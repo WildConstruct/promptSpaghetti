@@ -11,7 +11,10 @@
 
 import { EventEmitter } from 'events';
 import { FeatureToggleService } from './feature-toggle-service';
-import { FeatureToggleDependencyService, DependencyType } from '../../packages/core/services/FeatureToggleDependencyService';
+import { 
+  FeatureToggleDependencyService,
+  DependencyType
+} from '../../../packages/core/services/FeatureToggleDependencyService';
 import {
   FeatureToggle,
   ToggleType,

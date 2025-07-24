@@ -4,7 +4,7 @@
  */
 
 import { jest } from '@jest/globals';
-import { Graph } from '../../packages/core/graphSchema';
+import { Graph } from '../packages/core/graphSchema';
 import { executeGraph } from '../../server/src/engine';
 import { TestEnvironmentManager, PerformanceTestingUtils } from '../utils/TestingUtilities';
 

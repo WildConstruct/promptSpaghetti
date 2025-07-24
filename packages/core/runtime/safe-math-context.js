@@ -13,7 +13,7 @@
  *
  * Addresses P0 security requirements for Epic 18 - Conditional Node Security (DEBT-002)
  */
-import { securityAudit, SecuritySeverity, SecurityEventCategory } from './security-audit-logger';
+import { securityAudit, SecuritySeverity, SecurityEventCategory } from './security-audit-logger.js';
 /**
  * Safe Math functions whitelist
  * Only deterministic, side-effect-free functions are allowed

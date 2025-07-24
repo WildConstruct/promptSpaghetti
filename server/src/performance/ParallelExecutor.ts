@@ -11,7 +11,7 @@
  * - Configurable concurrency limits to prevent resource exhaustion
  */
 
-import { Graph, Node } from '../../../packages/core/graphSchema';
+import { Graph, Node } from '../../../../packages/core/graphSchema';
 
 export interface ParallelExecutionOptions {
   maxConcurrency?: number;

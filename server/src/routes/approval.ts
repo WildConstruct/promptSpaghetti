@@ -4,10 +4,10 @@
 import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { ApprovalService } from '../services/approval-service';
-import { database } from '../database/connection';
+import { getDatabase } from '../database/connection';
 
 export async function approvalRoutes(fastify: FastifyInstance) {
-  const approvalService = new ApprovalService(database);
+  const approvalService = new ApprovalService(getDatabase());
 
   // =============================================================================
   // APPROVAL CRITERIA ENDPOINTS
@@ -441,13 +441,15 @@ export async function approvalRoutes(fastify: FastifyInstance) {
 
       if (active !== undefined) {
         query += ` AND is_active = $${paramIndex++}`;
-        params.push(active);
+        params.push(active ? 1 : 0);
       }
 
       query += ' ORDER BY usage_count DESC, name';
 
-      const result = await database.query(query, params);
-      reply.send(result.rows);
+      const db = getDatabase();
+      const stmt = db.prepare(query);
+      const result = stmt.all(...params);
+      reply.send(result);
     } catch (error) {
       reply.status(500).send({ error: 'Failed to fetch approval templates' });
     }

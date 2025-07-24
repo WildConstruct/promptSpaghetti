@@ -1,4 +1,5 @@
-import { ValidationReport, AutoFixSuggestion, CrossPlatformIssue, ValidationResult } from '../validation/ValidationEngine.js';
+import { ValidationReport, AutoFixSuggestion, CrossPlatformIssue } from '../validation/ValidationEngine.js';
+import { ValidationResult } from '../types/index.js';
 import { Platform, Logger, MetricsInterface } from '../types/index.js';
 /**
  * Comprehensive error reporting and notification system

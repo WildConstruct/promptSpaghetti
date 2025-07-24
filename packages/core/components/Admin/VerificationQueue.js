@@ -6,12 +6,12 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Part of Epic 17.5.5 - Verification System
  */
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { Badge } from '../ui/Badge';
-import { Textarea } from '../ui/Textarea';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
+import { Button } from '../ui/Button.js';
+import { Badge } from '../ui/Badge.js';
+import { Textarea } from '../ui/Textarea.js';
 import { CheckCircle, AlertCircle, User, Mail, Phone, FileText, Award, Camera, ExternalLink, Flag, Calendar, MapPin, Smartphone, Globe, ArrowLeft, Eye, Download } from 'lucide-react';
-export const VerificationQueue = ({ request, onBack, onStatusUpdate, _____onRequestUpdate, className = '' }) => {
+export const VerificationQueue = ({ request, onBack, onStatusUpdate, onRequestUpdate, className = '' }) => {
     const [_____activeSection, _____setActiveSection] = useState('details');
     const [reviewDecision, setReviewDecision] = useState({
         status: 'pending',

@@ -6,7 +6,7 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Manages presentation modes, screenshot mode, and demo optimizations
  */
 import { useState, useEffect, useCallback } from 'react';
-import { ProfessionalSpinner } from '../LoadingStates/ProfessionalSpinner';
+import { ProfessionalSpinner } from '../LoadingStates/ProfessionalSpinner.js';
 const DEFAULT_CONFIG = {
     screenshotMode: false,
     presentationFocus: false,

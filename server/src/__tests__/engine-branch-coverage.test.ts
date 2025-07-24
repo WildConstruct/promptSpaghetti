@@ -1,6 +1,6 @@
 // server/src/__tests__/engine-branch-coverage.test.ts
 import { executeGraph } from '../engine';
-import { Graph } from '../../../packages/core/graphSchema';
+import { Graph } from '../../../../packages/core/graphSchema';
 
 /**
  * This test suite specifically targets branch coverage in the engine.ts file

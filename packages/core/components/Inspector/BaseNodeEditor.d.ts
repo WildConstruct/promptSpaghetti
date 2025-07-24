@@ -3,7 +3,7 @@ import { ZodSchema, ZodTypeAny } from 'zod';
 export interface BaseNodeEditorProps {
     nodeId: string;
     nodeData: Record<string, unknown>;
-    schema: ZodSchema<any>;
+    schema: ZodSchema<unknown>;
     onChange: (partial: Record<string, unknown>) => void;
     className?: string;
     children?: React.ReactNode;

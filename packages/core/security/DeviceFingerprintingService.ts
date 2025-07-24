@@ -370,7 +370,7 @@ export class DeviceFingerprintingService extends EventEmitter {
     }
     
     // Calculate overall risk score
-    riskScore = factors.reduce((score, factor) => score + factor.impact, 50);
+    riskScore = factors.reduce((score, factor) => score + factor.impact, 30);
     riskScore = Math.max(0, Math.min(100, riskScore));
     
     const overallRisk = this.determineRiskLevel(riskScore);
@@ -856,15 +856,21 @@ export class DeviceFingerprintingService extends EventEmitter {
     const ua = fingerprint.basic.userAgent.toLowerCase();
     const screen = fingerprint.enhanced.screen;
     
-    if (ua.includes('mobile') || screen.width <= 768) {
-      return DeviceType.MOBILE;
-    } else if (ua.includes('tablet') || (screen.width <= 1024 && screen.width > 768)) {
+    // Check user agent first for more accurate detection
+    if (ua.includes('tablet') || ua.includes('ipad')) {
       return DeviceType.TABLET;
-    } else if (screen.width > 1024) {
-      return DeviceType.DESKTOP;
+    } else if (ua.includes('mobile') || ua.includes('iphone')) {
+      return DeviceType.MOBILE;
     }
     
-    return DeviceType.UNKNOWN;
+    // Fallback to screen size detection
+    if (screen.width <= 767) {
+      return DeviceType.MOBILE;
+    } else if (screen.width <= 1024) {
+      return DeviceType.TABLET;
+    } else {
+      return DeviceType.DESKTOP;
+    }
   }
   
   // Mock helper methods (would be replaced with real implementations)
@@ -932,27 +938,27 @@ export class DeviceFingerprintingService extends EventEmitter {
   
   private detectVpn(ip: string): boolean {
     // Mock VPN detection based on IP pattern
-    return ip.startsWith('10.') || ip.includes('vpn') || Math.random() < 0.1;
+    return ip.startsWith('10.') || ip.includes('vpn');
   }
   
   private detectProxy(ip: string): boolean {
     // Mock proxy detection
-    return ip.includes('proxy') || Math.random() < 0.05;
+    return ip.includes('proxy');
   }
   
   private detectTor(ip: string): boolean {
     // Mock Tor detection
-    return ip.includes('tor') || Math.random() < 0.02;
+    return ip.includes('tor');
   }
   
   private detectHostingProvider(ip: string): boolean {
     // Mock hosting provider detection
-    return ip.startsWith('172.') || Math.random() < 0.15;
+    return ip.startsWith('172.');
   }
   
   private detectDatacenter(ip: string): boolean {
     // Mock datacenter detection
-    return ip.startsWith('192.168.') === false && Math.random() < 0.1;
+    return ip.startsWith('203.') || ip.includes('datacenter');
   }
   
   private isUserDevice(userId: string, deviceId: string): boolean {

@@ -25,7 +25,7 @@ import {
   validateAttributionFilter,
   validateAttributionStatsRequest,
   validateUpdatePrivacySettingsRequest
-} from '../../packages/core/types/attribution';
+} from '../../../packages/core/types/attribution';
 
 export class AttributionService {
   private db: DatabaseClient;
@@ -224,7 +224,10 @@ export class AttributionService {
   /**
    * Get contributor statistics
    */
-  async getContributorStats(projectId: string, dateRange?: { start: Date; end: Date }): Promise<ContributorStatsResponse> {
+  async getContributorStats(
+    projectId: string,
+    dateRange?: { start: Date; end: Date }
+  ): Promise<ContributorStatsResponse> {
     this.logger.info('Getting contributor statistics', { projectId, dateRange });
 
     const contributors = await this.db.query(`
@@ -731,32 +734,52 @@ export class AttributionService {
     };
   }
 
-  private async getStatsByAuthor(____projectId: string, ____dateRange: { start: Date; end: Date }, authorId?: string): Promise<any[]> {
+  private async getStatsByAuthor(
+    ____projectId: string,
+    ____dateRange: { start: Date; end: Date },
+    authorId?: string
+  ): Promise<any[]> {
     // Implementation would query author statistics
     return [];
   }
 
-  private async getStatsByResourceType(____projectId: string, ____dateRange: { start: Date; end: Date }): Promise<Record<string, number>> {
+  private async getStatsByResourceType(
+    ____projectId: string,
+    ____dateRange: { start: Date; end: Date }
+  ): Promise<Record<string, number>> {
     // Implementation would query resource type statistics
     return {};
   }
 
-  private async getStatsByChangeType(____projectId: string, ____dateRange: { start: Date; end: Date }): Promise<Record<string, number>> {
+  private async getStatsByChangeType(
+    ____projectId: string,
+    ____dateRange: { start: Date; end: Date }
+  ): Promise<Record<string, number>> {
     // Implementation would query change type statistics
     return {};
   }
 
-  private async getTimelineData(____projectId: string, ____dateRange: { start: Date; end: Date }, period?: AggregationPeriod): Promise<any[]> {
+  private async getTimelineData(
+    ____projectId: string,
+    ____dateRange: { start: Date; end: Date },
+    period?: AggregationPeriod
+  ): Promise<any[]> {
     // Implementation would query timeline data
     return [];
   }
 
-  private async getHeatmapData(____projectId: string, ____dateRange: { start: Date; end: Date }): Promise<Record<string, Record<string, number>>> {
+  private async getHeatmapData(
+    ____projectId: string,
+    ____dateRange: { start: Date; end: Date }
+  ): Promise<Record<string, Record<string, number>>> {
     // Implementation would query heatmap data
     return {};
   }
 
-  private async getCollaborationMetrics(____projectId: string, ____dateRange: { start: Date; end: Date }): Promise<unknown> {
+  private async getCollaborationMetrics(
+    ____projectId: string,
+    ____dateRange: { start: Date; end: Date }
+  ): Promise<unknown> {
     // Implementation would query collaboration metrics
     return {
       totalCollaborativeSessions: 0,
@@ -806,7 +829,13 @@ export class AttributionService {
     return result.rows.length > 0 ? result.rows[0].cache_data : null;
   }
 
-  private async setCachedStats(projectId: string, cacheKey: string, cacheType: string, data: Record<string, unknown>): Promise<void> {
+  private async setCachedStats(
+    projectId: string,
+    cacheKey: string,
+    cacheType: string,
+    data: Record<string,
+    unknown>
+  ): Promise<void> {
     const expiresAt = new Date(Date.now() + (ATTRIBUTION_DEFAULTS.CACHE_TTL_MINUTES * 60 * 1000));
     
     await this.db.query(`

@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { WSMessageSchema } from '../../../server/src/websocket/types';
+import { WSMessageSchema } from '../../../server/src/websocket/types.js';
 export class WebSocketClient extends EventEmitter {
     ws = null;
     config;

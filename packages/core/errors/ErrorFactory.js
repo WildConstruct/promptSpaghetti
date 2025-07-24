@@ -4,7 +4,7 @@
  * Centralized error creation with consistent patterns, context injection,
  * and recovery suggestions. Replaces scattered throw new Error() calls.
  */
-import { BaseError, GraphValidationError, GraphExecutionError, NodeExecutionError, DatabaseConnectionError, ConnectionFactoryError, AuthenticationError, MFAError, ProjectLockedError, WorkflowStateError, APIError, ValidationError, ConfigurationError } from './index';
+import { BaseError, GraphValidationError, GraphExecutionError, NodeExecutionError, DatabaseConnectionError, ConnectionFactoryError, AuthenticationError, MFAError, ProjectLockedError, WorkflowStateError, APIError, ValidationError, ConfigurationError } from './index.js';
 /**
  * Factory class for creating structured errors with consistent context
  */

@@ -30,7 +30,7 @@ import {
   DEFAULT_REVISION_REQUEST_CONFIG,
   EvidenceAnnotation,
   ReviewerPerformance
-} from '../../../packages/core/types/RevisionRequestTypes';
+} from '../../../../packages/core/types/RevisionRequestTypes';
 
 export class RevisionRequestService {
   private config: RevisionRequestConfig;

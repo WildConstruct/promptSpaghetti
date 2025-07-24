@@ -5,7 +5,7 @@
  * Implements inheritance rules for data classification, allowing child elements
  * to inherit classifications from parent elements based on configurable rules
  */
-import { CLASSIFICATION_LEVELS } from '../types/DataClassification';
+import { CLASSIFICATION_LEVELS } from '../types/DataClassification.js';
 /**
  * Service for managing classification inheritance rules and applying them
  */

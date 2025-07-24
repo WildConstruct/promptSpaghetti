@@ -4,7 +4,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { z } from 'zod';
 import { WorkflowService } from '../services/workflow-service';
-import { database } from '../database/connection';
+import { getDatabase } from '../database/connection';
 import {
   CreateWorkflowStateSchema,
   CreateWorkflowTransitionSchema,
@@ -16,7 +16,7 @@ import {
 } from '../database/workflow-models';
 
 export async function workflowRoutes(fastify: FastifyInstance) {
-  const workflowService = new WorkflowService(database);
+  const workflowService = new WorkflowService(getDatabase());
 
   // =============================================================================
   // WORKFLOW STATE ENDPOINTS
@@ -65,7 +65,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
 
   // POST /api/workflow/states - Create new workflow state
   fastify.post<{
-    Body: Zod.infer<typeof CreateWorkflowStateSchema>;
+    Body: z.infer<typeof CreateWorkflowStateSchema>;
   }>('/states', {
     schema: {
       body: CreateWorkflowStateSchema
@@ -82,7 +82,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
   // PUT /api/workflow/states/:id - Update workflow state
   fastify.put<{
     Params: { id: string };
-    Body: Partial<Zod.infer<typeof CreateWorkflowStateSchema>>;
+    Body: Partial<z.infer<typeof CreateWorkflowStateSchema>>;
   }>('/states/:id', {
     schema: {
       params: z.object({
@@ -160,7 +160,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
 
   // POST /api/workflow/transitions - Create workflow transition
   fastify.post<{
-    Body: Zod.infer<typeof CreateWorkflowTransitionSchema>;
+    Body: z.infer<typeof CreateWorkflowTransitionSchema>;
   }>('/transitions', {
     schema: {
       body: CreateWorkflowTransitionSchema
@@ -289,7 +289,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
 
   // POST /api/workflow/approvals - Create workflow approval
   fastify.post<{
-    Body: Zod.infer<typeof CreateWorkflowApprovalSchema>;
+    Body: z.infer<typeof CreateWorkflowApprovalSchema>;
   }>('/approvals', {
     schema: {
       body: CreateWorkflowApprovalSchema

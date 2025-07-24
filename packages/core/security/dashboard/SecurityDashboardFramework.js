@@ -37,7 +37,7 @@
  * @since 2024-01-22
  */
 import { EventEmitter } from 'events';
-import { SecurityLogger, SecurityEventType, LogLevel } from '../SecurityLogger';
+import { SecurityLogger, SecurityEventType, LogLevel } from '../SecurityLogger.js';
 // Core Dashboard Types
 export var DashboardType;
 (function (DashboardType) {

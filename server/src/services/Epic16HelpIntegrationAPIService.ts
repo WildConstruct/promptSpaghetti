@@ -9,7 +9,7 @@
 
 import { Database } from '../database/connection';
 import { Epic16SupportEscalationService } from '../admin/Epic16SupportEscalationService';
-import { Epic16TicketIntegrationService } from '../../packages/core/services/Epic16TicketIntegrationService';
+import { Epic16TicketIntegrationService } from '../../../packages/core/services/Epic16TicketIntegrationService';
 import { EventEmitter } from 'events';
 
 // =============================================================================
@@ -411,7 +411,10 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
     };
   }
 
-  private analyzeHelpContext(context: unknown, userProfile: Error): { relevanceScore: number; contextFactors: string[] } {
+  private analyzeHelpContext(
+    context: unknown,
+    userProfile: Error
+  ): { relevanceScore: number; contextFactors: string[] } {
     let relevanceScore = 50; // Base score
     const contextFactors: string[] = [];
 
@@ -517,7 +520,15 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
     // Record in database
     try {
       await this.database.query(
-        `INSERT INTO help_system_transitions (id, user_id, from_system, to_system, preserve_help, transition_data, created_at)
+        `INSERT INTO help_system_transitions (
+          id,
+          user_id,
+          from_system,
+          to_system,
+          preserve_help,
+          transition_data,
+          created_at
+        )
          VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
         [transitionId, request.userId, request.fromSystem, request.toSystem, request.preserveHelp, JSON.stringify(request.transitionData)]
       );

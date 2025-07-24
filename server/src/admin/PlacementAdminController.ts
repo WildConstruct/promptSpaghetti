@@ -10,7 +10,13 @@
 
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { Database } from '../database';
-import { PlacementManagementService, CreateSlotRequest, UpdateSlotRequest, CreatePlacementRequest, UpdatePlacementRequest } from '../services/placement/PlacementManagementService';
+import { 
+  PlacementManagementService,
+  CreateSlotRequest,
+  UpdateSlotRequest,
+  CreatePlacementRequest,
+  UpdatePlacementRequest
+} from '../services/placement/PlacementManagementService';
 import { AuditService } from '../auth/services/AuditService';
 import {
   PlacementSlot,
@@ -23,7 +29,7 @@ import {
   PlacementAnalytics,
   PlacementPreview,
   BulkPlacementOperation
-} from '../../packages/core/types/PlacementTypes';
+} from '../../../packages/core/types/PlacementTypes';
 
 export interface PlacementAdminConfig {
   maxSlotsPerArea: number;
@@ -862,7 +868,10 @@ export class PlacementAdminController {
   ): Promise<void> {
     await this.db.query(`
       UPDATE bulk_placement_operations 
-      SET status = $2, progress = $3, completed_at = CASE WHEN $2 IN ('completed', 'failed') THEN NOW() ELSE completed_at END
+      SET status = $2, progress = $3, completed_at = CASE WHEN $2 IN (
+        'completed',
+        'failed'
+      ) THEN NOW() ELSE completed_at END
       WHERE operation_id = $1
     `, [operationId, status, progress]);
   }

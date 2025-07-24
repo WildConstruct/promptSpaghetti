@@ -2,7 +2,7 @@
 // Tests for Epic 7 advanced node integration in the execution engine
 
 import { executeGraph } from '../engine';
-import { Graph } from '../../../packages/core/graphSchema';
+import { Graph } from '../../../../packages/core/graphSchema';
 
 describe('Engine Advanced Node Integration', () => {
   describe('WeightedAdvanced Node', () => {

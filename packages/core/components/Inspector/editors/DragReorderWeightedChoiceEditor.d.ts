@@ -12,7 +12,7 @@ export interface WeightedChoiceData {
         text: string;
         weight: number;
     }>;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 export interface DragReorderWeightedChoiceEditorProps {
     data: WeightedChoiceData;

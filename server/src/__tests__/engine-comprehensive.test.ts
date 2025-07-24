@@ -1,65 +1,65 @@
 import { executeGraph } from '../engine';
-import { ExecutionContext } from '../../../packages/core/runtime';
-import * as graphSchema from '../../../packages/core/graphSchema';
+import { ExecutionContext } from '../../../../packages/core/runtime';
+import * as graphSchema from '../../../../packages/core/graphSchema';
 
 // Mock dependencies
-jest.mock('../../../packages/core/runtime', () => ({
-  ExecutionContext: jest.fn(),
-  WeightedChoiceNode: jest.fn().mockImplementation((id, choices) => ({
+jest.mock('../../../../packages/core/runtime', () => ({
+  ExecutionContext: jest.fn<unknown[], unknown>(),
+  WeightedChoiceNode: jest.fn<unknown[], unknown>().mockImplementation((id, choices) => ({
     id,
     choices,
     run: jest.fn(() => choices[0]?.value || '')
   })),
-  ConcatNode: jest.fn().mockImplementation((id, inputs) => ({
+  ConcatNode: jest.fn<unknown[], unknown>().mockImplementation((id, inputs) => ({
     id,
     inputs,
     run: jest.fn(() => inputs.join(''))
   })),
-  OutputNode: jest.fn().mockImplementation((id, value) => ({
+  OutputNode: jest.fn<unknown[], unknown>().mockImplementation((id, value) => ({
     id,
     value,
     run: jest.fn(() => value)
   })),
-  IncludeNode: jest.fn().mockImplementation((id, template, templates) => ({
+  IncludeNode: jest.fn<unknown[], unknown>().mockImplementation((id, template, templates) => ({
     id,
     template,
     templates,
     run: jest.fn(() => templates[template])
   })),
-  SetVariableNode: jest.fn().mockImplementation((id, key, value) => ({
+  SetVariableNode: jest.fn<unknown[], unknown>().mockImplementation((id, key, value) => ({
     id,
     key,
     value,
-    run: jest.fn()
+    run: jest.fn<unknown[], unknown>()
   })),
-  GetVariableNode: jest.fn().mockImplementation((id, key) => ({
+  GetVariableNode: jest.fn<unknown[], unknown>().mockImplementation((id, key) => ({
     id,
     key,
     run: jest.fn(() => 'variable-value')
   }))
 }));
 
-jest.mock('../../../packages/core/runtime/advanced', () => ({
-  AdvancedExecutionContext: jest.fn().mockImplementation(() => ({
+jest.mock('../../../../packages/core/runtime/advanced', () => ({
+  AdvancedExecutionContext: jest.fn<unknown[], unknown>().mockImplementation(() => ({
     variables: {},
     seed: 'test-seed'
   })),
-  WeightedAdvancedNode: jest.fn().mockImplementation((id, config) => ({
+  WeightedAdvancedNode: jest.fn<unknown[], unknown>().mockImplementation((id, config) => ({
     id,
     config,
     run: jest.fn(() => 'advanced-result')
   })),
-  ConditionalNode: jest.fn().mockImplementation((id, config) => ({
+  ConditionalNode: jest.fn<unknown[], unknown>().mockImplementation((id, config) => ({
     id,
     config,
     run: jest.fn(() => 'conditional-result')
   })),
-  SequentialNode: jest.fn().mockImplementation((id, config) => ({
+  SequentialNode: jest.fn<unknown[], unknown>().mockImplementation((id, config) => ({
     id,
     config,
     run: jest.fn(() => 'sequential-result')
   })),
-  MarkovNode: jest.fn().mockImplementation((id, config) => ({
+  MarkovNode: jest.fn<unknown[], unknown>().mockImplementation((id, config) => ({
     id,
     config,
     run: jest.fn(() => 'markov-result')
@@ -472,7 +472,7 @@ describe('Server Engine - Comprehensive Coverage (85% target)', () => {
 
   describe('executeGraph - Context Management', () => {
     it('should properly initialize execution context', async () => {
-      const { ExecutionContext } = require('../../../packages/core/runtime');
+      const { ExecutionContext } = require('../../../../packages/core/runtime');
       
       await executeGraph(validGraph, 'test-seed');
       
@@ -484,7 +484,7 @@ describe('Server Engine - Comprehensive Coverage (85% target)', () => {
     });
 
     it('should use advanced context for advanced nodes', async () => {
-      const { AdvancedExecutionContext } = require('../../../packages/core/runtime/advanced');
+      const { AdvancedExecutionContext } = require('../../../../packages/core/runtime/advanced');
       
       const advancedGraph = {
         nodes: [

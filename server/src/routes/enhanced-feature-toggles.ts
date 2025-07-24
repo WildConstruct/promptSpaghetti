@@ -16,7 +16,7 @@ import { z } from 'zod';
 import { FeatureToggleService } from '../services/feature-toggle-service';
 import { EnhancedToggleEvaluationService } from '../services/EnhancedToggleEvaluationService';
 import { ToggleDependencyIntegrationService } from '../services/ToggleDependencyIntegrationService';
-import { FeatureToggleDependencyService } from '../../packages/core/services/FeatureToggleDependencyService';
+import { FeatureToggleDependencyService } from '../../../packages/core/services/FeatureToggleDependencyService';
 import { AuditService } from '../auth/services/AuditService';
 
 // Request/Response schemas
@@ -71,7 +71,14 @@ const ToggleOperationRequestSchema = z.object({
     metadata: z.any().optional()
   }),
   context: z.object({
-    requestSource: z.enum(['admin_dashboard', 'api_direct', 'automated_system', 'emergency_protocol', 'scheduled_task', 'external_system']),
+    requestSource: z.enum(
+      ['admin_dashboard',
+      'api_direct',
+      'automated_system',
+      'emergency_protocol',
+      'scheduled_task',
+      'external_system']
+    ),
     urgencyLevel: z.enum(['low', 'normal', 'high', 'emergency']),
     approvals: z.array(z.object({
       id: z.string(),
@@ -95,7 +102,13 @@ const ToggleOperationRequestSchema = z.object({
     notifications: z.array(z.object({
       channel: z.enum(['email', 'slack', 'sms', 'webhook', 'dashboard_alert']),
       recipients: z.array(z.string()),
-      eventTypes: z.array(z.enum(['operation_blocked', 'cascade_triggered', 'warning_issued', 'rollback_initiated', 'approval_required'])),
+      eventTypes: z.array(
+        z.enum(['operation_blocked',
+        'cascade_triggered',
+        'warning_issued',
+        'rollback_initiated',
+        'approval_required']
+      )),
       urgencyThreshold: z.enum(['low', 'normal', 'high', 'emergency'])
     })).optional()
   })

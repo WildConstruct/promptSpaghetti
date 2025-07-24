@@ -1,9 +1,9 @@
 import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from 'react';
-import { useCorrectionsEnabled } from './correctionsStore';
-import { CorrectionsManagerPanel } from './CorrectionsManagerPanel';
-import { MobileCorrectionsPanel } from './components/MobileCorrectionsPanel';
-import { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboard';
+import { useCorrectionsEnabled } from './correctionsStore.js';
+import { CorrectionsManagerPanel } from './CorrectionsManagerPanel.js';
+import { MobileCorrectionsPanel } from './components/MobileCorrectionsPanel.js';
+import { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboard.js';
 export const ResponsiveCorrectionsPanel = ({ isOpen, onClose }) => {
     const isEnabled = useCorrectionsEnabled();
     const [isMobile, setIsMobile] = useState(false);

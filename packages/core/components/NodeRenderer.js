@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { memo, useState, useRef, useEffect } from 'react';
 import { Handle, Position } from 'reactflow';
-import { useSmoothHover, globalAnimationManager } from '../utils/smoothAnimations';
+import { useSmoothHover, globalAnimationManager } from '../utils/smoothAnimations.js';
 export const NodeRenderer = memo(({ id, data, selected = false, onSelect, getNodeMeta, getCategoryColor }) => {
     const [_____isCreating, setIsCreating] = useState(false);
     const [isDeleting, _____setIsDeleting] = useState(false);

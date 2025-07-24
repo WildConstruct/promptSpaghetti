@@ -1,9 +1,9 @@
 // Epic 12 - LLM Agent Randomizer System
 // Story 12.2 - Cross-Model Testing Examples
 // Comprehensive examples for testing all three LLM agents
-import { generateGraphWithOpenAI } from '../scripts/openai-agent';
-import { generateGraphWithClaude } from '../scripts/anthropic-agent';
-import { generateGraphWithGemini } from '../scripts/gemini-agent';
+import { generateGraphWithOpenAI } from '../scripts/openai-agent.js';
+import { generateGraphWithClaude } from '../scripts/anthropic-agent.js';
+import { generateGraphWithGemini } from '../scripts/gemini-agent.js';
 export class CrossModelTester {
     /**
      * Test all three models with the same request

@@ -108,7 +108,7 @@ export interface AssignmentTemplate {
 export interface TargetFilter {
     field: string;
     operator: 'eq' | 'ne' | 'in' | 'not_in' | 'contains' | 'starts_with';
-    value: any;
+    value: Error;
     logicalOperator?: 'AND' | 'OR';
 }
 export interface BulkAssignmentProgress {

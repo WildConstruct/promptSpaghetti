@@ -6,14 +6,14 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * real-time updates, collaboration tracking, and analytics.
  */
 import { useState, useEffect, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { Badge } from '../ui/Badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
-import { Input } from '../ui/Input';
-import { Select } from '../ui/Select';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
+import { Button } from '../ui/Button.js';
+import { Badge } from '../ui/Badge.js';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
+import { Input } from '../ui/Input.js';
+import { Select } from '../ui/Select.js';
 import { Clock, User, Users, Activity as ActivityIcon, TrendingUp, Search, Calendar, Globe, Zap, AlertTriangle, CheckCircle, XCircle, GitBranch, FileText, Settings, BarChart3 } from 'lucide-react';
-import { activityTimeline } from '../../services/ActivityTimeline';
+import { activityTimeline } from '../../services/ActivityTimeline.js';
 /**
  * Activity type configurations for UI styling
  */

@@ -1,17 +1,17 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 // Import all node editors
-import { WeightedChoiceEditor } from './editors/WeightedChoiceEditor';
-import { ConcatEditor } from './editors/ConcatEditor';
-import { OutputEditor } from './editors/OutputEditor';
-import { VariableEditor } from './editors/VariableEditor';
-import { SubjectEditor } from './editors/SubjectEditor';
-import { ActionEditor } from './editors/ActionEditor';
-import { PythonTransformEditor } from './editors/PythonTransformEditor';
-import { ConditionalEditor } from './editors/ConditionalEditor';
-import { SequentialEditor } from './editors/SequentialEditor';
-import { MarkovEditor } from './editors/MarkovEditor';
-import { WeightedAdvancedEditor } from './editors/WeightedAdvancedEditor';
-import { BaseNodeEditor } from './BaseNodeEditor';
+import { WeightedChoiceEditor } from './editors/WeightedChoiceEditor.js';
+import { ConcatEditor } from './editors/ConcatEditor.js';
+import { OutputEditor } from './editors/OutputEditor.js';
+import { VariableEditor } from './editors/VariableEditor.js';
+import { SubjectEditor } from './editors/SubjectEditor.js';
+import { ActionEditor } from './editors/ActionEditor.js';
+import { PythonTransformEditor } from './editors/PythonTransformEditor.js';
+import { ConditionalEditor } from './editors/ConditionalEditor.js';
+import { SequentialEditor } from './editors/SequentialEditor.js';
+import { MarkovEditor } from './editors/MarkovEditor.js';
+import { WeightedAdvancedEditor } from './editors/WeightedAdvancedEditor.js';
+import { BaseNodeEditor } from './BaseNodeEditor.js';
 export const NodeEditorRouter = ({ node, schema, onChange, onGlobalPreviewRequest }) => {
     if (!node || !schema) {
         return null;

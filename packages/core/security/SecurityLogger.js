@@ -15,7 +15,7 @@
  */
 import { EventEmitter } from 'events';
 import crypto from 'crypto';
-import { LockoutReason } from './AccountLockoutService';
+import { LockoutReason } from './AccountLockoutService.js';
 // Log Levels
 export var LogLevel;
 (function (LogLevel) {

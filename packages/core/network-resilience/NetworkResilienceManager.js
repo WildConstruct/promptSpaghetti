@@ -1,8 +1,8 @@
 import { EventEmitter } from 'events';
-import { OfflineOperationQueue } from './OfflineOperationQueue';
-import { ConnectionStateManager, ConnectionState } from './ConnectionStateManager';
-import { ReconnectionHandler } from './ReconnectionHandler';
-import { SynchronizationRecovery } from './SynchronizationRecovery';
+import { OfflineOperationQueue } from './OfflineOperationQueue.js';
+import { ConnectionStateManager, ConnectionState } from './ConnectionStateManager.js';
+import { ReconnectionHandler } from './ReconnectionHandler.js';
+import { SynchronizationRecovery } from './SynchronizationRecovery.js';
 export class NetworkResilienceManager extends EventEmitter {
     config;
     offlineQueue;

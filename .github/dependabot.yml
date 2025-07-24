@@ -1,0 +1,196 @@
+version: 2
+updates:
+  # Root package.json
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "promptscape/core-team"
+    assignees:
+      - "promptscape/maintainers"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "automated"
+    ignore:
+      # Ignore major version updates for critical dependencies
+      - dependency-name: "zod"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+
+  # Client package
+  - package-ecosystem: "npm"
+    directory: "/client"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:30"
+      timezone: "UTC"
+    open-pull-requests-limit: 3
+    reviewers:
+      - "promptscape/frontend-team"
+    commit-message:
+      prefix: "deps(client)"
+    labels:
+      - "dependencies"
+      - "client"
+      - "automated"
+
+  # Server package
+  - package-ecosystem: "npm"
+    directory: "/server"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "10:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 3
+    reviewers:
+      - "promptscape/backend-team"
+    commit-message:
+      prefix: "deps(server)"
+    labels:
+      - "dependencies"
+      - "server"
+      - "automated"
+
+  # Core package
+  - package-ecosystem: "npm"
+    directory: "/packages/core"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "09:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 2
+    reviewers:
+      - "promptscape/core-team"
+    commit-message:
+      prefix: "deps(core)"
+    labels:
+      - "dependencies"
+      - "core"
+      - "automated"
+      - "critical"
+
+  # Analytics SDK
+  - package-ecosystem: "npm"
+    directory: "/packages/analytics-sdk"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "09:30"
+      timezone: "UTC"
+    open-pull-requests-limit: 2
+    commit-message:
+      prefix: "deps(analytics)"
+    labels:
+      - "dependencies"
+      - "analytics"
+      - "automated"
+
+  # Claude SDK
+  - package-ecosystem: "npm"
+    directory: "/packages/claude-sdk"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "10:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 2
+    commit-message:
+      prefix: "deps(claude-sdk)"
+    labels:
+      - "dependencies"
+      - "sdk"
+      - "automated"
+
+  # Graph Core
+  - package-ecosystem: "npm"
+    directory: "/packages/graph-core"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "10:30"
+      timezone: "UTC"
+    open-pull-requests-limit: 2
+    commit-message:
+      prefix: "deps(graph-core)"
+    labels:
+      - "dependencies"
+      - "graph"
+      - "automated"
+
+  # UI Kit
+  - package-ecosystem: "npm"
+    directory: "/packages/ui-kit"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "09:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 2
+    commit-message:
+      prefix: "deps(ui-kit)"
+    labels:
+      - "dependencies"
+      - "ui"
+      - "automated"
+
+  # CLI Package
+  - package-ecosystem: "npm"
+    directory: "/packages/cli"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "09:30"
+      timezone: "UTC"
+    open-pull-requests-limit: 1
+    commit-message:
+      prefix: "deps(cli)"
+    labels:
+      - "dependencies"
+      - "cli"
+      - "automated"
+
+  # Dockerfile dependencies
+  - package-ecosystem: "docker"
+    directory: "/server"
+    schedule:
+      interval: "monthly"
+      day: "monday"
+      time: "09:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 1
+    commit-message:
+      prefix: "deps(docker)"
+    labels:
+      - "dependencies"
+      - "docker"
+      - "automated"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      day: "monday"
+      time: "08:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 2
+    commit-message:
+      prefix: "deps(actions)"
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "automated"

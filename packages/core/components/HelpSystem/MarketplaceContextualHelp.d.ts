@@ -66,7 +66,7 @@ export interface MarketplaceContextualHelpProps {
     intelligenceLevel?: 'basic' | 'smart' | 'adaptive';
     triggerSensitivity?: 'low' | 'medium' | 'high';
     helpContentManager?: HelpContentManager;
-    onContextualHelpTriggered?: (rule: ContextualHelpRule, context: any) => void;
+    onContextualHelpTriggered?: (rule: ContextualHelpRule, context: unknown) => void;
     onUserStruggleDetected?: (struggleType: string, severity: number) => void;
     onHelpEffectiveness?: (helpId: string, wasEffective: boolean) => void;
 }

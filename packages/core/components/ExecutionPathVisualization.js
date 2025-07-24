@@ -4,7 +4,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Epic 8.5: Real-Time Multi-Seed Preview - Task 2: Execution Path Visualization
  */
 import { useState } from 'react';
-import { EXECUTION_PATH_COLORS, DEFAULT_VISUALIZATION_CONFIG } from '../types/ExecutionPath';
+import { EXECUTION_PATH_COLORS, DEFAULT_VISUALIZATION_CONFIG } from '../types/ExecutionPath.js';
 export const ExecutionPathVisualization = ({ results, onNodeHighlight, config = {}, className = '' }) => {
     const vizConfig = { ...DEFAULT_VISUALIZATION_CONFIG, ...config };
     const [expandedResults, setExpandedResults] = useState(new Set());

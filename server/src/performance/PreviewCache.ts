@@ -11,7 +11,7 @@
  * - Configurable cache size and TTL based on environment
  */
 
-import { Graph } from '../../../packages/core/graphSchema';
+import { Graph } from '../../../../packages/core/graphSchema';
 import crypto from 'crypto';
 
 export interface PreviewResult {

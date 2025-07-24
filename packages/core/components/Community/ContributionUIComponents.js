@@ -7,10 +7,10 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * form validation, and user experience optimization.
  */
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { Badge } from '../ui/Badge';
-import { Input } from '../ui/Input';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
+import { Button } from '../ui/Button.js';
+import { Badge } from '../ui/Badge.js';
+import { Input } from '../ui/Input.js';
 import { Save, Send, AlertTriangle, CheckCircle, XCircle, RefreshCw, Star, ThumbsUp, MessageSquare, Share2, Edit, Trash2, Eye, Clock, User } from 'lucide-react';
 // Security and validation utilities
 export class ContributionValidator {
@@ -195,7 +195,7 @@ export const ContributionForm = ({ initialData = {}, onSubmit, onSaveDraft, isLo
         license: initialData.license || 'cc-by'
     });
     // Error state management
-    const [_____errors, setErrors] = useState([]);
+    const [errors, setErrors] = useState([]);
     const [submitError, setSubmitError] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isDraftSaving, setIsDraftSaving] = useState(false);
@@ -351,7 +351,7 @@ export const ContributionForm = ({ initialData = {}, onSubmit, onSaveDraft, isLo
                                                             }
                                                         }, className: getFieldError('tags') ? 'border-red-500' : '' }), _jsx("div", { className: "tags-display mt-2 flex flex-wrap gap-2", children: formData.tags.map((tag, index) => (_jsxs(Badge, { variant: "secondary", className: "tag-badge cursor-pointer", onClick: () => removeTag(index), children: [tag, _jsx(XCircle, { className: "h-3 w-3 ml-1" })] }, index))) }), renderFieldError('tags'), _jsxs("div", { className: "text-xs text-gray-500 mt-1", children: [formData.tags.length, "/10 tags"] })] })] }) })] }), _jsxs(Card, { children: [_jsx(CardHeader, { children: _jsx(CardTitle, { children: "License" }) }), _jsx(CardContent, { children: _jsxs("div", { className: "form-field", children: [_jsx("label", { htmlFor: "license", className: "block text-sm font-medium text-gray-700 mb-1", children: "License Type" }), _jsxs("select", { id: "license", value: formData.license, onChange: (e) => updateFormData('license', e.target.value), className: "w-full p-3 border border-gray-300 rounded-lg", children: [_jsx("option", { value: "cc0", children: "Creative Commons Zero (Public Domain)" }), _jsx("option", { value: "cc-by", children: "Creative Commons Attribution" }), _jsx("option", { value: "cc-by-sa", children: "Creative Commons Attribution-ShareAlike" }), _jsx("option", { value: "proprietary", children: "Proprietary" })] })] }) })] })] }), _jsxs("div", { className: "form-actions mt-6 flex flex-col sm:flex-row gap-3", children: [_jsx(Button, { type: "submit", disabled: isSubmitting || isLoading || validationErrors.length > 0, className: "primary-submit", children: isSubmitting ? (_jsxs(_Fragment, { children: [_jsx(RefreshCw, { className: "h-4 w-4 mr-2 animate-spin" }), "Submitting..."] })) : (_jsxs(_Fragment, { children: [_jsx(Send, { className: "h-4 w-4 mr-2" }), "Submit Contribution"] })) }), onSaveDraft && (_jsx(Button, { type: "button", variant: "outline", onClick: handleSaveDraft, disabled: isDraftSaving || isLoading, children: isDraftSaving ? (_jsxs(_Fragment, { children: [_jsx(RefreshCw, { className: "h-4 w-4 mr-2 animate-spin" }), "Saving..."] })) : (_jsxs(_Fragment, { children: [_jsx(Save, { className: "h-4 w-4 mr-2" }), "Save Draft"] })) }))] }), validationErrors.length > 0 && (_jsxs("div", { className: "validation-summary mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg", children: [_jsxs("h4", { className: "text-yellow-800 font-medium mb-2 flex items-center", children: [_jsx(AlertTriangle, { className: "h-4 w-4 mr-2" }), "Please fix the following issues:"] }), _jsx("ul", { className: "text-yellow-700 text-sm space-y-1", children: validationErrors.map((error, index) => (_jsxs("li", { children: ["\u2022 ", error.message] }, index))) })] }))] }) }));
 };
-export const ContributionList = ({ contributions, onView, onEdit, onDelete, _____onRate, currentUserId, isLoading = false, error, className = '' }) => {
+export const ContributionList = ({ contributions, onView, onEdit, onDelete, onRate, currentUserId, isLoading = false, error, className = '' }) => {
     const [loadingActions, setLoadingActions] = useState(new Set());
     const handleAction = useCallback(async (contributionId, action) => {
         try {

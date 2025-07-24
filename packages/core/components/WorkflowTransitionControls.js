@@ -3,7 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Component for managing state transitions and approvals
 import { useState, useEffect } from 'react';
 import { ArrowRightIcon, ClockIcon, LockClosedIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
-import { useWorkflowStore } from '../stores/workflowStore';
+import { useWorkflowStore } from '../stores/workflowStore.js';
 export const WorkflowTransitionControls = ({ resourceId, currentStateId, currentUserId, workspaceId, onTransitionComplete, onApprovalRequested, disabled = false }) => {
     const { states, transitions, loading, error, fetchStates, fetchTransitions, transitionResourceState, validateStateTransition, canUserTransitionState, isResourceLocked } = useWorkflowStore();
     const [selectedTransition, setSelectedTransition] = useState(null);

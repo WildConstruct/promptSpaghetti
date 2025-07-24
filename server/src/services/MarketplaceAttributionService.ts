@@ -23,7 +23,7 @@ import {
   validateCreateAttributionClaimRequest,
   validateUpdateRevenueAttributionRequest,
   MARKETPLACE_ATTRIBUTION_DEFAULTS
-} from '../../packages/core/types/marketplaceAttribution';
+} from '../../../packages/core/types/marketplaceAttribution';
 
 // =============================================================================
 // Service Types

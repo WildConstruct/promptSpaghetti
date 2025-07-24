@@ -97,7 +97,7 @@ const consentPurposes = [
         thirdParties: ['Recommendation engines', 'Content platforms']
     }
 ];
-const ConsentBanner = ({ onConsentUpdate, onClose, country = 'US', _____language = 'en', theme = 'light', position = 'bottom', showRejectButton = true, showCustomizeButton = true, autoHide = false, respectDoNotTrack = true }) => {
+const ConsentBanner = ({ onConsentUpdate, onClose, country = 'US', language = 'en', theme = 'light', position = 'bottom', showRejectButton = true, showCustomizeButton = true, autoHide = false, respectDoNotTrack = true }) => {
     const [isVisible, setIsVisible] = useState(true);
     const [showDetails, setShowDetails] = useState(false);
     const [consents, setConsents] = useState(defaultConsents);

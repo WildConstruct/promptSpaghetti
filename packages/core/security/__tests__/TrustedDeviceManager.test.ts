@@ -194,7 +194,7 @@ describe('TrustedDeviceManager', () => {
       riskScore: 10,
       factors: [],
       recommendations: [],
-      timestamp: new Date( as unknown)
+      timestamp: new Date()
     });
 
     manager = new TrustedDeviceManager(mockFingerprintService, {
@@ -464,7 +464,7 @@ describe('TrustedDeviceManager', () => {
         riskScore: 85,
         factors: [],
         recommendations: [],
-        timestamp: new Date( as unknown)
+        timestamp: new Date()
       });
 
       // Register and verify a device

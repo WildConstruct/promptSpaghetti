@@ -37,7 +37,7 @@ import {
   DeviceRiskAssessment,
   PaymentRecommendation,
   AccountRecommendation
-} from '../../../packages/core/types/FraudMonitoring';
+} from '../../../../packages/core/types/FraudMonitoring';
 
 export interface FraudDetectionRequest {
   type: 'payment' | 'account' | 'transaction' | 'login' | 'registration';
@@ -1085,7 +1085,10 @@ export class FraudDetectionEngine {
     };
   }
 
-  private async assessChargebackRisk(_____paymentData: unknown, _____context: FraudContext): Promise<ChargebackRiskAssessment> {
+  private async assessChargebackRisk(
+    _____paymentData: unknown,
+    _____context: FraudContext
+  ): Promise<ChargebackRiskAssessment> {
     return this.getDefaultChargebackRisk();
   }
 
@@ -1098,7 +1101,11 @@ export class FraudDetectionEngine {
   }
 
   // Account fraud assessment helpers
-  private buildAccountRiskProfile(trustScore: Error, _____enforcementHistory: unknown, _____behavioralAnalysis: unknown): unknown {
+  private buildAccountRiskProfile(
+    trustScore: Error,
+    _____enforcementHistory: unknown,
+    _____behavioralAnalysis: unknown
+  ): unknown {
     return {
       overallRisk: 'low',
       riskFactors: [],

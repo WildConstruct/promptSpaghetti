@@ -4,9 +4,9 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Main interface for threaded commenting system
  */
 import { useState } from 'react';
-import { CommentThread } from './CommentThread';
-import { CommentForm } from './CommentForm';
-import { useComments } from '../../hooks/useComments';
+import { CommentThread } from './CommentThread.js';
+import { CommentForm } from './CommentForm.js';
+import { useComments } from '../../hooks/useComments.js';
 export const CommentSystem = ({ workspaceId, targetType, targetId, userId, resourceId, projectId, className = '', compact = false }) => {
     const [showCommentForm, setShowCommentForm] = useState(false);
     const [sortOrder, setSortOrder] = useState('desc');

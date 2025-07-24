@@ -11,7 +11,7 @@
  */
 
 import { GraphExecutionBenchmarker, GraphExecutionMetrics, BenchmarkConfiguration } from './graph-execution-benchmarks.test';
-import { PerformanceMonitoringDashboard } from '../../packages/core/performance/PerformanceMonitoringDashboard';
+import { PerformanceMonitoringDashboard } from '../packages/core/performance/PerformanceMonitoringDashboard';
 import { Logger } from '../../server/src/logging/Logger';
 import { RefactoredDataLifecycleService } from '../../server/src/services/RefactoredDataLifecycleService';
 

@@ -5,7 +5,7 @@
  * Handles subscription lifecycle, event publishing, and performance optimization.
  */
 import { useEffect, useRef, useCallback, useState } from 'react';
-import { globalEventBus, EventPriority, EventFactory } from '../EventSystem';
+import { globalEventBus, EventPriority, EventFactory } from '../EventSystem.js';
 /**
  * Hook for subscribing to events with automatic cleanup
  */

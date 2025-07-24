@@ -485,9 +485,9 @@ export declare const EdgeAddOperationSchema: z.ZodObject<{
     metadata?: Record<string, any> | undefined;
     dependencies?: string[] | undefined;
     clientId?: string | undefined;
-    operationVector?: Record<string, number> | undefined;
     sourcePort?: string | undefined;
     targetPort?: string | undefined;
+    operationVector?: Record<string, number> | undefined;
 }, {
     type: "EDGE_ADD";
     userId: string;
@@ -502,9 +502,9 @@ export declare const EdgeAddOperationSchema: z.ZodObject<{
     metadata?: Record<string, any> | undefined;
     dependencies?: string[] | undefined;
     clientId?: string | undefined;
-    operationVector?: Record<string, number> | undefined;
     sourcePort?: string | undefined;
     targetPort?: string | undefined;
+    operationVector?: Record<string, number> | undefined;
 }>;
 /**
  * All mutation operation schemas union
@@ -799,9 +799,9 @@ declare const _default: {
         metadata?: Record<string, any> | undefined;
         dependencies?: string[] | undefined;
         clientId?: string | undefined;
-        operationVector?: Record<string, number> | undefined;
         sourcePort?: string | undefined;
         targetPort?: string | undefined;
+        operationVector?: Record<string, number> | undefined;
     }, {
         type: "EDGE_ADD";
         userId: string;
@@ -816,9 +816,9 @@ declare const _default: {
         metadata?: Record<string, any> | undefined;
         dependencies?: string[] | undefined;
         clientId?: string | undefined;
-        operationVector?: Record<string, number> | undefined;
         sourcePort?: string | undefined;
         targetPort?: string | undefined;
+        operationVector?: Record<string, number> | undefined;
     }>;
     MutationOperationSchema: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         type: z.ZodLiteral<"NODE_ADD">;

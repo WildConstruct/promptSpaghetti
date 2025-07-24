@@ -24,6 +24,10 @@ export declare abstract class EnhancedBaseAdaptor implements ModelAdaptor, Adapt
     abstract capabilities(): Promise<Capabilities>;
     protected abstract doValidate(graph: PromptGraph): Promise<ValidationResult[]>;
     protected abstract doTransform(graph: PromptGraph, options?: TransformOptions): Promise<TargetPrompt>;
+    beforeValidate?(graph: PromptGraph): Promise<PromptGraph>;
+    afterValidate?(graph: PromptGraph, results: ValidationResult[]): Promise<ValidationResult[]>;
+    beforeTransform?(graph: PromptGraph): Promise<PromptGraph>;
+    afterTransform?(graph: PromptGraph, result: TargetPrompt): Promise<TargetPrompt>;
     protected onInitialize?(): Promise<void>;
     protected onDestroy?(): Promise<void>;
     protected onHealthCheck?(): Promise<Partial<AdaptorHealthDetails>>;
@@ -93,7 +97,7 @@ export declare abstract class EnhancedBaseAdaptor implements ModelAdaptor, Adapt
         edgeId?: string;
         autoFixable?: boolean;
         suggestions?: Array<{
-            type: string;
+            type: 'fix' | 'alternative' | 'workaround';
             description: string;
         }>;
     }): ValidationResult;

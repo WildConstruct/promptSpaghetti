@@ -6,11 +6,11 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Supports template creation, sharing, and customization for different project types.
  */
 import { useState, useCallback, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { Badge } from '../ui/Badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
-import { Switch } from '../ui/Switch';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
+import { Button } from '../ui/Button.js';
+import { Badge } from '../ui/Badge.js';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select.js';
+import { Switch } from '../ui/Switch.js';
 import { FileText, Copy, Edit3, Trash2, Search, Plus, Eye, Users, Clock, Zap, Camera, Film, Palette, BarChart3, CheckCircle } from 'lucide-react';
 // Built-in template data
 const BUILTIN_TEMPLATES = [

@@ -19,10 +19,13 @@
 
 import { EventEmitter } from 'events';
 import { logger } from '../../utils/logger';
-import { SecurityAlertingAnalytics, SecurityAlertingConfig } from '../../../packages/core/security/SecurityAlertingAnalytics';
+import { 
+  SecurityAlertingAnalytics,
+  SecurityAlertingConfig
+} from '../../../../packages/core/security/SecurityAlertingAnalytics';
 import { ProjectHealthAlertService } from '../project-health-alert-service';
 import { HealthMonitoringService, SystemHealthSummary, HealthStatus } from '../HealthMonitoringService';
-// import { SecurityAlert } from '../../../packages/core/security/CentralizedAccessControlService';
+// import { SecurityAlert } from '../../../../packages/core/security/CentralizedAccessControlService';
 
 export enum AlertPriority {
   LOW = 'LOW',

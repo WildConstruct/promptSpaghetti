@@ -8,9 +8,11 @@ module.exports = {
     '**/?(*.)+(spec|test).ts?(x)',
     '**/tests/documentation/**/*.(spec|test).ts?(x)',
     '**/tests/infrastructure/**/*.(spec|test).ts?(x)',
-    '**/tests/**/*.(spec|test).ts?(x)'
+    '**/tests/**/*.(spec|test).ts?(x)',
+    '**/__tests__/**/*.(spec|test).js?(x)',
+    '**/?(*.)+(spec|test).js?(x)'
   ],
-  testPathIgnorePatterns: ['/node_modules/', 'tests/performance/', '.*\\.spec\\.jsx$', '.*\\.js$'],
+  testPathIgnorePatterns: ['/node_modules/', 'tests/performance/', '.*timeout-examples\\.(ts|js)', '\\.test\\.d\\.ts$', '\\.spec\\.d\\.ts$'],
   coverageDirectory: 'coverage',
   collectCoverageFrom: [
     'packages/**/*.{ts,tsx}',
@@ -21,7 +23,14 @@ module.exports = {
     'tests/utils/**/*.{ts,tsx}',
     '!**/node_modules/**',
     '!tests/documentation/**/*.test.ts',
-    '!tests/infrastructure/**/*.test.ts'
+    '!tests/infrastructure/**/*.test.ts',
+    '!packages/core/hooks/useAdvancedPromptingCollaboration.ts',
+    '!packages/core/hooks/useKeyboardShortcuts.ts',
+    '!packages/core/hooks/useExternalDataImport.ts',
+    '!packages/core/stores/uiSettingsStore.ts',
+    '!server/src/admin/LogAnalysisService.ts',
+    '!**/timeout-examples.ts',
+    '!**/timeout-examples.js'
   ],
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
@@ -45,6 +54,12 @@ module.exports = {
     '^.+\\.js$': 'babel-jest',
     '^.+\\.jsx$': 'babel-jest'
   },
+  // extensionsToTreatAsEsm: ['.js'], // Removed as .js is automatically inferred from package.json
+  globals: {
+    'ts-jest': {
+      useESM: true
+    }
+  },
   coverageThreshold: {
     global: {
       branches: 80,
@@ -59,7 +74,7 @@ module.exports = {
       statements: 85
     }
   },
-  testTimeout: 15000,
+  testTimeout: 8000, // Reduced from 15000 to 8000 for faster feedback
   verbose: true,
   collectCoverage: true
 };

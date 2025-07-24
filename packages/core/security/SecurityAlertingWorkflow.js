@@ -7,8 +7,8 @@
  */
 import { EventEmitter } from 'events';
 import crypto from 'crypto';
-import { RiskLevel, ThreatCategory } from './SecurityEventAnalytics';
-import { ComplianceFramework } from './SecurityLogger';
+import { RiskLevel, ThreatCategory } from './SecurityEventAnalytics.js';
+import { ComplianceFramework } from './SecurityLogger.js';
 // Alert System Types
 export var AlertSeverity;
 (function (AlertSeverity) {

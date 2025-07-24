@@ -13,26 +13,26 @@
 // Verification System Components (Epic 17.5.5)
 // =============================================================================
 // Main verification dashboard for overview and queue management
-export { default as VerificationDashboard } from './VerificationDashboard';
+export { default as VerificationDashboard } from './VerificationDashboard.js';
 // Detailed verification queue interface for admin review workflow
-export { default as VerificationQueue } from './VerificationQueue';
+export { default as VerificationQueue } from './VerificationQueue.js';
 // Document review interface for examining uploaded verification documents
-export { default as DocumentReviewInterface } from './DocumentReviewInterface';
+export { default as DocumentReviewInterface } from './DocumentReviewInterface.js';
 // Trust score management interface for admin adjustments
-export { default as TrustScoreManager } from './TrustScoreManager';
+export { default as TrustScoreManager } from './TrustScoreManager.js';
 // Analytics and reporting interface for verification system performance
-export { default as VerificationAnalytics } from './VerificationAnalytics';
+export { default as VerificationAnalytics } from './VerificationAnalytics.js';
 // =============================================================================
 // Policy Framework Components (Epic 17.5.4)
 // =============================================================================
 // Main policy management dashboard with tabbed interface
-export { default as PolicyManagementDashboard } from './PolicyManagementDashboard';
+export { default as PolicyManagementDashboard } from './PolicyManagementDashboard.js';
 // Marketplace-specific policy configuration system
-export { default as MarketplacePolicyConfig } from './MarketplacePolicyConfig';
+export { default as MarketplacePolicyConfig } from './MarketplacePolicyConfig.js';
 // Policy enforcement workflow management and monitoring
-export { default as PolicyEnforcementWorkflow } from './PolicyEnforcementWorkflow';
+export { default as PolicyEnforcementWorkflow } from './PolicyEnforcementWorkflow.js';
 // Policy analytics and performance monitoring
-export { default as PolicyAnalyticsDashboard } from './PolicyAnalyticsDashboard';
+export { default as PolicyAnalyticsDashboard } from './PolicyAnalyticsDashboard.js';
 /**
  * IMPLEMENTATION SUMMARY - EPIC 17 BACKSTAGE ADMIN CONTROLS
  * ==========================================================

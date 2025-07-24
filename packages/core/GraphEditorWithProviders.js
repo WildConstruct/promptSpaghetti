@@ -6,22 +6,22 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useCallback, useState, useMemo, useEffect } from 'react';
 import { ReactFlowProvider, addEdge, Background, Controls, MiniMap, ReactFlow, ConnectionLineType, useReactFlow } from 'reactflow';
 // Import existing GraphEditor components
-import { InspectorPanel } from './components/Inspector';
-import { NodeRenderer } from './components/NodeRenderer';
-import { StatusBar } from './components/StatusBar';
-import { PreviewModal } from './PreviewModal';
-import { Palette } from './Palette';
-import { nodeSchemas } from './nodeSchemas';
-import { useGraphStore } from './graphStore';
-import { usePreviewSeeds } from './usePreviewSeeds';
-import { useValidation } from './hooks/useValidation';
-import { useAutosave } from './hooks/useAutosave';
-import { useNodeUtils } from './hooks/useNodeUtils';
+import { InspectorPanel } from './components/Inspector.js';
+import { NodeRenderer } from './components/NodeRenderer.js';
+import { StatusBar } from './components/StatusBar.js';
+import { PreviewModal } from './PreviewModal.js';
+import { Palette } from './Palette.js';
+import { nodeSchemas } from './nodeSchemas.js';
+import { useGraphStore } from './graphStore.js';
+import { usePreviewSeeds } from './usePreviewSeeds.js';
+import { useValidation } from './hooks/useValidation.js';
+import { useAutosave } from './hooks/useAutosave.js';
+import { useNodeUtils } from './hooks/useNodeUtils.js';
 // Import provider system
-import { EditorProviderWrapper } from './components/EditorProviderWrapper';
-import { createProviderHook } from './hooks/useEditorProviders';
+import { EditorProviderWrapper } from './components/EditorProviderWrapper.js';
+import { createProviderHook } from './hooks/useEditorProviders.js';
 // Import existing node type definitions and icons
-import { WeightedChoiceIcon, ConcatIcon, OutputIcon, IncludeIcon, SetVariableIcon, GetVariableIcon } from './icons';
+import { WeightedChoiceIcon, ConcatIcon, OutputIcon, IncludeIcon, SetVariableIcon, GetVariableIcon } from './icons.js';
 // Node type definitions (same as original GraphEditor)
 const NODE_TYPES = [
     // Text Node Types

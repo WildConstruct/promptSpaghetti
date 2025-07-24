@@ -2,7 +2,7 @@
 // Integration tests for Epic 7 advanced nodes via API
 
 import { generatePreviewOutputs } from '../index';
-import { Graph } from '../../../packages/core/graphSchema';
+import { Graph } from '../../../../packages/core/graphSchema';
 
 describe('API Advanced Node Integration', () => {
   describe('WeightedAdvanced via Preview API', () => {

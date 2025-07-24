@@ -6,12 +6,12 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * with message history, typing indicators, file uploads, and moderation.
  */
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { InteractionType } from '../../services/Epic16InteractiveElementsService';
+import { InteractionType } from '../../services/Epic16InteractiveElementsService.js';
 export const LiveChatWidget = ({ element, interactiveService, userId, userName, userAvatar, isMinimized = false, onMinimize, onClose }) => {
     // State management
     const [messages, setMessages] = useState([]);
     const [currentMessage, setCurrentMessage] = useState('');
-    const [typingUsers, _____setTypingUsers] = useState([]);
+    const [typingUsers, ___setTypingUsers] = useState([]);
     const [isTyping, setIsTyping] = useState(false);
     const [onlineUsers, setOnlineUsers] = useState([]);
     const [isConnected, setIsConnected] = useState(false);

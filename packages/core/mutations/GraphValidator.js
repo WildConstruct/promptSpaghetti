@@ -5,9 +5,9 @@
  * Supports schema validation, structural validation, and custom validation rules.
  */
 import { EventEmitter } from 'events';
-import { OperationType } from './types';
-import { nodeSchemas } from '../nodeSchemas';
-import { validateGraph } from '../validation';
+import { OperationType } from './types.js';
+import { nodeSchemas } from '../nodeSchemas.js';
+import { validateGraph } from '../validation.js';
 /**
  * Comprehensive graph validation system
  */

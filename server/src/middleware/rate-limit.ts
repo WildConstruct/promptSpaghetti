@@ -245,7 +245,7 @@ export class RateLimitMiddleware {
   createEndpointMiddleware(endpointConfig: Partial<RateLimitConfig> | string) {
     // Handle preset configurations
     const config = typeof endpointConfig === 'string' 
-      ? RateLimitPresets[endpointConfig as keyof typeof RateLimitPresets]()
+      ? (RateLimitPresets as any)[endpointConfig]()
       : endpointConfig;
 
     return async (request: FastifyRequest, reply: FastifyReply) => {
@@ -447,63 +447,7 @@ export function createRateLimitPlugin(config: RateLimitMiddlewareConfig = {}) {
 // Preset Configurations
 // ========================================
 
-export const RateLimitEndpoints = {
-  // Authentication endpoints
-  AUTH_LOGIN: {
-    path: '/api/auth/login',
-    method: 'POST',
-    config: RateLimitPresets.authentication()
-  },
-  AUTH_REGISTER: {
-    path: '/api/auth/register',
-    method: 'POST',
-    config: RateLimitPresets.authentication()
-  },
-  AUTH_PASSWORD_RESET: {
-    path: '/api/auth/password-reset',
-    method: 'POST',
-    config: RateLimitPresets.passwordReset()
-  },
-
-  // API endpoints
-  API_GRAPHS: {
-    path: '/api/graphs',
-    config: RateLimitPresets.api()
-  },
-  API_PREVIEW: {
-    path: '/api/preview',
-    method: 'POST',
-    config: {
-      windowMs: 60000, // 1 minute
-      maxRequests: 50,
-      keyGenerator: RateLimitKeyGenerator.byUser
-    }
-  },
-  API_EXECUTE: {
-    path: '/api/execute',
-    method: 'POST',
-    config: {
-      windowMs: 60000, // 1 minute
-      maxRequests: 100,
-      keyGenerator: RateLimitKeyGenerator.byUser
-    }
-  },
-
-  // File operations
-  FILE_UPLOAD: {
-    path: '/api/upload',
-    method: 'POST',
-    config: RateLimitPresets.fileUpload()
-  },
-
-  // Search operations
-  SEARCH: {
-    path: '/api/search',
-    method: ['GET', 'POST'],
-    config: RateLimitPresets.search()
-  }
-};
-
+export 
 // Type augmentation for Fastify
 declare module 'fastify' {
   interface FastifyInstance {

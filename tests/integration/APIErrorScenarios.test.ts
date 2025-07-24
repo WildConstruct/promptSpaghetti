@@ -43,7 +43,7 @@ jest.mock('supertest', () => {
 });
 
 import request from 'supertest';
-import { Graph } from '../../packages/core/graphSchema';
+import { Graph } from '../packages/core/graphSchema';
 import { TestEnvironmentManager } from '../utils/TestingUtilities';
 
 // Mock Express app for testing

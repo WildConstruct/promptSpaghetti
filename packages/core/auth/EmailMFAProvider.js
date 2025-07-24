@@ -5,8 +5,8 @@
  */
 import crypto from 'crypto';
 import { z } from 'zod';
-import { MFAMethodType, MFAMethodStatus, MFAVerificationResult, MFA_CONSTANTS } from '../types/MFATypes';
-import { ErrorFactory } from '../errors/ErrorFactory';
+import { MFAMethodType, MFAMethodStatus, MFAVerificationResult, MFA_CONSTANTS } from '../types/MFATypes.js';
+import { ErrorFactory } from '../errors/ErrorFactory.js';
 // ========================================
 // Input Validation Schemas
 // ========================================

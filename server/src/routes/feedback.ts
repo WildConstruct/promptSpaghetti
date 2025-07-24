@@ -18,7 +18,7 @@ import {
   validateUpdateFeedbackRequest,
   validateFeedbackFilter,
   validateModerateFeedbackRequest
-} from '../../packages/core/types/feedback';
+} from '../../../packages/core/types/feedback';
 
 interface FeedbackRouteParams {
   feedbackId: string;

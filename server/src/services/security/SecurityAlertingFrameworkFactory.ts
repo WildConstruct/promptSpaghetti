@@ -20,7 +20,10 @@ import {
   EscalationRule
 } from './UnifiedSecurityAlertingFramework';
 import { AlertingConfigurationManager } from './AlertingConfigurationManager';
-import { SecurityAlertingAnalytics, SecurityAlertingConfig } from '../../../packages/core/security/SecurityAlertingAnalytics';
+import { 
+  SecurityAlertingAnalytics,
+  SecurityAlertingConfig
+} from '../../../../packages/core/security/SecurityAlertingAnalytics';
 import { HealthMonitoringService } from '../HealthMonitoringService';
 import { ProjectHealthAlertService } from '../project-health-alert-service';
 import { AttributionService } from '../attribution-service';

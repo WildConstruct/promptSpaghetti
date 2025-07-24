@@ -1053,7 +1053,7 @@ export class DataClassificationService {
     condition: ClassificationCondition,
     data: { content: string; metadata: Record<string, any>; filename: string; size: number }
   ): { matches: boolean; reason: string } {
-    let fieldValue: Error;
+    let fieldValue: any;
     
     switch (condition.field) {
     case 'content':

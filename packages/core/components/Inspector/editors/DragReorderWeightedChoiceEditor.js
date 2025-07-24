@@ -8,12 +8,12 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * and three-tier progressive disclosure for filmmaker-friendly UI
  */
 import { useState, useCallback, useMemo } from 'react';
-import { DragReorderWeightManager } from '../WeightManagement/DragReorderWeightManager';
-import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
+import { DragReorderWeightManager } from '../WeightManagement/DragReorderWeightManager.js';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection.js';
 /**
  * Enhanced WeightedChoice editor with professional drag-to-reorder interface
  */
-export const DragReorderWeightedChoiceEditor = ({ data, onChange, _____nodeId = 'drag-reorder-weighted-choice', disabled = false, theme = 'cinema', showPreview = true, showAnalytics = true }) => {
+export const DragReorderWeightedChoiceEditor = ({ data, onChange, nodeId = 'drag-reorder-weighted-choice', disabled = false, theme = 'cinema', showPreview = true, showAnalytics = true }) => {
     const [isAddingChoice, setIsAddingChoice] = useState(false);
     const [newChoiceText, setNewChoiceText] = useState('');
     const [previewCount, setPreviewCount] = useState(10);

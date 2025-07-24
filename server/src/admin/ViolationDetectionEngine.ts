@@ -18,7 +18,7 @@ import {
   TransactionTrustScore,
   RiskFactor,
   FraudIndicator
-} from '../../packages/core/types/TrustTypes';
+} from '../../../packages/core/types/TrustTypes';
 
 export interface ViolationRule {
   ruleId: string;

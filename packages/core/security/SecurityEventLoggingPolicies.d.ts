@@ -143,10 +143,10 @@ export declare const SecurityEventSchema: z.ZodObject<{
     created_at: Date;
     created_by: string;
     event_type: SecurityEventType;
-    confidence_score: number;
     compliance_frameworks: ComplianceFramework[];
     system_component: string;
     regulatory_impact: boolean;
+    confidence_score: number;
     indicators: string[];
     event_id: string;
     threat_level: number;
@@ -189,8 +189,8 @@ export declare const SecurityEventSchema: z.ZodObject<{
     created_at: Date;
     created_by: string;
     event_type: SecurityEventType;
-    confidence_score: number;
     system_component: string;
+    confidence_score: number;
     event_id: string;
     threat_level: number;
     tags?: string[] | undefined;

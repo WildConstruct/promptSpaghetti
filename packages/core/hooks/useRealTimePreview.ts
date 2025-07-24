@@ -35,7 +35,7 @@ const DEFAULT_CONFIG: RealTimePreviewConfig = {
   autoRefresh: true
 };
 
-export 
+export const useRealTimePreview = (graph: GraphData, seedConfig: SeedConfig = {}) => {
   // State
   const [variants, setVariants] = useState<PreviewVariant[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);

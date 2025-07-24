@@ -1,4 +1,6 @@
 /**
+import { Plus } from 'lucide-react';
+
  * Tutorial UI Components (Epic 16)
  *
  * DEPLOYMENT BLOCKER FIX: Comprehensive tutorial UI components for creating
@@ -234,7 +236,7 @@ export declare const TutorialPlayer: React.FC<TutorialPlayerProps>;
 interface TutorialStepContentProps {
     step: TutorialStep;
     isPlaying: boolean;
-    settings: any;
+    settings: unknown;
     onComplete: (score?: number) => void;
     onPlayPause: () => void;
 }
@@ -249,8 +251,8 @@ interface TutorialResourcesProps {
     onResourceClick: (resource: TutorialResource) => void;
 }
 interface TutorialSettingsProps {
-    settings: any;
-    onSettingsChange: (settings: any) => void;
+    settings: unknown;
+    onSettingsChange: (settings: unknown) => void;
     onClose: () => void;
 }
 export interface TutorialBrowserProps {

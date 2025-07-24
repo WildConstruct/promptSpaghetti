@@ -2,7 +2,7 @@
  * Extension Interface Validator - Epic 8.4 Story 8.4.2
  * Advanced interface validation and runtime type checking for extensions
  */
-import { extensionTypeChecker, extensionInterfaceValidator } from './TypeDefinitions';
+import { extensionTypeChecker, extensionInterfaceValidator } from './TypeDefinitions.js';
 // Enhanced Interface Validator
 export class ExtensionInterfaceValidator {
     static instance;

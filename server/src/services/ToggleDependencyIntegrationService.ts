@@ -17,7 +17,11 @@
 
 import { EventEmitter } from 'events';
 import { FeatureToggleService } from './feature-toggle-service';
-import { FeatureToggleDependencyService, DependencyType, DependencyRelationship } from '../../packages/core/services/FeatureToggleDependencyService';
+import { 
+  FeatureToggleDependencyService,
+  DependencyType,
+  DependencyRelationship
+} from '../../../packages/core/services/FeatureToggleDependencyService';
 import { EnhancedToggleEvaluationService } from './EnhancedToggleEvaluationService';
 import { AuditService } from '../auth/services/AuditService';
 
@@ -566,8 +570,7 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
   ): Promise<ImpactPreview> {
     try {
       // Get dependency analysis
-      const _____dependencyAnalysis = await this.dependencyService.analyzeDependencies([operation.targetToggleId]);
-
+      
       // Get direct dependencies
       const directImpact = await this.dependencyService.getImpactAnalysis(
         operation.targetToggleId,
@@ -960,11 +963,21 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
   }
 
   // Additional helper methods would be implemented here
-  private async sendNotifications(_____operation: ToggleOperation, _____result: EnforcementResult, _____context: EnforcementContext, _____actorId: string): Promise<void> {
+  private async sendNotifications(
+    _____operation: ToggleOperation,
+    _____result: EnforcementResult,
+    _____context: EnforcementContext,
+    _____actorId: string
+  ): Promise<void> {
     // Implementation would send notifications based on configuration
   }
 
-  private async logEnforcement(operation: ToggleOperation, result: EnforcementResult, context: EnforcementContext, actorId: string): Promise<void> {
+  private async logEnforcement(
+    operation: ToggleOperation,
+    result: EnforcementResult,
+    context: EnforcementContext,
+    actorId: string
+  ): Promise<void> {
     await this.auditService.logAction({
       action: `dependency_enforcement_${operation.type}`,
       userId: actorId,
@@ -1023,18 +1036,38 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
   // Placeholder methods for complete interface implementation
   private extractAffectedFeatures(_____impactAnalysis: unknown): string[] { return []; }
   private assessBusinessImpact(_____riskScore: number): 'none' | 'low' | 'medium' | 'high' | 'critical' { return 'low'; }
-  private assessTechnicalComplexity(_____operation: ToggleOperation, _____impactAnalysis: unknown): 'simple' | 'moderate' | 'complex' | 'critical' { return 'simple'; }
+  private assessTechnicalComplexity(
+    _____operation: ToggleOperation,
+    _____impactAnalysis: unknown
+  ): 'simple' | 'moderate' | 'complex' | 'critical' { return 'simple'; }
   private estimateRolloutDuration(_____impactAnalysis: unknown): number { return 5; }
-  private async executePrimaryOperation(_____operation: ToggleOperation, _____actorId: string): Promise<unknown> { return { success: true }; }
-  private async executeCascadeAction(_____cascadeAction: CascadeAction, _____actorId: string): Promise<unknown> { return { success: true }; }
-  private async validateFinalState(_____operation: ToggleOperation, _____cascadeActions: CascadeAction[], _____cascadeResults: unknown[]): Promise<unknown> { return { valid: true }; }
+  private async executePrimaryOperation(
+    _____operation: ToggleOperation,
+    _____actorId: string
+  ): Promise<unknown> { return { success: true }; }
+  private async executeCascadeAction(
+    _____cascadeAction: CascadeAction,
+    _____actorId: string
+  ): Promise<unknown> { return { success: true }; }
+  private async validateFinalState(
+    _____operation: ToggleOperation,
+    _____cascadeActions: CascadeAction[],
+    _____cascadeResults: unknown[]
+  ): Promise<unknown> { return { valid: true }; }
   private async attemptRollback(_____executionId: string, _____error: Error, _____actorId: string): Promise<void> { }
   private async previewCascadeEffects(_____operation: ToggleOperation): Promise<any[]> { return []; }
-  private assessPreviewRisks(_____operation: ToggleOperation, _____directImpact: unknown, _____cascadePreview: unknown[]): unknown[] { return []; }
+  private assessPreviewRisks(
+    _____operation: ToggleOperation,
+    _____directImpact: unknown,
+    _____cascadePreview: unknown[]
+  ): unknown[] { return []; }
   private calculateOverallRisk(_____riskFactors: unknown[]): number { return 0.3; }
   private estimateExecutionTime(cascadeCount: number): number { return cascadeCount * 30; } // 30 seconds per cascade
   private getRecommendedApprovals(_____riskFactors: unknown[]): string[] { return []; }
-  private getSafetyCheckRecommendations(_____operation: ToggleOperation, _____riskFactors: unknown[]): string[] { return []; }
+  private getSafetyCheckRecommendations(
+    _____operation: ToggleOperation,
+    _____riskFactors: unknown[]
+  ): string[] { return []; }
 }
 
 // Supporting interfaces for completeness

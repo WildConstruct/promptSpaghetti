@@ -19,6 +19,6 @@ export interface ProgressiveDisclosureSectionProps {
  * - Advanced: Power user options with collapsible sections
  * - Debug: All technical details visible
  */
-export declare const isExpanded: any, setIsExpanded: React.Dispatch<any>;
+declare const ProgressiveDisclosureSection: React.FC<ProgressiveDisclosureSectionProps>;
 export default ProgressiveDisclosureSection;
 //# sourceMappingURL=ProgressiveDisclosureSection.d.ts.map

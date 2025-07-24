@@ -7,11 +7,11 @@
  * memory scaling analysis, and optimization validation.
  */
 
-import { ExecutionContext } from '../../packages/core/runtime/index';
-import { AdvancedExecutionContext } from '../../packages/core/runtime/advanced';
-import { WeightedAdvanced } from '../../packages/core/runtime/nodes/WeightedAdvanced';
-import { Sequential } from '../../packages/core/runtime/nodes/Sequential';
-import { Markov } from '../../packages/core/runtime/nodes/Markov';
+import { ExecutionContext } from '../packages/core/runtime/index';
+import { AdvancedExecutionContext } from '../packages/core/runtime/advanced';
+import { WeightedAdvanced } from '../packages/core/runtime/nodes/WeightedAdvanced';
+import { Sequential } from '../packages/core/runtime/nodes/Sequential';
+import { Markov } from '../packages/core/runtime/nodes/Markov';
 
 interface MemorySnapshot {
   timestamp: number;

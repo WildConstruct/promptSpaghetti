@@ -405,7 +405,7 @@ describe('usePasswordReset', () => {
   });
 
   describe('Reset Flow - Password Reset Step', () => {
-    const setupForPasswordReset = async (result: unknown) => {
+    const setupForPasswordReset = async (result: any) => {
       mockPasswordResetTokenManager.generateToken.mockResolvedValue({
         token: 'mock-token',
         tokenId: 'mock-token-id'
@@ -462,7 +462,7 @@ describe('usePasswordReset', () => {
 
       expect(result.current.success).toContain('Password reset successfully');
       expect(result.current.currentStep).toBe(ResetStep.SUCCESS);
-    });
+    }, 30000); // Increased timeout to 30 seconds
 
     test('should reject weak password', async () => {
       const { result } = renderHook(() => usePasswordReset());

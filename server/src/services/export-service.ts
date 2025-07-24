@@ -37,7 +37,7 @@ import {
   DEFAULT_EXPORT_EXPIRATION_HOURS,
   MAX_EXPORT_FILE_SIZE,
   MAX_CONCURRENT_EXPORTS
-} from '../../packages/core/types/export';
+} from '../../../packages/core/types/export';
 import * as crypto from 'crypto';
 import * as fs from 'fs/promises';
 import * as path from 'path';
@@ -692,7 +692,11 @@ export class ExportService {
     case 'markdown':
       return `# Export Report\n\n**Project:** ${data.project_id}\n**Type:** ${data.export_type}\n**Format:** ${data.export_format}\n**Generated:** ${data.generated_at}`;
     case 'html':
-      return `<!DOCTYPE html><html><head><title>Export</title></head><body><pre>${JSON.stringify(data, null, 2)}</pre></body></html>`;
+      return `<!DOCTYPE html><html><head><title>Export</title></head><body><pre>${JSON.stringify(
+        data,
+        null,
+        2
+      )}</pre></body></html>`;
     default:
       return JSON.stringify(data, null, 2);
     }

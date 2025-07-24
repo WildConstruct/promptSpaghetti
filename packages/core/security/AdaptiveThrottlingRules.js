@@ -8,7 +8,7 @@
  * while maintaining optimal user experience.
  */
 import { EventEmitter } from 'events';
-import { ThreatLevel } from './RateLimitingService';
+import { ThreatLevel } from './RateLimitingService.js';
 // ========================================
 // Throttling Rule Types
 // ========================================

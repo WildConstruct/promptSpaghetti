@@ -5,8 +5,8 @@
  * Comprehensive node framework with lifecycle management, registry, and extension architecture
  */
 import { EventEmitter } from 'events';
-import { AdvancedRuntimeNode } from '../runtime/advanced';
-import { NodeValidationService } from '../validation';
+import { AdvancedRuntimeNode } from '../runtime/advanced.js';
+import { NodeValidationService } from '../validation.js';
 /**
  * Enhanced node base class with framework integration
  */

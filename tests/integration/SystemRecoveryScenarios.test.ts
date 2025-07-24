@@ -7,7 +7,7 @@ import { jest } from '@jest/globals';
 import { TestEnvironmentManager, AsyncTestingUtils } from '../utils/TestingUtilities';
 import { ConnectionManager } from '../../server/src/websocket/ConnectionManager';
 import { executeGraph } from '../../server/src/engine';
-import { Graph } from '../../packages/core/graphSchema';
+import { Graph } from '../packages/core/graphSchema';
 import WebSocket from 'ws';
 
 describe('System Recovery and Resilience Scenarios', () => {

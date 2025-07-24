@@ -20,7 +20,7 @@ describe('RateLimitingService', () => {
 
   beforeEach(() => {
     mockDate = new Date('2025-01-15T10:00:00Z');
-    jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
+    jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
     
     service = new RateLimitingService();
   });
@@ -84,13 +84,13 @@ describe('RateLimitingService', () => {
       service.recordAttempt(identifier, endpoint, false);
       await service.checkRateLimit(identifier, endpoint);
       
-      let delay1 = service.getCalculatedBackoffDelay(identifier, endpoint);
+      const delay1 = service.getCalculatedBackoffDelay(identifier, endpoint);
 
       // Second failure
       service.recordAttempt(identifier, endpoint, false);
       await service.checkRateLimit(identifier, endpoint);
       
-      let delay2 = service.getCalculatedBackoffDelay(identifier, endpoint);
+      const delay2 = service.getCalculatedBackoffDelay(identifier, endpoint);
 
       expect(delay2).toBeGreaterThan(delay1);
       expect(delay2).toBeGreaterThanOrEqual(delay1 * 2); // Exponential growth
@@ -104,13 +104,13 @@ describe('RateLimitingService', () => {
       service.recordAttempt(identifier, endpoint, false);
       service.recordAttempt(identifier, endpoint, false);
       
-      let delayBefore = service.getBackoffDelay(identifier, endpoint);
+      const delayBefore = service.getBackoffDelay(identifier, endpoint);
       expect(delayBefore).toBeGreaterThan(0);
 
       // Successful attempt should reset
       service.recordAttempt(identifier, endpoint, true);
       
-      let delayAfter = service.getBackoffDelay(identifier, endpoint);
+      const delayAfter = service.getBackoffDelay(identifier, endpoint);
       expect(delayAfter).toBe(0);
     });
 
@@ -229,21 +229,21 @@ describe('RateLimitingService', () => {
         // Advance time by 2 seconds between attempts to avoid per-second limit (2/sec)
         // Use successful attempts to keep threat level LOW (threat detection reduces limits)
         mockDate = new Date(mockDate.getTime() + 2000);
-        jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
+        jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
         service.recordAttempt(identifier, loginEndpoint, true);
       }
       const loginResult = await service.checkRateLimit(identifier, loginEndpoint);
 
       // Reset time for MFA test
       mockDate = new Date('2025-01-15T10:00:00Z');
-      jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
+      jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
 
       // Test MFA limit - use successful attempts to avoid threat level increase  
       for (let i = 0; i < 4; i++) {
         // Advance time by 2 seconds between attempts to avoid per-second limit (1/sec for MFA)
         // Use successful attempts to keep threat level LOW (threat detection reduces limits)
         mockDate = new Date(mockDate.getTime() + 2000);
-        jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
+        jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
         service.recordAttempt(identifier, mfaEndpoint, true);
       }
       const mfaResult = await service.checkRateLimit(identifier, mfaEndpoint);
@@ -253,7 +253,7 @@ describe('RateLimitingService', () => {
 
       // One more MFA attempt should block (5 + 1 = 6 > limit of 5)
       mockDate = new Date(mockDate.getTime() + 2000);
-      jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
+      jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
       service.recordAttempt(identifier, mfaEndpoint, true);
       const mfaBlockedResult = await service.checkRateLimit(identifier, mfaEndpoint);
       expect(mfaBlockedResult.result).toBe(RateLimitResult.BLOCKED);
@@ -358,7 +358,7 @@ describe('RateLimitingService', () => {
         // Advance time by 2 seconds between attempts to avoid per-second limit
         // Use successful attempts to keep threat level LOW (threat detection reduces limits)
         mockDate = new Date(mockDate.getTime() + 2000);
-        jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
+        jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
         service.recordAttempt(identifier, endpoint, true);
       }
 

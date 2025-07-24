@@ -3,7 +3,7 @@
  * State management for extension manager UI
  */
 import { create } from 'zustand';
-import { extensionCompatibilityChecker } from '../../extensions/ExtensionCompatibilityChecker';
+import { extensionCompatibilityChecker } from '../../extensions/ExtensionCompatibilityChecker.js';
 // Default extension status
 const createDefaultStatus = (extension) => ({
     enabled: false,

@@ -5,10 +5,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Live dashboard for conversion and performance metrics
  */
 import { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Badge } from '../ui/Badge';
-import { conversionTracker } from '../../analytics/ConversionTracker';
-import { performanceMonitor } from '../../utils/PerformanceMonitor';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
+import { Badge } from '../ui/Badge.js';
+import { conversionTracker } from '../../analytics/ConversionTracker.js';
+import { performanceMonitor } from '../../utils/PerformanceMonitor.js';
 export const RealTimeMetrics = ({ metrics, loading }) => {
     const [liveData, setLiveData] = useState({
         activeUsers: 0,

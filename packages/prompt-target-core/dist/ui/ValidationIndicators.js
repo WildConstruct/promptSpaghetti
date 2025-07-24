@@ -175,6 +175,8 @@ export class ValidationIndicators {
         const severity = this.calculateOverallSeverity(results);
         const hasAutoFix = results.some(r => r.autoFixable);
         const baseStyle = {
+            color: severity === 'critical' ? '#ef4444' : severity === 'high' ? '#f59e0b' : severity === 'medium' ? '#eab308' : '#6b7280',
+            border: severity === 'critical' ? '2px solid #ef4444' : '1px solid #d1d5db',
             size: results.length > 3 ? 'large' : results.length > 1 ? 'medium' : 'small',
             shape: hasAutoFix ? 'circle-with-fix' : 'circle',
             animation: severity === 'critical' ? 'pulse' : 'none',

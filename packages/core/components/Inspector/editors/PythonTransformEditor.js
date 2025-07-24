@@ -1,9 +1,9 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from 'react';
-import { TextFieldEditor } from '../TextFieldEditor';
-import { TextAreaEditor } from '../TextAreaEditor';
-import { SelectEditor } from '../SelectEditor';
-import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
+import { TextFieldEditor } from '../TextFieldEditor.js';
+import { TextAreaEditor } from '../TextAreaEditor.js';
+import { SelectEditor } from '../SelectEditor.js';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection.js';
 /**
  * Epic 8.4 - Python Transform Editor with Progressive Disclosure
  *

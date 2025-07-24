@@ -9,14 +9,14 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Epic: 17 - Backstage Admin Controls
  */
 import { useState, useEffect, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { Badge } from '../ui/Badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
-import { Input } from '../ui/Input';
-import { Select } from '../ui/Select';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
+import { Button } from '../ui/Button.js';
+import { Badge } from '../ui/Badge.js';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
+import { Input } from '../ui/Input.js';
+import { Select } from '../ui/Select.js';
 import { Calendar, Clock, PlayCircle, PauseCircle, Edit, Eye, TrendingUp, Users, FileText, Image, Video, Megaphone, Archive, Trash2, Plus, Search, Download, RefreshCw, Settings, CheckCircle, XCircle, Globe, Target, Share2, Bell } from 'lucide-react';
-import { contentSchedulingService } from '../../services/ContentSchedulingService';
+import { contentSchedulingService } from '../../services/ContentSchedulingService.js';
 const CONTENT_TYPE_CONFIG = {
     article: { color: 'text-blue-600 bg-blue-100', icon: FileText },
     blog_post: { color: 'text-green-600 bg-green-100', icon: Edit },
@@ -685,7 +685,7 @@ const BatchCard = ({ batch, onExecute, onCancel }) => {
         }
       ` })] }));
 };
-const ContentDetailModal = ({ content, onClose, onUpdate, _____userRole }) => {
+const ContentDetailModal = ({ content, onClose, onUpdate, userRole }) => {
     return (_jsxs("div", { className: "modal-overlay", children: [_jsxs("div", { className: "modal-content", children: [_jsxs("div", { className: "modal-header", children: [_jsxs("h2", { children: ["Content Details: ", content.title] }), _jsx(Button, { onClick: onClose, variant: "outline", size: "sm", children: "\u2715" })] }), _jsx("div", { className: "modal-body", children: _jsxs("div", { className: "content-details", children: [_jsxs("div", { className: "detail-section", children: [_jsx("h3", { children: "Basic Information" }), _jsxs("div", { className: "detail-grid", children: [_jsxs("div", { className: "detail-item", children: [_jsx("label", { children: "Title:" }), _jsx("span", { children: content.title })] }), _jsxs("div", { className: "detail-item", children: [_jsx("label", { children: "Type:" }), _jsx(Badge, { className: CONTENT_TYPE_CONFIG[content.type].color, children: content.type })] }), _jsxs("div", { className: "detail-item", children: [_jsx("label", { children: "Status:" }), _jsx(Badge, { className: STATUS_CONFIG[content.status].color, children: content.status })] }), _jsxs("div", { className: "detail-item", children: [_jsx("label", { children: "Author:" }), _jsx("span", { children: content.createdBy })] }), _jsxs("div", { className: "detail-item", children: [_jsx("label", { children: "Created:" }), _jsx("span", { children: content.createdAt.toLocaleString() })] }), _jsxs("div", { className: "detail-item", children: [_jsx("label", { children: "Updated:" }), _jsx("span", { children: content.updatedAt.toLocaleString() })] })] })] }), content.scheduling.publishAt && (_jsxs("div", { className: "detail-section", children: [_jsx("h3", { children: "Scheduling" }), _jsxs("div", { className: "detail-grid", children: [_jsxs("div", { className: "detail-item", children: [_jsx("label", { children: "Publish At:" }), _jsx("span", { children: content.scheduling.publishAt.toLocaleString() })] }), _jsxs("div", { className: "detail-item", children: [_jsx("label", { children: "Timezone:" }), _jsx("span", { children: content.scheduling.timezone })] })] })] })), _jsxs("div", { className: "detail-section", children: [_jsx("h3", { children: "Performance" }), _jsxs("div", { className: "detail-grid", children: [_jsxs("div", { className: "detail-item", children: [_jsx("label", { children: "Views:" }), _jsx("span", { children: content.performance.views.toLocaleString() })] }), _jsxs("div", { className: "detail-item", children: [_jsx("label", { children: "Engagement:" }), _jsxs("span", { children: [content.performance.engagement.toFixed(1), "%"] })] }), _jsxs("div", { className: "detail-item", children: [_jsx("label", { children: "Shares:" }), _jsx("span", { children: content.performance.shares.toLocaleString() })] }), _jsxs("div", { className: "detail-item", children: [_jsx("label", { children: "Likes:" }), _jsx("span", { children: content.performance.likes.toLocaleString() })] })] })] })] }) }), _jsxs("div", { className: "modal-footer", children: [_jsx(Button, { onClick: onClose, variant: "outline", children: "Close" }), _jsx(Button, { onClick: () => { onUpdate(); onClose(); }, children: "Edit Content" })] })] }), _jsx("style", { jsx: true, children: `
         .modal-overlay {
           position: fixed;

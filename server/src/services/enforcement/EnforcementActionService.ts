@@ -36,7 +36,7 @@ import {
   Evidence,
   EvidenceType,
   EvidenceSource
-} from '../../../packages/core/types/EnforcementTypes';
+} from '../../../../packages/core/types/EnforcementTypes';
 
 export interface EnforcementServiceConfig {
   enabled: boolean;
@@ -1221,12 +1221,20 @@ export class EnforcementActionService {
     return [];
   }
 
-  private async generateRecommendations(_____effectivenessMetrics: unknown, _____appealMetrics: unknown): Promise<any[]> {
+  private async generateRecommendations(
+    _____effectivenessMetrics: unknown,
+    _____appealMetrics: unknown
+  ): Promise<any[]> {
     return [];
   }
 
   // Additional helper methods
-  private async recordActionExecution(actionId: string, result: Record<string, unknown>, client: unknown): Promise<void> {
+  private async recordActionExecution(
+    actionId: string,
+    result: Record<string,
+    unknown>,
+    client: unknown
+  ): Promise<void> {
     await client.query(`
       INSERT INTO enforcement_action_executions (action_id, executed_at, result, details)
       VALUES ($1, NOW(), $2, $3)

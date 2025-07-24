@@ -2,9 +2,9 @@ import {
   ValidationReport,
   PlatformValidationResult,
   AutoFixSuggestion,
-  CrossPlatformIssue,
-  ValidationResult
+  CrossPlatformIssue
 } from '../validation/ValidationEngine.js';
+import { ValidationResult } from '../types/index.js';
 import { Platform, Logger, MetricsInterface } from '../types/index.js';
 
 /**

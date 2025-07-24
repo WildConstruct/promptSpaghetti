@@ -11,7 +11,11 @@
 import { EventEmitter } from 'events';
 import { AuditService } from '../auth/services/AuditService';
 import { DataAccessControlService } from './DataAccessControlService';
-import { DataClassificationLevel, DataOperation, OperationContext } from '../../packages/core/types/DataClassification';
+import { 
+  DataClassificationLevel,
+  DataOperation,
+  OperationContext
+} from '../../../packages/core/types/DataClassification';
 
 export interface AccessRequest {
   id: string;
@@ -1432,7 +1436,11 @@ export class AccessRequestWorkflowService extends EventEmitter {
   private async estimateProcessingTime(_____request: unknown): Promise<number> { return 24; }
   private async storeAccessRequest(_____request: AccessRequest): Promise<void> { }
   private async evaluateAutoApproval(_____request: AccessRequest): Promise<{ eligible: boolean; rule?: AutoApprovalRule }> { return { eligible: false }; }
-  private async processAutoApproval(request: AccessRequest, _____result: Record<string, unknown>): Promise<AccessRequest> { return request; }
+  private async processAutoApproval(
+    request: AccessRequest,
+    _____result: Record<string,
+    unknown>
+  ): Promise<AccessRequest> { return request; }
   private async findApplicableWorkflow(_____request: AccessRequest): Promise<ApprovalWorkflow | null> { return null; }
   private async initiateWorkflow(_____request: AccessRequest, _____workflow: ApprovalWorkflow): Promise<void> { }
   private async initiateDefaultApprovalProcess(_____request: AccessRequest): Promise<void> { }

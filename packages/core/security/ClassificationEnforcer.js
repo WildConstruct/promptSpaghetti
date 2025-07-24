@@ -10,8 +10,8 @@
  * - Policy enforcement for data handling
  * - Integration with existing security middleware
  */
-import { DataSensitivityUtils } from './DataSensitivityLevels';
-import { CLASSIFICATION_LEVEL_MAPPING } from './DataClassificationHelpers';
+import { DataSensitivityUtils } from './DataSensitivityLevels.js';
+import { CLASSIFICATION_LEVEL_MAPPING } from './DataClassificationHelpers.js';
 import { createHash } from 'crypto';
 /**
  * Classification Enforcement Engine

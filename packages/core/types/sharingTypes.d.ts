@@ -1,0 +1,2547 @@
+/**
+ * Epic 16 Marketplace Sharing System - Data Types
+ *
+ * Comprehensive sharing functionality for templates, graphs, and marketplace content.
+ * Supports direct links, social integration, embeds, and analytics tracking.
+ *
+ * Task: E16-1753114247020-65B7A3 - Design sharing system
+ */
+import { z } from 'zod';
+export type ShareableResourceType = 'template' | 'graph' | 'collection' | 'case_study' | 'tutorial' | 'marketplace_item';
+export type ShareTarget = 'public' | 'workspace' | 'organization' | 'private' | 'unlisted';
+export type ShareFormat = 'link' | 'embed' | 'export' | 'clone';
+export type SocialPlatform = 'twitter' | 'linkedin' | 'discord' | 'slack' | 'teams' | 'email' | 'github';
+export declare const SharePermissionSchema: z.ZodObject<{
+    canView: z.ZodDefault<z.ZodBoolean>;
+    canComment: z.ZodDefault<z.ZodBoolean>;
+    canClone: z.ZodDefault<z.ZodBoolean>;
+    canEdit: z.ZodDefault<z.ZodBoolean>;
+    canShare: z.ZodDefault<z.ZodBoolean>;
+    canEmbed: z.ZodDefault<z.ZodBoolean>;
+    canDownload: z.ZodDefault<z.ZodBoolean>;
+    requiresAuth: z.ZodDefault<z.ZodBoolean>;
+    allowedDomains: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    expiresAt: z.ZodOptional<z.ZodDate>;
+    maxViews: z.ZodOptional<z.ZodNumber>;
+    maxShares: z.ZodOptional<z.ZodNumber>;
+}, "strip", z.ZodTypeAny, {
+    canEdit: boolean;
+    canComment: boolean;
+    canView: boolean;
+    canClone: boolean;
+    canShare: boolean;
+    canEmbed: boolean;
+    canDownload: boolean;
+    requiresAuth: boolean;
+    expiresAt?: Date | undefined;
+    allowedDomains?: string[] | undefined;
+    maxViews?: number | undefined;
+    maxShares?: number | undefined;
+}, {
+    canEdit?: boolean | undefined;
+    canComment?: boolean | undefined;
+    expiresAt?: Date | undefined;
+    allowedDomains?: string[] | undefined;
+    canView?: boolean | undefined;
+    canClone?: boolean | undefined;
+    canShare?: boolean | undefined;
+    canEmbed?: boolean | undefined;
+    canDownload?: boolean | undefined;
+    requiresAuth?: boolean | undefined;
+    maxViews?: number | undefined;
+    maxShares?: number | undefined;
+}>;
+export type SharePermission = z.infer<typeof SharePermissionSchema>;
+export declare const ShareConfigSchema: z.ZodObject<{
+    id: z.ZodString;
+    resourceId: z.ZodString;
+    resourceType: z.ZodEnum<["template", "graph", "collection", "case_study", "tutorial", "marketplace_item"]>;
+    shareTarget: z.ZodEnum<["public", "workspace", "organization", "private", "unlisted"]>;
+    shareFormat: z.ZodEnum<["link", "embed", "export", "clone"]>;
+    title: z.ZodString;
+    description: z.ZodOptional<z.ZodString>;
+    thumbnailUrl: z.ZodOptional<z.ZodString>;
+    tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+    permissions: z.ZodObject<{
+        canView: z.ZodDefault<z.ZodBoolean>;
+        canComment: z.ZodDefault<z.ZodBoolean>;
+        canClone: z.ZodDefault<z.ZodBoolean>;
+        canEdit: z.ZodDefault<z.ZodBoolean>;
+        canShare: z.ZodDefault<z.ZodBoolean>;
+        canEmbed: z.ZodDefault<z.ZodBoolean>;
+        canDownload: z.ZodDefault<z.ZodBoolean>;
+        requiresAuth: z.ZodDefault<z.ZodBoolean>;
+        allowedDomains: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        expiresAt: z.ZodOptional<z.ZodDate>;
+        maxViews: z.ZodOptional<z.ZodNumber>;
+        maxShares: z.ZodOptional<z.ZodNumber>;
+    }, "strip", z.ZodTypeAny, {
+        canEdit: boolean;
+        canComment: boolean;
+        canView: boolean;
+        canClone: boolean;
+        canShare: boolean;
+        canEmbed: boolean;
+        canDownload: boolean;
+        requiresAuth: boolean;
+        expiresAt?: Date | undefined;
+        allowedDomains?: string[] | undefined;
+        maxViews?: number | undefined;
+        maxShares?: number | undefined;
+    }, {
+        canEdit?: boolean | undefined;
+        canComment?: boolean | undefined;
+        expiresAt?: Date | undefined;
+        allowedDomains?: string[] | undefined;
+        canView?: boolean | undefined;
+        canClone?: boolean | undefined;
+        canShare?: boolean | undefined;
+        canEmbed?: boolean | undefined;
+        canDownload?: boolean | undefined;
+        requiresAuth?: boolean | undefined;
+        maxViews?: number | undefined;
+        maxShares?: number | undefined;
+    }>;
+    customization: z.ZodDefault<z.ZodObject<{
+        branding: z.ZodOptional<z.ZodObject<{
+            showLogo: z.ZodDefault<z.ZodBoolean>;
+            showAttribution: z.ZodDefault<z.ZodBoolean>;
+            customLogo: z.ZodOptional<z.ZodString>;
+            customColors: z.ZodOptional<z.ZodObject<{
+                primary: z.ZodOptional<z.ZodString>;
+                background: z.ZodOptional<z.ZodString>;
+                text: z.ZodOptional<z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                text?: string | undefined;
+                background?: string | undefined;
+                primary?: string | undefined;
+            }, {
+                text?: string | undefined;
+                background?: string | undefined;
+                primary?: string | undefined;
+            }>>;
+        }, "strip", z.ZodTypeAny, {
+            showLogo: boolean;
+            showAttribution: boolean;
+            customLogo?: string | undefined;
+            customColors?: {
+                text?: string | undefined;
+                background?: string | undefined;
+                primary?: string | undefined;
+            } | undefined;
+        }, {
+            showLogo?: boolean | undefined;
+            showAttribution?: boolean | undefined;
+            customLogo?: string | undefined;
+            customColors?: {
+                text?: string | undefined;
+                background?: string | undefined;
+                primary?: string | undefined;
+            } | undefined;
+        }>>;
+        layout: z.ZodOptional<z.ZodObject<{
+            width: z.ZodDefault<z.ZodNumber>;
+            height: z.ZodDefault<z.ZodNumber>;
+            showHeader: z.ZodDefault<z.ZodBoolean>;
+            showFooter: z.ZodDefault<z.ZodBoolean>;
+            showToolbar: z.ZodDefault<z.ZodBoolean>;
+            responsive: z.ZodDefault<z.ZodBoolean>;
+        }, "strip", z.ZodTypeAny, {
+            width: number;
+            height: number;
+            showHeader: boolean;
+            showFooter: boolean;
+            showToolbar: boolean;
+            responsive: boolean;
+        }, {
+            width?: number | undefined;
+            height?: number | undefined;
+            showHeader?: boolean | undefined;
+            showFooter?: boolean | undefined;
+            showToolbar?: boolean | undefined;
+            responsive?: boolean | undefined;
+        }>>;
+        features: z.ZodOptional<z.ZodObject<{
+            allowComments: z.ZodDefault<z.ZodBoolean>;
+            allowRating: z.ZodDefault<z.ZodBoolean>;
+            showMetrics: z.ZodDefault<z.ZodBoolean>;
+            enableInteraction: z.ZodDefault<z.ZodBoolean>;
+            autoPlay: z.ZodDefault<z.ZodBoolean>;
+        }, "strip", z.ZodTypeAny, {
+            autoPlay: boolean;
+            allowComments: boolean;
+            showMetrics: boolean;
+            allowRating: boolean;
+            enableInteraction: boolean;
+        }, {
+            autoPlay?: boolean | undefined;
+            allowComments?: boolean | undefined;
+            showMetrics?: boolean | undefined;
+            allowRating?: boolean | undefined;
+            enableInteraction?: boolean | undefined;
+        }>>;
+    }, "strip", z.ZodTypeAny, {
+        layout?: {
+            width: number;
+            height: number;
+            showHeader: boolean;
+            showFooter: boolean;
+            showToolbar: boolean;
+            responsive: boolean;
+        } | undefined;
+        branding?: {
+            showLogo: boolean;
+            showAttribution: boolean;
+            customLogo?: string | undefined;
+            customColors?: {
+                text?: string | undefined;
+                background?: string | undefined;
+                primary?: string | undefined;
+            } | undefined;
+        } | undefined;
+        features?: {
+            autoPlay: boolean;
+            allowComments: boolean;
+            showMetrics: boolean;
+            allowRating: boolean;
+            enableInteraction: boolean;
+        } | undefined;
+    }, {
+        layout?: {
+            width?: number | undefined;
+            height?: number | undefined;
+            showHeader?: boolean | undefined;
+            showFooter?: boolean | undefined;
+            showToolbar?: boolean | undefined;
+            responsive?: boolean | undefined;
+        } | undefined;
+        branding?: {
+            showLogo?: boolean | undefined;
+            showAttribution?: boolean | undefined;
+            customLogo?: string | undefined;
+            customColors?: {
+                text?: string | undefined;
+                background?: string | undefined;
+                primary?: string | undefined;
+            } | undefined;
+        } | undefined;
+        features?: {
+            autoPlay?: boolean | undefined;
+            allowComments?: boolean | undefined;
+            showMetrics?: boolean | undefined;
+            allowRating?: boolean | undefined;
+            enableInteraction?: boolean | undefined;
+        } | undefined;
+    }>>;
+    metadata: z.ZodObject<{
+        createdBy: z.ZodString;
+        createdAt: z.ZodDate;
+        updatedAt: z.ZodDate;
+        version: z.ZodDefault<z.ZodString>;
+        category: z.ZodOptional<z.ZodString>;
+        difficulty: z.ZodOptional<z.ZodEnum<["beginner", "intermediate", "advanced"]>>;
+        estimatedTime: z.ZodOptional<z.ZodNumber>;
+        prerequisites: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+        relatedResources: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+    }, "strip", z.ZodTypeAny, {
+        createdAt: Date;
+        updatedAt: Date;
+        version: string;
+        createdBy: string;
+        prerequisites: string[];
+        relatedResources: string[];
+        category?: string | undefined;
+        estimatedTime?: number | undefined;
+        difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+    }, {
+        createdAt: Date;
+        updatedAt: Date;
+        createdBy: string;
+        category?: string | undefined;
+        version?: string | undefined;
+        prerequisites?: string[] | undefined;
+        estimatedTime?: number | undefined;
+        difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+        relatedResources?: string[] | undefined;
+    }>;
+}, "strip", z.ZodTypeAny, {
+    id: string;
+    tags: string[];
+    metadata: {
+        createdAt: Date;
+        updatedAt: Date;
+        version: string;
+        createdBy: string;
+        prerequisites: string[];
+        relatedResources: string[];
+        category?: string | undefined;
+        estimatedTime?: number | undefined;
+        difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+    };
+    title: string;
+    permissions: {
+        canEdit: boolean;
+        canComment: boolean;
+        canView: boolean;
+        canClone: boolean;
+        canShare: boolean;
+        canEmbed: boolean;
+        canDownload: boolean;
+        requiresAuth: boolean;
+        expiresAt?: Date | undefined;
+        allowedDomains?: string[] | undefined;
+        maxViews?: number | undefined;
+        maxShares?: number | undefined;
+    };
+    resourceId: string;
+    resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
+    shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
+    shareFormat: "link" | "embed" | "export" | "clone";
+    customization: {
+        layout?: {
+            width: number;
+            height: number;
+            showHeader: boolean;
+            showFooter: boolean;
+            showToolbar: boolean;
+            responsive: boolean;
+        } | undefined;
+        branding?: {
+            showLogo: boolean;
+            showAttribution: boolean;
+            customLogo?: string | undefined;
+            customColors?: {
+                text?: string | undefined;
+                background?: string | undefined;
+                primary?: string | undefined;
+            } | undefined;
+        } | undefined;
+        features?: {
+            autoPlay: boolean;
+            allowComments: boolean;
+            showMetrics: boolean;
+            allowRating: boolean;
+            enableInteraction: boolean;
+        } | undefined;
+    };
+    description?: string | undefined;
+    thumbnailUrl?: string | undefined;
+}, {
+    id: string;
+    metadata: {
+        createdAt: Date;
+        updatedAt: Date;
+        createdBy: string;
+        category?: string | undefined;
+        version?: string | undefined;
+        prerequisites?: string[] | undefined;
+        estimatedTime?: number | undefined;
+        difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+        relatedResources?: string[] | undefined;
+    };
+    title: string;
+    permissions: {
+        canEdit?: boolean | undefined;
+        canComment?: boolean | undefined;
+        expiresAt?: Date | undefined;
+        allowedDomains?: string[] | undefined;
+        canView?: boolean | undefined;
+        canClone?: boolean | undefined;
+        canShare?: boolean | undefined;
+        canEmbed?: boolean | undefined;
+        canDownload?: boolean | undefined;
+        requiresAuth?: boolean | undefined;
+        maxViews?: number | undefined;
+        maxShares?: number | undefined;
+    };
+    resourceId: string;
+    resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
+    shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
+    shareFormat: "link" | "embed" | "export" | "clone";
+    description?: string | undefined;
+    tags?: string[] | undefined;
+    thumbnailUrl?: string | undefined;
+    customization?: {
+        layout?: {
+            width?: number | undefined;
+            height?: number | undefined;
+            showHeader?: boolean | undefined;
+            showFooter?: boolean | undefined;
+            showToolbar?: boolean | undefined;
+            responsive?: boolean | undefined;
+        } | undefined;
+        branding?: {
+            showLogo?: boolean | undefined;
+            showAttribution?: boolean | undefined;
+            customLogo?: string | undefined;
+            customColors?: {
+                text?: string | undefined;
+                background?: string | undefined;
+                primary?: string | undefined;
+            } | undefined;
+        } | undefined;
+        features?: {
+            autoPlay?: boolean | undefined;
+            allowComments?: boolean | undefined;
+            showMetrics?: boolean | undefined;
+            allowRating?: boolean | undefined;
+            enableInteraction?: boolean | undefined;
+        } | undefined;
+    } | undefined;
+}>;
+export type ShareConfig = z.infer<typeof ShareConfigSchema>;
+export declare const ShareLinkSchema: z.ZodObject<{
+    id: z.ZodString;
+    shareConfigId: z.ZodString;
+    shortCode: z.ZodString;
+    fullUrl: z.ZodString;
+    shortUrl: z.ZodString;
+    qrCode: z.ZodOptional<z.ZodString>;
+    socialTags: z.ZodObject<{
+        openGraph: z.ZodObject<{
+            title: z.ZodString;
+            description: z.ZodString;
+            image: z.ZodOptional<z.ZodString>;
+            url: z.ZodString;
+            type: z.ZodDefault<z.ZodString>;
+            siteName: z.ZodDefault<z.ZodString>;
+        }, "strip", z.ZodTypeAny, {
+            description: string;
+            type: string;
+            title: string;
+            url: string;
+            siteName: string;
+            image?: string | undefined;
+        }, {
+            description: string;
+            title: string;
+            url: string;
+            type?: string | undefined;
+            image?: string | undefined;
+            siteName?: string | undefined;
+        }>;
+        twitter: z.ZodObject<{
+            card: z.ZodDefault<z.ZodEnum<["summary", "summary_large_image"]>>;
+            title: z.ZodString;
+            description: z.ZodString;
+            image: z.ZodOptional<z.ZodString>;
+            creator: z.ZodOptional<z.ZodString>;
+        }, "strip", z.ZodTypeAny, {
+            description: string;
+            title: string;
+            card: "summary" | "summary_large_image";
+            image?: string | undefined;
+            creator?: string | undefined;
+        }, {
+            description: string;
+            title: string;
+            image?: string | undefined;
+            creator?: string | undefined;
+            card?: "summary" | "summary_large_image" | undefined;
+        }>;
+        schema: z.ZodObject<{
+            type: z.ZodDefault<z.ZodString>;
+            name: z.ZodString;
+            description: z.ZodString;
+            url: z.ZodString;
+            author: z.ZodOptional<z.ZodObject<{
+                type: z.ZodDefault<z.ZodString>;
+                name: z.ZodString;
+            }, "strip", z.ZodTypeAny, {
+                name: string;
+                type: string;
+            }, {
+                name: string;
+                type?: string | undefined;
+            }>>;
+        }, "strip", z.ZodTypeAny, {
+            name: string;
+            description: string;
+            type: string;
+            url: string;
+            author?: {
+                name: string;
+                type: string;
+            } | undefined;
+        }, {
+            name: string;
+            description: string;
+            url: string;
+            type?: string | undefined;
+            author?: {
+                name: string;
+                type?: string | undefined;
+            } | undefined;
+        }>;
+    }, "strip", z.ZodTypeAny, {
+        schema: {
+            name: string;
+            description: string;
+            type: string;
+            url: string;
+            author?: {
+                name: string;
+                type: string;
+            } | undefined;
+        };
+        twitter: {
+            description: string;
+            title: string;
+            card: "summary" | "summary_large_image";
+            image?: string | undefined;
+            creator?: string | undefined;
+        };
+        openGraph: {
+            description: string;
+            type: string;
+            title: string;
+            url: string;
+            siteName: string;
+            image?: string | undefined;
+        };
+    }, {
+        schema: {
+            name: string;
+            description: string;
+            url: string;
+            type?: string | undefined;
+            author?: {
+                name: string;
+                type?: string | undefined;
+            } | undefined;
+        };
+        twitter: {
+            description: string;
+            title: string;
+            image?: string | undefined;
+            creator?: string | undefined;
+            card?: "summary" | "summary_large_image" | undefined;
+        };
+        openGraph: {
+            description: string;
+            title: string;
+            url: string;
+            type?: string | undefined;
+            image?: string | undefined;
+            siteName?: string | undefined;
+        };
+    }>;
+    embedCode: z.ZodOptional<z.ZodObject<{
+        iframe: z.ZodString;
+        javascript: z.ZodOptional<z.ZodString>;
+        responsive: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        iframe: string;
+        javascript?: string | undefined;
+        responsive?: string | undefined;
+    }, {
+        iframe: string;
+        javascript?: string | undefined;
+        responsive?: string | undefined;
+    }>>;
+    analytics: z.ZodDefault<z.ZodObject<{
+        trackingEnabled: z.ZodDefault<z.ZodBoolean>;
+        utmSource: z.ZodOptional<z.ZodString>;
+        utmMedium: z.ZodOptional<z.ZodString>;
+        utmCampaign: z.ZodOptional<z.ZodString>;
+        customParams: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodString>>;
+    }, "strip", z.ZodTypeAny, {
+        trackingEnabled: boolean;
+        customParams: Record<string, string>;
+        utmSource?: string | undefined;
+        utmMedium?: string | undefined;
+        utmCampaign?: string | undefined;
+    }, {
+        trackingEnabled?: boolean | undefined;
+        utmSource?: string | undefined;
+        utmMedium?: string | undefined;
+        utmCampaign?: string | undefined;
+        customParams?: Record<string, string> | undefined;
+    }>>;
+}, "strip", z.ZodTypeAny, {
+    id: string;
+    analytics: {
+        trackingEnabled: boolean;
+        customParams: Record<string, string>;
+        utmSource?: string | undefined;
+        utmMedium?: string | undefined;
+        utmCampaign?: string | undefined;
+    };
+    shareConfigId: string;
+    shortCode: string;
+    fullUrl: string;
+    shortUrl: string;
+    socialTags: {
+        schema: {
+            name: string;
+            description: string;
+            type: string;
+            url: string;
+            author?: {
+                name: string;
+                type: string;
+            } | undefined;
+        };
+        twitter: {
+            description: string;
+            title: string;
+            card: "summary" | "summary_large_image";
+            image?: string | undefined;
+            creator?: string | undefined;
+        };
+        openGraph: {
+            description: string;
+            type: string;
+            title: string;
+            url: string;
+            siteName: string;
+            image?: string | undefined;
+        };
+    };
+    qrCode?: string | undefined;
+    embedCode?: {
+        iframe: string;
+        javascript?: string | undefined;
+        responsive?: string | undefined;
+    } | undefined;
+}, {
+    id: string;
+    shareConfigId: string;
+    shortCode: string;
+    fullUrl: string;
+    shortUrl: string;
+    socialTags: {
+        schema: {
+            name: string;
+            description: string;
+            url: string;
+            type?: string | undefined;
+            author?: {
+                name: string;
+                type?: string | undefined;
+            } | undefined;
+        };
+        twitter: {
+            description: string;
+            title: string;
+            image?: string | undefined;
+            creator?: string | undefined;
+            card?: "summary" | "summary_large_image" | undefined;
+        };
+        openGraph: {
+            description: string;
+            title: string;
+            url: string;
+            type?: string | undefined;
+            image?: string | undefined;
+            siteName?: string | undefined;
+        };
+    };
+    analytics?: {
+        trackingEnabled?: boolean | undefined;
+        utmSource?: string | undefined;
+        utmMedium?: string | undefined;
+        utmCampaign?: string | undefined;
+        customParams?: Record<string, string> | undefined;
+    } | undefined;
+    qrCode?: string | undefined;
+    embedCode?: {
+        iframe: string;
+        javascript?: string | undefined;
+        responsive?: string | undefined;
+    } | undefined;
+}>;
+export type ShareLink = z.infer<typeof ShareLinkSchema>;
+export declare const ShareAnalyticsEventSchema: z.ZodObject<{
+    id: z.ZodString;
+    shareLinkId: z.ZodString;
+    eventType: z.ZodEnum<["view", "click", "share", "embed_load", "comment", "rating", "clone", "download", "social_share", "referral"]>;
+    timestamp: z.ZodDate;
+    sessionId: z.ZodOptional<z.ZodString>;
+    userId: z.ZodOptional<z.ZodString>;
+    ipAddress: z.ZodOptional<z.ZodString>;
+    userAgent: z.ZodOptional<z.ZodString>;
+    referer: z.ZodOptional<z.ZodString>;
+    platform: z.ZodOptional<z.ZodEnum<["twitter", "linkedin", "discord", "slack", "teams", "email", "github"]>>;
+    geolocation: z.ZodOptional<z.ZodObject<{
+        country: z.ZodOptional<z.ZodString>;
+        region: z.ZodOptional<z.ZodString>;
+        city: z.ZodOptional<z.ZodString>;
+        timezone: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        region?: string | undefined;
+        timezone?: string | undefined;
+        country?: string | undefined;
+        city?: string | undefined;
+    }, {
+        region?: string | undefined;
+        timezone?: string | undefined;
+        country?: string | undefined;
+        city?: string | undefined;
+    }>>;
+    deviceInfo: z.ZodOptional<z.ZodObject<{
+        type: z.ZodOptional<z.ZodEnum<["desktop", "mobile", "tablet"]>>;
+        os: z.ZodOptional<z.ZodString>;
+        browser: z.ZodOptional<z.ZodString>;
+        screenSize: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        type?: "desktop" | "mobile" | "tablet" | undefined;
+        browser?: string | undefined;
+        os?: string | undefined;
+        screenSize?: string | undefined;
+    }, {
+        type?: "desktop" | "mobile" | "tablet" | undefined;
+        browser?: string | undefined;
+        os?: string | undefined;
+        screenSize?: string | undefined;
+    }>>;
+    contextData: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+}, "strip", z.ZodTypeAny, {
+    id: string;
+    timestamp: Date;
+    eventType: "view" | "rating" | "comment" | "click" | "clone" | "share" | "referral" | "download" | "embed_load" | "social_share";
+    shareLinkId: string;
+    contextData: Record<string, unknown>;
+    userId?: string | undefined;
+    sessionId?: string | undefined;
+    platform?: "email" | "slack" | "twitter" | "linkedin" | "github" | "teams" | "discord" | undefined;
+    ipAddress?: string | undefined;
+    userAgent?: string | undefined;
+    geolocation?: {
+        region?: string | undefined;
+        timezone?: string | undefined;
+        country?: string | undefined;
+        city?: string | undefined;
+    } | undefined;
+    referer?: string | undefined;
+    deviceInfo?: {
+        type?: "desktop" | "mobile" | "tablet" | undefined;
+        browser?: string | undefined;
+        os?: string | undefined;
+        screenSize?: string | undefined;
+    } | undefined;
+}, {
+    id: string;
+    timestamp: Date;
+    eventType: "view" | "rating" | "comment" | "click" | "clone" | "share" | "referral" | "download" | "embed_load" | "social_share";
+    shareLinkId: string;
+    userId?: string | undefined;
+    sessionId?: string | undefined;
+    platform?: "email" | "slack" | "twitter" | "linkedin" | "github" | "teams" | "discord" | undefined;
+    ipAddress?: string | undefined;
+    userAgent?: string | undefined;
+    geolocation?: {
+        region?: string | undefined;
+        timezone?: string | undefined;
+        country?: string | undefined;
+        city?: string | undefined;
+    } | undefined;
+    referer?: string | undefined;
+    deviceInfo?: {
+        type?: "desktop" | "mobile" | "tablet" | undefined;
+        browser?: string | undefined;
+        os?: string | undefined;
+        screenSize?: string | undefined;
+    } | undefined;
+    contextData?: Record<string, unknown> | undefined;
+}>;
+export type ShareAnalyticsEvent = z.infer<typeof ShareAnalyticsEventSchema>;
+export declare const ShareMetricsSchema: z.ZodObject<{
+    shareLinkId: z.ZodString;
+    timeRange: z.ZodObject<{
+        start: z.ZodDate;
+        end: z.ZodDate;
+    }, "strip", z.ZodTypeAny, {
+        end: Date;
+        start: Date;
+    }, {
+        end: Date;
+        start: Date;
+    }>;
+    metrics: z.ZodObject<{
+        totalViews: z.ZodDefault<z.ZodNumber>;
+        uniqueViews: z.ZodDefault<z.ZodNumber>;
+        totalShares: z.ZodDefault<z.ZodNumber>;
+        totalComments: z.ZodDefault<z.ZodNumber>;
+        totalRatings: z.ZodDefault<z.ZodNumber>;
+        averageRating: z.ZodDefault<z.ZodNumber>;
+        totalClones: z.ZodDefault<z.ZodNumber>;
+        totalDownloads: z.ZodDefault<z.ZodNumber>;
+        conversionRate: z.ZodDefault<z.ZodNumber>;
+        viralCoefficient: z.ZodDefault<z.ZodNumber>;
+        engagementScore: z.ZodDefault<z.ZodNumber>;
+    }, "strip", z.ZodTypeAny, {
+        averageRating: number;
+        conversionRate: number;
+        totalViews: number;
+        uniqueViews: number;
+        totalShares: number;
+        totalComments: number;
+        totalRatings: number;
+        totalClones: number;
+        totalDownloads: number;
+        viralCoefficient: number;
+        engagementScore: number;
+    }, {
+        averageRating?: number | undefined;
+        conversionRate?: number | undefined;
+        totalViews?: number | undefined;
+        uniqueViews?: number | undefined;
+        totalShares?: number | undefined;
+        totalComments?: number | undefined;
+        totalRatings?: number | undefined;
+        totalClones?: number | undefined;
+        totalDownloads?: number | undefined;
+        viralCoefficient?: number | undefined;
+        engagementScore?: number | undefined;
+    }>;
+    breakdowns: z.ZodDefault<z.ZodObject<{
+        byPlatform: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodNumber>>;
+        byGeography: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodNumber>>;
+        byDevice: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodNumber>>;
+        byTimeOfDay: z.ZodDefault<z.ZodArray<z.ZodNumber, "many">>;
+        byDayOfWeek: z.ZodDefault<z.ZodArray<z.ZodNumber, "many">>;
+        byReferrer: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodNumber>>;
+    }, "strip", z.ZodTypeAny, {
+        byPlatform: Record<string, number>;
+        byGeography: Record<string, number>;
+        byDevice: Record<string, number>;
+        byTimeOfDay: number[];
+        byDayOfWeek: number[];
+        byReferrer: Record<string, number>;
+    }, {
+        byPlatform?: Record<string, number> | undefined;
+        byGeography?: Record<string, number> | undefined;
+        byDevice?: Record<string, number> | undefined;
+        byTimeOfDay?: number[] | undefined;
+        byDayOfWeek?: number[] | undefined;
+        byReferrer?: Record<string, number> | undefined;
+    }>>;
+    trends: z.ZodDefault<z.ZodObject<{
+        viewsOverTime: z.ZodDefault<z.ZodArray<z.ZodObject<{
+            timestamp: z.ZodDate;
+            value: z.ZodNumber;
+        }, "strip", z.ZodTypeAny, {
+            value: number;
+            timestamp: Date;
+        }, {
+            value: number;
+            timestamp: Date;
+        }>, "many">>;
+        sharesOverTime: z.ZodDefault<z.ZodArray<z.ZodObject<{
+            timestamp: z.ZodDate;
+            value: z.ZodNumber;
+        }, "strip", z.ZodTypeAny, {
+            value: number;
+            timestamp: Date;
+        }, {
+            value: number;
+            timestamp: Date;
+        }>, "many">>;
+        engagementOverTime: z.ZodDefault<z.ZodArray<z.ZodObject<{
+            timestamp: z.ZodDate;
+            value: z.ZodNumber;
+        }, "strip", z.ZodTypeAny, {
+            value: number;
+            timestamp: Date;
+        }, {
+            value: number;
+            timestamp: Date;
+        }>, "many">>;
+    }, "strip", z.ZodTypeAny, {
+        viewsOverTime: {
+            value: number;
+            timestamp: Date;
+        }[];
+        sharesOverTime: {
+            value: number;
+            timestamp: Date;
+        }[];
+        engagementOverTime: {
+            value: number;
+            timestamp: Date;
+        }[];
+    }, {
+        viewsOverTime?: {
+            value: number;
+            timestamp: Date;
+        }[] | undefined;
+        sharesOverTime?: {
+            value: number;
+            timestamp: Date;
+        }[] | undefined;
+        engagementOverTime?: {
+            value: number;
+            timestamp: Date;
+        }[] | undefined;
+    }>>;
+}, "strip", z.ZodTypeAny, {
+    metrics: {
+        averageRating: number;
+        conversionRate: number;
+        totalViews: number;
+        uniqueViews: number;
+        totalShares: number;
+        totalComments: number;
+        totalRatings: number;
+        totalClones: number;
+        totalDownloads: number;
+        viralCoefficient: number;
+        engagementScore: number;
+    };
+    trends: {
+        viewsOverTime: {
+            value: number;
+            timestamp: Date;
+        }[];
+        sharesOverTime: {
+            value: number;
+            timestamp: Date;
+        }[];
+        engagementOverTime: {
+            value: number;
+            timestamp: Date;
+        }[];
+    };
+    timeRange: {
+        end: Date;
+        start: Date;
+    };
+    shareLinkId: string;
+    breakdowns: {
+        byPlatform: Record<string, number>;
+        byGeography: Record<string, number>;
+        byDevice: Record<string, number>;
+        byTimeOfDay: number[];
+        byDayOfWeek: number[];
+        byReferrer: Record<string, number>;
+    };
+}, {
+    metrics: {
+        averageRating?: number | undefined;
+        conversionRate?: number | undefined;
+        totalViews?: number | undefined;
+        uniqueViews?: number | undefined;
+        totalShares?: number | undefined;
+        totalComments?: number | undefined;
+        totalRatings?: number | undefined;
+        totalClones?: number | undefined;
+        totalDownloads?: number | undefined;
+        viralCoefficient?: number | undefined;
+        engagementScore?: number | undefined;
+    };
+    timeRange: {
+        end: Date;
+        start: Date;
+    };
+    shareLinkId: string;
+    trends?: {
+        viewsOverTime?: {
+            value: number;
+            timestamp: Date;
+        }[] | undefined;
+        sharesOverTime?: {
+            value: number;
+            timestamp: Date;
+        }[] | undefined;
+        engagementOverTime?: {
+            value: number;
+            timestamp: Date;
+        }[] | undefined;
+    } | undefined;
+    breakdowns?: {
+        byPlatform?: Record<string, number> | undefined;
+        byGeography?: Record<string, number> | undefined;
+        byDevice?: Record<string, number> | undefined;
+        byTimeOfDay?: number[] | undefined;
+        byDayOfWeek?: number[] | undefined;
+        byReferrer?: Record<string, number> | undefined;
+    } | undefined;
+}>;
+export type ShareMetrics = z.infer<typeof ShareMetricsSchema>;
+export declare const SocialIntegrationSchema: z.ZodObject<{
+    platform: z.ZodEnum<["twitter", "linkedin", "discord", "slack", "teams", "email", "github"]>;
+    enabled: z.ZodDefault<z.ZodBoolean>;
+    configuration: z.ZodOptional<z.ZodObject<{
+        appId: z.ZodOptional<z.ZodString>;
+        appSecret: z.ZodOptional<z.ZodString>;
+        webhookUrl: z.ZodOptional<z.ZodString>;
+        defaultHashtags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+        customMessage: z.ZodOptional<z.ZodString>;
+        autoPost: z.ZodDefault<z.ZodBoolean>;
+    }, "strip", z.ZodTypeAny, {
+        defaultHashtags: string[];
+        autoPost: boolean;
+        customMessage?: string | undefined;
+        webhookUrl?: string | undefined;
+        appId?: string | undefined;
+        appSecret?: string | undefined;
+    }, {
+        customMessage?: string | undefined;
+        webhookUrl?: string | undefined;
+        appId?: string | undefined;
+        appSecret?: string | undefined;
+        defaultHashtags?: string[] | undefined;
+        autoPost?: boolean | undefined;
+    }>>;
+    templates: z.ZodDefault<z.ZodObject<{
+        shareMessage: z.ZodDefault<z.ZodString>;
+        embedMessage: z.ZodDefault<z.ZodString>;
+        achievementMessage: z.ZodDefault<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        shareMessage: string;
+        embedMessage: string;
+        achievementMessage: string;
+    }, {
+        shareMessage?: string | undefined;
+        embedMessage?: string | undefined;
+        achievementMessage?: string | undefined;
+    }>>;
+}, "strip", z.ZodTypeAny, {
+    enabled: boolean;
+    platform: "email" | "slack" | "twitter" | "linkedin" | "github" | "teams" | "discord";
+    templates: {
+        shareMessage: string;
+        embedMessage: string;
+        achievementMessage: string;
+    };
+    configuration?: {
+        defaultHashtags: string[];
+        autoPost: boolean;
+        customMessage?: string | undefined;
+        webhookUrl?: string | undefined;
+        appId?: string | undefined;
+        appSecret?: string | undefined;
+    } | undefined;
+}, {
+    platform: "email" | "slack" | "twitter" | "linkedin" | "github" | "teams" | "discord";
+    configuration?: {
+        customMessage?: string | undefined;
+        webhookUrl?: string | undefined;
+        appId?: string | undefined;
+        appSecret?: string | undefined;
+        defaultHashtags?: string[] | undefined;
+        autoPost?: boolean | undefined;
+    } | undefined;
+    enabled?: boolean | undefined;
+    templates?: {
+        shareMessage?: string | undefined;
+        embedMessage?: string | undefined;
+        achievementMessage?: string | undefined;
+    } | undefined;
+}>;
+export type SocialIntegration = z.infer<typeof SocialIntegrationSchema>;
+export declare const ShareCollectionSchema: z.ZodObject<{
+    id: z.ZodString;
+    name: z.ZodString;
+    description: z.ZodOptional<z.ZodString>;
+    resourceIds: z.ZodArray<z.ZodString, "many">;
+    shareConfig: z.ZodObject<{
+        id: z.ZodString;
+        resourceId: z.ZodString;
+        resourceType: z.ZodEnum<["template", "graph", "collection", "case_study", "tutorial", "marketplace_item"]>;
+        shareTarget: z.ZodEnum<["public", "workspace", "organization", "private", "unlisted"]>;
+        shareFormat: z.ZodEnum<["link", "embed", "export", "clone"]>;
+        title: z.ZodString;
+        description: z.ZodOptional<z.ZodString>;
+        thumbnailUrl: z.ZodOptional<z.ZodString>;
+        tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+        permissions: z.ZodObject<{
+            canView: z.ZodDefault<z.ZodBoolean>;
+            canComment: z.ZodDefault<z.ZodBoolean>;
+            canClone: z.ZodDefault<z.ZodBoolean>;
+            canEdit: z.ZodDefault<z.ZodBoolean>;
+            canShare: z.ZodDefault<z.ZodBoolean>;
+            canEmbed: z.ZodDefault<z.ZodBoolean>;
+            canDownload: z.ZodDefault<z.ZodBoolean>;
+            requiresAuth: z.ZodDefault<z.ZodBoolean>;
+            allowedDomains: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            expiresAt: z.ZodOptional<z.ZodDate>;
+            maxViews: z.ZodOptional<z.ZodNumber>;
+            maxShares: z.ZodOptional<z.ZodNumber>;
+        }, "strip", z.ZodTypeAny, {
+            canEdit: boolean;
+            canComment: boolean;
+            canView: boolean;
+            canClone: boolean;
+            canShare: boolean;
+            canEmbed: boolean;
+            canDownload: boolean;
+            requiresAuth: boolean;
+            expiresAt?: Date | undefined;
+            allowedDomains?: string[] | undefined;
+            maxViews?: number | undefined;
+            maxShares?: number | undefined;
+        }, {
+            canEdit?: boolean | undefined;
+            canComment?: boolean | undefined;
+            expiresAt?: Date | undefined;
+            allowedDomains?: string[] | undefined;
+            canView?: boolean | undefined;
+            canClone?: boolean | undefined;
+            canShare?: boolean | undefined;
+            canEmbed?: boolean | undefined;
+            canDownload?: boolean | undefined;
+            requiresAuth?: boolean | undefined;
+            maxViews?: number | undefined;
+            maxShares?: number | undefined;
+        }>;
+        customization: z.ZodDefault<z.ZodObject<{
+            branding: z.ZodOptional<z.ZodObject<{
+                showLogo: z.ZodDefault<z.ZodBoolean>;
+                showAttribution: z.ZodDefault<z.ZodBoolean>;
+                customLogo: z.ZodOptional<z.ZodString>;
+                customColors: z.ZodOptional<z.ZodObject<{
+                    primary: z.ZodOptional<z.ZodString>;
+                    background: z.ZodOptional<z.ZodString>;
+                    text: z.ZodOptional<z.ZodString>;
+                }, "strip", z.ZodTypeAny, {
+                    text?: string | undefined;
+                    background?: string | undefined;
+                    primary?: string | undefined;
+                }, {
+                    text?: string | undefined;
+                    background?: string | undefined;
+                    primary?: string | undefined;
+                }>>;
+            }, "strip", z.ZodTypeAny, {
+                showLogo: boolean;
+                showAttribution: boolean;
+                customLogo?: string | undefined;
+                customColors?: {
+                    text?: string | undefined;
+                    background?: string | undefined;
+                    primary?: string | undefined;
+                } | undefined;
+            }, {
+                showLogo?: boolean | undefined;
+                showAttribution?: boolean | undefined;
+                customLogo?: string | undefined;
+                customColors?: {
+                    text?: string | undefined;
+                    background?: string | undefined;
+                    primary?: string | undefined;
+                } | undefined;
+            }>>;
+            layout: z.ZodOptional<z.ZodObject<{
+                width: z.ZodDefault<z.ZodNumber>;
+                height: z.ZodDefault<z.ZodNumber>;
+                showHeader: z.ZodDefault<z.ZodBoolean>;
+                showFooter: z.ZodDefault<z.ZodBoolean>;
+                showToolbar: z.ZodDefault<z.ZodBoolean>;
+                responsive: z.ZodDefault<z.ZodBoolean>;
+            }, "strip", z.ZodTypeAny, {
+                width: number;
+                height: number;
+                showHeader: boolean;
+                showFooter: boolean;
+                showToolbar: boolean;
+                responsive: boolean;
+            }, {
+                width?: number | undefined;
+                height?: number | undefined;
+                showHeader?: boolean | undefined;
+                showFooter?: boolean | undefined;
+                showToolbar?: boolean | undefined;
+                responsive?: boolean | undefined;
+            }>>;
+            features: z.ZodOptional<z.ZodObject<{
+                allowComments: z.ZodDefault<z.ZodBoolean>;
+                allowRating: z.ZodDefault<z.ZodBoolean>;
+                showMetrics: z.ZodDefault<z.ZodBoolean>;
+                enableInteraction: z.ZodDefault<z.ZodBoolean>;
+                autoPlay: z.ZodDefault<z.ZodBoolean>;
+            }, "strip", z.ZodTypeAny, {
+                autoPlay: boolean;
+                allowComments: boolean;
+                showMetrics: boolean;
+                allowRating: boolean;
+                enableInteraction: boolean;
+            }, {
+                autoPlay?: boolean | undefined;
+                allowComments?: boolean | undefined;
+                showMetrics?: boolean | undefined;
+                allowRating?: boolean | undefined;
+                enableInteraction?: boolean | undefined;
+            }>>;
+        }, "strip", z.ZodTypeAny, {
+            layout?: {
+                width: number;
+                height: number;
+                showHeader: boolean;
+                showFooter: boolean;
+                showToolbar: boolean;
+                responsive: boolean;
+            } | undefined;
+            branding?: {
+                showLogo: boolean;
+                showAttribution: boolean;
+                customLogo?: string | undefined;
+                customColors?: {
+                    text?: string | undefined;
+                    background?: string | undefined;
+                    primary?: string | undefined;
+                } | undefined;
+            } | undefined;
+            features?: {
+                autoPlay: boolean;
+                allowComments: boolean;
+                showMetrics: boolean;
+                allowRating: boolean;
+                enableInteraction: boolean;
+            } | undefined;
+        }, {
+            layout?: {
+                width?: number | undefined;
+                height?: number | undefined;
+                showHeader?: boolean | undefined;
+                showFooter?: boolean | undefined;
+                showToolbar?: boolean | undefined;
+                responsive?: boolean | undefined;
+            } | undefined;
+            branding?: {
+                showLogo?: boolean | undefined;
+                showAttribution?: boolean | undefined;
+                customLogo?: string | undefined;
+                customColors?: {
+                    text?: string | undefined;
+                    background?: string | undefined;
+                    primary?: string | undefined;
+                } | undefined;
+            } | undefined;
+            features?: {
+                autoPlay?: boolean | undefined;
+                allowComments?: boolean | undefined;
+                showMetrics?: boolean | undefined;
+                allowRating?: boolean | undefined;
+                enableInteraction?: boolean | undefined;
+            } | undefined;
+        }>>;
+        metadata: z.ZodObject<{
+            createdBy: z.ZodString;
+            createdAt: z.ZodDate;
+            updatedAt: z.ZodDate;
+            version: z.ZodDefault<z.ZodString>;
+            category: z.ZodOptional<z.ZodString>;
+            difficulty: z.ZodOptional<z.ZodEnum<["beginner", "intermediate", "advanced"]>>;
+            estimatedTime: z.ZodOptional<z.ZodNumber>;
+            prerequisites: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+            relatedResources: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+        }, "strip", z.ZodTypeAny, {
+            createdAt: Date;
+            updatedAt: Date;
+            version: string;
+            createdBy: string;
+            prerequisites: string[];
+            relatedResources: string[];
+            category?: string | undefined;
+            estimatedTime?: number | undefined;
+            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+        }, {
+            createdAt: Date;
+            updatedAt: Date;
+            createdBy: string;
+            category?: string | undefined;
+            version?: string | undefined;
+            prerequisites?: string[] | undefined;
+            estimatedTime?: number | undefined;
+            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+            relatedResources?: string[] | undefined;
+        }>;
+    }, "strip", z.ZodTypeAny, {
+        id: string;
+        tags: string[];
+        metadata: {
+            createdAt: Date;
+            updatedAt: Date;
+            version: string;
+            createdBy: string;
+            prerequisites: string[];
+            relatedResources: string[];
+            category?: string | undefined;
+            estimatedTime?: number | undefined;
+            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+        };
+        title: string;
+        permissions: {
+            canEdit: boolean;
+            canComment: boolean;
+            canView: boolean;
+            canClone: boolean;
+            canShare: boolean;
+            canEmbed: boolean;
+            canDownload: boolean;
+            requiresAuth: boolean;
+            expiresAt?: Date | undefined;
+            allowedDomains?: string[] | undefined;
+            maxViews?: number | undefined;
+            maxShares?: number | undefined;
+        };
+        resourceId: string;
+        resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
+        shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
+        shareFormat: "link" | "embed" | "export" | "clone";
+        customization: {
+            layout?: {
+                width: number;
+                height: number;
+                showHeader: boolean;
+                showFooter: boolean;
+                showToolbar: boolean;
+                responsive: boolean;
+            } | undefined;
+            branding?: {
+                showLogo: boolean;
+                showAttribution: boolean;
+                customLogo?: string | undefined;
+                customColors?: {
+                    text?: string | undefined;
+                    background?: string | undefined;
+                    primary?: string | undefined;
+                } | undefined;
+            } | undefined;
+            features?: {
+                autoPlay: boolean;
+                allowComments: boolean;
+                showMetrics: boolean;
+                allowRating: boolean;
+                enableInteraction: boolean;
+            } | undefined;
+        };
+        description?: string | undefined;
+        thumbnailUrl?: string | undefined;
+    }, {
+        id: string;
+        metadata: {
+            createdAt: Date;
+            updatedAt: Date;
+            createdBy: string;
+            category?: string | undefined;
+            version?: string | undefined;
+            prerequisites?: string[] | undefined;
+            estimatedTime?: number | undefined;
+            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+            relatedResources?: string[] | undefined;
+        };
+        title: string;
+        permissions: {
+            canEdit?: boolean | undefined;
+            canComment?: boolean | undefined;
+            expiresAt?: Date | undefined;
+            allowedDomains?: string[] | undefined;
+            canView?: boolean | undefined;
+            canClone?: boolean | undefined;
+            canShare?: boolean | undefined;
+            canEmbed?: boolean | undefined;
+            canDownload?: boolean | undefined;
+            requiresAuth?: boolean | undefined;
+            maxViews?: number | undefined;
+            maxShares?: number | undefined;
+        };
+        resourceId: string;
+        resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
+        shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
+        shareFormat: "link" | "embed" | "export" | "clone";
+        description?: string | undefined;
+        tags?: string[] | undefined;
+        thumbnailUrl?: string | undefined;
+        customization?: {
+            layout?: {
+                width?: number | undefined;
+                height?: number | undefined;
+                showHeader?: boolean | undefined;
+                showFooter?: boolean | undefined;
+                showToolbar?: boolean | undefined;
+                responsive?: boolean | undefined;
+            } | undefined;
+            branding?: {
+                showLogo?: boolean | undefined;
+                showAttribution?: boolean | undefined;
+                customLogo?: string | undefined;
+                customColors?: {
+                    text?: string | undefined;
+                    background?: string | undefined;
+                    primary?: string | undefined;
+                } | undefined;
+            } | undefined;
+            features?: {
+                autoPlay?: boolean | undefined;
+                allowComments?: boolean | undefined;
+                showMetrics?: boolean | undefined;
+                allowRating?: boolean | undefined;
+                enableInteraction?: boolean | undefined;
+            } | undefined;
+        } | undefined;
+    }>;
+    organization: z.ZodOptional<z.ZodObject<{
+        sequence: z.ZodArray<z.ZodString, "many">;
+        grouping: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodArray<z.ZodString, "many">>>;
+        navigation: z.ZodDefault<z.ZodObject<{
+            showIndex: z.ZodDefault<z.ZodBoolean>;
+            showProgress: z.ZodDefault<z.ZodBoolean>;
+            allowJumping: z.ZodDefault<z.ZodBoolean>;
+            autoAdvance: z.ZodDefault<z.ZodBoolean>;
+        }, "strip", z.ZodTypeAny, {
+            showProgress: boolean;
+            showIndex: boolean;
+            allowJumping: boolean;
+            autoAdvance: boolean;
+        }, {
+            showProgress?: boolean | undefined;
+            showIndex?: boolean | undefined;
+            allowJumping?: boolean | undefined;
+            autoAdvance?: boolean | undefined;
+        }>>;
+    }, "strip", z.ZodTypeAny, {
+        sequence: string[];
+        navigation: {
+            showProgress: boolean;
+            showIndex: boolean;
+            allowJumping: boolean;
+            autoAdvance: boolean;
+        };
+        grouping: Record<string, string[]>;
+    }, {
+        sequence: string[];
+        navigation?: {
+            showProgress?: boolean | undefined;
+            showIndex?: boolean | undefined;
+            allowJumping?: boolean | undefined;
+            autoAdvance?: boolean | undefined;
+        } | undefined;
+        grouping?: Record<string, string[]> | undefined;
+    }>>;
+}, "strip", z.ZodTypeAny, {
+    id: string;
+    name: string;
+    resourceIds: string[];
+    shareConfig: {
+        id: string;
+        tags: string[];
+        metadata: {
+            createdAt: Date;
+            updatedAt: Date;
+            version: string;
+            createdBy: string;
+            prerequisites: string[];
+            relatedResources: string[];
+            category?: string | undefined;
+            estimatedTime?: number | undefined;
+            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+        };
+        title: string;
+        permissions: {
+            canEdit: boolean;
+            canComment: boolean;
+            canView: boolean;
+            canClone: boolean;
+            canShare: boolean;
+            canEmbed: boolean;
+            canDownload: boolean;
+            requiresAuth: boolean;
+            expiresAt?: Date | undefined;
+            allowedDomains?: string[] | undefined;
+            maxViews?: number | undefined;
+            maxShares?: number | undefined;
+        };
+        resourceId: string;
+        resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
+        shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
+        shareFormat: "link" | "embed" | "export" | "clone";
+        customization: {
+            layout?: {
+                width: number;
+                height: number;
+                showHeader: boolean;
+                showFooter: boolean;
+                showToolbar: boolean;
+                responsive: boolean;
+            } | undefined;
+            branding?: {
+                showLogo: boolean;
+                showAttribution: boolean;
+                customLogo?: string | undefined;
+                customColors?: {
+                    text?: string | undefined;
+                    background?: string | undefined;
+                    primary?: string | undefined;
+                } | undefined;
+            } | undefined;
+            features?: {
+                autoPlay: boolean;
+                allowComments: boolean;
+                showMetrics: boolean;
+                allowRating: boolean;
+                enableInteraction: boolean;
+            } | undefined;
+        };
+        description?: string | undefined;
+        thumbnailUrl?: string | undefined;
+    };
+    description?: string | undefined;
+    organization?: {
+        sequence: string[];
+        navigation: {
+            showProgress: boolean;
+            showIndex: boolean;
+            allowJumping: boolean;
+            autoAdvance: boolean;
+        };
+        grouping: Record<string, string[]>;
+    } | undefined;
+}, {
+    id: string;
+    name: string;
+    resourceIds: string[];
+    shareConfig: {
+        id: string;
+        metadata: {
+            createdAt: Date;
+            updatedAt: Date;
+            createdBy: string;
+            category?: string | undefined;
+            version?: string | undefined;
+            prerequisites?: string[] | undefined;
+            estimatedTime?: number | undefined;
+            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+            relatedResources?: string[] | undefined;
+        };
+        title: string;
+        permissions: {
+            canEdit?: boolean | undefined;
+            canComment?: boolean | undefined;
+            expiresAt?: Date | undefined;
+            allowedDomains?: string[] | undefined;
+            canView?: boolean | undefined;
+            canClone?: boolean | undefined;
+            canShare?: boolean | undefined;
+            canEmbed?: boolean | undefined;
+            canDownload?: boolean | undefined;
+            requiresAuth?: boolean | undefined;
+            maxViews?: number | undefined;
+            maxShares?: number | undefined;
+        };
+        resourceId: string;
+        resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
+        shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
+        shareFormat: "link" | "embed" | "export" | "clone";
+        description?: string | undefined;
+        tags?: string[] | undefined;
+        thumbnailUrl?: string | undefined;
+        customization?: {
+            layout?: {
+                width?: number | undefined;
+                height?: number | undefined;
+                showHeader?: boolean | undefined;
+                showFooter?: boolean | undefined;
+                showToolbar?: boolean | undefined;
+                responsive?: boolean | undefined;
+            } | undefined;
+            branding?: {
+                showLogo?: boolean | undefined;
+                showAttribution?: boolean | undefined;
+                customLogo?: string | undefined;
+                customColors?: {
+                    text?: string | undefined;
+                    background?: string | undefined;
+                    primary?: string | undefined;
+                } | undefined;
+            } | undefined;
+            features?: {
+                autoPlay?: boolean | undefined;
+                allowComments?: boolean | undefined;
+                showMetrics?: boolean | undefined;
+                allowRating?: boolean | undefined;
+                enableInteraction?: boolean | undefined;
+            } | undefined;
+        } | undefined;
+    };
+    description?: string | undefined;
+    organization?: {
+        sequence: string[];
+        navigation?: {
+            showProgress?: boolean | undefined;
+            showIndex?: boolean | undefined;
+            allowJumping?: boolean | undefined;
+            autoAdvance?: boolean | undefined;
+        } | undefined;
+        grouping?: Record<string, string[]> | undefined;
+    } | undefined;
+}>;
+export type ShareCollection = z.infer<typeof ShareCollectionSchema>;
+export declare const CreateShareRequestSchema: z.ZodObject<{
+    resourceId: z.ZodString;
+    resourceType: z.ZodEnum<["template", "graph", "collection", "case_study", "tutorial", "marketplace_item"]>;
+    shareTarget: z.ZodDefault<z.ZodEnum<["public", "workspace", "organization", "private", "unlisted"]>>;
+    shareFormat: z.ZodDefault<z.ZodEnum<["link", "embed", "export", "clone"]>>;
+    title: z.ZodString;
+    description: z.ZodOptional<z.ZodString>;
+    permissions: z.ZodOptional<z.ZodObject<{
+        canView: z.ZodDefault<z.ZodBoolean>;
+        canComment: z.ZodDefault<z.ZodBoolean>;
+        canClone: z.ZodDefault<z.ZodBoolean>;
+        canEdit: z.ZodDefault<z.ZodBoolean>;
+        canShare: z.ZodDefault<z.ZodBoolean>;
+        canEmbed: z.ZodDefault<z.ZodBoolean>;
+        canDownload: z.ZodDefault<z.ZodBoolean>;
+        requiresAuth: z.ZodDefault<z.ZodBoolean>;
+        allowedDomains: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        expiresAt: z.ZodOptional<z.ZodDate>;
+        maxViews: z.ZodOptional<z.ZodNumber>;
+        maxShares: z.ZodOptional<z.ZodNumber>;
+    }, "strip", z.ZodTypeAny, {
+        canEdit: boolean;
+        canComment: boolean;
+        canView: boolean;
+        canClone: boolean;
+        canShare: boolean;
+        canEmbed: boolean;
+        canDownload: boolean;
+        requiresAuth: boolean;
+        expiresAt?: Date | undefined;
+        allowedDomains?: string[] | undefined;
+        maxViews?: number | undefined;
+        maxShares?: number | undefined;
+    }, {
+        canEdit?: boolean | undefined;
+        canComment?: boolean | undefined;
+        expiresAt?: Date | undefined;
+        allowedDomains?: string[] | undefined;
+        canView?: boolean | undefined;
+        canClone?: boolean | undefined;
+        canShare?: boolean | undefined;
+        canEmbed?: boolean | undefined;
+        canDownload?: boolean | undefined;
+        requiresAuth?: boolean | undefined;
+        maxViews?: number | undefined;
+        maxShares?: number | undefined;
+    }>>;
+    customization: z.ZodOptional<z.ZodObject<{}, "strip", z.ZodTypeAny, {}, {}>>;
+    socialPlatforms: z.ZodDefault<z.ZodArray<z.ZodEnum<["twitter", "linkedin", "discord", "slack", "teams", "email", "github"]>, "many">>;
+}, "strip", z.ZodTypeAny, {
+    title: string;
+    resourceId: string;
+    resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
+    shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
+    shareFormat: "link" | "embed" | "export" | "clone";
+    socialPlatforms: ("email" | "slack" | "twitter" | "linkedin" | "github" | "teams" | "discord")[];
+    description?: string | undefined;
+    permissions?: {
+        canEdit: boolean;
+        canComment: boolean;
+        canView: boolean;
+        canClone: boolean;
+        canShare: boolean;
+        canEmbed: boolean;
+        canDownload: boolean;
+        requiresAuth: boolean;
+        expiresAt?: Date | undefined;
+        allowedDomains?: string[] | undefined;
+        maxViews?: number | undefined;
+        maxShares?: number | undefined;
+    } | undefined;
+    customization?: {} | undefined;
+}, {
+    title: string;
+    resourceId: string;
+    resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
+    description?: string | undefined;
+    permissions?: {
+        canEdit?: boolean | undefined;
+        canComment?: boolean | undefined;
+        expiresAt?: Date | undefined;
+        allowedDomains?: string[] | undefined;
+        canView?: boolean | undefined;
+        canClone?: boolean | undefined;
+        canShare?: boolean | undefined;
+        canEmbed?: boolean | undefined;
+        canDownload?: boolean | undefined;
+        requiresAuth?: boolean | undefined;
+        maxViews?: number | undefined;
+        maxShares?: number | undefined;
+    } | undefined;
+    shareTarget?: "private" | "public" | "organization" | "workspace" | "unlisted" | undefined;
+    shareFormat?: "link" | "embed" | "export" | "clone" | undefined;
+    customization?: {} | undefined;
+    socialPlatforms?: ("email" | "slack" | "twitter" | "linkedin" | "github" | "teams" | "discord")[] | undefined;
+}>;
+export declare const ShareResponseSchema: z.ZodObject<{
+    shareConfig: z.ZodObject<{
+        id: z.ZodString;
+        resourceId: z.ZodString;
+        resourceType: z.ZodEnum<["template", "graph", "collection", "case_study", "tutorial", "marketplace_item"]>;
+        shareTarget: z.ZodEnum<["public", "workspace", "organization", "private", "unlisted"]>;
+        shareFormat: z.ZodEnum<["link", "embed", "export", "clone"]>;
+        title: z.ZodString;
+        description: z.ZodOptional<z.ZodString>;
+        thumbnailUrl: z.ZodOptional<z.ZodString>;
+        tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+        permissions: z.ZodObject<{
+            canView: z.ZodDefault<z.ZodBoolean>;
+            canComment: z.ZodDefault<z.ZodBoolean>;
+            canClone: z.ZodDefault<z.ZodBoolean>;
+            canEdit: z.ZodDefault<z.ZodBoolean>;
+            canShare: z.ZodDefault<z.ZodBoolean>;
+            canEmbed: z.ZodDefault<z.ZodBoolean>;
+            canDownload: z.ZodDefault<z.ZodBoolean>;
+            requiresAuth: z.ZodDefault<z.ZodBoolean>;
+            allowedDomains: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            expiresAt: z.ZodOptional<z.ZodDate>;
+            maxViews: z.ZodOptional<z.ZodNumber>;
+            maxShares: z.ZodOptional<z.ZodNumber>;
+        }, "strip", z.ZodTypeAny, {
+            canEdit: boolean;
+            canComment: boolean;
+            canView: boolean;
+            canClone: boolean;
+            canShare: boolean;
+            canEmbed: boolean;
+            canDownload: boolean;
+            requiresAuth: boolean;
+            expiresAt?: Date | undefined;
+            allowedDomains?: string[] | undefined;
+            maxViews?: number | undefined;
+            maxShares?: number | undefined;
+        }, {
+            canEdit?: boolean | undefined;
+            canComment?: boolean | undefined;
+            expiresAt?: Date | undefined;
+            allowedDomains?: string[] | undefined;
+            canView?: boolean | undefined;
+            canClone?: boolean | undefined;
+            canShare?: boolean | undefined;
+            canEmbed?: boolean | undefined;
+            canDownload?: boolean | undefined;
+            requiresAuth?: boolean | undefined;
+            maxViews?: number | undefined;
+            maxShares?: number | undefined;
+        }>;
+        customization: z.ZodDefault<z.ZodObject<{
+            branding: z.ZodOptional<z.ZodObject<{
+                showLogo: z.ZodDefault<z.ZodBoolean>;
+                showAttribution: z.ZodDefault<z.ZodBoolean>;
+                customLogo: z.ZodOptional<z.ZodString>;
+                customColors: z.ZodOptional<z.ZodObject<{
+                    primary: z.ZodOptional<z.ZodString>;
+                    background: z.ZodOptional<z.ZodString>;
+                    text: z.ZodOptional<z.ZodString>;
+                }, "strip", z.ZodTypeAny, {
+                    text?: string | undefined;
+                    background?: string | undefined;
+                    primary?: string | undefined;
+                }, {
+                    text?: string | undefined;
+                    background?: string | undefined;
+                    primary?: string | undefined;
+                }>>;
+            }, "strip", z.ZodTypeAny, {
+                showLogo: boolean;
+                showAttribution: boolean;
+                customLogo?: string | undefined;
+                customColors?: {
+                    text?: string | undefined;
+                    background?: string | undefined;
+                    primary?: string | undefined;
+                } | undefined;
+            }, {
+                showLogo?: boolean | undefined;
+                showAttribution?: boolean | undefined;
+                customLogo?: string | undefined;
+                customColors?: {
+                    text?: string | undefined;
+                    background?: string | undefined;
+                    primary?: string | undefined;
+                } | undefined;
+            }>>;
+            layout: z.ZodOptional<z.ZodObject<{
+                width: z.ZodDefault<z.ZodNumber>;
+                height: z.ZodDefault<z.ZodNumber>;
+                showHeader: z.ZodDefault<z.ZodBoolean>;
+                showFooter: z.ZodDefault<z.ZodBoolean>;
+                showToolbar: z.ZodDefault<z.ZodBoolean>;
+                responsive: z.ZodDefault<z.ZodBoolean>;
+            }, "strip", z.ZodTypeAny, {
+                width: number;
+                height: number;
+                showHeader: boolean;
+                showFooter: boolean;
+                showToolbar: boolean;
+                responsive: boolean;
+            }, {
+                width?: number | undefined;
+                height?: number | undefined;
+                showHeader?: boolean | undefined;
+                showFooter?: boolean | undefined;
+                showToolbar?: boolean | undefined;
+                responsive?: boolean | undefined;
+            }>>;
+            features: z.ZodOptional<z.ZodObject<{
+                allowComments: z.ZodDefault<z.ZodBoolean>;
+                allowRating: z.ZodDefault<z.ZodBoolean>;
+                showMetrics: z.ZodDefault<z.ZodBoolean>;
+                enableInteraction: z.ZodDefault<z.ZodBoolean>;
+                autoPlay: z.ZodDefault<z.ZodBoolean>;
+            }, "strip", z.ZodTypeAny, {
+                autoPlay: boolean;
+                allowComments: boolean;
+                showMetrics: boolean;
+                allowRating: boolean;
+                enableInteraction: boolean;
+            }, {
+                autoPlay?: boolean | undefined;
+                allowComments?: boolean | undefined;
+                showMetrics?: boolean | undefined;
+                allowRating?: boolean | undefined;
+                enableInteraction?: boolean | undefined;
+            }>>;
+        }, "strip", z.ZodTypeAny, {
+            layout?: {
+                width: number;
+                height: number;
+                showHeader: boolean;
+                showFooter: boolean;
+                showToolbar: boolean;
+                responsive: boolean;
+            } | undefined;
+            branding?: {
+                showLogo: boolean;
+                showAttribution: boolean;
+                customLogo?: string | undefined;
+                customColors?: {
+                    text?: string | undefined;
+                    background?: string | undefined;
+                    primary?: string | undefined;
+                } | undefined;
+            } | undefined;
+            features?: {
+                autoPlay: boolean;
+                allowComments: boolean;
+                showMetrics: boolean;
+                allowRating: boolean;
+                enableInteraction: boolean;
+            } | undefined;
+        }, {
+            layout?: {
+                width?: number | undefined;
+                height?: number | undefined;
+                showHeader?: boolean | undefined;
+                showFooter?: boolean | undefined;
+                showToolbar?: boolean | undefined;
+                responsive?: boolean | undefined;
+            } | undefined;
+            branding?: {
+                showLogo?: boolean | undefined;
+                showAttribution?: boolean | undefined;
+                customLogo?: string | undefined;
+                customColors?: {
+                    text?: string | undefined;
+                    background?: string | undefined;
+                    primary?: string | undefined;
+                } | undefined;
+            } | undefined;
+            features?: {
+                autoPlay?: boolean | undefined;
+                allowComments?: boolean | undefined;
+                showMetrics?: boolean | undefined;
+                allowRating?: boolean | undefined;
+                enableInteraction?: boolean | undefined;
+            } | undefined;
+        }>>;
+        metadata: z.ZodObject<{
+            createdBy: z.ZodString;
+            createdAt: z.ZodDate;
+            updatedAt: z.ZodDate;
+            version: z.ZodDefault<z.ZodString>;
+            category: z.ZodOptional<z.ZodString>;
+            difficulty: z.ZodOptional<z.ZodEnum<["beginner", "intermediate", "advanced"]>>;
+            estimatedTime: z.ZodOptional<z.ZodNumber>;
+            prerequisites: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+            relatedResources: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+        }, "strip", z.ZodTypeAny, {
+            createdAt: Date;
+            updatedAt: Date;
+            version: string;
+            createdBy: string;
+            prerequisites: string[];
+            relatedResources: string[];
+            category?: string | undefined;
+            estimatedTime?: number | undefined;
+            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+        }, {
+            createdAt: Date;
+            updatedAt: Date;
+            createdBy: string;
+            category?: string | undefined;
+            version?: string | undefined;
+            prerequisites?: string[] | undefined;
+            estimatedTime?: number | undefined;
+            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+            relatedResources?: string[] | undefined;
+        }>;
+    }, "strip", z.ZodTypeAny, {
+        id: string;
+        tags: string[];
+        metadata: {
+            createdAt: Date;
+            updatedAt: Date;
+            version: string;
+            createdBy: string;
+            prerequisites: string[];
+            relatedResources: string[];
+            category?: string | undefined;
+            estimatedTime?: number | undefined;
+            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+        };
+        title: string;
+        permissions: {
+            canEdit: boolean;
+            canComment: boolean;
+            canView: boolean;
+            canClone: boolean;
+            canShare: boolean;
+            canEmbed: boolean;
+            canDownload: boolean;
+            requiresAuth: boolean;
+            expiresAt?: Date | undefined;
+            allowedDomains?: string[] | undefined;
+            maxViews?: number | undefined;
+            maxShares?: number | undefined;
+        };
+        resourceId: string;
+        resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
+        shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
+        shareFormat: "link" | "embed" | "export" | "clone";
+        customization: {
+            layout?: {
+                width: number;
+                height: number;
+                showHeader: boolean;
+                showFooter: boolean;
+                showToolbar: boolean;
+                responsive: boolean;
+            } | undefined;
+            branding?: {
+                showLogo: boolean;
+                showAttribution: boolean;
+                customLogo?: string | undefined;
+                customColors?: {
+                    text?: string | undefined;
+                    background?: string | undefined;
+                    primary?: string | undefined;
+                } | undefined;
+            } | undefined;
+            features?: {
+                autoPlay: boolean;
+                allowComments: boolean;
+                showMetrics: boolean;
+                allowRating: boolean;
+                enableInteraction: boolean;
+            } | undefined;
+        };
+        description?: string | undefined;
+        thumbnailUrl?: string | undefined;
+    }, {
+        id: string;
+        metadata: {
+            createdAt: Date;
+            updatedAt: Date;
+            createdBy: string;
+            category?: string | undefined;
+            version?: string | undefined;
+            prerequisites?: string[] | undefined;
+            estimatedTime?: number | undefined;
+            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+            relatedResources?: string[] | undefined;
+        };
+        title: string;
+        permissions: {
+            canEdit?: boolean | undefined;
+            canComment?: boolean | undefined;
+            expiresAt?: Date | undefined;
+            allowedDomains?: string[] | undefined;
+            canView?: boolean | undefined;
+            canClone?: boolean | undefined;
+            canShare?: boolean | undefined;
+            canEmbed?: boolean | undefined;
+            canDownload?: boolean | undefined;
+            requiresAuth?: boolean | undefined;
+            maxViews?: number | undefined;
+            maxShares?: number | undefined;
+        };
+        resourceId: string;
+        resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
+        shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
+        shareFormat: "link" | "embed" | "export" | "clone";
+        description?: string | undefined;
+        tags?: string[] | undefined;
+        thumbnailUrl?: string | undefined;
+        customization?: {
+            layout?: {
+                width?: number | undefined;
+                height?: number | undefined;
+                showHeader?: boolean | undefined;
+                showFooter?: boolean | undefined;
+                showToolbar?: boolean | undefined;
+                responsive?: boolean | undefined;
+            } | undefined;
+            branding?: {
+                showLogo?: boolean | undefined;
+                showAttribution?: boolean | undefined;
+                customLogo?: string | undefined;
+                customColors?: {
+                    text?: string | undefined;
+                    background?: string | undefined;
+                    primary?: string | undefined;
+                } | undefined;
+            } | undefined;
+            features?: {
+                autoPlay?: boolean | undefined;
+                allowComments?: boolean | undefined;
+                showMetrics?: boolean | undefined;
+                allowRating?: boolean | undefined;
+                enableInteraction?: boolean | undefined;
+            } | undefined;
+        } | undefined;
+    }>;
+    shareLink: z.ZodObject<{
+        id: z.ZodString;
+        shareConfigId: z.ZodString;
+        shortCode: z.ZodString;
+        fullUrl: z.ZodString;
+        shortUrl: z.ZodString;
+        qrCode: z.ZodOptional<z.ZodString>;
+        socialTags: z.ZodObject<{
+            openGraph: z.ZodObject<{
+                title: z.ZodString;
+                description: z.ZodString;
+                image: z.ZodOptional<z.ZodString>;
+                url: z.ZodString;
+                type: z.ZodDefault<z.ZodString>;
+                siteName: z.ZodDefault<z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                description: string;
+                type: string;
+                title: string;
+                url: string;
+                siteName: string;
+                image?: string | undefined;
+            }, {
+                description: string;
+                title: string;
+                url: string;
+                type?: string | undefined;
+                image?: string | undefined;
+                siteName?: string | undefined;
+            }>;
+            twitter: z.ZodObject<{
+                card: z.ZodDefault<z.ZodEnum<["summary", "summary_large_image"]>>;
+                title: z.ZodString;
+                description: z.ZodString;
+                image: z.ZodOptional<z.ZodString>;
+                creator: z.ZodOptional<z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                description: string;
+                title: string;
+                card: "summary" | "summary_large_image";
+                image?: string | undefined;
+                creator?: string | undefined;
+            }, {
+                description: string;
+                title: string;
+                image?: string | undefined;
+                creator?: string | undefined;
+                card?: "summary" | "summary_large_image" | undefined;
+            }>;
+            schema: z.ZodObject<{
+                type: z.ZodDefault<z.ZodString>;
+                name: z.ZodString;
+                description: z.ZodString;
+                url: z.ZodString;
+                author: z.ZodOptional<z.ZodObject<{
+                    type: z.ZodDefault<z.ZodString>;
+                    name: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    name: string;
+                    type: string;
+                }, {
+                    name: string;
+                    type?: string | undefined;
+                }>>;
+            }, "strip", z.ZodTypeAny, {
+                name: string;
+                description: string;
+                type: string;
+                url: string;
+                author?: {
+                    name: string;
+                    type: string;
+                } | undefined;
+            }, {
+                name: string;
+                description: string;
+                url: string;
+                type?: string | undefined;
+                author?: {
+                    name: string;
+                    type?: string | undefined;
+                } | undefined;
+            }>;
+        }, "strip", z.ZodTypeAny, {
+            schema: {
+                name: string;
+                description: string;
+                type: string;
+                url: string;
+                author?: {
+                    name: string;
+                    type: string;
+                } | undefined;
+            };
+            twitter: {
+                description: string;
+                title: string;
+                card: "summary" | "summary_large_image";
+                image?: string | undefined;
+                creator?: string | undefined;
+            };
+            openGraph: {
+                description: string;
+                type: string;
+                title: string;
+                url: string;
+                siteName: string;
+                image?: string | undefined;
+            };
+        }, {
+            schema: {
+                name: string;
+                description: string;
+                url: string;
+                type?: string | undefined;
+                author?: {
+                    name: string;
+                    type?: string | undefined;
+                } | undefined;
+            };
+            twitter: {
+                description: string;
+                title: string;
+                image?: string | undefined;
+                creator?: string | undefined;
+                card?: "summary" | "summary_large_image" | undefined;
+            };
+            openGraph: {
+                description: string;
+                title: string;
+                url: string;
+                type?: string | undefined;
+                image?: string | undefined;
+                siteName?: string | undefined;
+            };
+        }>;
+        embedCode: z.ZodOptional<z.ZodObject<{
+            iframe: z.ZodString;
+            javascript: z.ZodOptional<z.ZodString>;
+            responsive: z.ZodOptional<z.ZodString>;
+        }, "strip", z.ZodTypeAny, {
+            iframe: string;
+            javascript?: string | undefined;
+            responsive?: string | undefined;
+        }, {
+            iframe: string;
+            javascript?: string | undefined;
+            responsive?: string | undefined;
+        }>>;
+        analytics: z.ZodDefault<z.ZodObject<{
+            trackingEnabled: z.ZodDefault<z.ZodBoolean>;
+            utmSource: z.ZodOptional<z.ZodString>;
+            utmMedium: z.ZodOptional<z.ZodString>;
+            utmCampaign: z.ZodOptional<z.ZodString>;
+            customParams: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodString>>;
+        }, "strip", z.ZodTypeAny, {
+            trackingEnabled: boolean;
+            customParams: Record<string, string>;
+            utmSource?: string | undefined;
+            utmMedium?: string | undefined;
+            utmCampaign?: string | undefined;
+        }, {
+            trackingEnabled?: boolean | undefined;
+            utmSource?: string | undefined;
+            utmMedium?: string | undefined;
+            utmCampaign?: string | undefined;
+            customParams?: Record<string, string> | undefined;
+        }>>;
+    }, "strip", z.ZodTypeAny, {
+        id: string;
+        analytics: {
+            trackingEnabled: boolean;
+            customParams: Record<string, string>;
+            utmSource?: string | undefined;
+            utmMedium?: string | undefined;
+            utmCampaign?: string | undefined;
+        };
+        shareConfigId: string;
+        shortCode: string;
+        fullUrl: string;
+        shortUrl: string;
+        socialTags: {
+            schema: {
+                name: string;
+                description: string;
+                type: string;
+                url: string;
+                author?: {
+                    name: string;
+                    type: string;
+                } | undefined;
+            };
+            twitter: {
+                description: string;
+                title: string;
+                card: "summary" | "summary_large_image";
+                image?: string | undefined;
+                creator?: string | undefined;
+            };
+            openGraph: {
+                description: string;
+                type: string;
+                title: string;
+                url: string;
+                siteName: string;
+                image?: string | undefined;
+            };
+        };
+        qrCode?: string | undefined;
+        embedCode?: {
+            iframe: string;
+            javascript?: string | undefined;
+            responsive?: string | undefined;
+        } | undefined;
+    }, {
+        id: string;
+        shareConfigId: string;
+        shortCode: string;
+        fullUrl: string;
+        shortUrl: string;
+        socialTags: {
+            schema: {
+                name: string;
+                description: string;
+                url: string;
+                type?: string | undefined;
+                author?: {
+                    name: string;
+                    type?: string | undefined;
+                } | undefined;
+            };
+            twitter: {
+                description: string;
+                title: string;
+                image?: string | undefined;
+                creator?: string | undefined;
+                card?: "summary" | "summary_large_image" | undefined;
+            };
+            openGraph: {
+                description: string;
+                title: string;
+                url: string;
+                type?: string | undefined;
+                image?: string | undefined;
+                siteName?: string | undefined;
+            };
+        };
+        analytics?: {
+            trackingEnabled?: boolean | undefined;
+            utmSource?: string | undefined;
+            utmMedium?: string | undefined;
+            utmCampaign?: string | undefined;
+            customParams?: Record<string, string> | undefined;
+        } | undefined;
+        qrCode?: string | undefined;
+        embedCode?: {
+            iframe: string;
+            javascript?: string | undefined;
+            responsive?: string | undefined;
+        } | undefined;
+    }>;
+    socialLinks: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodString>>;
+    embedCodes: z.ZodObject<{
+        basic: z.ZodString;
+        responsive: z.ZodString;
+        customizable: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        basic: string;
+        responsive: string;
+        customizable: string;
+    }, {
+        basic: string;
+        responsive: string;
+        customizable: string;
+    }>;
+    qrCode: z.ZodOptional<z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    shareConfig: {
+        id: string;
+        tags: string[];
+        metadata: {
+            createdAt: Date;
+            updatedAt: Date;
+            version: string;
+            createdBy: string;
+            prerequisites: string[];
+            relatedResources: string[];
+            category?: string | undefined;
+            estimatedTime?: number | undefined;
+            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+        };
+        title: string;
+        permissions: {
+            canEdit: boolean;
+            canComment: boolean;
+            canView: boolean;
+            canClone: boolean;
+            canShare: boolean;
+            canEmbed: boolean;
+            canDownload: boolean;
+            requiresAuth: boolean;
+            expiresAt?: Date | undefined;
+            allowedDomains?: string[] | undefined;
+            maxViews?: number | undefined;
+            maxShares?: number | undefined;
+        };
+        resourceId: string;
+        resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
+        shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
+        shareFormat: "link" | "embed" | "export" | "clone";
+        customization: {
+            layout?: {
+                width: number;
+                height: number;
+                showHeader: boolean;
+                showFooter: boolean;
+                showToolbar: boolean;
+                responsive: boolean;
+            } | undefined;
+            branding?: {
+                showLogo: boolean;
+                showAttribution: boolean;
+                customLogo?: string | undefined;
+                customColors?: {
+                    text?: string | undefined;
+                    background?: string | undefined;
+                    primary?: string | undefined;
+                } | undefined;
+            } | undefined;
+            features?: {
+                autoPlay: boolean;
+                allowComments: boolean;
+                showMetrics: boolean;
+                allowRating: boolean;
+                enableInteraction: boolean;
+            } | undefined;
+        };
+        description?: string | undefined;
+        thumbnailUrl?: string | undefined;
+    };
+    shareLink: {
+        id: string;
+        analytics: {
+            trackingEnabled: boolean;
+            customParams: Record<string, string>;
+            utmSource?: string | undefined;
+            utmMedium?: string | undefined;
+            utmCampaign?: string | undefined;
+        };
+        shareConfigId: string;
+        shortCode: string;
+        fullUrl: string;
+        shortUrl: string;
+        socialTags: {
+            schema: {
+                name: string;
+                description: string;
+                type: string;
+                url: string;
+                author?: {
+                    name: string;
+                    type: string;
+                } | undefined;
+            };
+            twitter: {
+                description: string;
+                title: string;
+                card: "summary" | "summary_large_image";
+                image?: string | undefined;
+                creator?: string | undefined;
+            };
+            openGraph: {
+                description: string;
+                type: string;
+                title: string;
+                url: string;
+                siteName: string;
+                image?: string | undefined;
+            };
+        };
+        qrCode?: string | undefined;
+        embedCode?: {
+            iframe: string;
+            javascript?: string | undefined;
+            responsive?: string | undefined;
+        } | undefined;
+    };
+    socialLinks: Record<string, string>;
+    embedCodes: {
+        basic: string;
+        responsive: string;
+        customizable: string;
+    };
+    qrCode?: string | undefined;
+}, {
+    shareConfig: {
+        id: string;
+        metadata: {
+            createdAt: Date;
+            updatedAt: Date;
+            createdBy: string;
+            category?: string | undefined;
+            version?: string | undefined;
+            prerequisites?: string[] | undefined;
+            estimatedTime?: number | undefined;
+            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+            relatedResources?: string[] | undefined;
+        };
+        title: string;
+        permissions: {
+            canEdit?: boolean | undefined;
+            canComment?: boolean | undefined;
+            expiresAt?: Date | undefined;
+            allowedDomains?: string[] | undefined;
+            canView?: boolean | undefined;
+            canClone?: boolean | undefined;
+            canShare?: boolean | undefined;
+            canEmbed?: boolean | undefined;
+            canDownload?: boolean | undefined;
+            requiresAuth?: boolean | undefined;
+            maxViews?: number | undefined;
+            maxShares?: number | undefined;
+        };
+        resourceId: string;
+        resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
+        shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
+        shareFormat: "link" | "embed" | "export" | "clone";
+        description?: string | undefined;
+        tags?: string[] | undefined;
+        thumbnailUrl?: string | undefined;
+        customization?: {
+            layout?: {
+                width?: number | undefined;
+                height?: number | undefined;
+                showHeader?: boolean | undefined;
+                showFooter?: boolean | undefined;
+                showToolbar?: boolean | undefined;
+                responsive?: boolean | undefined;
+            } | undefined;
+            branding?: {
+                showLogo?: boolean | undefined;
+                showAttribution?: boolean | undefined;
+                customLogo?: string | undefined;
+                customColors?: {
+                    text?: string | undefined;
+                    background?: string | undefined;
+                    primary?: string | undefined;
+                } | undefined;
+            } | undefined;
+            features?: {
+                autoPlay?: boolean | undefined;
+                allowComments?: boolean | undefined;
+                showMetrics?: boolean | undefined;
+                allowRating?: boolean | undefined;
+                enableInteraction?: boolean | undefined;
+            } | undefined;
+        } | undefined;
+    };
+    shareLink: {
+        id: string;
+        shareConfigId: string;
+        shortCode: string;
+        fullUrl: string;
+        shortUrl: string;
+        socialTags: {
+            schema: {
+                name: string;
+                description: string;
+                url: string;
+                type?: string | undefined;
+                author?: {
+                    name: string;
+                    type?: string | undefined;
+                } | undefined;
+            };
+            twitter: {
+                description: string;
+                title: string;
+                image?: string | undefined;
+                creator?: string | undefined;
+                card?: "summary" | "summary_large_image" | undefined;
+            };
+            openGraph: {
+                description: string;
+                title: string;
+                url: string;
+                type?: string | undefined;
+                image?: string | undefined;
+                siteName?: string | undefined;
+            };
+        };
+        analytics?: {
+            trackingEnabled?: boolean | undefined;
+            utmSource?: string | undefined;
+            utmMedium?: string | undefined;
+            utmCampaign?: string | undefined;
+            customParams?: Record<string, string> | undefined;
+        } | undefined;
+        qrCode?: string | undefined;
+        embedCode?: {
+            iframe: string;
+            javascript?: string | undefined;
+            responsive?: string | undefined;
+        } | undefined;
+    };
+    embedCodes: {
+        basic: string;
+        responsive: string;
+        customizable: string;
+    };
+    qrCode?: string | undefined;
+    socialLinks?: Record<string, string> | undefined;
+}>;
+export type CreateShareRequest = z.infer<typeof CreateShareRequestSchema>;
+export type ShareResponse = z.infer<typeof ShareResponseSchema>;
+export declare const validateCreateShareRequest: (data: unknown) => CreateShareRequest;
+export declare const validateShareConfig: (data: unknown) => ShareConfig;
+export declare const validateShareAnalyticsEvent: (data: unknown) => ShareAnalyticsEvent;
+declare const ShareableResourceTypeSchema: z.ZodEnum<["template", "graph", "collection", "case_study", "tutorial", "marketplace_item"]>;
+declare const ShareTargetSchema: z.ZodEnum<["public", "workspace", "organization", "private", "unlisted"]>;
+declare const ShareFormatSchema: z.ZodEnum<["link", "embed", "export", "clone"]>;
+declare const SocialPlatformSchema: z.ZodEnum<["twitter", "linkedin", "discord", "slack", "teams", "email", "github"]>;
+export interface ShareSystemConfig {
+    enabledPlatforms: SocialPlatform[];
+    defaultPermissions: SharePermission;
+    analyticsRetentionDays: number;
+    maxSharesPerUser: number;
+    rateLimiting: {
+        sharesPerHour: number;
+        embedsPerHour: number;
+    };
+    customization: {
+        allowCustomBranding: boolean;
+        allowCustomDomains: boolean;
+        maxEmbedSize: {
+            width: number;
+            height: number;
+        };
+    };
+}
+export { SharePermissionSchema, ShareConfigSchema, ShareLinkSchema, ShareAnalyticsEventSchema, ShareMetricsSchema, SocialIntegrationSchema, ShareCollectionSchema, CreateShareRequestSchema, ShareResponseSchema, ShareableResourceTypeSchema, ShareTargetSchema, ShareFormatSchema, SocialPlatformSchema };
+//# sourceMappingURL=sharingTypes.d.ts.map

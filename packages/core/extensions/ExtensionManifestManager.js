@@ -2,7 +2,7 @@
  * Extension Manifest Manager - Epic 8.4 Story 8.4.3
  * Manages extension manifests including loading, caching, and validation
  */
-import { extensionManifestParser, extensionManifestValidator } from './ExtensionManifest';
+import { extensionManifestParser, extensionManifestValidator } from './ExtensionManifest.js';
 // Extension Manifest Manager
 export class ExtensionManifestManager {
     static instance;

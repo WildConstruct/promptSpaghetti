@@ -21,8 +21,8 @@ import {
   MetricThreshold,
   PlaybookExecutionContext,
   PlaybookExecutionResult
-} from '../../../packages/core/types/Epic17IncidentPlaybooks';
-import { ActionSeverity } from '../../../packages/core/types/EnforcementTypes';
+} from '../../../../packages/core/types/Epic17IncidentPlaybooks';
+import { ActionSeverity } from '../../../../packages/core/types/EnforcementTypes';
 
 export interface HealthCheckFailureEvent {
   healthCheckId: string;
@@ -619,7 +619,11 @@ export class HealthCheckPlaybookIntegration {
     console.log('✅ Configuration validation completed');
   }
 
-  private async queuePlaybookExecution(playbookId: string, _____triggerEvent: unknown, _____triggerType: string): Promise<void> {
+  private async queuePlaybookExecution(
+    playbookId: string,
+    _____triggerEvent: unknown,
+    _____triggerType: string
+  ): Promise<void> {
     // Implementation for queueing playbook execution when at capacity
     console.log(`📋 Queued playbook execution: ${playbookId}`);
   }

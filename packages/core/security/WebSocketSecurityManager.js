@@ -11,8 +11,8 @@
  */
 import { EventEmitter } from 'events';
 import { createCipheriv, createDecipheriv, randomBytes, createHmac } from 'crypto';
-import { KeyType, KeyPurpose, KeyAlgorithm, StorageTier } from './KeyManagementService';
-import { ClassificationLevel } from './DataClassifier';
+import { KeyType, KeyPurpose, KeyAlgorithm, StorageTier } from './KeyManagementService.js';
+import { ClassificationLevel } from './DataClassifier.js';
 /**
  * WebSocket Security Manager
  */

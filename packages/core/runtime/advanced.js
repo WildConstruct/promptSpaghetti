@@ -1,7 +1,10 @@
 // packages/core/runtime/advanced.ts
 // Advanced runtime node base classes and enhanced execution context for Epic 7
-import { RuntimeNode } from './types';
+import { ExecutionContext, RuntimeNode } from './types.js';
 import seedrandom from 'seedrandom';
+
+// Interface placeholders (interfaces don't exist in compiled JS but we need the exports for imports)
+export const AdvancedNodeConfig = null;
 /**
  * Abstract base class for all advanced rule nodes in Epic 7
  * Extends the proven RuntimeNode architecture with enhanced capabilities
@@ -81,6 +84,35 @@ export class AdvancedRuntimeNode extends RuntimeNode {
     }
 }
 /**
+ * Concrete implementation of AdvancedExecutionContext for tests and direct instantiation
+ */
+export class AdvancedExecutionContextImpl {
+    variables;
+    seed;
+    nodeStates;
+    evaluationDepth;
+    cache;
+    executionMeta;
+    inputs;
+    outputs;
+    constructor(seed, variables = {}) {
+        this.variables = { ...variables };
+        this.seed = seed;
+        this.nodeStates = new Map();
+        this.evaluationDepth = 0;
+        this.cache = new Map();
+        this.executionMeta = {
+            startTime: performance.now(),
+            nodeExecutionOrder: [],
+            performanceMetrics: new Map()
+        };
+        this.inputs = {};
+        this.outputs = {};
+    }
+}
+// Export as both named and default for backward compatibility
+export { AdvancedExecutionContextImpl as AdvancedExecutionContext };
+/**
  * Utility functions for working with advanced execution contexts
  */
 export class AdvancedExecutionUtils {
@@ -114,7 +146,7 @@ export class AdvancedExecutionUtils {
     /**
      * Check for potential infinite loops in stateful node execution
      */
-    static detectInfiniteLoop(ctx, nodeId) {
+    static detectInfiniteLoop(ctx, _______nodeId) {
         const MAX_DEPTH = 1000; // Configurable limit
         return ctx.evaluationDepth > MAX_DEPTH;
     }

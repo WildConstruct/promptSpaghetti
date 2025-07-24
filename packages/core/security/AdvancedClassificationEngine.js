@@ -7,7 +7,7 @@
  */
 import { EventEmitter } from 'events';
 import crypto from 'crypto';
-import { DataClassifier, ClassificationLevel, DataCategory, ComplianceFramework, ClassificationPolicyManager } from './DataClassifier';
+import { DataClassifier, ClassificationLevel, DataCategory, ComplianceFramework, ClassificationPolicyManager } from './DataClassifier.js';
 /**
  * Advanced Classification Engine with ML and Workflow Capabilities
  */

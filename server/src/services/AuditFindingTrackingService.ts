@@ -10,7 +10,7 @@ import { AuditTeamCollaborationService } from './AuditTeamCollaborationService';
 import { 
   DataProtectionEventLogger,
   DataProtectionEventType
-} from '../../packages/core/security/DataProtectionEventLogger';
+} from '../../../packages/core/security/DataProtectionEventLogger';
 
 export enum FindingTrackingStatus {
   NEW = 'new',

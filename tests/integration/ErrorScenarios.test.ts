@@ -7,7 +7,7 @@ import { jest } from '@jest/globals';
 import WebSocket from 'ws';
 import { ConnectionManager } from '../../server/src/websocket/ConnectionManager';
 import { GraphEngine } from '../../packages/graph-core/src/engine';
-import { Graph } from '../../packages/core/graphSchema';
+import { Graph } from '../packages/core/graphSchema';
 import { generatePreviewOutputs } from '../../server/src/index';
 import { TestEnvironmentManager, AsyncTestingUtils } from '../utils/TestingUtilities';
 

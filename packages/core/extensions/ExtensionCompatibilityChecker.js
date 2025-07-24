@@ -2,7 +2,7 @@
  * Extension Compatibility Checker - Epic 8.4 Story 8.4.4
  * Advanced compatibility checking and resolution for extensions
  */
-import { SemanticVersion, VersionRange } from './ExtensionVersionManager';
+import { SemanticVersion, VersionRange } from './ExtensionVersionManager.js';
 // Compatibility Checker
 export class ExtensionCompatibilityChecker {
     static instance;

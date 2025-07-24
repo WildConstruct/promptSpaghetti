@@ -326,34 +326,43 @@ describe('Performance Benchmarks', () => {
  * Performance monitoring utilities
  */
 describe('Performance Monitoring', () => {
-  it('should track FPS during animations', (done) => {
+  it('should track FPS during animations', async () => {
     let frameCount = 0;
     let lastTime = performance.now();
     const fpsSamples: number[] = [];
     
-    const measureFPS = () => {
-      const currentTime = performance.now();
-      const deltaTime = currentTime - lastTime;
+    const fpsPromise = new Promise<void>((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        reject(new Error('FPS measurement timeout after 8s'));
+      }, 8000);
       
-      if (deltaTime >= 1000) {
-        const fps = (frameCount * 1000) / deltaTime;
-        fpsSamples.push(fps);
-        frameCount = 0;
-        lastTime = currentTime;
+      const measureFPS = () => {
+        const currentTime = performance.now();
+        const deltaTime = currentTime - lastTime;
         
-        if (fpsSamples.length >= 5) {
-          const averageFPS = fpsSamples.reduce((sum, fps) => sum + fps, 0) / fpsSamples.length;
-          expect(averageFPS).toBeGreaterThan(50); // Should maintain 50+ FPS
-          done();
-          return;
+        if (deltaTime >= 1000) {
+          const fps = (frameCount * 1000) / deltaTime;
+          fpsSamples.push(fps);
+          frameCount = 0;
+          lastTime = currentTime;
+          
+          if (fpsSamples.length >= 5) {
+            const averageFPS = fpsSamples.reduce((sum, fps) => sum + fps, 0) / fpsSamples.length;
+            expect(averageFPS).toBeGreaterThan(50); // Should maintain 50+ FPS
+            clearTimeout(timeout);
+            resolve();
+            return;
+          }
         }
-      }
+        
+        frameCount++;
+        requestAnimationFrame(measureFPS);
+      };
       
-      frameCount++;
       requestAnimationFrame(measureFPS);
-    };
+    });
     
-    requestAnimationFrame(measureFPS);
+    await fpsPromise;
   });
   
   it('should measure first contentful paint', () => {

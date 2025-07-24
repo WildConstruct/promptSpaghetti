@@ -1,7 +1,7 @@
 import { create } from 'zustand';
-import { ProjectManager } from './projectManager';
-import { ServerProjectManager } from './serverProjectManager';
-import { templateService } from './services/TemplateService';
+import { ProjectManager } from './projectManager.js';
+import { ServerProjectManager } from './serverProjectManager.js';
+import { templateService } from './services/TemplateService.js';
 export const useGraphStore = create((set, get) => ({
     nodes: [],
     edges: [],

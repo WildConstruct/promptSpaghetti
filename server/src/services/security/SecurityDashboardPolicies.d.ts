@@ -9,7 +9,10 @@
  * Task: E19-1753114712019-3E638C - Create security dashboard policies
  */
 import { EventEmitter } from 'events';
-import { DataClassificationLevel, DataOperation } from '../../../packages/core/security/DataClassificationAccessControl';
+import { 
+  DataClassificationLevel,
+  DataOperation
+} from '../../../../packages/core/security/DataClassificationAccessControl';
 export declare enum DashboardRole {
     VIEWER = "VIEWER",
     ANALYST = "ANALYST",
@@ -91,7 +94,7 @@ export interface ContentFilter {
     type: 'FIELD' | 'VALUE' | 'REGEX' | 'CLASSIFICATION' | 'KEYWORD';
     field?: string;
     operator: 'EQUALS' | 'NOT_EQUALS' | 'CONTAINS' | 'NOT_CONTAINS' | 'MATCHES' | 'GREATER_THAN' | 'LESS_THAN';
-    value: any;
+    value: Error;
     action: 'HIDE' | 'MASK' | 'REDACT' | 'AGGREGATE';
     maskingPattern?: string;
 }
@@ -105,7 +108,7 @@ export interface PolicyCondition {
     type: 'USER_ATTRIBUTE' | 'TIME' | 'LOCATION' | 'DEVICE' | 'CONTEXT' | 'RISK_SCORE';
     field: string;
     operator: 'EQUALS' | 'NOT_EQUALS' | 'IN' | 'NOT_IN' | 'GREATER_THAN' | 'LESS_THAN' | 'BETWEEN';
-    value: any;
+    value: Error;
     weight: number;
 }
 export interface PolicyEvaluationContext {
@@ -195,7 +198,7 @@ export interface ComplianceEvidence {
     type: 'AUDIT_LOG' | 'CONFIGURATION' | 'SCREENSHOT' | 'DOCUMENT';
     source: string;
     timestamp: Date;
-    data: any;
+    data: Record<string, unknown>;
     hash: string;
 }
 export interface ComplianceRecommendation {
@@ -222,11 +225,18 @@ export declare class SecurityDashboardPolicies extends EventEmitter {
     /**
      * Get dashboard view configuration for a user
      */
-    getDashboardConfiguration(userId: string, context: Partial<PolicyEvaluationContext>): Promise<DashboardViewConfiguration>;
+    getDashboardConfiguration(
+      userId: string,
+      context: Partial<PolicyEvaluationContext>
+    ): Promise<DashboardViewConfiguration>;
     /**
      * Create new policy
      */
-    createPolicy(policyData: Omit<DashboardPolicy, 'id' | 'createdAt' | 'updatedAt' | 'version'>, createdBy: string): Promise<DashboardPolicy>;
+    createPolicy(
+      policyData: Omit<DashboardPolicy,
+      'id' | 'createdAt' | 'updatedAt' | 'version'>,
+      createdBy: string
+    ): Promise<DashboardPolicy>;
     /**
      * Update existing policy
      */
@@ -254,7 +264,12 @@ export declare class SecurityDashboardPolicies extends EventEmitter {
     /**
      * Apply data classification filters
      */
-    applyDataFilters(data: any, filters: ContentFilter[], userContext: PolicyEvaluationContext): any;
+    applyDataFilters(
+      data: Record<string,
+      unknown>,
+      filters: ContentFilter[],
+      userContext: PolicyEvaluationContext
+    ): unknown;
     private evaluatePolicy;
     private evaluateCondition;
     private compareValues;

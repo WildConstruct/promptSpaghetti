@@ -3,7 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Dialog for requesting locks on resources
 import { useState, useEffect } from 'react';
 import { X, Lock, Clock, AlertTriangle, Info } from 'lucide-react';
-export const LockRequestDialog = ({ isOpen, onClose, onRequest, resourceId, _____userId }) => {
+export const LockRequestDialog = ({ isOpen, onClose, onRequest, resourceId, userId }) => {
     const [selectedResource, setSelectedResource] = useState(resourceId || '');
     const [lockType, setLockType] = useState('edit');
     const [reason, setReason] = useState('');

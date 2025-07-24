@@ -303,16 +303,16 @@ export const useUISettingsStore = create<UISettingsState>()(
 );
 
 // Helper function to check if field should be shown based on current settings
-export   
+export const shouldShowField = (fieldName: string, fieldType?: string, store?: ReturnType<typeof useUISettingsStore>): boolean => {
   // Always hide technical fields like 'id', 'nodeId', 'internalConfig', etc.
   const technicalFields = ['id', 'nodeId', 'internalId', 'config', '_internal', 'metadata'];
   if (technicalFields.some(tech => fieldName.toLowerCase().includes(tech.toLowerCase()))) {
-    return store.shouldShowTechnicalFields();
+    return store?.shouldShowTechnicalFields() ?? false;
   }
   
   // Hide advanced fields based on complexity level
   if (fieldType === 'advanced') {
-    return store.shouldShowAdvancedFeatures();
+    return store?.shouldShowAdvancedFeatures() ?? true;
   }
   
   // Always show basic fields

@@ -44,10 +44,12 @@ export class ConfigurationManager {
         const validatedConfig = schema.parse(config);
         config = validatedConfig;
       } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const errorDetails = error instanceof Error && 'errors' in error ? (error as any).errors : undefined;
         throw new ConfigurationError(
-          `Invalid configuration for ${adaptorId}: ${error.message}`,
+          `Invalid configuration for ${adaptorId}: ${errorMessage}`,
           'VALIDATION_ERROR',
-          { adaptorId, validationErrors: error.errors }
+          { adaptorId, validationErrors: errorDetails }
         );
       }
     }
@@ -240,7 +242,7 @@ export class ConfigurationManager {
             result.failed++;
             result.errors.push({
               adaptorId: configData.adaptorId || 'unknown',
-              error: error.message
+              error: error instanceof Error ? error.message : String(error)
             });
           }
         }
@@ -253,7 +255,7 @@ export class ConfigurationManager {
           result.failed++;
           result.errors.push({
             adaptorId: parsedData.adaptorId,
-            error: error.message
+            error: error instanceof Error ? error.message : String(error)
           });
         }
       } else {
@@ -269,7 +271,7 @@ export class ConfigurationManager {
             result.failed++;
             result.errors.push({
               adaptorId,
-              error: error.message
+              error: error instanceof Error ? error.message : String(error)
             });
           }
         }
@@ -283,8 +285,9 @@ export class ConfigurationManager {
 
       return result;
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.error('Configuration import failed', {
-        error: error.message,
+        error: errorMessage,
         format
       });
 
@@ -292,7 +295,7 @@ export class ConfigurationManager {
         success: false,
         imported: 0,
         failed: 1,
-        errors: [{ adaptorId: 'unknown', error: error.message }]
+        errors: [{ adaptorId: 'unknown', error: errorMessage }]
       };
     }
   }
@@ -342,9 +345,11 @@ export class ConfigurationManager {
         warnings: []
       };
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorDetails = error instanceof Error && 'errors' in error ? (error as any).errors : undefined;
       return {
         valid: false,
-        errors: error.errors || [error.message],
+        errors: errorDetails || [errorMessage],
         warnings: []
       };
     }
@@ -529,7 +534,7 @@ export class ConfigurationManager {
       } catch (error) {
         this.logger.error('Configuration change listener failed', {
           adaptorId,
-          error: error.message
+          error: error instanceof Error ? error.message : String(error)
         });
       }
     }

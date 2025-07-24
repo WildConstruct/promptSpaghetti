@@ -21,16 +21,16 @@ import {
   ReviewPriority,
   ReviewComplexity,
   ReviewMetadata
-} from '../../../packages/core/types/ReviewTools';
+} from '../../../../packages/core/types/ReviewTools';
 import {
   FraudDetectionResult,
   FraudAlert
-} from '../../../packages/core/types/FraudMonitoring';
+} from '../../../../packages/core/types/FraudMonitoring';
 import {
   EnforcementAction,
   ViolationReport,
   EnforcementAppeal
-} from '../../../packages/core/types/EnforcementTypes';
+} from '../../../../packages/core/types/EnforcementTypes';
 
 export interface IntegrationConfig {
   enabled: boolean;

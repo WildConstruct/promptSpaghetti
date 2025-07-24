@@ -1,9 +1,9 @@
 // packages/core/runtime/expression-evaluator.ts
 // Safe expression evaluator using acorn AST parsing with enhanced security filtering
 import * as acorn from 'acorn';
-import { createConditionalNodeFilter } from './ast-node-whitelist';
-import { createAuditedSafeMathContext, MathFunctionAuditor } from './safe-math-context';
-import { securityAudit } from './security-audit-logger';
+import { createConditionalNodeFilter } from './ast-node-whitelist.js';
+import { createAuditedSafeMathContext, MathFunctionAuditor } from './safe-math-context.js';
+import { securityAudit } from './security-audit-logger.js';
 /**
  * Token types for expression parsing
  */

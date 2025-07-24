@@ -19,7 +19,7 @@ import {
   PolicyVersionListResponse,
   PolicyStatus,
   ChangeType
-} from '../../packages/core/types/PolicyVersionTypes';
+} from '../../../packages/core/types/PolicyVersionTypes';
 
 export class PolicyVersionDAO {
   constructor(private db: Database) {}

@@ -2,7 +2,7 @@
  * Optimized Execution Cache System
  * Eliminates redundant node map rebuilding and provides persistent caching
  */
-import { OptimizedGraphStorage } from './OptimizedGraphStorage';
+import { OptimizedGraphStorage } from './OptimizedGraphStorage.js';
 /**
  * High-performance execution cache with intelligent invalidation
  */

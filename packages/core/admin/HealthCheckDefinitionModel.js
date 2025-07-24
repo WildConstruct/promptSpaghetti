@@ -344,11 +344,11 @@ export const createExampleHealthChecks = () => {
         output: {
             expectedFormat: 'json',
             successConditions: [
-                { field: 'health_check', operator: ComparisonOperator.EQUALS, value: 1, description: 'Database connectivity check' }
+                { field: 'health_check', operator: ComparisonOperator.EQUALS, value: 1, description: 'Database returns health check result' }
             ]
         },
         runtime: {
-            maxExecutionTime: 4000, // Less than the 5000ms timeout
+            maxExecutionTime: 4000,
             networkAccessRequired: false,
             fileSystemAccessRequired: false,
             privilegedAccessRequired: false
@@ -383,7 +383,7 @@ export const createExampleHealthChecks = () => {
             ]
         },
         runtime: {
-            maxExecutionTime: 8000, // Less than the 10000ms timeout
+            maxExecutionTime: 8000,
             networkAccessRequired: true,
             fileSystemAccessRequired: false,
             privilegedAccessRequired: false

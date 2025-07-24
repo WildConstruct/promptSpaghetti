@@ -770,7 +770,7 @@ export class ConflictResolutionEngine extends EventEmitter {
           id: this.generateConflictId(),
           resource_id: '', // Will be filled by caller
           conflict_type: ConflictType.CONTENT,
-          location: { path: 'root' },
+          location: { field_path: 'root' },
           local_version: localVersion,
           remote_version: remoteVersion,
           created_at: new Date()

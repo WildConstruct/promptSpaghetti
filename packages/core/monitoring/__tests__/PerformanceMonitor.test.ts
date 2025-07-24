@@ -95,27 +95,38 @@ describe('PerformanceMonitor', () => {
       expect(metrics).toBeNull();
     });
 
-    it('should emit execution events', (done) => {
+    it('should emit execution events', async () => {
       let eventsReceived = 0;
       
-      monitor.on('execution_started', (data) => {
-        expect(data.nodeId).toBe('event-test');
-        expect(data.nodeType).toBe('EventType');
-        eventsReceived++;
-      });
-      
-      monitor.on('execution_completed', (data) => {
-        expect(data.metrics.nodeId).toBe('event-test');
-        expect(data.success).toBe(true);
-        eventsReceived++;
+      const eventsPromise = new Promise<void>((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new Error('Events timeout after 3s'));
+        }, 3000);
         
-        if (eventsReceived === 2) done();
+        monitor.on('execution_started', (data) => {
+          expect(data.nodeId).toBe('event-test');
+          expect(data.nodeType).toBe('EventType');
+          eventsReceived++;
+        });
+        
+        monitor.on('execution_completed', (data) => {
+          expect(data.metrics.nodeId).toBe('event-test');
+          expect(data.success).toBe(true);
+          eventsReceived++;
+          
+          if (eventsReceived === 2) {
+            clearTimeout(timeout);
+            resolve();
+          }
+        });
       });
       
       const context = createMockContext();
       const trackingId = monitor.startExecution('event-test', 'EventType', context);
       mockTime += 30;
       monitor.endExecution(trackingId, context);
+      
+      await eventsPromise;
     });
   });
 

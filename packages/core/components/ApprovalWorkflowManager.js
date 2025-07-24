@@ -3,9 +3,9 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Main component that orchestrates all approval workflow functionality
 import { useState, useEffect } from 'react';
 import { Cog6ToothIcon, ClipboardDocumentListIcon, ChartBarIcon, DocumentTextIcon, PlusIcon, PencilIcon, TrashIcon, XCircleIcon } from '@heroicons/react/24/outline';
-import { ApprovalDashboard } from './ApprovalDashboard';
-import { ApprovalReviewInterface } from './ApprovalReviewInterface';
-import { ApprovalStatistics } from './ApprovalStatistics';
+import { ApprovalDashboard } from './ApprovalDashboard.js';
+import { ApprovalReviewInterface } from './ApprovalReviewInterface.js';
+import { ApprovalStatistics } from './ApprovalStatistics.js';
 export const ApprovalWorkflowManager = ({ workspaceId, currentUserId, userRole }) => {
     const [activeTab, setActiveTab] = useState('dashboard');
     const [approvalCriteria, setApprovalCriteria] = useState([]);

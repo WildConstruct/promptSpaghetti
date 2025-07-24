@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { TextFieldEditor } from '../TextFieldEditor';
-import { TextAreaEditor } from '../TextAreaEditor';
-import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
+import { TextFieldEditor } from '../TextFieldEditor.js';
+import { TextAreaEditor } from '../TextAreaEditor.js';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection.js';
 /**
  * Epic 8.4 - Conditional Editor with Progressive Disclosure
  *

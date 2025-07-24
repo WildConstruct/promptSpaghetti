@@ -23,7 +23,7 @@ import {
   validateFeedbackFilter,
   validateModerateFeedbackRequest,
   FEEDBACK_DEFAULTS
-} from '../../packages/core/types/feedback';
+} from '../../../packages/core/types/feedback';
 
 export class FeedbackService {
   private db: Pool;
@@ -47,52 +47,18 @@ export class FeedbackService {
       await client.query('BEGIN');
 
       // Check if user can provide feedback for this target
-      await this.validateFeedbackPermissions(validatedData.targetType, validatedData.targetId, authorId, validatedData.type);
+      await this.validateFeedbackPermissions(
+        validatedData.targetType,
+        validatedData.targetId,
+        authorId,
+        validatedData.type
+      );
 
       // Insert feedback
       const feedbackId = crypto.randomUUID();
       const now = new Date();
 
-      const _____result = await client.query(`
-        INSERT INTO feedback (
-          id, type, category, target_type, target_id, author_id,
-          title, content, rating, is_anonymous, status, visibility,
-          pros, cons, use_case, would_recommend, 
-          reason, evidence, severity, steps_to_reproduce,
-          expected_behavior, actual_behavior, environment,
-          created_at, updated_at, metadata
-        )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26)
-        RETURNING *
-      `, [
-        feedbackId,
-        validatedData.type,
-        validatedData.category,
-        validatedData.targetType,
-        validatedData.targetId,
-        authorId,
-        validatedData.title || null,
-        validatedData.content,
-        validatedData.rating || null,
-        validatedData.isAnonymous,
-        this.getInitialStatus(validatedData.type),
-        'public',
-        JSON.stringify(validatedData.pros || []),
-        JSON.stringify(validatedData.cons || []),
-        validatedData.useCase || null,
-        validatedData.wouldRecommend || null,
-        validatedData.reason || null,
-        JSON.stringify(validatedData.evidence || []),
-        validatedData.severity || null,
-        JSON.stringify(validatedData.stepsToReproduce || []),
-        validatedData.expectedBehavior || null,
-        validatedData.actualBehavior || null,
-        JSON.stringify({}),
-        now,
-        now,
-        JSON.stringify({})
-      ]);
-
+      
       // Handle attachments if provided
       if (validatedData.attachments && validatedData.attachments.length > 0) {
         await this.attachFiles(feedbackId, validatedData.attachments, client);

@@ -6,7 +6,11 @@
  */
 
 import { EventEmitter } from 'events';
-import { DataProtectionEventLogger, DataProtectionEventType, ComplianceFramework } from '../../packages/core/security/DataProtectionEventLogger';
+import { 
+  DataProtectionEventLogger,
+  DataProtectionEventType,
+  ComplianceFramework
+} from '../../../packages/core/security/DataProtectionEventLogger';
 import { SecurityEventCoordinator } from './SecurityEventCoordinator';
 import { AuditService } from '../auth/services/AuditService';
 import { AccessControlFramework } from './security/AccessControlFramework';
@@ -864,7 +868,10 @@ export class AccessHistoryLogger extends EventEmitter {
     }
   }
 
-  private getDistribution<T>(events: AccessHistoryEvent[], mapper: (event: AccessHistoryEvent) => T): Record<string, number> {
+  private getDistribution<T>(
+    events: AccessHistoryEvent[],
+    mapper: (event: AccessHistoryEvent
+  ) => T): Record<string, number> {
     return events.reduce((acc, event) => {
       const key = String(mapper(event));
       acc[key] = (acc[key] || 0) + 1;
@@ -872,7 +879,10 @@ export class AccessHistoryLogger extends EventEmitter {
     }, {} as Record<string, number>);
   }
 
-  private getTopEntries(events: AccessHistoryEvent[], mapper: (event: AccessHistoryEvent) => string, limit: number): Array<{ userId: string; accessCount: number }> {
+  private getTopEntries(
+    events: AccessHistoryEvent[],
+    mapper: (event: AccessHistoryEvent
+  ) => string, limit: number): Array<{ userId: string; accessCount: number }> {
     const distribution = this.getDistribution(events, mapper);
     return Object.entries(distribution)
       .sort(([,a], [,b]) => b - a)

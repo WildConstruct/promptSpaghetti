@@ -5,11 +5,11 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Epic 19: Authentication Enhancement & Security Hardening
  */
 import { useMemo, useEffect, useState } from 'react';
-import { PasswordComplexityValidator } from '../auth/PasswordComplexityValidator';
+import { PasswordComplexityValidator } from '../auth/PasswordComplexityValidator.js';
 // ========================================
 // Strength Meter Component
 // ========================================
-const StrengthMeter = ({ score, strength, compact, _____theme }) => {
+const StrengthMeter = ({ score, strength, compact, theme }) => {
     const getStrengthColor = (strength) => {
         const colors = {
             'very-weak': '#dc2626', // red-600
@@ -49,7 +49,7 @@ const StrengthMeter = ({ score, strength, compact, _____theme }) => {
 // ========================================
 // Rule Results Display
 // ========================================
-const RuleResultsDisplay = ({ ruleResults, passedRules, totalRules, _____theme }) => {
+const RuleResultsDisplay = ({ ruleResults, passedRules, totalRules, theme }) => {
     if (ruleResults.length === 0)
         return null;
     return (_jsxs("div", { className: "space-y-2", children: [_jsxs("div", { className: "flex justify-between items-center", children: [_jsx("span", { className: "text-sm font-medium text-gray-700", children: "Requirements" }), _jsxs("span", { className: "text-xs text-gray-500", children: [passedRules, "/", totalRules, " met"] })] }), _jsx("div", { className: "space-y-1", children: ruleResults.map((result, index) => (_jsxs("div", { className: "flex items-center gap-2 text-xs", children: [_jsx("span", { className: `w-2 h-2 rounded-full ${result.passed ? 'bg-green-500' : 'bg-red-500'}` }), _jsx("span", { className: `flex-1 ${result.passed ? 'text-green-700' : 'text-red-600'}`, children: result.message }), _jsxs("span", { className: "text-gray-400", children: [result.score, "/10"] })] }, index))) })] }));
@@ -57,7 +57,7 @@ const RuleResultsDisplay = ({ ruleResults, passedRules, totalRules, _____theme }
 // ========================================
 // Suggestions Display
 // ========================================
-const SuggestionsDisplay = ({ suggestions, _____theme }) => {
+const SuggestionsDisplay = ({ suggestions, theme }) => {
     if (suggestions.length === 0)
         return null;
     return (_jsxs("div", { className: "space-y-2", children: [_jsx("span", { className: "text-sm font-medium text-gray-700", children: "Suggestions" }), _jsxs("div", { className: "space-y-1", children: [suggestions.slice(0, 3).map((suggestion, index) => (_jsxs("div", { className: "flex items-start gap-2 text-xs", children: [_jsx("span", { className: "text-blue-500 mt-0.5", children: "\u2022" }), _jsx("span", { className: "text-gray-600", children: suggestion })] }, index))), suggestions.length > 3 && (_jsxs("div", { className: "text-xs text-gray-500 italic", children: ["+", suggestions.length - 3, " more suggestions"] }))] })] }));
@@ -65,7 +65,7 @@ const SuggestionsDisplay = ({ suggestions, _____theme }) => {
 // ========================================
 // Additional Info Display
 // ========================================
-const AdditionalInfoDisplay = ({ result, showCrackTime, showEntropy, _____theme }) => {
+const AdditionalInfoDisplay = ({ result, showCrackTime, showEntropy, theme }) => {
     if (!showCrackTime && !showEntropy)
         return null;
     return (_jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-gray-200", children: [showEntropy && result.entropy && (_jsxs("div", { className: "space-y-1", children: [_jsx("span", { className: "text-xs font-medium text-gray-600", children: "Entropy" }), _jsxs("div", { className: "text-sm text-gray-800", children: [result.entropy.toFixed(1), " bits"] })] })), showCrackTime && result.estimatedCrackTime && (_jsxs("div", { className: "space-y-1", children: [_jsx("span", { className: "text-xs font-medium text-gray-600", children: "Crack Time" }), _jsxs("div", { className: "text-sm text-gray-800", children: [_jsxs("div", { children: ["Online: ", result.estimatedCrackTime.online] }), _jsxs("div", { children: ["Offline: ", result.estimatedCrackTime.offline] })] })] }))] }));

@@ -84,7 +84,7 @@ interface AdvancedConditionBuilderProps {
         label: string;
         type: string;
         category: string;
-        options?: any[];
+        options?: unknown[];
     }>;
     onPreview?: (conditions: TargetingCondition[]) => Promise<TargetingPreview>;
     showVisualBuilder?: boolean;
@@ -109,29 +109,5 @@ interface SegmentManagementProps {
     onDuplicateSegment: (id: string) => void;
 }
 export declare const SegmentManagement: React.FC<SegmentManagementProps>;
-interface TargetingAnalyticsProps {
-    analytics: {
-        totalUsers: number;
-        activeTargeting: number;
-        conversionRate: number;
-        impressions: number;
-        clicks: number;
-        topSegments: Array<{
-            id: string;
-            name: string;
-            performance: number;
-            users: number;
-        }>;
-        geographicBreakdown: Record<string, number>;
-        timeSeriesData: Array<{
-            date: string;
-            impressions: number;
-            conversions: number;
-        }>;
-    };
-    timeRange: '24h' | '7d' | '30d' | '90d';
-    onTimeRangeChange: (range: '24h' | '7d' | '30d' | '90d') => void;
-}
-export declare const TargetingAnalytics: React.FC<TargetingAnalyticsProps>;
 export { type TargetingCondition, type UserSegment, type TargetingAudience, type TargetingPreview };
 //# sourceMappingURL=TargetingUIComponents.d.ts.map

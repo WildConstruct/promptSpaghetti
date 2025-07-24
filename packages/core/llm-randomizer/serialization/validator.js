@@ -1,7 +1,7 @@
 // Epic 12 - LLM Agent Randomizer System
 // Story 12.1 - Serialization Format Design
 // Validation system for LLM-generated graph format
-import { NodeTypeEnum } from '../../graphSchema';
+import { NodeTypeEnum } from '../../graphSchema.js';
 export class FormatValidator {
     static SUPPORTED_VERSIONS = ['1.0.0'];
     static REQUIRED_SECTIONS = ['---NODES---', '---END---'];

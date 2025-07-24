@@ -1,14 +1,14 @@
 // packages/core/runtime/nodes/Sequential.ts
 // Advanced sequential node with stateful sequence processing
-import { AdvancedRuntimeNode } from '../advanced';
-import { AdvancedIOHandler, IOSpecBuilder } from '../io-system';
+import { AdvancedRuntimeNode } from '../advanced.js';
+import { AdvancedIOHandler, IOSpecBuilder } from '../io-system.js';
 import seedrandom from 'seedrandom';
 /**
  * Linear sequence pattern - goes through items in order, then stops
  */
 export class LinearPattern {
     type = 'linear';
-    getNext(sequence, state, ctx) {
+    getNext(sequence, state, ______ctx) {
         if (state.index >= sequence.length) {
             // Return last item when sequence is exhausted
             return sequence[sequence.length - 1] || '';
@@ -21,7 +21,7 @@ export class LinearPattern {
  */
 export class CyclicalPattern {
     type = 'cyclical';
-    getNext(sequence, state, ctx) {
+    getNext(sequence, state, ______ctx) {
         if (sequence.length === 0)
             return '';
         const index = state.index % sequence.length;
@@ -111,7 +111,7 @@ export function createSequencePattern(type, config = {}) {
         case 'weighted':
             return new WeightedPattern(config);
         default:
-            const _exhaustive = type;
+            const _______exhaustive = type;
             throw new Error(`Unknown sequence pattern type: ${type}`);
     }
 }
@@ -291,7 +291,7 @@ export class SequentialNode extends AdvancedRuntimeNode {
     /**
      * Get effective sequence from constructor data or dynamic inputs
      */
-    getEffectiveSequence(ctx) {
+    getEffectiveSequence(______ctx) {
         // For now, use constructor sequence
         // In full implementation, would merge with dynamic inputs from I/O system
         return this.sequence;
@@ -309,9 +309,9 @@ export function createSequentialNode(id, sequence, patternType = 'linear', patte
  */
 export const SequentialPresets = {
     /** Simple linear sequence */
-    linear: (sequence) => createSequencePattern('linear'),
+    linear: (______sequence) => createSequencePattern('linear'),
     /** Infinite cycling sequence */
-    cycle: (sequence) => createSequencePattern('cyclical'),
+    cycle: (______sequence) => createSequencePattern('cyclical'),
     /** Random selection with repeats */
     random: (allowRepeats = true) => createSequencePattern('random', { allowRepeats }),
     /** Random selection without repeats until exhausted */

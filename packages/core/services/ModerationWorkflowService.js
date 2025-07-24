@@ -7,7 +7,7 @@
  * Task: E17-1753114396900-7DA65F - Design moderation workflow
  * Epic: 17 - Backstage Admin Controls
  */
-import { moderationStatesService } from './ModerationStatesService';
+import { moderationStatesService } from './ModerationStatesService.js';
 /**
  * Moderation Workflow Service
  *

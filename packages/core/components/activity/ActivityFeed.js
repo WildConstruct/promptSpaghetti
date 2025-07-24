@@ -4,10 +4,10 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Main activity feed interface for workspace activity
  */
 import { useState } from 'react';
-import { ActivityItem } from './ActivityItem';
-import { ActivityFilters } from './ActivityFilters';
-import { ActivityStats } from './ActivityStats';
-import { useActivityFeed } from '../../hooks/useActivityFeed';
+import { ActivityItem } from './ActivityItem.js';
+import { ActivityFilters } from './ActivityFilters.js';
+import { ActivityStats } from './ActivityStats.js';
+import { useActivityFeed } from '../../hooks/useActivityFeed.js';
 export const ActivityFeed = ({ workspaceId, userId, projectId, showStats = true, showFilters = true, maxItems, compact = false }) => {
     const [filters, setFilters] = useState({
         project_id: projectId

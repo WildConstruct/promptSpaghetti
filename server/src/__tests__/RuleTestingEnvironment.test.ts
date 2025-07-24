@@ -9,16 +9,16 @@ import RuleTestingEnvironment, { TestEnvironmentConfig, ComplianceFramework } fr
 // Mock dependencies
 jest.mock('../services/ComplianceRuleEngine', () => ({
   ComplianceRuleEngine: jest.fn<unknown[], unknown>().mockImplementation(() => ({
-    detectConflicts: jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown as unknown as unknown),
-    resolveConflicts: jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown as unknown as unknown),
-    evaluateRules: jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown as unknown as unknown)
+    detectConflicts: jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown as unknown as unknown as unknown),
+    resolveConflicts: jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown as unknown as unknown as unknown),
+    evaluateRules: jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown as unknown as unknown as unknown)
   }))
 }));
 
 jest.mock('../services/RuleTestingFramework', () => ({
   RuleTestingFramework: jest.fn<unknown[], unknown>().mockImplementation(() => ({
-    generateTests: jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown as unknown as unknown),
-    executeTestSuite: jest.fn<unknown[], unknown>().mockResolvedValue({} as unknown as unknown as unknown),
+    generateTests: jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown as unknown as unknown as unknown),
+    executeTestSuite: jest.fn<unknown[], unknown>().mockResolvedValue({} as unknown as unknown as unknown as unknown),
     generateReport: jest.fn<unknown[], unknown>().mockResolvedValue({
       id: 'test-report',
       testSuite: { id: 'test-suite', name: 'Test Suite' },

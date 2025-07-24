@@ -29,7 +29,7 @@ import {
   DisputeSearchCriteria,
   DisputeNotification,
   DisputeTrustImpact
-} from '../../../packages/core/types/DisputeTypes';
+} from '../../../../packages/core/types/DisputeTypes';
 
 export interface DisputeCreationRequest {
   transactionId: string;
@@ -629,7 +629,11 @@ export class DisputeManagementService {
   /**
    * Check if dispute should trigger enforcement actions
    */
-  private async checkEnforcementTriggers(disputeId: string, dispute: Dispute, _____newStatus: DisputeStatus): Promise<void> {
+  private async checkEnforcementTriggers(
+    disputeId: string,
+    dispute: Dispute,
+    _____newStatus: DisputeStatus
+  ): Promise<void> {
     // High-value disputes or fraud-related disputes may trigger enforcement
     if (dispute.amount > 1000 || dispute.category === DisputeCategory.FRAUD) {
       await this.enforcementActionService.evaluateDisputeForEnforcement(dispute);

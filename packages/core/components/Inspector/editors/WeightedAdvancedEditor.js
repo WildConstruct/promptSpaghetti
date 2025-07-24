@@ -1,9 +1,9 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
-import { TextFieldEditor } from '../TextFieldEditor';
-import { SelectEditor } from '../SelectEditor';
-import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
-import { WeightSlider } from '../WeightSlider';
-import { WeightVisualizationPanel } from '../../WeightVisualization';
+import { TextFieldEditor } from '../TextFieldEditor.js';
+import { SelectEditor } from '../SelectEditor.js';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection.js';
+import { WeightSlider } from '../WeightSlider.js';
+import { WeightVisualizationPanel } from '../../WeightVisualization.js';
 /**
  * Epic 8.4 - WeightedAdvanced Editor with Progressive Disclosure
  *

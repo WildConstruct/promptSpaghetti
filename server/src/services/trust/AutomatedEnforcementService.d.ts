@@ -11,7 +11,7 @@
 import { Database } from '../../database';
 import { TrustScoreService } from './TrustScoreService';
 import { AuditService } from '../auth/services/AuditService';
-import { UserTrustScore, TemplateTrustScore, TransactionTrustScore } from '../../../packages/core/types/TrustTypes';
+import { UserTrustScore, TemplateTrustScore, TransactionTrustScore } from '../../../../packages/core/types/TrustTypes';
 export interface EnforcementAction {
     actionId: string;
     entityType: 'user' | 'template' | 'transaction';
@@ -20,7 +20,7 @@ export interface EnforcementAction {
     severity: 'low' | 'medium' | 'high' | 'critical';
     reason: string;
     triggeredBy: 'trust_score' | 'risk_factor' | 'fraud_detection' | 'policy_violation' | 'manual_review';
-    triggerDetails: any;
+    triggerDetails: unknown;
     autoApplied: boolean;
     actionTaken: boolean;
     actionTimestamp?: Date;
@@ -86,7 +86,12 @@ export declare class AutomatedEnforcementService {
     private trustScoreService;
     private auditService;
     private config;
-    constructor(database: Database, trustScoreService: TrustScoreService, auditService: AuditService, config?: EnforcementConfig);
+    constructor(
+      database: Database,
+      trustScoreService: TrustScoreService,
+      auditService: AuditService,
+      config?: EnforcementConfig
+    );
     /**
      * Evaluate and enforce policies for a user trust score
      */
@@ -94,11 +99,17 @@ export declare class AutomatedEnforcementService {
     /**
      * Evaluate and enforce policies for a template trust score
      */
-    enforceTemplateTrustPolicies(templateTrustScore: TemplateTrustScore, triggeredBy?: string): Promise<EnforcementAction[]>;
+    enforceTemplateTrustPolicies(
+      templateTrustScore: TemplateTrustScore,
+      triggeredBy?: string
+    ): Promise<EnforcementAction[]>;
     /**
      * Evaluate and enforce policies for a transaction
      */
-    enforceTransactionPolicies(transactionTrustScore: TransactionTrustScore, triggeredBy?: string): Promise<EnforcementAction[]>;
+    enforceTransactionPolicies(
+      transactionTrustScore: TransactionTrustScore,
+      triggeredBy?: string
+    ): Promise<EnforcementAction[]>;
     /**
      * Process suspicious activity report and take automated actions
      */
@@ -143,6 +154,9 @@ export declare class AutomatedEnforcementService {
     /**
      * Manually trigger enforcement evaluation
      */
-    triggerEnforcementEvaluation(entityType: 'user' | 'template' | 'transaction', entityId: string): Promise<EnforcementAction[]>;
+    triggerEnforcementEvaluation(
+      entityType: 'user' | 'template' | 'transaction',
+      entityId: string
+    ): Promise<EnforcementAction[]>;
 }
 //# sourceMappingURL=AutomatedEnforcementService.d.ts.map

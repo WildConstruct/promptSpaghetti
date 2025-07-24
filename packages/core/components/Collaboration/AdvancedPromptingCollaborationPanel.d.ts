@@ -14,6 +14,6 @@ interface AdvancedPromptingCollaborationPanelProps {
     onVFXExport?: (exportData: any) => void;
     className?: string;
 }
-export declare const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborationPanelProps>;
+declare const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborationPanelProps>;
 export default AdvancedPromptingCollaborationPanel;
 //# sourceMappingURL=AdvancedPromptingCollaborationPanel.d.ts.map

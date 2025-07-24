@@ -421,20 +421,6 @@ export class CorrectionsDAO {
     return stmt.all(userId) as CorrectionRule[];
   }
 
-  /**
-   * Record rule usage
-   */
-  recordRuleUsage(ruleId: number): void {
-    const now = new Date().toISOString();
-    const stmt = this.db.prepare(`
-      UPDATE correction_rules 
-      SET usage_count = usage_count + 1,
-          last_used_at = ?
-      WHERE id = ?
-    `);
-    
-    stmt.run(now, ruleId);
-  }
 
   /**
    * Update rule effectiveness score
@@ -597,13 +583,27 @@ export class CorrectionsDAO {
   // ========== STATISTICS ==========
 
   /**
-   * Record rule usage statistics with enhanced effectiveness metrics
+   * Simple rule usage recording (for basic usage tracking)
    */
+  recordRuleUsage(ruleId: number): void;
   recordRuleUsage(
     ruleId: number,
     executionTimeMs: number,
     charactersProcessed: number,
     success: boolean,
+    options?: {
+      charactersAfter?: number;
+      qualityScore?: number;
+      impactRating?: number;
+      isFalsePositive?: boolean;
+      userFeedback?: number;
+    }
+  ): void;
+  recordRuleUsage(
+    ruleId: number,
+    executionTimeMs?: number,
+    charactersProcessed?: number,
+    success?: boolean,
     options: {
       charactersAfter?: number;
       qualityScore?: number;
@@ -612,6 +612,20 @@ export class CorrectionsDAO {
       userFeedback?: number;
     } = {}
   ): void {
+    // Simple usage case - just update usage count
+    if (arguments.length === 1) {
+      const now = new Date().toISOString();
+      const stmt = this.db.prepare(`
+        UPDATE correction_rules 
+        SET usage_count = usage_count + 1,
+            last_used_at = ?
+        WHERE id = ?
+      `);
+      stmt.run(now, ruleId);
+      return;
+    }
+
+    // Enhanced usage tracking
     const rule = this.getRuleById(ruleId);
     if (!rule) return;
     
@@ -829,14 +843,15 @@ export class CorrectionsDAO {
     const transaction = this.db.transaction((rules: unknown[]) => {
       for (const rule of rules) {
         try {
+          const ruleData = rule as any; // Type assertion for localStorage data
           const input: CreateCorrectionRuleInput = {
-            name: rule.name,
-            description: rule.description,
-            find_pattern: rule.findPattern,
-            replace_with: rule.replaceWith,
-            is_regex: rule.isRegex,
-            is_active: rule.isActive,
-            priority: rule.priority,
+            name: ruleData.name,
+            description: ruleData.description,
+            find_pattern: ruleData.findPattern,
+            replace_with: ruleData.replaceWith,
+            is_regex: ruleData.isRegex,
+            is_active: ruleData.isActive,
+            priority: ruleData.priority,
             user_id: userId,
             scope: 'private'
           };
@@ -844,7 +859,7 @@ export class CorrectionsDAO {
           this.createRule(input);
           importedCount++;
         } catch (error) {
-          console.error('Failed to import rule:', rule.name, error);
+          console.error('Failed to import rule:', (rule as any)?.name, error);
         }
       }
     });
@@ -880,5 +895,130 @@ export class CorrectionsDAO {
     const stmt = this.db.prepare('DELETE FROM correction_rules WHERE user_id = ?');
     const result = stmt.run(userId);
     return result.changes;
+  }
+
+  /**
+   * Record user feedback for a rule
+   */
+  recordUserFeedback(ruleId: number, rating: number, comment?: string): boolean {
+    const rule = this.getRuleById(ruleId);
+    if (!rule) {
+      return false;
+    }
+
+    // Update the rule's user feedback score
+    const stmt = this.db.prepare(`
+      UPDATE correction_rules 
+      SET user_feedback_score = ?,
+          user_feedback_comment = ?,
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `);
+    
+    const result = stmt.run(rating, comment || null, ruleId);
+    return result.changes > 0;
+  }
+
+  /**
+   * Mark a rule application as false positive
+   */
+  markFalsePositive(ruleId: number): boolean {
+    const rule = this.getRuleById(ruleId);
+    if (!rule) {
+      return false;
+    }
+
+    // Record false positive in statistics
+    const now = new Date();
+    const dateBucket = now.toISOString().split('T')[0];
+    const hourBucket = now.getHours();
+    
+    const stmt = this.db.prepare(`
+      UPDATE correction_statistics 
+      SET false_positive_count = false_positive_count + 1,
+          updated_at = CURRENT_TIMESTAMP
+      WHERE rule_id = ? AND date_bucket = ? AND hour_bucket = ?
+    `);
+    
+    const result = stmt.run(ruleId, dateBucket, hourBucket);
+    return result.changes > 0;
+  }
+
+  /**
+   * Get rule recommendations based on usage patterns
+   */
+  getRuleRecommendations(userId: number, limit: number = 5): CorrectionRule[] {
+    const stmt = this.db.prepare(`
+      SELECT DISTINCT cr.* 
+      FROM correction_rules cr
+      LEFT JOIN correction_statistics cs ON cr.id = cs.rule_id
+      WHERE cr.user_id = ? 
+        AND cr.is_active = 1
+        AND (cs.quality_score > 80 OR cs.impact_rating > 3)
+      ORDER BY 
+        cs.quality_score DESC,
+        cs.impact_rating DESC,
+        cr.usage_count DESC
+      LIMIT ?
+    `);
+    
+    return stmt.all(userId, limit) as CorrectionRule[];
+  }
+
+  // ========== HELPER METHODS ==========
+
+  /**
+   * Calculate quality score for a rule
+   */
+  private calculateQualityScore(rule: CorrectionRule, charactersSaved: number, success: boolean): number {
+    if (!success) return 0;
+    
+    let score = 50; // Base score
+    
+    // Bonus for character savings
+    if (charactersSaved > 100) score += 30;
+    else if (charactersSaved > 50) score += 20;
+    else if (charactersSaved > 10) score += 10;
+    
+    // Bonus for regex rules (assuming more sophisticated)
+    if (rule.is_regex) score += 10;
+    
+    // Cap at 100
+    return Math.min(score, 100);
+  }
+
+  /**
+   * Calculate impact rating for a rule
+   */
+  private calculateImpactRating(rule: CorrectionRule, charactersSaved: number): number {
+    let rating = 1; // Minimum rating
+    
+    if (charactersSaved > 200) rating = 5;
+    else if (charactersSaved > 100) rating = 4;
+    else if (charactersSaved > 50) rating = 3;
+    else if (charactersSaved > 10) rating = 2;
+    
+    return rating;
+  }
+
+  /**
+   * Calculate complexity score for a rule
+   */
+  private calculateComplexityScore(rule: CorrectionRule): number {
+    let score = 1; // Base complexity
+    
+    if (rule.is_regex) {
+      // Analyze regex complexity
+      const pattern = rule.find_pattern;
+      if (pattern.includes('(') || pattern.includes('[')) score += 2;
+      if (pattern.includes('*') || pattern.includes('+')) score += 1;
+      if (pattern.includes('?') || pattern.includes('|')) score += 1;
+    }
+    
+    // Longer patterns are generally more complex
+    if (rule.find_pattern.length > 50) score += 2;
+    else if (rule.find_pattern.length > 20) score += 1;
+    
+    return Math.min(score, 10); // Cap at 10
   }
 }

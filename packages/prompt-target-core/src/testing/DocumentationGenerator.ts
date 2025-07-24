@@ -68,7 +68,7 @@ export class DocumentationGenerator {
     } catch (error) {
       this.logger.error('Documentation generation failed', {
         adaptorId: adaptor.id,
-        error: error.message
+        error: error instanceof Error ? error.message : String(error)
       });
       throw error;
     }

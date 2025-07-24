@@ -1,6 +1,6 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState } from 'react';
-import { UserAvatar, UserAvatarList } from './UserAvatar';
+import { UserAvatar, UserAvatarList } from './UserAvatar.js';
 export const PresencePanel = ({ users, currentUserId, onUserClick, onFollowUser, onUnfollowUser, followingUserId, showDetailedView = false, maxAvatars = 5, className = '' }) => {
     const [expanded, setExpanded] = useState(false);
     const activeUsers = users.filter(user => user.status === 'active');

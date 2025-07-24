@@ -2,7 +2,7 @@
  * Extension Interface Test Utilities - Epic 8.4 Story 8.4.2
  * Testing utilities for extension interface validation and compliance
  */
-import { extensionDevelopmentKit } from './ExtensionDevelopmentTools';
+import { extensionDevelopmentKit } from './ExtensionDevelopmentTools.js';
 // Extension Interface Test Suite
 export class ExtensionInterfaceTestSuite {
     static instance;

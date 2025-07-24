@@ -3,17 +3,15 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Story 9.3.2 - Visual Diff Tool
 import { useState, useCallback, useEffect } from 'react';
 import { ReactFlow, Controls, Background } from 'reactflow';
-import { ComparisonToolbar } from './ComparisonToolbar';
-import { DiffLegend } from './DiffLegend';
-import { VersionSelector } from './VersionSelector';
-import { ComparisonStats } from './ComparisonStats';
-import { DiffNodeRenderer } from './DiffNodeRenderer';
-import { DiffEdgeRenderer } from './DiffEdgeRenderer';
-import { useDiffSession } from '../../hooks/useDiffSession';
-import { useGraphVersions } from '../../hooks/useGraphVersions';
-export const VisualDiffPanel = ({ graphId, initialSourceVersionId, initialTargetVersionId, onClose, className = '' }) => {
-    // State
-    const [sourceVersionId, setSourceVersionId] = useState(initialSourceVersionId || '');
+import { ComparisonToolbar } from './ComparisonToolbar.js';
+import { DiffLegend } from './DiffLegend.js';
+import { VersionSelector } from './VersionSelector.js';
+import { ComparisonStats } from './ComparisonStats.js';
+import { DiffNodeRenderer } from './DiffNodeRenderer.js';
+import { DiffEdgeRenderer } from './DiffEdgeRenderer.js';
+import { useDiffSession } from '../../hooks/useDiffSession.js';
+import { useGraphVersions } from '../../hooks/useGraphVersions.js';
+const VisualDiffPanel = ({ graphId, sourceVersionId, initialSourceVersionId, initialTargetVersionId, onClose, className = '' }) => {
     const [targetVersionId, setTargetVersionId] = useState(initialTargetVersionId || '');
     const [viewMode, setViewMode] = useState('side-by-side');
     const [highlightMode, setHighlightMode] = useState('changes');
@@ -193,7 +191,7 @@ export const VisualDiffPanel = ({ graphId, initialSourceVersionId, initialTarget
         }).filter(Boolean);
     }, [comparison, highlightMode, showUnchanged]);
     // Get node styling based on diff state
-    const getDiffNodeStyle = (diffState, _____highlightMode) => {
+    const getDiffNodeStyle = (diffState, __highlightMode) => {
         const baseStyle = {
             border: '2px solid',
             borderRadius: '6px',
@@ -211,7 +209,7 @@ export const VisualDiffPanel = ({ graphId, initialSourceVersionId, initialTarget
         }
     };
     // Get edge styling based on diff state
-    const getDiffEdgeStyle = (diffState, _____highlightMode) => {
+    const getDiffEdgeStyle = (diffState, __highlightMode) => {
         const baseStyle = {
             strokeWidth: 2,
             transition: 'all 0.2s ease'
@@ -246,3 +244,4 @@ export const VisualDiffPanel = ({ graphId, initialSourceVersionId, initialTarget
     };
     return (_jsxs("div", { className: `visual-diff-panel ${className}`, children: [_jsxs("div", { className: "border-b border-gray-200 bg-white px-4 py-3", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsx("h2", { className: "text-lg font-semibold text-gray-900", children: "Visual Diff" }), onClose && (_jsx("button", { onClick: onClose, className: "text-gray-400 hover:text-gray-600 transition-colors", children: _jsx("svg", { className: "h-5 w-5", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M6 18L18 6M6 6l12 12" }) }) }))] }), _jsx(VersionSelector, { graphId: graphId, versions: versions, sourceVersionId: sourceVersionId, targetVersionId: targetVersionId, onVersionChange: handleVersionChange, className: "mt-3" }), comparison && (_jsx(ComparisonStats, { comparison: comparison, className: "mt-3" }))] }), _jsx(ComparisonToolbar, { viewMode: viewMode, highlightMode: highlightMode, showUnchanged: showUnchanged, showMetadata: showMetadata, zoomLevel: zoomLevel, onViewModeChange: handleViewModeChange, onHighlightModeChange: handleHighlightModeChange, onShowUnchangedChange: setShowUnchanged, onShowMetadataChange: setShowMetadata, onZoomChange: handleZoomChange, className: "border-b border-gray-200" }), _jsxs("div", { className: "flex-1 relative", children: [viewMode === 'side-by-side' && (_jsxs("div", { className: "flex h-full", children: [_jsx("div", { className: "flex-1 border-r border-gray-200", children: _jsxs("div", { className: "h-full relative", children: [_jsx("div", { className: "absolute top-2 left-2 z-10 bg-white rounded px-2 py-1 shadow-sm text-sm font-medium text-gray-700", children: "Source Version" }), _jsxs(ReactFlow, { nodes: sourceNodes, edges: sourceEdges, nodeTypes: nodeTypes, edgeTypes: edgeTypes, fitView: true, zoomOnScroll: false, panOnScroll: true, defaultZoom: zoomLevel, children: [_jsx(Background, {}), _jsx(Controls, { showInteractive: false })] })] }) }), _jsx("div", { className: "flex-1", children: _jsxs("div", { className: "h-full relative", children: [_jsx("div", { className: "absolute top-2 left-2 z-10 bg-white rounded px-2 py-1 shadow-sm text-sm font-medium text-gray-700", children: "Target Version" }), _jsxs(ReactFlow, { nodes: targetNodes, edges: targetEdges, nodeTypes: nodeTypes, edgeTypes: edgeTypes, fitView: true, zoomOnScroll: false, panOnScroll: true, defaultZoom: zoomLevel, children: [_jsx(Background, {}), _jsx(Controls, { showInteractive: false })] })] }) })] })), viewMode === 'unified' && (_jsx("div", { className: "h-full", children: _jsxs(ReactFlow, { nodes: [...sourceNodes, ...targetNodes], edges: [...sourceEdges, ...targetEdges], nodeTypes: nodeTypes, edgeTypes: edgeTypes, fitView: true, zoomOnScroll: false, panOnScroll: true, defaultZoom: zoomLevel, children: [_jsx(Background, {}), _jsx(Controls, { showInteractive: false })] }) })), viewMode === 'overlay' && (_jsxs("div", { className: "h-full relative", children: [_jsx("div", { className: "absolute inset-0", children: _jsxs(ReactFlow, { nodes: sourceNodes, edges: sourceEdges, nodeTypes: nodeTypes, edgeTypes: edgeTypes, fitView: true, zoomOnScroll: false, panOnScroll: true, defaultZoom: zoomLevel, children: [_jsx(Background, {}), _jsx(Controls, { showInteractive: false })] }) }), _jsx("div", { className: "absolute inset-0 opacity-70", children: _jsx(ReactFlow, { nodes: targetNodes, edges: targetEdges, nodeTypes: nodeTypes, edgeTypes: edgeTypes, fitView: true, zoomOnScroll: false, panOnScroll: true, defaultZoom: zoomLevel, children: _jsx(Background, {}) }) })] })), _jsx(DiffLegend, { highlightMode: highlightMode, className: "absolute bottom-4 right-4 z-10" })] })] }));
 };
+export default VisualDiffPanel;

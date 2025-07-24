@@ -210,27 +210,29 @@ export const useUISettingsStore = create()(persist((set, get) => ({
     }
 }));
 // Helper function to check if field should be shown based on current settings
-export 
-// Always hide technical fields like 'id', 'nodeId', 'internalConfig', etc.
-const technicalFields = ['id', 'nodeId', 'internalId', 'config', '_internal', 'metadata'];
-if (technicalFields.some(tech => fieldName.toLowerCase().includes(tech.toLowerCase()))) {
-    return store.shouldShowTechnicalFields();
-}
-// Hide advanced fields based on complexity level
-if (fieldType === 'advanced') {
-    return store.shouldShowAdvancedFeatures();
-}
-// Always show basic fields
-return true;
-;
+export const shouldShowField = (fieldName, fieldType, store) => {
+    // Always hide technical fields like 'id', 'nodeId', 'internalConfig', etc.
+    const technicalFields = ['id', 'nodeId', 'internalId', 'config', '_internal', 'metadata'];
+    if (technicalFields.some(tech => fieldName.toLowerCase().includes(tech.toLowerCase()))) {
+        return store?.shouldShowTechnicalFields() ?? false;
+    }
+    // Hide advanced fields based on complexity level
+    if (fieldType === 'advanced') {
+        return store?.shouldShowAdvancedFeatures() ?? true;
+    }
+    // Always show basic fields
+    return true;
+};
 // Field classification helper
-export const advancedPatterns = ['weight', 'seed', 'transform', 'validate', 'optimization'];
-const lowerName = fieldName.toLowerCase();
-if (technicalPatterns.some(pattern => lowerName.includes(pattern))) {
-    return 'technical';
-}
-if (advancedPatterns.some(pattern => lowerName.includes(pattern))) {
-    return 'advanced';
-}
-return 'basic';
-;
+export const classifyField = (fieldName, fieldType) => {
+    const technicalPatterns = ['debug', 'trace', 'performance', 'meta', 'internal'];
+    const advancedPatterns = ['weight', 'seed', 'transform', 'validate', 'optimization'];
+    const lowerName = fieldName.toLowerCase();
+    if (technicalPatterns.some(pattern => lowerName.includes(pattern))) {
+        return 'technical';
+    }
+    if (advancedPatterns.some(pattern => lowerName.includes(pattern))) {
+        return 'advanced';
+    }
+    return 'basic';
+};

@@ -4,10 +4,10 @@ import { jest } from '@jest/globals';
 // Very small subset of the public API that App and our tests actually use.
 export interface XYPosition { x: number; y: number }
 export interface Viewport extends XYPosition { zoom: number }
-export interface Node<T = unknown> {
+export interface Node<T = any> {
   id: string;
   position: XYPosition;
-  data: T;
+  data: T & { label?: string; nodeType?: string };
   selected?: boolean;
 }
 export interface Edge {
@@ -27,12 +27,7 @@ export enum MarkerType {
   ArrowClosed = 'arrowclosed',
 }
 
-export enum Position {
-  Left = 'left',
-  Top = 'top',
-  Right = 'right',
-  Bottom = 'bottom',
-}
+// Position enum removed - using const object below instead to avoid duplication
 
 interface ReactFlowProps {
   nodes: Node[];
@@ -135,8 +130,8 @@ export const ReactFlowProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 );
 
 export const useReactFlow = () => ({
-  project: (pos: Position) => pos,
-  screenToFlowPosition: (pos: Position) => pos,
+  project: (pos: XYPosition) => pos,
+  screenToFlowPosition: (pos: XYPosition) => pos,
   getNodes: () => [],
   getEdges: () => [],
   getViewport: (): Viewport => ({ x: 0, y: 0, zoom: 1 }),
@@ -161,7 +156,7 @@ export type PositionEnum = typeof Position[keyof typeof Position];
 
 export const Handle: React.FC<{ 
   type?: 'source' | 'target';
-  position: PositionEnum; 
+  position: typeof Position[keyof typeof Position]; 
   style?: React.CSSProperties;
   children?: React.ReactNode;
 }> = ({ children, type, position, style }) => (
@@ -205,9 +200,9 @@ export const ConnectionMode = {
 } as const;
 
 // Add utility functions
-export const addEdge = jest.fn((connection: unknown, edges: Edge[]) => [
+export const addEdge = jest.fn((connection: any, edges: Edge[]) => [
   ...edges, 
-  { ...connection, id: `e-${Date.now()}` }
+  { ...(connection as object), id: `e-${Date.now()}` }
 ]);
 export const useNodesState = jest.fn((initialNodes: Node[]) => [initialNodes, jest.fn()]);
 export const useEdgesState = jest.fn((initialEdges: Edge[]) => [initialEdges, jest.fn()]);

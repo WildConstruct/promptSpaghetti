@@ -6,7 +6,12 @@
  * core compression service, HTTP middleware, and file utilities.
  */
 
-import { CompressionService, CompressionAlgorithm, CompressionLevel, DataType } from '../../packages/core/utils/CompressionService';
+import { 
+  CompressionService,
+  CompressionAlgorithm,
+  CompressionLevel,
+  DataType
+} from '../../../packages/core/utils/CompressionService';
 import { CompressionMiddleware } from '../middleware/compression.middleware';
 import FileCompressionUtils from '../utils/FileCompressionUtils';
 import { writeFileSync, readFileSync, unlinkSync, mkdirSync, rmSync } from 'fs';
@@ -188,8 +193,7 @@ describe('Compression System Tests', () => {
         })
       };
       
-      const originalSend = mockReply.send;
-      const handler = middleware.getHandler();
+            const handler = middleware.getHandler();
       
       // Simulate middleware execution
       await new Promise<void>((resolve) => {

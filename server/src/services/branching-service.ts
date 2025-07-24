@@ -39,7 +39,7 @@ import {
   validateMergeBranchRequest,
   validateBranchFilter,
   validateMergeRequestFilter
-} from '../../packages/core/types/branching';
+} from '../../../packages/core/types/branching';
 
 export class BranchingService {
   private db: DatabaseClient;
@@ -706,7 +706,10 @@ export class BranchingService {
     return mergeCommitId.id;
   }
 
-  private async findCommonAncestor(____sourceBranchId: string, ____targetBranchId: string): Promise<BranchCommit | null> {
+  private async findCommonAncestor(
+    ____sourceBranchId: string,
+    ____targetBranchId: string
+  ): Promise<BranchCommit | null> {
     // Simplified common ancestor finding - would need graph traversal
     return null;
   }

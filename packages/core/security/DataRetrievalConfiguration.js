@@ -7,7 +7,7 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  * Task: T-1752989143998-95 - Add rate limiting for data retrieval
  */
-import { BackoffStrategy } from './RateLimitingService';
+import { BackoffStrategy } from './RateLimitingService.js';
 /**
  * Standard Rate Limiting Configurations by Classification Level
  */

@@ -20,7 +20,7 @@ import {
   FeedbackType,
   FeedbackCategory,
   PreviewChange
-} from '../../packages/core/security/PolicyPreviewStagingService';
+} from '../../../packages/core/security/PolicyPreviewStagingService';
 
 // Request schemas
 const CreatePreviewSchema = z.object({

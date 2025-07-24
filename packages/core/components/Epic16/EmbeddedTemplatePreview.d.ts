@@ -81,7 +81,7 @@ export interface PreviewSize {
     width: number;
     height: number;
     label: string;
-    icon: React.ComponentType<any>;
+    icon: React.ComponentType<unknown>;
     description: string;
 }
 export declare const PREVIEW_SIZES: PreviewSize[];

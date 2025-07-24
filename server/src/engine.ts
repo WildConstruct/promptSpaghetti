@@ -28,8 +28,8 @@ import { getDatabase } from './database/connection';
 import { v4 as uuidv4 } from 'uuid';
 
 // Epic 8.5 Execution Path Tracking
-import { GraphExecutionTracker } from '../../packages/core/execution/ExecutionTracker';
-import { NodeExecutionStep, RandomChoiceInfo, ExecutionInput } from '../../packages/core/types/ExecutionPath';
+import { GraphExecutionTracker } from '../../packages/core/execution/ExecutionTracker.js';
+import { NodeExecutionStep, RandomChoiceInfo, ExecutionInput } from '../../packages/core/types/ExecutionPath.js';
 
 // Import advanced nodes directly to avoid circular dependencies
 import { WeightedAdvancedNode } from '../../packages/core/runtime/nodes/WeightedAdvanced.js';
@@ -37,11 +37,11 @@ import { ConditionalNode } from '../../packages/core/runtime/nodes/Conditional.j
 import { SequentialNode, createSequencePattern } from '../../packages/core/runtime/nodes/Sequential.js';
 import { MarkovNode, createTransitionMatrix } from '../../packages/core/runtime/nodes/Markov.js';
 // Temporarily disabled due to compilation issues
-// import { PythonTransformNode } from '../../packages/core/runtime/nodes/PythonTransform.js';
+// import { PythonTransformNode } from '../../packages/core/runtime/nodes/PythonTransform';
 
 // Epic 8.4 Extension System imports
-import { ExtensionLifecycleManager } from '../../packages/core/extensions/ExtensionLifecycleManager';
-import { BaseExtension, NodeExtension } from '../../packages/core/extensions/interfaces/ExtensionInterfaces';
+import { ExtensionLifecycleManager } from '../../packages/core/extensions/ExtensionLifecycleManager.js';
+import { BaseExtension, NodeExtension } from '../../packages/core/extensions/interfaces/ExtensionInterfaces.js';
 
 // Epic 8.2 Template Processing imports  
 import { parseTemplate, substituteVariables } from '../../packages/core/utils/templateParser.js';
@@ -658,7 +658,11 @@ function extractRandomChoiceInfo(node: Node, result: any, resolvedInputs: any[])
 /**
  * Try to create a runtime node from an extension
  */
-function tryCreateExtensionNode(node: Node, resolvedInputs: any[], executionContext: ExecutionContext): RuntimeNode<any> | null {
+function tryCreateExtensionNode(
+  node: Node,
+  resolvedInputs: any[],
+  executionContext: ExecutionContext
+): RuntimeNode<any> | null {
   try {
     // Get all active node extensions
     const extensions = ExtensionLifecycleManager.getActiveExtensions();

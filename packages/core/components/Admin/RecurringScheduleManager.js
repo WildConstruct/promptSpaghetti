@@ -9,16 +9,16 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Epic: 17 - Backstage Admin Controls
  */
 import { useState, useEffect, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { Badge } from '../ui/Badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
-import { Input } from '../ui/Input';
-import { Select } from '../ui/Select';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
+import { Button } from '../ui/Button.js';
+import { Badge } from '../ui/Badge.js';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
+import { Input } from '../ui/Input.js';
+import { Select } from '../ui/Select.js';
 import { Clock, Repeat, Settings, Plus, Edit, Trash2, Copy, Play, Pause, AlertTriangle, CheckCircle, XCircle, RefreshCw, Filter, Search, TrendingUp, Target, Activity, BarChart3 } from 'lucide-react';
-import { RecurrenceEditor } from '../../components/admin/scheduling/RecurrenceEditor';
+import { RecurrenceEditor } from '../../components/admin/scheduling/RecurrenceEditor.js';
 // Import scheduling models
-import { ScheduleType, RecurrenceType, ScheduleAction, ScheduleStatus } from '../../../server/src/database/scheduling-models';
+import { ScheduleType, RecurrenceType, ScheduleAction, ScheduleStatus } from '../../../server/src/database/scheduling-models.js';
 const RECURRENCE_PRESETS = [
     {
         id: 'daily-business',
@@ -84,7 +84,7 @@ const STATUS_CONFIG = {
     failed: { color: 'text-red-600 bg-red-100', icon: AlertTriangle },
     paused: { color: 'text-yellow-600 bg-yellow-100', icon: Pause }
 };
-export const RecurringScheduleManager = ({ className = '', _____userId, _____userRole }) => {
+export const RecurringScheduleManager = ({ className = '', userId, userRole }) => {
     const [activeTab, setActiveTab] = useState('schedules');
     const [schedules, setSchedules] = useState([]);
     const [conflicts, setConflicts] = useState([]);

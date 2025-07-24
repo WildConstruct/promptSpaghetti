@@ -5,11 +5,11 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Comprehensive funnel analysis and conversion tracking visualization
  */
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
-import { Badge } from '../ui/Badge';
-import { conversionTracker } from '../../analytics/ConversionTracker';
-export const ConversionFunnelDashboard = ({ _____conversionData, timeRange, loading }) => {
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select.js';
+import { Badge } from '../ui/Badge.js';
+import { conversionTracker } from '../../analytics/ConversionTracker.js';
+export const ConversionFunnelDashboard = ({ conversionData, timeRange, loading }) => {
     const [selectedFunnel, setSelectedFunnel] = useState('director-onboarding');
     const [funnelMetrics, setFunnelMetrics] = useState(null);
     const [availableFunnels] = useState([

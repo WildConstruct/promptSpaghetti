@@ -7,14 +7,14 @@
 // Core Event System
 export { EventBus, globalEventBus, EventPriority, EventCategory, EventFactory, LoggingMiddleware, ValidationMiddleware, RateLimitMiddleware, 
 // Schema exports
-WorkflowEventSchema, AnalyticsEventSchema, SecurityEventSchema, SystemEventSchema, UIEventSchema } from './EventSystem';
+WorkflowEventSchema, AnalyticsEventSchema, SecurityEventSchema, SystemEventSchema, UIEventSchema } from './EventSystem.js';
 // Adapters
-export { WebSocketEventAdapter, webSocketEventAdapter, WebSocketEventUtils } from './adapters/WebSocketEventAdapter';
-export { ZustandEventAdapter, createZustandEventAdapter, createEventAwareStore, ZustandEventUtils, GraphStoreEventAdapter, CollaborativeGraphStoreEventAdapter, UISettingsStoreEventAdapter } from './adapters/ZustandEventAdapter';
+export { WebSocketEventAdapter, webSocketEventAdapter, WebSocketEventUtils } from './adapters/WebSocketEventAdapter.js';
+export { ZustandEventAdapter, createZustandEventAdapter, createEventAwareStore, ZustandEventUtils, GraphStoreEventAdapter, CollaborativeGraphStoreEventAdapter, UISettingsStoreEventAdapter } from './adapters/ZustandEventAdapter.js';
 // React Hooks
-export { useEventSubscription, useEventPublisher, useWorkflowEvents, useAnalyticsEvents, useUIEvents, useEventHistory, useEventStats, useDebouncedEventPublisher, useBatchedEventPublisher, useConditionalEventSubscription, useEventState, useEventPerformanceMonitor } from './hooks/useEventBus';
+export { useEventSubscription, useEventPublisher, useWorkflowEvents, useAnalyticsEvents, useUIEvents, useEventHistory, useEventStats, useDebouncedEventPublisher, useBatchedEventPublisher, useConditionalEventSubscription, useEventState, useEventPerformanceMonitor } from './hooks/useEventBus.js';
 // Middleware
-export { createLoggingMiddleware, createValidationMiddleware, createRateLimitMiddleware, createTransformMiddleware, createSecurityMiddleware, createPerformanceMiddleware, createDeduplicationMiddleware, createCircuitBreakerMiddleware, ProductionMiddleware, DevelopmentMiddleware, TestingMiddleware } from './middleware/EventMiddleware';
+export { createLoggingMiddleware, createValidationMiddleware, createRateLimitMiddleware, createTransformMiddleware, createSecurityMiddleware, createPerformanceMiddleware, createDeduplicationMiddleware, createCircuitBreakerMiddleware, ProductionMiddleware, DevelopmentMiddleware, TestingMiddleware } from './middleware/EventMiddleware.js';
 /**
  * Event System Configuration and Setup Utilities
  */

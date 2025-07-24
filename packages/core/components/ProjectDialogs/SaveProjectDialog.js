@@ -3,7 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * SaveProjectDialog - Dialog for saving projects to .psg files
  */
 import { useState } from 'react';
-import { useGraphStore } from '../../graphStore';
+import { useGraphStore } from '../../graphStore.js';
 export const SaveProjectDialog = ({ isOpen, onClose, onSave }) => {
     const { saveProject, currentProject } = useGraphStore();
     const [formData, setFormData] = useState({

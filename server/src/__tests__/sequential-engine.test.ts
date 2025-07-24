@@ -2,7 +2,7 @@
 // Test Sequential node integration with the engine
 
 import { executeGraph } from '../engine';
-import type { Graph } from '../../../packages/core/graphSchema';
+import type { Graph } from '../../../../packages/core/graphSchema';
 
 describe('Sequential Node Engine Integration', () => {
   test('should execute Sequential node with linear pattern', async () => {

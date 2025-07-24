@@ -6,11 +6,12 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Supports multi-node selection, highlighting, MARS zone annotations, and area-based feedback.
  */
 import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { Badge } from '../ui/Badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
-import { Switch } from '../ui/Switch';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
+import { Button } from '../ui/Button.js';
+import { Badge } from '../ui/Badge.js';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select.js';
+import { Switch } from '../ui/Switch.js';
+// import { Slider } from '../ui/Slider.js';
 import { Square, Circle, Polygon, Paintbrush, Edit3, Save, Target, Settings, AlertTriangle, Clock, Camera, Zap } from 'lucide-react';
 // Region type configurations for VFX workflow
 const REGION_TYPES = {

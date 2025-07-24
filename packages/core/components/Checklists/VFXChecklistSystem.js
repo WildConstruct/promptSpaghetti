@@ -6,11 +6,11 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Supports hierarchical tasks, team collaboration, asset tracking, and quality assurance.
  */
 import { useState, useCallback, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { Badge } from '../ui/Badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
-import { Switch } from '../ui/Switch';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
+import { Button } from '../ui/Button.js';
+import { Badge } from '../ui/Badge.js';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select.js';
+import { Switch } from '../ui/Switch.js';
 import { CheckSquare, Plus, Edit3, Trash2, RotateCw, Timer, Calendar, Users, FileText, AlertTriangle, CheckCircle, Clock, Eye, Filter, Search, BarChart3, Zap, Camera, Film, Palette } from 'lucide-react';
 // Status configurations with VFX-specific colors and labels
 const STATUS_CONFIG = {
@@ -51,7 +51,7 @@ const VFX_PRODUCTION_PHASES = [
     { value: 'review', label: 'Review' },
     { value: 'final', label: 'Final' }
 ];
-export const VFXChecklistSystem = ({ checklist, currentUser, _____onChecklistUpdate, onItemCreate, onItemUpdate, onItemDelete, onCommentCreate, readonly = false, showStatistics = true, compactView = false, className = '' }) => {
+export const VFXChecklistSystem = ({ checklist, currentUser, onChecklistUpdate, onItemCreate, onItemUpdate, onItemDelete, onCommentCreate, readonly = false, showStatistics = true, compactView = false, className = '' }) => {
     // UI state
     const [_____selectedTab, _____setSelectedTab] = useState('overview');
     const [selectedItem, setSelectedItem] = useState(null);
@@ -226,7 +226,7 @@ export const VFXChecklistSystem = ({ checklist, currentUser, _____onChecklistUpd
                                                     ? 'This checklist doesn\'t have any items yet.'
                                                     : 'No items match your current filters.' }), checklist.items.length === 0 && !readonly && currentUser.permissions.canCreate && (_jsxs(Button, { variant: "default", onClick: () => setIsCreating(true), className: "mt-4", children: [_jsx(Plus, { className: "w-4 h-4 mr-2" }), "Add First Item"] }))] }) })) : (filteredItems.map(item => (_jsx(VFXChecklistItemCard, { item: item, checklist: checklist, currentUser: currentUser, onStatusChange: handleStatusChange, onPriorityChange: handlePriorityChange, onAssigneeChange: handleAssigneeChange, onProgressChange: handleProgressChange, onCommentCreate: onCommentCreate, onItemUpdate: onItemUpdate, onItemDelete: onItemDelete, readonly: readonly, compact: compactView, isSelected: selectedItem === item.id, onSelect: () => setSelectedItem(selectedItem === item.id ? null : item.id) }, item.id)))) })] }) })] }) }));
 };
-const VFXChecklistItemCard = ({ item, _____checklist, currentUser, onStatusChange, _____onPriorityChange, _____onAssigneeChange, _____onProgressChange, onCommentCreate, onItemUpdate, onItemDelete, readonly = false, compact = false, isSelected = false, onSelect }) => {
+const VFXChecklistItemCard = ({ item, checklist, currentUser, onStatusChange, onPriorityChange, onAssigneeChange, onProgressChange, onCommentCreate, onItemUpdate, onItemDelete, readonly = false, compact = false, isSelected = false, onSelect }) => {
     const [showComments, setShowComments] = useState(false);
     const [newComment, setNewComment] = useState('');
     const statusConfig = STATUS_CONFIG[item.status];
@@ -234,7 +234,7 @@ const VFXChecklistItemCard = ({ item, _____checklist, currentUser, onStatusChang
     const StatusIcon = statusConfig.icon;
     const isOverdue = item.dueDate && new Date(item.dueDate) < new Date() && item.status !== 'approved';
     const canEdit = !readonly && (currentUser.permissions.canEdit || item.author.id === currentUser.id);
-    const _____canApprove = !readonly && currentUser.permissions._____canApprove;
+    const ___canApprove = !readonly && currentUser.permissions.___canApprove;
     const handleCommentSubmit = useCallback(() => {
         if (!newComment.trim())
             return;

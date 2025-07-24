@@ -8,7 +8,7 @@
  */
 
 import { executeGraph } from '../../../server/src/engine';
-import { Graph } from '../../../packages/core/graphSchema';
+import { Graph } from '../../packages/core/graphSchema';
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { join } from 'path';
 

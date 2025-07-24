@@ -5,11 +5,11 @@
 // These are thin stubs for now; they will be fully implemented in later tasks.
 
 import { SecurityValidation } from '../validation/security';
-import { ExecutionContext, RuntimeNode } from './types';
+import { ExecutionContext, RuntimeNode } from './types.js';
 
 // Re-export types
-export { ExecutionContext, RuntimeNode } from './types';
-export { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedNodeConfig } from './advanced';
+export { ExecutionContext, RuntimeNode } from './types.js';
+export { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedNodeConfig } from './advanced.js';
 
 /* ------------------------- Core node runtimes ------------------------- */
 
@@ -80,7 +80,7 @@ export class IncludeNode extends RuntimeNode<string> {
 }
 
 export class SetVariableNode extends RuntimeNode<void> {
-  constructor(id: string, private key: string, private value: Error) {
+  constructor(id: string, private key: string, private value: any) {
     super(id);
   }
 

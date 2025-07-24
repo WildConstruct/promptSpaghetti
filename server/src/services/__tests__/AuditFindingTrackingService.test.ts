@@ -14,13 +14,13 @@ import {
 import { AuditWorkflowService, WorkflowFinding } from '../AuditWorkflowService';
 import { ComplianceReportingService } from '../ComplianceReportingService';
 import { AuditTeamCollaborationService } from '../AuditTeamCollaborationService';
-import { DataProtectionEventLogger } from '../../../packages/core/security/DataProtectionEventLogger';
+import { DataProtectionEventLogger } from '../../../../packages/core/security/DataProtectionEventLogger';
 
 // Mock the dependencies
 jest.mock('../AuditWorkflowService');
 jest.mock('../ComplianceReportingService');
 jest.mock('../AuditTeamCollaborationService');
-jest.mock('../../../packages/core/security/DataProtectionEventLogger');
+jest.mock('../../../../packages/core/security/DataProtectionEventLogger');
 
 describe('AuditFindingTrackingService', () => {
   let service: AuditFindingTrackingService;
@@ -67,7 +67,7 @@ describe('AuditFindingTrackingService', () => {
     mockCollaborationService = new AuditTeamCollaborationService() as jest.Mocked<AuditTeamCollaborationService>;
     mockEventLogger = new DataProtectionEventLogger() as jest.Mocked<DataProtectionEventLogger>;
 
-    mockEventLogger.logDataProtectionEvent = jest.fn().mockResolvedValue(undefined);
+    mockEventLogger.logDataProtectionEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
 
     service = new AuditFindingTrackingService(
       mockWorkflowService,
@@ -221,7 +221,11 @@ describe('AuditFindingTrackingService', () => {
     });
 
     it('should log status change event', async () => {
-      await service.updateFindingStatus(trackedFinding.findingId, FindingTrackingStatus.IN_PROGRESS, 'Starting remediation');
+      await service.updateFindingStatus(
+        trackedFinding.findingId,
+        FindingTrackingStatus.IN_PROGRESS,
+        'Starting remediation'
+      );
 
       // Should have 2 calls: one for creation, one for status update
       expect(mockEventLogger.logDataProtectionEvent).toHaveBeenCalledTimes(2);

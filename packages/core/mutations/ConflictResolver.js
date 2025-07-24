@@ -5,7 +5,7 @@
  * Supports operational transformation, last-writer-wins, and manual resolution strategies.
  */
 import { EventEmitter } from 'events';
-import { OperationType, ConflictType, ConflictResolutionStrategy } from './types';
+import { OperationType, ConflictType, ConflictResolutionStrategy } from './types.js';
 /**
  * Handles collaborative editing conflicts and synchronization
  */

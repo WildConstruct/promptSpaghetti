@@ -7,7 +7,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * with batch operations, templates, and automated classification
  */
 import { useState, useMemo } from 'react';
-import { CLASSIFICATION_LEVELS } from '../../types/DataClassification';
+import { CLASSIFICATION_LEVELS } from '../../types/DataClassification.js';
 const DEFAULT_TEMPLATES = [
     {
         id: 'pii-template',

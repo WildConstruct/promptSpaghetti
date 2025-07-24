@@ -8,7 +8,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Following patterns from DocumentReviewInterface and ApprovalWorkflowManager.
  */
 import React, { useState, useCallback, useMemo } from 'react';
-import { RevisionContentType, RevisionRequestType, RevisionRequestPriority, RevisionEvidenceType } from '../../types/RevisionRequestTypes';
+import { RevisionContentType, RevisionRequestType, RevisionRequestPriority, RevisionEvidenceType } from '../../types/RevisionRequestTypes.js';
 export const RevisionRequestForm = ({ initialData = {}, contentType: initialContentType, contentId: initialContentId, contentTitle: initialContentTitle, onSubmit, onCancel, isSubmitting = false, className = '' }) => {
     // Form state
     const [formData, setFormData] = useState({

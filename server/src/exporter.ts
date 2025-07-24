@@ -59,6 +59,76 @@ export const ControlNetParametersSchema = z.object({
 });
 
 /**
+ * Epic 8.6 Task 3: Scene Data Integration Schema
+ * Professional scene data structure for film production workflows
+ */
+export const SceneDataSchema = z.object({
+  camera: z.object({
+    position: z.object({
+      x: z.number().default(0),
+      y: z.number().default(0), 
+      z: z.number().default(5)
+    }),
+    angle: z.object({
+      pitch: z.number().min(-90).max(90).default(0), // degrees
+      yaw: z.number().min(-180).max(180).default(0), // degrees  
+      roll: z.number().min(-180).max(180).default(0) // degrees
+    }),
+    distance: z.number().min(0.1).max(1000).default(5),
+    lens: z.object({
+      focalLength: z.number().min(10).max(500).default(50), // mm
+      aperture: z.number().min(1).max(22).default(2.8), // f-stop
+      focusDistance: z.number().min(0.1).max(1000).default(10) // meters
+    }).optional(),
+    movement: z.object({
+      type: z.enum(['static', 'pan', 'tilt', 'dolly', 'crane', 'handheld']).default('static'),
+      speed: z.enum(['slow', 'medium', 'fast']).default('medium'),
+      smoothness: z.number().min(0).max(1).default(0.8)
+    }).optional()
+  }),
+  lighting: z.object({
+    timeOfDay: z.enum([
+      'dawn',
+      'morning',
+      'noon',
+      'afternoon',
+      'dusk',
+      'night',
+      'golden-hour',
+      'blue-hour'
+    ]).default('noon'),
+    weather: z.enum(['clear', 'cloudy', 'overcast', 'foggy', 'rainy', 'stormy', 'snowy']).default('clear'),
+    mood: z.enum(['bright', 'dramatic', 'soft', 'harsh', 'moody', 'ethereal', 'cinematic']).default('bright'),
+    keyLight: z.object({
+      intensity: z.number().min(0).max(100).default(80),
+      temperature: z.number().min(2000).max(10000).default(5600), // Kelvin
+      angle: z.number().min(0).max(360).default(45) // degrees from subject
+    }).optional(),
+    fillLight: z.object({
+      intensity: z.number().min(0).max(100).default(40),
+      temperature: z.number().min(2000).max(10000).default(3200), // Kelvin
+      angle: z.number().min(0).max(360).default(225) // degrees from subject
+    }).optional()
+  }).optional(),
+  environment: z.object({
+    location: z.enum(['interior', 'exterior', 'studio', 'practical']).default('studio'),
+    atmosphere: z.enum(['clear', 'hazy', 'dusty', 'smoky', 'misty']).default('clear'),
+    temperature: z.number().min(-40).max(50).default(20), // Celsius
+    windSpeed: z.number().min(0).max(100).default(0), // km/h
+    props: z.array(z.string()).default([])
+  }).optional(),
+  postProcessing: z.object({
+    colorGrading: z.object({
+      style: z.enum(['natural', 'cinematic', 'vintage', 'modern', 'dramatic']).default('natural'),
+      contrast: z.number().min(-100).max(100).default(0),
+      saturation: z.number().min(-100).max(100).default(0),
+      warmth: z.number().min(-100).max(100).default(0)
+    }).optional(),
+    effects: z.array(z.enum(['bloom', 'vignette', 'film-grain', 'lens-flare', 'depth-of-field'])).default([])
+  }).optional()
+});
+
+/**
  * GeneratorBundle schema matching the Randomizer Engine's expected format
  * Epic 8.6: Enhanced with VFX/ControlNet compatibility
  */
@@ -126,9 +196,10 @@ export type GeneratorBundle = z.infer<typeof GeneratorBundleSchema>;
 export type ControlNetParameters = z.infer<typeof ControlNetParametersSchema>;
 
 /**
- * Epic 8.6 Task 3: Scene Data Integration Schema
+ * Epic 8.6 Task 3: Scene Data Integration Schema (DUPLICATE - COMMENTED OUT)
  * Professional scene data structure for film production workflows
  */
+/* DUPLICATE REMOVED - SceneDataSchema already defined above
 export const SceneDataSchema = z.object({
   camera: z.object({
     position: z.object({
@@ -214,6 +285,7 @@ export const SceneDataSchema = z.object({
     notes: z.string().optional()
   }).optional()
 });
+END OF DUPLICATE COMMENT */
 
 export type SceneData = z.infer<typeof SceneDataSchema>;
 
@@ -695,7 +767,11 @@ export function validateVFXCompatibility(graph: Graph): {
   
   if (!compatible) {
     recommendations.push(
-      'Add VFX-related nodes (camera variables, sequential animations, or depth/edge hints) for better ControlNet compatibility'
+      'Add VFX-related nodes (
+        camera variables,
+        sequential animations,
+        or depth/edge hints
+      ) for better ControlNet compatibility'
     );
   }
   
@@ -1389,7 +1465,10 @@ function exportProfessionalReport(data: any, options: any): ExportResult {
         sum + (r.output ? r.output.split(/\s+/).length : 0), 0) / data.results.length,
       executionStats: {
         totalTime: data.results.reduce((sum: number, r: any) => sum + (r.executionTimeMs || 0), 0),
-        averageTime: data.results.reduce((sum: number, r: any) => sum + (r.executionTimeMs || 0), 0) / data.results.length
+        averageTime: data.results.reduce(
+          (sum: number,
+          r: any
+        ) => sum + (r.executionTimeMs || 0), 0) / data.results.length
       }
     },
     results: data.results,

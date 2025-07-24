@@ -8,8 +8,8 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  */
 import { useState } from 'react';
 import { Calculator, PiggyBank, TrendingUp, BarChart3, Download } from 'lucide-react';
-import { ROICalculator } from './ROICalculator';
-import { SavingsEstimation } from './SavingsEstimation';
+import { ROICalculator } from './ROICalculator.js';
+import { SavingsEstimation } from './SavingsEstimation.js';
 export const BusinessValueDemo = ({ className = '', templateExample = {
     name: 'Professional Email Templates',
     price: 999, // $9.99 in cents

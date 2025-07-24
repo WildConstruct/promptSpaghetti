@@ -12,7 +12,7 @@
  * - Creator performance metrics
  * - A/B testing for marketplace features
  */
-import { conversionTracker } from './ConversionTracker';
+import { conversionTracker } from './ConversionTracker.js';
 export class MarketplaceMetrics {
     events = [];
     templateMetrics = new Map();

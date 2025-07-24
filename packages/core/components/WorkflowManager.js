@@ -1,8 +1,8 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useMemo } from 'react';
-import { useCorrectionsStore } from '../correctionsStore';
+import { useCorrectionsStore } from '../correctionsStore.js';
 export const WorkflowManager = ({ isOpen, onClose }) => {
-    const { rules, _____getDraftRules, _____getPublishedRules, approveRule, deprecateRule, _____suggestRule, _____updateRule, deleteRule } = useCorrectionsStore();
+    const { rules, getDraftRules, getPublishedRules, approveRule, deprecateRule, suggestRule, updateRule, deleteRule } = useCorrectionsStore();
     const [activeTab, setActiveTab] = useState('pending');
     const [selectedRules, setSelectedRules] = useState(new Set());
     const [_____showApprovalDialog, setShowApprovalDialog] = useState(false);

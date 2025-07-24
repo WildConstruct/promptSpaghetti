@@ -4,7 +4,7 @@
  *
  * Framework-integrated WeightedChoice node with enhanced lifecycle and monitoring
  */
-import { FrameworkNode } from '../NodeFramework';
+import { FrameworkNode } from '../NodeFramework.js';
 /**
  * Framework-integrated WeightedChoice node
  */

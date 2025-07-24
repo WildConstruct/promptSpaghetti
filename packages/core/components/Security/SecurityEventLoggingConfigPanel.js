@@ -7,17 +7,17 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * UI patterns and integrates with the security event policy engine.
  */
 import { useState, useEffect, useCallback } from 'react';
-import { SecurityEventType, ComplianceFramework, securityEventPolicyEngine } from '../../security/SecurityEventLoggingPolicies';
-import { Card } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { Badge } from '../ui/Badge';
-import { Alert } from '../ui/Alert';
-import { Tabs } from '../ui/Tabs';
-import { Dialog } from '../ui/Dialog';
-import { Input } from '../ui/Input';
-import { Select } from '../ui/Select';
-import { Checkbox } from '../ui/Checkbox';
-import { AlertRuleBuilder } from './AlertRuleBuilder';
+import { SecurityEventType, ComplianceFramework, securityEventPolicyEngine } from '../../security/SecurityEventLoggingPolicies.js';
+import { Card } from '../ui/Card.js';
+import { Button } from '../ui/Button.js';
+import { Badge } from '../ui/Badge.js';
+import { Alert } from '../ui/Alert.js';
+import { Tabs } from '../ui/Tabs.js';
+import { Dialog } from '../ui/Dialog.js';
+import { Input } from '../ui/Input.js';
+import { Select } from '../ui/Select.js';
+import { Checkbox } from '../ui/Checkbox.js';
+import { AlertRuleBuilder } from './AlertRuleBuilder.js';
 import './SecurityEventLoggingConfigPanel.css';
 /**
  * Main Security Event Logging Configuration Panel
@@ -136,20 +136,23 @@ export const SecurityEventLoggingConfigPanel = () => {
 };
 // Component for managing logging destinations
 const LogDestinationManager = ({ destinations, onDestinationsChange }) => {
-    const [editingDestination, setEditingDestination] = useState(null);
-    const [showAddDialog, setShowAddDialog] = useState(false);
-    onDestinationsChange([...destinations, newDestination]);
-    setShowAddDialog(false);
+    const [_editingDestination, setEditingDestination] = useState(null);
+    const [_showAddDialog, setShowAddDialog] = useState(false);
+    const _handleAddDestination = (newDestination) => {
+        onDestinationsChange([...destinations, newDestination]);
+        setShowAddDialog(false);
+    };
+    const _handleUpdateDestination = (updated) => {
+        const updatedDestinations = destinations.map(dest => dest.id === updated.id ? updated : dest);
+        onDestinationsChange(updatedDestinations);
+        setEditingDestination(null);
+    };
+    const handleDeleteDestination = (id) => {
+        const filtered = destinations.filter(dest => dest.id !== id);
+        onDestinationsChange(filtered);
+    };
+    return (_jsxs("div", { className: "destination-manager", children: [_jsxs("div", { className: "manager-header", children: [_jsx("h2", { children: "Logging Destinations" }), _jsx("p", { children: "Configure where security events are sent for storage and processing" }), _jsx(Button, { variant: "primary", onClick: () => setShowAddDialog(true), children: "Add Destination" })] }), _jsx("div", { className: "destinations-grid", children: destinations.map(destination => (_jsxs(Card, { className: "destination-card", children: [_jsxs("div", { className: "destination-header", children: [_jsxs("div", { className: "destination-info", children: [_jsx("h3", { children: destination.name }), _jsx(Badge, { variant: destination.type === 'siem' ? 'info' : 'default', children: destination.type.toUpperCase() }), _jsx(Badge, { variant: destination.enabled ? 'success' : 'error', children: destination.enabled ? 'Enabled' : 'Disabled' })] }), _jsxs("div", { className: "destination-actions", children: [_jsx(Button, { variant: "outline", size: "sm", onClick: () => setEditingDestination(destination), children: "Edit" }), _jsx(Button, { variant: "outline", size: "sm", onClick: () => handleDeleteDestination(destination.id), children: "Delete" })] })] }), _jsxs("div", { className: "destination-details", children: [_jsxs("div", { className: "detail-item", children: [_jsx("span", { className: "label", children: "Endpoint:" }), _jsx("span", { className: "value", children: destination.endpoint })] }), _jsxs("div", { className: "detail-item", children: [_jsx("span", { className: "label", children: "Format:" }), _jsx("span", { className: "value", children: destination.format.toUpperCase() })] }), destination.batch_size && (_jsxs("div", { className: "detail-item", children: [_jsx("span", { className: "label", children: "Batch Size:" }), _jsx("span", { className: "value", children: destination.batch_size })] }))] })] }, destination.id))) }), destinations.length === 0 && (_jsxs("div", { className: "empty-state", children: [_jsx("h3", { children: "No Destinations Configured" }), _jsx("p", { children: "Add your first logging destination to start collecting security events." }), _jsx(Button, { variant: "primary", onClick: () => setShowAddDialog(true), children: "Add First Destination" })] }))] }));
 };
-onDestinationsChange(updated);
-setEditingDestination(null);
-;
-const handleDeleteDestination = (id) => {
-    const filtered = destinations.filter(dest => dest.id !== id);
-    onDestinationsChange(filtered);
-};
-return (_jsxs("div", { className: "destination-manager", children: [_jsxs("div", { className: "manager-header", children: [_jsx("h2", { children: "Logging Destinations" }), _jsx("p", { children: "Configure where security events are sent for storage and processing" }), _jsx(Button, { variant: "primary", onClick: () => setShowAddDialog(true), children: "Add Destination" })] }), _jsx("div", { className: "destinations-grid", children: destinations.map(destination => (_jsxs(Card, { className: "destination-card", children: [_jsxs("div", { className: "destination-header", children: [_jsxs("div", { className: "destination-info", children: [_jsx("h3", { children: destination.name }), _jsx(Badge, { variant: destination.type === 'siem' ? 'info' : 'default', children: destination.type.toUpperCase() }), _jsx(Badge, { variant: destination.enabled ? 'success' : 'error', children: destination.enabled ? 'Enabled' : 'Disabled' })] }), _jsxs("div", { className: "destination-actions", children: [_jsx(Button, { variant: "outline", size: "sm", onClick: () => setEditingDestination(destination), children: "Edit" }), _jsx(Button, { variant: "outline", size: "sm", onClick: () => handleDeleteDestination(destination.id), children: "Delete" })] })] }), _jsxs("div", { className: "destination-details", children: [_jsxs("div", { className: "detail-item", children: [_jsx("span", { className: "label", children: "Endpoint:" }), _jsx("span", { className: "value", children: destination.endpoint })] }), _jsxs("div", { className: "detail-item", children: [_jsx("span", { className: "label", children: "Format:" }), _jsx("span", { className: "value", children: destination.format.toUpperCase() })] }), destination.batch_size && (_jsxs("div", { className: "detail-item", children: [_jsx("span", { className: "label", children: "Batch Size:" }), _jsx("span", { className: "value", children: destination.batch_size })] }))] })] }, destination.id))) }), destinations.length === 0 && (_jsxs("div", { className: "empty-state", children: [_jsx("h3", { children: "No Destinations Configured" }), _jsx("p", { children: "Add your first logging destination to start collecting security events." }), _jsx(Button, { variant: "primary", onClick: () => setShowAddDialog(true), children: "Add First Destination" })] }))] }));
-;
 // Component for selecting event types to monitor
 const EventTypeSelector = ({ selectedTypes, onSelectionChange }) => {
     const eventTypeCategories = {
@@ -370,7 +373,7 @@ async function saveSecurityLoggingConfig(config) {
     await new Promise(resolve => setTimeout(resolve, 1000));
     console.log('Saved configuration:', config);
 }
-async function testSecurityLoggingConfig(config) {
+async function testSecurityLoggingConfig(_config) {
     // Simulate configuration test
     await new Promise(resolve => setTimeout(resolve, 2000));
     return {

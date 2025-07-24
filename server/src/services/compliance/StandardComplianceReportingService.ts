@@ -8,8 +8,8 @@
  * Epic: 18 - Technical Debt & Refactoring
  */
 
-import { ComplianceMonitor } from '../../../packages/core/services/ComplianceMonitor';
-import { ComplianceBaselineTracker } from '../../../packages/core/services/ComplianceBaselineTracker';
+import { ComplianceMonitor } from '../../../../packages/core/services/ComplianceMonitor';
+import { ComplianceBaselineTracker } from '../../../../packages/core/services/ComplianceBaselineTracker';
 import { ComplianceReportingService } from '../ComplianceReportingService';
 import { RegulatoryReportingService } from '../RegulatoryReportingService';
 import { RefactoredDataLifecycleService } from '../RefactoredDataLifecycleService';

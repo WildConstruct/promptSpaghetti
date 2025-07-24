@@ -27,7 +27,7 @@ import {
   ReviewPriority,
   AvailabilityStatus,
   ReviewAssignment
-} from '../../../packages/core/types/ReviewTools';
+} from '../../../../packages/core/types/ReviewTools';
 
 export interface AssignmentRecommendation {
   reviewerId: string;
@@ -166,8 +166,7 @@ export class ReviewerAssignmentService {
     }
 
     // Determine reassignment strategy based on reason
-    const _____strategy = this.getReassignmentStrategy(reason, currentReviewer);
-
+    
     // Find replacement reviewer
     const recommendation = await this.findBestReviewer(review, [currentReviewerId]);
     
@@ -684,7 +683,10 @@ export class ReviewerAssignmentService {
       WHERE availability_status IN ('available', 'busy')
       AND current_assignments < max_concurrent_reviews
       AND $1 = ANY(review_types)
-      ${excludeReviewers.length > 0 ? 'AND reviewer_id NOT IN (' + excludeReviewers.map((_, i) => `$${i + 2}`).join(',') + ')' : ''}
+      ${excludeReviewers.length > 0 ? 'AND reviewer_id NOT IN (
+        ' + excludeReviewers.map((_,
+        i
+      ) => `$${i + 2}`).join(',') + ')' : ''}
       ORDER BY availability_status, capacity_utilization
     `;
 
@@ -740,7 +742,10 @@ export class ReviewerAssignmentService {
   // Placeholder methods for workload rebalancing
   private async getActiveReviewers(reviewType?: ReviewType): Promise<ReviewerProfile[]> { return []; }
   private async getReassignableReviews(_____reviewerId: string): Promise<ReviewItem[]> { return []; }
-  private async findBestAvailableReviewer(_____review: ReviewItem, _____reviewerIds: string[]): Promise<string | null> { return null; }
+  private async findBestAvailableReviewer(
+    _____review: ReviewItem,
+    _____reviewerIds: string[]
+  ): Promise<string | null> { return null; }
   private calculateRebalanceBenefit(_____from: ReviewerProfile, _____to: string): number { return 0; }
   private calculateProjectedImprovement(_____actions: WorkloadRebalanceAction[]): number { return 0; }
 }

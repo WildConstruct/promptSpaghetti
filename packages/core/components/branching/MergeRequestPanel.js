@@ -2,7 +2,7 @@ import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-run
 import { useState, useEffect } from 'react';
 import { Card, List, Button, Modal, Form, Input, Select, Tag, Typography, Space, Alert, Divider, Badge, Dropdown, Menu } from 'antd';
 import { MergeOutlined, PlusOutlined, CloseOutlined, UserOutlined, ClockCircleOutlined, MoreOutlined, EyeOutlined, BranchesOutlined } from '@ant-design/icons';
-import { useBranching } from '../../hooks/useBranching';
+import { useBranching } from '../../hooks/useBranching.js';
 const { Title, Text } = Typography;
 const { Option } = Select;
 const { TextArea } = Input;
@@ -27,7 +27,7 @@ const MergeRequestItem = ({ mergeRequest, onView, onMerge, onClose }) => {
     const menu = (_jsxs(Menu, { children: [_jsx(Menu.Item, { icon: _jsx(EyeOutlined, {}), onClick: () => onView(mergeRequest), children: "View Details" }, "view"), mergeRequest.status === 'open' && (_jsxs(_Fragment, { children: [_jsx(Menu.Item, { icon: _jsx(MergeOutlined, {}), onClick: () => onMerge(mergeRequest), children: "Merge" }, "merge"), _jsx(Menu.Item, { icon: _jsx(CloseOutlined, {}), onClick: () => onClose(mergeRequest), children: "Close" }, "close")] }))] }));
     return (_jsx(Card, { size: "small", style: { marginBottom: '8px' }, children: _jsxs("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }, children: [_jsxs("div", { style: { flex: 1 }, children: [_jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }, children: [_jsx(Text, { strong: true, children: mergeRequest.title }), _jsx(Tag, { color: getStatusColor(mergeRequest.status), children: mergeRequest.status.toUpperCase() })] }), _jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '8px' }, children: [_jsxs(Space, { size: "small", children: [_jsx(BranchesOutlined, {}), _jsx(Text, { code: true, style: { fontSize: '11px' }, children: "source \u2192 target" })] }), _jsxs(Space, { size: "small", children: [_jsx(UserOutlined, {}), _jsx(Text, { type: "secondary", style: { fontSize: '11px' }, children: "Created by User" })] }), _jsxs(Space, { size: "small", children: [_jsx(ClockCircleOutlined, {}), _jsx(Text, { type: "secondary", style: { fontSize: '11px' }, children: formatDate(mergeRequest.createdAt) })] })] }), mergeRequest.description && (_jsx(Text, { type: "secondary", style: { fontSize: '12px' }, children: mergeRequest.description })), _jsx("div", { style: { marginTop: '8px' }, children: _jsxs(Space, { children: [_jsx(Badge, { count: mergeRequest.commitsCount, size: "small", children: _jsx(Tag, { size: "small", children: "Commits" }) }), _jsx(Badge, { count: mergeRequest.filesChanged, size: "small", children: _jsx(Tag, { size: "small", children: "Files" }) }), _jsx(Badge, { count: mergeRequest.reviewers.length, size: "small", children: _jsx(Tag, { size: "small", children: "Reviewers" }) })] }) })] }), _jsx(Dropdown, { overlay: menu, trigger: ['click'], children: _jsx(Button, { type: "text", size: "small", icon: _jsx(MoreOutlined, {}) }) })] }) }));
 };
-export const MergeRequestPanel = ({ projectId, visible, _____onClose }) => {
+export const MergeRequestPanel = ({ projectId, visible, onClose }) => {
     const [mergeRequests, _____setMergeRequests] = useState([]);
     const [branches, setBranches] = useState([]);
     const [showCreateModal, setShowCreateModal] = useState(false);

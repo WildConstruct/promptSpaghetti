@@ -1,6 +1,6 @@
 // packages/core/runtime/io-system.ts
 // Standardized Input/Output handling system for Epic 7 advanced nodes
-import { ErrorFactory } from '../errors/ErrorFactory';
+import { ErrorFactory } from '../errors/ErrorFactory.js';
 /**
  * Advanced Input/Output handler for Epic 7 nodes
  */
@@ -40,7 +40,7 @@ export class AdvancedIOHandler {
     /**
      * Resolve inputs from connected nodes and apply defaults
      */
-    resolveInputs(connectedInputs, nodeId) {
+    resolveInputs(connectedInputs, ___nodeId) {
         const values = new Map();
         const metadata = new Map();
         for (const inputDef of this.spec.inputs) {

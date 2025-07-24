@@ -30,7 +30,7 @@ import {
   PaymentFraudAssessment,
   AccountFraudAssessment,
   FraudNetworkAnalysis
-} from '../../../packages/core/types/FraudMonitoring';
+} from '../../../../packages/core/types/FraudMonitoring';
 
 export interface FraudReviewCase {
   caseId: string;

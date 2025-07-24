@@ -19,7 +19,7 @@ export interface WidgetConfig {
 interface MonitoringWidgetProps {
     config: WidgetConfig;
     userRole: string;
-    data?: any;
+    data?: unknown;
     onAction?: (widgetId: string, action: string, params?: any) => void;
     className?: string;
 }

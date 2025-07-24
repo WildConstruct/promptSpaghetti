@@ -1,6 +1,6 @@
 // server/src/__tests__/exporter.test.ts
 import { graphToBundle, validateGeneratorBundle, bundleToGraph, GeneratorBundle } from '../exporter';
-import { Graph } from '../../../packages/core/graphSchema';
+import { Graph } from '../../../../packages/core/graphSchema';
 
 describe('Graph to GeneratorBundle conversion', () => {
   // Simple test graph with all node types

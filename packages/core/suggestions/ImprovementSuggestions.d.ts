@@ -342,8 +342,7 @@ export declare class ImprovementSuggestionsSystem extends EventEmitter {
     private buildDefaultAnalysisContext;
     private buildUserContext;
     private getUserBehaviorData;
-    private personalizeS;
-    uggestions(suggestions: ImprovementSuggestion[], userBehavior: UserBehaviorData, context: AnalysisContext): ImprovementSuggestion[];
+    private personalizeSuggestions;
     private updateAlgorithmsFromFeedback;
     private mapProblemTypeToDomain;
     private mapProblemTypeToSuggestionTypes;

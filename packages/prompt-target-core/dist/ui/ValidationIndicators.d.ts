@@ -1,4 +1,5 @@
-import { ValidationResult, ValidationReport } from '../validation/ValidationEngine.js';
+import { ValidationReport } from '../validation/ValidationEngine.js';
+import { ValidationResult } from '../types/index.js';
 import { Platform } from '../types/index.js';
 /**
  * Inline validation indicators and detailed issue viewer

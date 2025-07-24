@@ -114,14 +114,14 @@ export declare const AuditScheduleSchema: z.ZodObject<{
         message_template: z.ZodOptional<z.ZodString>;
         channels: z.ZodArray<z.ZodEnum<["email", "slack", "sms", "dashboard"]>, "many">;
     }, "strip", z.ZodTypeAny, {
+        channels: ("email" | "sms" | "slack" | "dashboard")[];
         timing: NotificationTiming;
         recipients: string[];
-        channels: ("email" | "sms" | "slack" | "dashboard")[];
         message_template?: string | undefined;
     }, {
+        channels: ("email" | "sms" | "slack" | "dashboard")[];
         timing: NotificationTiming;
         recipients: string[];
-        channels: ("email" | "sms" | "slack" | "dashboard")[];
         message_template?: string | undefined;
     }>, "many">>;
     deliverables: z.ZodDefault<z.ZodArray<z.ZodObject<{
@@ -196,26 +196,26 @@ export declare const AuditScheduleSchema: z.ZodObject<{
             timestamp: Date;
             content: string;
         }[];
+        completion_percentage: number;
         milestones: {
             name: string;
             completed: boolean;
             due_date: Date;
             completion_date?: Date | undefined;
         }[];
-        completion_percentage: number;
     }, {
         notes?: {
             author: string;
             timestamp: Date;
             content: string;
         }[] | undefined;
+        completion_percentage?: number | undefined;
         milestones?: {
             name: string;
             due_date: Date;
             completed?: boolean | undefined;
             completion_date?: Date | undefined;
         }[] | undefined;
-        completion_percentage?: number | undefined;
     }>>;
     related_audit_events: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
     system_components: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
@@ -234,9 +234,9 @@ export declare const AuditScheduleSchema: z.ZodObject<{
     title: string;
     mandatory: boolean;
     notifications: {
+        channels: ("email" | "sms" | "slack" | "dashboard")[];
         timing: NotificationTiming;
         recipients: string[];
-        channels: ("email" | "sms" | "slack" | "dashboard")[];
         message_template?: string | undefined;
     }[];
     dependencies: string[];
@@ -271,13 +271,13 @@ export declare const AuditScheduleSchema: z.ZodObject<{
             timestamp: Date;
             content: string;
         }[];
+        completion_percentage: number;
         milestones: {
             name: string;
             completed: boolean;
             due_date: Date;
             completion_date?: Date | undefined;
         }[];
-        completion_percentage: number;
     } | undefined;
     resources?: {
         personnel_count?: number | undefined;
@@ -324,13 +324,13 @@ export declare const AuditScheduleSchema: z.ZodObject<{
             timestamp: Date;
             content: string;
         }[] | undefined;
+        completion_percentage?: number | undefined;
         milestones?: {
             name: string;
             due_date: Date;
             completed?: boolean | undefined;
             completion_date?: Date | undefined;
         }[] | undefined;
-        completion_percentage?: number | undefined;
     } | undefined;
     resources?: {
         personnel_count?: number | undefined;
@@ -340,9 +340,9 @@ export declare const AuditScheduleSchema: z.ZodObject<{
     } | undefined;
     mandatory?: boolean | undefined;
     notifications?: {
+        channels: ("email" | "sms" | "slack" | "dashboard")[];
         timing: NotificationTiming;
         recipients: string[];
-        channels: ("email" | "sms" | "slack" | "dashboard")[];
         message_template?: string | undefined;
     }[] | undefined;
     dependencies?: string[] | undefined;
@@ -422,7 +422,7 @@ export declare const CalendarViewConfigSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     start_date: Date;
     end_date: Date;
-    view_type: "month" | "week" | "day" | "timeline" | "agenda";
+    view_type: "month" | "week" | "day" | "agenda" | "timeline";
     filters?: {
         compliance_frameworks?: string[] | undefined;
         activity_types?: AuditActivityType[] | undefined;
@@ -440,7 +440,7 @@ export declare const CalendarViewConfigSchema: z.ZodObject<{
 }, {
     start_date: Date;
     end_date: Date;
-    view_type: "month" | "week" | "day" | "timeline" | "agenda";
+    view_type: "month" | "week" | "day" | "agenda" | "timeline";
     filters?: {
         compliance_frameworks?: string[] | undefined;
         activity_types?: AuditActivityType[] | undefined;

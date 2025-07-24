@@ -7,7 +7,7 @@ import {
   ConflictResolutionRequestSchema,
   RestorationBookmarkRequestSchema,
   RestorationFilterSchema
-} from '../../packages/core/types/restoration';
+} from '../../../packages/core/types/restoration';
 
 export async function restorationRoutes(fastify: FastifyInstance) {
   const restorationService = new RestorationService(fastify.db, fastify.log);

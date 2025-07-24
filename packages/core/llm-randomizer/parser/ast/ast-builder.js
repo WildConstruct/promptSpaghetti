@@ -1,7 +1,7 @@
 // Epic 12 - LLM Agent Randomizer System
 // Story 12.3 - Parser Implementation
 // AST construction from lexer tokens
-import { TokenType } from '../lexer/graph-lexer';
+import { TokenType } from '../lexer/graph-lexer.js';
 export class ASTBuilder {
     tokens;
     current = 0;

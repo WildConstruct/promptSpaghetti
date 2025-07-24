@@ -31,7 +31,7 @@ import {
   ExecutionMetadata,
   ResultDetails,
   Finding
-} from '../../../packages/core/admin/HealthCheckDefinitionModel';
+} from '../../../../packages/core/admin/HealthCheckDefinitionModel';
 
 // ==========================================
 // SERVICE INTERFACES

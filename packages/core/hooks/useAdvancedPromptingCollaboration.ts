@@ -65,7 +65,29 @@ const DEFAULT_CONFIG: AdvancedCollaborationConfig = {
  * prompt development workflows, integrating MARS framework, Zada patterns,
  * and VFX pipeline export capabilities.
  */
-export   const autoSaveTimeoutRef = useRef<NodeJS.Timeout>();
+export function useAdvancedPromptingCollaboration(
+  config: Partial<AdvancedCollaborationConfig> = {}
+): AdvancedCollaborationState & AdvancedCollaborationActions & {
+  config: AdvancedCollaborationConfig;
+  getAvailableMARSRegions: () => MARSRegionTemplate[];
+  getAvailableZadaPatterns: () => ZadaPromptPattern[];
+  getWorkflowTemplates: () => any[];
+  getUsersByRole: (role: FilmIndustryRole) => FilmIndustryUser[];
+  getSessionParticipants: () => FilmIndustryUser[];
+  isUserCompatibleWithMethodology: (methodology: 'zada' | 'mars' | 'hybrid' | 'custom') => boolean;
+} {
+  const [state, setState] = useState<AdvancedCollaborationState>({
+    collaborationService: null,
+    currentUser: null,
+    currentSession: null,
+    activeSessions: [],
+    connectedUsers: [],
+    isConnected: false,
+    lastSync: null
+  });
+
+  const configRef = useRef<AdvancedCollaborationConfig>(DEFAULT_CONFIG);
+  const autoSaveTimeoutRef = useRef<NodeJS.Timeout>();
 
   // Initialize collaboration service
   const initializeCollaboration = useCallback(async (
@@ -324,7 +346,7 @@ export   const autoSaveTimeoutRef = useRef<NodeJS.Timeout>();
     return state.collaborationService?.getUsersByRole(role) || [];
   }, [state.collaborationService]);
 
-  const getSessionParticipants = useCallback(() => {
+  const getSessionParticipants = useCallback((): FilmIndustryUser[] => {
     return state.currentSession?.participants || [];
   }, [state.currentSession]);
 
@@ -374,4 +396,4 @@ export   const autoSaveTimeoutRef = useRef<NodeJS.Timeout>();
     getSessionParticipants,
     isUserCompatibleWithMethodology
   };
-};
+}

@@ -5,13 +5,13 @@
  * Provides all types, classes, and utilities needed for graph mutations.
  */
 // Core Types and Interfaces
-export * from './types';
+export * from './types.js';
 // Core Engine and Components
-export { GraphMutationEngine } from './GraphMutationEngine';
-export { GraphValidator } from './GraphValidator';
-export { ConflictResolver } from './ConflictResolver';
-export { OperationHistory } from './OperationHistory';
-export { CollaborativeSync, SimpleWebSocketService } from './CollaborativeSync';
+export { GraphMutationEngine } from './GraphMutationEngine.js';
+export { GraphValidator } from './GraphValidator.js';
+export { ConflictResolver } from './ConflictResolver.js';
+export { OperationHistory } from './OperationHistory.js';
+export { CollaborativeSync, SimpleWebSocketService } from './CollaborativeSync.js';
 // Default Configuration
 export const defaultMutationEngineConfig = {
     // History management

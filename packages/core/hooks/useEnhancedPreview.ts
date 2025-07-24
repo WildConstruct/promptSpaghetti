@@ -59,7 +59,7 @@ interface EnhancedPreviewState {
   varianceAnalysis: VarianceAnalysis | null;
 }
 
-export 
+export const useEnhancedPreviewResultManagement = () => {
   const abortRef = useRef<AbortController | null>(null);
   const resultManagement = useResultManagementStore();
 

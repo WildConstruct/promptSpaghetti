@@ -6,21 +6,22 @@ import { ConcatNode, GetVariableNode, IncludeNode, OutputNode, SetVariableNode, 
 // Import advanced capabilities separately
 import { AdvancedExecutionUtils } from '../../packages/core/runtime/advanced.js';
 // Epic 13 Analytics Integration
-import { AnalyticsCollector, AnalyticsEventType } from './analytics/AnalyticsCollector';
-import { AnalyticsDAO } from './database/analytics-dao';
-import { getDatabase } from './database/connection';
+import { AnalyticsCollector, AnalyticsEventType } from './analytics/AnalyticsCollector.js';
+import { AnalyticsDAO } from './database/analytics-dao.js';
+import { getDatabase } from './database/connection.js';
 import { v4 as uuidv4 } from 'uuid';
 // Epic 8.5 Execution Path Tracking
-import { GraphExecutionTracker } from '../../packages/core/execution/ExecutionTracker';
+import { GraphExecutionTracker } from '../../packages/core/execution/ExecutionTracker.js';
+import { NodeExecutionStep, RandomChoiceInfo, ExecutionInput } from '../../packages/core/types/ExecutionPath.js';
 // Import advanced nodes directly to avoid circular dependencies
 import { WeightedAdvancedNode } from '../../packages/core/runtime/nodes/WeightedAdvanced.js';
 import { ConditionalNode } from '../../packages/core/runtime/nodes/Conditional.js';
 import { SequentialNode, createSequencePattern } from '../../packages/core/runtime/nodes/Sequential.js';
 import { MarkovNode, createTransitionMatrix } from '../../packages/core/runtime/nodes/Markov.js';
 // Temporarily disabled due to compilation issues
-// import { PythonTransformNode } from '../../packages/core/runtime/nodes/PythonTransform.js';
+// import { PythonTransformNode } from '../../packages/core/runtime/nodes/PythonTransform';
 // Epic 8.4 Extension System imports
-import { ExtensionLifecycleManager } from '../../packages/core/extensions/ExtensionLifecycleManager';
+import { ExtensionLifecycleManager } from '../../packages/core/extensions/ExtensionLifecycleManager.js';
 // Epic 8.2 Template Processing imports  
 import { parseTemplate, substituteVariables } from '../../packages/core/utils/templateParser.js';
 // Global analytics collector instance

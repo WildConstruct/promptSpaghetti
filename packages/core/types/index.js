@@ -5,14 +5,14 @@
  * and types used throughout the application.
  */
 // Export all policy interfaces
-export * from './PolicyInterfaces';
+export * from './PolicyInterfaces.js';
 // Export policy service interfaces
-export * from './PolicyServices';
+export * from './PolicyServices.js';
 // Export policy event interfaces
-export * from './PolicyEvents';
+export * from './PolicyEvents.js';
 // Export promotion interfaces
-export * from './PromotionTypes';
+export * from './PromotionTypes.js';
 // Export existing types for compatibility
-export * from './TrustTypes';
-export * from './EnforcementTypes';
+export * from './TrustTypes.js';
+export * from './EnforcementTypes.js';
 //# sourceMappingURL=index.js.map

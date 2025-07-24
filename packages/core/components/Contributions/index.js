@@ -4,7 +4,7 @@
  *
  * Centralized exports for all contribution-related components.
  */
-export { ContributionDashboard } from './ContributionDashboard';
-export { ContributionCard } from './ContributionCard';
-export { ContributionSubmissionForm } from './ContributionSubmissionForm';
-export { ContributorProfileManager } from './ContributorProfileManager';
+export { ContributionDashboard } from './ContributionDashboard.js';
+export { ContributionCard } from './ContributionCard.js';
+export { ContributionSubmissionForm } from './ContributionSubmissionForm.js';
+export { ContributorProfileManager } from './ContributorProfileManager.js';

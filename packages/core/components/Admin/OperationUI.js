@@ -13,7 +13,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * - Batch operation management
  */
 import { useState, useCallback, useMemo } from 'react';
-import { ExecutionStatus, ParameterType, InputType, RiskLevel } from '../../admin/services/OperationTypesService';
+import { ExecutionStatus, ParameterType, InputType, RiskLevel } from '../../admin/services/OperationTypesService.js';
 export const OperationUI = ({ operationType, initialParameters = {}, onExecute, onCancel, onParametersChange, readonly = false, showAdvanced = false }) => {
     const [parameters, setParameters] = useState(initialParameters);
     const [validationErrors, setValidationErrors] = useState({});
@@ -193,7 +193,7 @@ const OperationActions = ({ operationType, canExecute, isExecuting, execution, o
     return (_jsxs("div", { className: "operation-actions", children: [_jsxs("div", { className: "primary-actions", children: [!execution && (_jsx("button", { className: `execute-btn risk-${operationType.riskLevel}`, onClick: handleExecute, disabled: !canExecute, children: isExecuting ? 'Executing...' : `Execute ${operationType.displayName}` })), execution && execution.status === ExecutionStatus.RUNNING && operationType.uiConfig.allowCancel && (_jsx("button", { className: "cancel-btn", onClick: onCancel, children: "Cancel Operation" }))] }), _jsxs("div", { className: "secondary-actions", children: [_jsx("button", { className: "template-btn", children: "Save as Template" }), _jsx("button", { className: "schedule-btn", children: "Schedule" }), _jsx("button", { className: "dry-run-btn", children: "Dry Run" })] }), showConfirmation && (_jsx("div", { className: "confirmation-modal", children: _jsxs("div", { className: "confirmation-content", children: [_jsx("h4", { children: "Confirm Operation" }), _jsx("p", { children: operationType.uiConfig.confirmationMessage ||
                                 `Are you sure you want to execute ${operationType.displayName}?` }), _jsxs("div", { className: "confirmation-actions", children: [_jsx("button", { onClick: () => setShowConfirmation(false), children: "Cancel" }), _jsx("button", { className: `confirm-btn risk-${operationType.riskLevel}`, onClick: confirmExecution, children: "Execute" })] })] }) }))] }));
 };
-const OperationProgress = ({ execution, operationType, _____onCancel }) => {
+const OperationProgress = ({ execution, operationType, onCancel }) => {
     const formatDuration = (ms) => {
         const seconds = Math.floor(ms / 1000);
         const minutes = Math.floor(seconds / 60);
@@ -235,7 +235,7 @@ function validateParameterType(value, type) {
             return true;
     }
 }
-function validateConstraint(value, constraint) {
+function validateConstraint(_____value, _____constraint) {
     // Implementation would match the server-side validation
     return { isValid: true, message: '' };
 }

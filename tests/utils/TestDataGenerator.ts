@@ -5,7 +5,7 @@
  * including graph generation, user data, performance data, and edge cases.
  */
 
-import { Graph, Node, GraphEdge } from '../../packages/core/graphSchema';
+import { Graph, Node, GraphEdge } from '../packages/core/graphSchema';
 import { User, AuthContext, Permission, UserRole } from '../../server/src/types/auth';
 
 export enum TestScenario {

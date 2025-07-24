@@ -1,6 +1,6 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React from 'react';
-export const SelectEditor = ({ label, value, fieldKey, error, onChange, _____placeholder, disabled = false, options = [], multiple = false, searchable = false, allowCustom = false, emptyLabel = 'None' }) => {
+export const SelectEditor = ({ label, value, fieldKey, error, onChange, placeholder, disabled = false, options = [], multiple = false, searchable = false, allowCustom = false, emptyLabel = 'None' }) => {
     const [localValue, setLocalValue] = React.useState(value);
     const [isOpen, setIsOpen] = React.useState(false);
     const [searchTerm, setSearchTerm] = React.useState('');

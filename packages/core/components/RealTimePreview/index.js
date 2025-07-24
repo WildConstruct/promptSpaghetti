@@ -3,4 +3,4 @@
  *
  * Export all components for the director-friendly real-time preview system
  */
-export { RealTimePreviewIntegration } from './RealTimePreviewIntegration';
+export { RealTimePreviewIntegration } from './RealTimePreviewIntegration.js';

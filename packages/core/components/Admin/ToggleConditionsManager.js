@@ -9,7 +9,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * - A/B testing and multivariate setup
  */
 import { useState, useEffect, useCallback } from 'react';
-import { ConditionType } from '../../services/ToggleConditionsService';
+import { ConditionType } from '../../services/ToggleConditionsService.js';
 export const ToggleConditionsManager = ({ conditionsService, toggleId, onConditionsChange, onClose }) => {
     // State management
     const [conditions, setConditions] = useState([]);

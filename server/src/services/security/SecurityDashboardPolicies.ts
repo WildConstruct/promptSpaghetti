@@ -15,7 +15,7 @@ import {
   DataClassificationLevel,
   DataOperation,
   SecurityContext
-} from '../../../packages/core/security/DataClassificationAccessControl';
+} from '../../../../packages/core/security/DataClassificationAccessControl';
 
 export enum DashboardRole {
   VIEWER = 'VIEWER',

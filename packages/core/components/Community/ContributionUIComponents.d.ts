@@ -65,15 +65,15 @@ export declare class ContributionValidator {
 interface ErrorBoundaryState {
     hasError: boolean;
     error?: Error;
-    errorInfo?: any;
+    errorInfo?: unknown;
 }
 export declare class ContributionErrorBoundary extends React.Component<{
     children: React.ReactNode;
     onError?: (error: Error) => void;
 }, ErrorBoundaryState> {
-    constructor(props: any);
+    constructor(props: Record<string, unknown>);
     static getDerivedStateFromError(error: Error): ErrorBoundaryState;
-    componentDidCatch(error: Error, errorInfo: any): void;
+    componentDidCatch(error: Error, errorInfo: unknown): void;
     render(): string | number | boolean | Iterable<React.ReactNode> | import("react/jsx-runtime").JSX.Element | null | undefined;
 }
 export interface ContributionFormProps {

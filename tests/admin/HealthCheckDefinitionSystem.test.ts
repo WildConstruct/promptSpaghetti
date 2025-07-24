@@ -24,7 +24,7 @@ import {
   HealthStatus,
   ComparisonOperator,
   createExampleHealthChecks
-} from '../../packages/core/admin/HealthCheckDefinitionModel';
+} from '../packages/core/admin/HealthCheckDefinitionModel';
 
 // Mock dependencies
 const mockDatabase = {

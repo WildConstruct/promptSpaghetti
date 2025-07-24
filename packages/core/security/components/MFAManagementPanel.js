@@ -17,7 +17,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * - Real-time status updates
  */
 import { useState, useEffect } from 'react';
-import { Smartphone, Monitor } from 'lucide-react';
+import { Shield, Smartphone, Mail, Key, Download, Trash2, Plus, AlertTriangle, Eye, EyeOff, RefreshCw, Settings, Clock, MapPin, Monitor } from 'lucide-react';
 export const MFAManagementPanel = ({ userId, onMFAStatusChange, onSecurityEvent, className = '' }) => {
     // State management
     const [mfaMethods, setMFAMethods] = useState([]);
@@ -221,105 +221,109 @@ export const MFAManagementPanel = ({ userId, onMFAStatusChange, onSecurityEvent,
             setLoading(false);
         }
     };
-    try {
-        // API call to setup SMS verification
-        const newMethod = {
-            id: `sms-${Date.now()}`,
-            type: 'sms',
-            name: 'SMS Verification',
-            enabled: true,
-            primary: false,
-            configuredAt: new Date(),
-            configuration: { phoneNumber }
-        };
-        setMFAMethods(prev => [...prev, newMethod]);
-        setSetupMethod('');
-    }
-    catch (error) {
-        console.error('Failed to setup SMS:', error);
-    }
-    finally {
-        setLoading(false);
-    }
+    const handleSetupSMS = async (phoneNumber) => {
+        setLoading(true);
+        try {
+            // API call to setup SMS verification
+            const newMethod = {
+                id: `sms-${Date.now()}`,
+                type: 'sms',
+                name: 'SMS Verification',
+                enabled: true,
+                primary: false,
+                configuredAt: new Date(),
+                configuration: { phoneNumber }
+            };
+            setMFAMethods(prev => [...prev, newMethod]);
+            setSetupMethod('');
+        }
+        catch (error) {
+            console.error('Failed to setup SMS:', error);
+        }
+        finally {
+            setLoading(false);
+        }
+    };
+    const handleGenerateBackupCodes = async () => {
+        setLoading(true);
+        try {
+            // Generate new backup codes
+            const newCodes = Array.from({ length: 10 }, (_, i) => ({
+                id: `backup-${Date.now()}-${i}`,
+                code: generateBackupCode(),
+                used: false
+            }));
+            setBackupCodes(newCodes);
+        }
+        catch (error) {
+            console.error('Failed to generate backup codes:', error);
+        }
+        finally {
+            setLoading(false);
+        }
+    };
+    const handleRemoveTrustedDevice = async (deviceId) => {
+        setLoading(true);
+        try {
+            setTrustedDevices(prev => prev.filter(device => device.id !== deviceId));
+        }
+        catch (error) {
+            console.error('Failed to remove trusted device:', error);
+        }
+        finally {
+            setLoading(false);
+        }
+    };
+    const handleUpdateSettings = async (newSettings) => {
+        setLoading(true);
+        try {
+            setSettings(prev => ({ ...prev, ...newSettings }));
+        }
+        catch (error) {
+            console.error('Failed to update settings:', error);
+        }
+        finally {
+            setLoading(false);
+        }
+    };
+    // Helper functions
+    const generateTOTPSecret = () => {
+        return 'JBSWY3DPEHPK3PXP'; // Mock secret
+    };
+    const generateQRCode = (secret) => {
+        return `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==`; // Mock QR code
+    };
+    const generateBackupCode = () => {
+        return Math.random().toString(36).substring(2, 11).toUpperCase();
+    };
+    const getSeverityColor = (riskLevel) => {
+        switch (riskLevel) {
+            case 'high': return 'text-red-600';
+            case 'medium': return 'text-yellow-600';
+            case 'low': return 'text-green-600';
+            default: return 'text-gray-600';
+        }
+    };
+    const getDeviceIcon = (type) => {
+        switch (type) {
+            case 'mobile': return _jsx(Smartphone, { className: "w-4 h-4" });
+            case 'tablet': return _jsx(Smartphone, { className: "w-4 h-4" });
+            default: return _jsx(Monitor, { className: "w-4 h-4" });
+        }
+    };
+    return (_jsxs("div", { className: `bg-white rounded-lg shadow-lg ${className}`, children: [_jsxs("div", { className: "border-b border-gray-200 p-6", children: [_jsxs("div", { className: "flex items-center space-x-3", children: [_jsx(Shield, { className: "w-6 h-6 text-blue-600" }), _jsx("h2", { className: "text-xl font-semibold text-gray-900", children: "Multi-Factor Authentication" })] }), _jsx("p", { className: "mt-2 text-sm text-gray-600", children: "Secure your account with additional verification methods" })] }), _jsx("div", { className: "border-b border-gray-200", children: _jsx("nav", { className: "flex space-x-8 px-6", children: [
+                        { id: 'methods', label: 'Methods', icon: Key },
+                        { id: 'backup', label: 'Backup Codes', icon: Download },
+                        { id: 'devices', label: 'Trusted Devices', icon: Monitor },
+                        { id: 'history', label: 'Security History', icon: Clock },
+                        { id: 'settings', label: 'Settings', icon: Settings }
+                    ].map(({ id, label, icon: Icon }) => (_jsxs("button", { onClick: () => setActiveTab(id), className: `flex items-center space-x-2 py-4 text-sm font-medium border-b-2 ${activeTab === id
+                            ? 'border-blue-500 text-blue-600'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`, children: [_jsx(Icon, { className: "w-4 h-4" }), _jsx("span", { children: label })] }, id))) }) }), _jsxs("div", { className: "p-6", children: [loading && (_jsxs("div", { className: "flex items-center justify-center py-8", children: [_jsx(RefreshCw, { className: "w-6 h-6 animate-spin text-blue-600" }), _jsx("span", { className: "ml-2 text-gray-600", children: "Loading..." })] })), activeTab === 'methods' && !loading && (_jsxs("div", { className: "space-y-6", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsx("h3", { className: "text-lg font-medium text-gray-900", children: "Authentication Methods" }), _jsxs("button", { onClick: () => setSetupMethod('select'), className: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700", children: [_jsx(Plus, { className: "w-4 h-4 mr-2" }), "Add Method"] })] }), _jsx("div", { className: "space-y-4", children: mfaMethods.map((method) => (_jsx("div", { className: "border border-gray-200 rounded-lg p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center space-x-3", children: [method.type === 'totp' && _jsx(Smartphone, { className: "w-5 h-5 text-blue-600" }), method.type === 'sms' && _jsx(Smartphone, { className: "w-5 h-5 text-green-600" }), method.type === 'email' && _jsx(Mail, { className: "w-5 h-5 text-purple-600" }), _jsxs("div", { children: [_jsx("h4", { className: "text-sm font-medium text-gray-900", children: method.name }), _jsx("p", { className: "text-xs text-gray-500", children: method.configuration?.phoneNumber || method.configuration?.email || method.configuration?.appName }), method.primary && (_jsx("span", { className: "inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 mt-1", children: "Primary" }))] })] }), _jsxs("div", { className: "flex items-center space-x-3", children: [method.lastUsed && (_jsxs("span", { className: "text-xs text-gray-500", children: ["Last used: ", method.lastUsed.toLocaleDateString()] })), _jsxs("label", { className: "relative inline-flex items-center cursor-pointer", children: [_jsx("input", { type: "checkbox", checked: method.enabled, onChange: (e) => handleToggleMFAMethod(method.id, e.target.checked), className: "sr-only peer" }), _jsx("div", { className: "w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600" })] })] })] }) }, method.id))) }), setupMethod && (_jsx("div", { className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50", children: _jsxs("div", { className: "bg-white rounded-lg p-6 w-full max-w-md", children: [_jsx("h3", { className: "text-lg font-medium text-gray-900 mb-4", children: setupMethod === 'select' ? 'Choose Authentication Method' : 'Setup Authentication' }), setupMethod === 'select' && (_jsxs("div", { className: "space-y-3", children: [_jsxs("button", { onClick: handleSetupTOTP, className: "w-full flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50", children: [_jsx(Smartphone, { className: "w-5 h-5 text-blue-600" }), _jsxs("div", { className: "text-left", children: [_jsx("div", { className: "font-medium", children: "Authenticator App" }), _jsx("div", { className: "text-sm text-gray-500", children: "Use Google Authenticator, Authy, etc." })] })] }), _jsxs("button", { onClick: () => setSetupMethod('sms'), className: "w-full flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50", children: [_jsx(Smartphone, { className: "w-5 h-5 text-green-600" }), _jsxs("div", { className: "text-left", children: [_jsx("div", { className: "font-medium", children: "SMS Verification" }), _jsx("div", { className: "text-sm text-gray-500", children: "Receive codes via text message" })] })] })] })), setupMethod === 'totp' && (_jsxs("div", { className: "space-y-4", children: [_jsxs("div", { className: "text-center", children: [_jsx("img", { src: totpQRCode, alt: "QR Code", className: "mx-auto w-32 h-32 border" }), _jsx("p", { className: "mt-2 text-sm text-gray-600", children: "Scan this QR code with your authenticator app" })] }), _jsxs("div", { className: "text-center", children: [_jsx("p", { className: "text-xs text-gray-500 mb-2", children: "Or enter this code manually:" }), _jsx("code", { className: "text-sm font-mono bg-gray-100 px-2 py-1 rounded", children: totpSecret })] })] })), _jsxs("div", { className: "flex justify-end space-x-3 mt-6", children: [_jsx("button", { onClick: () => setSetupMethod(''), className: "px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md", children: "Cancel" }), _jsx("button", { onClick: () => setSetupMethod(''), className: "px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md", children: "Complete Setup" })] })] }) }))] })), activeTab === 'backup' && !loading && (_jsxs("div", { className: "space-y-6", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("h3", { className: "text-lg font-medium text-gray-900", children: "Backup Codes" }), _jsx("p", { className: "text-sm text-gray-600", children: "Use these one-time codes if you lose access to your other authentication methods" })] }), _jsxs("button", { onClick: handleGenerateBackupCodes, className: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700", children: [_jsx(RefreshCw, { className: "w-4 h-4 mr-2" }), "Generate New Codes"] })] }), _jsx("div", { className: "bg-yellow-50 border border-yellow-200 rounded-lg p-4", children: _jsxs("div", { className: "flex items-start space-x-3", children: [_jsx(AlertTriangle, { className: "w-5 h-5 text-yellow-600 mt-0.5" }), _jsxs("div", { children: [_jsx("h4", { className: "text-sm font-medium text-yellow-800", children: "Important" }), _jsx("p", { className: "text-sm text-yellow-700 mt-1", children: "Save these codes in a secure location. Each code can only be used once." })] })] }) }), _jsxs("div", { className: "relative", children: [_jsxs("div", { className: "flex items-center justify-between mb-4", children: [_jsxs("span", { className: "text-sm font-medium text-gray-700", children: [backupCodes.filter(c => !c.used).length, " of ", backupCodes.length, " codes remaining"] }), _jsxs("button", { onClick: () => setShowBackupCodes(!showBackupCodes), className: "inline-flex items-center text-sm text-blue-600 hover:text-blue-700", children: [showBackupCodes ? _jsx(EyeOff, { className: "w-4 h-4 mr-1" }) : _jsx(Eye, { className: "w-4 h-4 mr-1" }), showBackupCodes ? 'Hide' : 'Show', " Codes"] })] }), showBackupCodes && (_jsx("div", { className: "grid grid-cols-2 gap-3", children: backupCodes.map((code) => (_jsxs("div", { className: `p-3 rounded-lg border font-mono text-sm ${code.used
+                                                ? 'bg-gray-50 border-gray-200 text-gray-400 line-through'
+                                                : 'bg-white border-gray-300 text-gray-900'}`, children: [code.code, code.used && code.usedAt && (_jsxs("div", { className: "text-xs text-gray-500 mt-1", children: ["Used ", code.usedAt.toLocaleDateString()] }))] }, code.id))) }))] })] })), activeTab === 'devices' && !loading && (_jsxs("div", { className: "space-y-6", children: [_jsxs("div", { children: [_jsx("h3", { className: "text-lg font-medium text-gray-900", children: "Trusted Devices" }), _jsxs("p", { className: "text-sm text-gray-600", children: ["Devices you've marked as trusted won't require MFA for ", settings.trustedDeviceExpiry, " days"] })] }), _jsx("div", { className: "space-y-4", children: trustedDevices.map((device) => (_jsx("div", { className: "border border-gray-200 rounded-lg p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center space-x-3", children: [getDeviceIcon(device.type), _jsxs("div", { children: [_jsxs("h4", { className: "text-sm font-medium text-gray-900", children: [device.name, device.current && (_jsx("span", { className: "ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800", children: "Current Device" }))] }), _jsxs("p", { className: "text-xs text-gray-500", children: [device.browser, " \u2022 ", device.location] }), _jsxs("p", { className: "text-xs text-gray-500", children: ["Added ", device.addedAt.toLocaleDateString(), " \u2022 Last access ", device.lastAccess.toLocaleDateString()] })] })] }), !device.current && (_jsx("button", { onClick: () => handleRemoveTrustedDevice(device.id), className: "text-red-600 hover:text-red-700", children: _jsx(Trash2, { className: "w-4 h-4" }) }))] }) }, device.id))) })] })), activeTab === 'history' && !loading && (_jsxs("div", { className: "space-y-6", children: [_jsxs("div", { children: [_jsx("h3", { className: "text-lg font-medium text-gray-900", children: "Security History" }), _jsx("p", { className: "text-sm text-gray-600", children: "Recent security events and authentication activity" })] }), _jsx("div", { className: "space-y-4", children: securityEvents.map((event) => (_jsx("div", { className: "border border-gray-200 rounded-lg p-4", children: _jsxs("div", { className: "flex items-start justify-between", children: [_jsxs("div", { className: "flex items-start space-x-3", children: [_jsx("div", { className: `w-2 h-2 rounded-full mt-2 ${event.riskLevel === 'high' ? 'bg-red-500' :
+                                                            event.riskLevel === 'medium' ? 'bg-yellow-500' : 'bg-green-500'}` }), _jsxs("div", { children: [_jsx("h4", { className: "text-sm font-medium text-gray-900", children: event.description }), _jsxs("div", { className: "flex items-center space-x-4 mt-1 text-xs text-gray-500", children: [_jsxs("span", { className: "flex items-center", children: [_jsx(Clock, { className: "w-3 h-3 mr-1" }), event.timestamp.toLocaleString()] }), _jsxs("span", { className: "flex items-center", children: [_jsx(MapPin, { className: "w-3 h-3 mr-1" }), event.location] }), _jsx("span", { children: event.ipAddress })] })] })] }), _jsxs("span", { className: `text-xs font-medium px-2 py-1 rounded-full ${event.riskLevel === 'high' ? 'bg-red-100 text-red-800' :
+                                                    event.riskLevel === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                                                        'bg-green-100 text-green-800'}`, children: [event.riskLevel.toUpperCase(), " RISK"] })] }) }, event.id))) })] })), activeTab === 'settings' && !loading && (_jsxs("div", { className: "space-y-6", children: [_jsxs("div", { children: [_jsx("h3", { className: "text-lg font-medium text-gray-900", children: "MFA Settings" }), _jsx("p", { className: "text-sm text-gray-600", children: "Configure how multi-factor authentication works for your account" })] }), _jsxs("div", { className: "space-y-6", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("h4", { className: "text-sm font-medium text-gray-900", children: "Require MFA" }), _jsx("p", { className: "text-sm text-gray-500", children: "Always require MFA for login" })] }), _jsxs("label", { className: "relative inline-flex items-center cursor-pointer", children: [_jsx("input", { type: "checkbox", checked: settings.requireMFA, onChange: (e) => handleUpdateSettings({ requireMFA: e.target.checked }), className: "sr-only peer" }), _jsx("div", { className: "w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600" })] })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Trusted Device Expiry" }), _jsxs("select", { value: settings.trustedDeviceExpiry, onChange: (e) => handleUpdateSettings({ trustedDeviceExpiry: parseInt(e.target.value) }), className: "block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500", children: [_jsx("option", { value: 7, children: "7 days" }), _jsx("option", { value: 30, children: "30 days" }), _jsx("option", { value: 90, children: "90 days" }), _jsx("option", { value: 365, children: "1 year" })] })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Session Timeout" }), _jsxs("select", { value: settings.sessionTimeout, onChange: (e) => handleUpdateSettings({ sessionTimeout: parseInt(e.target.value) }), className: "block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500", children: [_jsx("option", { value: 15, children: "15 minutes" }), _jsx("option", { value: 30, children: "30 minutes" }), _jsx("option", { value: 60, children: "1 hour" }), _jsx("option", { value: 240, children: "4 hours" })] })] }), _jsxs("div", { className: "space-y-4", children: [_jsx("h4", { className: "text-sm font-medium text-gray-900", children: "Notifications" }), _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("span", { className: "text-sm text-gray-700", children: "Email notifications" }), _jsx("p", { className: "text-xs text-gray-500", children: "Receive security alerts via email" })] }), _jsxs("label", { className: "relative inline-flex items-center cursor-pointer", children: [_jsx("input", { type: "checkbox", checked: settings.emailNotifications, onChange: (e) => handleUpdateSettings({ emailNotifications: e.target.checked }), className: "sr-only peer" }), _jsx("div", { className: "w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600" })] })] }), _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("span", { className: "text-sm text-gray-700", children: "SMS notifications" }), _jsx("p", { className: "text-xs text-gray-500", children: "Receive security alerts via text" })] }), _jsxs("label", { className: "relative inline-flex items-center cursor-pointer", children: [_jsx("input", { type: "checkbox", checked: settings.smsNotifications, onChange: (e) => handleUpdateSettings({ smsNotifications: e.target.checked }), className: "sr-only peer" }), _jsx("div", { className: "w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600" })] })] })] })] })] }))] })] }));
 };
-const handleGenerateBackupCodes = async () => {
-    setLoading(true);
-    try {
-        // Generate new backup codes
-        const newCodes = Array.from({ length: 10 }, (_, i) => ({
-            id: `backup-${Date.now()}-${i}`,
-            code: generateBackupCode(),
-            used: false
-        }));
-        setBackupCodes(newCodes);
-    }
-    catch (error) {
-        console.error('Failed to generate backup codes:', error);
-    }
-    finally {
-        setLoading(false);
-    }
-};
-const handleRemoveTrustedDevice = async (deviceId) => {
-    setLoading(true);
-    try {
-        setTrustedDevices(prev => prev.filter(device => device.id !== deviceId));
-    }
-    catch (error) {
-        console.error('Failed to remove trusted device:', error);
-    }
-    finally {
-        setLoading(false);
-    }
-};
-const handleUpdateSettings = async (newSettings) => {
-    setLoading(true);
-    try {
-        setSettings(prev => ({ ...prev, ...newSettings }));
-    }
-    catch (error) {
-        console.error('Failed to update settings:', error);
-    }
-    finally {
-        setLoading(false);
-    }
-};
-// Helper functions
-const generateTOTPSecret = () => {
-    return 'JBSWY3DPEHPK3PXP'; // Mock secret
-};
-const generateQRCode = (secret) => {
-    return `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==`; // Mock QR code
-};
-const generateBackupCode = () => {
-    return Math.random().toString(36).substring(2, 11).toUpperCase();
-};
-'medium';
-return 'text-yellow-600';
-'low';
-return 'text-green-600';
-return 'text-gray-600';
-;
-const getDeviceIcon = (type) => {
-    switch (type) {
-        case 'mobile': return _jsx(Smartphone, { className: "w-4 h-4" });
-        case 'tablet': return _jsx(Smartphone, { className: "w-4 h-4" });
-        default: return _jsx(Monitor, { className: "w-4 h-4" });
-    }
-};
-return (_jsxs("div", { className: `bg-white rounded-lg shadow-lg ${className}`, children: [_jsxs("div", { className: "border-b border-gray-200 p-6", children: [_jsxs("div", { className: "flex items-center space-x-3", children: [_jsx(Shield, { className: "w-6 h-6 text-blue-600" }), _jsx("h2", { className: "text-xl font-semibold text-gray-900", children: "Multi-Factor Authentication" })] }), _jsx("p", { className: "mt-2 text-sm text-gray-600", children: "Secure your account with additional verification methods" })] }), _jsx("div", { className: "border-b border-gray-200", children: _jsx("nav", { className: "flex space-x-8 px-6", children: [
-                    { id: 'methods', label: 'Methods', icon: Key },
-                    { id: 'backup', label: 'Backup Codes', icon: Download },
-                    { id: 'devices', label: 'Trusted Devices', icon: Monitor },
-                    { id: 'history', label: 'Security History', icon: Clock },
-                    { id: 'settings', label: 'Settings', icon: Settings }
-                ].map(({ id, label, icon: Icon }) => (_jsxs("button", { onClick: () => setActiveTab(id), className: `flex items-center space-x-2 py-4 text-sm font-medium border-b-2 ${activeTab === id
-                        ? 'border-blue-500 text-blue-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`, children: [_jsx(Icon, { className: "w-4 h-4" }), _jsx("span", { children: label })] }, id))) }) }), _jsxs("div", { className: "p-6", children: [loading && (_jsxs("div", { className: "flex items-center justify-center py-8", children: [_jsx(RefreshCw, { className: "w-6 h-6 animate-spin text-blue-600" }), _jsx("span", { className: "ml-2 text-gray-600", children: "Loading..." })] })), activeTab === 'methods' && !loading && (_jsxs("div", { className: "space-y-6", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsx("h3", { className: "text-lg font-medium text-gray-900", children: "Authentication Methods" }), _jsxs("button", { onClick: () => setSetupMethod('select'), className: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700", children: [_jsx(Plus, { className: "w-4 h-4 mr-2" }), "Add Method"] })] }), _jsx("div", { className: "space-y-4", children: mfaMethods.map((method) => (_jsx("div", { className: "border border-gray-200 rounded-lg p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center space-x-3", children: [method.type === 'totp' && _jsx(Smartphone, { className: "w-5 h-5 text-blue-600" }), method.type === 'sms' && _jsx(Smartphone, { className: "w-5 h-5 text-green-600" }), method.type === 'email' && _jsx(Mail, { className: "w-5 h-5 text-purple-600" }), _jsxs("div", { children: [_jsx("h4", { className: "text-sm font-medium text-gray-900", children: method.name }), _jsx("p", { className: "text-xs text-gray-500", children: method.configuration?.phoneNumber || method.configuration?.email || method.configuration?.appName }), method.primary && (_jsx("span", { className: "inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 mt-1", children: "Primary" }))] })] }), _jsxs("div", { className: "flex items-center space-x-3", children: [method.lastUsed && (_jsxs("span", { className: "text-xs text-gray-500", children: ["Last used: ", method.lastUsed.toLocaleDateString()] })), _jsxs("label", { className: "relative inline-flex items-center cursor-pointer", children: [_jsx("input", { type: "checkbox", checked: method.enabled, onChange: (e) => handleToggleMFAMethod(method.id, e.target.checked), className: "sr-only peer" }), _jsx("div", { className: "w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600" })] })] })] }) }, method.id))) }), setupMethod && (_jsx("div", { className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50", children: _jsxs("div", { className: "bg-white rounded-lg p-6 w-full max-w-md", children: [_jsx("h3", { className: "text-lg font-medium text-gray-900 mb-4", children: setupMethod === 'select' ? 'Choose Authentication Method' : 'Setup Authentication' }), setupMethod === 'select' && (_jsxs("div", { className: "space-y-3", children: [_jsxs("button", { onClick: handleSetupTOTP, className: "w-full flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50", children: [_jsx(Smartphone, { className: "w-5 h-5 text-blue-600" }), _jsxs("div", { className: "text-left", children: [_jsx("div", { className: "font-medium", children: "Authenticator App" }), _jsx("div", { className: "text-sm text-gray-500", children: "Use Google Authenticator, Authy, etc." })] })] }), _jsxs("button", { onClick: () => setSetupMethod('sms'), className: "w-full flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50", children: [_jsx(Smartphone, { className: "w-5 h-5 text-green-600" }), _jsxs("div", { className: "text-left", children: [_jsx("div", { className: "font-medium", children: "SMS Verification" }), _jsx("div", { className: "text-sm text-gray-500", children: "Receive codes via text message" })] })] })] })), setupMethod === 'totp' && (_jsxs("div", { className: "space-y-4", children: [_jsxs("div", { className: "text-center", children: [_jsx("img", { src: totpQRCode, alt: "QR Code", className: "mx-auto w-32 h-32 border" }), _jsx("p", { className: "mt-2 text-sm text-gray-600", children: "Scan this QR code with your authenticator app" })] }), _jsxs("div", { className: "text-center", children: [_jsx("p", { className: "text-xs text-gray-500 mb-2", children: "Or enter this code manually:" }), _jsx("code", { className: "text-sm font-mono bg-gray-100 px-2 py-1 rounded", children: totpSecret })] })] })), _jsxs("div", { className: "flex justify-end space-x-3 mt-6", children: [_jsx("button", { onClick: () => setSetupMethod(''), className: "px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md", children: "Cancel" }), _jsx("button", { onClick: () => setSetupMethod(''), className: "px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md", children: "Complete Setup" })] })] }) }))] })), activeTab === 'backup' && !loading && (_jsxs("div", { className: "space-y-6", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("h3", { className: "text-lg font-medium text-gray-900", children: "Backup Codes" }), _jsx("p", { className: "text-sm text-gray-600", children: "Use these one-time codes if you lose access to your other authentication methods" })] }), _jsxs("button", { onClick: handleGenerateBackupCodes, className: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700", children: [_jsx(RefreshCw, { className: "w-4 h-4 mr-2" }), "Generate New Codes"] })] }), _jsx("div", { className: "bg-yellow-50 border border-yellow-200 rounded-lg p-4", children: _jsxs("div", { className: "flex items-start space-x-3", children: [_jsx(AlertTriangle, { className: "w-5 h-5 text-yellow-600 mt-0.5" }), _jsxs("div", { children: [_jsx("h4", { className: "text-sm font-medium text-yellow-800", children: "Important" }), _jsx("p", { className: "text-sm text-yellow-700 mt-1", children: "Save these codes in a secure location. Each code can only be used once." })] })] }) }), _jsxs("div", { className: "relative", children: [_jsxs("div", { className: "flex items-center justify-between mb-4", children: [_jsxs("span", { className: "text-sm font-medium text-gray-700", children: [backupCodes.filter(c => !c.used).length, " of ", backupCodes.length, " codes remaining"] }), _jsxs("button", { onClick: () => setShowBackupCodes(!showBackupCodes), className: "inline-flex items-center text-sm text-blue-600 hover:text-blue-700", children: [showBackupCodes ? _jsx(EyeOff, { className: "w-4 h-4 mr-1" }) : _jsx(Eye, { className: "w-4 h-4 mr-1" }), showBackupCodes ? 'Hide' : 'Show', " Codes"] })] }), showBackupCodes && (_jsx("div", { className: "grid grid-cols-2 gap-3", children: backupCodes.map((code) => (_jsxs("div", { className: `p-3 rounded-lg border font-mono text-sm ${code.used
-                                            ? 'bg-gray-50 border-gray-200 text-gray-400 line-through'
-                                            : 'bg-white border-gray-300 text-gray-900'}`, children: [code.code, code.used && code.usedAt && (_jsxs("div", { className: "text-xs text-gray-500 mt-1", children: ["Used ", code.usedAt.toLocaleDateString()] }))] }, code.id))) }))] })] })), activeTab === 'devices' && !loading && (_jsxs("div", { className: "space-y-6", children: [_jsxs("div", { children: [_jsx("h3", { className: "text-lg font-medium text-gray-900", children: "Trusted Devices" }), _jsxs("p", { className: "text-sm text-gray-600", children: ["Devices you've marked as trusted won't require MFA for ", settings.trustedDeviceExpiry, " days"] })] }), _jsx("div", { className: "space-y-4", children: trustedDevices.map((device) => (_jsx("div", { className: "border border-gray-200 rounded-lg p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center space-x-3", children: [getDeviceIcon(device.type), _jsxs("div", { children: [_jsxs("h4", { className: "text-sm font-medium text-gray-900", children: [device.name, device.current && (_jsx("span", { className: "ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800", children: "Current Device" }))] }), _jsxs("p", { className: "text-xs text-gray-500", children: [device.browser, " \u2022 ", device.location] }), _jsxs("p", { className: "text-xs text-gray-500", children: ["Added ", device.addedAt.toLocaleDateString(), " \u2022 Last access ", device.lastAccess.toLocaleDateString()] })] })] }), !device.current && (_jsx("button", { onClick: () => handleRemoveTrustedDevice(device.id), className: "text-red-600 hover:text-red-700", children: _jsx(Trash2, { className: "w-4 h-4" }) }))] }) }, device.id))) })] })), activeTab === 'history' && !loading && (_jsxs("div", { className: "space-y-6", children: [_jsxs("div", { children: [_jsx("h3", { className: "text-lg font-medium text-gray-900", children: "Security History" }), _jsx("p", { className: "text-sm text-gray-600", children: "Recent security events and authentication activity" })] }), _jsx("div", { className: "space-y-4", children: securityEvents.map((event) => (_jsx("div", { className: "border border-gray-200 rounded-lg p-4", children: _jsxs("div", { className: "flex items-start justify-between", children: [_jsxs("div", { className: "flex items-start space-x-3", children: [_jsx("div", { className: `w-2 h-2 rounded-full mt-2 ${event.riskLevel === 'high' ? 'bg-red-500' :
-                                                        event.riskLevel === 'medium' ? 'bg-yellow-500' : 'bg-green-500'}` }), _jsxs("div", { children: [_jsx("h4", { className: "text-sm font-medium text-gray-900", children: event.description }), _jsxs("div", { className: "flex items-center space-x-4 mt-1 text-xs text-gray-500", children: [_jsxs("span", { className: "flex items-center", children: [_jsx(Clock, { className: "w-3 h-3 mr-1" }), event.timestamp.toLocaleString()] }), _jsxs("span", { className: "flex items-center", children: [_jsx(MapPin, { className: "w-3 h-3 mr-1" }), event.location] }), _jsx("span", { children: event.ipAddress })] })] })] }), _jsxs("span", { className: `text-xs font-medium px-2 py-1 rounded-full ${event.riskLevel === 'high' ? 'bg-red-100 text-red-800' :
-                                                event.riskLevel === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                                                    'bg-green-100 text-green-800'}`, children: [event.riskLevel.toUpperCase(), " RISK"] })] }) }, event.id))) })] })), activeTab === 'settings' && !loading && (_jsxs("div", { className: "space-y-6", children: [_jsxs("div", { children: [_jsx("h3", { className: "text-lg font-medium text-gray-900", children: "MFA Settings" }), _jsx("p", { className: "text-sm text-gray-600", children: "Configure how multi-factor authentication works for your account" })] }), _jsxs("div", { className: "space-y-6", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("h4", { className: "text-sm font-medium text-gray-900", children: "Require MFA" }), _jsx("p", { className: "text-sm text-gray-500", children: "Always require MFA for login" })] }), _jsxs("label", { className: "relative inline-flex items-center cursor-pointer", children: [_jsx("input", { type: "checkbox", checked: settings.requireMFA, onChange: (e) => handleUpdateSettings({ requireMFA: e.target.checked }), className: "sr-only peer" }), _jsx("div", { className: "w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600" })] })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Trusted Device Expiry" }), _jsxs("select", { value: settings.trustedDeviceExpiry, onChange: (e) => handleUpdateSettings({ trustedDeviceExpiry: parseInt(e.target.value) }), className: "block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500", children: [_jsx("option", { value: 7, children: "7 days" }), _jsx("option", { value: 30, children: "30 days" }), _jsx("option", { value: 90, children: "90 days" }), _jsx("option", { value: 365, children: "1 year" })] })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Session Timeout" }), _jsxs("select", { value: settings.sessionTimeout, onChange: (e) => handleUpdateSettings({ sessionTimeout: parseInt(e.target.value) }), className: "block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500", children: [_jsx("option", { value: 15, children: "15 minutes" }), _jsx("option", { value: 30, children: "30 minutes" }), _jsx("option", { value: 60, children: "1 hour" }), _jsx("option", { value: 240, children: "4 hours" })] })] }), _jsxs("div", { className: "space-y-4", children: [_jsx("h4", { className: "text-sm font-medium text-gray-900", children: "Notifications" }), _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("span", { className: "text-sm text-gray-700", children: "Email notifications" }), _jsx("p", { className: "text-xs text-gray-500", children: "Receive security alerts via email" })] }), _jsxs("label", { className: "relative inline-flex items-center cursor-pointer", children: [_jsx("input", { type: "checkbox", checked: settings.emailNotifications, onChange: (e) => handleUpdateSettings({ emailNotifications: e.target.checked }), className: "sr-only peer" }), _jsx("div", { className: "w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600" })] })] }), _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("span", { className: "text-sm text-gray-700", children: "SMS notifications" }), _jsx("p", { className: "text-xs text-gray-500", children: "Receive security alerts via text" })] }), _jsxs("label", { className: "relative inline-flex items-center cursor-pointer", children: [_jsx("input", { type: "checkbox", checked: settings.smsNotifications, onChange: (e) => handleUpdateSettings({ smsNotifications: e.target.checked }), className: "sr-only peer" }), _jsx("div", { className: "w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600" })] })] })] })] })] }))] })] }));
-;
 export default MFAManagementPanel;

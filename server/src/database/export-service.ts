@@ -489,16 +489,17 @@ export class ExportService {
       updateStmt.run(setId);
 
       // Return export data
-      const mimeType = set.export_format === 'json' 
+      const setData = set as any; // Type assertion for database result
+      const mimeType = setData.export_format === 'json' 
         ? 'application/json' 
-        : set.export_format === 'yaml' 
+        : setData.export_format === 'yaml' 
           ? 'application/x-yaml' 
           : 'text/csv';
 
       return {
         success: true,
-        data: set.export_data,
-        filename: `${set.name.replace(/[^a-z0-9]/gi, '_')}.${set.export_format}`,
+        data: setData.export_data,
+        filename: `${setData.name.replace(/[^a-z0-9]/gi, '_')}.${setData.export_format}`,
         mimeType
       };
     } catch (error) {

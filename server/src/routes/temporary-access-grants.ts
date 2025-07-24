@@ -8,8 +8,17 @@
  */
 
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { TemporaryAccessGrantService, GrantCreationRequest, GrantRevocationRequest, GrantSearchFilters } from '../services/TemporaryAccessGrantService';
-import { DataClassificationLevel, DataOperation, OperationContext } from '../../../packages/core/types/DataClassification';
+import { 
+  TemporaryAccessGrantService,
+  GrantCreationRequest,
+  GrantRevocationRequest,
+  GrantSearchFilters
+} from '../services/TemporaryAccessGrantService';
+import { 
+  DataClassificationLevel,
+  DataOperation,
+  OperationContext
+} from '../../../../packages/core/types/DataClassification';
 import { AuditService } from '../auth/services/AuditService';
 import { DataAccessControlService } from '../services/DataAccessControlService';
 import { AccessRequestWorkflowService } from '../services/AccessRequestWorkflowService';

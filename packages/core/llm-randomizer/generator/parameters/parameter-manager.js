@@ -1,7 +1,7 @@
 // Epic 12 - LLM Agent Randomizer System
 // Story 12.4 - Randomizer Generator Implementation
 // Parameter management system with presets and history
-import { ParameterValidator, defaultPresets, RandomizerParametersSchema } from './parameter-schema';
+import { ParameterValidator, defaultPresets, RandomizerParametersSchema } from './parameter-schema.js';
 const isBrowser = (function () {
     try {
         return typeof globalThis !== 'undefined' &&
@@ -34,7 +34,7 @@ export class ParameterManager {
      * Load default presets
      */
     loadDefaultPresets() {
-        for (const [key, preset] of Object.entries(defaultPresets)) {
+        for (const preset of defaultPresets) {
             this.presets.set(preset.id, preset);
         }
     }
@@ -198,7 +198,7 @@ export class ParameterManager {
      * Get parameter history
      */
     getHistory() {
-        return [...this.history].reverse(); // Most recent first
+        return [...this.history]; // Already in most recent first order (unshift puts new items at start)
     }
     /**
      * Add to history

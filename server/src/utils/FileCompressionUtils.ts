@@ -8,8 +8,21 @@
 
 import { createReadStream, createWriteStream, promises as fs } from 'fs';
 import { pipeline } from 'stream/promises';
-import { createGzip, createDeflate, createBrotliCompress, createGunzip, createInflate, createBrotliDecompress } from 'zlib';
-import { compressionService, CompressionAlgorithm, CompressionLevel, DataType, CompressionResult } from '../../packages/core/utils/CompressionService';
+import { 
+  createGzip,
+  createDeflate,
+  createBrotliCompress,
+  createGunzip,
+  createInflate,
+  createBrotliDecompress
+} from 'zlib';
+import { 
+  compressionService,
+  CompressionAlgorithm,
+  CompressionLevel,
+  DataType,
+  CompressionResult
+} from '../../../packages/core/utils/CompressionService';
 import { join, dirname, basename, extname } from 'path';
 
 export interface FileCompressionOptions {

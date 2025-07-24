@@ -5,9 +5,9 @@
  * Service implementation for managing community contributions through their lifecycle.
  * Integrates workflow management, quality assessment, and publication processes.
  */
-import { CONTRIBUTION_WORKFLOW_TEMPLATES, QUALITY_GATE_PRESETS } from './ContributionArchitecture';
-import { ContentVersionManager } from './ContentVersionManager';
-import { ContentQualityAssessmentService } from './ContentQualityAssessment';
+import { CONTRIBUTION_WORKFLOW_TEMPLATES, QUALITY_GATE_PRESETS } from './ContributionArchitecture.js';
+import { ContentVersionManager } from './ContentVersionManager.js';
+import { ContentQualityAssessmentService } from './ContentQualityAssessment.js';
 export class ContributionManagementService {
     apiClient;
     versionManager;

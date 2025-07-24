@@ -17,8 +17,8 @@ interface Epic16InteractiveElementsProps {
         templateId?: string;
         categoryId?: string;
     };
-    onElementInteraction?: (elementId: string, interaction: any) => void;
-    onAnalyticsUpdate?: (analytics: any) => void;
+    onElementInteraction?: (elementId: string, interaction: unknown) => void;
+    onAnalyticsUpdate?: (analytics: unknown) => void;
 }
 export declare const Epic16InteractiveElements: React.FC<Epic16InteractiveElementsProps>;
 export default Epic16InteractiveElements;

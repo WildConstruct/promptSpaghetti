@@ -4,7 +4,7 @@
  */
 import { useCallback, useEffect, useMemo } from 'react';
 import { useReactFlow } from 'reactflow';
-import { useCollaborativeGraphStore, useCollaborativeActions, useConnectedUsers } from './collaborativeGraphStore';
+import { useCollaborativeGraphStore, useCollaborativeActions, useConnectedUsers } from './collaborativeGraphStore.js';
 /**
  * Hook that bridges collaborative graph store with React Flow
  */

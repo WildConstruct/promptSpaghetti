@@ -6,8 +6,8 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Comprehensive visualization panel for creative weight management
  */
 import { useState, useMemo } from 'react';
-import { WeightDistributionChart } from './WeightDistributionChart';
-import { CollapsibleSection } from '../Inspector/CollapsibleSection';
+import { WeightDistributionChart } from './WeightDistributionChart.js';
+import { CollapsibleSection } from '../Inspector/CollapsibleSection.js';
 export const WeightVisualizationPanel = ({ options, title = 'Weight Distribution', defaultChartType = 'pie', showChartControls = true, showStatistics = true, collapsed = false, onCollapseChange, onOptionHover, onOptionClick, className, style }) => {
     const [chartType, setChartType] = useState(defaultChartType);
     const [colorScheme, setColorScheme] = useState('cinema4d');

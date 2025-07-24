@@ -10,7 +10,7 @@
  *
  * Provides unified interfaces and orchestration for the complete Epic 16 ecosystem.
  */
-import { TimeRange, ContentType, LearningMetricType } from '../analytics/LearningAnalyticsExtension';
+import { TimeRange, ContentType, LearningMetricType } from '../analytics/LearningAnalyticsExtension.js';
 // ====================================
 // Comprehensive Service Implementation
 // ====================================

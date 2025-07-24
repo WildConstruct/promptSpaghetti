@@ -1,8 +1,8 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { TextFieldEditor } from '../TextFieldEditor';
-import { TextAreaEditor } from '../TextAreaEditor';
-import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
-import { WeightSlider } from '../WeightSlider';
+import { TextFieldEditor } from '../TextFieldEditor.js';
+import { TextAreaEditor } from '../TextAreaEditor.js';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection.js';
+import { WeightSlider } from '../WeightSlider.js';
 /**
  * Epic 8.4 - Markov Chain Editor with Progressive Disclosure
  *

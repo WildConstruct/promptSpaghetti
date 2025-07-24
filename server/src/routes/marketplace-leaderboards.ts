@@ -8,7 +8,7 @@
 
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { MarketplaceLeaderboardService } from '../marketplace/LeaderboardService';
-import { BadgeSystem } from '../../packages/core/gamification/BadgeSystem';
+import { BadgeSystem } from '../../../packages/core/gamification/BadgeSystem';
 import { Database } from '../database/connection';
 
 interface LeaderboardRouteOptions {

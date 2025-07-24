@@ -72,18 +72,13 @@ export const useKeyboardShortcuts = ({ shortcuts, enabled = true, preventDefault
 /**
  * Hook for command palette specific shortcuts
  */
-export const useCommandPaletteShortcuts = () => {
-    const shortcuts = [
-        { key: 'k', ctrlKey: true, action: 'openCommandPalette' },
-        { key: 'p', ctrlKey: true, action: 'openCommandPalette' },
-        { key: 'Escape', action: 'closeCommandPalette' }
-    ];
+export const useCommandPaletteShortcuts = (shortcuts) => {
     return useKeyboardShortcuts({ shortcuts, enabled: true });
 };
 /**
  * Default keyboard shortcuts for the graph editor
  */
-export const createDefaultShortcuts = ({ onUndo, onRedo, onSave, onCopy, onPaste, onDelete, onSelectAll, onDuplicate, onFitView, onZoomIn, onZoomOut, onNewNode, onExport }) => {
+export const createDefaultShortcuts = (actions) => {
     return [
         // Basic editing
         {
@@ -223,51 +218,54 @@ export const createDefaultShortcuts = ({ onUndo, onRedo, onSave, onCopy, onPaste
 /**
  * Format keyboard shortcut for display
  */
-export const isMac = navigator.platform.includes('Mac');
-if (shortcut.ctrl && !shortcut.cmd) {
-    parts.push(isMac ? '⌃' : 'Ctrl');
-}
-if (shortcut.cmd) {
-    parts.push(isMac ? '⌘' : 'Ctrl');
-}
-if (shortcut.alt) {
-    parts.push(isMac ? '⌥' : 'Alt');
-}
-if (shortcut.shift) {
-    parts.push(isMac ? '⇧' : 'Shift');
-}
-// Format the key
-let key = shortcut.key;
-const keyMappings = {
-    'ArrowUp': '↑',
-    'ArrowDown': '↓',
-    'ArrowLeft': '←',
-    'ArrowRight': '→',
-    'Enter': '⏎',
-    'Escape': 'Esc',
-    'Backspace': '⌫',
-    'Delete': '⌦',
-    ' ': 'Space'
+export const formatKeyCombo = (shortcut) => {
+    const parts = [];
+    const isMac = navigator.platform.includes('Mac');
+    if (shortcut.ctrl && !shortcut.cmd) {
+        parts.push(isMac ? '⌃' : 'Ctrl');
+    }
+    if (shortcut.cmd) {
+        parts.push(isMac ? '⌘' : 'Ctrl');
+    }
+    if (shortcut.alt) {
+        parts.push(isMac ? '⌥' : 'Alt');
+    }
+    if (shortcut.shift) {
+        parts.push(isMac ? '⇧' : 'Shift');
+    }
+    // Format the key
+    let key = shortcut.key;
+    const keyMappings = {
+        'ArrowUp': '↑',
+        'ArrowDown': '↓',
+        'ArrowLeft': '←',
+        'ArrowRight': '→',
+        'Enter': '⏎',
+        'Escape': 'Esc',
+        'Backspace': '⌫',
+        'Delete': '⌦',
+        ' ': 'Space'
+    };
+    if (keyMappings[key]) {
+        key = keyMappings[key];
+    }
+    else {
+        key = key.charAt(0).toUpperCase() + key.slice(1);
+    }
+    parts.push(key);
+    return parts.join(isMac ? '' : '+');
 };
-if (keyMappings[key]) {
-    key = keyMappings[key];
-}
-else {
-    key = key.charAt(0).toUpperCase() + key.slice(1);
-}
-parts.push(key);
-return parts.join(isMac ? '' : '+');
-;
 /**
  * Check if a keyboard shortcut conflicts with browser shortcuts
  */
-export const conflictsWithBrowser = (shortcut) => {
+export const checkBrowserConflicts = (shortcut) => {
     const browserShortcuts = [
+        { key: 'r', cmd: true }, // Refresh
         { key: 't', cmd: true }, // New tab
         { key: 'w', cmd: true }, // Close tab
-        { key: 'r', cmd: true }, // Reload
-        { key: 'f', cmd: true }, // Find
         { key: 'l', cmd: true }, // Address bar
+        { key: 'j', cmd: true }, // Downloads
+        { key: 'k', cmd: true }, // Search
     ];
     return browserShortcuts.some(browser => browser.key === shortcut.key.toLowerCase() &&
         !!browser.cmd === !!shortcut.cmd &&

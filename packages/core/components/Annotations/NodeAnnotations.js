@@ -6,11 +6,12 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Supports performance notes, creative direction, technical specs, and director approvals.
  */
 import { useState, useCallback, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { Badge } from '../ui/Badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
+import { Button } from '../ui/Button.js';
+import { Badge } from '../ui/Badge.js';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select.js';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
+// import { Switch } from '../ui/Switch.js';
 import { MessageCircle, CheckCircle, Clock, User, Camera, Zap, Settings, FileText, Link, Image as ImageIcon, Pause, X, Eye, EyeOff, Edit3, Save, MoreHorizontal } from 'lucide-react';
 // Annotation type configurations
 const ANNOTATION_TYPES = {
@@ -78,7 +79,7 @@ const PRIORITY_CONFIGS = {
     high: { color: '#ef4444', bg: 'bg-red-100', label: 'High' },
     critical: { color: '#dc2626', bg: 'bg-red-200', label: 'Critical' }
 };
-export const NodeAnnotationSystem = ({ nodeId, nodeName, _____nodeType, annotations, currentUser, onAnnotationCreate, onAnnotationUpdate, _____onAnnotationDelete, onReplyCreate, className = '', compact = false }) => {
+export const NodeAnnotationSystem = ({ nodeId, nodeName, nodeType, annotations, currentUser, onAnnotationCreate, onAnnotationUpdate, onAnnotationDelete, onReplyCreate, className = '', compact = false }) => {
     const [_____isCreating, setIsCreating] = useState(false);
     const [_____editingId, _____setEditingId] = useState(null);
     const [selectedAnnotation, setSelectedAnnotation] = useState(null);

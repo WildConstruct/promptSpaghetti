@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState } from 'react';
-import { ExecutionPathVisualization } from './components/ExecutionPathVisualization';
-import { professionalColors } from './styles/professional-design-system';
+import { ExecutionPathVisualization } from './components/ExecutionPathVisualization.js';
+import { professionalColors } from './styles/professional-design-system.js';
 export const PreviewModal = ({ open, loading, error, results, onClose, onCancel, onResultHover, onNodeHighlight }) => {
     const [showExecutionPaths, setShowExecutionPaths] = useState(false);
     // Check if results have execution path data

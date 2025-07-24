@@ -85,6 +85,6 @@ interface SharingConsent {
     requiresNotification: boolean;
 }
 type DataRequestType = 'ACCESS' | 'PORTABILITY' | 'RECTIFICATION' | 'ERASURE' | 'RESTRICTION' | 'OBJECTION';
-export declare const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps>;
+declare const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps>;
 export default ConsentPreferenceCenter;
 //# sourceMappingURL=ConsentPreferenceCenter.d.ts.map

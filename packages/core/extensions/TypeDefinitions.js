@@ -4,11 +4,11 @@
  */
 import { z } from 'zod';
 // Re-export all interface types
-export * from './interfaces/ExtensionInterfaces';
-export * from './interfaces/NodeExtension';
-export * from './interfaces/UIExtension';
-export * from './interfaces/TransformExtension';
-export * from './interfaces/StorageExtension';
+export * from './interfaces/ExtensionInterfaces.js';
+export * from './interfaces/NodeExtension.js';
+export * from './interfaces/UIExtension.js';
+export * from './interfaces/TransformExtension.js';
+export * from './interfaces/StorageExtension.js';
 // Runtime Type Validation Schemas
 export const ExtensionTypeSchemas = {
     // Base Extension Schema

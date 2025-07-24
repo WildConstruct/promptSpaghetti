@@ -7,10 +7,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Marketplace & Community features.
  */
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { KnowledgeCategory, ArticleType, Epic16KnowledgeBaseService } from '../../services/Epic16KnowledgeBaseService';
-import { KnowledgeBaseSearch } from './KnowledgeBaseSearch';
-import { KnowledgeBaseArticleViewer } from './KnowledgeBaseArticleViewer';
-export const Epic16KnowledgeBase = ({ userId, _____userRole, initialView = 'search', initialArticleId, onAnalytics }) => {
+import { KnowledgeCategory, ArticleType, Epic16KnowledgeBaseService } from '../../services/Epic16KnowledgeBaseService.js';
+import { KnowledgeBaseSearch } from './KnowledgeBaseSearch.js';
+import { KnowledgeBaseArticleViewer } from './KnowledgeBaseArticleViewer.js';
+export const Epic16KnowledgeBase = ({ userId, userRole, initialView = 'search', initialArticleId, onAnalytics }) => {
     // Service initialization
     const knowledgeService = useMemo(() => new Epic16KnowledgeBaseService(), []);
     // State management

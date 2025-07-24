@@ -126,7 +126,7 @@ export class DeviceFingerprintingService extends EventEmitter {
             factors.push(...this.analyzeBehavioralRisk(userId, fingerprint, location));
         }
         // Calculate overall risk score
-        riskScore = factors.reduce((score, factor) => score + factor.impact, 50);
+        riskScore = factors.reduce((score, factor) => score + factor.impact, 30);
         riskScore = Math.max(0, Math.min(100, riskScore));
         const overallRisk = this.determineRiskLevel(riskScore);
         const recommendations = this.generateRecommendations(factors, overallRisk);
@@ -548,16 +548,23 @@ export class DeviceFingerprintingService extends EventEmitter {
     determineDeviceType(fingerprint) {
         const ua = fingerprint.basic.userAgent.toLowerCase();
         const screen = fingerprint.enhanced.screen;
-        if (ua.includes('mobile') || screen.width <= 768) {
-            return DeviceType.MOBILE;
-        }
-        else if (ua.includes('tablet') || (screen.width <= 1024 && screen.width > 768)) {
+        // Check user agent first for more accurate detection
+        if (ua.includes('tablet') || ua.includes('ipad')) {
             return DeviceType.TABLET;
         }
-        else if (screen.width > 1024) {
+        else if (ua.includes('mobile') || ua.includes('iphone')) {
+            return DeviceType.MOBILE;
+        }
+        // Fallback to screen size detection
+        if (screen.width <= 767) {
+            return DeviceType.MOBILE;
+        }
+        else if (screen.width <= 1024) {
+            return DeviceType.TABLET;
+        }
+        else {
             return DeviceType.DESKTOP;
         }
-        return DeviceType.UNKNOWN;
     }
     // Mock helper methods (would be replaced with real implementations)
     parseUserAgent(userAgent) {
@@ -621,23 +628,23 @@ export class DeviceFingerprintingService extends EventEmitter {
     }
     detectVpn(ip) {
         // Mock VPN detection based on IP pattern
-        return ip.startsWith('10.') || ip.includes('vpn') || Math.random() < 0.1;
+        return ip.startsWith('10.') || ip.includes('vpn');
     }
     detectProxy(ip) {
         // Mock proxy detection
-        return ip.includes('proxy') || Math.random() < 0.05;
+        return ip.includes('proxy');
     }
     detectTor(ip) {
         // Mock Tor detection
-        return ip.includes('tor') || Math.random() < 0.02;
+        return ip.includes('tor');
     }
     detectHostingProvider(ip) {
         // Mock hosting provider detection
-        return ip.startsWith('172.') || Math.random() < 0.15;
+        return ip.startsWith('172.');
     }
     detectDatacenter(ip) {
         // Mock datacenter detection
-        return ip.startsWith('192.168.') === false && Math.random() < 0.1;
+        return ip.startsWith('203.') || ip.includes('datacenter');
     }
     isUserDevice(userId, deviceId) {
         // This would check a user-device mapping in a real implementation

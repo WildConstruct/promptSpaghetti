@@ -4,7 +4,7 @@
  * CLI and programmatic runner for Epic 16 prerequisite checks with
  * formatted reporting, auto-fix capabilities, and progress monitoring.
  */
-import { Epic16PrerequisiteSystem } from './Epic16PrerequisiteSystem';
+import { Epic16PrerequisiteSystem } from './Epic16PrerequisiteSystem.js';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 // =============================================================================

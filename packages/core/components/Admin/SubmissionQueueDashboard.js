@@ -6,10 +6,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Part of Epic 17.5.1 - Review Workflow (Backstage Admin Controls)
  */
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { Badge } from '../ui/Badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
+import { Button } from '../ui/Button.js';
+import { Badge } from '../ui/Badge.js';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
 import { Queue, Clock, User, FileText, Eye, CheckCircle, AlertTriangle, Search, RefreshCw, Download, Calendar, BarChart3, TrendingUp, Users } from 'lucide-react';
 const SubmissionQueueDashboard = () => {
     // State management

@@ -13,7 +13,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 import { PolicyAcceptanceTrackingService } from './PolicyAcceptanceTrackingService';
 import { UserPolicyInteractionService } from './UserPolicyInteractionService';
-import { OperationContext } from '../../packages/core/types/DataClassification';
+import { OperationContext } from '../../../packages/core/types/DataClassification';
 
 export interface PolicyEffectivenessMetrics {
   trackingId: string;

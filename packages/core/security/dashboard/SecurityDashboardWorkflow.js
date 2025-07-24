@@ -37,8 +37,8 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * @since 2025-07-22
  */
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { SecurityDashboardFramework, DashboardType, SecurityRole } from './SecurityDashboardFramework';
-import { useWorkflowStore } from '../stores/workflowStore';
+import { SecurityDashboardFramework, DashboardType, SecurityRole } from './SecurityDashboardFramework.js';
+import { useWorkflowStore } from '../stores/workflowStore.js';
 import './SecurityDashboardWorkflow.css';
 export var SecurityEventType;
 (function (SecurityEventType) {

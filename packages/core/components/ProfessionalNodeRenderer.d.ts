@@ -2,7 +2,7 @@ import React from 'react';
 import { NodeMeta } from '../Palette';
 interface ProfessionalNodeRendererProps {
     id: string;
-    data: any;
+    data: Record<string, unknown>;
     selected?: boolean;
     onSelect: (nodeId: string) => void;
     getNodeMeta: (nodeType: string) => NodeMeta;

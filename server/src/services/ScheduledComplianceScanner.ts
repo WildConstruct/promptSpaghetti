@@ -14,7 +14,7 @@ import {
   ComplianceResult,
   ComplianceDashboard,
   ComplianceContext
-} from '../../../packages/core/services/ComplianceMonitor';
+} from '../../../../packages/core/services/ComplianceMonitor';
 import { ComplianceReportingService, ComplianceReportRequest } from './ComplianceReportingService';
 import { ComplianceRuleEngine } from './ComplianceRuleEngine';
 import { AuditService } from '../auth/services/AuditService';

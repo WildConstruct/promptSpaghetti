@@ -915,7 +915,7 @@ export class BehaviorAnalyticsService {
         baseline.commonActionSequences.push({
           actions: sessionActions,
           frequency: 0.05,
-          lastSeen: new Date()
+          averageTimeBetween: []
         });
       }
       

@@ -1,8 +1,8 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { TextFieldEditor } from '../TextFieldEditor';
-import { SelectEditor } from '../SelectEditor';
-import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
-import { TemplateEditor } from '../TemplateEditor';
+import { TextFieldEditor } from '../TextFieldEditor.js';
+import { SelectEditor } from '../SelectEditor.js';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection.js';
+import { TemplateEditor } from '../TemplateEditor.js';
 const OUTPUT_FORMATS = [
     { value: 'text', label: 'Plain Text' },
     { value: 'markdown', label: 'Markdown' },

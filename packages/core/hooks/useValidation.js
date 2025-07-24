@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { validateConnection } from '../validation';
+import { validateConnection } from '../validation.js';
 export const useValidation = ({ edges, nodes, highlightNodeIds = new Set(), highlightEdgeIds = new Set(), validateConnection: customValidateConnection = validateConnection }) => {
     const [errors, setErrors] = useState([]);
     const runValidation = useCallback((edgesToValidate, nodesToValidate) => {

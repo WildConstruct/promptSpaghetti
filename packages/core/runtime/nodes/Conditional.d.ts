@@ -87,5 +87,5 @@ export declare class ConditionalBuilder {
 /**
  * Fluent API for building conditional nodes
  */
-export declare function conditional(id: string): ConditionalBuilder;
+export declare function conditional(_______id: string): ConditionalBuilder;
 //# sourceMappingURL=Conditional.d.ts.map

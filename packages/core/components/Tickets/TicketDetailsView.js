@@ -6,7 +6,7 @@ import { jsxs as _jsxs, jsx as _jsx, Fragment as _Fragment } from "react/jsx-run
  * and SLA tracking. Provides full ticket management capabilities.
  */
 import { useState, useMemo } from 'react';
-import { TicketStatus, TicketPriority } from '../../services/Epic16TicketIntegrationService';
+import { TicketStatus, TicketPriority } from '../../services/Epic16TicketIntegrationService.js';
 export const TicketDetailsView = ({ ticket, ticketService, userId, userRole, onClose, onTicketUpdate }) => {
     const [currentTicket, setCurrentTicket] = useState(ticket);
     const [loading, setLoading] = useState(false);
@@ -208,7 +208,7 @@ const PriorityBadge = ({ priority }) => {
     };
     return (_jsx("span", { className: `px-2 py-1 rounded-full text-xs font-medium ${colors[priority]}`, children: priority.toUpperCase() }));
 };
-const CommentItem = ({ comment, _____canViewInternal }) => {
+const CommentItem = ({ comment, canViewInternal }) => {
     const visibilityColors = {
         public: 'bg-green-100 text-green-800',
         internal: 'bg-yellow-100 text-yellow-800',

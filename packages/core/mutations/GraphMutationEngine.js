@@ -5,10 +5,10 @@
  * conflict resolution, and history tracking capabilities.
  */
 import { EventEmitter } from 'events';
-import { OperationType } from './types';
-import { GraphValidator } from './GraphValidator';
-import { ConflictResolver } from './ConflictResolver';
-import { OperationHistory } from './OperationHistory';
+import { OperationType } from './types.js';
+import { GraphValidator } from './GraphValidator.js';
+import { ConflictResolver } from './ConflictResolver.js';
+import { OperationHistory } from './OperationHistory.js';
 /**
  * Core engine for executing graph mutations with full validation,
  * conflict resolution, and history tracking

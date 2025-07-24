@@ -4,8 +4,8 @@
  * Bridges the existing WebSocket collaboration system with the new centralized event bus.
  * Converts WebSocket messages to standard events and vice versa.
  */
-import { globalEventBus, EventFactory, EventCategory, EventPriority } from '../EventSystem';
-import { CollaborationEventType } from '../../collaboration/EnhancedCollaborationService';
+import { globalEventBus, EventFactory, EventCategory, EventPriority } from '../EventSystem.js';
+import { CollaborationEventType } from '../../collaboration/EnhancedCollaborationService.js';
 /**
  * Maps WebSocket message types to event system types
  */
@@ -275,19 +275,22 @@ export class WebSocketEventAdapter {
         this.subscribedEventTypes.clear();
     }
 }
-/**
- * Get WebSocket message type for event type
- */
-getWebSocketType: (eventType) => {
-    const entry = Object.entries(WS_MESSAGE_TYPE_MAP)
-        .find(([wsType, mappedEventType]) => mappedEventType === eventType);
-    return entry ? entry[0] : null;
-},
+// Export singleton instance
+export const webSocketAdapter = new WebSocketEventAdapter();
+// Export utility functions
+export const webSocketUtils = {
+    /**
+     * Get WebSocket message type for event type
+     */
+    getWebSocketType: (eventType) => {
+        const entry = Object.entries(WS_MESSAGE_TYPE_MAP)
+            .find(([wsType, mappedEventType]) => mappedEventType === eventType);
+        return entry ? entry[0] : null;
+    },
     /**
      * Get event type for WebSocket message type
      */
-    getEventType;
-(wsType) => {
-    return WS_MESSAGE_TYPE_MAP[wsType] || wsType;
+    getEventType: (wsType) => {
+        return WS_MESSAGE_TYPE_MAP[wsType] || wsType;
+    }
 };
-;

@@ -258,7 +258,7 @@ export function parseFromYAML(yamlString: string): ExportedCorrectionSet {
   const result: Record<string, unknown> = { meta: {}, rules: [] };
   
   let currentSection = '';
-  let currentRule: Error = null;
+  let currentRule: any = null;
   
   for (const line of lines) {
     const trimmed = line.trim();
@@ -275,7 +275,7 @@ export function parseFromYAML(yamlString: string): ExportedCorrectionSet {
     
     if (trimmed.startsWith('- id:')) {
       if (currentRule) {
-        result.rules.push(currentRule);
+        (result.rules as any[]).push(currentRule);
       }
       currentRule = {};
       const id = trimmed.match(/id: "(.+)"/)?.[1];
@@ -305,7 +305,7 @@ export function parseFromYAML(yamlString: string): ExportedCorrectionSet {
   }
   
   if (currentRule) {
-    result.rules.push(currentRule);
+    (result.rules as any[]).push(currentRule);
   }
   
   return ExportedCorrectionSetSchema.parse(result);
@@ -327,7 +327,7 @@ export function parseFromCSV(csvString: string): ExportedCorrectionSet {
     const values = parseCSVLine(line);
     
     if (values.length >= headers.length) {
-      const rule: Error = {};
+      const rule: any = {};
       headers.forEach((header, index) => {
         const value = values[index];
         switch (header) {
@@ -431,7 +431,10 @@ export function validateImportedSet(data: Record<string, unknown>): {
     const names = validatedSet.rules.map(r => r.name);
     const duplicates = names.filter((name, index) => names.indexOf(name) !== index);
     if (duplicates.length > 0) {
-      warnings.push(`Duplicate rule names found: ${duplicates.slice(0, 5).join(', ')}${duplicates.length > 5 ? '...' : ''}`);
+      warnings.push(
+        `Duplicate rule names found: ${duplicates.slice(0,
+        5
+      ).join(', ')}${duplicates.length > 5 ? '...' : ''}`);
     }
     
     return {

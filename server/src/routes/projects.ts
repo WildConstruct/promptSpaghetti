@@ -132,7 +132,7 @@ function dbProjectToAPI(dbProject: DatabaseProject): any {
       createdAt: dbProject.created_at,
       lastModified: dbProject.last_modified,
       author: dbProject.author,
-      tags: JSON.parse(dbProject.tags || '[]'),
+      tags: typeof dbProject.tags === 'string' ? JSON.parse(dbProject.tags || '[]') : (dbProject.tags || []),
       fileFormatVersion: dbProject.file_format_version
     },
     graph: JSON.parse(dbProject.graph_data),
@@ -373,6 +373,7 @@ export async function projectRoutes(fastify: FastifyInstance) {
 
   // Update existing project
   fastify.put<{
+    Params: { projectId: string };
     Body: z.infer<typeof UpdateProjectRequestSchema>;
   }>('/projects/:projectId', {
     schema: {

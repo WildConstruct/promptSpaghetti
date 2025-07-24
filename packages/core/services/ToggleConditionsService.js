@@ -8,8 +8,8 @@
  * - A/B testing integration and multivariate conditions
  * - Security-hardened expression evaluation
  */
-import { SafeExpressionEvaluator } from '../runtime/expression-evaluator';
-import { securityAudit, SecuritySeverity, SecurityEventCategory } from '../runtime/security-audit-logger';
+import { SafeExpressionEvaluator } from '../runtime/expression-evaluator.js';
+import { securityAudit, SecuritySeverity, SecurityEventCategory } from '../runtime/security-audit-logger.js';
 export var ConditionType;
 (function (ConditionType) {
     ConditionType["USER_ATTRIBUTE"] = "user_attribute";

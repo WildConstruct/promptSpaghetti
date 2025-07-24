@@ -10,7 +10,7 @@ import {
   identityValidationService,
   IdentityValidationType,
   IdentityValidationData
-} from '../../packages/core/auth/IdentityValidation';
+} from '../../../packages/core/auth/IdentityValidation';
 
 interface SubmitVerificationRequestBody {
   userId: string;

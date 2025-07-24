@@ -2,7 +2,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Version Selector - UI for selecting source and target versions
 // Story 9.3.2 - Visual Diff Tool
 import { useMemo } from 'react';
-export const VersionSelector = ({ _____graphId, versions, sourceVersionId, targetVersionId, onVersionChange, className = '' }) => {
+export const VersionSelector = ({ graphId, versions, sourceVersionId, targetVersionId, onVersionChange, className = '' }) => {
     // Sort versions by version number (descending)
     const sortedVersions = useMemo(() => {
         return [...versions].sort((a, b) => b.version_number - a.version_number);

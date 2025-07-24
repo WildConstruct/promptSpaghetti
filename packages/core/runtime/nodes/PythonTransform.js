@@ -2,9 +2,9 @@
  * PythonTransform Node Implementation
  * Epic 8 Story 8.1.4: Python executor integration
  */
-import { AdvancedRuntimeNode } from '../advanced';
-import { IOSpecBuilder, AdvancedIOHandler } from '../io-system';
-import { PythonExecutorClient, pythonExecutorClient } from '../../python-executor-client';
+import { AdvancedRuntimeNode } from '../advanced.js';
+import { IOSpecBuilder, AdvancedIOHandler } from '../io-system.js';
+import { PythonExecutorClient, pythonExecutorClient } from '../../python-executor-client.js';
 export class PythonTransformNode extends AdvancedRuntimeNode {
     pythonClient;
     pythonConfig;
@@ -280,7 +280,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
     /**
      * Log security events from Python execution
      */
-    logSecurityEvents(events, context) {
+    logSecurityEvents(events, ______context) {
         for (const event of events) {
             console.warn(`Python security event in node ${this.id}:`, {
                 level: event.level,
@@ -294,7 +294,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
     /**
      * Log warnings from Python execution
      */
-    logWarnings(warnings, context) {
+    logWarnings(warnings, ______context) {
         for (const warning of warnings) {
             console.warn(`Python warning in node ${this.id}:`, {
                 warning,

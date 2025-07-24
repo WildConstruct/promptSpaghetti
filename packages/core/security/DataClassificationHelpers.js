@@ -10,9 +10,9 @@
  * - Security policy enforcement
  * - Data handling workflow automation
  */
-import { DataSensitivityLevel, DataSensitivityUtils, DATA_SENSITIVITY_GUIDELINES } from './DataSensitivityLevels';
-import { ClassificationLevel } from './DataClassifier';
-import { SecurityValidation } from '../validation/security';
+import { DataSensitivityLevel, DataSensitivityUtils, DATA_SENSITIVITY_GUIDELINES } from './DataSensitivityLevels.js';
+import { ClassificationLevel } from './DataClassifier.js';
+import { SecurityValidation } from '../validation/security.js';
 /**
  * Mapping between DataClassifier levels and DataSensitivityLevel
  */

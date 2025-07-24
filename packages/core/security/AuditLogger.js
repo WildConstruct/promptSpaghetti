@@ -26,9 +26,6 @@ class BrowserEventEmitter {
             listeners.forEach(listener => listener(...args));
         }
     }
-    removeAllListeners() {
-        this.events.clear();
-    }
 }
 // Browser-compatible crypto utility
 const browserCrypto = {
@@ -44,29 +41,9 @@ const browserCrypto = {
             }
         }
         return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
-    },
-    createHash: (algorithm) => {
-        return {
-            update: (data) => {
-                // Simple hash for browser compatibility
-                let hash = 0;
-                if (data.length === 0) return { digest: () => '0000000000000000' };
-                for (let i = 0; i < data.length; i++) {
-                    const char = data.charCodeAt(i);
-                    hash = ((hash << 5) - hash) + char;
-                    hash = hash & hash; // Convert to 32bit integer
-                }
-                return {
-                    digest: (encoding) => {
-                        // Return 16-character hex string
-                        return Math.abs(hash).toString(16).padStart(16, '0').substring(0, 16);
-                    }
-                };
-            }
-        };
     }
 };
-import { DataClassificationLevel } from '../types/DataClassification';
+import { DataClassificationLevel } from '../types/DataClassification.js';
 /**
  * Types of operations that can be audited
  */
@@ -368,7 +345,7 @@ export class AuditLogger extends BrowserEventEmitter {
      * Hash sensitive data
      */
     hashData(data) {
-        return browserCrypto
+        return crypto
             .createHash('sha256')
             .update(data)
             .digest('hex')

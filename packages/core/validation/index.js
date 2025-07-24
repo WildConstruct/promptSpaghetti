@@ -5,6 +5,6 @@
  *
  * Comprehensive validation framework for runtime nodes and execution contexts
  */
-export { NodeValidationFramework, NodeValidationUtils } from './NodeValidationFramework';
-export { NodeValidationService } from './NodeValidationService';
-export { ContextValidationFramework, ContextValidationUtils } from './ContextValidationFramework';
+export { NodeValidationFramework, NodeValidationUtils } from './NodeValidationFramework.js';
+export { NodeValidationService } from './NodeValidationService.js';
+export { ContextValidationFramework, ContextValidationUtils } from './ContextValidationFramework.js';

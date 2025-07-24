@@ -4,5 +4,4 @@
  * Extended transaction tracking types for Epic 17 - Backstage Admin Controls.
  * Provides comprehensive transaction monitoring capabilities for marketplace administrators.
  */
-
 export {};

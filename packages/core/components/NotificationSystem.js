@@ -1,6 +1,6 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import { useState, useEffect } from 'react';
-import { useCorrectionsStore } from '../correctionsStore';
+import { useCorrectionsStore } from '../correctionsStore.js';
 export const NotificationSystem = ({ position = 'top-right', maxVisible = 5, autoHideDuration = 5000 }) => {
     const { notifications, dismissNotification, clearNotifications } = useCorrectionsStore();
     const [visibleNotifications, setVisibleNotifications] = useState([]);

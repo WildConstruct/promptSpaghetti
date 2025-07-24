@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from 'react';
-import { validateExportOptions } from '../../types/export';
-import { useExport } from '../../hooks/useExport';
+import { validateExportOptions } from '../../types/export.js';
+import { useExport } from '../../hooks/useExport.js';
 import { FiChevronLeft, FiChevronRight, FiX, FiFile, FiSettings, FiFilter, FiCheck, FiDownload, FiInfo } from 'react-icons/fi';
 const EXPORT_FORMATS = [
     { value: 'json', label: 'JSON', description: 'JavaScript Object Notation - structured data', icon: '{}' },

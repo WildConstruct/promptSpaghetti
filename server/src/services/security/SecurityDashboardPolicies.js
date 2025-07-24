@@ -10,7 +10,7 @@
  */
 import { EventEmitter } from 'events';
 import { logger } from '../../utils/logger';
-import { DataClassificationLevel, DataOperation } from '../../../packages/core/security/DataClassificationAccessControl';
+import { DataClassificationLevel } from '../../../../packages/core/security/DataClassificationAccessControl';
 export var DashboardRole;
 (function (DashboardRole) {
     DashboardRole["VIEWER"] = "VIEWER";
@@ -590,15 +590,15 @@ export class SecurityDashboardPolicies extends EventEmitter {
         }
         return result;
     }
-    applyValueFilter(data, filter) {
+    applyValueFilter(data, _____filter) {
         // Implementation would recursively search for values to filter
         return data;
     }
-    applyClassificationFilter(data, filter, context) {
+    applyClassificationFilter(data, _____filter, _____context) {
         // Implementation would filter based on data classification levels
         return data;
     }
-    applyKeywordFilter(data, filter) {
+    applyKeywordFilter(data, _____filter) {
         // Implementation would filter based on sensitive keywords
         return data;
     }
@@ -669,7 +669,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
         }
         return findings;
     }
-    generateComplianceRecommendations(findings, framework) {
+    generateComplianceRecommendations(findings, _____framework) {
         const recommendations = [];
         const highSeverityCount = findings.filter(f => f.severity === 'HIGH' || f.severity === 'CRITICAL').length;
         if (highSeverityCount > 0) {
@@ -801,11 +801,11 @@ export class SecurityDashboardPolicies extends EventEmitter {
         this.rolePermissions.set(DashboardRole.ADMIN, Object.values(DashboardPermission));
     }
     // Mock methods for external integrations
-    async getUserRoles(userId) {
+    async getUserRoles(_____userId) {
         // In real implementation, this would query user management system
         return [DashboardRole.VIEWER];
     }
-    async getUserAttributes(userId) {
+    async getUserAttributes(_____userId) {
         // In real implementation, this would fetch user attributes
         return {};
     }

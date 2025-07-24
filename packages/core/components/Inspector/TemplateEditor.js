@@ -1,8 +1,8 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useRef, useEffect, useMemo } from 'react';
-import { parseTemplate, getVariableSuggestions, getPreviewWithSamples, setTemplateContext, trackVariableUsage, VARIABLE_CATEGORIES } from '../../utils/templateParser';
-import { useTemplatePreview } from '../../hooks/useTemplatePreview';
-export const TemplateEditor = ({ value, onChange, onVariablesChange, variableValues = {}, nodeType, existingVariables = [], placeholder = 'Enter your template...', disabled = false, showPreview = false, showRealTimePreview = false, autoComplete = true, _____showCategoryFilters = false, maxSuggestions = 10, className = '' }) => {
+import { parseTemplate, getVariableSuggestions, getPreviewWithSamples, setTemplateContext, trackVariableUsage, VARIABLE_CATEGORIES } from '../../utils/templateParser.js';
+import { useTemplatePreview } from '../../hooks/useTemplatePreview.js';
+export const TemplateEditor = ({ value, onChange, onVariablesChange, variableValues = {}, nodeType, existingVariables = [], placeholder = 'Enter your template...', disabled = false, showPreview = false, showRealTimePreview = false, autoComplete = true, showCategoryFilters = false, maxSuggestions = 10, className = '' }) => {
     const [isFocused, setIsFocused] = useState(false);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [_____currentSuggestion, _____setCurrentSuggestion] = useState('');
@@ -23,7 +23,7 @@ export const TemplateEditor = ({ value, onChange, onVariablesChange, variableVal
     const parseResult = useMemo(() => parseTemplate(value), [value]);
     const previewResult = useMemo(() => getPreviewWithSamples(value), [value]);
     // Real-time preview integration
-    const { variants: realTimeVariants, isGenerating, error: previewError, _____extractedVariables, hasTemplateErrors, templateErrors, forcePreview, refreshVariant } = useTemplatePreview(value, variableValues, {
+    const { variants: realTimeVariants, isGenerating, error: previewError, extractedVariables, hasTemplateErrors, templateErrors, forcePreview, refreshVariant } = useTemplatePreview(value, variableValues, {
         maxVariants: 3,
         debounceMs: 200,
         autoRefresh: showRealTimePreview,

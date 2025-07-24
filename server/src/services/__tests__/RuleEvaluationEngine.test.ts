@@ -62,7 +62,7 @@ describe('RuleEvaluationEngine', () => {
       enabled: true,
       ttl: 300,
       maxCacheSize: 1000,
-      cacheStrategy: CacheStrategy.LRU,
+      cacheStrategy: 'LRU' as CacheStrategy,
       compressionEnabled: false,
       distributedCache: false,
       cacheKeyPrefix: 'test-eval-'
@@ -166,18 +166,18 @@ describe('RuleEvaluationEngine', () => {
     test('should initialize caching subsystem when enabled', () => {
       expect(engine.getCacheStats()).toBeDefined();
       expect(engine.getCacheStats().enabled).toBe(true);
-      expect(engine.getCacheStats().strategy).toBe(CacheStrategy.LRU);
+      expect(engine.getCacheStats().strategy).toBe('LRU');
     });
 
     test('should register default condition evaluators', () => {
       const evaluators = engine.getRegisteredEvaluators();
       
-      expect(evaluators).toContain('DataFieldEvaluator');
-      expect(evaluators).toContain('ContextPropertyEvaluator');
-      expect(evaluators).toContain('TimeBasedEvaluator');
-      expect(evaluators).toContain('ThresholdEvaluator');
-      expect(evaluators).toContain('PatternEvaluator');
-      expect(evaluators).toContain('ExpressionEvaluator');
+      expect(evaluators).toContain('DATA_FIELD');
+      expect(evaluators).toContain('CONTEXT_PROPERTY');
+      expect(evaluators).toContain('TIME_BASED');
+      expect(evaluators).toContain('THRESHOLD');
+      expect(evaluators).toContain('PATTERN');
+      expect(evaluators).toContain('EXPRESSION');
     });
 
     test('should log engine initialization', () => {
@@ -229,7 +229,7 @@ describe('RuleEvaluationEngine', () => {
         conditions: [
           {
             conditionId: 'SLOW-COND-001',
-            type: ConditionType.EXPRESSION,
+            type: 'EXPRESSION' as ConditionType,
             operand: {
               expression: 'while(true) { /* infinite loop */ }',
               variables: {}
@@ -246,7 +246,7 @@ describe('RuleEvaluationEngine', () => {
       
       // Should complete with timeout error
       expect(result.errors).toBeDefined();
-      expect(result.errors.some(error => error.type === ErrorType.TIMEOUT)).toBe(true);
+      expect(result.errors.some(error => error.type === 'TIMEOUT')).toBe(true);
     });
 
     test('should apply security sandbox restrictions', async () => {
@@ -256,7 +256,7 @@ describe('RuleEvaluationEngine', () => {
         conditions: [
           {
             conditionId: 'MALICIOUS-COND-001',
-            type: ConditionType.EXPRESSION,
+            type: 'EXPRESSION' as ConditionType,
             operand: {
               expression: 'require("fs").readFileSync("/etc/passwd")',
               variables: {}
@@ -268,7 +268,7 @@ describe('RuleEvaluationEngine', () => {
       const result = await engine.evaluateRule(maliciousRule, mockContext);
       
       expect(result.errors).toBeDefined();
-      expect(result.errors.some(error => error.type === ErrorType.SECURITY_VIOLATION)).toBe(true);
+      expect(result.errors.some(error => error.type === 'SECURITY_VIOLATION')).toBe(true);
     });
 
     test('should track performance metrics when enabled', async () => {
@@ -332,7 +332,7 @@ describe('RuleEvaluationEngine', () => {
         conditions: [
           {
             conditionId: 'FLAKY-COND-001',
-            type: ConditionType.EXPRESSION,
+            type: 'EXPRESSION' as ConditionType,
             operand: {
               expression: 'Math.random() < 0.7 ? true : throw new Error("Random failure")',
               variables: {}
@@ -371,8 +371,8 @@ describe('RuleEvaluationEngine', () => {
           metadata: {}
         } as unknown),
         validate: jest.fn<unknown[], unknown>().mockReturnValue({ isValid: true } as unknown),
-        optimize: jest.fn<unknown[], unknown>().mockReturnValue({} as any as unknown)
-      };
+        optimize: jest.fn<unknown[], unknown>().mockReturnValue({} as unknown)
+      } as any;
 
       engine.registerConditionEvaluator(customEvaluator);
 
@@ -383,10 +383,10 @@ describe('RuleEvaluationEngine', () => {
     test('should use appropriate evaluator for condition type', async () => {
       const dataFieldCondition: RuleCondition = {
         conditionId: 'DATA-FIELD-COND',
-        type: ConditionType.DATA_FIELD,
+        type: 'DATA_FIELD' as ConditionType,
         operand: {
           field: 'classification',
-          operator: ComparisonOperator.EQUALS,
+          operator: 'EQUALS',
           value: 'CONFIDENTIAL'
         }
       };
@@ -416,7 +416,7 @@ describe('RuleEvaluationEngine', () => {
       const result = await engine.evaluateRule(invalidRule, mockContext);
 
       expect(result.errors).toBeDefined();
-      expect(result.errors.some(error => error.type === ErrorType.VALIDATION_ERROR)).toBe(true);
+      expect(result.errors.some(error => error.type === 'VALIDATION_ERROR')).toBe(true);
     });
   });
 
@@ -512,7 +512,7 @@ describe('RuleEvaluationEngine', () => {
         conditions: [
           {
             conditionId: 'SLOW-COND',
-            type: ConditionType.EXPRESSION,
+            type: 'EXPRESSION' as ConditionType,
             operand: {
               expression: 'new Promise(resolve => setTimeout(resolve, 2000)).then(() => true)', // 2 second delay
               variables: {}
@@ -553,7 +553,7 @@ describe('RuleEvaluationEngine', () => {
         conditions: [
           {
             conditionId: 'ERROR-COND',
-            type: ConditionType.EXPRESSION,
+            type: 'EXPRESSION' as ConditionType,
             operand: {
               expression: 'throw new Error("Test error")',
               variables: {}
@@ -565,8 +565,8 @@ describe('RuleEvaluationEngine', () => {
       const result = await engine.evaluateRule(errorRule, mockContext);
 
       expect(result.errors).toBeDefined();
-      expect(result.errors[0].type).toBe(ErrorType.EXECUTION_ERROR);
-      expect(result.errors[0].severity).toBeOneOf([ErrorSeverity.LOW, ErrorSeverity.MEDIUM, ErrorSeverity.HIGH, ErrorSeverity.CRITICAL]);
+      expect(result.errors[0].type).toBe('EXECUTION_ERROR');
+      expect(result.errors[0].severity).toBeOneOf(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']);
     });
 
     test('should provide detailed error context', async () => {
@@ -576,10 +576,10 @@ describe('RuleEvaluationEngine', () => {
         conditions: [
           {
             conditionId: 'CONTEXT-ERROR-COND',
-            type: ConditionType.DATA_FIELD,
+            type: 'DATA_FIELD' as ConditionType,
             operand: {
               field: 'nonExistentField',
-              operator: ComparisonOperator.EQUALS,
+              operator: 'EQUALS',
               value: 'someValue'
             }
           }

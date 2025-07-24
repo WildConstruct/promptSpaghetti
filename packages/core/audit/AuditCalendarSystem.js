@@ -756,5 +756,5 @@ export class AuditCalendarSystem {
 // Global calendar system instance
 export const auditCalendarSystem = new AuditCalendarSystem();
 // Utility functions
-export export export const generateCalendarView = (config) => auditCalendarSystem.generateCalendarView(config);
+export const generateCalendarView = (config) => auditCalendarSystem.generateCalendarView(config);
 export default AuditCalendarSystem;

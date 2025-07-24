@@ -1,7 +1,7 @@
 // Epic 12 - LLM Agent Randomizer System
 // Story 12.2 - LLM Agent Script Development
 // Google Gemini agent script with structured output and safety considerations
-import { validateFormat } from '../../serialization/validator';
+import { validateFormat } from '../../serialization/validator.js';
 export class GeminiGraphAgent {
     config;
     basePrompt;

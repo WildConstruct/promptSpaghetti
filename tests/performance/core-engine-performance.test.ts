@@ -7,12 +7,12 @@
  * focusing on runtime execution, memory usage, and scalability.
  */
 
-import { ExecutionContext, RuntimeNode } from '../../packages/core/runtime/index';
-import { AdvancedExecutionContext, AdvancedRuntimeNode } from '../../packages/core/runtime/advanced';
-import { WeightedAdvanced } from '../../packages/core/runtime/nodes/WeightedAdvanced';
-import { Conditional } from '../../packages/core/runtime/nodes/Conditional';
-import { Sequential } from '../../packages/core/runtime/nodes/Sequential';
-import { Markov } from '../../packages/core/runtime/nodes/Markov';
+import { ExecutionContext, RuntimeNode } from '../packages/core/runtime/index';
+import { AdvancedExecutionContext, AdvancedRuntimeNode } from '../packages/core/runtime/advanced';
+import { WeightedAdvanced } from '../packages/core/runtime/nodes/WeightedAdvanced';
+import { Conditional } from '../packages/core/runtime/nodes/Conditional';
+import { Sequential } from '../packages/core/runtime/nodes/Sequential';
+import { Markov } from '../packages/core/runtime/nodes/Markov';
 
 interface PerformanceMetrics {
   executionTime: number;

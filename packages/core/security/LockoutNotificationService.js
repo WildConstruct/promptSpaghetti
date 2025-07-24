@@ -14,7 +14,7 @@
  */
 import { EventEmitter } from 'events';
 import crypto from 'crypto';
-import { LockoutReason, NotificationType, AdminRole } from './AccountLockoutService';
+import { LockoutReason, NotificationType, AdminRole } from './AccountLockoutService.js';
 // Notification Channels
 export var NotificationChannel;
 (function (NotificationChannel) {

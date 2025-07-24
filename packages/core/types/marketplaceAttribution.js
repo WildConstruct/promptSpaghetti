@@ -6,7 +6,7 @@
  * ownership tracking, revenue attribution, and creator analytics.
  */
 import { z } from 'zod';
-import { ResourceTypeSchema, ChangeTypeSchema, AuthorTypeSchema, ChangeAttributionSchema, AttributionFilterSchema } from './attribution';
+import { ResourceTypeSchema, ChangeTypeSchema, AuthorTypeSchema, ChangeAttributionSchema, AttributionFilterSchema } from './attribution.js';
 // =============================================================================
 // Marketplace-Specific Attribution Types
 // =============================================================================

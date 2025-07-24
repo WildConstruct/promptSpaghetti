@@ -4,7 +4,7 @@
  * Coordinates graph mutations with operational transform and conflict resolution
  * Handles concurrent operations and maintains data consistency
  */
-import { ConflictType, ResolutionStrategy, OperationPriority, generateOperationId, compareOperations, operationsConflict } from './GraphMutations';
+import { ConflictType, ResolutionStrategy, OperationPriority, generateOperationId, compareOperations, operationsConflict } from './GraphMutations.js';
 // =============================================================================
 // Main Mutation Coordinator Class
 // =============================================================================

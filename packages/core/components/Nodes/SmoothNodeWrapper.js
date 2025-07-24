@@ -7,9 +7,9 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  */
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { Handle, Position } from 'reactflow';
-import { createSmoothTransition, animationDurations, easingFunctions, useSmoothHover, globalAnimationManager } from '../../utils/smoothAnimations';
+import { createSmoothTransition, animationDurations, easingFunctions, useSmoothHover, globalAnimationManager } from '../../utils/smoothAnimations.js';
 import '../../styles/smoothAnimations.css';
-export const SmoothNodeWrapper = ({ id, _____data, selected, children, nodeType = 'default', isSelected = false, isConnectable = true, onNodeClick, onNodeDoubleClick, _____onNodeDelete }) => {
+export const SmoothNodeWrapper = ({ id, data, selected, children, nodeType = 'default', isSelected = false, isConnectable = true, onNodeClick, onNodeDoubleClick, onNodeDelete }) => {
     const [isHovered, setIsHovered] = useState(false);
     const [isPressed, setIsPressed] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);

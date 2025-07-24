@@ -6,10 +6,10 @@
  *
  * Task: T-1752989144373-766 - Build plugin loader with version & dependency resolution
  */
-import { ExtensionPointRegistry } from './ExtensionPointRegistry';
-import { PluginLoader } from './PluginLoader';
-import { DependencyResolver } from './DependencyResolver';
-import { ExtensionVersionManager } from './ExtensionLifecycleManager';
+import { ExtensionPointRegistry } from './ExtensionPointRegistry.js';
+import { PluginLoader } from './PluginLoader.js';
+import { DependencyResolver } from './DependencyResolver.js';
+import { ExtensionVersionManager } from './ExtensionLifecycleManager.js';
 import { EventEmitter } from 'events';
 import { promises as fs } from 'fs';
 import { join } from 'path';

@@ -7,8 +7,8 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  */
 import { useState, useEffect, useMemo } from 'react';
 import { AlertTriangle, CheckCircle, Info, X, Eye, EyeOff, Settings } from 'lucide-react';
-import { ConstraintValidator } from '../../historical/ConstraintValidator';
-import { HISTORICAL_ERAS } from '../../types/UTDG';
+import { ConstraintValidator } from '../../historical/ConstraintValidator.js';
+import { HISTORICAL_ERAS } from '../../types/UTDG.js';
 import './ConstraintValidationPanel.css';
 export const ConstraintValidationPanel = ({ nodes, utdgNodes = [], targetEra, visible = true, onToggleVisibility, onNodeHighlight, onConstraintOverride }) => {
     const [validator] = useState(() => new ConstraintValidator());

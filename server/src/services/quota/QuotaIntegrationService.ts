@@ -10,8 +10,8 @@
  */
 
 import { UsageQuotaService } from './UsageQuotaService';
-import { RateLimitingService } from '../../../packages/core/security/RateLimitingService';
-import { AdaptiveThrottlingRulesEngine } from '../../../packages/core/security/AdaptiveThrottlingRules';
+import { RateLimitingService } from '../../../../packages/core/security/RateLimitingService';
+import { AdaptiveThrottlingRulesEngine } from '../../../../packages/core/security/AdaptiveThrottlingRules';
 import { FraudMonitoringService } from '../fraud/FraudMonitoringService';
 import { EnforcementActionService } from '../enforcement/EnforcementActionService';
 import { AuditService } from '../auth/services/AuditService';
@@ -24,8 +24,8 @@ import {
   QuotaEventLog,
   QuotaType,
   EnforcementAction
-} from '../../../packages/core/types/UsageQuotaTypes';
-import { ActionSeverity } from '../../../packages/core/types/EnforcementTypes';
+} from '../../../../packages/core/types/UsageQuotaTypes';
+import { ActionSeverity } from '../../../../packages/core/types/EnforcementTypes';
 
 export interface QuotaIntegrationConfig {
   rateLimitingEnabled: boolean;
@@ -655,7 +655,10 @@ export class QuotaIntegrationService {
     console.log('🚨 Sending admin alert for critical quota violation');
   }
 
-  private async sendStakeholderNotification(_____request: QuotaCheckRequest, _____result: QuotaCheckResult): Promise<void> {
+  private async sendStakeholderNotification(
+    _____request: QuotaCheckRequest,
+    _____result: QuotaCheckResult
+  ): Promise<void> {
     // Implementation for stakeholder notifications
     console.log('📊 Sending stakeholder notification for business-critical quota');
   }

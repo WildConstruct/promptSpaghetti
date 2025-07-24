@@ -12,8 +12,8 @@ import {
   ThrottlingContext, 
   ThrottlingResult,
   SystemMetrics
-} from '../../../packages/core/security/AdaptiveThrottlingRules';
-import { RateLimitingService, ThreatLevel } from '../../../packages/core/security/RateLimitingService';
+} from '../../../../packages/core/security/AdaptiveThrottlingRules';
+import { RateLimitingService, ThreatLevel } from '../../../../packages/core/security/RateLimitingService';
 
 // ========================================
 // Middleware Configuration

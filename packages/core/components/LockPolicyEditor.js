@@ -3,7 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Editor for workspace lock policies
 import { useState, useEffect } from 'react';
 import { Save, Settings, AlertTriangle, Info, Clock, Users, Shield } from 'lucide-react';
-import { useLockingStore } from '../stores/lockingStore';
+import { useLockingStore } from '../stores/lockingStore.js';
 export const LockPolicyEditor = ({ workspaceId, onPolicyUpdate }) => {
     const { policy, fetchPolicy, updatePolicy, isLoading, error } = useLockingStore();
     const [editingPolicy, setEditingPolicy] = useState(null);

@@ -152,10 +152,7 @@ export class ImprovementSuggestionsSystem extends EventEmitter {
         // Get relevant suggestions
         const allSuggestions = this.getSuggestions();
         // Apply personalization algorithm
-        const personalizedSuggestions = this.personalizeS, uggestions;
-        (allSuggestions,
-            userBehavior,
-            userContext);
+        const personalizedSuggestions = this.personalizeSuggestions(allSuggestions, userBehavior, userContext);
         return personalizedSuggestions.slice(0, 10); // Return top 10
     }
     // Update suggestion status
@@ -591,8 +588,7 @@ export class ImprovementSuggestionsSystem extends EventEmitter {
             preferences: []
         };
     }
-    personalizeS;
-    uggestions(suggestions, userBehavior, context) {
+    personalizeSuggestions(suggestions, userBehavior, context) {
         // Apply personalization algorithm
         return suggestions.filter(suggestion => {
             // Simple personalization based on user context

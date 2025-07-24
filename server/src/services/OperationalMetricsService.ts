@@ -477,4 +477,4 @@ class OperationalMetricsService extends EventEmitter {
 }
 
 // Export singleton instance
-export default OperationalMetricsService;
+export export default OperationalMetricsService;

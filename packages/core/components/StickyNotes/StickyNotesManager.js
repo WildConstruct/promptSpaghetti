@@ -11,10 +11,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * - Professional UI matching Cinema 4D standards
  */
 import { useCallback, useEffect, useRef } from 'react';
-import { useStickyNotesStore } from '../../stores/stickyNotesStore';
-import { StickyNote } from './StickyNote';
-import { StickyNoteToolbar } from './StickyNoteToolbar';
-export const StickyNotesManager = ({ _____canvasRef, disabled = false, readonly = false, onNotesChange, className = '' }) => {
+import { useStickyNotesStore } from '../../stores/stickyNotesStore.js';
+import { StickyNote } from './StickyNote.js';
+import { StickyNoteToolbar } from './StickyNoteToolbar.js';
+export const StickyNotesManager = ({ canvasRef, disabled = false, readonly = false, onNotesChange, className = '' }) => {
     const containerRef = useRef(null);
     const { notes, groups, selection, activeNote, settings, 
     // Actions

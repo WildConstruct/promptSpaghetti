@@ -32,7 +32,7 @@ export interface EmbedWidget {
     type: 'header' | 'preview' | 'metadata' | 'actions' | 'stats' | 'comments' | 'author' | 'footer';
     name: string;
     description: string;
-    icon: React.ComponentType<any>;
+    icon: React.ComponentType<unknown>;
     configurable: boolean;
     required: boolean;
     position: {

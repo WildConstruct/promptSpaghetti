@@ -4,9 +4,9 @@
  *
  * Central export file for all case study components.
  */
-export { CaseStudyCard } from './CaseStudyCard';
-export { CaseStudyGallery } from './CaseStudyGallery';
-export { CaseStudyModal } from './CaseStudyModal';
+export { CaseStudyCard } from './CaseStudyCard.js';
+export { CaseStudyGallery } from './CaseStudyGallery.js';
+export { CaseStudyModal } from './CaseStudyModal.js';
 // Default configurations
 export const CASE_STUDY_DEFAULTS = {
     variant: 'standard',

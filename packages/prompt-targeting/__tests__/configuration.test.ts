@@ -128,9 +128,9 @@ describe('Configuration System', () => {
       
       // Check for expected built-in presets
       const presetNames = presets.map(p => p.name);
-      expect(presetNames).toContain('high-quality');
-      expect(presetNames).toContain('creative');
-      expect(presetNames).toContain('fast');
+      expect(presetNames).toContain('High Quality');
+      expect(presetNames).toContain('Creative');
+      expect(presetNames).toContain('Fast Processing');
     });
 
     test('should create custom presets', () => {

@@ -8,7 +8,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * with configurable layouts, role-based access, and real-time updates.
  */
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { MonitoringWidget } from './MonitoringWidgets';
+import { MonitoringWidget } from './MonitoringWidgets.js';
 // Predefined Dashboard Layouts
 const DASHBOARD_LAYOUTS = [
     {
@@ -160,7 +160,7 @@ const DASHBOARD_LAYOUTS = [
         ]
     }
 ];
-export const MonitoringDashboard = ({ userRole, userId, initialLayout = 'executive', _____allowLayoutCustomization = true, onExport, _____onAlertAction, className = '' }) => {
+export const MonitoringDashboard = ({ userRole, userId, initialLayout = 'executive', allowLayoutCustomization = true, onExport, onAlertAction, className = '' }) => {
     // State Management
     const [currentLayoutId, setCurrentLayoutId] = useState(initialLayout);
     const [customLayout, setCustomLayout] = useState(null);

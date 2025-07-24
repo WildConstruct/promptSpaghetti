@@ -1,8 +1,8 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { TextFieldEditor } from '../TextFieldEditor';
-import { VariationList } from '../VariationList';
-import { WeightSlider } from '../WeightSlider';
-import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
+import { TextFieldEditor } from '../TextFieldEditor.js';
+import { VariationList } from '../VariationList.js';
+import { WeightSlider } from '../WeightSlider.js';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection.js';
 /**
  * Epic 8.4 - Enhanced WeightedChoice Editor with Progressive Disclosure
  *

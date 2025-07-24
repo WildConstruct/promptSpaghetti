@@ -1,21 +1,21 @@
 // Epic 12 - LLM Agent Randomizer System
 // Story 12.4 - Randomizer Generator Implementation
 // Public API exports for generator system
-import { ParameterManager } from './parameters/parameter-manager';
-import { RandomizerWorkflow } from './workflow/randomizer-workflow';
+import { ParameterManager } from './parameters/parameter-manager.js';
+import { RandomizerWorkflow } from './workflow/randomizer-workflow.js';
 // Parameter System
-export { ComplexityLevel, StylePreference, LLMProvider, NodeTypePreference, RandomizerParametersSchema, ParameterPresetSchema, ValidationResultSchema, ParameterValidator, defaultPresets } from './parameters/parameter-schema';
-export { ParameterManager } from './parameters/parameter-manager';
+export { ComplexityLevel, StylePreference, LLMProvider, NodeTypePreference, RandomizerParametersSchema, ParameterPresetSchema, ValidationResultSchema, ParameterValidator, defaultPresets } from './parameters/parameter-schema.js';
+export { ParameterManager } from './parameters/parameter-manager.js';
 // UI Components - Temporarily disabled for server build
 // export {
 //   RandomizerPanel
-// } from './ui/RandomizerPanel';
+// } from './ui/RandomizerPanel.js';
 // Preview System - Temporarily disabled for server build
 // export {
 //   GraphPreview
-// } from './preview/GraphPreview';
+// } from './preview/GraphPreview.js';
 // Workflow System
-export { RandomizerWorkflow } from './workflow/randomizer-workflow';
+export { RandomizerWorkflow } from './workflow/randomizer-workflow.js';
 /**
  * Complete randomizer system factory
  */

@@ -100,6 +100,14 @@ export declare class ZustandEventAdapter {
     };
 }
 /**
+ * Factory function to create Zustand event middleware
+ */
+export declare const createZustandEventMiddleware: () => <T extends object>(stateCreator: StateCreator<T & EventableStore, [], [], T & EventableStore>) => StateCreator<T & EventableStore, [], [], T & EventableStore>;
+/**
+ * Enhanced Zustand store creator with event integration
+ */
+export declare const createEventEnabledStore: <T>(stateCreator: StateCreator<T>) => StateCreator<object & EventableStore, [], [], object & EventableStore>;
+/**
  * Utility functions for Zustand-Event integration
  */
 export declare const ZustandEventUtils: {
@@ -119,4 +127,10 @@ export declare const ZustandEventUtils: {
         setState: (partial: Partial<T>) => void;
     }, eventTypes: string[]) => string;
 };
+/**
+ * Pre-configured adapters for common stores
+ */
+export declare const graphStoreAdapter: ZustandEventAdapter;
+export declare const uiStoreAdapter: ZustandEventAdapter;
+export declare const previewStoreAdapter: ZustandEventAdapter;
 //# sourceMappingURL=ZustandEventAdapter.d.ts.map

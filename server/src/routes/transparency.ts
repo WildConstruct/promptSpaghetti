@@ -15,7 +15,7 @@ import {
   TransparencyConfig,
   DataSubjectAccessRequest,
   TransparencySettings
-} from '../../packages/core/security/UserAccessTransparency';
+} from '../../../packages/core/security/UserAccessTransparency';
 
 // Request schemas
 const InventoryRequestSchema = z.object({

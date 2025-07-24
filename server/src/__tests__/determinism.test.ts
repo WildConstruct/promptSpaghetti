@@ -1,6 +1,6 @@
 // server/src/__tests__/determinism.test.ts
 import { executeGraph } from '../engine';
-import { Graph } from '../../../packages/core/graphSchema';
+import { Graph } from '../../../../packages/core/graphSchema';
 
 /**
  * Test fixture: A graph with weighted choices and variable definitions

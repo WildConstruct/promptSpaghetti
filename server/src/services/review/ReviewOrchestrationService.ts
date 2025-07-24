@@ -36,7 +36,7 @@ import {
   ReviewMetadata,
   ReviewNote,
   ReviewEvidence
-} from '../../../packages/core/types/ReviewTools';
+} from '../../../../packages/core/types/ReviewTools';
 
 export interface ReviewOrchestrationConfig {
   enabled: boolean;
@@ -613,7 +613,11 @@ export class ReviewOrchestrationService {
     return 'simple';
   }
 
-  private async buildReviewCriteria(reviewType: ReviewType, _____data: Record<string, unknown>): Promise<ReviewCriteria[]> {
+  private async buildReviewCriteria(
+    reviewType: ReviewType,
+    _____data: Record<string,
+    unknown>
+  ): Promise<ReviewCriteria[]> {
     // Get criteria template for review type
     const criteriaTemplates = await this.getCriteriaTemplates(reviewType);
     
@@ -804,17 +808,46 @@ export class ReviewOrchestrationService {
     console.log(`📧 Notifying reviewer assignment: ${assignment.assignmentId}`);
   }
 
-  private async notifyReviewStakeholders(reviewId: string, event: string, _____data: Record<string, unknown>): Promise<void> {
+  private async notifyReviewStakeholders(
+    reviewId: string,
+    event: string,
+    _____data: Record<string,
+    unknown>
+  ): Promise<void> {
     console.log(`📧 Notifying stakeholders of ${event} for review ${reviewId}`);
   }
 
   // Placeholder helper methods - would implement full functionality
-  private async extractBusinessContext(_____reviewType: ReviewType, _____data: Record<string, unknown>): Promise<string> { return ''; }
-  private async assessRiskLevel(_____reviewType: ReviewType, _____data: Record<string, unknown>): Promise<unknown> { return 'medium'; }
-  private async calculateConfidenceScore(_____reviewType: ReviewType, _____data: Record<string, unknown>): Promise<number> { return 75; }
-  private async generateAutomatedRecommendation(_____reviewType: ReviewType, _____data: Record<string, unknown>): Promise<string> { return ''; }
-  private async generateTags(_____reviewType: ReviewType, _____data: Record<string, unknown>): Promise<string[]> { return []; }
-  private async checkForFlags(_____reviewType: ReviewType, _____data: Record<string, unknown>): Promise<boolean> { return false; }
+  private async extractBusinessContext(
+    _____reviewType: ReviewType,
+    _____data: Record<string,
+    unknown>
+  ): Promise<string> { return ''; }
+  private async assessRiskLevel(
+    _____reviewType: ReviewType,
+    _____data: Record<string,
+    unknown>
+  ): Promise<unknown> { return 'medium'; }
+  private async calculateConfidenceScore(
+    _____reviewType: ReviewType,
+    _____data: Record<string,
+    unknown>
+  ): Promise<number> { return 75; }
+  private async generateAutomatedRecommendation(
+    _____reviewType: ReviewType,
+    _____data: Record<string,
+    unknown>
+  ): Promise<string> { return ''; }
+  private async generateTags(
+    _____reviewType: ReviewType,
+    _____data: Record<string,
+    unknown>
+  ): Promise<string[]> { return []; }
+  private async checkForFlags(
+    _____reviewType: ReviewType,
+    _____data: Record<string,
+    unknown>
+  ): Promise<boolean> { return false; }
   private async estimateReviewTime(reviewType: ReviewType, complexity: ReviewComplexity): Promise<number> { 
     const timeMap = { simple: 15, moderate: 30, complex: 60, expert_required: 120 };
     return timeMap[complexity]; 
@@ -824,13 +857,20 @@ export class ReviewOrchestrationService {
   private async storeAssignment(_____assignment: ReviewAssignment): Promise<void> { }
   private async updateReviewStatus(_____reviewId: string, _____status: ReviewStatus): Promise<void> { }
   private async updateReviewerWorkload(_____reviewerId: string, _____delta: number): Promise<void> { }
-  private async getAssignment(_____reviewId: string, _____reviewerId: string): Promise<ReviewAssignment | null> { return null; }
+  private async getAssignment(
+    _____reviewId: string,
+    _____reviewerId: string
+  ): Promise<ReviewAssignment | null> { return null; }
   private async storeDecision(_____reviewId: string, _____decision: ReviewDecision): Promise<void> { }
   private async updateAssignmentStatus(_____assignmentId: string, _____status: unknown): Promise<void> { }
   private async storeNote(_____reviewId: string, _____note: ReviewNote): Promise<void> { }
   private async updateReviewTimestamp(_____reviewId: string): Promise<void> { }
   private async handleNoAvailableReviewers(_____review: ReviewItem): Promise<void> { }
-  private async executeEscalationAction(_____review: ReviewItem, _____action: unknown, _____reason: string): Promise<void> { }
+  private async executeEscalationAction(
+    _____review: ReviewItem,
+    _____action: unknown,
+    _____reason: string
+  ): Promise<void> { }
   private async assignToSeniorReviewer(_____review: ReviewItem): Promise<void> { }
   
   // Analytics placeholder methods

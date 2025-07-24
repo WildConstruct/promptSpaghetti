@@ -14,7 +14,7 @@
  * - Real-time policy monitoring and violation detection
  */
 import { EventEmitter } from 'events';
-import { SecurityDashboardPolicies } from '../../../server/src/services/security/SecurityDashboardPolicies';
+import { SecurityDashboardPolicies } from '../../../server/src/services/security/SecurityDashboardPolicies.js';
 export var PolicyDomain;
 (function (PolicyDomain) {
     PolicyDomain["SECURITY"] = "SECURITY";

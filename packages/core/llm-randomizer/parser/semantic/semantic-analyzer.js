@@ -1,7 +1,7 @@
 // Epic 12 - LLM Agent Randomizer System
 // Story 12.3 - Parser Implementation
 // Semantic analysis and graph construction
-import { NodeTypeEnum } from '../../../graphSchema';
+import { NodeTypeEnum } from '../../../graphSchema.js';
 export class SemanticAnalyzer {
     context;
     errors = [];

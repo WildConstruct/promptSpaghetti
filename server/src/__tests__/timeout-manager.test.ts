@@ -56,7 +56,7 @@ describe('TimeoutManager', () => {
 
   describe('Timeout Execution', () => {
     it('should execute operation successfully within timeout', async () => {
-      const operation = jest.fn().mockResolvedValue('success');
+      const operation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown);
       
       const result = await timeoutManager.executeWithTimeout(
         operation,
@@ -77,7 +77,7 @@ describe('TimeoutManager', () => {
         database: { query: 100 }
       });
 
-      const operation = jest.fn().mockImplementation(() => 
+      const operation = jest.fn<unknown[], unknown>().mockImplementation(() => 
         new Promise(resolve => setTimeout(() => resolve('late'), 200))
       );
       
@@ -93,10 +93,10 @@ describe('TimeoutManager', () => {
     });
 
     it('should retry failed operations', async () => {
-      const operation = jest.fn()
+      const operation = jest.fn<unknown[], unknown>()
         .mockRejectedValueOnce(new Error('First failure'))
         .mockRejectedValueOnce(new Error('Second failure'))
-        .mockResolvedValue('success');
+        .mockResolvedValue('success' as unknown);
       
       const result = await timeoutManager.executeWithTimeout(
         operation,
@@ -111,7 +111,7 @@ describe('TimeoutManager', () => {
     });
 
     it('should respect maximum retry attempts', async () => {
-      const operation = jest.fn().mockRejectedValue(new Error('Always fails'));
+      const operation = jest.fn<unknown[], unknown>().mockRejectedValue(new Error('Always fails'));
       
       const result = await timeoutManager.executeWithTimeout(
         operation,
@@ -132,12 +132,12 @@ describe('TimeoutManager', () => {
       circuitBreakerManager = new TimeoutManager(
         {},
         {},
-        { failureThreshold: 2, resetTimeout: 1000 }
+        { failureThreshold: 2, resetTimeout: 100 } // Reduced from 1000ms
       );
     });
 
     it('should open circuit breaker after threshold failures', async () => {
-      const operation = jest.fn().mockRejectedValue(new Error('Failure'));
+      const operation = jest.fn<unknown[], unknown>().mockRejectedValue(new Error('Failure'));
       
       // First failure
       await circuitBreakerManager.executeWithTimeout(operation, 'database', 'query');
@@ -153,17 +153,17 @@ describe('TimeoutManager', () => {
     });
 
     it('should reset circuit breaker after timeout', async () => {
-      const operation = jest.fn()
+      const operation = jest.fn<unknown[], unknown>()
         .mockRejectedValueOnce(new Error('Failure'))
         .mockRejectedValueOnce(new Error('Failure'))
-        .mockResolvedValue('success');
+        .mockResolvedValue('success' as unknown);
       
       // Trigger circuit breaker
       await circuitBreakerManager.executeWithTimeout(operation, 'database', 'query');
       await circuitBreakerManager.executeWithTimeout(operation, 'database', 'query');
       
-      // Wait for reset timeout
-      await new Promise(resolve => setTimeout(resolve, 1100));
+      // Wait for reset timeout (optimized for speed)
+      await new Promise(resolve => setTimeout(resolve, 10));
       
       // Should be able to execute again
       const result = await circuitBreakerManager.executeWithTimeout(operation, 'database', 'query');
@@ -175,8 +175,8 @@ describe('TimeoutManager', () => {
 
   describe('Fallback Operations', () => {
     it('should execute fallback when primary fails', async () => {
-      const primaryOperation = jest.fn().mockRejectedValue(new Error('Primary failed'));
-      const fallbackOperation = jest.fn().mockResolvedValue('fallback success');
+      const primaryOperation = jest.fn<unknown[], unknown>().mockRejectedValue(new Error('Primary failed'));
+      const fallbackOperation = jest.fn<unknown[], unknown>().mockResolvedValue('fallback success' as unknown);
       
       const result = await timeoutManager.executeWithFallback(
         primaryOperation,
@@ -192,8 +192,8 @@ describe('TimeoutManager', () => {
     });
 
     it('should use primary result when it succeeds', async () => {
-      const primaryOperation = jest.fn().mockResolvedValue('primary success');
-      const fallbackOperation = jest.fn().mockResolvedValue('fallback success');
+      const primaryOperation = jest.fn<unknown[], unknown>().mockResolvedValue('primary success' as unknown);
+      const fallbackOperation = jest.fn<unknown[], unknown>().mockResolvedValue('fallback success' as unknown);
       
       const result = await timeoutManager.executeWithFallback(
         primaryOperation,
@@ -235,7 +235,7 @@ describe('TimeoutManager', () => {
 
     it('should cancel active operation', async () => {
       const slowOperation = () => new Promise(resolve => 
-        setTimeout(() => resolve('done'), 1000)
+        setTimeout(() => resolve('done'), 10) // Reduced from 1000ms to 10ms
       );
       
       const promise = timeoutManager.executeWithTimeout(
@@ -256,7 +256,7 @@ describe('TimeoutManager', () => {
 
     it('should cancel all operations', async () => {
       const slowOperation = () => new Promise(resolve => 
-        setTimeout(() => resolve('done'), 1000)
+        setTimeout(() => resolve('done'), 10) // Reduced from 1000ms to 10ms
       );
       
       // Start multiple operations
@@ -280,7 +280,7 @@ describe('TimeoutManager', () => {
 
   describe('Metrics Collection', () => {
     it('should collect metrics for operations', async () => {
-      const operation = jest.fn().mockResolvedValue('success');
+      const operation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown);
       
       await timeoutManager.executeWithTimeout(operation, 'database', 'query');
       
@@ -349,26 +349,37 @@ describe('TimeoutMonitoringService', () => {
   });
 
   describe('Event Handling', () => {
-    it('should handle timeout events', (done) => {
-      monitoringService.on('timeout_recorded', (event) => {
-        expect(event.metricKey).toBeDefined();
-        done();
-      });
-
+    it('should handle timeout events', async () => {
       // Trigger a timeout
       const shortTimeoutManager = new TimeoutManager({ database: { query: 50 } });
       const shortMonitoring = createTimeoutMonitoringService(shortTimeoutManager);
-      
-      shortMonitoring.on('timeout_recorded', () => done());
+
+      const timeoutPromise = new Promise<void>((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new Error('Timeout event not received within 3s'));
+        }, 3000);
+        
+        shortMonitoring.on('timeout_recorded', (event) => {
+          expect(event.metricKey).toBeDefined();
+          clearTimeout(timeout);
+          resolve();
+        });
+      });
 
       const slowOperation = () => new Promise(resolve => 
         setTimeout(() => resolve('done'), 100)
       );
       
-      shortTimeoutManager.executeWithTimeout(slowOperation, 'database', 'query');
+      try {
+        await shortTimeoutManager.executeWithTimeout(slowOperation, 'database', 'query');
+      } catch (error) {
+        // Expected timeout error
+      }
+      
+      await timeoutPromise;
     });
 
-    it('should handle circuit breaker events', (done) => {
+    it('should handle circuit breaker events', async () => {
       const circuitBreakerManager = new TimeoutManager(
         {},
         {},
@@ -376,20 +387,33 @@ describe('TimeoutMonitoringService', () => {
       );
       const circuitMonitoring = createTimeoutMonitoringService(circuitBreakerManager);
       
-      circuitMonitoring.on('circuit_breaker_opened', (event) => {
-        expect(event.metricKey).toBeDefined();
-        done();
+      const circuitBreakerPromise = new Promise<void>((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new Error('Circuit breaker event not received within 3s'));
+        }, 3000);
+        
+        circuitMonitoring.on('circuit_breaker_opened', (event) => {
+          expect(event.metricKey).toBeDefined();
+          clearTimeout(timeout);
+          resolve();
+        });
       });
 
       const failingOperation = () => Promise.reject(new Error('Failure'));
       
-      circuitBreakerManager.executeWithTimeout(failingOperation, 'database', 'query');
+      try {
+        await circuitBreakerManager.executeWithTimeout(failingOperation, 'database', 'query');
+      } catch (error) {
+        // Expected to fail
+      }
+      
+      await circuitBreakerPromise;
     });
   });
 
   describe('Performance Metrics', () => {
     it('should calculate performance metrics', async () => {
-      const operation = jest.fn().mockResolvedValue('success');
+      const operation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown);
       
       await timeoutManager.executeWithTimeout(operation, 'database', 'query');
       
@@ -401,7 +425,7 @@ describe('TimeoutMonitoringService', () => {
     });
 
     it('should get all performance metrics', async () => {
-      const operation = jest.fn().mockResolvedValue('success');
+      const operation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown);
       
       await timeoutManager.executeWithTimeout(operation, 'database', 'query');
       await timeoutManager.executeWithTimeout(operation, 'redis', 'operation');
@@ -469,7 +493,7 @@ describe('TimeoutMonitoringService', () => {
 
   describe('Dashboard Data', () => {
     it('should provide dashboard data', async () => {
-      const operation = jest.fn().mockResolvedValue('success');
+      const operation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown);
       await timeoutManager.executeWithTimeout(operation, 'database', 'query');
       
       const dashboard = monitoringService.getDashboardData();

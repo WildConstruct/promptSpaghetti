@@ -7,9 +7,9 @@
  * measuring performance, determinism, and scalability characteristics.
  */
 
-import { ExecutionContext } from '../../packages/core/runtime/index';
-import { validateGraph } from '../../packages/core/validation';
-import { GraphType } from '../../packages/core/graphSchema';
+import { ExecutionContext } from '../packages/core/runtime/index';
+import { validateGraph } from '../packages/core/validation';
+import { GraphType } from '../packages/core/graphSchema';
 
 interface GraphExecutionMetrics {
   seed: number;

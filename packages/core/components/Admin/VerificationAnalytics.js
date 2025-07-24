@@ -6,8 +6,8 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Part of Epic 17.5.5 - Verification System
  */
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Button } from '../ui/Button';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
+import { Button } from '../ui/Button.js';
 import { TrendingUp, TrendingDown, Users, Clock, CheckCircle, XCircle, AlertTriangle, Download, RefreshCw, Eye } from 'lucide-react';
 export const VerificationAnalytics = ({ className = '' }) => {
     const [selectedPeriod, setSelectedPeriod] = useState('last_30_days');

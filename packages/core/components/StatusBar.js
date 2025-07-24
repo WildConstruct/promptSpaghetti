@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import { useState, useRef, useEffect } from 'react';
-import { WebSocketStatusIcon, WebSocketDetails } from './WebSocketStatus';
-import { EncryptionStatusIcon, EncryptionDetails } from './EncryptionStatus';
+import { WebSocketStatusIcon, WebSocketDetails } from './WebSocketStatus.js';
+import { EncryptionStatusIcon, EncryptionDetails } from './EncryptionStatus.js';
 export const StatusBar = ({ statusMessage, errors, onPreview, onSaveJson, onExportBundle, onSaveProject, onLoadProject, onNewProject, hasUnsavedChanges, currentProjectName, onCorrections, correctionsEnabled, correctionsOpen, onStats, statsOpen, onExtensions, extensionsOpen, connectionState, queuedMessages, onClearQueue, onReconnect, onDisconnect, encryptionState, onEncrypt, onDecrypt, onChangeAlgorithm, onOptimization, optimizationEnabled, onSaveTemplate, onBrowseTemplates }) => {
     const [showWebSocketDetails, setShowWebSocketDetails] = useState(false);
     const [showEncryptionDetails, setShowEncryptionDetails] = useState(false);

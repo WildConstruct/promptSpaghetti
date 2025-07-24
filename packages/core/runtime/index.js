@@ -3,10 +3,11 @@
 // Each class exposes an async `run` method that takes input/context
 // and returns output plus possibly mutated context.
 // These are thin stubs for now; they will be fully implemented in later tasks.
-import { SecurityValidation } from '../validation/security';
-import { RuntimeNode } from './types';
+import { SecurityValidation } from '../validation/security.js';
+import { ExecutionContext, RuntimeNode } from './types.js';
 // Re-export types
-export { RuntimeNode } from './types';
+export { ExecutionContext, RuntimeNode } from './types.js';
+export { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedNodeConfig } from './advanced.js';
 /* ------------------------- Core node runtimes ------------------------- */
 export class WeightedChoiceNode extends RuntimeNode {
     choices;
@@ -135,7 +136,7 @@ function seededRandom(seed) {
 }
 /* ----------------------------- Advanced Nodes (Epic 7) ------------------------------ */
 // Re-export all advanced node capabilities
-export * from './advanced';
+export * from './advanced.js';
 /* ----------------------------- Python Integration (Epic 8) ------------------------------ */
 // Re-export Python integration capabilities
-export * from './nodes/PythonTransform';
+export * from './nodes/PythonTransform.js';

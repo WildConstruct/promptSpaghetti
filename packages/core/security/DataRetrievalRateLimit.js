@@ -12,7 +12,7 @@
  * Task: T-1752989143998-95 - Add rate limiting for data retrieval
  */
 import { EventEmitter } from 'events';
-import { RateLimitResult, BackoffStrategy } from './RateLimitingService';
+import { RateLimitResult, BackoffStrategy } from './RateLimitingService.js';
 // Extended endpoint categories for data operations
 export var DataEndpointCategory;
 (function (DataEndpointCategory) {

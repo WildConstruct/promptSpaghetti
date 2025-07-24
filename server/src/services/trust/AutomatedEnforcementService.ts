@@ -19,7 +19,7 @@ import {
   TrustStatus,
   RiskFactor,
   FraudIndicator
-} from '../../../packages/core/types/TrustTypes';
+} from '../../../../packages/core/types/TrustTypes';
 
 export interface EnforcementAction {
   actionId: string;

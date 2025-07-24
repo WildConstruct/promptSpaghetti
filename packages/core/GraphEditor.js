@@ -1,39 +1,39 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useCallback, useState, useMemo, useRef, useEffect } from 'react';
 import { ReactFlowProvider, addEdge, Background, Controls, MiniMap, ReactFlow, ConnectionLineType, useReactFlow, useViewport } from 'reactflow';
-import { InspectorPanel } from './components/Inspector';
-import { NodeRenderer } from './components/NodeRenderer';
-import { VariablePortNodeRenderer } from './components/VariablePortNodeRenderer';
-import { StatusBar } from './components/StatusBar';
-import { RestorePrompt } from './components/RestorePrompt';
-import { nodeSchemas } from './nodeSchemas';
-import { Palette } from './Palette';
-import { useGraphStore } from './graphStore';
-import { PreviewModal } from './PreviewModal';
-import { usePreviewSeeds } from './usePreviewSeeds';
-import { ResponsiveCorrectionsPanel } from './ResponsiveCorrectionsPanel';
-import { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboard';
-import { ExtensionManagerPanel } from './components/ExtensionManager/ExtensionManagerPanel';
-import { useCorrectionsEnabled } from './correctionsStore';
-import SaveProjectDialog from './components/ProjectDialogs/SaveProjectDialog';
-import LoadProjectDialog from './components/ProjectDialogs/LoadProjectDialog';
-import ExportBundleDialog from './components/ProjectDialogs/ExportBundleDialog';
-import { SaveTemplateDialog } from './components/TemplateDialogs/SaveTemplateDialog';
-import { TemplateBrowser } from './components/TemplateDialogs/TemplateBrowser';
-import { GraphAnalysisPanel, PerformanceMonitor, OptimizationControls } from './components/GraphOptimization';
-import { StickyNotesManager } from './components/StickyNotes/StickyNotesManager';
-import { DirectorPreviewToolbar } from './components/DirectorToolbar/DirectorPreviewToolbar';
-import { ContextualHelpSystem, helpContentManager } from './components/ContextualHelp';
-import { useValidation } from './hooks/useValidation';
-import { useAutosave } from './hooks/useAutosave';
-import { useNodeUtils } from './hooks/useNodeUtils';
-import { SmoothInspectorPanel } from './components/Inspector/SmoothInspectorPanel';
-import { ProfessionalSpinner } from './components/LoadingStates/ProfessionalSpinner';
-import { SmoothNodeWrapper } from './components/Nodes/SmoothNodeWrapper';
-import { useCanvasOptimization } from './utils/canvasOptimization';
-import { globalAnimationManager } from './utils/smoothAnimations';
-import { DemoModeManager } from './components/Demo/DemoModeManager';
-import { DemoPerformanceTester } from './components/Demo/DemoPerformanceTester';
+import { InspectorPanel } from './components/Inspector.js';
+import { NodeRenderer } from './components/NodeRenderer.js';
+import { VariablePortNodeRenderer } from './components/VariablePortNodeRenderer.js';
+import { StatusBar } from './components/StatusBar.js';
+import { RestorePrompt } from './components/RestorePrompt.js';
+import { nodeSchemas } from './nodeSchemas.js';
+import { Palette } from './Palette.js';
+import { useGraphStore } from './graphStore.js';
+import { PreviewModal } from './PreviewModal.js';
+import { usePreviewSeeds } from './usePreviewSeeds.js';
+import { ResponsiveCorrectionsPanel } from './ResponsiveCorrectionsPanel.js';
+import { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboard.js';
+import { ExtensionManagerPanel } from './components/ExtensionManager/ExtensionManagerPanel.js';
+import { useCorrectionsEnabled } from './correctionsStore.js';
+import SaveProjectDialog from './components/ProjectDialogs/SaveProjectDialog.js';
+import LoadProjectDialog from './components/ProjectDialogs/LoadProjectDialog.js';
+import ExportBundleDialog from './components/ProjectDialogs/ExportBundleDialog.js';
+import { SaveTemplateDialog } from './components/TemplateDialogs/SaveTemplateDialog.js';
+import { TemplateBrowser } from './components/TemplateDialogs/TemplateBrowser.js';
+import { GraphAnalysisPanel, PerformanceMonitor, OptimizationControls } from './components/GraphOptimization.js';
+import { StickyNotesManager } from './components/StickyNotes/StickyNotesManager.js';
+import { DirectorPreviewToolbar } from './components/DirectorToolbar/DirectorPreviewToolbar.js';
+import { ContextualHelpSystem, helpContentManager } from './components/ContextualHelp.js';
+import { useValidation } from './hooks/useValidation.js';
+import { useAutosave } from './hooks/useAutosave.js';
+import { useNodeUtils } from './hooks/useNodeUtils.js';
+import { SmoothInspectorPanel } from './components/Inspector/SmoothInspectorPanel.js';
+import { ProfessionalSpinner } from './components/LoadingStates/ProfessionalSpinner.js';
+import { SmoothNodeWrapper } from './components/Nodes/SmoothNodeWrapper.js';
+import { useCanvasOptimization } from './utils/canvasOptimization.js';
+import { globalAnimationManager } from './utils/smoothAnimations.js';
+import { DemoModeManager } from './components/Demo/DemoModeManager.js';
+import { DemoPerformanceTester } from './components/Demo/DemoPerformanceTester.js';
 import './styles/smoothAnimations.css';
 // SECURITY FIX: Safe CSS injection using controlled constants
 const ANIMATION_CSS = `
@@ -68,7 +68,7 @@ const injectSafeStyles = () => {
 };
 // Inject styles safely on module load
 injectSafeStyles();
-import { WeightedChoiceIcon, ConcatIcon, OutputIcon, IncludeIcon, SetVariableIcon, GetVariableIcon } from './icons';
+import { WeightedChoiceIcon, ConcatIcon, OutputIcon, IncludeIcon, SetVariableIcon, GetVariableIcon } from './icons.js';
 const NODE_TYPES = [
     // Content Building Blocks
     {

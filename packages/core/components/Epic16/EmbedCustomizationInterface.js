@@ -8,7 +8,7 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { PaintBrushIcon, EyeIcon, CodeBracketIcon, SwatchIcon, CubeIcon, SparklesIcon, BoltIcon, PhotoIcon, Squares2X2Icon, ListBulletIcon, SunIcon, MoonIcon, ComputerDesktopIcon as AutoIcon, CheckIcon, XMarkIcon, ClipboardDocumentIcon, ShareIcon, Cog6ToothIcon, UserIcon, TagIcon, FlagIcon } from '@heroicons/react/24/outline';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { PREVIEW_SIZES } from './EmbeddedTemplatePreview';
+import { PREVIEW_SIZES } from './EmbeddedTemplatePreview.js';
 // Predefined embed presets
 const DEFAULT_PRESETS = [
     {
@@ -199,7 +199,7 @@ const WIDGET_LIBRARY = [
         type: 'stats',
         name: 'Statistics',
         description: 'Downloads, likes, ratings',
-        icon: ChartBarIcon,
+        icon: BarChart3,
         configurable: true,
         required: false
     },

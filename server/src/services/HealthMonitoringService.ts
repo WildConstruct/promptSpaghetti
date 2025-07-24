@@ -487,4 +487,4 @@ class HealthMonitoringService extends EventEmitter {
 }
 
 // Export singleton instance
-export default HealthMonitoringService;
+export export default HealthMonitoringService;

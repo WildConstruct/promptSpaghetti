@@ -27,7 +27,7 @@ import {
   validateRestorationConfig,
   validateRestorationAttempt,
   validateConflictResolution
-} from '../../packages/core/types/restoration';
+} from '../../../packages/core/types/restoration';
 
 export class RestorationService {
   private db: DatabaseClient;
@@ -439,7 +439,10 @@ export class RestorationService {
     return operations;
   }
 
-  private async executeRestorationOperations(restorationAttemptId: string, operations: RestorationOperation[]): Promise<RestorationResult> {
+  private async executeRestorationOperations(
+    restorationAttemptId: string,
+    operations: RestorationOperation[]
+  ): Promise<RestorationResult> {
     let executedOperations = 0;
     const resolvedConflicts = 0;
     const startTime = Date.now();
@@ -543,7 +546,11 @@ export class RestorationService {
     return Math.max(0, totalEstimatedTime - elapsedTime);
   }
 
-  private async updateRestorationStatus(restorationAttemptId: string, status: string, errorMessage?: string): Promise<void> {
+  private async updateRestorationStatus(
+    restorationAttemptId: string,
+    status: string,
+    errorMessage?: string
+  ): Promise<void> {
     await this.db.query(`
       UPDATE restoration_attempts 
       SET status = $1, error_message = $2, updated_at = CURRENT_TIMESTAMP

@@ -13,7 +13,7 @@ import {
   SyncBranchRequestSchema,
   BranchFilterSchema,
   MergeRequestFilterSchema
-} from '../../packages/core/types/branching';
+} from '../../../packages/core/types/branching';
 
 export async function branchingRoutes(fastify: FastifyInstance) {
   const branchingService = new BranchingService(fastify.db, fastify.log);

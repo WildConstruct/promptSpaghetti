@@ -14,7 +14,7 @@ import {
   ExportType,
   ExportJobStatus,
   validateExportOptions
-} from '../../packages/core/types/export';
+} from '../../../packages/core/types/export';
 import { z } from 'zod';
 import { logger } from '../utils/logger';
 import * as fs from 'fs/promises';
@@ -33,13 +33,7 @@ const JobParamsSchema = z.object({
   jobId: z.string().uuid()
 });
 
-const ScheduleParamsSchema = z.object({
-  scheduleId: z.string().uuid()
-});
 
-const ShareParamsSchema = z.object({
-  shareToken: z.string()
-});
 
 // Query parameter schemas
 const ExportTemplateQuerySchema = z.object({

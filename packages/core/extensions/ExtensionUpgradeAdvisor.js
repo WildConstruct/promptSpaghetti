@@ -2,8 +2,8 @@
  * Extension Upgrade Advisor - Epic 8.4 Story 8.4.4
  * Provides intelligent upgrade recommendations and migration assistance
  */
-import { SemanticVersion, extensionVersionManager } from './ExtensionVersionManager';
-import { extensionCompatibilityChecker } from './ExtensionCompatibilityChecker';
+import { SemanticVersion, extensionVersionManager } from './ExtensionVersionManager.js';
+import { extensionCompatibilityChecker } from './ExtensionCompatibilityChecker.js';
 // Upgrade Advisor
 export class ExtensionUpgradeAdvisor {
     static instance;

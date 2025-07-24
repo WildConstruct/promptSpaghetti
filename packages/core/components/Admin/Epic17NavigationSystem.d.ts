@@ -13,7 +13,7 @@ export interface NavigationItem {
     id: string;
     label: string;
     description?: string;
-    icon: React.ComponentType<any>;
+    icon: React.ComponentType<unknown>;
     path: string;
     children?: NavigationItem[];
     requiredPermissions?: {
@@ -46,14 +46,14 @@ export interface NavigationContext {
 export interface BreadcrumbItem {
     label: string;
     path: string;
-    icon?: React.ComponentType<any>;
+    icon?: React.ComponentType<unknown>;
     active: boolean;
 }
 export interface QuickAction {
     id: string;
     label: string;
     description: string;
-    icon: React.ComponentType<any>;
+    icon: React.ComponentType<unknown>;
     action: () => void;
     shortcut?: string;
     category: 'primary' | 'secondary' | 'tertiary';
@@ -72,7 +72,7 @@ export interface RecentItem {
     label: string;
     path: string;
     timestamp: Date;
-    icon: React.ComponentType<any>;
+    icon: React.ComponentType<unknown>;
 }
 interface Epic17NavigationSystemProps {
     currentSection?: string;

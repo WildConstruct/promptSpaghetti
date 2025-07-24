@@ -3,4 +3,4 @@
  *
  * Export all components for the director-friendly toolbar system
  */
-export { DirectorPreviewToolbar } from './DirectorPreviewToolbar';
+export { DirectorPreviewToolbar } from './DirectorPreviewToolbar.js';

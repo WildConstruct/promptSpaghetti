@@ -55,12 +55,26 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
     public readonly description: string,
     context?: PluginContext
   ) {
-    if (context) {
-      this.logger = context.logger;
-      this.cache = context.cache;
-      this.metrics = context.metrics;
-      this.config = context.config;
-    }
+    // Initialize with context or defaults
+    this.logger = context?.logger || { 
+      debug: () => {}, 
+      info: () => {}, 
+      warn: () => {}, 
+      error: () => {} 
+    } as Logger;
+    this.cache = context?.cache || { 
+      get: async () => undefined, 
+      set: async () => {}, 
+      del: async () => {},
+      exists: async () => false 
+    } as CacheInterface;
+    this.metrics = context?.metrics || { 
+      counter: () => {}, 
+      gauge: () => {}, 
+      histogram: () => {},
+      timer: () => ({ end: () => {} })
+    } as MetricsInterface;
+    this.config = context?.config || {};
 
     this.healthMetrics = {
       uptime: 0,
@@ -77,6 +91,23 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
   abstract capabilities(): Promise<Capabilities>;
   protected abstract doValidate(graph: PromptGraph): Promise<ValidationResult[]>;
   protected abstract doTransform(graph: PromptGraph, options?: TransformOptions): Promise<TargetPrompt>;
+
+  // Optional lifecycle hooks with default implementations
+  async beforeValidate?(graph: PromptGraph): Promise<PromptGraph> {
+    return graph;
+  }
+
+  async afterValidate?(graph: PromptGraph, results: ValidationResult[]): Promise<ValidationResult[]> {
+    return results;
+  }
+
+  async beforeTransform?(graph: PromptGraph): Promise<PromptGraph> {
+    return graph;
+  }
+
+  async afterTransform?(graph: PromptGraph, result: TargetPrompt): Promise<TargetPrompt> {
+    return result;
+  }
 
   // Optional lifecycle hooks that can be overridden
   protected async onInitialize?(): Promise<void>;
@@ -267,7 +298,8 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
             allResults.push(...stageResults);
           } catch (error) {
             if (stage.onError) {
-              const errorResults = await stage.onError(error, processedGraph, context);
+              const typedError = error instanceof Error ? error : new Error(String(error));
+              const errorResults = await stage.onError(typedError, processedGraph, context);
               if (errorResults) {
                 allResults.push(...errorResults);
               }
@@ -318,7 +350,8 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
 
       return allResults;
     } catch (error) {
-      this.updateErrorMetrics(Date.now() - startTime, error);
+      const typedError = error instanceof Error ? error : new Error(String(error));
+      this.updateErrorMetrics(Date.now() - startTime, typedError);
       
       this.metrics.counter('adaptor.validate.error', 1, { 
         adaptor: this.id,
@@ -430,7 +463,8 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
             }
           } catch (error) {
             if (stage.onError) {
-              const errorResult = await stage.onError(error, processedGraph, context);
+              const typedError = error instanceof Error ? error : new Error(String(error));
+              const errorResult = await stage.onError(typedError, processedGraph, context);
               if (errorResult) {
                 // Handle error recovery
               }
@@ -496,7 +530,8 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
 
       return result;
     } catch (error) {
-      this.updateErrorMetrics(Date.now() - startTime, error);
+      const typedError = error instanceof Error ? error : new Error(String(error));
+      this.updateErrorMetrics(Date.now() - startTime, typedError);
       
       this.metrics.counter('adaptor.transform.error', 1, { 
         adaptor: this.id,
@@ -580,9 +615,10 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
         platform: this.platform
       });
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.error('Adaptor destruction failed', {
         adaptorId: this.id,
-        error: error.message
+        error: errorMessage
       });
 
       this.metrics.counter('adaptor.destroy.error', 1, {
@@ -779,7 +815,7 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
       nodeId?: string;
       edgeId?: string;
       autoFixable?: boolean;
-      suggestions?: Array<{ type: string; description: string }>;
+      suggestions?: Array<{ type: 'fix' | 'alternative' | 'workaround'; description: string }>;
     } = {}
   ): ValidationResult {
     return {

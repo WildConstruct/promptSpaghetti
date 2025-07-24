@@ -21,10 +21,10 @@ import { Plus } from 'lucide-react';
  */
 import { useState, useCallback, useMemo } from 'react';
 import { Play, Pause, Square, ChevronLeft, ChevronRight, Book, BookOpen, Target, CheckCircle, Circle, Clock, Users, Star, Zap, Lightbulb, Info, AlertCircle, Settings, Maximize2, Minimize2, Search } from 'lucide-react';
-import { Button } from '../ui/Button';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Badge } from '../ui/Badge';
-export const TutorialPlayer = ({ tutorial, progress, onStepComplete, onTutorialComplete, _____onProgressSave, onExit, className = '' }) => {
+import { Button } from '../ui/Button.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
+import { Badge } from '../ui/Badge.js';
+export const TutorialPlayer = ({ tutorial, progress, onStepComplete, onTutorialComplete, onProgressSave, onExit, className = '' }) => {
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
     const [showStepList, setShowStepList] = useState(false);

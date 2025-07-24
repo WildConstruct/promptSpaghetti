@@ -81,4 +81,4 @@ export const ExtensionManifestSchema = z.object({
     }).optional()
 });
 // Re-export specific extension types
-export { NodeCategory } from './NodeExtension';
+export { NodeCategory } from './NodeExtension.js';

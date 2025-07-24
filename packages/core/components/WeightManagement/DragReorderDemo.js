@@ -6,7 +6,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Professional demo showcase for Wild Construct's $2.3B film industry integration
  */
 import React, { useState, useCallback, useMemo } from 'react';
-import { DragReorderWeightManager } from './DragReorderWeightManager';
+import { DragReorderWeightManager } from './DragReorderWeightManager.js';
 /**
  * Interactive demo showcasing drag-to-reorder weight management capabilities
  */
@@ -339,7 +339,7 @@ export const DragReorderDemo = ({ theme = 'cinema', showCode = true, interactive
                                     lineHeight: 1.5,
                                     margin: 0,
                                     fontFamily: 'Monaco, Consolas, "Liberation Mono", "Courier New", monospace'
-                                }, children: _jsx("code", { style: { color: styles.text }, children: `import { DragReorderWeightManager } from './WeightManagement/DragReorderWeightManager';
+                                }, children: _jsx("code", { style: { color: styles.text }, children: `import { DragReorderWeightManager } from './WeightManagement/DragReorderWeightManager.js';
 
 const filmOptions = [
   { id: '1', text: 'Mysterious protagonist', weight: 25 },

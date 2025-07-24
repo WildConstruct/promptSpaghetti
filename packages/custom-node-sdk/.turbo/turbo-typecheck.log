@@ -2,8 +2,1061 @@
 > @prompt-spaghetti/custom-node-sdk@0.1.0 typecheck /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/custom-node-sdk
 > tsc --noEmit
 
-../core/components/Inspector/editors/WeightedChoiceEditor.tsx(440,5): error TS1005: ')' expected.
-../core/hooks/useEnhancedPreview.ts(561,1): error TS1128: Declaration or statement expected.
-../core/hooks/useRealTimePreview.ts(303,1): error TS1128: Declaration or statement expected.
-../core/stores/uiSettingsStore.ts(320,1): error TS1128: Declaration or statement expected.
+../core/collaboration/collaborativeGraphStore.ts(8,23): error TS2305: Module '"../graphSchema"' has no exported member 'Edge'.
+../core/collaboration/collaborativeGraphStore.ts(179,24): error TS2339: Property 'edges' does not exist on type '{ nodes: ({ id: string; type: "WeightedChoice"; choices: { weight: number; value: string; }[]; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; ... 5 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; } | ... 9 more ... | { ...; }...'.
+../core/collaboration/collaborativeGraphStore.ts(199,15): error TS2322: Type '{ nodes: ({ id: string; type: "WeightedChoice" | "Include"; name?: string | undefined; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; ... 5 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; choices: { ...; }[]; } | ... 62 more ...' is not assignable to type '{ nodes: ({ id: string; type: "WeightedChoice"; choices: { weight: number; value: string; }[]; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; ... 5 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; } | ... 9 more ... | { ...; }...'.
+  Types of property 'nodes' are incompatible.
+    Type '({ id: string; type: "WeightedChoice" | "Include"; name?: string | undefined; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; ... 5 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; choices: { ...; }[]; } | ... 62 more ... | { ....' is not assignable to type '({ id: string; type: "WeightedChoice"; choices: { weight: number; value: string; }[]; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; name: string; ... 4 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; } | ... 9 more ... | { ....'.
+      Type '{ id: string; type: "WeightedChoice" | "Include"; name?: string | undefined; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; ... 5 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; choices: { ...; }[]; } | ... 62 more ... | { .....' is not assignable to type '{ id: string; type: "WeightedChoice"; choices: { weight: number; value: string; }[]; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; name: string; ... 4 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; } | ... 9 more ... | { .....'.
+        Type '{ id: string; type: "WeightedChoice" | "Include"; name?: string | undefined; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; name: string; ... 4 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; choices: { ...; }[]; }' is not assignable to type '{ id: string; type: "WeightedChoice"; choices: { weight: number; value: string; }[]; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; name: string; ... 4 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; } | ... 9 more ... | { .....'.
+          Type '{ id: string; type: "WeightedChoice" | "Include"; name?: string | undefined; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; name: string; ... 4 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; choices: { ...; }[]; }' is not assignable to type '{ id: string; type: "WeightedChoice"; choices: { weight: number; value: string; }[]; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; name: string; ... 4 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; } | { ...; }'.
+            Type '{ id: string; type: "WeightedChoice" | "Include"; name?: string | undefined; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; name: string; ... 4 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; choices: { ...; }[]; }' is not assignable to type '{ id: string; type: "Include"; name: string; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; name: string; startIndex: number; endIndex: number; isValid: boolean; defaultValue?: string | undefined; inferredType?: "string" | ... 5 more ... | undefined; }[] | u...'.
+              Types of property 'type' are incompatible.
+                Type '"WeightedChoice" | "Include"' is not assignable to type '"Include"'.
+                  Type '"WeightedChoice"' is not assignable to type '"Include"'.
+../core/collaboration/collaborativeGraphStore.ts(213,24): error TS2339: Property 'edges' does not exist on type '{ nodes: ({ id: string; type: "WeightedChoice"; choices: { weight: number; value: string; }[]; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; ... 5 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; } | ... 9 more ... | { ...; }...'.
+../core/collaboration/collaborativeGraphStore.ts(213,37): error TS7006: Parameter 'edge' implicitly has an 'any' type.
+../core/collaboration/collaborativeGraphStore.ts(231,28): error TS2339: Property 'edges' does not exist on type '{ nodes: ({ id: string; type: "WeightedChoice"; choices: { weight: number; value: string; }[]; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; ... 5 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; } | ... 9 more ... | { ...; }...'.
+../core/collaboration/collaborativeGraphStore.ts(247,24): error TS2339: Property 'edges' does not exist on type '{ nodes: ({ id: string; type: "WeightedChoice"; choices: { weight: number; value: string; }[]; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; ... 5 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; } | ... 9 more ... | { ...; }...'.
+../core/collaboration/collaborativeGraphStore.ts(247,37): error TS7006: Parameter 'edge' implicitly has an 'any' type.
+../core/collaboration/GraphCRDTAdapter.ts(7,16): error TS2305: Module '"../graphSchema"' has no exported member 'Edge'.
+../core/collaboration/GraphCRDTAdapter.ts(36,54): error TS2719: Type '{ nodes: ({ id: string; type: "WeightedChoice"; choices: { weight: number; value: string; }[]; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; ... 5 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; } | ... 9 more ... | { ...; }...' is not assignable to type '{ nodes: ({ id: string; type: "WeightedChoice"; choices: { weight: number; value: string; }[]; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; ... 5 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; } | ... 9 more ... | { ...; }...'. Two different types with this name exist, but they are unrelated.
+  Object literal may only specify known properties, and 'edges' does not exist in type '{ nodes: ({ id: string; type: "WeightedChoice"; choices: { weight: number; value: string; }[]; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; ... 5 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; } | ... 9 more ... | { ...; }...'.
+../core/collaboration/GraphCRDTAdapter.ts(117,9): error TS2353: Object literal may only specify known properties, and 'variableName' does not exist in type '{ id: string; key: string; type: "SetVariable"; template?: string | undefined; value?: string | number | boolean | string[] | Record<string, string> | null | undefined; inputs?: string[] | undefined; extractedVariables?: { ...; }[] | undefined; }'.
+../core/collaboration/GraphCRDTAdapter.ts(125,9): error TS2353: Object literal may only specify known properties, and 'variableName' does not exist in type '{ id: string; key: string; type: "GetVariable"; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; name: string; startIndex: number; endIndex: number; isValid: boolean; defaultValue?: string | undefined; inferredType?: "string" | ... 5 more ... | undefined; }[] ...'.
+../core/collaboration/GraphCRDTAdapter.ts(238,13): error TS2339: Property 'edges' does not exist on type '{ nodes: ({ id: string; type: "WeightedChoice"; choices: { weight: number; value: string; }[]; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; ... 5 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; } | ... 9 more ... | { ...; }...'.
+../core/collaboration/GraphCRDTAdapter.ts(238,27): error TS7006: Parameter 'edge' implicitly has an 'any' type.
+../core/collaboration/GraphCRDTAdapter.ts(259,34): error TS2353: Object literal may only specify known properties, and 'edges' does not exist in type '{ nodes: ({ id: string; type: "WeightedChoice"; choices: { weight: number; value: string; }[]; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; ... 5 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; } | ... 9 more ... | { ...; }...'.
+../core/collaboration/useCollaborativeReactFlow.ts(15,16): error TS2305: Module '"../graphSchema"' has no exported member 'Edge'.
+../core/collaboration/useCollaborativeReactFlow.ts(68,18): error TS2339: Property 'edges' does not exist on type '{ nodes: ({ id: string; type: "WeightedChoice"; choices: { weight: number; value: string; }[]; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; ... 5 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; } | ... 9 more ... | { ...; }...'.
+../core/collaboration/useCollaborativeReactFlow.ts(68,28): error TS7006: Parameter 'edge' implicitly has an 'any' type.
+../core/collaboration/useCollaborativeReactFlow.ts(85,13): error TS2339: Property 'edges' does not exist on type '{ nodes: ({ id: string; type: "WeightedChoice"; choices: { weight: number; value: string; }[]; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; ... 5 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; } | ... 9 more ... | { ...; }...'.
+../core/components/AuditTrailViewer.tsx(44,5): error TS2339: Property 'auditHistory' does not exist on type 'WorkflowStore'.
+../core/components/AuditTrailViewer.tsx(47,5): error TS2339: Property 'fetchAuditHistory' does not exist on type 'WorkflowStore'.
+../core/components/AuditTrailViewer.tsx(48,5): error TS2339: Property 'exportAuditHistory' does not exist on type 'WorkflowStore'.
+../core/components/AuditTrailViewer.tsx(68,32): error TS7006: Parameter 'entry' implicitly has an 'any' type.
+../core/components/AuditTrailViewer.tsx(72,32): error TS7006: Parameter 'entry' implicitly has an 'any' type.
+../core/components/AuditTrailViewer.tsx(76,32): error TS7006: Parameter 'entry' implicitly has an 'any' type.
+../core/components/AuditTrailViewer.tsx(80,32): error TS7006: Parameter 'entry' implicitly has an 'any' type.
+../core/components/AuditTrailViewer.tsx(86,32): error TS7006: Parameter 'entry' implicitly has an 'any' type.
+../core/components/AuditTrailViewer.tsx(93,32): error TS7006: Parameter 'entry' implicitly has an 'any' type.
+../core/components/AuditTrailViewer.tsx(101,26): error TS7006: Parameter 'a' implicitly has an 'any' type.
+../core/components/AuditTrailViewer.tsx(101,29): error TS7006: Parameter 'b' implicitly has an 'any' type.
+../core/components/AuditTrailViewer.tsx(108,41): error TS7006: Parameter 'entry' implicitly has an 'any' type.
+../core/components/AuditTrailViewer.tsx(112,41): error TS7006: Parameter 'entry' implicitly has an 'any' type.
+../core/components/AuditTrailViewer.tsx(237,68): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'Error'.
+  Type 'undefined' is not assignable to type 'Error'.
+../core/components/AuditTrailViewer.tsx(242,27): error TS2322: Type 'unknown' is not assignable to type 'Key | null | undefined'.
+../core/components/AuditTrailViewer.tsx(242,38): error TS2322: Type 'unknown' is not assignable to type 'string | number | readonly string[] | undefined'.
+../core/components/AuditTrailViewer.tsx(243,22): error TS18046: 'type' is of type 'unknown'.
+../core/components/AuditTrailViewer.tsx(255,65): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'Error'.
+  Type 'undefined' is not assignable to type 'Error'.
+../core/components/AuditTrailViewer.tsx(260,27): error TS2322: Type 'unknown' is not assignable to type 'Key | null | undefined'.
+../core/components/AuditTrailViewer.tsx(260,39): error TS2322: Type 'unknown' is not assignable to type 'string | number | readonly string[] | undefined'.
+../core/components/AuditTrailViewer.tsx(261,21): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+../core/components/AuditTrailViewer.tsx(276,70): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'Error'.
+  Type 'undefined' is not assignable to type 'Error'.
+../core/components/AuditTrailViewer.tsx(290,67): error TS2345: Argument of type 'Date | undefined' is not assignable to parameter of type 'Error'.
+  Type 'undefined' is not assignable to type 'Error'.
+../core/components/AuditTrailViewer.tsx(302,65): error TS2345: Argument of type 'Date | undefined' is not assignable to parameter of type 'Error'.
+  Type 'undefined' is not assignable to type 'Error'.
+../core/components/AuditTrailViewer.tsx(318,32): error TS7006: Parameter 'entry' implicitly has an 'any' type.
+../core/components/ContextualHelp/ContextualHelpSystem.tsx(241,15): error TS18046: 'context' is of type 'unknown'.
+../core/components/ContextualHelp/ContextualHelpSystem.tsx(241,45): error TS18046: 'context' is of type 'unknown'.
+../core/components/ContextualHelp/ContextualHelpSystem.tsx(248,37): error TS18046: 'context' is of type 'unknown'.
+../core/components/ContextualHelp/ContextualHelpSystem.tsx(249,48): error TS18046: 'context' is of type 'unknown'.
+../core/components/ContextualHelp/ContextualHelpSystem.tsx(459,14): error TS2322: Type '{ children: string; jsx: true; }' is not assignable to type 'DetailedHTMLProps<StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement>'.
+  Property 'jsx' does not exist on type 'DetailedHTMLProps<StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement>'.
+../core/components/DirectorToolbar/DirectorPreviewToolbar.tsx(236,14): error TS2322: Type '{ children: string; jsx: true; }' is not assignable to type 'DetailedHTMLProps<StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement>'.
+  Property 'jsx' does not exist on type 'DetailedHTMLProps<StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement>'.
+../core/components/ExecutionPathVisualization.tsx(14,3): error TS2305: Module '"../types/ExecutionPath"' has no exported member 'DEFAULT_VISUALIZATION_CONFIG'.
+../core/components/ExecutionPathVisualization.tsx(53,64): error TS18048: 'r.executionTimeMs' is possibly 'undefined'.
+../core/components/ExtensionManager/ExtensionConfigurationPanel.tsx(53,13): error TS2365: Operator '<' cannot be applied to types 'Error' and 'number'.
+../core/components/ExtensionManager/ExtensionConfigurationPanel.tsx(53,26): error TS2365: Operator '>' cannot be applied to types 'Error' and 'number'.
+../core/components/ExtensionManager/ExtensionConfigurationPanel.tsx(64,27): error TS2322: Type 'string' is not assignable to type 'Error'.
+../core/components/ExtensionManager/ExtensionConfigurationPanel.tsx(65,26): error TS2322: Type 'string' is not assignable to type 'Error'.
+../core/components/ExtensionManager/ExtensionConfigurationPanel.tsx(66,29): error TS2322: Type 'string' is not assignable to type 'Error'.
+../core/components/ExtensionManager/ExtensionConfigurationPanel.tsx(67,27): error TS2322: Type 'string' is not assignable to type 'Error'.
+../core/components/ExtensionManager/ExtensionConfigurationPanel.tsx(91,13): error TS2365: Operator '<' cannot be applied to types 'Error' and 'number'.
+../core/components/ExtensionManager/ExtensionConfigurationPanel.tsx(114,69): error TS2367: This comparison appears to be unintentional because the types 'Error' and 'string' have no overlap.
+../core/components/ExtensionManager/ExtensionConfigurationPanel.tsx(131,20): error TS2345: Argument of type 'Error' is not assignable to parameter of type 'string'.
+../core/components/ExtensionManager/ExtensionConfigurationPanel.tsx(209,63): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'Error'.
+../core/components/ExtensionManager/ExtensionConfigurationPanel.tsx(222,61): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Error'.
+../core/components/ExtensionManager/ExtensionConfigurationPanel.tsx(232,61): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Error'.
+../core/components/ExtensionManager/ExtensionConfigurationPanel.tsx(241,61): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Error'.
+../core/components/ExtensionManager/ExtensionConfigurationPanel.tsx(244,25): error TS2322: Type 'Error' is not assignable to type 'Key | null | undefined'.
+../core/components/ExtensionManager/ExtensionConfigurationPanel.tsx(244,44): error TS2322: Type 'Error' is not assignable to type 'string | number | readonly string[] | undefined'.
+../core/components/ExtensionManager/ExtensionConfigurationPanel.tsx(255,61): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Error'.
+../core/components/ExtensionManager/ExtensionConfigurationPanel.tsx(265,70): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'Error'.
+  Type 'string[]' is missing the following properties from type 'Error': name, message
+../core/components/ExtensionManager/ExtensionConfigurationPanel.tsx(300,68): error TS2322: Type '{ name: string; email?: string | undefined; url?: string | undefined; }' is not assignable to type 'ReactNode'.
+../core/components/ExtensionManager/ExtensionDetailView.tsx(96,43): error TS2322: Type '{ name: string; email?: string | undefined; url?: string | undefined; }' is not assignable to type 'ReactNode'.
+../core/components/ExtensionManager/ExtensionDetailView.tsx(212,64): error TS2339: Property 'entry_point' does not exist on type '{ node_types?: string[] | undefined; transforms?: string[] | undefined; storage_providers?: string[] | undefined; background_tasks?: string[] | undefined; }'.
+../core/components/ExtensionManager/ExtensionDetailView.tsx(243,72): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
+../core/components/ExtensionManager/ExtensionDetailView.tsx(306,79): error TS2339: Property 'system_version' does not exist on type '{ system?: string | undefined; extensions?: Record<string, string> | undefined; npm?: Record<string, string> | undefined; }'.
+../core/components/ExtensionManager/ExtensionInstallDialog.tsx(7,59): error TS2307: Cannot find module '../../extensions/ExtensionManifest-simple' or its corresponding type declarations.
+../core/components/ExtensionManager/ExtensionInstallDialog.tsx(302,71): error TS2339: Property 'compatible' does not exist on type '{}'.
+../core/components/ExtensionManager/ExtensionInstallDialog.tsx(304,36): error TS2339: Property 'compatible' does not exist on type '{}'.
+../core/components/ExtensionManager/ExtensionInstallDialog.tsx(307,36): error TS2339: Property 'compatible' does not exist on type '{}'.
+../core/components/ExtensionManager/ExtensionInstallDialog.tsx(311,32): error TS2339: Property 'issues' does not exist on type '{}'.
+../core/components/ExtensionManager/ExtensionInstallDialog.tsx(314,36): error TS2339: Property 'issues' does not exist on type '{}'.
+../core/components/ExtensionManager/ExtensionInstallDialog.tsx(315,60): error TS2339: Property 'severity' does not exist on type 'Error'.
+../core/components/ExtensionManager/ExtensionInstallDialog.tsx(317,28): error TS2339: Property 'severity' does not exist on type 'Error'.
+../core/components/ExtensionManager/ExtensionInstallDialog.tsx(325,32): error TS2339: Property 'warnings' does not exist on type '{}'.
+../core/components/ExtensionManager/ExtensionInstallDialog.tsx(328,36): error TS2339: Property 'warnings' does not exist on type '{}'.
+../core/components/ExtensionManager/ExtensionInstallDialog.tsx(337,32): error TS2339: Property 'recommendations' does not exist on type '{}'.
+../core/components/ExtensionManager/ExtensionInstallDialog.tsx(340,36): error TS2339: Property 'recommendations' does not exist on type '{}'.
+../core/components/ExtensionManager/ExtensionInstallDialog.tsx(355,46): error TS7006: Parameter 'permission' implicitly has an 'any' type.
+../core/components/ExtensionManager/ExtensionInstallDialog.tsx(355,58): error TS7006: Parameter 'index' implicitly has an 'any' type.
+../core/components/ExtensionManager/ExtensionInstallDialog.tsx(373,43): error TS2339: Property 'compatible' does not exist on type '{}'.
+../core/components/ExtensionManager/ExtensionListView.tsx(102,47): error TS2322: Type '{ name: string; email?: string | undefined; url?: string | undefined; }' is not assignable to type 'ReactNode'.
+../core/components/ExtensionManager/ExtensionManagerPanel.tsx(71,26): error TS2339: Property 'toLowerCase' does not exist on type '{ name: string; email?: string | undefined; url?: string | undefined; }'.
+../core/components/ExtensionManager/ExtensionManagerStore.ts(72,5): error TS2322: Type 'string' is not assignable to type '{ name: string; email?: string | undefined; url?: string | undefined; }'.
+../core/components/ExtensionManager/ExtensionManagerStore.ts(79,7): error TS2353: Object literal may only specify known properties, and 'system_version' does not exist in type '{ system?: string | undefined; extensions?: Record<string, string> | undefined; npm?: Record<string, string> | undefined; }'.
+../core/components/ExtensionManager/ExtensionManagerStore.ts(81,19): error TS2322: Type '"data-processing"' is not assignable to type '"storage" | "file-system-read" | "file-system-write" | "network" | "ui-components" | "runtime-nodes" | "system-info" | "extensions-api"'.
+../core/components/ExtensionManager/ExtensionManagerStore.ts(83,7): error TS2353: Object literal may only specify known properties, and 'entry_point' does not exist in type '{ node_types?: string[] | undefined; transforms?: string[] | undefined; storage_providers?: string[] | undefined; background_tasks?: string[] | undefined; }'.
+../core/components/ExtensionManager/ExtensionManagerStore.ts(93,5): error TS2322: Type 'string' is not assignable to type '{ name: string; email?: string | undefined; url?: string | undefined; }'.
+../core/components/ExtensionManager/ExtensionManagerStore.ts(100,7): error TS2353: Object literal may only specify known properties, and 'system_version' does not exist in type '{ system?: string | undefined; extensions?: Record<string, string> | undefined; npm?: Record<string, string> | undefined; }'.
+../core/components/ExtensionManager/ExtensionManagerStore.ts(102,19): error TS2322: Type '"data-processing"' is not assignable to type '"storage" | "file-system-read" | "file-system-write" | "network" | "ui-components" | "runtime-nodes" | "system-info" | "extensions-api"'.
+../core/components/ExtensionManager/ExtensionManagerStore.ts(104,7): error TS2353: Object literal may only specify known properties, and 'entry_point' does not exist in type '{ node_types?: string[] | undefined; transforms?: string[] | undefined; storage_providers?: string[] | undefined; background_tasks?: string[] | undefined; }'.
+../core/components/ExtensionManager/ExtensionManagerStore.ts(111,3): error TS2322: Type '{ id: string; main: string; name: string; description: string; version: string; author: { name: string; email?: string | undefined; url?: string | undefined; }; manifest_version: "1.0"; extension_type: "transform" | ... 2 more ... | "ui"; ... 11 more ...; publishing?: { ...; } | undefined; } | { ...; } | { ...; }' is not assignable to type '{ id: string; main: string; name: string; description: string; version: string; author: { name: string; email?: string | undefined; url?: string | undefined; }; manifest_version: "1.0"; extension_type: "transform" | ... 2 more ... | "ui"; ... 11 more ...; publishing?: { ...; } | undefined; }'.
+  Property 'main' is missing in type '{ manifest_version: "1.0"; id: string; name: string; version: string; description: string; author: string; extension_type: "storage"; capabilities: { provides: string[]; requires: string[]; }; dependencies: { ...; }; permissions: ("network" | "data-storage")[]; runtime: { ...; }; }' but required in type '{ id: string; main: string; name: string; description: string; version: string; author: { name: string; email?: string | undefined; url?: string | undefined; }; manifest_version: "1.0"; extension_type: "transform" | ... 2 more ... | "ui"; ... 11 more ...; publishing?: { ...; } | undefined; }'.
+../core/components/ExtensionManager/ExtensionManagerStore.ts(118,5): error TS2322: Type 'string' is not assignable to type '{ name: string; email?: string | undefined; url?: string | undefined; }'.
+../core/components/ExtensionManager/ExtensionManagerStore.ts(125,7): error TS2353: Object literal may only specify known properties, and 'system_version' does not exist in type '{ system?: string | undefined; extensions?: Record<string, string> | undefined; npm?: Record<string, string> | undefined; }'.
+../core/components/ExtensionManager/ExtensionManagerStore.ts(127,30): error TS2322: Type '"data-storage"' is not assignable to type '"storage" | "file-system-read" | "file-system-write" | "network" | "ui-components" | "runtime-nodes" | "system-info" | "extensions-api"'.
+../core/components/ExtensionManager/ExtensionManagerStore.ts(129,7): error TS2353: Object literal may only specify known properties, and 'entry_point' does not exist in type '{ node_types?: string[] | undefined; transforms?: string[] | undefined; storage_providers?: string[] | undefined; background_tasks?: string[] | undefined; }'.
+../core/components/ExtensionManager/ExtensionManagerStore.ts(139,5): error TS2322: Type 'string' is not assignable to type '{ name: string; email?: string | undefined; url?: string | undefined; }'.
+../core/components/ExtensionManager/ExtensionManagerStore.ts(146,7): error TS2353: Object literal may only specify known properties, and 'system_version' does not exist in type '{ system?: string | undefined; extensions?: Record<string, string> | undefined; npm?: Record<string, string> | undefined; }'.
+../core/components/ExtensionManager/ExtensionManagerStore.ts(148,5): error TS2322: Type '("storage" | "file-system-read" | "file-system-write" | "network" | "ui-components" | "runtime-nodes" | "system-info" | "extensions-api")[] | ("network" | "data-storage")[] | "ui-components"[] | undefined' is not assignable to type '("storage" | "file-system-read" | "file-system-write" | "network" | "ui-components" | "runtime-nodes" | "system-info" | "extensions-api")[] | undefined'.
+  Type '("network" | "data-storage")[]' is not assignable to type '("storage" | "file-system-read" | "file-system-write" | "network" | "ui-components" | "runtime-nodes" | "system-info" | "extensions-api")[]'.
+    Type '"network" | "data-storage"' is not assignable to type '"storage" | "file-system-read" | "file-system-write" | "network" | "ui-components" | "runtime-nodes" | "system-info" | "extensions-api"'.
+      Type '"data-storage"' is not assignable to type '"storage" | "file-system-read" | "file-system-write" | "network" | "ui-components" | "runtime-nodes" | "system-info" | "extensions-api"'.
+../core/components/ExtensionManager/ExtensionManagerStore.ts(149,5): error TS2322: Type '{ themes: string[]; components: string[]; }' is not assignable to type '{ category?: string | undefined; icon?: string | undefined; themes?: string[] | undefined; css?: string[] | undefined; components?: Record<string, string> | undefined; }'.
+  Types of property 'components' are incompatible.
+    Type 'string[]' is not assignable to type 'Record<string, string>'.
+      Index signature for type 'string' is missing in type 'string[]'.
+../core/components/ExtensionManager/ExtensionMarketplace.tsx(132,50): error TS2322: Type '{ name: string; email?: string | undefined; url?: string | undefined; }' is not assignable to type 'ReactNode'.
+../core/components/ExtensionManager/ExtensionMarketplace.tsx(189,50): error TS2322: Type '{ name: string; email?: string | undefined; url?: string | undefined; }' is not assignable to type 'ReactNode'.
+../core/components/ExtensionManager/index.ts(80,25): error TS2304: Cannot find name 'ExtensionStatus'.
+../core/components/ExtensionManager/index.ts(90,25): error TS2304: Cannot find name 'ExtensionStatus'.
+../core/components/Inspector/BaseNodeEditor.tsx(82,38): error TS2339: Property 'safeParse' does not exist on type '{}'.
+../core/components/Inspector/BaseNodeEditor.tsx(103,16): error TS2349: This expression is not callable.
+  Type 'never' has no call signatures.
+../core/components/Inspector/BaseNodeEditor.tsx(105,16): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Error'.
+  No index signature with a parameter of type 'string' was found on type 'Error'.
+../core/components/Inspector/BaseNodeEditor.tsx(196,19): error TS2349: This expression is not callable.
+  Type 'never' has no call signatures.
+../core/components/Inspector/BaseNodeEditor.tsx(198,11): error TS2322: Type 'Error' is not assignable to type 'Record<string, ZodTypeAny>'.
+  Index signature for type 'string' is missing in type 'Error'.
+../core/components/Inspector/editors/ActionEditor.tsx(6,10): error TS2724: '"../ProgressiveDisclosureSection"' has no exported member named 'ProgressiveDisclosureSection'. Did you mean 'ProgressiveDisclosureSectionProps'?
+../core/components/Inspector/editors/ActionEditor.tsx(43,61): error TS2339: Property '_____nodeId' does not exist on type 'ActionEditorProps'.
+../core/components/Inspector/editors/ActionEditor.tsx(205,25): error TS2304: Cannot find name 'verb'.
+../core/components/Inspector/editors/ActionEditor.tsx(205,32): error TS2304: Cannot find name 'adverb'.
+../core/components/Inspector/editors/ActionEditor.tsx(205,44): error TS2304: Cannot find name 'character'.
+../core/components/Inspector/editors/ActionEditor.tsx(205,56): error TS2304: Cannot find name 'action'.
+../core/components/Inspector/editors/ActionEditor.tsx(205,65): error TS2304: Cannot find name 'object'.
+../core/components/Inspector/editors/ActionEditor.tsx(205,86): error TS2304: Cannot find name 'movement'.
+../core/components/Inspector/editors/ConcatEditor.tsx(6,10): error TS2724: '"../ProgressiveDisclosureSection"' has no exported member named 'ProgressiveDisclosureSection'. Did you mean 'ProgressiveDisclosureSectionProps'?
+../core/components/Inspector/editors/ConcatEditor.tsx(30,61): error TS2339: Property '_____nodeId' does not exist on type 'ConcatEditorProps'.
+../core/components/Inspector/editors/ConditionalEditor.tsx(5,10): error TS2724: '"../ProgressiveDisclosureSection"' has no exported member named 'ProgressiveDisclosureSection'. Did you mean 'ProgressiveDisclosureSectionProps'?
+../core/components/Inspector/editors/ConditionalEditor.tsx(89,13): error TS2322: Type 'null' is not assignable to type 'ZodTypeAny'.
+../core/components/Inspector/editors/ConditionalEditor.tsx(100,13): error TS2322: Type 'null' is not assignable to type 'ZodTypeAny'.
+../core/components/Inspector/editors/MarkovEditor.tsx(5,10): error TS2724: '"../ProgressiveDisclosureSection"' has no exported member named 'ProgressiveDisclosureSection'. Did you mean 'ProgressiveDisclosureSectionProps'?
+../core/components/Inspector/editors/MarkovEditor.tsx(214,13): error TS2322: Type 'null' is not assignable to type 'ZodTypeAny'.
+../core/components/Inspector/editors/MarkovEditor.tsx(692,13): error TS2322: Type 'null' is not assignable to type 'ZodTypeAny'.
+../core/components/Inspector/editors/MarkovEditor.tsx(736,13): error TS2322: Type 'null' is not assignable to type 'ZodTypeAny'.
+../core/components/Inspector/editors/OutputEditor.tsx(5,10): error TS2724: '"../ProgressiveDisclosureSection"' has no exported member named 'ProgressiveDisclosureSection'. Did you mean 'ProgressiveDisclosureSectionProps'?
+../core/components/Inspector/editors/OutputEditor.tsx(25,61): error TS2339: Property '_____nodeId' does not exist on type 'OutputEditorProps'.
+../core/components/Inspector/editors/OutputEditor.tsx(305,64): error TS2322: Type '{}' is not assignable to type 'ReactNode'.
+../core/components/Inspector/editors/PythonTransformEditor.tsx(6,10): error TS2724: '"../ProgressiveDisclosureSection"' has no exported member named 'ProgressiveDisclosureSection'. Did you mean 'ProgressiveDisclosureSectionProps'?
+../core/components/Inspector/editors/SequentialEditor.tsx(6,10): error TS2724: '"../ProgressiveDisclosureSection"' has no exported member named 'ProgressiveDisclosureSection'. Did you mean 'ProgressiveDisclosureSectionProps'?
+../core/components/Inspector/editors/SequentialEditor.tsx(23,69): error TS2339: Property '_____nodeId' does not exist on type 'SequentialEditorProps'.
+../core/components/Inspector/editors/SequentialEditor.tsx(113,13): error TS2322: Type 'null' is not assignable to type 'ZodTypeAny'.
+../core/components/Inspector/editors/SequentialEditor.tsx(176,13): error TS2322: Type 'null' is not assignable to type 'ZodTypeAny'.
+../core/components/Inspector/editors/SequentialEditor.tsx(240,80): error TS2339: Property 'weights' does not exist on type '{}'.
+../core/components/Inspector/editors/SubjectEditor.tsx(6,10): error TS2724: '"../ProgressiveDisclosureSection"' has no exported member named 'ProgressiveDisclosureSection'. Did you mean 'ProgressiveDisclosureSectionProps'?
+../core/components/Inspector/editors/SubjectEditor.tsx(37,63): error TS2339: Property '_____nodeId' does not exist on type 'SubjectEditorProps'.
+../core/components/Inspector/editors/SubjectEditor.tsx(167,27): error TS2304: Cannot find name 'creature'.
+../core/components/Inspector/editors/SubjectEditor.tsx(167,45): error TS2304: Cannot find name 'setting'.
+../core/components/Inspector/editors/SubjectEditor.tsx(167,62): error TS2304: Cannot find name 'character'.
+../core/components/Inspector/editors/SubjectEditor.tsx(167,78): error TS2304: Cannot find name 'description'.
+../core/components/Inspector/editors/SubjectEditor.tsx(167,95): error TS2304: Cannot find name 'adjective'.
+../core/components/Inspector/editors/SubjectEditor.tsx(167,107): error TS2304: Cannot find name 'noun'.
+../core/components/Inspector/editors/VariableEditor.tsx(6,10): error TS2724: '"../ProgressiveDisclosureSection"' has no exported member named 'ProgressiveDisclosureSection'. Did you mean 'ProgressiveDisclosureSectionProps'?
+../core/components/Inspector/editors/VariableEditor.tsx(7,36): error TS2307: Cannot find module '../../stores/uiSettingsStore' or its corresponding type declarations.
+../core/components/Inspector/editors/VariableEditor.tsx(28,65): error TS2339: Property '_____nodeId' does not exist on type 'VariableEditorProps'.
+../core/components/Inspector/editors/VariableEditor.tsx(49,25): error TS2304: Cannot find name 'nodeType'.
+../core/components/Inspector/editors/VariableEditor.tsx(50,25): error TS2304: Cannot find name 'nodeType'.
+../core/components/Inspector/editors/VariableEditor.tsx(128,30): error TS18046: 'v' is of type 'unknown'.
+../core/components/Inspector/editors/VariableEditor.tsx(129,22): error TS18046: 'v' is of type 'unknown'.
+../core/components/Inspector/editors/VariableEditor.tsx(129,46): error TS18046: 'v' is of type 'unknown'.
+../core/components/Inspector/editors/VariableEditor.tsx(130,22): error TS18046: 'v' is of type 'unknown'.
+../core/components/Inspector/editors/VariableEditor.tsx(130,47): error TS18046: 'v' is of type 'unknown'.
+../core/components/Inspector/editors/WeightedAdvancedEditor.tsx(5,10): error TS2724: '"../ProgressiveDisclosureSection"' has no exported member named 'ProgressiveDisclosureSection'. Did you mean 'ProgressiveDisclosureSectionProps'?
+../core/components/Inspector/editors/WeightedAdvancedEditor.tsx(24,81): error TS2339: Property '_____nodeId' does not exist on type 'WeightedAdvancedEditorProps'.
+../core/components/Inspector/editors/WeightedAdvancedEditor.tsx(583,28): error TS2304: Cannot find name 'props'.
+../core/components/Inspector/editors/WeightedChoiceEditor.tsx(5,10): error TS2724: '"../ProgressiveDisclosureSection"' has no exported member named 'ProgressiveDisclosureSection'. Did you mean 'ProgressiveDisclosureSectionProps'?
+../core/components/Inspector/editors/WeightedChoiceEditor.tsx(7,52): error TS2614: Module '"../WeightControlSlider"' has no exported member 'useWeightControlIntegration'. Did you mean to use 'import useWeightControlIntegration from "../WeightControlSlider"' instead?
+../core/components/Inspector/editors/WeightedChoiceEditor.tsx(21,3): error TS2339: Property 'errors' does not exist on type 'WeightedChoiceEditorProps'.
+../core/components/Inspector/editors/WeightedChoiceEditor.tsx(56,5): error TS2554: Expected 1-2 arguments, but got 3.
+../core/components/Inspector/editors/WeightedChoiceEditor.tsx(189,13): error TS2322: Type '{ options: WeightControlOption[]; onOptionsChange: any; onPreviewRequest: (weightOptions: WeightControlOption[]) => void; showPreview: boolean; previewDebounceMs: number; showPresets: boolean; allowCustomPresets: boolean; }' is not assignable to type 'IntrinsicAttributes & WeightControlSliderProps'.
+  Property 'showPreview' does not exist on type 'IntrinsicAttributes & WeightControlSliderProps'.
+../core/components/Inspector/EnhancedTextAreaEditor.tsx(54,45): error TS2339: Property 'addNotification' does not exist on type 'CorrectionsState'.
+../core/components/Inspector/EnhancedTextAreaEditor.tsx(95,34): error TS2339: Property 'effectivenessScore' does not exist on type 'CorrectionRule'.
+../core/components/Inspector/EnhancedTextAreaEditor.tsx(113,34): error TS2339: Property 'effectivenessScore' does not exist on type 'CorrectionRule'.
+../core/components/Inspector/index.ts(10,31): error TS2614: Module '"./WeightControlSlider"' has no exported member 'useWeightControlIntegration'. Did you mean to use 'import useWeightControlIntegration from "./WeightControlSlider"' instead?
+../core/components/Inspector/index.ts(14,36): error TS2724: '"./WeightControlSlider"' has no exported member named 'WeightControlSliderProps'. Did you mean 'WeightControlSlider'?
+../core/components/Inspector/InspectorPanel.tsx(5,10): error TS2724: '"./PreferenceControls"' has no exported member named 'PreferenceControls'. Did you mean 'PreferenceControlsProps'?
+../core/components/Inspector/InspectorPanel.tsx(44,3): error TS7031: Binding element 'node' implicitly has an 'any' type.
+../core/components/Inspector/InspectorPanel.tsx(45,3): error TS7031: Binding element 'schema' implicitly has an 'any' type.
+../core/components/Inspector/InspectorPanel.tsx(46,3): error TS7031: Binding element 'onChange' implicitly has an 'any' type.
+../core/components/Inspector/InspectorPanel.tsx(47,3): error TS7031: Binding element 'onClose' implicitly has an 'any' type.
+../core/components/Inspector/InspectorPanel.tsx(48,3): error TS7031: Binding element 'onGlobalPreviewRequest' implicitly has an 'any' type.
+../core/components/Inspector/InspectorPanelWithContext.tsx(217,13): error TS2739: Type 'Node' is missing the following properties from type 'Error': name, message
+../core/components/Inspector/InspectorPanelWithContext.tsx(222,13): error TS2739: Type 'Node' is missing the following properties from type 'Error': name, message
+../core/components/Inspector/NodeEditorRouter.tsx(34,44): error TS2339: Property 'nodeType' does not exist on type '{}'.
+../core/components/Inspector/NodeEditorRouter.tsx(50,13): error TS2322: Type '{ onGlobalPreviewRequest: (() => void) | undefined; nodeId: unknown; nodeData: {}; schema: ZodType<Record<string, unknown>, ZodTypeDef, Record<string, unknown>>; onChange: (partial: Record<...>) => void; }' is not assignable to type 'WeightedChoiceEditorProps'.
+  Types of property 'nodeId' are incompatible.
+    Type 'unknown' is not assignable to type 'string'.
+../core/components/Inspector/NodeEditorRouter.tsx(53,13): error TS2322: Type '{ nodeId: unknown; nodeData: {}; schema: ZodType<Record<string, unknown>, ZodTypeDef, Record<string, unknown>>; onChange: (partial: Record<string, unknown>) => void; }' is not assignable to type 'ConcatEditorProps'.
+  Types of property 'nodeId' are incompatible.
+    Type 'unknown' is not assignable to type 'string'.
+../core/components/Inspector/NodeEditorRouter.tsx(56,13): error TS2322: Type '{ nodeId: unknown; nodeData: {}; schema: ZodType<Record<string, unknown>, ZodTypeDef, Record<string, unknown>>; onChange: (partial: Record<string, unknown>) => void; }' is not assignable to type 'OutputEditorProps'.
+  Types of property 'nodeId' are incompatible.
+    Type 'unknown' is not assignable to type 'string'.
+../core/components/Inspector/NodeEditorRouter.tsx(60,13): error TS2322: Type '{ nodeId: unknown; nodeData: {}; schema: ZodType<Record<string, unknown>, ZodTypeDef, Record<string, unknown>>; onChange: (partial: Record<string, unknown>) => void; }' is not assignable to type 'BaseNodeEditorProps'.
+  Types of property 'nodeId' are incompatible.
+    Type 'unknown' is not assignable to type 'string'.
+../core/components/Inspector/NodeEditorRouter.tsx(64,13): error TS2741: Property 'nodeType' is missing in type '{ nodeId: unknown; nodeData: {}; schema: ZodType<Record<string, unknown>, ZodTypeDef, Record<string, unknown>>; onChange: (partial: Record<string, unknown>) => void; }' but required in type 'VariableEditorProps'.
+../core/components/Inspector/NodeEditorRouter.tsx(68,13): error TS2322: Type '{ nodeId: unknown; nodeData: {}; schema: ZodType<Record<string, unknown>, ZodTypeDef, Record<string, unknown>>; onChange: (partial: Record<string, unknown>) => void; }' is not assignable to type 'SubjectEditorProps'.
+  Types of property 'nodeId' are incompatible.
+    Type 'unknown' is not assignable to type 'string'.
+../core/components/Inspector/NodeEditorRouter.tsx(72,13): error TS2322: Type '{ nodeId: unknown; nodeData: {}; schema: ZodType<Record<string, unknown>, ZodTypeDef, Record<string, unknown>>; onChange: (partial: Record<string, unknown>) => void; }' is not assignable to type 'BaseNodeEditorProps'.
+  Types of property 'nodeId' are incompatible.
+    Type 'unknown' is not assignable to type 'string'.
+../core/components/Inspector/NodeEditorRouter.tsx(76,13): error TS2322: Type '{ nodeId: unknown; nodeData: {}; schema: ZodType<Record<string, unknown>, ZodTypeDef, Record<string, unknown>>; onChange: (partial: Record<string, unknown>) => void; }' is not assignable to type 'BaseNodeEditorProps'.
+  Types of property 'nodeId' are incompatible.
+    Type 'unknown' is not assignable to type 'string'.
+../core/components/Inspector/NodeEditorRouter.tsx(79,13): error TS2322: Type '{ nodeId: unknown; nodeData: {}; schema: ZodType<Record<string, unknown>, ZodTypeDef, Record<string, unknown>>; onChange: (partial: Record<string, unknown>) => void; }' is not assignable to type 'ActionEditorProps'.
+  Types of property 'nodeId' are incompatible.
+    Type 'unknown' is not assignable to type 'string'.
+../core/components/Inspector/NodeEditorRouter.tsx(83,13): error TS2322: Type '{ nodeId: unknown; nodeData: {}; schema: ZodType<Record<string, unknown>, ZodTypeDef, Record<string, unknown>>; onChange: (partial: Record<string, unknown>) => void; }' is not assignable to type 'WeightedAdvancedEditorProps'.
+  Types of property 'nodeId' are incompatible.
+    Type 'unknown' is not assignable to type 'string'.
+../core/components/Inspector/NodeEditorRouter.tsx(86,13): error TS2322: Type '{ nodeId: unknown; nodeData: {}; schema: ZodType<Record<string, unknown>, ZodTypeDef, Record<string, unknown>>; onChange: (partial: Record<string, unknown>) => void; }' is not assignable to type 'ConditionalEditorProps'.
+  Types of property 'nodeId' are incompatible.
+    Type 'unknown' is not assignable to type 'string'.
+../core/components/Inspector/NodeEditorRouter.tsx(89,13): error TS2322: Type '{ nodeId: unknown; nodeData: {}; schema: ZodType<Record<string, unknown>, ZodTypeDef, Record<string, unknown>>; onChange: (partial: Record<string, unknown>) => void; }' is not assignable to type 'SequentialEditorProps'.
+  Types of property 'nodeId' are incompatible.
+    Type 'unknown' is not assignable to type 'string'.
+../core/components/Inspector/NodeEditorRouter.tsx(92,13): error TS2322: Type '{ nodeId: unknown; nodeData: {}; schema: ZodType<Record<string, unknown>, ZodTypeDef, Record<string, unknown>>; onChange: (partial: Record<string, unknown>) => void; }' is not assignable to type 'MarkovEditorProps'.
+  Types of property 'nodeId' are incompatible.
+    Type 'unknown' is not assignable to type 'string'.
+../core/components/Inspector/NodeEditorRouter.tsx(96,13): error TS2322: Type '{ nodeId: unknown; nodeData: {}; schema: ZodType<Record<string, unknown>, ZodTypeDef, Record<string, unknown>>; onChange: (partial: Record<string, unknown>) => void; }' is not assignable to type 'PythonTransformEditorProps'.
+  Types of property 'nodeId' are incompatible.
+    Type 'unknown' is not assignable to type 'string'.
+../core/components/Inspector/NodeEditorRouter.tsx(101,13): error TS2322: Type '{ nodeId: unknown; nodeData: {}; schema: ZodType<Record<string, unknown>, ZodTypeDef, Record<string, unknown>>; onChange: (partial: Record<string, unknown>) => void; }' is not assignable to type 'BaseNodeEditorProps'.
+  Types of property 'nodeId' are incompatible.
+    Type 'unknown' is not assignable to type 'string'.
+../core/components/Inspector/PreferenceControls.tsx(296,26): error TS2304: Cannot find name 'nodePreferences'.
+../core/components/Inspector/PreferenceControls.tsx(300,35): error TS2304: Cannot find name 'nodePreferences'.
+../core/components/Inspector/PreferenceControls.tsx(304,39): error TS2304: Cannot find name 'nodePreferences'.
+../core/components/Inspector/PreferenceControls.tsx(308,35): error TS2304: Cannot find name 'nodePreferences'.
+../core/components/Inspector/PreferenceControls.tsx(309,36): error TS2304: Cannot find name 'nodePreferences'.
+../core/components/Inspector/PreviewSection.tsx(26,24): error TS2339: Property 'data' does not exist on type 'Error'.
+../core/components/Inspector/PreviewSection.tsx(28,13): error TS2339: Property 'type' does not exist on type 'Error'.
+../core/components/Inspector/PreviewSection.tsx(28,19): error TS2339: Property 'data' does not exist on type 'Error'.
+../core/components/Inspector/ProgressiveDisclosureSection.tsx(247,14): error TS2322: Type '{ children: string; jsx: true; }' is not assignable to type 'DetailedHTMLProps<StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement>'.
+  Property 'jsx' does not exist on type 'DetailedHTMLProps<StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement>'.
+../core/components/Inspector/PropertiesSection.tsx(21,9): error TS2322: Type 'Error' is not assignable to type 'Record<string, unknown>'.
+  Index signature for type 'string' is missing in type 'Error'.
+../core/components/Inspector/PropertiesSection.tsx(22,9): error TS2322: Type 'ZodType<unknown, ZodTypeDef, unknown>' is not assignable to type 'ZodType<Record<string, unknown>, ZodTypeDef, Record<string, unknown>>'.
+  Type 'unknown' is not assignable to type 'Record<string, unknown>'.
+../core/components/Inspector/SmoothInspectorPanel.tsx(19,3): error TS2305: Module '"../../utils/smoothAnimations"' has no exported member 'AnimatedElement'.
+../core/components/Inspector/SmoothInspectorPanel.tsx(58,3): error TS7031: Binding element 'node' implicitly has an 'any' type.
+../core/components/Inspector/SmoothInspectorPanel.tsx(59,3): error TS7031: Binding element 'schema' implicitly has an 'any' type.
+../core/components/Inspector/SmoothInspectorPanel.tsx(60,3): error TS7031: Binding element 'onChange' implicitly has an 'any' type.
+../core/components/Inspector/SmoothInspectorPanel.tsx(61,3): error TS7031: Binding element 'onClose' implicitly has an 'any' type.
+../core/components/Inspector/SmoothInspectorPanel.tsx(62,3): error TS7031: Binding element 'onGlobalPreviewRequest' implicitly has an 'any' type.
+../core/components/Inspector/SmoothInspectorPanel.tsx(98,5): error TS2304: Cannot find name 'setWidth'.
+../core/components/Inspector/SmoothInspectorPanel.tsx(128,51): error TS2304: Cannot find name 'width'.
+../core/components/Inspector/TemplateEditor.tsx(7,3): error TS2724: '"../../utils/templateParser"' has no exported member named 'getContextualDefaults'. Did you mean 'getContextualDefault'?
+../core/components/Inspector/TemplateEditor.tsx(8,3): error TS2305: Module '"../../utils/templateParser"' has no exported member 'setTemplateContext'.
+../core/components/Inspector/TemplateEditor.tsx(688,14): error TS2322: Type '{ children: string; jsx: true; }' is not assignable to type 'DetailedHTMLProps<StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement>'.
+  Property 'jsx' does not exist on type 'DetailedHTMLProps<StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement>'.
+../core/components/NodeRenderer.tsx(51,63): error TS2339: Property 'length' does not exist on type '{}'.
+../core/components/NodeRenderer.tsx(53,34): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
+../core/components/NodeRenderer.tsx(62,8): error TS2322: Type '{ children: Element[]; className: string; onClick: (e: MouseEvent<HTMLDivElement, MouseEvent>) => void; onKeyDown: (e: KeyboardEvent<HTMLDivElement>) => void; ... 7 more ...; tabIndex: number; }' is not assignable to type 'DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>'.
+  Type '{ children: Element[]; className: string; onClick: (e: MouseEvent<HTMLDivElement, MouseEvent>) => void; onKeyDown: (e: KeyboardEvent<HTMLDivElement>) => void; ... 7 more ...; tabIndex: number; }' is not assignable to type 'HTMLAttributes<HTMLDivElement>'.
+    Types of property '"aria-label"' are incompatible.
+      Type '{}' is not assignable to type 'string'.
+../core/components/NodeRenderer.tsx(159,11): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+../core/components/NodeRenderer.tsx(175,25): error TS18046: 'data.variations' is of type 'unknown'.
+../core/components/NodeRenderer.tsx(177,16): error TS18046: 'data.variations' is of type 'unknown'.
+../core/components/NodeRenderer.tsx(201,13): error TS2322: Type '{}' is not assignable to type 'ReactNode'.
+../core/components/NodeRenderer.tsx(334,20): error TS2322: Type '{}' is not assignable to type 'ReactNode'.
+../core/components/Nodes/SmoothNodeWrapper.tsx(19,18): error TS2430: Interface 'SmoothNodeWrapperProps' incorrectly extends interface 'NodeProps'.
+  Type 'SmoothNodeWrapperProps' is not assignable to type 'Pick<WrapNodeProps<any>, "id" | "data" | "type" | "selected" | "zIndex" | "dragHandle" | "isConnectable" | "xPos" | "yPos">'.
+    Types of property 'isConnectable' are incompatible.
+      Type 'boolean | undefined' is not assignable to type 'boolean'.
+        Type 'undefined' is not assignable to type 'boolean'.
+../core/components/Nodes/SmoothNodeWrapper.tsx(234,7): error TS2783: 'onMouseEnter' is specified more than once, so this usage will be overwritten.
+../core/components/Nodes/SmoothNodeWrapper.tsx(235,7): error TS2783: 'onMouseLeave' is specified more than once, so this usage will be overwritten.
+../core/components/NotificationSystem.tsx(2,31): error TS2305: Module '"../correctionsStore"' has no exported member 'Notification'.
+../core/components/NotificationSystem.tsx(15,11): error TS2339: Property 'notifications' does not exist on type 'CorrectionsState'.
+../core/components/NotificationSystem.tsx(15,26): error TS2339: Property 'dismissNotification' does not exist on type 'CorrectionsState'.
+../core/components/NotificationSystem.tsx(15,47): error TS2339: Property 'clearNotifications' does not exist on type 'CorrectionsState'.
+../core/components/PreviewModal/EnhancedPreviewModal.tsx(265,15): error TS2353: Object literal may only specify known properties, and '':hover'' does not exist in type 'Properties<string | number, string & {}>'.
+../core/components/PreviewModal/EnhancedPreviewModal.tsx(453,25): error TS2353: Object literal may only specify known properties, and '':hover'' does not exist in type 'Properties<string | number, string & {}>'.
+../core/components/PreviewModal/EnhancedPreviewModal.tsx(710,15): error TS2322: Type 'VarianceAnalysis | null | undefined' is not assignable to type 'VarianceAnalysis | null'.
+  Type 'undefined' is not assignable to type 'VarianceAnalysis | null'.
+../core/components/PreviewModal/EnhancedPreviewModal.tsx(725,15): error TS2322: Type 'VarianceAnalysis | null | undefined' is not assignable to type 'VarianceAnalysis | null'.
+  Type 'undefined' is not assignable to type 'VarianceAnalysis | null'.
+../core/components/ProjectDialogs/ExportBundleDialog.tsx(108,62): error TS2339: Property 'metadata' does not exist on type 'Error'.
+../core/components/ProjectDialogs/ExportBundleDialog.tsx(123,47): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(o: ArrayLike<unknown> | { [s: string]: unknown; }): [string, unknown][]', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'ArrayLike<unknown> | { [s: string]: unknown; }'.
+  Overload 2 of 2, '(o: {}): [string, any][]', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type '{}'.
+../core/components/ProjectDialogs/ExportBundleDialog.tsx(626,13): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+../core/components/ProjectDialogs/SaveProjectDialog.tsx(52,44): error TS7006: Parameter 'tag' implicitly has an 'any' type.
+../core/components/RealTimePreview/RealTimePreviewIntegration.tsx(18,10): error TS2305: Module '"../../hooks/useEnhancedPreview"' has no exported member 'useEnhancedPreview'.
+../core/components/RealTimePreview/RealTimePreviewIntegration.tsx(69,5): error TS2339: Property 'generateVariants' does not exist on type '{ variants: PreviewVariant[]; isGenerating: boolean; performance: PreviewPerformance; error: string | null; requestPreview: (weights: WeightControlOption[]) => void; ... 6 more ...; config: any; }'.
+../core/components/RealTimePreview/RealTimePreviewIntegration.tsx(293,14): error TS2322: Type '{ children: string; jsx: true; }' is not assignable to type 'DetailedHTMLProps<StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement>'.
+  Property 'jsx' does not exist on type 'DetailedHTMLProps<StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement>'.
+../core/components/ScheduledExecutionManager.tsx(700,14): error TS2367: This comparison appears to be unintentional because the types 'TabType' and '"statistics"' have no overlap.
+../core/components/StatusBar.tsx(87,66): error TS2345: Argument of type 'import("/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/@reactflow+core@11.11.4_@types+react@18.3.23_react-dom@18.3.1_react@18.3.1/node_modules/@reactflow/core/dist/esm/types/nodes").Node' is not assignable to parameter of type 'Node'.
+  Type 'Node' is missing the following properties from type 'Node': baseURI, childNodes, firstChild, isConnected, and 45 more.
+../core/components/StatusBar.tsx(87,66): error TS2352: Conversion of type 'EventTarget | null' to type 'Node' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'EventTarget' is missing the following properties from type 'Node': id, position, data
+../core/components/StatusBar.tsx(90,82): error TS2345: Argument of type 'import("/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/@reactflow+core@11.11.4_@types+react@18.3.23_react-dom@18.3.1_react@18.3.1/node_modules/@reactflow/core/dist/esm/types/nodes").Node' is not assignable to parameter of type 'Node'.
+  Type 'Node' is missing the following properties from type 'Node': baseURI, childNodes, firstChild, isConnected, and 45 more.
+../core/components/StatusBar.tsx(90,82): error TS2352: Conversion of type 'EventTarget | null' to type 'Node' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'EventTarget' is missing the following properties from type 'Node': id, position, data
+../core/components/StickyNotes/StickyNotesManager.tsx(164,20): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Partial<StickyNote>'.
+../core/components/StickyNotes/StickyNotesManager.tsx(267,11): error TS2322: Type '(settings: Partial<{ showAll: boolean; ghostMode: boolean; snapToGrid: boolean; gridSize: number; defaultColor: StickyNoteColor; defaultCategory: StickyNoteCategory; }>) => void' is not assignable to type '(settings: unknown) => void'.
+  Types of parameters 'settings' and 'settings' are incompatible.
+    Type 'unknown' is not assignable to type 'Partial<{ showAll: boolean; ghostMode: boolean; snapToGrid: boolean; gridSize: number; defaultColor: StickyNoteColor; defaultCategory: StickyNoteCategory; }>'.
+../core/components/StickyNotes/StickyNoteToolbar.tsx(293,26): error TS18046: 'settings' is of type 'unknown'.
+../core/components/StickyNotes/StickyNoteToolbar.tsx(304,26): error TS18046: 'settings' is of type 'unknown'.
+../core/components/StickyNotes/StickyNoteToolbar.tsx(315,26): error TS18046: 'settings' is of type 'unknown'.
+../core/components/StickyNotes/StickyNoteToolbar.tsx(323,14): error TS18046: 'settings' is of type 'unknown'.
+../core/components/StickyNotes/StickyNoteToolbar.tsx(326,31): error TS18046: 'settings' is of type 'unknown'.
+../core/components/StickyNotes/StickyNoteToolbar.tsx(332,26): error TS18046: 'settings' is of type 'unknown'.
+../core/components/TemplateDialogs/SaveTemplateDialog.tsx(57,33): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'Error'.
+  Type 'string[]' is missing the following properties from type 'Error': name, message
+../core/components/TemplateDialogs/SaveTemplateDialog.tsx(63,31): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'Error'.
+  Type 'string[]' is missing the following properties from type 'Error': name, message
+../core/components/TemplateDialogs/SaveTemplateDialog.tsx(173,58): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Error'.
+../core/components/TemplateDialogs/SaveTemplateDialog.tsx(201,65): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Error'.
+../core/components/TemplateDialogs/SaveTemplateDialog.tsx(231,62): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Error'.
+  Type 'string' is not assignable to type 'Error'.
+../core/components/TemplateDialogs/SaveTemplateDialog.tsx(349,76): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'Error'.
+../core/components/TemplateDialogs/SaveTemplateDialog.tsx(362,66): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'Error'.
+../core/components/VariablePortNodeRenderer.tsx(48,63): error TS2339: Property 'length' does not exist on type '{}'.
+../core/components/VariablePortNodeRenderer.tsx(50,34): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
+../core/components/VariablePortNodeRenderer.tsx(111,35): error TS2551: Property 'WebkitTransform' does not exist on type 'CSSStyleDeclaration'. Did you mean 'webkitTransform'?
+../core/components/VariablePortNodeRenderer.tsx(119,35): error TS2551: Property 'WebkitTransform' does not exist on type 'CSSStyleDeclaration'. Did you mean 'webkitTransform'?
+../core/components/VariablePortNodeRenderer.tsx(158,11): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+../core/components/VariablePortNodeRenderer.tsx(174,25): error TS18046: 'data.variations' is of type 'unknown'.
+../core/components/VariablePortNodeRenderer.tsx(176,16): error TS18046: 'data.variations' is of type 'unknown'.
+../core/components/VariablePortNodeRenderer.tsx(200,13): error TS2322: Type '{}' is not assignable to type 'ReactNode'.
+../core/components/VariablePortNodeRenderer.tsx(392,20): error TS2322: Type '{}' is not assignable to type 'ReactNode'.
+../core/components/VarianceAnalysis/CreativeVarianceAnalyzer.tsx(9,28): error TS2459: Module '"../../hooks/useEnhancedPreview"' declares 'EnhancedPreviewResult' locally, but it is not exported.
+../core/components/VarianceAnalysis/CreativeVarianceAnalyzer.tsx(70,58): error TS7006: Parameter 's' implicitly has an 'any' type.
+../core/components/VarianceAnalysis/CreativeVarianceAnalyzer.tsx(71,28): error TS7006: Parameter 's' implicitly has an 'any' type.
+../core/components/VarianceAnalysis/CreativeVarianceAnalyzer.tsx(82,48): error TS7006: Parameter 'p' implicitly has an 'any' type.
+../core/components/VarianceAnalysis/CreativeVarianceAnalyzer.tsx(93,51): error TS7006: Parameter 'w' implicitly has an 'any' type.
+../core/components/VarianceAnalysis/CreativeVarianceAnalyzer.tsx(112,47): error TS7006: Parameter 'phrase' implicitly has an 'any' type.
+../core/components/VarianceAnalysis/CreativeVarianceAnalyzer.tsx(286,9): error TS2353: Object literal may only specify known properties, and '':hover'' does not exist in type 'Properties<string | number, string & {}>'.
+../core/components/VarianceAnalysis/VarianceVisualization.tsx(8,28): error TS2459: Module '"../../hooks/useEnhancedPreview"' declares 'EnhancedPreviewResult' locally, but it is not exported.
+../core/components/WeightVisualization/WeightVisualizationPanel.tsx(302,9): error TS2322: Type '(collapsed: boolean) => void' is not assignable to type '() => void'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
+../core/components/WorkflowManager.tsx(17,5): error TS2339: Property 'getDraftRules' does not exist on type 'CorrectionsState'.
+../core/components/WorkflowManager.tsx(18,5): error TS2339: Property 'getPublishedRules' does not exist on type 'CorrectionsState'.
+../core/components/WorkflowManager.tsx(19,5): error TS2339: Property 'approveRule' does not exist on type 'CorrectionsState'.
+../core/components/WorkflowManager.tsx(20,5): error TS2339: Property 'deprecateRule' does not exist on type 'CorrectionsState'.
+../core/components/WorkflowManager.tsx(21,5): error TS2339: Property 'suggestRule' does not exist on type 'CorrectionsState'.
+../core/components/WorkflowManager.tsx(37,47): error TS2339: Property 'status' does not exist on type 'CorrectionRule'.
+../core/components/WorkflowManager.tsx(38,49): error TS2339: Property 'status' does not exist on type 'CorrectionRule'.
+../core/components/WorkflowManager.tsx(39,50): error TS2339: Property 'status' does not exist on type 'CorrectionRule'.
+../core/components/WorkflowManager.tsx(40,51): error TS2339: Property 'suggestedBy' does not exist on type 'CorrectionRule'.
+../core/components/WorkflowManager.tsx(40,71): error TS2339: Property 'status' does not exist on type 'CorrectionRule'.
+../core/components/WorkflowManager.tsx(95,50): error TS2339: Property 'status' does not exist on type 'CorrectionRule'.
+../core/components/WorkflowManager.tsx(114,39): error TS2339: Property 'status' does not exist on type 'CorrectionRule'.
+../core/components/WorkflowManager.tsx(117,13): error TS2339: Property 'status' does not exist on type 'CorrectionRule'.
+../core/components/WorkflowManager.tsx(146,19): error TS2339: Property 'suggestedBy' does not exist on type 'CorrectionRule'.
+../core/components/WorkflowManager.tsx(152,36): error TS2339: Property 'suggestedBy' does not exist on type 'CorrectionRule'.
+../core/components/WorkflowManager.tsx(166,19): error TS2339: Property 'usageCount' does not exist on type 'CorrectionRule'.
+../core/components/WorkflowManager.tsx(167,33): error TS2339: Property 'usageCount' does not exist on type 'CorrectionRule'.
+../core/components/WorkflowManager.tsx(169,19): error TS2339: Property 'lastUsedAt' does not exist on type 'CorrectionRule'.
+../core/components/WorkflowManager.tsx(170,38): error TS2339: Property 'lastUsedAt' does not exist on type 'CorrectionRule'.
+../core/components/WorkflowManager.tsx(174,17): error TS2339: Property 'suggestionReason' does not exist on type 'CorrectionRule'.
+../core/components/WorkflowManager.tsx(181,33): error TS2339: Property 'suggestionReason' does not exist on type 'CorrectionRule'.
+../core/components/WorkflowManager.tsx(185,17): error TS2339: Property 'deprecationReason' does not exist on type 'CorrectionRule'.
+../core/components/WorkflowManager.tsx(191,33): error TS2339: Property 'deprecationReason' does not exist on type 'CorrectionRule'.
+../core/components/WorkflowManager.tsx(197,17): error TS2339: Property 'status' does not exist on type 'CorrectionRule'.
+../core/components/WorkflowManager.tsx(214,17): error TS2339: Property 'status' does not exist on type 'CorrectionRule'.
+../core/CorrectionsManagerPanel.tsx(30,5): error TS2339: Property 'getDraftRules' does not exist on type 'CorrectionsState'.
+../core/CorrectionsManagerPanel.tsx(106,47): error TS2339: Property 'status' does not exist on type 'CorrectionRule'.
+../core/CorrectionsManagerPanel.tsx(109,47): error TS2339: Property 'status' does not exist on type 'CorrectionRule'.
+../core/CorrectionsManagerPanel.tsx(112,47): error TS2339: Property 'status' does not exist on type 'CorrectionRule'.
+../core/CorrectionsManagerPanel.tsx(139,18): error TS2345: Argument of type '{ name: string; description: string; findPattern: string; replaceWith: string; isRegex: false; isActive: true; priority: number; }' is not assignable to parameter of type 'SetStateAction<{ name: string; description: string; findPattern: string; replaceWith: string; isRegex: boolean; isActive: boolean; priority: number; category: string; tags: string[]; }>'.
+  Type '{ name: string; description: string; findPattern: string; replaceWith: string; isRegex: false; isActive: true; priority: number; }' is missing the following properties from type '{ name: string; description: string; findPattern: string; replaceWith: string; isRegex: boolean; isActive: boolean; priority: number; category: string; tags: string[]; }': category, tags
+../core/CorrectionsManagerPanel.tsx(353,15): error TS2353: Object literal may only specify known properties, and 'writing' does not exist in type 'Properties<string | number, string & {}>'.
+../core/CorrectionsManagerPanel.tsx(836,29): error TS2339: Property 'status' does not exist on type 'CorrectionRule'.
+../core/CorrectionsManagerPanel.tsx(838,44): error TS2339: Property 'status' does not exist on type 'CorrectionRule'.
+../core/CorrectionsManagerPanel.tsx(839,34): error TS2339: Property 'status' does not exist on type 'CorrectionRule'.
+../core/CorrectionsManagerPanel.tsx(840,36): error TS2339: Property 'status' does not exist on type 'CorrectionRule'.
+../core/CorrectionsManagerPanel.tsx(848,33): error TS2339: Property 'status' does not exist on type 'CorrectionRule'.
+../core/extensions/ExtensionCompatibilityChecker.ts(163,39): error TS2339: Property 'deprecated' does not exist on type '{ min_system_version?: string | undefined; max_system_version?: string | undefined; platforms?: ("web" | "desktop" | "server")[] | undefined; browsers?: Record<string, string> | undefined; }'.
+../core/extensions/ExtensionCompatibilityChecker.ts(164,88): error TS2339: Property 'deprecationMessage' does not exist on type '{ min_system_version?: string | undefined; max_system_version?: string | undefined; platforms?: ("web" | "desktop" | "server")[] | undefined; browsers?: Record<string, string> | undefined; }'.
+../core/extensions/ExtensionCompatibilityChecker.ts(202,55): error TS2345: Argument of type 'string' is not assignable to parameter of type '"web" | "desktop" | "server"'.
+../core/extensions/ExtensionLifecycleManager.ts(150,28): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Error'.
+../core/extensions/ExtensionLifecycleManager.ts(154,44): error TS18046: 'error' is of type 'unknown'.
+../core/extensions/ExtensionLifecycleManager.ts(155,9): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Error | undefined'.
+../core/extensions/ExtensionLifecycleManager.ts(193,28): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Error'.
+../core/extensions/ExtensionLifecycleManager.ts(197,42): error TS18046: 'error' is of type 'unknown'.
+../core/extensions/ExtensionLifecycleManager.ts(198,9): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Error | undefined'.
+../core/extensions/ExtensionLifecycleManager.ts(229,28): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Error'.
+../core/extensions/ExtensionLifecycleManager.ts(233,44): error TS18046: 'error' is of type 'unknown'.
+../core/extensions/ExtensionLifecycleManager.ts(234,9): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Error | undefined'.
+../core/extensions/ExtensionLifecycleManager.ts(268,28): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Error'.
+../core/extensions/ExtensionLifecycleManager.ts(272,41): error TS18046: 'error' is of type 'unknown'.
+../core/extensions/ExtensionLifecycleManager.ts(273,9): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Error | undefined'.
+../core/extensions/ExtensionLifecycleManager.ts(351,18): error TS18046: 'error' is of type 'unknown'.
+../core/extensions/ExtensionManifest.ts(193,20): error TS18046: 'error' is of type 'unknown'.
+../core/extensions/ExtensionManifest.ts(221,34): error TS2345: Argument of type '{ id: string; main: string; name: string; description: string; version: string; author: { name: string; email?: string | undefined; url?: string | undefined; }; manifest_version: "1.0"; extension_type: "transform" | ... 2 more ... | "ui"; ... 11 more ...; publishing?: { ...; } | undefined; } | undefined' is not assignable to parameter of type '{ id: string; main: string; name: string; description: string; version: string; author: { name: string; email?: string | undefined; url?: string | undefined; }; manifest_version: "1.0"; extension_type: "transform" | ... 2 more ... | "ui"; ... 11 more ...; publishing?: { ...; } | undefined; }'.
+  Type 'undefined' is not assignable to type '{ id: string; main: string; name: string; description: string; version: string; author: { name: string; email?: string | undefined; url?: string | undefined; }; manifest_version: "1.0"; extension_type: "transform" | ... 2 more ... | "ui"; ... 11 more ...; publishing?: { ...; } | undefined; }'.
+../core/extensions/ExtensionManifest.ts(231,20): error TS18046: 'error' is of type 'unknown'.
+../core/extensions/ExtensionManifest.ts(339,7): error TS2322: Type 'string[]' is not assignable to type '("storage" | "file-system-read" | "file-system-write" | "network" | "ui-components" | "runtime-nodes" | "system-info" | "extensions-api")[]'.
+  Type 'string' is not assignable to type '"storage" | "file-system-read" | "file-system-write" | "network" | "ui-components" | "runtime-nodes" | "system-info" | "extensions-api"'.
+../core/extensions/ExtensionManifest.ts(354,9): error TS2322: Type 'string[]' is not assignable to type '("web" | "desktop" | "server")[]'.
+  Type 'string' is not assignable to type '"web" | "desktop" | "server"'.
+../core/extensions/ExtensionVersionManager.ts(379,42): error TS2339: Property 'deprecated' does not exist on type '{ min_system_version?: string | undefined; max_system_version?: string | undefined; platforms?: ("web" | "desktop" | "server")[] | undefined; browsers?: Record<string, string> | undefined; }'.
+../core/extensions/ExtensionVersionManager.ts(380,90): error TS2339: Property 'deprecationMessage' does not exist on type '{ min_system_version?: string | undefined; max_system_version?: string | undefined; platforms?: ("web" | "desktop" | "server")[] | undefined; browsers?: Record<string, string> | undefined; }'.
+../core/extensions/interfaces/ExtensionInterfaces.ts(362,10): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/extensions/interfaces/ExtensionInterfaces.ts(362,25): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/extensions/interfaces/ExtensionInterfaces.ts(363,10): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/extensions/interfaces/ExtensionInterfaces.ts(364,10): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/extensions/interfaces/ExtensionInterfaces.ts(365,10): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/GraphEditor.tsx(325,12): error TS2739: Type '{ children: Element; id: string; data: Record<string, unknown>; selected: boolean; nodeType: string; isSelected: boolean; onNodeClick: Dispatch<SetStateAction<string | null>>; }' is missing the following properties from type 'SmoothNodeWrapperProps': type, zIndex, xPos, yPos, dragging
+../core/GraphEditor.tsx(478,30): error TS2339: Property 'scheduleAnimation' does not exist on type 'AnimationManager'.
+../core/GraphEditor.tsx(813,15): error TS2783: 'elementsSelectable' is specified more than once, so this usage will be overwritten.
+../core/GraphEditor.tsx(821,15): error TS2783: 'nodesDraggable' is specified more than once, so this usage will be overwritten.
+../core/GraphEditor.tsx(822,15): error TS2783: 'nodesConnectable' is specified more than once, so this usage will be overwritten.
+../core/GraphEditor.tsx(852,15): error TS2322: Type 'string' is not assignable to type 'ConnectionLineType | undefined'.
+../core/GraphEditor.tsx(852,15): error TS2783: 'connectionLineType' is specified more than once, so this usage will be overwritten.
+../core/GraphEditor.tsx(862,19): error TS2322: Type '"arrow"' is not assignable to type 'MarkerType'.
+../core/GraphEditor.tsx(895,19): error TS2353: Object literal may only specify known properties, and 'button' does not exist in type 'Properties<string | number, string & {}>'.
+../core/GraphEditor.tsx(963,20): error TS2741: Property 'onClose' is missing in type '{ node: Node; schema: ZodType<any, ZodTypeDef, any> | null; onChange: (partial: Record<string, unknown>) => void; onGlobalPreviewRequest: () => void; }' but required in type '{ node: any; schema: any; onChange: any; onClose: any; onGlobalPreviewRequest: any; initialWidth?: number | undefined; minWidth?: number | undefined; maxWidth?: number | undefined; }'.
+../core/GraphEditor.tsx(970,20): error TS2741: Property 'onClose' is missing in type '{ node: Node; schema: ZodType<any, ZodTypeDef, any> | null; onChange: (partial: Record<string, unknown>) => void; onGlobalPreviewRequest: () => void; }' but required in type '{ node: any; schema: any; onChange: any; onClose: any; onGlobalPreviewRequest: any; initialWidth?: number | undefined; minWidth?: number | undefined; maxWidth?: number | undefined; }'.
+../core/GraphEditor.tsx(1109,11): error TS2322: Type 'string | null' is not assignable to type 'string | undefined'.
+  Type 'null' is not assignable to type 'string | undefined'.
+../core/GraphEditor.tsx(1110,27): error TS2304: Cannot find name 'selectedEdgeId'.
+../core/GraphEditor.tsx(1201,15): error TS2322: Type 'number' is not assignable to type '"small" | "large" | "medium" | "xl" | undefined'.
+../core/graphStore.ts(11,26): error TS2305: Module '"./projectManager"' has no exported member 'ProjectMetadata'.
+../core/graphStore.ts(11,43): error TS2305: Module '"./projectManager"' has no exported member 'ProjectSettings'.
+../core/graphStore.ts(11,60): error TS2305: Module '"./projectManager"' has no exported member 'SaveProjectOptions'.
+../core/graphStore.ts(93,15): error TS7006: Parameter 'nodeId' implicitly has an 'any' type.
+../core/graphStore.ts(125,43): error TS2339: Property 'saveProjectToDevice' does not exist on type 'typeof ProjectManager'.
+../core/graphStore.ts(158,43): error TS2339: Property 'loadProjectFromDevice' does not exist on type 'typeof ProjectManager'.
+../core/graphStore.ts(223,11): error TS2322: Type 'Node[]' is not assignable to type '({ id: string; type: "WeightedChoice"; choices: { weight: number; value: string; }[]; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; name: string; ... 4 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; } | ... 9 more ... | { ....'.
+  Type 'Node' is not assignable to type '{ id: string; type: "WeightedChoice"; choices: { weight: number; value: string; }[]; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; name: string; ... 4 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; } | ... 9 more ... | { .....'.
+    Property 'code' is missing in type 'Node' but required in type '{ id: string; code: string; type: "PythonTransform"; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; name: string; startIndex: number; endIndex: number; isValid: boolean; defaultValue?: string | undefined; inferredType?: "string" | ... 5 more ... | undefined;...'.
+../core/graphStore.ts(288,11): error TS2322: Type 'Node[]' is not assignable to type '({ id: string; type: "WeightedChoice"; choices: { weight: number; value: string; }[]; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; name: string; ... 4 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; } | ... 9 more ... | { ....'.
+  Type 'Node' is not assignable to type '{ id: string; type: "WeightedChoice"; choices: { weight: number; value: string; }[]; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; name: string; ... 4 more ...; inferredType?: "string" | ... 5 more ... | undefined; }[] | undefined; } | ... 9 more ... | { .....'.
+    Property 'code' is missing in type 'Node' but required in type '{ id: string; code: string; type: "PythonTransform"; template?: string | undefined; inputs?: string[] | undefined; extractedVariables?: { placeholder: string; name: string; startIndex: number; endIndex: number; isValid: boolean; defaultValue?: string | undefined; inferredType?: "string" | ... 5 more ... | undefined;...'.
+../core/graphStore.ts(411,3): error TS2322: Type '() => { nodes: Node[]; edges: Edge[]; annotations: { stickyNotes: never[]; nodeLabels: { [k: string]: any; }; regionGroups: never[]; connectionLabels: { [k: string]: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<...>> | Iterable<...> | React.ReactPortal; }; metadata: { ...;...' is not assignable to type '() => GraphData'.
+  Call signature return types '{ nodes: Node[]; edges: Edge[]; annotations: { stickyNotes: never[]; nodeLabels: { [k: string]: any; }; regionGroups: never[]; connectionLabels: { [k: string]: string | number | boolean | ReactElement<any, string | JSXElementConstructor<...>> | Iterable<...> | ReactPortal; }; metadata: { ...; }; }; }' and 'GraphData' are incompatible.
+    The types of 'annotations.connectionLabels' are incompatible between these types.
+      Type '{ [k: string]: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal; }' is not assignable to type 'Record<string, string>'.
+        'string' index signatures are incompatible.
+          Type 'string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal' is not assignable to type 'string'.
+            Type 'number' is not assignable to type 'string'.
+../core/historical/ConstraintValidator.ts(463,16): error TS2322: Type '{ readonly name: "High Medieval"; readonly period: { readonly start: 1000; readonly end: 1300; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "High medieval period of cathedral building, crusades, and scholasticism"; }' is not assignable to type 'Era'.
+  Types of property 'region' are incompatible.
+    The type 'readonly ["Europe"]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+../core/historical/ConstraintValidator.ts(463,47): error TS2322: Type '{ readonly name: "Late Medieval"; readonly period: { readonly start: 1300; readonly end: 1500; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "Late medieval period transitioning toward Renaissance"; }' is not assignable to type 'Era'.
+  Types of property 'region' are incompatible.
+    The type 'readonly ["Europe"]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+../core/historical/ConstraintValidator.ts(471,16): error TS2322: Type '{ readonly name: "Early Medieval"; readonly period: { readonly start: 476; readonly end: 1000; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "Early medieval period characterized by the fall of Rome and rise of feudalism"; }' is not assignable to type 'Era'.
+  Types of property 'region' are incompatible.
+    The type 'readonly ["Europe"]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+../core/historical/ConstraintValidator.ts(480,16): error TS2322: Type '{ readonly name: "High Medieval"; readonly period: { readonly start: 1000; readonly end: 1300; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "High medieval period of cathedral building, crusades, and scholasticism"; }' is not assignable to type 'Era'.
+  Types of property 'region' are incompatible.
+    The type 'readonly ["Europe"]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+../core/historical/ConstraintValidator.ts(480,47): error TS2322: Type '{ readonly name: "Late Medieval"; readonly period: { readonly start: 1300; readonly end: 1500; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "Late medieval period transitioning toward Renaissance"; }' is not assignable to type 'Era'.
+  Types of property 'region' are incompatible.
+    The type 'readonly ["Europe"]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+../core/historical/ConstraintValidator.ts(489,9): error TS2322: Type '({ readonly name: "Early Medieval"; readonly period: { readonly start: 476; readonly end: 1000; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "Early medieval period characterized by the fall of Rome and rise of feudalism"; } | { ...; } | { ...; } | { ...; })[]' is not assignable to type 'Era[]'.
+  Type '{ readonly name: "Early Medieval"; readonly period: { readonly start: 476; readonly end: 1000; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "Early medieval period characterized by the fall of Rome and rise of feudalism"; } | { ...; } | { ...; } | { ...; }' is not assignable to type 'Era'.
+    Type '{ readonly name: "Early Medieval"; readonly period: { readonly start: 476; readonly end: 1000; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "Early medieval period characterized by the fall of Rome and rise of feudalism"; }' is not assignable to type 'Era'.
+      Types of property 'region' are incompatible.
+        The type 'readonly ["Europe"]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+../core/historical/ExternalDataService.ts(256,9): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(input: string | URL | Request, init?: RequestInit | undefined): Promise<Response>', gave the following error.
+    Object literal may only specify known properties, and 'timeout' does not exist in type 'RequestInit'.
+  Overload 2 of 2, '(input: URL | RequestInfo, init?: RequestInit | undefined): Promise<Response>', gave the following error.
+    Object literal may only specify known properties, and 'timeout' does not exist in type 'RequestInit'.
+../core/historical/ExternalDataService.ts(440,13): error TS18046: 'era' is of type 'unknown'.
+../core/historical/ExternalDataService.ts(440,74): error TS18046: 'era' is of type 'unknown'.
+../core/historical/ExternalDataService.ts(441,19): error TS2322: Type 'unknown' is not assignable to type 'Era'.
+../core/historical/MedievalDemo.ts(226,15): error TS2322: Type '{ readonly name: "High Medieval"; readonly period: { readonly start: 1000; readonly end: 1300; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "High medieval period of cathedral building, crusades, and scholasticism"; }' is not assignable to type 'Era'.
+  Types of property 'region' are incompatible.
+    The type 'readonly ["Europe"]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+../core/historical/MedievalDemo.ts(272,15): error TS2322: Type '{ readonly name: "High Medieval"; readonly period: { readonly start: 1000; readonly end: 1300; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "High medieval period of cathedral building, crusades, and scholasticism"; }' is not assignable to type 'Era'.
+  Types of property 'region' are incompatible.
+    The type 'readonly ["Europe"]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+../core/historical/MedievalDemo.ts(272,47): error TS2322: Type '{ readonly name: "Late Medieval"; readonly period: { readonly start: 1300; readonly end: 1500; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "Late medieval period transitioning toward Renaissance"; }' is not assignable to type 'Era'.
+  Types of property 'region' are incompatible.
+    The type 'readonly ["Europe"]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+../core/historical/MedievalDemo.ts(312,15): error TS2322: Type '{ readonly name: "High Medieval"; readonly period: { readonly start: 1000; readonly end: 1300; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "High medieval period of cathedral building, crusades, and scholasticism"; }' is not assignable to type 'Era'.
+  Types of property 'region' are incompatible.
+    The type 'readonly ["Europe"]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+../core/historical/MedievalDemo.ts(354,15): error TS2322: Type '{ readonly name: "Early Medieval"; readonly period: { readonly start: 476; readonly end: 1000; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "Early medieval period characterized by the fall of Rome and rise of feudalism"; }' is not assignable to type 'Era'.
+  Types of property 'region' are incompatible.
+    The type 'readonly ["Europe"]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+../core/historical/MedievalDemo.ts(354,48): error TS2322: Type '{ readonly name: "High Medieval"; readonly period: { readonly start: 1000; readonly end: 1300; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "High medieval period of cathedral building, crusades, and scholasticism"; }' is not assignable to type 'Era'.
+  Types of property 'region' are incompatible.
+    The type 'readonly ["Europe"]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+../core/historical/MedievalDemo.ts(354,80): error TS2322: Type '{ readonly name: "Late Medieval"; readonly period: { readonly start: 1300; readonly end: 1500; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "Late medieval period transitioning toward Renaissance"; }' is not assignable to type 'Era'.
+  Types of property 'region' are incompatible.
+    The type 'readonly ["Europe"]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+../core/historical/MedievalDemo.ts(392,15): error TS2322: Type '{ readonly name: "High Medieval"; readonly period: { readonly start: 1000; readonly end: 1300; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "High medieval period of cathedral building, crusades, and scholasticism"; }' is not assignable to type 'Era'.
+  Types of property 'region' are incompatible.
+    The type 'readonly ["Europe"]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+../core/historical/MedievalDemo.ts(392,47): error TS2322: Type '{ readonly name: "Late Medieval"; readonly period: { readonly start: 1300; readonly end: 1500; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "Late medieval period transitioning toward Renaissance"; }' is not assignable to type 'Era'.
+  Types of property 'region' are incompatible.
+    The type 'readonly ["Europe"]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+../core/historical/MedievalDemo.ts(422,15): error TS2322: Type '{ readonly name: "High Medieval"; readonly period: { readonly start: 1000; readonly end: 1300; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "High medieval period of cathedral building, crusades, and scholasticism"; }' is not assignable to type 'Era'.
+  Types of property 'region' are incompatible.
+    The type 'readonly ["Europe"]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+../core/historical/MedievalDemo.ts(422,47): error TS2322: Type '{ readonly name: "Late Medieval"; readonly period: { readonly start: 1300; readonly end: 1500; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "Late medieval period transitioning toward Renaissance"; }' is not assignable to type 'Era'.
+  Types of property 'region' are incompatible.
+    The type 'readonly ["Europe"]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+../core/historical/MedievalDemo.ts(434,13): error TS2322: Type '"decoration"' is not assignable to type '"color" | "pattern" | "condition" | "texture" | "quality"'.
+../core/historical/UTDGManager.ts(37,56): error TS2345: Argument of type '({ id: string; rule: string; eras: { name: string; period: { start: number; end: number; }; region: string[]; accuracy: "high"; }[]; enforcement: "strict"; message: string; historical_basis: string; social_classes?: undefined; } | { ...; } | { ...; })[]' is not assignable to parameter of type 'HistoricalConstraint[]'.
+  Type '{ id: string; rule: string; eras: { name: string; period: { start: number; end: number; }; region: string[]; accuracy: "high"; }[]; enforcement: "strict"; message: string; historical_basis: string; social_classes?: undefined; } | { ...; } | { ...; }' is not assignable to type 'HistoricalConstraint'.
+    Type '{ id: string; rule: string; eras: { name: string; period: { start: number; end: number; }; region: string[]; accuracy: "high"; }[]; social_classes: readonly ["peasant", "artisan", "merchant", "noble"]; enforcement: "suggestion"; message: string; historical_basis: string; }' is not assignable to type 'HistoricalConstraint'.
+      Types of property 'social_classes' are incompatible.
+        The type 'readonly ["peasant", "artisan", "merchant", "noble"]' is 'readonly' and cannot be assigned to the mutable type 'SocialClass[]'.
+../core/historical/UTDGManager.ts(133,9): error TS2322: Type '{ readonly name: "High Medieval"; readonly period: { readonly start: 1000; readonly end: 1300; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "High medieval period of cathedral building, crusades, and scholasticism"; }' is not assignable to type 'Era'.
+  Types of property 'region' are incompatible.
+    The type 'readonly ["Europe"]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+../core/historical/UTDGManager.ts(148,9): error TS2322: Type '{ readonly name: "High Medieval"; readonly period: { readonly start: 1000; readonly end: 1300; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "High medieval period of cathedral building, crusades, and scholasticism"; }' is not assignable to type 'Era'.
+  Types of property 'region' are incompatible.
+    The type 'readonly ["Europe"]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+../core/historical/UTDGManager.ts(163,9): error TS2322: Type '{ readonly name: "High Medieval"; readonly period: { readonly start: 1000; readonly end: 1300; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "High medieval period of cathedral building, crusades, and scholasticism"; }' is not assignable to type 'Era'.
+  Types of property 'region' are incompatible.
+    The type 'readonly ["Europe"]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+../core/historical/UTDGManager.ts(177,9): error TS2322: Type '{ readonly name: "High Medieval"; readonly period: { readonly start: 1000; readonly end: 1300; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "High medieval period of cathedral building, crusades, and scholasticism"; }' is not assignable to type 'Era'.
+  Types of property 'region' are incompatible.
+    The type 'readonly ["Europe"]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+../core/historical/UTDGManager.ts(355,7): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ readonly MEDIEVAL_EARLY: { readonly name: "Early Medieval"; readonly period: { readonly start: 476; readonly end: 1000; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "Early medieval period characterized by the fall of Rome and rise of feudalism"; }; readonly MEDIEVAL_HIG...'.
+  No index signature with a parameter of type 'string' was found on type '{ readonly MEDIEVAL_EARLY: { readonly name: "Early Medieval"; readonly period: { readonly start: 476; readonly end: 1000; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "Early medieval period characterized by the fall of Rome and rise of feudalism"; }; readonly MEDIEVAL_HIG...'.
+../core/historical/UTDGManager.ts(356,7): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ readonly MEDIEVAL_EARLY: { readonly name: "Early Medieval"; readonly period: { readonly start: 476; readonly end: 1000; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "Early medieval period characterized by the fall of Rome and rise of feudalism"; }; readonly MEDIEVAL_HIG...'.
+  No index signature with a parameter of type 'string' was found on type '{ readonly MEDIEVAL_EARLY: { readonly name: "Early Medieval"; readonly period: { readonly start: 476; readonly end: 1000; }; readonly region: readonly ["Europe"]; readonly accuracy: "high"; readonly description: "Early medieval period characterized by the fall of Rome and rise of feudalism"; }; readonly MEDIEVAL_HIG...'.
+../core/historical/UTDGManager.ts(362,9): error TS2322: Type 'SocialClass | SocialClass[] | undefined' is not assignable to type 'SocialClass | undefined'.
+  Type 'SocialClass[]' is not assignable to type 'SocialClass | undefined'.
+../core/historical/UTDGManager.ts(378,9): error TS2322: Type 'SocialClass | SocialClass[] | undefined' is not assignable to type 'SocialClass | undefined'.
+  Type 'SocialClass[]' is not assignable to type 'SocialClass | undefined'.
+../core/historical/UTDGManager.ts(412,9): error TS2322: Type '"mixed" | "male" | "female"' is not assignable to type '"male" | "female"'.
+  Type '"mixed"' is not assignable to type '"male" | "female"'.
+../core/hooks/useEnhancedPreview.ts(68,13): error TS2304: Cannot find name 'seedStrategy'.
+../core/hooks/useEnhancedPreview.ts(73,16): error TS2304: Cannot find name 'customSeeds'.
+../core/hooks/useEnhancedPreview.ts(78,7): error TS2304: Cannot find name 'seedStrategy'.
+../core/hooks/useEnhancedPreview.ts(78,21): error TS2304: Cannot find name 'customSeeds'.
+../core/hooks/useEnhancedPreview.ts(82,10): error TS2304: Cannot find name 'enableProfessionalMetadata'.
+../core/hooks/useEnhancedPreview.ts(115,7): error TS2304: Cannot find name 'enableProfessionalMetadata'.
+../core/hooks/useEnhancedPreview.ts(229,5): error TS2304: Cannot find name 'setState'.
+../core/hooks/useEnhancedPreview.ts(229,14): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(236,20): error TS2304: Cannot find name 'maxResults'.
+../core/hooks/useEnhancedPreview.ts(304,32): error TS2304: Cannot find name 'enableVarianceAnalysis'.
+../core/hooks/useEnhancedPreview.ts(308,7): error TS2304: Cannot find name 'setState'.
+../core/hooks/useEnhancedPreview.ts(318,11): error TS2304: Cannot find name 'enableAutoSave'.
+../core/hooks/useEnhancedPreview.ts(328,11): error TS18046: 'error' is of type 'unknown'.
+../core/hooks/useEnhancedPreview.ts(334,7): error TS2304: Cannot find name 'setState'.
+../core/hooks/useEnhancedPreview.ts(334,16): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(350,5): error TS2304: Cannot find name 'maxResults'.
+../core/hooks/useEnhancedPreview.ts(353,5): error TS2304: Cannot find name 'enableVarianceAnalysis'.
+../core/hooks/useEnhancedPreview.ts(355,5): error TS2304: Cannot find name 'enableAutoSave'.
+../core/hooks/useEnhancedPreview.ts(361,5): error TS2304: Cannot find name 'setState'.
+../core/hooks/useEnhancedPreview.ts(361,14): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(364,33): error TS7006: Parameter 'r' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(371,5): error TS2304: Cannot find name 'setState'.
+../core/hooks/useEnhancedPreview.ts(371,14): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(374,33): error TS7006: Parameter 'r' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(381,24): error TS2304: Cannot find name 'state'.
+../core/hooks/useEnhancedPreview.ts(387,7): error TS2304: Cannot find name 'state'.
+../core/hooks/useEnhancedPreview.ts(390,20): error TS2304: Cannot find name 'state'.
+../core/hooks/useEnhancedPreview.ts(390,38): error TS7006: Parameter 'r' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(391,5): error TS2304: Cannot find name 'setState'.
+../core/hooks/useEnhancedPreview.ts(391,14): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(394,33): error TS7006: Parameter 'r' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(396,7): error TS2304: Cannot find name 'state'.
+../core/hooks/useEnhancedPreview.ts(399,5): error TS2304: Cannot find name 'setState'.
+../core/hooks/useEnhancedPreview.ts(399,14): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(402,33): error TS7006: Parameter 'r' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(408,20): error TS2304: Cannot find name 'state'.
+../core/hooks/useEnhancedPreview.ts(408,39): error TS7006: Parameter 'r' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(420,5): error TS2304: Cannot find name 'setState'.
+../core/hooks/useEnhancedPreview.ts(420,14): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(422,33): error TS7006: Parameter 'r' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(428,7): error TS2304: Cannot find name 'state'.
+../core/hooks/useEnhancedPreview.ts(431,5): error TS2304: Cannot find name 'setState'.
+../core/hooks/useEnhancedPreview.ts(431,14): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(433,33): error TS7006: Parameter 'r' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(448,5): error TS2304: Cannot find name 'setState'.
+../core/hooks/useEnhancedPreview.ts(448,14): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(450,33): error TS7006: Parameter 'r' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(465,5): error TS2304: Cannot find name 'setState'.
+../core/hooks/useEnhancedPreview.ts(465,14): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(467,33): error TS7006: Parameter 'r' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(484,5): error TS2304: Cannot find name 'setState'.
+../core/hooks/useEnhancedPreview.ts(484,14): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(493,10): error TS2304: Cannot find name 'state'.
+../core/hooks/useEnhancedPreview.ts(493,36): error TS2304: Cannot find name 'state'.
+../core/hooks/useEnhancedPreview.ts(495,52): error TS2304: Cannot find name 'state'.
+../core/hooks/useEnhancedPreview.ts(527,7): error TS2304: Cannot find name 'state'.
+../core/hooks/useEnhancedPreview.ts(527,31): error TS2304: Cannot find name 'state'.
+../core/hooks/useEnhancedPreview.ts(527,53): error TS2304: Cannot find name 'state'.
+../core/hooks/useEnhancedPreview.ts(531,8): error TS2304: Cannot find name 'state'.
+../core/hooks/useEnhancedPreview.ts(554,22): error TS2304: Cannot find name 'state'.
+../core/hooks/useEnhancedPreview.ts(554,43): error TS7006: Parameter 'r' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(554,48): error TS2304: Cannot find name 'state'.
+../core/hooks/useEnhancedPreview.ts(555,17): error TS2304: Cannot find name 'state'.
+../core/hooks/useEnhancedPreview.ts(556,16): error TS2304: Cannot find name 'state'.
+../core/hooks/useEnhancedPreview.ts(556,35): error TS7006: Parameter 'r' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(557,18): error TS2304: Cannot find name 'state'.
+../core/hooks/useEnhancedPreview.ts(558,10): error TS2304: Cannot find name 'state'.
+../core/hooks/useEnhancedPreview.ts(558,31): error TS7006: Parameter 'r' implicitly has an 'any' type.
+../core/hooks/useEnhancedPreview.ts(558,55): error TS2304: Cannot find name 'state'.
+../core/hooks/useRealTimePreview.ts(38,43): error TS2304: Cannot find name 'GraphData'.
+../core/hooks/useRealTimePreview.ts(38,66): error TS2304: Cannot find name 'SeedConfig'.
+../core/hooks/useRealTimePreview.ts(60,10): error TS2304: Cannot find name 'template'.
+../core/hooks/useRealTimePreview.ts(75,35): error TS2339: Property 'now' does not exist on type 'PreviewPerformance'.
+../core/hooks/useRealTimePreview.ts(81,30): error TS2304: Cannot find name 'fullConfig'.
+../core/hooks/useRealTimePreview.ts(88,59): error TS2304: Cannot find name 'template'.
+../core/hooks/useRealTimePreview.ts(89,16): error TS2304: Cannot find name 'variables'.
+../core/hooks/useRealTimePreview.ts(108,40): error TS2339: Property 'now' does not exist on type 'PreviewPerformance'.
+../core/hooks/useRealTimePreview.ts(110,29): error TS2304: Cannot find name 'variables'.
+../core/hooks/useRealTimePreview.ts(120,13): error TS2304: Cannot find name 'fullConfig'.
+../core/hooks/useRealTimePreview.ts(121,45): error TS2339: Property 'now' does not exist on type 'PreviewPerformance'.
+../core/hooks/useRealTimePreview.ts(137,13): error TS2304: Cannot find name 'fullConfig'.
+../core/hooks/useRealTimePreview.ts(151,7): error TS2304: Cannot find name 'template'.
+../core/hooks/useRealTimePreview.ts(151,17): error TS2304: Cannot find name 'variables'.
+../core/hooks/useRealTimePreview.ts(151,28): error TS2304: Cannot find name 'fullConfig'.
+../core/hooks/useRealTimePreview.ts(155,10): error TS2304: Cannot find name 'fullConfig'.
+../core/hooks/useRealTimePreview.ts(165,8): error TS2304: Cannot find name 'fullConfig'.
+../core/hooks/useRealTimePreview.ts(166,24): error TS2304: Cannot find name 'fullConfig'.
+../core/hooks/useRealTimePreview.ts(187,37): error TS2339: Property 'now' does not exist on type 'PreviewPerformance'.
+../core/hooks/useRealTimePreview.ts(189,55): error TS2304: Cannot find name 'template'.
+../core/hooks/useRealTimePreview.ts(190,12): error TS2304: Cannot find name 'variables'.
+../core/hooks/useRealTimePreview.ts(200,36): error TS2339: Property 'now' does not exist on type 'PreviewPerformance'.
+../core/hooks/useRealTimePreview.ts(201,25): error TS2304: Cannot find name 'variables'.
+../core/hooks/useRealTimePreview.ts(211,17): error TS2304: Cannot find name 'template'.
+../core/hooks/useRealTimePreview.ts(211,27): error TS2304: Cannot find name 'variables'.
+../core/hooks/useRealTimePreview.ts(244,7): error TS18004: No value exists in scope for the shorthand property 'template'. Either declare one or provide an initializer.
+../core/hooks/useRealTimePreview.ts(245,7): error TS18004: No value exists in scope for the shorthand property 'variables'. Either declare one or provide an initializer.
+../core/hooks/useRealTimePreview.ts(257,7): error TS2304: Cannot find name 'template'.
+../core/hooks/useRealTimePreview.ts(257,17): error TS2304: Cannot find name 'variables'.
+../core/hooks/useRealTimePreview.ts(301,13): error TS2304: Cannot find name 'fullConfig'.
+../core/hooks/useRealTimePreview.ts(344,15): error TS2484: Export declaration conflicts with exported declaration of 'PreviewVariant'.
+../core/hooks/useRealTimePreview.ts(344,31): error TS2484: Export declaration conflicts with exported declaration of 'PreviewPerformance'.
+../core/hooks/useRealTimePreview.ts(344,51): error TS2484: Export declaration conflicts with exported declaration of 'RealTimePreviewConfig'.
+../core/hooks/useTemplatePreview.ts(10,3): error TS2724: '"../utils/templateParser"' has no exported member named 'getContextualDefaults'. Did you mean 'getContextualDefault'?
+../core/hooks/useTemplatePreview.ts(126,35): error TS2339: Property 'now' does not exist on type 'TemplatePreviewPerformance'.
+../core/hooks/useTemplatePreview.ts(182,40): error TS2339: Property 'now' does not exist on type 'TemplatePreviewPerformance'.
+../core/hooks/useTemplatePreview.ts(196,45): error TS2339: Property 'now' does not exist on type 'TemplatePreviewPerformance'.
+../core/hooks/useTemplatePreview.ts(218,38): error TS2339: Property 'now' does not exist on type 'TemplatePreviewPerformance'.
+../core/index.ts(40,3): error TS2305: Module '"./projectManager"' has no exported member 'ProjectMetadata'.
+../core/index.ts(42,3): error TS2305: Module '"./projectManager"' has no exported member 'ProjectSettings'.
+../core/index.ts(43,3): error TS2305: Module '"./projectManager"' has no exported member 'SaveProjectOptions'.
+../core/index.ts(44,3): error TS2305: Module '"./projectManager"' has no exported member 'LoadProjectResult'.
+../core/index.ts(45,3): error TS2305: Module '"./projectManager"' has no exported member 'SaveProjectResult'.
+../core/index.ts(70,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/index.ts(71,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/index.ts(72,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/index.ts(73,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/index.ts(74,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/index.ts(75,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/index.ts(76,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/index.ts(77,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/index.ts(78,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/index.ts(79,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/index.ts(80,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/index.ts(84,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/index.ts(86,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/index.ts(89,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/index.ts(142,3): error TS2305: Module '"./llm-randomizer"' has no exported member 'RandomizerPanel'.
+../core/index.ts(143,3): error TS2305: Module '"./llm-randomizer"' has no exported member 'GraphPreview'.
+../core/index.ts(172,3): error TS2724: '"./security/DataClassifier"' has no exported member named 'createDataClassifier'. Did you mean 'DataClassifier'?
+../core/index.ts(173,8): error TS2724: '"./security/DataClassifier"' has no exported member named 'DataClassificationResult'. Did you mean 'ClassificationResult'?
+../core/index.ts(174,8): error TS2614: Module '"./security/DataClassifier"' has no exported member 'ClassificationPattern'. Did you mean to use 'import ClassificationPattern from "./security/DataClassifier"' instead?
+../core/index.ts(175,8): error TS2724: '"./security/DataClassifier"' has no exported member named 'ClassificationConfig'. Did you mean 'ClassificationPolicy'?
+../core/index.ts(183,8): error TS2305: Module '"./security/ClassificationEnforcer"' has no exported member 'ClassificationHandlingRequirements'.
+../core/index.ts(188,3): error TS2724: '"./security/ClassificationEnforcementMiddleware"' has no exported member named 'ClassificationEnforcementMiddleware'. Did you mean 'createClassificationEnforcementMiddleware'?
+../core/index.ts(189,3): error TS2305: Module '"./security/ClassificationEnforcementMiddleware"' has no exported member 'createClassificationMiddleware'.
+../core/index.ts(195,8): error TS2724: '"./types/DataClassification"' has no exported member named 'ClassificationResult'. Did you mean 'ClassificationRule'?
+../core/index.ts(215,3): error TS2724: '"./historical/MedievalDemo"' has no exported member named 'MEDIEVAL_REGIONS'. Did you mean 'MEDIEVAL_PERIODS'?
+../core/index.ts(216,3): error TS2614: Module '"./historical/MedievalDemo"' has no exported member 'MEDIEVAL_FABRICS'. Did you mean to use 'import MEDIEVAL_FABRICS from "./historical/MedievalDemo"' instead?
+../core/index.ts(217,3): error TS2614: Module '"./historical/MedievalDemo"' has no exported member 'MEDIEVAL_COLORS'. Did you mean to use 'import MEDIEVAL_COLORS from "./historical/MedievalDemo"' instead?
+../core/index.ts(244,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/index.ts(248,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/agents/index.ts(16,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/agents/index.ts(17,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/agents/index.ts(18,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/agents/index.ts(26,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/agents/index.ts(27,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/agents/index.ts(28,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/agents/index.ts(36,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/agents/index.ts(37,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/agents/index.ts(38,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/agents/index.ts(46,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/generator/index.ts(16,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/generator/index.ts(17,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/generator/index.ts(18,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/generator/index.ts(32,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/generator/index.ts(33,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/generator/index.ts(49,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/generator/index.ts(50,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/generator/index.ts(51,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/generator/index.ts(52,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/generator/parameters/parameter-manager.ts(446,30): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+../core/llm-randomizer/generator/parameters/parameter-manager.ts(460,30): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+../core/llm-randomizer/index.ts(7,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/index.ts(8,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/index.ts(54,9): error TS2416: Property 'generateWithLLM' in type 'LLMRandomizerSystem' is not assignable to the same property in base type 'LLMRandomizerWorkflow'.
+  Type '(request: any, provider?: "openai" | "claude" | "gemini") => Promise<any>' is not assignable to type '(request: any, provider?: string | undefined) => Promise<any>'.
+    Types of parameters 'provider' and 'provider' are incompatible.
+      Type 'string | undefined' is not assignable to type '"openai" | "claude" | "gemini" | undefined'.
+        Type 'string' is not assignable to type '"openai" | "claude" | "gemini" | undefined'.
+../core/llm-randomizer/parser/index.ts(8,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/parser/index.ts(9,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/parser/index.ts(10,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/parser/index.ts(18,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/parser/index.ts(20,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/parser/index.ts(21,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/parser/index.ts(27,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/parser/index.ts(28,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/parser/index.ts(29,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/parser/index.ts(30,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/parser/index.ts(31,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/parser/index.ts(32,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/parser/index.ts(33,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/parser/index.ts(34,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/parser/index.ts(40,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/parser/index.ts(41,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/parser/index.ts(42,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/serialization/index.ts(7,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/serialization/index.ts(8,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/serialization/index.ts(15,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/serialization/index.ts(16,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/serialization/index.ts(17,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/serialization/index.ts(18,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/serialization/index.ts(19,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/serialization/index.ts(20,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/llm-randomizer/serialization/validator.ts(81,34): error TS18046: 'error' is of type 'unknown'.
+../core/PreviewModal.tsx(164,21): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+../core/PreviewModal.tsx(184,98): error TS2339: Property 'length' does not exist on type '{}'.
+../core/PreviewModal.tsx(200,44): error TS2339: Property 'map' does not exist on type '{}'.
+../core/PreviewModal.tsx(200,49): error TS7006: Parameter 'choice' implicitly has an 'any' type.
+../core/PreviewModal.tsx(200,57): error TS7006: Parameter 'idx' implicitly has an 'any' type.
+../core/runtime/advanced.ts(190,3): error TS2416: Property 'executionMeta' in type 'AdvancedExecutionContextImpl' is not assignable to the same property in base type 'AdvancedExecutionContext'.
+  Property 'executionId' is missing in type '{ startTime: number; nodeExecutionOrder: string[]; performanceMetrics: Map<string, number>; }' but required in type '{ startTime: number; executionId: string; nodeExecutionOrder: string[]; performanceMetrics: Map<string, number>; }'.
+../core/runtime/advanced.ts(215,10): error TS2484: Export declaration conflicts with exported declaration of 'AdvancedExecutionContext'.
+../core/runtime/advanced.ts(230,7): error TS2741: Property 'executionId' is missing in type '{ startTime: number; nodeExecutionOrder: never[]; performanceMetrics: Map<any, any>; }' but required in type '{ startTime: number; executionId: string; nodeExecutionOrder: string[]; performanceMetrics: Map<string, number>; }'.
+../core/runtime/advanced.ts(294,53): error TS2367: This comparison appears to be unintentional because the types 'Error' and 'string' have no overlap.
+../core/runtime/ast-node-whitelist.ts(4,24): error TS2307: Cannot find module 'acorn' or its corresponding type declarations.
+../core/runtime/expression-evaluator.ts(4,24): error TS2307: Cannot find module 'acorn' or its corresponding type declarations.
+../core/runtime/expression-evaluator.ts(402,33): error TS2322: Type 'number' is not assignable to type 'Error'.
+../core/runtime/expression-evaluator.ts(406,33): error TS2322: Type 'string' is not assignable to type 'Error'.
+../core/runtime/expression-evaluator.ts(410,33): error TS2322: Type 'boolean' is not assignable to type 'Error'.
+../core/runtime/expression-evaluator.ts(496,11): error TS18046: 'program' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(497,11): error TS18046: 'program' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(498,11): error TS18046: 'program' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(502,14): error TS18046: 'program' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(543,24): error TS18046: 'left' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(543,31): error TS18046: 'right' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(544,24): error TS18046: 'left' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(544,31): error TS18046: 'right' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(545,24): error TS18046: 'left' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(545,31): error TS18046: 'right' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(546,24): error TS18046: 'left' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(546,31): error TS18046: 'right' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(547,24): error TS18046: 'left' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(547,31): error TS18046: 'right' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(548,24): error TS18046: 'left' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(548,31): error TS18046: 'right' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(549,24): error TS18046: 'left' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(549,31): error TS18046: 'right' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(550,25): error TS18046: 'left' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(550,33): error TS18046: 'right' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(551,25): error TS18046: 'left' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(551,33): error TS18046: 'right' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(565,25): error TS18046: 'argument' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(566,25): error TS18046: 'argument' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(600,20): error TS18046: 'propNode' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(600,44): error TS18046: 'propNode' is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(613,14): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
+../core/runtime/expression-evaluator.ts(622,40): error TS7006: Parameter 'arg' implicitly has an 'any' type.
+../core/runtime/expression-evaluator.ts(632,49): error TS2571: Object is of type 'unknown'.
+../core/runtime/expression-evaluator.ts(664,49): error TS2339: Property 'length' does not exist on type '{}'.
+../core/runtime/expression-evaluator.ts(665,59): error TS2339: Property 'length' does not exist on type '{}'.
+../core/runtime/index.ts(11,10): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/runtime/index.ts(12,57): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+../core/runtime/nodes/Conditional.ts(146,15): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Error | undefined'.
+../core/runtime/nodes/Conditional.ts(337,9): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Error | undefined'.
+../core/runtime/nodes/PythonTransform.ts(219,41): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Error'.
+../core/runtime/nodes/PythonTransform.ts(220,38): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Error'.
+../core/runtime/nodes/PythonTransform.ts(221,46): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Error'.
+../core/runtime/nodes/PythonTransform.ts(339,16): error TS18046: 'event' is of type 'unknown'.
+../core/runtime/nodes/PythonTransform.ts(340,15): error TS18046: 'event' is of type 'unknown'.
+../core/runtime/nodes/PythonTransform.ts(341,18): error TS18046: 'event' is of type 'unknown'.
+../core/runtime/nodes/PythonTransform.ts(342,20): error TS18046: 'event' is of type 'unknown'.
+../core/runtime/nodes/PythonTransform.ts(449,31): error TS2339: Property 'executions' does not exist on type '{}'.
+../core/runtime/nodes/PythonTransform.ts(460,58): error TS2339: Property 'success' does not exist on type 'Error'.
+../core/runtime/nodes/PythonTransform.ts(461,77): error TS2339: Property 'executionTime' does not exist on type 'Error'.
+../core/runtime/nodes/PythonTransform.ts(462,83): error TS2339: Property 'securityViolations' does not exist on type 'Error'.
+../core/runtime/nodes/PythonTransform.ts(477,16): error TS2339: Property 'executions' does not exist on type '{}'.
+../core/runtime/nodes/PythonTransform.ts(478,13): error TS2339: Property 'executions' does not exist on type '{}'.
+../core/runtime/nodes/PythonTransform.ts(481,11): error TS2339: Property 'executions' does not exist on type '{}'.
+../core/runtime/nodes/PythonTransform.ts(489,15): error TS2339: Property 'executions' does not exist on type '{}'.
+../core/runtime/nodes/PythonTransform.ts(490,13): error TS2339: Property 'executions' does not exist on type '{}'.
+../core/runtime/nodes/PythonTransform.ts(490,32): error TS2339: Property 'executions' does not exist on type '{}'.
+../core/runtime/nodes/PythonTransform.ts(493,28): error TS2345: Argument of type '{}' is not assignable to parameter of type 'Error'.
+  Type '{}' is missing the following properties from type 'Error': name, message
+../core/runtime/nodes/Sequential.ts(272,26): error TS2345: Argument of type 'SequenceState' is not assignable to parameter of type 'Error'.
+  Type 'SequenceState' is missing the following properties from type 'Error': name, message
+../core/runtime/nodes/Sequential.ts(301,11): error TS2741: Property 'executionId' is missing in type '{ startTime: number; nodeExecutionOrder: never[]; performanceMetrics: Map<any, any>; }' but required in type '{ startTime: number; executionId: string; nodeExecutionOrder: string[]; performanceMetrics: Map<string, number>; }'.
+../core/runtime/nodes/Sequential.ts(369,7): error TS2353: Object literal may only specify known properties, and 'index' does not exist in type 'Error'.
+../core/runtime/nodes/WeightedAdvanced.ts(95,11): error TS2322: Type '(weights: number[]) => ValidationResult' is not assignable to type '(value: unknown) => ValidationResult'.
+  Types of parameters 'weights' and 'value' are incompatible.
+    Type 'unknown' is not assignable to type 'number[]'.
+../core/runtime/safe-math-context.ts(162,47): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Error'.
+../core/runtime/safe-math-context.ts(455,27): error TS2339: Property 'trim' does not exist on type 'never'.
+../core/runtime/safe-math-context.ts(470,33): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Error'.
+../core/runtime/security-audit-logger.ts(493,26): error TS18046: 'target' is of type 'unknown'.
+../core/security/AuditIntegration.ts(16,8): error TS2724: '"../types/DataClassification"' has no exported member named 'ClassificationResult'. Did you mean 'ClassificationRule'?
+../core/security/AuditIntegration.ts(75,44): error TS2551: Property 'classifyData' does not exist on type 'DataClassifier'. Did you mean 'classify'?
+../core/security/AuditIntegration.ts(107,46): error TS2339: Property 'missingControls' does not exist on type 'EnforcementResult'.
+../core/security/AuditIntegration.ts(121,38): error TS2339: Property 'reason' does not exist on type 'EnforcementResult'.
+../core/security/AuditIntegration.ts(122,47): error TS2339: Property 'missingControls' does not exist on type 'EnforcementResult'.
+../core/security/AuditIntegration.ts(144,25): error TS2339: Property 'userRole' does not exist on type 'OperationContext'.
+../core/security/AuditIntegration.ts(149,26): error TS2339: Property 'ipAddress' does not exist on type 'OperationContext'.
+../core/security/AuditIntegration.ts(172,25): error TS2339: Property 'userRole' does not exist on type 'OperationContext'.
+../core/security/AuditIntegration.ts(177,26): error TS2339: Property 'ipAddress' does not exist on type 'OperationContext'.
+../core/security/AuditIntegration.ts(211,25): error TS2339: Property 'userRole' does not exist on type 'OperationContext'.
+../core/security/AuditIntegration.ts(216,26): error TS2339: Property 'ipAddress' does not exist on type 'OperationContext'.
+../core/security/AuditIntegration.ts(243,25): error TS2339: Property 'userRole' does not exist on type 'OperationContext'.
+../core/security/AuditIntegration.ts(249,26): error TS2339: Property 'ipAddress' does not exist on type 'OperationContext'.
+../core/security/AuditIntegration.ts(268,21): error TS2339: Property 'on' does not exist on type 'ClassificationEnforcer'.
+../core/security/AuditIntegration.ts(268,46): error TS7006: Parameter 'event' implicitly has an 'any' type.
+../core/security/AuditIntegration.ts(293,21): error TS2339: Property 'on' does not exist on type 'ClassificationEnforcer'.
+../core/security/AuditIntegration.ts(293,42): error TS7006: Parameter 'event' implicitly has an 'any' type.
+../core/security/AuditIntegration.ts(303,51): error TS7006: Parameter 'event' implicitly has an 'any' type.
+../core/security/AuditLogger.ts(276,30): error TS2339: Property 'correlationId' does not exist on type 'OperationContext'.
+../core/security/AuditLogger.ts(278,25): error TS2339: Property 'userRole' does not exist on type 'OperationContext'.
+../core/security/AuditLogger.ts(279,25): error TS2339: Property 'systemId' does not exist on type 'OperationContext'.
+../core/security/AuditLogger.ts(284,26): error TS2339: Property 'ipAddress' does not exist on type 'OperationContext'.
+../core/security/AuditLogger.ts(285,26): error TS2339: Property 'userAgent' does not exist on type 'OperationContext'.
+../core/security/AuditLogger.ts(293,30): error TS2551: Property 'requestedAt' does not exist on type 'OperationContext'. Did you mean 'requestId'?
+../core/security/AuditLogger.ts(527,8): error TS2339: Property 'createHash' does not exist on type 'Crypto'.
+../core/security/AuditLogger.ts(558,10): error TS2339: Property 'removeAllListeners' does not exist on type 'AuditLogger'.
+../core/security/AuditLogger.ts(636,3): error TS2484: Export declaration conflicts with exported declaration of 'AuditLogEntry'.
+../core/security/AuditLogger.ts(637,3): error TS2484: Export declaration conflicts with exported declaration of 'AuditLoggerConfig'.
+../core/security/AuditLogger.ts(638,3): error TS2484: Export declaration conflicts with exported declaration of 'AuditStorageBackend'.
+../core/security/AuditLogger.ts(639,3): error TS2484: Export declaration conflicts with exported declaration of 'AuditQueryCriteria'.
+../core/security/AuditLogger.ts(640,3): error TS2484: Export declaration conflicts with exported declaration of 'AlertThresholds'.
+../core/security/AuditLogger.ts(641,3): error TS2484: Export declaration conflicts with exported declaration of 'AuditStatistics'.
+../core/security/ClassificationEnforcementMiddleware.ts(14,49): error TS2307: Cannot find module 'express' or its corresponding type declarations.
+../core/security/ClassificationEnforcementMiddleware.ts(105,57): error TS2339: Property 'path' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(179,26): error TS2339: Property 'params' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(179,43): error TS2339: Property 'body' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(188,26): error TS2339: Property 'sessionID' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(189,24): error TS2339: Property 'headers' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(191,23): error TS2339: Property 'headers' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(192,26): error TS2339: Property 'headers' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(248,31): error TS2339: Property 'body' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(248,49): error TS2339: Property 'params' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(290,36): error TS2339: Property 'headers' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(296,11): error TS2339: Property 'params' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(296,62): error TS2339: Property 'params' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(297,16): error TS2339: Property 'params' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(301,11): error TS2339: Property 'body' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(302,66): error TS2339: Property 'body' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(319,41): error TS2322: Type '"PUBLIC"' is not assignable to type 'DataClassificationLevel'.
+../core/security/ClassificationEnforcementMiddleware.ts(320,43): error TS2322: Type '"INTERNAL"' is not assignable to type 'DataClassificationLevel'.
+../core/security/ClassificationEnforcementMiddleware.ts(321,47): error TS2322: Type '"CONFIDENTIAL"' is not assignable to type 'DataClassificationLevel'.
+../core/security/ClassificationEnforcementMiddleware.ts(322,45): error TS2322: Type '"RESTRICTED"' is not assignable to type 'DataClassificationLevel'.
+../core/security/ClassificationEnforcementMiddleware.ts(323,41): error TS2322: Type '"RESTRICTED"' is not assignable to type 'DataClassificationLevel'.
+../core/security/ClassificationEnforcementMiddleware.ts(324,33): error TS2322: Type '"CONFIDENTIAL"' is not assignable to type 'DataClassificationLevel'.
+../core/security/ClassificationEnforcementMiddleware.ts(325,28): error TS2322: Type '"RESTRICTED"' is not assignable to type 'DataClassificationLevel'.
+../core/security/ClassificationEnforcementMiddleware.ts(341,50): error TS2339: Property 'method' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(345,11): error TS2339: Property 'path' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(347,18): error TS2339: Property 'path' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(354,20): error TS2339: Property 'sessionID' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(355,19): error TS2339: Property 'headers' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(358,18): error TS2339: Property 'headers' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(359,21): error TS2339: Property 'headers' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(382,13): error TS2339: Property 'headers' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(393,11): error TS2339: Property 'secure' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(393,25): error TS2339: Property 'headers' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(401,30): error TS2339: Property 'headers' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(446,23): error TS7006: Parameter 'data' implicitly has an 'any' type.
+../core/security/ClassificationEnforcementMiddleware.ts(453,22): error TS2339: Property 'method' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(454,17): error TS2339: Property 'path' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcementMiddleware.ts(524,9): error TS2322: Type '"PUBLIC"' is not assignable to type 'DataClassificationLevel'.
+../core/security/ClassificationEnforcementMiddleware.ts(525,9): error TS2322: Type '"INTERNAL"' is not assignable to type 'DataClassificationLevel'.
+../core/security/ClassificationEnforcementMiddleware.ts(526,9): error TS2322: Type '"CONFIDENTIAL"' is not assignable to type 'DataClassificationLevel'.
+../core/security/ClassificationEnforcementMiddleware.ts(527,9): error TS2322: Type '"RESTRICTED"' is not assignable to type 'DataClassificationLevel'.
+../core/security/ClassificationEnforcementMiddleware.ts(562,54): error TS2339: Property 'method' does not exist on type 'ClassificationAwareRequest'.
+../core/security/ClassificationEnforcer.ts(422,59): error TS2551: Property 'PUBLIC' does not exist on type 'Record<ClassificationLevel, DataSensitivityLevel>'. Did you mean 'public'?
+../core/security/ClassificationEnforcer.ts(536,11): error TS2741: Property '[DataClassificationLevel.TOP_SECRET]' is missing in type '{ PUBLIC: number; INTERNAL: number; CONFIDENTIAL: number; RESTRICTED: number; }' but required in type 'Record<DataClassificationLevel, number>'.
+../core/security/ClassificationEnforcer.ts(730,11): error TS2741: Property '[DataClassificationLevel.TOP_SECRET]' is missing in type '{ PUBLIC: string[]; INTERNAL: string[]; CONFIDENTIAL: string[]; RESTRICTED: string[]; }' but required in type 'Record<DataClassificationLevel, string[]>'.
+../core/security/ClassificationEnforcer.ts(779,11): error TS2741: Property '[DataClassificationLevel.TOP_SECRET]' is missing in type '{ PUBLIC: number; INTERNAL: number; CONFIDENTIAL: number; RESTRICTED: number; }' but required in type 'Record<DataClassificationLevel, number>'.
+../core/security/ClassificationEnforcer.ts(926,41): error TS2339: Property 'logging' does not exist on type '{ allowedChannels: string[]; approvalRequired: boolean; encryptionRequired: boolean; geographicRestrictions: string[]; }'.
+../core/security/ClassificationEnforcer.ts(931,40): error TS2339: Property 'processingEnvironments' does not exist on type 'DataHandlingRequirements'.
+../core/security/ClassificationEnforcer.ts(951,47): error TS2339: Property 'restrictions' does not exist on type '{ allowedChannels: string[]; approvalRequired: boolean; encryptionRequired: boolean; geographicRestrictions: string[]; }'.
+../core/security/ClassificationEnforcer.ts(968,11): error TS2741: Property '[DataClassificationLevel.TOP_SECRET]' is missing in type '{ PUBLIC: string[]; INTERNAL: string[]; CONFIDENTIAL: string[]; RESTRICTED: string[]; }' but required in type 'Record<DataClassificationLevel, string[]>'.
+../core/security/ClassificationEnforcer.ts(981,11): error TS2741: Property '[DataClassificationLevel.TOP_SECRET]' is missing in type '{ PUBLIC: number; INTERNAL: number; CONFIDENTIAL: number; RESTRICTED: number; }' but required in type 'Record<DataClassificationLevel, number>'.
+../core/security/ClassificationEnforcer.ts(994,11): error TS2741: Property '[DataClassificationLevel.TOP_SECRET]' is missing in type '{ PUBLIC: string[]; INTERNAL: string[]; CONFIDENTIAL: string[]; RESTRICTED: string[]; }' but required in type 'Record<DataClassificationLevel, string[]>'.
+../core/security/ClassificationEnforcer.ts(1009,11): error TS2741: Property '[DataClassificationLevel.TOP_SECRET]' is missing in type '{ PUBLIC: "STANDARD"; INTERNAL: "STANDARD"; CONFIDENTIAL: "HIGH"; RESTRICTED: "CRITICAL"; }' but required in type 'Record<DataClassificationLevel, "CRITICAL" | "HIGH" | "NONE" | "STANDARD">'.
+../core/security/ClassificationEnforcer.ts(1022,11): error TS2741: Property '[DataClassificationLevel.TOP_SECRET]' is missing in type '{ PUBLIC: never[]; INTERNAL: string[]; CONFIDENTIAL: string[]; RESTRICTED: string[]; }' but required in type 'Record<DataClassificationLevel, string[]>'.
+../core/security/ClassificationEnforcer.ts(1035,11): error TS2741: Property '[DataClassificationLevel.TOP_SECRET]' is missing in type '{ PUBLIC: number; INTERNAL: number; CONFIDENTIAL: number; RESTRICTED: number; }' but required in type 'Record<DataClassificationLevel, number>'.
+../core/security/DataClassificationHelpers.ts(585,3): error TS2484: Export declaration conflicts with exported declaration of 'EnhancedDataElement'.
+../core/security/DataClassificationHelpers.ts(586,3): error TS2484: Export declaration conflicts with exported declaration of 'SecurityPolicyEnforcementResult'.
+../core/security/DataClassificationHelpers.ts(587,3): error TS2484: Export declaration conflicts with exported declaration of 'DataFlowSecurityAssessment'.
+../core/security/DataSensitivityLevels.ts(682,3): error TS2484: Export declaration conflicts with exported declaration of 'DataHandlingRequirements'.
+../core/security/DataSensitivityLevels.ts(683,3): error TS2484: Export declaration conflicts with exported declaration of 'DataElementClassification'.
+../core/serverProjectManager.ts(8,10): error TS2305: Module '"./projectManager"' has no exported member 'ProjectMetadata'.
+../core/serverProjectManager.ts(8,36): error TS2305: Module '"./projectManager"' has no exported member 'SaveProjectOptions'.
+../core/serverProjectManager.ts(8,56): error TS2305: Module '"./projectManager"' has no exported member 'LoadProjectResult'.
+../core/serverProjectManager.ts(8,75): error TS2305: Module '"./projectManager"' has no exported member 'SaveProjectResult'.
+../core/serverProjectManager.ts(57,11): error TS2353: Object literal may only specify known properties, and 'name' does not exist in type '{ title?: string | undefined; description?: string | undefined; tags: string[]; author?: string | undefined; version: string; created: Date; thumbnail?: string | undefined; }'.
+../core/serverProjectManager.ts(125,11): error TS2353: Object literal may only specify known properties, and 'name' does not exist in type '{ title?: string | undefined; description?: string | undefined; tags: string[]; author?: string | undefined; version: string; created: Date; thumbnail?: string | undefined; }'.
+../core/services/TemplateService.ts(224,7): error TS2322: Type '{ stickyNotes: never[]; nodeLabels: { [k: string]: any; }; regionGroups: never[]; connectionLabels: { [k: string]: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<...> | React.ReactPortal; }; metadata: { ...; }; }' is not assignable to type 'GraphAnnotations'.
+  Types of property 'connectionLabels' are incompatible.
+    Type '{ [k: string]: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal; }' is not assignable to type 'Record<string, string>'.
+      'string' index signatures are incompatible.
+        Type 'string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal' is not assignable to type 'string'.
+          Type 'number' is not assignable to type 'string'.
+../core/stores/resultManagementStore.ts(174,7): error TS2322: Type '(result: EnhancedPreviewResult, metadata?: Partial<SavedResult>) => string' is not assignable to type '(result: EnhancedPreviewResult, metadata?: Partial<SavedResult> | undefined) => Promise<string>'.
+  Type 'string' is not assignable to type 'Promise<string>'.
+../core/stores/resultManagementStore.ts(286,11): error TS2322: Type '{ notes: string; createdAt?: Date | undefined; wordCount?: number; characterCount?: number; estimatedReadingTime?: number; contentType?: "dialogue" | "action" | "description" | "mixed"; tags?: string[]; rating?: 1 | 2 | 3 | 4 | 5; }' is not assignable to type '{ createdAt: Date; wordCount?: number | undefined; characterCount?: number | undefined; estimatedReadingTime?: number | undefined; contentType?: "description" | "action" | "dialogue" | "mixed" | undefined; tags?: string[] | undefined; rating?: 2 | ... 4 more ... | undefined; notes?: string | undefined; }'.
+  Types of property 'createdAt' are incompatible.
+    Type 'Date | undefined' is not assignable to type 'Date'.
+      Type 'undefined' is not assignable to type 'Date'.
+../core/stores/resultManagementStore.ts(340,11): error TS2322: Type '{ rating: 1 | 2 | 3 | 4 | 5; createdAt?: Date | undefined; wordCount?: number; characterCount?: number; estimatedReadingTime?: number; contentType?: "dialogue" | "action" | "description" | "mixed"; tags?: string[]; notes?: string; }' is not assignable to type '{ createdAt: Date; wordCount?: number | undefined; characterCount?: number | undefined; estimatedReadingTime?: number | undefined; contentType?: "description" | "action" | "dialogue" | "mixed" | undefined; tags?: string[] | undefined; rating?: 2 | ... 4 more ... | undefined; notes?: string | undefined; }'.
+  Types of property 'createdAt' are incompatible.
+    Type 'Date | undefined' is not assignable to type 'Date'.
+      Type 'undefined' is not assignable to type 'Date'.
+../core/stores/resultManagementStore.ts(365,11): error TS2322: Type '{ tags: string[]; createdAt?: Date | undefined; wordCount?: number; characterCount?: number; estimatedReadingTime?: number; contentType?: "dialogue" | "action" | "description" | "mixed"; rating?: 1 | 2 | 3 | 4 | 5; notes?: string; }' is not assignable to type '{ createdAt: Date; wordCount?: number | undefined; characterCount?: number | undefined; estimatedReadingTime?: number | undefined; contentType?: "description" | "action" | "dialogue" | "mixed" | undefined; tags?: string[] | undefined; rating?: 2 | ... 4 more ... | undefined; notes?: string | undefined; }'.
+  Types of property 'createdAt' are incompatible.
+    Type 'Date | undefined' is not assignable to type 'Date'.
+      Type 'undefined' is not assignable to type 'Date'.
+../core/stores/resultManagementStore.ts(390,11): error TS2322: Type '{ notes: string; createdAt?: Date | undefined; wordCount?: number; characterCount?: number; estimatedReadingTime?: number; contentType?: "dialogue" | "action" | "description" | "mixed"; tags?: string[]; rating?: 1 | 2 | 3 | 4 | 5; }' is not assignable to type '{ createdAt: Date; wordCount?: number | undefined; characterCount?: number | undefined; estimatedReadingTime?: number | undefined; contentType?: "description" | "action" | "dialogue" | "mixed" | undefined; tags?: string[] | undefined; rating?: 2 | ... 4 more ... | undefined; notes?: string | undefined; }'.
+  Types of property 'createdAt' are incompatible.
+    Type 'Date | undefined' is not assignable to type 'Date'.
+      Type 'undefined' is not assignable to type 'Date'.
+../core/stores/resultManagementStore.ts(712,45): error TS2339: Property 'selectedResultIds' does not exist on type 'StorageValue<ResultManagementState>'.
+../core/stores/uiSettingsStore.ts(310,19): error TS2339: Property 'shouldShowTechnicalFields' does not exist on type '{}'.
+../core/stores/uiSettingsStore.ts(315,19): error TS2339: Property 'shouldShowAdvancedFeatures' does not exist on type '{}'.
+../core/types/UTDG.ts(355,3): error TS2484: Export declaration conflicts with exported declaration of 'UTDGNode'.
+../core/types/UTDG.ts(356,3): error TS2484: Export declaration conflicts with exported declaration of 'Era'.
+../core/types/UTDG.ts(357,3): error TS2484: Export declaration conflicts with exported declaration of 'HistoricalConstraint'.
+../core/types/UTDG.ts(358,3): error TS2484: Export declaration conflicts with exported declaration of 'DataSource'.
+../core/types/UTDG.ts(359,3): error TS2484: Export declaration conflicts with exported declaration of 'HistoricalQuery'.
+../core/types/UTDG.ts(360,3): error TS2484: Export declaration conflicts with exported declaration of 'HistoricalQueryResult'.
+../core/types/UTDG.ts(361,3): error TS2484: Export declaration conflicts with exported declaration of 'MedievalClothing'.
+../core/types/UTDG.ts(362,3): error TS2484: Export declaration conflicts with exported declaration of 'UTDGGraph'.
+../core/types/UTDG.ts(363,3): error TS2484: Export declaration conflicts with exported declaration of 'ContentGenerationConfig'.
+../core/types/UTDG.ts(364,3): error TS2484: Export declaration conflicts with exported declaration of 'GeneratedContent'.
+../core/types/UTDG.ts(365,3): error TS2484: Export declaration conflicts with exported declaration of 'VFXExportData'.
+../core/types/UTDG.ts(366,3): error TS2484: Export declaration conflicts with exported declaration of 'ValidationReport'.
+../core/types/UTDG.ts(367,3): error TS2484: Export declaration conflicts with exported declaration of 'ConstraintValidationResult'.
+../core/utils/canvasOptimization.tsx(443,48): error TS2304: Cannot find name 'PerformanceMetrics'.
+../core/utils/templateParser.ts(472,30): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+../core/utils/templateParser.ts(747,39): error TS18048: 's.priority' is possibly 'undefined'.
+../core/utils/templateParser.ts(847,40): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+../core/websocket/WebSocketClient.ts(127,7): error TS2322: Type '"selection_update"' is not assignable to type '"error" | "connect" | "disconnect" | "graph_update" | "cursor_update" | "presence_update" | "user_join" | "user_leave" | "ping" | "pong" | "auth_request" | "auth_response" | ... 25 more ... | "collaboration_conflict_resolved"'.
+../core/websocket/WebSocketClient.ts(140,7): error TS2322: Type '"activity_update"' is not assignable to type '"error" | "connect" | "disconnect" | "graph_update" | "cursor_update" | "presence_update" | "user_join" | "user_leave" | "ping" | "pong" | "auth_request" | "auth_response" | ... 25 more ... | "collaboration_conflict_resolved"'.
+../core/websocket/WebSocketClient.ts(153,7): error TS2322: Type '"presence_request"' is not assignable to type '"error" | "connect" | "disconnect" | "graph_update" | "cursor_update" | "presence_update" | "user_join" | "user_leave" | "ping" | "pong" | "auth_request" | "auth_response" | ... 25 more ... | "collaboration_conflict_resolved"'.
+../core/websocket/WebSocketClient.ts(290,12): error TS2678: Type '"presence_sync"' is not comparable to type '"error" | "connect" | "disconnect" | "graph_update" | "cursor_update" | "presence_update" | "user_join" | "user_leave" | "ping" | "pong" | "auth_request" | "auth_response" | ... 25 more ... | "collaboration_conflict_resolved"'.
+../core/websocket/WebSocketClient.ts(298,12): error TS2678: Type '"selection_update"' is not comparable to type '"error" | "connect" | "disconnect" | "graph_update" | "cursor_update" | "presence_update" | "user_join" | "user_leave" | "ping" | "pong" | "auth_request" | "auth_response" | ... 25 more ... | "collaboration_conflict_resolved"'.
+../core/websocket/WebSocketClient.ts(302,12): error TS2678: Type '"activity_update"' is not comparable to type '"error" | "connect" | "disconnect" | "graph_update" | "cursor_update" | "presence_update" | "user_join" | "user_leave" | "ping" | "pong" | "auth_request" | "auth_response" | ... 25 more ... | "collaboration_conflict_resolved"'.
+../core/websocket/WebSocketClient.ts(306,12): error TS2678: Type '"user_status_changed"' is not comparable to type '"error" | "connect" | "disconnect" | "graph_update" | "cursor_update" | "presence_update" | "user_join" | "user_leave" | "ping" | "pong" | "auth_request" | "auth_response" | ... 25 more ... | "collaboration_conflict_resolved"'.
+../crdt-research/src/graph-sync.ts(220,29): error TS2345: Argument of type 'Doc' is not assignable to parameter of type 'Snapshot'.
+  Type 'Doc' is missing the following properties from type 'Snapshot': ds, sv
+../crdt-research/src/graph-sync.ts(228,42): error TS2345: Argument of type 'Snapshot' is not assignable to parameter of type 'Doc'.
+  Type 'Snapshot' is missing the following properties from type 'Doc': gc, gcFilter, clientID, guid, and 32 more.
+../crdt-research/src/y-graph.ts(188,32): error TS2345: Argument of type 'GraphOperation' is not assignable to parameter of type 'NodeOperation'.
+  Types of property 'type' are incompatible.
+    Type '"node" | "addNode" | "addEdge" | "updateNode" | "edge" | "removeNode" | "removeEdge"' is not assignable to type '"node"'.
+      Type '"addNode"' is not assignable to type '"node"'.
+../crdt-research/src/y-graph.ts(190,32): error TS2345: Argument of type 'GraphOperation' is not assignable to parameter of type 'EdgeOperation'.
+  Types of property 'type' are incompatible.
+    Type '"node" | "addNode" | "addEdge" | "updateNode" | "edge" | "removeNode" | "removeEdge"' is not assignable to type '"edge"'.
+      Type '"node"' is not assignable to type '"edge"'.
+../crdt-research/src/y-graph.ts(198,22): error TS2345: Argument of type 'Partial<CRDTNode>' is not assignable to parameter of type 'CRDTNode'.
+  Types of property 'id' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+../crdt-research/src/y-graph.ts(216,22): error TS2345: Argument of type 'Partial<CRDTEdge>' is not assignable to parameter of type 'CRDTEdge'.
+  Types of property 'id' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/runtime/CustomNodeAdapter.ts(23,14): error TS2515: Non-abstract class 'CustomNodeAdapter' does not implement inherited abstract member serialize from class 'AdvancedRuntimeNode<unknown>'.
+src/runtime/CustomNodeAdapter.ts(48,15): error TS2304: Cannot find name 'ValidationResult'.
+src/runtime/CustomNodeAdapter.ts(90,49): error TS2345: Argument of type 'import("/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/runtime/advanced").AdvancedExecutionContext' is not assignable to parameter of type 'import("/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/graph-core/dist/types").AdvancedExecutionContext'.
+  Type 'AdvancedExecutionContext' is missing the following properties from type 'AdvancedExecutionContext': performanceCache, executionTrace
+src/runtime/CustomNodeAdapter.ts(173,37): error TS2322: Type 'import("/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/graph-core/dist/validation").ValidationResult' is not assignable to type 'import("/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/custom-node-sdk/src/types").ValidationResult'.
+  Types of property 'errors' are incompatible.
+    Type 'ValidationError[]' is not assignable to type 'string[]'.
+      Type 'ValidationError' is not assignable to type 'string'.
+src/runtime/CustomNodeAdapter.ts(210,30): error TS2339: Property 'nodeStats' does not exist on type '{ startTime: number; executionId: string; nodeExecutionOrder: string[]; performanceMetrics: Map<string, number>; }'.
+src/runtime/CustomNodeAdapter.ts(211,27): error TS2339: Property 'nodeStats' does not exist on type '{ startTime: number; executionId: string; nodeExecutionOrder: string[]; performanceMetrics: Map<string, number>; }'.
+src/runtime/CustomNodeAdapter.ts(214,25): error TS2339: Property 'nodeStats' does not exist on type '{ startTime: number; executionId: string; nodeExecutionOrder: string[]; performanceMetrics: Map<string, number>; }'.
+src/runtime/CustomNodeAdapter.ts(229,30): error TS2339: Property 'errors' does not exist on type '{ startTime: number; executionId: string; nodeExecutionOrder: string[]; performanceMetrics: Map<string, number>; }'.
+src/runtime/CustomNodeAdapter.ts(230,27): error TS2339: Property 'errors' does not exist on type '{ startTime: number; executionId: string; nodeExecutionOrder: string[]; performanceMetrics: Map<string, number>; }'.
+src/runtime/CustomNodeAdapter.ts(233,25): error TS2339: Property 'errors' does not exist on type '{ startTime: number; executionId: string; nodeExecutionOrder: string[]; performanceMetrics: Map<string, number>; }'.
+src/runtime/NodeRegistry.ts(162,55): error TS18046: 'error' is of type 'unknown'.
+src/runtime/SecurityManager.ts(57,7): error TS2322: Type 'string[]' is not assignable to type 'ValidationError[]'.
+  Type 'string' is not assignable to type 'ValidationError'.
+src/runtime/SecurityManager.ts(58,7): error TS2322: Type 'string[]' is not assignable to type 'ValidationWarning[]'.
+  Type 'string' is not assignable to type 'ValidationWarning'.
+src/runtime/SecurityManager.ts(189,7): error TS2322: Type 'string[]' is not assignable to type 'ValidationError[]'.
+  Type 'string' is not assignable to type 'ValidationError'.
+src/runtime/SecurityManager.ts(190,7): error TS2322: Type 'string[]' is not assignable to type 'ValidationWarning[]'.
+  Type 'string' is not assignable to type 'ValidationWarning'.
+src/runtime/ValidationEngine.ts(86,48): error TS18046: 'error' is of type 'unknown'.
+src/runtime/ValidationEngine.ts(91,7): error TS2322: Type 'string[]' is not assignable to type 'ValidationError[]'.
+  Type 'string' is not assignable to type 'ValidationError'.
+src/runtime/ValidationEngine.ts(92,7): error TS2322: Type 'string[]' is not assignable to type 'ValidationWarning[]'.
+  Type 'string' is not assignable to type 'ValidationWarning'.
+src/runtime/ValidationEngine.ts(122,72): error TS18046: 'validationError' is of type 'unknown'.
+src/runtime/ValidationEngine.ts(137,47): error TS18046: 'error' is of type 'unknown'.
+src/runtime/ValidationEngine.ts(142,7): error TS2322: Type 'string[]' is not assignable to type 'ValidationError[]'.
+  Type 'string' is not assignable to type 'ValidationError'.
+src/runtime/ValidationEngine.ts(143,7): error TS2322: Type 'string[]' is not assignable to type 'ValidationWarning[]'.
+  Type 'string' is not assignable to type 'ValidationWarning'.
+src/runtime/ValidationEngine.ts(171,72): error TS18046: 'validationError' is of type 'unknown'.
+src/runtime/ValidationEngine.ts(185,48): error TS18046: 'error' is of type 'unknown'.
+src/runtime/ValidationEngine.ts(190,7): error TS2322: Type 'string[]' is not assignable to type 'ValidationError[]'.
+  Type 'string' is not assignable to type 'ValidationError'.
+src/runtime/ValidationEngine.ts(191,7): error TS2322: Type 'string[]' is not assignable to type 'ValidationWarning[]'.
+  Type 'string' is not assignable to type 'ValidationWarning'.
+src/runtime/ValidationEngine.ts(211,32): error TS2322: Type 'string[]' is not assignable to type 'ValidationError[]'.
+  Type 'string' is not assignable to type 'ValidationError'.
+src/runtime/ValidationEngine.ts(213,41): error TS18046: 'error' is of type 'unknown'.
+src/runtime/ValidationEngine.ts(358,21): error TS2322: Type 'string[]' is not assignable to type 'ValidationError[]'.
+  Type 'string' is not assignable to type 'ValidationError'.
+src/testing/index.ts(6,15): error TS2307: Cannot find module './TestHarness' or its corresponding type declarations.
+src/testing/index.ts(8,15): error TS2307: Cannot find module './TestHelpers' or its corresponding type declarations.
+src/testing/MockContext.ts(45,5): error TS2739: Type '{ variables: Map<string, any>; prng: PRNG; nodeStates: Map<string, any>; evaluationDepth: number; cache: Map<any, any>; executionMeta: { startTime: number; nodeStats: Map<...>; errors: never[]; warnings: never[]; } | undefined; ... 10 more ...; decrementDepth: () => void; }' is missing the following properties from type 'AdvancedExecutionContext': performanceCache, executionTrace, seed
  ELIFECYCLE  Command failed with exit code 1.

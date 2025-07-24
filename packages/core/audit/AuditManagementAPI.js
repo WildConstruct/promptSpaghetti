@@ -5,7 +5,7 @@
  * PromptScape audit infrastructure and providing enhanced management capabilities.
  */
 import { z } from 'zod';
-import { AuditEventType, AuditSeverity, ComplianceFramework, AuditStatus, auditManagementSystem } from './AuditManagementSystem';
+import { AuditEventType, AuditSeverity, ComplianceFramework, AuditStatus, auditManagementSystem } from './AuditManagementSystem.js';
 // API Request/Response Schemas
 export const CreateAuditEventRequest = z.object({
     event_type: z.nativeEnum(AuditEventType),

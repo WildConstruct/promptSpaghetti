@@ -59,4 +59,26 @@ export declare const createPerformanceMiddleware: (options?: {
     slowEventThreshold?: number;
     trackMemoryUsage?: boolean;
 }) => EventMiddleware;
+/**
+ * Event deduplication middleware
+ */
+export declare const createDeduplicationMiddleware: (options: {
+    keyGenerator: (event: BaseEvent) => string;
+    windowMs: number;
+    strategy?: "drop" | "merge" | "latest";
+}) => EventMiddleware;
+/**
+ * Circuit breaker middleware
+ */
+export declare const createCircuitBreakerMiddleware: (options: {
+    failureThreshold: number;
+    resetTimeoutMs: number;
+    monitorWindowMs: number;
+}) => EventMiddleware;
+/**
+ * Pre-configured middleware collections
+ */
+export declare const developmentMiddleware: EventMiddleware[];
+export declare const productionMiddleware: any[];
+export declare const testingMiddleware: EventMiddleware[];
 //# sourceMappingURL=EventMiddleware.d.ts.map

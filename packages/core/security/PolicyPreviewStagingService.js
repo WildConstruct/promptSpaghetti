@@ -9,10 +9,9 @@
  * Task: T-1752989143998-98 - Implement policy preview and staging
  */
 import { EventEmitter } from 'events';
-import { ValidationType, ValidationStatus } from '../../../server/src/services/PolicyUpdateWorkflowService.ts';
-
+import { PolicyType, DeploymentType, DeploymentStatus, ValidationType, ValidationStatus, RiskLevel, UpdatePriority, VersionStatus } from '../../../server/src/services/PolicyUpdateWorkflowService.ts.js';
 // Re-export for tests
-export { ValidationType, ValidationStatus };
+export { PolicyType, DeploymentType, DeploymentStatus, ValidationType, ValidationStatus, RiskLevel, UpdatePriority, VersionStatus };
 export var EnvironmentType;
 (function (EnvironmentType) {
     EnvironmentType["DEVELOPMENT"] = "DEVELOPMENT";
@@ -104,9 +103,6 @@ export class PolicyPreviewStagingService extends EventEmitter {
      * Create a new policy preview with staging capabilities
      */
     async createPolicyPreview(policyId, baseVersion, changes, options) {
-        if (!policyId || policyId.trim() === '') {
-            throw new Error('Policy ID is required');
-        }
         const previewId = this.generatePreviewId();
         const expiresAt = new Date(Date.now() + (options.expirationDays || this.config.previewRetentionDays) * 24 * 60 * 60 * 1000);
         const preview = {
@@ -543,34 +539,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
     async assessUserImpact(differences) { return {}; }
     async compareCompliance(differences) { return {}; }
     async getUserSegment(userId) { return 'general'; }
-    async aggregateAnalytics(preview) { 
-        return {
-            previewId: preview.previewId,
-            totalInteractions: Math.floor(Math.random() * 1000) + 100,
-            uniqueUsers: Math.floor(Math.random() * 200) + 50,
-            averageTimeSpent: Math.floor(Math.random() * 300) + 60,
-            completionRate: Math.random() * 0.5 + 0.5,
-            dropOffPoints: [
-                { step: 'landing', rate: 0.1 },
-                { step: 'consent', rate: 0.15 },
-                { step: 'completion', rate: 0.05 }
-            ],
-            heatmapData: [
-                { element: 'header', interactions: 45 },
-                { element: 'consent-button', interactions: 89 }
-            ],
-            userJourney: [
-                { step: 'entry', count: 100, avgTime: 5 },
-                { step: 'reading', count: 85, avgTime: 120 },
-                { step: 'decision', count: 70, avgTime: 45 }
-            ],
-            conversionFunnel: [
-                { stage: 'awareness', count: 100 },
-                { stage: 'consideration', count: 85 },
-                { stage: 'conversion', count: 70 }
-            ]
-        };
-    }
+    async aggregateAnalytics(preview) { return {}; }
     async validateProductionReadiness(preview) { return { ready: true, reasons: [] }; }
     async createProductionVersion(preview, options) { return `v${Date.now()}`; }
     async cleanupStagingDeployments(preview) { }

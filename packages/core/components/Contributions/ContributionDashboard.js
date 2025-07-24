@@ -7,9 +7,9 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * templates, knowledge articles, tutorials, case studies, and community content.
  */
 import { useState, useEffect, useCallback } from 'react';
-import { ContributionCard } from './ContributionCard';
-import { ContributionSubmissionForm } from './ContributionSubmissionForm';
-import { ContributorProfileManager } from './ContributorProfileManager';
+import { ContributionCard } from './ContributionCard.js';
+import { ContributionSubmissionForm } from './ContributionSubmissionForm.js';
+import { ContributorProfileManager } from './ContributorProfileManager.js';
 export const ContributionDashboard = ({ userId, showCreateForm = true, initialFilter = {}, onContributionClick, onContributionEdit, onContributionDelete, className = '' }) => {
     const [contributions, setContributions] = useState([]);
     const [contributorProfile, setContributorProfile] = useState(null);

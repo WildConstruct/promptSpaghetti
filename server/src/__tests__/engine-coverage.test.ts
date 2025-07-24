@@ -1,6 +1,6 @@
 // server/src/__tests__/engine-coverage.test.ts
 import { executeGraph } from '../engine';
-import { Graph } from '../../../packages/core/graphSchema';
+import { Graph } from '../../../../packages/core/graphSchema';
 
 /**
  * This test suite focuses on improving coverage for the engine.ts file

@@ -6,10 +6,10 @@ import { jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
  * Part of Epic 17.5.5 - Verification System
  */
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { Badge } from '../ui/Badge';
-import { Textarea } from '../ui/Textarea';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
+import { Button } from '../ui/Button.js';
+import { Badge } from '../ui/Badge.js';
+import { Textarea } from '../ui/Textarea.js';
 import { Eye, Download, ZoomIn, ZoomOut, RotateCw, CheckCircle, XCircle, Flag, FileText, Image, Maximize2, Minimize2, ArrowLeft, ArrowRight, Search, Info, Shield } from 'lucide-react';
 export const DocumentReviewInterface = ({ documents, requestId, userId, documentType, onReviewComplete, onBack, className = '' }) => {
     const [currentDocumentIndex, setCurrentDocumentIndex] = useState(0);

@@ -1,7 +1,7 @@
 // packages/core/hooks/useTemplatePreview.ts
 // Real-time preview system specifically designed for template-based nodes
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { parseTemplate, substituteVariables, getContextualDefaults } from '../utils/templateParser';
+import { parseTemplate, substituteVariables, getContextualDefaults } from '../utils/templateParser.js';
 const DEFAULT_CONFIG = {
     maxVariants: 5,
     debounceMs: 300,

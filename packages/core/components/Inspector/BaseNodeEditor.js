@@ -1,6 +1,6 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React from 'react';
-import { shouldShowField, classifyField } from '../../stores/uiSettingsStore';
+import { shouldShowField, classifyField } from '../../stores/uiSettingsStore.js';
 // Convert technical error messages to filmmaker-friendly language
 const getFilmmakerFriendlyError = (message) => {
     const errorMappings = {

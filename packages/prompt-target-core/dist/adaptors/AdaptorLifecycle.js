@@ -32,7 +32,7 @@ export class AdaptorRegistry {
         catch (error) {
             this.logger.error('Failed to register adaptor', {
                 adaptorId: id,
-                error: error.message
+                error: error instanceof Error ? error.message : String(error)
             });
             throw error;
         }
@@ -57,7 +57,7 @@ export class AdaptorRegistry {
             catch (error) {
                 this.logger.error('Error during adaptor cleanup', {
                     adaptorId: id,
-                    error: error.message
+                    error: error instanceof Error ? error.message : String(error)
                 });
             }
         }
@@ -102,7 +102,7 @@ export class AdaptorRegistry {
                     details: {
                         connectivity: {
                             reachable: false,
-                            errorMessage: error.message
+                            errorMessage: error instanceof Error ? error.message : String(error)
                         },
                         capabilities: { available: false },
                         configuration: { valid: false },
@@ -116,8 +116,8 @@ export class AdaptorRegistry {
                         errorRate: 1,
                         lastError: {
                             timestamp: new Date(),
-                            message: error.message,
-                            type: error.constructor.name
+                            message: error instanceof Error ? error.message : String(error),
+                            type: error instanceof Error ? error.constructor.name : 'Unknown'
                         }
                     }
                 };
@@ -125,7 +125,7 @@ export class AdaptorRegistry {
                 results.set(id, unhealthyStatus);
                 this.logger.error('Health check failed', {
                     adaptorId: id,
-                    error: error.message
+                    error: error instanceof Error ? error.message : String(error)
                 });
             }
         }

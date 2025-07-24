@@ -7,10 +7,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  */
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Maximize2, Minimize2 } from 'lucide-react';
-import { PropertiesSection } from './PropertiesSection';
-import { PreviewSection } from './PreviewSection';
-import { useUISettingsStore } from '../../stores/uiSettingsStore';
-import { createSmoothTransition, animationDurations, easingFunctions, useSmoothHover, AnimatedElement } from '../../utils/smoothAnimations';
+import { PropertiesSection } from './PropertiesSection.js';
+import { PreviewSection } from './PreviewSection.js';
+import { useUISettingsStore } from '../../stores/uiSettingsStore.js';
+import { createSmoothTransition, animationDurations, easingFunctions, useSmoothHover, AnimatedElement } from '../../utils/smoothAnimations.js';
 import '../../styles/smoothAnimations.css';
 // Filmmaker-friendly node type names
 const getFilmmakerFriendlyName = (nodeType) => {
@@ -33,13 +33,13 @@ const getFilmmakerFriendlyName = (nodeType) => {
     };
     return friendlyNames[nodeType] || nodeType;
 };
-export const SmoothInspectorPanel = ({ node, schema, onChange, _____onClose, _____onGlobalPreviewRequest, _____initialWidth = 320, minWidth = 280, maxWidth = 600 }) => {
+export const SmoothInspectorPanel = ({ node, schema, onChange, onClose, onGlobalPreviewRequest, initialWidth = 320, minWidth = 280, maxWidth = 600 }) => {
     const [isResizing, setIsResizing] = useState(false);
     const [collapsed, setCollapsed] = useState(false);
     const [isMaximized, setIsMaximized] = useState(false);
     const resizeRef = useRef(null);
     // UI Settings
-    const { debugMode, setDebugMode, _____shouldShowTechnicalFields, _____complexityLevel, _____setComplexityLevel, _____shouldShowAdvancedFeatures } = useUISettingsStore();
+    const { debugMode, setDebugMode, shouldShowTechnicalFields, complexityLevel, setComplexityLevel, shouldShowAdvancedFeatures } = useUISettingsStore();
     // Smooth hover states
     const collapseHover = useSmoothHover();
     const debugHover = useSmoothHover();

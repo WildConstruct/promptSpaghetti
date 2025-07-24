@@ -25,6 +25,25 @@ jobs:
         env:
           PUPPETEER_SKIP_DOWNLOAD: true
 
+      - name: Dependency Conflict Check
+        run: |
+          echo "🔍 Checking for critical dependency conflicts..."
+          ZOD_VERSIONS=$(grep -r '"zod"' */package.json packages/*/package.json 2>/dev/null | grep -v node_modules | awk -F'"' '{print $4}' | sort -u | wc -l)
+          if [ $ZOD_VERSIONS -gt 1 ]; then
+            echo "❌ Zod version conflicts detected!"
+            grep -r '"zod"' */package.json packages/*/package.json 2>/dev/null | grep -v node_modules
+            echo "::error::Multiple Zod versions found. This can cause runtime validation issues."
+            exit 1
+          fi
+          echo "✅ No critical dependency conflicts found"
+
+      - name: Security Audit
+        run: |
+          echo "🔒 Running security audit..."
+          pnpm audit --audit-level high || {
+            echo "::warning::High severity vulnerabilities found. Please review."
+          }
+
       - name: Lint
         run: pnpm lint
         # Using improved ESLint config with higher warning thresholds

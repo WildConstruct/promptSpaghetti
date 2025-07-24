@@ -26,7 +26,7 @@ import {
   PlacementSlotMetrics,
   ContentPlacementMetrics,
   PlacementTemplate
-} from '../../../packages/core/types/PlacementTypes';
+} from '../../../../packages/core/types/PlacementTypes';
 
 export interface CreateSlotRequest {
   name: string;

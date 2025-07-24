@@ -30,8 +30,8 @@ import {
   SystemDependency,
   PlaybookConfiguration,
   PlaybookMetadata
-} from '../../../packages/core/types/Epic17IncidentPlaybooks';
-// import { ActionSeverity } from '../../../packages/core/types/EnforcementTypes';
+} from '../../../../packages/core/types/Epic17IncidentPlaybooks';
+// import { ActionSeverity } from '../../../../packages/core/types/EnforcementTypes';
 
 export class Epic17SpecificPlaybooks {
   

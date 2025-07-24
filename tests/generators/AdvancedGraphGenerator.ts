@@ -10,7 +10,7 @@
  * Task: E18-1753114562159-0BC5A0
  */
 
-import { Graph, Node, Edge, NodeTypeEnum } from '../../packages/core/graphSchema';
+import { Graph, Node, Edge, NodeTypeEnum } from '../packages/core/graphSchema';
 import seedrandom from 'seedrandom';
 
 export interface GraphGenerationOptions {

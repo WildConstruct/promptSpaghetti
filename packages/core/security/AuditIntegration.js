@@ -6,8 +6,8 @@
  *
  * Epic 19 Task T-1752989143998-485: Implement audit logging for data access
  */
-import { AuditOperation } from './AuditLogger';
-import { DataClassificationLevel } from '../types/DataClassification';
+import { AuditOperation } from './AuditLogger.js';
+import { DataClassificationLevel } from '../types/DataClassification.js';
 /**
  * Audit integration service
  */
@@ -63,13 +63,13 @@ export class AuditIntegration {
             } : undefined
         });
         // Log denied access separately if configured
-        if (enforcementResult && !enforcementResult.allowed && this.config.logDeniedAccess) {
+        if (!enforcementResult?.allowed && this.config.logDeniedAccess) {
             await this.logSecurityEvent('ACCESS_DENIED', context, {
                 resourceType,
                 resourceId,
                 classification,
-                reason: enforcementResult.reason,
-                missingControls: enforcementResult.missingControls
+                reason: enforcementResult?.reason,
+                missingControls: enforcementResult?.missingControls
             });
         }
     }

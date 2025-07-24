@@ -155,7 +155,7 @@ const GenerationWizard = ({ flow, currentStep, params, onParamsChange, onStepCha
 /**
  * Professional command palette for graph editor with generation flow integration
  */
-export const CommandPalette = ({ isOpen, onClose, _____nodes, _____edges, selectedNodes, onGenerationStart, onNodeCreate, onNodeDelete, onExport, onTemplateApply, theme = 'cinema', _____recentCommands = [], customActions = [] }) => {
+export const CommandPalette = ({ isOpen, onClose, nodes, edges, selectedNodes, onGenerationStart, onNodeCreate, onNodeDelete, onExport, onTemplateApply, theme = 'cinema', recentCommands = [], customActions = [] }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [_____activeCategory, _____setActiveCategory] = useState(null);
@@ -665,109 +665,110 @@ export const CommandPalette = ({ isOpen, onClose, _____nodes, _____edges, select
     const styles = getThemeStyles();
     if (!isOpen && !showGenerationWizard)
         return null;
-    return (_jsxs(_Fragment, { children: [_jsxs("div", { style: {
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: styles.overlay,
-                    zIndex: 10000,
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    justifyContent: 'center',
-                    paddingTop: '100px'
-                }, onClick: onClose, children: [isOpen && !showGenerationWizard && (_jsxs("div", { style: {
-                            width: '640px',
-                            maxHeight: '500px',
-                            background: styles.background,
-                            border: `1px solid ${styles.border}`,
-                            borderRadius: '12px',
-                            boxShadow: `0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px ${styles.border}`,
-                            overflow: 'hidden',
-                            fontFamily: 'Inter, system-ui, sans-serif'
-                        }, onClick: (e) => e.stopPropagation(), children: [_jsx("div", { style: {
-                                    padding: '16px',
-                                    borderBottom: `1px solid ${styles.border}`
-                                }, children: _jsx("input", { ref: searchInputRef, type: "text", value: searchQuery, onChange: (e) => {
-                                        setSearchQuery(e.target.value);
-                                        setSelectedIndex(0);
-                                    }, placeholder: "Search commands... (\u2318K)", style: {
-                                        width: '100%',
-                                        padding: '12px 16px',
-                                        border: 'none',
-                                        borderRadius: '8px',
-                                        background: styles.secondary,
-                                        color: styles.text,
-                                        fontSize: '16px',
-                                        outline: 'none'
-                                    } }) }), _jsxs("div", { style: {
-                                    maxHeight: '400px',
-                                    overflow: 'auto',
-                                    padding: '8px'
-                                }, children: [Object.entries(groupedActions).map(([category, actions]) => (_jsxs("div", { style: { marginBottom: '16px' }, children: [_jsxs("div", { style: {
-                                                    padding: '8px 12px 4px',
-                                                    fontSize: '12px',
-                                                    fontWeight: 600,
-                                                    color: styles.textSecondary,
-                                                    textTransform: 'uppercase',
-                                                    letterSpacing: '0.5px'
-                                                }, children: [categoryIcons[category], " ", category] }), actions.map((action, actionIndex) => {
-                                                const globalIndex = filteredActions.indexOf(action);
-                                                const isSelected = globalIndex === selectedIndex;
-                                                return (_jsxs("div", { onClick: () => executeAction(action), style: {
-                                                        padding: '12px',
-                                                        margin: '2px 4px',
-                                                        borderRadius: '6px',
-                                                        background: isSelected ? styles.hover : 'transparent',
-                                                        border: isSelected ? `1px solid ${styles.accent}` : '1px solid transparent',
-                                                        cursor: action.disabled ? 'not-allowed' : 'pointer',
-                                                        opacity: action.disabled ? 0.5 : 1,
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        gap: '12px',
-                                                        transition: 'all 0.15s ease'
-                                                    }, children: [_jsx("span", { style: { fontSize: '20px' }, children: action.icon }), _jsxs("div", { style: { flex: 1 }, children: [_jsxs("div", { style: {
-                                                                        fontSize: '14px',
-                                                                        fontWeight: 600,
-                                                                        color: styles.text,
-                                                                        marginBottom: '2px'
-                                                                    }, children: [action.title, action.premium && (_jsx("span", { style: {
-                                                                                marginLeft: '8px',
-                                                                                padding: '2px 6px',
-                                                                                background: styles.accent,
-                                                                                color: styles.background,
-                                                                                fontSize: '10px',
-                                                                                borderRadius: '4px',
-                                                                                fontWeight: 500
-                                                                            }, children: "PRO" }))] }), _jsx("div", { style: {
-                                                                        fontSize: '12px',
-                                                                        color: styles.textSecondary,
-                                                                        lineHeight: 1.4
-                                                                    }, children: action.description })] }), action.shortcut && (_jsx("div", { style: {
-                                                                padding: '4px 8px',
-                                                                background: styles.secondary,
-                                                                border: `1px solid ${styles.border}`,
-                                                                borderRadius: '4px',
-                                                                fontSize: '11px',
-                                                                color: styles.textSecondary,
-                                                                fontFamily: 'Monaco, monospace'
-                                                            }, children: action.shortcut }))] }, action.id));
-                                            })] }, category))), filteredActions.length === 0 && (_jsxs("div", { style: {
-                                            padding: '40px 20px',
-                                            textAlign: 'center',
-                                            color: styles.textSecondary
-                                        }, children: [_jsx("div", { style: { fontSize: '48px', marginBottom: '16px' }, children: "\uD83D\uDD0D" }), _jsx("div", { style: { fontSize: '14px' }, children: "No commands found" }), _jsx("div", { style: { fontSize: '12px', marginTop: '4px' }, children: "Try searching for \"generate\", \"create\", or \"export\"" })] }))] }), _jsxs("div", { style: {
+    return (_jsx(_Fragment, { children: _jsxs("div", { style: {
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: styles.overlay,
+                zIndex: 10000,
+                display: 'flex',
+                alignItems: 'flex-start',
+                justifyContent: 'center',
+                paddingTop: '100px'
+            }, onClick: onClose, children: [isOpen && !showGenerationWizard && (_jsxs("div", { style: {
+                        width: '640px',
+                        maxHeight: '500px',
+                        background: styles.background,
+                        border: `1px solid ${styles.border}`,
+                        borderRadius: '12px',
+                        boxShadow: `0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px ${styles.border}`,
+                        overflow: 'hidden',
+                        fontFamily: 'Inter, system-ui, sans-serif'
+                    }, onClick: (e) => e.stopPropagation(), children: [_jsx("div", { style: {
+                                padding: '16px',
+                                borderBottom: `1px solid ${styles.border}`
+                            }, children: _jsx("input", { ref: searchInputRef, type: "text", value: searchQuery, onChange: (e) => {
+                                    setSearchQuery(e.target.value);
+                                    setSelectedIndex(0);
+                                }, placeholder: "Search commands... (\u2318K)", style: {
+                                    width: '100%',
                                     padding: '12px 16px',
-                                    borderTop: `1px solid ${styles.border}`,
+                                    border: 'none',
+                                    borderRadius: '8px',
                                     background: styles.secondary,
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    fontSize: '12px',
-                                    color: styles.textSecondary
-                                }, children: [_jsx("div", { children: "\u2191\u2193 Navigate \u2022 Enter Execute \u2022 Esc Close" }), _jsx("div", { children: "\uD83C\uDFAC Wild Construct Command Palette" })] })] })), showGenerationWizard && activeGenerationFlow && (_jsx(GenerationWizard, { flow: activeGenerationFlow, currentStep: currentStep, params: generationParams, onParamsChange: setGenerationParams, onStepChange: setCurrentStep, onExecute: executeGenerationFlow, onCancel: () => {
-                            setShowGenerationWizard(false);
-                            setActiveGenerationFlow(null);
-                        }, theme: theme }))] }), "); }; export default CommandPalette;"] }));
+                                    color: styles.text,
+                                    fontSize: '16px',
+                                    outline: 'none'
+                                } }) }), _jsxs("div", { style: {
+                                maxHeight: '400px',
+                                overflow: 'auto',
+                                padding: '8px'
+                            }, children: [Object.entries(groupedActions).map(([category, actions]) => (_jsxs("div", { style: { marginBottom: '16px' }, children: [_jsxs("div", { style: {
+                                                padding: '8px 12px 4px',
+                                                fontSize: '12px',
+                                                fontWeight: 600,
+                                                color: styles.textSecondary,
+                                                textTransform: 'uppercase',
+                                                letterSpacing: '0.5px'
+                                            }, children: [categoryIcons[category], " ", category] }), actions.map((action, actionIndex) => {
+                                            const globalIndex = filteredActions.indexOf(action);
+                                            const isSelected = globalIndex === selectedIndex;
+                                            return (_jsxs("div", { onClick: () => executeAction(action), style: {
+                                                    padding: '12px',
+                                                    margin: '2px 4px',
+                                                    borderRadius: '6px',
+                                                    background: isSelected ? styles.hover : 'transparent',
+                                                    border: isSelected ? `1px solid ${styles.accent}` : '1px solid transparent',
+                                                    cursor: action.disabled ? 'not-allowed' : 'pointer',
+                                                    opacity: action.disabled ? 0.5 : 1,
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '12px',
+                                                    transition: 'all 0.15s ease'
+                                                }, children: [_jsx("span", { style: { fontSize: '20px' }, children: action.icon }), _jsxs("div", { style: { flex: 1 }, children: [_jsxs("div", { style: {
+                                                                    fontSize: '14px',
+                                                                    fontWeight: 600,
+                                                                    color: styles.text,
+                                                                    marginBottom: '2px'
+                                                                }, children: [action.title, action.premium && (_jsx("span", { style: {
+                                                                            marginLeft: '8px',
+                                                                            padding: '2px 6px',
+                                                                            background: styles.accent,
+                                                                            color: styles.background,
+                                                                            fontSize: '10px',
+                                                                            borderRadius: '4px',
+                                                                            fontWeight: 500
+                                                                        }, children: "PRO" }))] }), _jsx("div", { style: {
+                                                                    fontSize: '12px',
+                                                                    color: styles.textSecondary,
+                                                                    lineHeight: 1.4
+                                                                }, children: action.description })] }), action.shortcut && (_jsx("div", { style: {
+                                                            padding: '4px 8px',
+                                                            background: styles.secondary,
+                                                            border: `1px solid ${styles.border}`,
+                                                            borderRadius: '4px',
+                                                            fontSize: '11px',
+                                                            color: styles.textSecondary,
+                                                            fontFamily: 'Monaco, monospace'
+                                                        }, children: action.shortcut }))] }, action.id));
+                                        })] }, category))), filteredActions.length === 0 && (_jsxs("div", { style: {
+                                        padding: '40px 20px',
+                                        textAlign: 'center',
+                                        color: styles.textSecondary
+                                    }, children: [_jsx("div", { style: { fontSize: '48px', marginBottom: '16px' }, children: "\uD83D\uDD0D" }), _jsx("div", { style: { fontSize: '14px' }, children: "No commands found" }), _jsx("div", { style: { fontSize: '12px', marginTop: '4px' }, children: "Try searching for \"generate\", \"create\", or \"export\"" })] }))] }), _jsxs("div", { style: {
+                                padding: '12px 16px',
+                                borderTop: `1px solid ${styles.border}`,
+                                background: styles.secondary,
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                fontSize: '12px',
+                                color: styles.textSecondary
+                            }, children: [_jsx("div", { children: "\u2191\u2193 Navigate \u2022 Enter Execute \u2022 Esc Close" }), _jsx("div", { children: "\uD83C\uDFAC Wild Construct Command Palette" })] })] })), showGenerationWizard && activeGenerationFlow && (_jsx(GenerationWizard, { flow: activeGenerationFlow, currentStep: currentStep, params: generationParams, onParamsChange: setGenerationParams, onStepChange: setCurrentStep, onExecute: executeGenerationFlow, onCancel: () => {
+                        setShowGenerationWizard(false);
+                        setActiveGenerationFlow(null);
+                    }, theme: theme }))] }) }));
 };
+export default CommandPalette;

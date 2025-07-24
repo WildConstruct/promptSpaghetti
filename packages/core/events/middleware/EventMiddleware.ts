@@ -191,7 +191,7 @@ export const createRateLimitMiddleware = (options: {
       return;
     }
 
-    let counts = eventCounts.get(key) || {
+    const counts = eventCounts.get(key) || {
       secondCount: 0,
       minuteCount: 0,
       hourCount: 0,

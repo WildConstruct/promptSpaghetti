@@ -124,7 +124,7 @@ export const createRateLimitMiddleware = (options) => {
             next();
             return;
         }
-        let counts = eventCounts.get(key) || {
+        const counts = eventCounts.get(key) || {
             secondCount: 0,
             minuteCount: 0,
             hourCount: 0,
@@ -270,9 +270,10 @@ export const createPerformanceMiddleware = (options) => {
         };
     };
 };
-windowMs: number;
-strategy ?  : 'drop' | 'merge' | 'latest';
-EventMiddleware => {
+/**
+ * Event deduplication middleware
+ */
+export const createDeduplicationMiddleware = (options) => {
     const { keyGenerator, windowMs, strategy = 'drop' } = options;
     const recentEvents = new Map();
     return (event, next) => {
@@ -309,9 +310,10 @@ EventMiddleware => {
         next();
     };
 };
-resetTimeoutMs: number;
-monitorWindowMs: number;
-EventMiddleware => {
+/**
+ * Circuit breaker middleware
+ */
+export const createCircuitBreakerMiddleware = (options) => {
     const { failureThreshold, resetTimeoutMs, monitorWindowMs } = options;
     let state = 'closed';
     let failureCount = 0;
@@ -362,4 +364,20 @@ EventMiddleware => {
         }
     };
 };
-;
+/**
+ * Pre-configured middleware collections
+ */
+export const developmentMiddleware = [
+    createLoggingMiddleware({ level: 'info' }),
+    createPerformanceMiddleware({ trackMemoryUsage: true })
+];
+export const productionMiddleware = [
+    createRateLimitingMiddleware({ maxRequests: 1000, windowMs: 60000 }),
+    createCircuitBreakerMiddleware({ failureThreshold: 10, resetTimeoutMs: 30000, monitorWindowMs: 60000 })
+];
+export const testingMiddleware = [
+    createDeduplicationMiddleware({
+        keyGenerator: (event) => `${event.type}_${event.timestamp}`,
+        windowMs: 1000
+    })
+];

@@ -5,14 +5,14 @@
  * Extends Epic 8.4 contextual help with marketplace-specific functionality.
  */
 // Main integrated help system
-export { Epic16HelpSystem } from './Epic16HelpSystem';
+export { Epic16HelpSystem } from './Epic16HelpSystem.js';
 // Marketplace help overlay
-export { MarketplaceHelpOverlay } from './MarketplaceHelpOverlay';
+export { MarketplaceHelpOverlay } from './MarketplaceHelpOverlay.js';
 // Contextual help intelligence
-export { MarketplaceContextualHelp } from './MarketplaceContextualHelp';
+export { MarketplaceContextualHelp } from './MarketplaceContextualHelp.js';
 // Re-export core help system components for convenience
-export { ContextualHelpSystem } from '../ContextualHelp/ContextualHelpSystem';
-export { HelpContentManager } from '../ContextualHelp/HelpContentManager';
+export { ContextualHelpSystem } from '../ContextualHelp/ContextualHelpSystem.js';
+export { HelpContentManager } from '../ContextualHelp/HelpContentManager.js';
 // Helper functions for help system integration
 export const createMarketplaceHelpContext = (page, userRole, templateData, userBehavior) => ({
     currentPage: page,

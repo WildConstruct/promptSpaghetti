@@ -1,10 +1,10 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { PropertiesSection } from './PropertiesSection';
-import { PreviewSection } from './PreviewSection';
-import { PreferenceControls } from './PreferenceControls';
-import { useUISettingsStore } from '../../stores/uiSettingsStore';
-import { useAnimation, animationDurations, easingFunctions } from '../../utils/smoothAnimations';
+import { PropertiesSection } from './PropertiesSection.js';
+import { PreviewSection } from './PreviewSection.js';
+import { PreferenceControls } from './PreferenceControls.js';
+import { useUISettingsStore } from '../../stores/uiSettingsStore.js';
+import { useAnimation, animationDurations, easingFunctions } from '../../utils/smoothAnimations.js';
 // Map technical node types to filmmaker-friendly names
 const getFilmmakerFriendlyName = (nodeType) => {
     const friendlyNames = {
@@ -33,7 +33,7 @@ export const InspectorPanel = ({ node, schema, onChange, onClose, onGlobalPrevie
     const [width, setWidth] = useState(initialWidth);
     const resizeRef = useRef(null);
     const { isAnimating: _____isCollapseAnimating, startAnimation: startCollapseAnimation } = useAnimation();
-    const { _____debugMode, _____setDebugMode, _____shouldShowTechnicalFields, complexityLevel, setComplexityLevel, _____shouldShowAdvancedFeatures, _____globalDisclosureLevel, _____setGlobalDisclosureLevel } = useUISettingsStore();
+    const { debugMode, setDebugMode, shouldShowTechnicalFields, complexityLevel, setComplexityLevel, shouldShowAdvancedFeatures, globalDisclosureLevel, setGlobalDisclosureLevel } = useUISettingsStore();
     const nodeId = node?.id;
     const nodeType = node?.data?.nodeType || node?.type;
     const handleMouseDown = useCallback((e) => {

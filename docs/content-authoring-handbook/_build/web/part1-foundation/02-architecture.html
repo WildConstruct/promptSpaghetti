@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2: Architecture & Core Concepts - Content Authoring Handbook</title>
+    <meta name="description" content="Chapter 2: Architecture & Core Concepts - Content Authoring Handbook">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="./assets/css/handbook-base.css">
+    <link rel="stylesheet" href="./assets/css/search-navigation.css">
+    <link rel="stylesheet" href="./assets/css/interactive-examples.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="./assets/favicon.ico">
+    
+    <!-- Search Engine -->
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Chapter 2: Architecture & Core Concepts - Content Authoring Handbook">
+    <meta property="og:description" content="Chapter 2: Architecture & Core Concepts - Content Authoring Handbook">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{PAGE_URL}}">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Chapter 2: Architecture & Core Concepts - Content Authoring Handbook">
+    <meta name="twitter:description" content="Chapter 2: Architecture & Core Concepts - Content Authoring Handbook">
+    
+    <!-- Monaco Editor (for interactive examples) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.1/min/vs/loader.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="handbook-header">
+        <div class="header-container">
+            <div class="header-left">
+                <a href="" class="logo">
+                    <img src="./assets/images/logo.svg" alt="Prompt Spaghetti" class="logo-img">
+                    <span class="logo-text">Content Authoring Handbook</span>
+                </a>
+            </div>
+            
+            <div class="header-center">
+                <div class="handbook-search-container">
+                    <div class="search-header">
+                        <input type="text" id="handbook-search" 
+                               placeholder="Search handbook... (Ctrl+K)" 
+                               class="search-input">
+                        <button class="search-clear" title="Clear search">×</button>
+                    </div>
+                    <div class="search-filters">
+                        <select class="filter-select" data-filter="type">
+                            <option value="all">All Types</option>
+                            <option value="chapter">Chapters</option>
+                            <option value="example">Examples</option>
+                            <option value="reference">Reference</option>
+                        </select>
+                        <select class="filter-select" data-filter="difficulty">
+                            <option value="all">All Levels</option>
+                            <option value="beginner">Beginner</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                        </select>
+                        <select class="filter-select" data-filter="part">
+                            <option value="all">All Parts</option>
+                            <option value="part1">Part 1: Foundation</option>
+                            <option value="part2">Part 2: Content Development</option>
+                            <option value="part3">Part 3: Engine Reference</option>
+                            <option value="part4">Part 4: Practical Guides</option>
+                            <option value="part5">Part 5: Advanced Topics</option>
+                            <option value="part6">Part 6: Reference Materials</option>
+                        </select>
+                    </div>
+                    <div id="search-results" class="search-results"></div>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <nav class="header-nav">
+                    <a href="" class="nav-link">Home</a>
+                    <a href="/part4-practical-guides/14-interactive-tutorial.html" class="nav-link">Tutorial</a>
+                    <a href="/part6-reference-materials/22-quick-reference.html" class="nav-link">Reference</a>
+                    <a href="https://github.com/your-org/prompt-spaghetti" class="nav-link" target="_blank">GitHub</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="handbook-main">
+        <div class="main-container">
+            <!-- Sidebar Navigation -->
+            <aside class="sidebar">
+                <div class="sidebar-content">
+                    <!-- Breadcrumb Navigation -->
+                    <nav class="breadcrumb-nav">
+                        
+      <div class="breadcrumb-item">
+        <a href="../index.html" class="breadcrumb-link">Home</a>
+      </div>
+      <div class="breadcrumb-item">
+        <a href="#" class="breadcrumb-link">Part 1: Foundation</a>
+      </div>
+      <div class="breadcrumb-item">
+        <span class="breadcrumb-current">Chapter 2: Architecture & Core Concepts</span>
+      </div>
+    
+                    </nav>
+                    
+                    <!-- Table of Contents -->
+                    <div class="table-of-contents">
+                        <h3 class="toc-title">On This Page</h3>
+                        <ul class="toc-list" id="toc-list">
+                            <!-- Generated by JavaScript -->
+                        </ul>
+                    </div>
+                    
+                    <!-- Main Navigation -->
+                    <nav class="handbook-navigation" id="handbook-nav">
+                        <div class="nav-section">
+                            <h3 class="nav-section-title">Part 1: Foundation</h3>
+                            <ul class="nav-section-items">
+                                <li class="nav-item">
+                                    <a href="/part1-foundation/01-introduction.html" class="nav-link">Introduction & Overview</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part1-foundation/02-architecture.html" class="nav-link">Architecture & Core Concepts</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part1-foundation/03-schema-reference.html" class="nav-link">Generator JSON Schema Reference</a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="nav-section">
+                            <h3 class="nav-section-title">Part 2: Content Development</h3>
+                            <ul class="nav-section-items">
+                                <li class="nav-item">
+                                    <a href="/part2-content-development/04-basic-generator.html" class="nav-link">Basic Generator Creation</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part2-content-development/05-advanced-rules.html" class="nav-link">Advanced Rule Syntax</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part2-content-development/06-modularization.html" class="nav-link">Modularization & Organization</a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="nav-section">
+                            <h3 class="nav-section-title">Part 3: Engine Reference</h3>
+                            <ul class="nav-section-items">
+                                <li class="nav-item">
+                                    <a href="/part3-engine-reference/09-api-documentation.html" class="nav-link">Engine API Documentation</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part3-engine-reference/10-modifier-system.html" class="nav-link">Modifier System</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part3-engine-reference/11-variable-system.html" class="nav-link">Variable System</a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="nav-section">
+                            <h3 class="nav-section-title">Part 4: Practical Guides</h3>
+                            <ul class="nav-section-items">
+                                <li class="nav-item">
+                                    <a href="/part4-practical-guides/14-interactive-tutorial.html" class="nav-link">Interactive Tutorial</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part4-practical-guides/15-expansion-recipes.html" class="nav-link">Expansion Recipes for LLMs</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part4-practical-guides/16-testing-qa.html" class="nav-link">Testing & Quality Assurance</a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="nav-section">
+                            <h3 class="nav-section-title">Part 5: Advanced Topics</h3>
+                            <ul class="nav-section-items">
+                                <li class="nav-item">
+                                    <a href="/part5-advanced-topics/18-custom-extensions.html" class="nav-link">Custom Extensions</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part5-advanced-topics/19-security.html" class="nav-link">Security Best Practices</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part5-advanced-topics/20-integration.html" class="nav-link">Integration Patterns</a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="nav-section">
+                            <h3 class="nav-section-title">Part 6: Reference Materials</h3>
+                            <ul class="nav-section-items">
+                                <li class="nav-item">
+                                    <a href="/part6-reference-materials/22-quick-reference.html" class="nav-link">Quick Reference Tables</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part6-reference-materials/23-templates.html" class="nav-link">Templates & Boilerplates</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part6-reference-materials/24-pitfalls.html" class="nav-link">Common Pitfalls & Solutions</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- Content Area -->
+            <article class="content">
+                <div class="content-header">
+                    <h1 class="page-title">Chapter 2: Architecture & Core Concepts</h1>
+                    <div class="page-meta">
+                        <span class="page-type">reference</span>
+                        <span class="page-difficulty">advanced</span>
+                        <span class="page-part">part1</span>
+                    </div>
+                </div>
+                
+                <div class="content-body">
+                    <h1>Chapter 2: Architecture & Core Concepts</h1><p>Understanding the architecture of Prompt Spaghetti is crucial for creating effective generators. This chapter explores the system's design, execution model, and core concepts that power content generation.</p><h2>System Architecture Overview</h2><p>Prompt Spaghetti follows a modular, layered architecture:</p><p>``<code></p>
+<p>┌─────────────────────────────────────────────────────┐</p>
+<p>│                   User Interface                     │</p>
+<p>│         (Visual Editor / Inspector Panel)            │</p>
+<p>├─────────────────────────────────────────────────────┤</p>
+<p>│                  Graph System                        │</p>
+<p>│          (React Flow / Node Management)              │</p>
+<p>├─────────────────────────────────────────────────────┤</p>
+<p>│                 Execution Engine                     │</p>
+<p>│        (Runtime Nodes / Context Management)          │</p>
+<p>├─────────────────────────────────────────────────────┤</p>
+<p>│                   Core Layer                         │</p>
+<p>│      (Schemas / Validation / Serialization)          │</p>
+<p>├─────────────────────────────────────────────────────┤</p>
+<p>│                Storage & Export                      │</p>
+<p>│        (JSON / Database / Bundle Export)             │</p>
+<p>└─────────────────────────────────────────────────────┘</p>
+</code>`<code></p><h3>Key Components</h3><h4>1. Visual Editor</h4>
+<ul><li><strong>React Flow Canvas</strong>: Drag-and-drop node interface</li>
+<li><strong>Inspector Panel</strong>: Node configuration and properties</li>
+<li><strong>Preview System</strong>: Real-time generation preview</li>
+<li><strong>Palette</strong>: Available node types</li><h4>2. Runtime Engine</h4>
+<li><strong>Node Execution</strong>: Processes the graph structure</li>
+<li><strong>Context Management</strong>: Maintains variables and state</li>
+<li><strong>Deterministic RNG</strong>: Seeded random number generation</li>
+<li><strong>Performance Optimization</strong>: Caching and efficiency</li><h4>3. Schema Layer</h4>
+<li><strong>Zod Validation</strong>: Type-safe data structures</li>
+<li><strong>Graph Validation</strong>: Connection rules and constraints</li>
+<li><strong>Serialization</strong>: Save/load functionality</li><h2>The Generator Engine</h2><p>The heart of Prompt Spaghetti is its generator engine, which transforms node graphs into generated content.</p><h3>Execution Model</h3><p>1. <strong>Graph Traversal</strong>
+<p>   </code>`<code>typescript</p>
+<p>   // Simplified execution flow</p>
+<p>   function execute(nodeId: string, context: ExecutionContext) {</p>
+<p>     const node = getNode(nodeId);</p>
+<p>     const inputs = resolveInputs(node, context);</p>
+<p>     const output = node.execute(inputs, context);</p>
+<p>     return output;</p>
+<p>   }</p>
+<p>   </code>`<code></p><p>2. <strong>Depth-First Processing</strong>
+<li>Starts from Output nodes</li>
+<li>Recursively resolves dependencies</li>
+<li>Builds result bottom-up</li><p>3. <strong>Lazy Evaluation</strong>
+<li>Nodes execute only when needed</li>
+<li>Results cached within execution</li>
+<li>Efficient for complex graphs</li><h3>Deterministic Execution</h3><p>Prompt Spaghetti ensures reproducible results through deterministic execution:</p></code>`<code>javascript</p>
+<p>// Every execution with same seed produces identical output</p>
+<p>const seed = "abc123";</p>
+<p>const result1 = generator.execute(seed);</p>
+<p>const result2 = generator.execute(seed);</p>
+<p>console.log(result1 === result2); // true</p>
+</code>`<code></p><p>Key principles:</p>
+<li><strong>Seeded RNG</strong>: Uses seedrandom for predictable randomness</li>
+<li><strong>Sub-seed Generation</strong>: </code>hash(nodeId + parentSeed)<code> for node isolation</li>
+<li><strong>No External State</strong>: Pure functions throughout</li>
+<li><strong>Consistent Ordering</strong>: Stable array iterations</li><h2>Node-Based Graph System</h2><p>Content generation uses a directed acyclic graph (DAG) of nodes:</p><h3>Node Types</h3><h4>Core Nodes</h4>
+<p>1. <strong>WeightedChoice</strong>: Probabilistic selection</p>
+<p>   </code>`<code>json</p>
+<p>   {</p>
+<p>     "type": "WeightedChoice",</p>
+<p>     "choices": [</p>
+<p>       {"weight": 70, "value": "common"},</p>
+<p>       {"weight": 30, "value": "rare"}</p>
+<p>     ]</p>
+<p>   }</p>
+<p>   </code>`<code></p><p>2. <strong>Concat</strong>: String concatenation</p>
+<p>   </code>`<code>json</p>
+<p>   {</p>
+<p>     "type": "Concat",</p>
+<p>     "inputs": ["Hello, ", {"$ref": "nameNode"}, "!"]</p>
+<p>   }</p>
+<p>   </code>`<code></p><p>3. <strong>Output</strong>: Final result production</p>
+<p>   </code>`<code>json</p>
+<p>   {</p>
+<p>     "type": "Output",</p>
+<p>     "template": "Generated: {input}"</p>
+<p>   }</p>
+<p>   </code>`<code></p><h4>Variable Nodes</h4>
+<p>1. <strong>SetVariable</strong>: Store values</p>
+<p>   </code>`<code>json</p>
+<p>   {</p>
+<p>     "type": "SetVariable",</p>
+<p>     "variableName": "character_name",</p>
+<p>     "value": {"$ref": "nameGenerator"}</p>
+<p>   }</p>
+<p>   </code>`<code></p><p>2. <strong>GetVariable</strong>: Retrieve values</p>
+<p>   </code>`<code>json</p>
+<p>   {</p>
+<p>     "type": "GetVariable",</p>
+<p>     "variableName": "character_name",</p>
+<p>     "defaultValue": "Unknown"</p>
+<p>   }</p>
+<p>   </code>`<code></p><h4>Advanced Nodes (Epic 7)</h4>
+<p>1. <strong>Conditional</strong>: Logic branching</p>
+<p>2. <strong>Sequential</strong>: Ordered processing</p>
+<p>3. <strong>Markov</strong>: State transitions</p>
+<p>4. <strong>WeightedAdvanced</strong>: Complex distributions</p><h3>Node Connections</h3><p>Nodes connect through edges that define data flow:</p></code>`<code>typescript</p>
+<p>interface Edge {</p>
+<p>  id: string;</p>
+<p>  source: string;      // Source node ID</p>
+<p>  target: string;      // Target node ID</p>
+<p>  sourceHandle: string; // Output port</p>
+<p>  targetHandle: string; // Input port</p>
+<p>}</p>
+</code>`<code></p><p>Connection rules:</p>
+<li>No cycles allowed (DAG constraint)</li>
+<li>Type compatibility enforced</li>
+<li>Multiple inputs supported</li>
+<li>Single output per port</li><h2>Variable Context and Scoping</h2><p>Variables provide dynamic behavior within generators:</p><h3>Context Flow</h3></code>`<code></p>
+<p>┌─────────────┐     ┌─────────────┐     ┌─────────────┐</p>
+<p>│ SetVariable │────▶│   Process   │────▶│ GetVariable │</p>
+<p>│  name=Alice │     │   Context   │     │  name=?     │</p>
+<p>└─────────────┘     └─────────────┘     └─────────────┘</p>
+</code>`<code></p><h3>Scoping Rules</h3><p>1. <strong>Global Scope</strong>: Variables persist across entire execution</p>
+<p>2. <strong>Node Isolation</strong>: Each node gets context copy</p>
+<p>3. <strong>Immutable Updates</strong>: Context never mutated directly</p>
+<p>4. <strong>Default Values</strong>: Fallbacks for missing variables</p><p>Example context flow:</p>
+</code>`<code>javascript</p>
+<p>// Initial context</p>
+<p>{ seed: "123", variables: {} }</p><p>// After SetVariable</p>
+<p>{ seed: "123", variables: { name: "Alice" } }</p><p>// After nested execution</p>
+<p>{ seed: "123-sub", variables: { name: "Alice", age: 25 } }</p>
+</code>`<code></p><h2>Execution Flow and Rule Resolution</h2><p>Understanding how rules resolve is key to effective generator design:</p><h3>Rule Types</h3><p>1. <strong>String Rules</strong>
+<p>   </code>`<code>json</p>
+<p>   "rule": "Simple text output"</p>
+<p>   </code>`<code></p><p>2. <strong>Array Rules</strong> (random selection)</p>
+<p>   </code>`<code>json</p>
+<p>   "rule": ["option1", "option2", "option3"]</p>
+<p>   </code>`<code></p><p>3. <strong>Weighted Rules</strong>
+<p>   </code>`<code>json</p>
+<p>   "rule": [</p>
+<p>     {"w": 60, "v": "common"},</p>
+<p>     {"w": 30, "v": "uncommon"},</p>
+<p>     {"w": 10, "v": "rare"}</p>
+<p>   ]</p>
+<p>   </code>`<code></p><p>4. <strong>Reference Rules</strong>
+<p>   </code>`<code>json</p>
+<p>   "rule": "[adjective] [noun]"</p>
+<p>   </code>`<code></p><h3>Resolution Process</h3><p>1. <strong>Tokenization</strong>: Parse rule for references </code>[ruleName]<code></p>
+<p>2. <strong>Reference Resolution</strong>: Replace with sub-rule results</p>
+<p>3. <strong>Modifier Application</strong>: Apply any text transformations</p>
+<p>4. <strong>Variable Interpolation</strong>: Replace </code>{varName}<code> with values</p>
+<p>5. <strong>Final Assembly</strong>: Combine all pieces</p><p>Example resolution:</p>
+</code>`<code></p>
+<p>Input:  "The [size] [color] [animal]"</p>
+<p>Step 1: "The " + resolve([size]) + " " + resolve([color]) + " " + resolve([animal])</p>
+<p>Step 2: "The " + "large" + " " + "blue" + " " + "elephant"</p>
+<p>Result: "The large blue elephant"</p>
+</code>`<code></p><h2>Performance Considerations</h2><p>Efficient execution is crucial for responsive generation:</p><h3>Optimization Strategies</h3><p>1. <strong>Result Caching</strong>
+<li>Cache within single execution</li>
+<li>Invalidate between executions</li>
+<li>Memory-time tradeoff</li><p>2. <strong>Lazy Evaluation</strong>
+<li>Don't compute unused branches</li>
+<li>Defer expensive operations</li>
+<li>Stream large outputs</li><p>3. <strong>Sub-seed Optimization</strong>
+<li>Pre-compute common seeds</li>
+<li>Use efficient hashing</li>
+<li>Minimize seed generation</li><h3>Performance Patterns</h3></code>`<code>javascript</p>
+<p>// Good: Reference reuse</p>
+<p>{</p>
+<p>  "character": "[name]",</p>
+<p>  "greeting": "Hello, [name]!"  // Reuses same result</p>
+<p>}</p><p>// Better: Variable storage</p>
+<p>{</p>
+<p>  "character": {"$set": "name", "value": "[names]"},</p>
+<p>  "greeting": "Hello, {name}!"  // Even more efficient</p>
+<p>}</p>
+</code>`<code></p><h2>Security and Sandboxing</h2><p>Prompt Spaghetti implements multiple security layers:</p><h3>Input Validation</h3>
+<li>Schema validation on all inputs</li>
+<li>Size limits on generated content</li>
+<li>Recursive depth limits</li><h3>Safe Execution</h3>
+<li>No eval() or code execution</li>
+<li>Sandboxed expression evaluation</li>
+<li>Pattern detection for malicious content</li><h3>Resource Limits</h3>
+<li>Maximum execution time</li>
+<li>Memory usage caps</li>
+<li>Recursion depth limits</li><h2>Integration Points</h2><p>The architecture provides multiple integration options:</p><h3>API Integration</h3>
+</code>`<code>javascript</p>
+<p>// JavaScript API</p>
+<p>import { Generator } from '@prompt-spaghetti/core';</p>
+<p>const gen = new Generator(config);</p>
+<p>const result = gen.execute(seed);</p><p>// REST API</p>
+<p>POST /api/generate</p>
+<p>{</p>
+<p>  "generator": "character",</p>
+<p>  "seed": "12345"</p>
+<p>}</p>
+</code>``</p><h3>Extension System</h3>
+<li>Custom node types</li>
+<li>Modifier plugins</li>
+<li>Storage adapters</li>
+<li>UI components</li><h3>Export Formats</h3>
+<li>Native JSON format</li>
+<li>Generator bundles</li>
+<li>Compiled executables</li>
+<li>Web embeds</li><h2>Best Practices</h2><p>When working with the architecture:</p><p>1. <strong>Design for Determinism</strong>
+<li>Avoid external dependencies</li>
+<li>Use provided RNG only</li>
+<li>Test with multiple seeds</li><p>2. <strong>Optimize Graph Structure</strong>
+<li>Minimize node count</li>
+<li>Reuse common patterns</li>
+<li>Leverage variables</li><p>3. <strong>Plan for Scale</strong>
+<li>Modularize large generators</li>
+<li>Use includes wisely</li>
+<li>Profile performance</li><p>4. <strong>Ensure Compatibility</strong>
+<li>Version your generators</li>
+<li>Document requirements</li>
+<li>Test across platforms</li><h2>Summary</h2><p>The Prompt Spaghetti architecture provides a robust foundation for content generation:</p>
+<li><strong>Visual Editing</strong>: Intuitive node-based interface</li>
+<li><strong>Deterministic Engine</strong>: Reproducible results</li>
+<li><strong>Flexible System</strong>: Extensible and integrable</li>
+<li><strong>Performance Focus</strong>: Optimized execution</li>
+<li><strong>Security First</strong>: Safe content generation</li></ul><p>Understanding these architectural principles enables you to create more effective, efficient, and maintainable generators.</p><p>---</p><strong>Next Chapter</strong>: <a href="03-schema-reference.md">Generator JSON Schema Reference</a> →</p>
+                </div>
+                
+                <div class="content-footer">
+                    <div class="page-navigation">
+                        {{#PREV_PAGE}}
+                        <a href="{{PREV_PAGE.url}}" class="page-nav-link prev">
+                            <span class="nav-direction">← Previous</span>
+                            <span class="nav-title">{{PREV_PAGE.title}}</span>
+                        </a>
+                        {{/PREV_PAGE}}
+                        
+                        {{#NEXT_PAGE}}
+                        <a href="{{NEXT_PAGE.url}}" class="page-nav-link next">
+                            <span class="nav-direction">Next →</span>
+                            <span class="nav-title">{{NEXT_PAGE.title}}</span>
+                        </a>
+                        {{/NEXT_PAGE}}
+                    </div>
+                    
+                    <div class="content-actions">
+                        <button class="action-button" onclick="window.print()">Print</button>
+                        <button class="action-button" onclick="copyPageUrl()">Share</button>
+                        <a href="https://github.com/your-org/prompt-spaghetti/edit/main/docs/content-authoring-handbook" class="action-button" target="_blank">Edit on GitHub</a>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="handbook-footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Content Authoring Handbook</h4>
+                    <p>Comprehensive guide to creating content with Prompt Spaghetti</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/part1-foundation/01-introduction.html">Getting Started</a></li>
+                        <li><a href="/part4-practical-guides/14-interactive-tutorial.html">Interactive Tutorial</a></li>
+                        <li><a href="/part6-reference-materials/22-quick-reference.html">Quick Reference</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Community</h4>
+                    <ul>
+                        <li><a href="https://github.com/your-org/prompt-spaghetti" target="_blank">GitHub</a></li>
+                        <li><a href="https://discord.gg/your-server" target="_blank">Discord</a></li>
+                        <li><a href="https://twitter.com/your-account" target="_blank">Twitter</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="/assets/examples/" target="_blank">Example Generators</a></li>
+                        <li><a href="/assets/templates/" target="_blank">Templates</a></li>
+                        <li><a href="/assets/tools/" target="_blank">Tools</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Prompt Spaghetti. All rights reserved.</p>
+                <p>Built with ❤️ for the content creation community</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="./assets/js/search-system.js"></script>
+    <script src="./assets/js/interactive-examples.js"></script>
+    <script src="./assets/js/handbook-utils.js"></script>
+    
+    <script>
+        // Initialize Monaco Editor for interactive examples
+        require.config({ 
+            paths: { 
+                'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.1/min/vs' 
+            } 
+        });
+        
+        // Initialize handbook features
+        document.addEventListener('DOMContentLoaded', function() {
+            // Generate table of contents
+            generateTableOfContents();
+            
+            // Initialize search with custom configuration
+            window.handbookSearch = new HandbookSearchSystem({
+                searchInputId: 'handbook-search',
+                resultsContainerId: 'search-results',
+                navigationId: 'handbook-nav',
+                indexPath: './assets/data/search-index.json'
+            });
+            
+            // Initialize interactive examples
+            initializeInteractiveExamples();
+            
+            // Track page views
+            trackPageView();
+        });
+        
+        // Generate table of contents from headings
+        function generateTableOfContents() {
+            const toc = document.getElementById('toc-list');
+            const headings = document.querySelectorAll('.content h2, .content h3, .content h4');
+            
+            if (headings.length === 0) {
+                toc.parentElement.style.display = 'none';
+                return;
+            }
+            
+            headings.forEach((heading, index) => {
+                const id = heading.id || `heading-${index}`;
+                if (!heading.id) {
+                    heading.id = id;
+                }
+                
+                const li = document.createElement('li');
+                li.className = 'toc-item';
+                
+                const a = document.createElement('a');
+                a.href = `#${id}`;
+                a.className = 'toc-link';
+                a.textContent = heading.textContent;
+                
+                li.appendChild(a);
+                toc.appendChild(li);
+            });
+            
+            // Highlight current section on scroll
+            window.addEventListener('scroll', updateTocHighlight);
+        }
+        
+        // Update TOC highlighting based on scroll position
+        function updateTocHighlight() {
+            const headings = document.querySelectorAll('.content h2, .content h3, .content h4');
+            const tocLinks = document.querySelectorAll('.toc-link');
+            
+            let current = 0;
+            headings.forEach((heading, index) => {
+                if (heading.offsetTop <= window.scrollY + 100) {
+                    current = index;
+                }
+            });
+            
+            tocLinks.forEach((link, index) => {
+                link.classList.toggle('active', index === current);
+            });
+        }
+        
+        // Initialize interactive examples
+        function initializeInteractiveExamples() {
+            // This is handled by the interactive-examples.js file
+            // but we can add any page-specific initialization here
+        }
+        
+        // Copy page URL to clipboard
+        function copyPageUrl() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('Page URL copied to clipboard!');
+            });
+        }
+        
+        // Track page views for analytics
+        function trackPageView() {
+            if (typeof gtag !== 'undefined') {
+                gtag('config', 'GA_MEASUREMENT_ID', {
+                    page_title: 'Chapter 2: Architecture & Core Concepts',
+                    page_location: window.location.href
+                });
+            }
+        }
+    </script>
+</body>
+</html>

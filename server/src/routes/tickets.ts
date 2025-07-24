@@ -13,7 +13,7 @@ import {
   TicketPriority,
   GitHubAutomationConfigSchema 
 } from '../database/ticket-models';
-import { getDatabase } from '../database';
+import { getDatabase } from '../database/connection';
 import { logger } from '../utils/logger';
 
 // Request schemas

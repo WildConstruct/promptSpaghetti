@@ -6,7 +6,7 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * zoom, download, sharing, and detailed information display.
  */
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { InteractionType } from '../../services/Epic16InteractiveElementsService';
+import { InteractionType } from '../../services/Epic16InteractiveElementsService.js';
 export const QuickPreviewWidget = ({ element, interactiveService, userId, templateId, templateData, onClose, onDownload, onShare, onPurchase }) => {
     // Configuration
     const previewConfig = element.config.preview_config;

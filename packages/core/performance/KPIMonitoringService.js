@@ -3,9 +3,9 @@
  * Real-time monitoring and alerting system for performance KPIs
  */
 import { EventEmitter } from 'events';
-import { corePerformanceKPIs, generateKPIRecommendations } from './PerformanceKPIs';
-import { PerformanceBaseline } from './PerformanceBaseline';
-import { PerformanceMonitoringDashboard } from './PerformanceMonitoringDashboard';
+import { corePerformanceKPIs, generateKPIRecommendations } from './PerformanceKPIs.js';
+import { PerformanceBaseline } from './PerformanceBaseline.js';
+import { PerformanceMonitoringDashboard } from './PerformanceMonitoringDashboard.js';
 /**
  * KPI Monitoring Service
  * Provides real-time monitoring, alerting, and trend analysis for performance KPIs

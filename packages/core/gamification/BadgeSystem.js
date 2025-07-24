@@ -5,7 +5,7 @@
  * Gamifies the platform experience while highlighting professional accomplishments
  * and building trust through verified achievements.
  */
-import { identityValidationService } from '../auth/IdentityValidation';
+import { identityValidationService } from '../auth/IdentityValidation.js';
 export class BadgeSystem {
     badges = new Map();
     userProgress = new Map();

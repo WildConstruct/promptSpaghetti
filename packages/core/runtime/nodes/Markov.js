@@ -1,7 +1,7 @@
 // packages/core/runtime/nodes/Markov.ts
 // Advanced Markov node with state transition matrices
-import { AdvancedRuntimeNode } from '../advanced';
-import { AdvancedIOHandler, IOSpecBuilder } from '../io-system';
+import { AdvancedRuntimeNode } from '../advanced.js';
+import { AdvancedIOHandler, IOSpecBuilder } from '../io-system.js';
 import seedrandom from 'seedrandom';
 /**
  * Standard transition matrix implementation

@@ -6,7 +6,7 @@ import {
   AttributionFilterSchema,
   AttributionStatsRequestSchema,
   UpdatePrivacySettingsRequestSchema
-} from '../../packages/core/types/attribution';
+} from '../../../packages/core/types/attribution';
 
 export async function attributionRoutes(fastify: FastifyInstance) {
   const attributionService = new AttributionService(fastify.db, fastify.log);

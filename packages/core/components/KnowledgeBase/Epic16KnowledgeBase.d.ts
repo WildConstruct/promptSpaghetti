@@ -11,7 +11,7 @@ interface Epic16KnowledgeBaseProps {
     userRole: 'user' | 'creator' | 'admin';
     initialView?: 'search' | 'browse' | 'article';
     initialArticleId?: string;
-    onAnalytics?: (analytics: any) => void;
+    onAnalytics?: (analytics: unknown) => void;
 }
 export declare const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps>;
 export default Epic16KnowledgeBase;

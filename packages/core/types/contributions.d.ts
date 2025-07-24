@@ -119,15 +119,15 @@ export declare const BaseContributionSchema: z.ZodObject<{
         mimeType: string;
     }[];
     comments: number;
+    views: number;
     downloads: number;
     qualityScore: number;
-    views: number;
     likes: number;
     shares: number;
     submittedAt: Date;
     contributorId: string;
     contributorName: string;
-    contributorLevel: "expert" | "moderator" | "contributor" | "trusted" | "regular" | "newcomer";
+    contributorLevel: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
     revisionRequests: {
         id: string;
         details: string;
@@ -159,7 +159,7 @@ export declare const BaseContributionSchema: z.ZodObject<{
     submittedAt: Date;
     contributorId: string;
     contributorName: string;
-    contributorLevel: "expert" | "moderator" | "contributor" | "trusted" | "regular" | "newcomer";
+    contributorLevel: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
     category?: string | undefined;
     tags?: string[] | undefined;
     version?: string | undefined;
@@ -173,10 +173,10 @@ export declare const BaseContributionSchema: z.ZodObject<{
         mimeType: string;
     }[] | undefined;
     comments?: number | undefined;
+    views?: number | undefined;
     downloads?: number | undefined;
     qualityScore?: number | undefined;
     publishedAt?: Date | undefined;
-    views?: number | undefined;
     likes?: number | undefined;
     shares?: number | undefined;
     reviewedAt?: Date | undefined;
@@ -416,15 +416,15 @@ export declare const TemplateContributionSchema: z.ZodObject<{
         mimeType: string;
     }[];
     comments: number;
+    views: number;
     downloads: number;
     qualityScore: number;
-    views: number;
     likes: number;
     shares: number;
     submittedAt: Date;
     contributorId: string;
     contributorName: string;
-    contributorLevel: "expert" | "moderator" | "contributor" | "trusted" | "regular" | "newcomer";
+    contributorLevel: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
     revisionRequests: {
         id: string;
         details: string;
@@ -482,7 +482,7 @@ export declare const TemplateContributionSchema: z.ZodObject<{
     submittedAt: Date;
     contributorId: string;
     contributorName: string;
-    contributorLevel: "expert" | "moderator" | "contributor" | "trusted" | "regular" | "newcomer";
+    contributorLevel: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
     category?: string | undefined;
     tags?: string[] | undefined;
     version?: string | undefined;
@@ -503,10 +503,10 @@ export declare const TemplateContributionSchema: z.ZodObject<{
         reviewCount?: number | undefined;
     } | undefined;
     comments?: number | undefined;
+    views?: number | undefined;
     downloads?: number | undefined;
     qualityScore?: number | undefined;
     publishedAt?: Date | undefined;
-    views?: number | undefined;
     likes?: number | undefined;
     shares?: number | undefined;
     reviewedAt?: Date | undefined;
@@ -680,7 +680,6 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
         keywords: string[];
         prerequisites: string[];
         difficulty: "expert" | "advanced" | "intermediate" | "beginner";
-        relatedArticles: string[];
         articleType: "tutorial" | "reference" | "troubleshooting" | "guide" | "faq";
         estimatedReadTime: number;
         learningObjectives: string[];
@@ -698,6 +697,7 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
             language: string;
             runnable: boolean;
         }[];
+        relatedArticles: string[];
         externalLinks: {
             title: string;
             url: string;
@@ -716,7 +716,6 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
         }[];
         keywords?: string[] | undefined;
         prerequisites?: string[] | undefined;
-        relatedArticles?: string[] | undefined;
         learningObjectives?: string[] | undefined;
         codeExamples?: {
             id: string;
@@ -725,6 +724,7 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
             language: string;
             runnable?: boolean | undefined;
         }[] | undefined;
+        relatedArticles?: string[] | undefined;
         externalLinks?: {
             title: string;
             url: string;
@@ -745,7 +745,6 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
         keywords: string[];
         prerequisites: string[];
         difficulty: "expert" | "advanced" | "intermediate" | "beginner";
-        relatedArticles: string[];
         articleType: "tutorial" | "reference" | "troubleshooting" | "guide" | "faq";
         estimatedReadTime: number;
         learningObjectives: string[];
@@ -763,6 +762,7 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
             language: string;
             runnable: boolean;
         }[];
+        relatedArticles: string[];
         externalLinks: {
             title: string;
             url: string;
@@ -778,15 +778,15 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
         mimeType: string;
     }[];
     comments: number;
+    views: number;
     downloads: number;
     qualityScore: number;
-    views: number;
     likes: number;
     shares: number;
     submittedAt: Date;
     contributorId: string;
     contributorName: string;
-    contributorLevel: "expert" | "moderator" | "contributor" | "trusted" | "regular" | "newcomer";
+    contributorLevel: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
     revisionRequests: {
         id: string;
         details: string;
@@ -828,7 +828,6 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
         }[];
         keywords?: string[] | undefined;
         prerequisites?: string[] | undefined;
-        relatedArticles?: string[] | undefined;
         learningObjectives?: string[] | undefined;
         codeExamples?: {
             id: string;
@@ -837,6 +836,7 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
             language: string;
             runnable?: boolean | undefined;
         }[] | undefined;
+        relatedArticles?: string[] | undefined;
         externalLinks?: {
             title: string;
             url: string;
@@ -846,7 +846,7 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
     submittedAt: Date;
     contributorId: string;
     contributorName: string;
-    contributorLevel: "expert" | "moderator" | "contributor" | "trusted" | "regular" | "newcomer";
+    contributorLevel: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
     category?: string | undefined;
     tags?: string[] | undefined;
     version?: string | undefined;
@@ -859,10 +859,10 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
         mimeType: string;
     }[] | undefined;
     comments?: number | undefined;
+    views?: number | undefined;
     downloads?: number | undefined;
     qualityScore?: number | undefined;
     publishedAt?: Date | undefined;
-    views?: number | undefined;
     likes?: number | undefined;
     shares?: number | undefined;
     reviewedAt?: Date | undefined;
@@ -1056,8 +1056,8 @@ export declare const TutorialContributionSchema: z.ZodObject<{
             }[];
         }[];
         tools: string[];
-        difficulty: "expert" | "advanced" | "intermediate" | "beginner";
         deliverables: string[];
+        difficulty: "expert" | "advanced" | "intermediate" | "beginner";
         tutorialType: "video" | "interactive" | "workshop" | "step_by_step";
         estimatedDuration: number;
         skillsLearned: string[];
@@ -1121,8 +1121,8 @@ export declare const TutorialContributionSchema: z.ZodObject<{
             }[];
         }[];
         tools: string[];
-        difficulty: "expert" | "advanced" | "intermediate" | "beginner";
         deliverables: string[];
+        difficulty: "expert" | "advanced" | "intermediate" | "beginner";
         tutorialType: "video" | "interactive" | "workshop" | "step_by_step";
         estimatedDuration: number;
         skillsLearned: string[];
@@ -1142,15 +1142,15 @@ export declare const TutorialContributionSchema: z.ZodObject<{
         mimeType: string;
     }[];
     comments: number;
+    views: number;
     downloads: number;
     qualityScore: number;
-    views: number;
     likes: number;
     shares: number;
     submittedAt: Date;
     contributorId: string;
     contributorName: string;
-    contributorLevel: "expert" | "moderator" | "contributor" | "trusted" | "regular" | "newcomer";
+    contributorLevel: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
     revisionRequests: {
         id: string;
         details: string;
@@ -1210,7 +1210,7 @@ export declare const TutorialContributionSchema: z.ZodObject<{
     submittedAt: Date;
     contributorId: string;
     contributorName: string;
-    contributorLevel: "expert" | "moderator" | "contributor" | "trusted" | "regular" | "newcomer";
+    contributorLevel: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
     category?: string | undefined;
     tags?: string[] | undefined;
     version?: string | undefined;
@@ -1223,10 +1223,10 @@ export declare const TutorialContributionSchema: z.ZodObject<{
         mimeType: string;
     }[] | undefined;
     comments?: number | undefined;
+    views?: number | undefined;
     downloads?: number | undefined;
     qualityScore?: number | undefined;
     publishedAt?: Date | undefined;
-    views?: number | undefined;
     likes?: number | undefined;
     shares?: number | undefined;
     reviewedAt?: Date | undefined;
@@ -1429,13 +1429,13 @@ export declare const CaseStudyContributionSchema: z.ZodObject<{
                 after: string;
                 improvement?: string | undefined;
             }[] | undefined;
+            outcomes?: string[] | undefined;
             roi?: {
                 description?: string | undefined;
                 costSavings?: number | undefined;
                 timeReduction?: string | undefined;
                 qualityImprovement?: string | undefined;
             } | undefined;
-            outcomes?: string[] | undefined;
         }>;
         testimonials: z.ZodDefault<z.ZodArray<z.ZodObject<{
             author: z.ZodString;
@@ -1525,13 +1525,13 @@ export declare const CaseStudyContributionSchema: z.ZodObject<{
                 after: string;
                 improvement?: string | undefined;
             }[] | undefined;
+            outcomes?: string[] | undefined;
             roi?: {
                 description?: string | undefined;
                 costSavings?: number | undefined;
                 timeReduction?: string | undefined;
                 qualityImprovement?: string | undefined;
             } | undefined;
-            outcomes?: string[] | undefined;
         };
         industry: string;
         challenge: {
@@ -1628,15 +1628,15 @@ export declare const CaseStudyContributionSchema: z.ZodObject<{
         mimeType: string;
     }[];
     comments: number;
+    views: number;
     downloads: number;
     qualityScore: number;
-    views: number;
     likes: number;
     shares: number;
     submittedAt: Date;
     contributorId: string;
     contributorName: string;
-    contributorLevel: "expert" | "moderator" | "contributor" | "trusted" | "regular" | "newcomer";
+    contributorLevel: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
     revisionRequests: {
         id: string;
         details: string;
@@ -1673,13 +1673,13 @@ export declare const CaseStudyContributionSchema: z.ZodObject<{
                 after: string;
                 improvement?: string | undefined;
             }[] | undefined;
+            outcomes?: string[] | undefined;
             roi?: {
                 description?: string | undefined;
                 costSavings?: number | undefined;
                 timeReduction?: string | undefined;
                 qualityImprovement?: string | undefined;
             } | undefined;
-            outcomes?: string[] | undefined;
         };
         industry: string;
         challenge: {
@@ -1714,7 +1714,7 @@ export declare const CaseStudyContributionSchema: z.ZodObject<{
     submittedAt: Date;
     contributorId: string;
     contributorName: string;
-    contributorLevel: "expert" | "moderator" | "contributor" | "trusted" | "regular" | "newcomer";
+    contributorLevel: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
     category?: string | undefined;
     tags?: string[] | undefined;
     version?: string | undefined;
@@ -1727,10 +1727,10 @@ export declare const CaseStudyContributionSchema: z.ZodObject<{
         mimeType: string;
     }[] | undefined;
     comments?: number | undefined;
+    views?: number | undefined;
     downloads?: number | undefined;
     qualityScore?: number | undefined;
     publishedAt?: Date | undefined;
-    views?: number | undefined;
     likes?: number | undefined;
     shares?: number | undefined;
     reviewedAt?: Date | undefined;
@@ -1920,12 +1920,12 @@ export declare const PatternLibraryContributionSchema: z.ZodObject<{
             description: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             description: string;
-            patternId: string;
             relationship: "uses" | "used_by" | "similar_to" | "alternative_to";
+            patternId: string;
         }, {
             description: string;
-            patternId: string;
             relationship: "uses" | "used_by" | "similar_to" | "alternative_to";
+            patternId: string;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
         pattern: {
@@ -1958,8 +1958,8 @@ export declare const PatternLibraryContributionSchema: z.ZodObject<{
         domain: string;
         relatedPatterns: {
             description: string;
-            patternId: string;
             relationship: "uses" | "used_by" | "similar_to" | "alternative_to";
+            patternId: string;
         }[];
     }, {
         pattern: {
@@ -1992,8 +1992,8 @@ export declare const PatternLibraryContributionSchema: z.ZodObject<{
         }[] | undefined;
         relatedPatterns?: {
             description: string;
-            patternId: string;
             relationship: "uses" | "used_by" | "similar_to" | "alternative_to";
+            patternId: string;
         }[] | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
@@ -2037,8 +2037,8 @@ export declare const PatternLibraryContributionSchema: z.ZodObject<{
         domain: string;
         relatedPatterns: {
             description: string;
-            patternId: string;
             relationship: "uses" | "used_by" | "similar_to" | "alternative_to";
+            patternId: string;
         }[];
     };
     assets: {
@@ -2050,15 +2050,15 @@ export declare const PatternLibraryContributionSchema: z.ZodObject<{
         mimeType: string;
     }[];
     comments: number;
+    views: number;
     downloads: number;
     qualityScore: number;
-    views: number;
     likes: number;
     shares: number;
     submittedAt: Date;
     contributorId: string;
     contributorName: string;
-    contributorLevel: "expert" | "moderator" | "contributor" | "trusted" | "regular" | "newcomer";
+    contributorLevel: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
     revisionRequests: {
         id: string;
         details: string;
@@ -2118,14 +2118,14 @@ export declare const PatternLibraryContributionSchema: z.ZodObject<{
         }[] | undefined;
         relatedPatterns?: {
             description: string;
-            patternId: string;
             relationship: "uses" | "used_by" | "similar_to" | "alternative_to";
+            patternId: string;
         }[] | undefined;
     };
     submittedAt: Date;
     contributorId: string;
     contributorName: string;
-    contributorLevel: "expert" | "moderator" | "contributor" | "trusted" | "regular" | "newcomer";
+    contributorLevel: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
     category?: string | undefined;
     tags?: string[] | undefined;
     version?: string | undefined;
@@ -2138,10 +2138,10 @@ export declare const PatternLibraryContributionSchema: z.ZodObject<{
         mimeType: string;
     }[] | undefined;
     comments?: number | undefined;
+    views?: number | undefined;
     downloads?: number | undefined;
     qualityScore?: number | undefined;
     publishedAt?: Date | undefined;
-    views?: number | undefined;
     likes?: number | undefined;
     shares?: number | undefined;
     reviewedAt?: Date | undefined;
@@ -2371,15 +2371,15 @@ export declare const CommunityPostContributionSchema: z.ZodObject<{
         mimeType: string;
     }[];
     comments: number;
+    views: number;
     downloads: number;
     qualityScore: number;
-    views: number;
     likes: number;
     shares: number;
     submittedAt: Date;
     contributorId: string;
     contributorName: string;
-    contributorLevel: "expert" | "moderator" | "contributor" | "trusted" | "regular" | "newcomer";
+    contributorLevel: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
     revisionRequests: {
         id: string;
         details: string;
@@ -2432,7 +2432,7 @@ export declare const CommunityPostContributionSchema: z.ZodObject<{
     submittedAt: Date;
     contributorId: string;
     contributorName: string;
-    contributorLevel: "expert" | "moderator" | "contributor" | "trusted" | "regular" | "newcomer";
+    contributorLevel: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
     category?: string | undefined;
     tags?: string[] | undefined;
     version?: string | undefined;
@@ -2445,10 +2445,10 @@ export declare const CommunityPostContributionSchema: z.ZodObject<{
         mimeType: string;
     }[] | undefined;
     comments?: number | undefined;
+    views?: number | undefined;
     downloads?: number | undefined;
     qualityScore?: number | undefined;
     publishedAt?: Date | undefined;
-    views?: number | undefined;
     likes?: number | undefined;
     shares?: number | undefined;
     reviewedAt?: Date | undefined;
@@ -2683,15 +2683,8 @@ export declare const ContributorProfileSchema: z.ZodObject<{
     createdAt: Date;
     updatedAt: Date;
     userId: string;
-    level: "expert" | "moderator" | "contributor" | "trusted" | "regular" | "newcomer";
+    level: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
     displayName: string;
-    achievements: {
-        id: string;
-        name: string;
-        description: string;
-        progress: number;
-        completedAt?: Date | undefined;
-    }[];
     expertise: string[];
     skills: string[];
     totalContributions: number;
@@ -2705,6 +2698,13 @@ export declare const ContributorProfileSchema: z.ZodObject<{
         description: string;
         iconUrl: string;
         earnedAt: Date;
+    }[];
+    achievements: {
+        id: string;
+        name: string;
+        description: string;
+        progress: number;
+        completedAt?: Date | undefined;
     }[];
     notificationPreferences: {
         emailOnComment: boolean;
@@ -2725,7 +2725,7 @@ export declare const ContributorProfileSchema: z.ZodObject<{
     createdAt: Date;
     updatedAt: Date;
     userId: string;
-    level: "expert" | "moderator" | "contributor" | "trusted" | "regular" | "newcomer";
+    level: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
     displayName: string;
     location?: string | undefined;
     social?: {
@@ -2734,13 +2734,6 @@ export declare const ContributorProfileSchema: z.ZodObject<{
         github?: string | undefined;
     } | undefined;
     website?: string | undefined;
-    achievements?: {
-        id: string;
-        name: string;
-        description: string;
-        progress: number;
-        completedAt?: Date | undefined;
-    }[] | undefined;
     expertise?: string[] | undefined;
     bio?: string | undefined;
     skills?: string[] | undefined;
@@ -2755,6 +2748,13 @@ export declare const ContributorProfileSchema: z.ZodObject<{
         description: string;
         iconUrl: string;
         earnedAt: Date;
+    }[] | undefined;
+    achievements?: {
+        id: string;
+        name: string;
+        description: string;
+        progress: number;
+        completedAt?: Date | undefined;
     }[] | undefined;
     notificationPreferences?: {
         emailOnComment?: boolean | undefined;

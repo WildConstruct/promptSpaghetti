@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { WebSocketClient } from '../websocket/WebSocketClient';
+import { WebSocketClient } from '../websocket/WebSocketClient.js';
 const DEFAULT_CONFIG = {
     reconnectInterval: 1000,
     maxReconnectAttempts: 5,

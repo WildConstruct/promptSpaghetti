@@ -6,7 +6,7 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * knowledge base integration, and smart categorization.
  */
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { HelpRequestType, HelpCategory, HelpPriority } from '../../services/Epic16HelpRequestService';
+import { HelpRequestType, HelpCategory, HelpPriority } from '../../services/Epic16HelpRequestService.js';
 const categorySubcategories = {
     [HelpCategory.GETTING_STARTED]: ['account_setup', 'first_purchase', 'navigation', 'basic_features'],
     [HelpCategory.TEMPLATES]: ['submission', 'approval', 'licensing', 'customization', 'downloads'],

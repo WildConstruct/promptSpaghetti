@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { memo } from 'react';
 import { Handle, Position } from 'reactflow';
-import { professionalColors, professionalShadows, professionalSpacing, professionalBorderRadius } from '../styles/professional-design-system';
+import { professionalColors, professionalShadows, professionalSpacing, professionalBorderRadius } from '../styles/professional-design-system.js';
 /**
  * Professional Node Renderer - Cinema 4D/Substance Designer inspired
  *

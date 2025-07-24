@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-import { ErrorFactory } from '../../errors/ErrorFactory';
+import { ErrorFactory } from '../../errors/ErrorFactory.js';
 export class DatabaseConnection {
     pool;
     isConnected = false;

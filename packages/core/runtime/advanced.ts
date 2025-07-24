@@ -101,7 +101,7 @@ export abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode
   /**
    * Set the current state for this node in the execution context
    */
-  protected setState(ctx: AdvancedExecutionContext, state: Error): void {
+  protected setState(ctx: AdvancedExecutionContext, state: any): void {
     ctx.nodeStates.set(this.id, state);
   }
 
@@ -214,6 +214,9 @@ export class AdvancedExecutionContextImpl implements AdvancedExecutionContext {
 // Export as both named and default for backward compatibility
 export { AdvancedExecutionContextImpl as AdvancedExecutionContext };
 
+// Re-export the interface explicitly to avoid visibility issues
+export type { AdvancedExecutionContext as AdvancedExecutionContextInterface };
+
 /**
  * Utility functions for working with advanced execution contexts
  */
@@ -290,13 +293,13 @@ export class ValidationHelpers {
     return { valid: false, errors, warnings };
   }
 
-  static validateRequired(value: Error, fieldName: string): string[] {
+  static validateRequired(value: any, fieldName: string): string[] {
     return value === undefined || value === null || value === '' 
       ? [`${fieldName} is required`] 
       : [];
   }
 
-  static validateArray(value: Error, fieldName: string, minLength: number = 0): string[] {
+  static validateArray(value: any, fieldName: string, minLength: number = 0): string[] {
     const errors: string[] = [];
     
     if (!Array.isArray(value)) {
@@ -309,7 +312,7 @@ export class ValidationHelpers {
   }
 
   static validateNumericRange(
-    value: Error, 
+    value: any, 
     fieldName: string, 
     min?: number, 
     max?: number

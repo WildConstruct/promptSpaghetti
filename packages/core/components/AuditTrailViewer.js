@@ -3,7 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // UI component for viewing and filtering audit trail records
 import { useState, useEffect, useMemo } from 'react';
 import { ClipboardDocumentListIcon, FunnelIcon, UserIcon, CogIcon, ArrowDownTrayIcon, MagnifyingGlassIcon, ChevronDownIcon, ClockIcon, CheckCircleIcon, XCircleIcon, LockClosedIcon, LockOpenIcon } from '@heroicons/react/24/outline';
-import { useWorkflowStore } from '../stores/workflowStore';
+import { useWorkflowStore } from '../stores/workflowStore.js';
 export const AuditTrailViewer = ({ workspaceId, resourceId, onClose }) => {
     const { auditHistory, loading, error, fetchAuditHistory, exportAuditHistory } = useWorkflowStore();
     const [filters, setFilters] = useState({

@@ -8,7 +8,7 @@
 
 import { Database } from '../database/connection';
 import { EventEmitter } from 'events';
-import { BadgeSystem } from '../../packages/core/gamification/BadgeSystem';
+import { BadgeSystem } from '../../../packages/core/gamification/BadgeSystem';
 
 // =============================================================================
 // Leaderboard Types and Interfaces
@@ -268,8 +268,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
 
       let orderBy: string;
       let selectFields = '';
-      const joinClause = '';
-      let whereClause = 'WHERE mt.status = \'listed\'';
+            let whereClause = 'WHERE mt.status = \'listed\'';
       const queryParams: any[] = [];
 
       // Add timeframe filter

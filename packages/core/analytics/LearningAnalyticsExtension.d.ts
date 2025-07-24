@@ -685,13 +685,13 @@ export declare const LearningAnalyticsEventSchema: z.ZodObject<{
         current_learning_path: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         user_role: string;
-        learning_goals?: string[] | undefined;
         skill_profile_snapshot?: any;
+        learning_goals?: string[] | undefined;
         current_learning_path?: string | undefined;
     }, {
         user_role: string;
-        learning_goals?: string[] | undefined;
         skill_profile_snapshot?: any;
+        learning_goals?: string[] | undefined;
         current_learning_path?: string | undefined;
     }>;
     performance_context: z.ZodObject<{
@@ -728,8 +728,8 @@ export declare const LearningAnalyticsEventSchema: z.ZodObject<{
     };
     user_context: {
         user_role: string;
-        learning_goals?: string[] | undefined;
         skill_profile_snapshot?: any;
+        learning_goals?: string[] | undefined;
         current_learning_path?: string | undefined;
     };
     performance_context: {
@@ -752,8 +752,8 @@ export declare const LearningAnalyticsEventSchema: z.ZodObject<{
     };
     user_context: {
         user_role: string;
-        learning_goals?: string[] | undefined;
         skill_profile_snapshot?: any;
+        learning_goals?: string[] | undefined;
         current_learning_path?: string | undefined;
     };
     performance_context: {
@@ -773,16 +773,16 @@ export declare const LearningAnalyticsQuerySchema: z.ZodObject<{
         learning_objectives: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         user_segments: z.ZodOptional<z.ZodArray<z.ZodNativeEnum<typeof LearningAnalyticsSegment>, "many">>;
     }, "strip", z.ZodTypeAny, {
-        skill_levels?: any[] | undefined;
-        learning_objectives?: string[] | undefined;
         skill_domains?: any[] | undefined;
+        skill_levels?: any[] | undefined;
         content_types?: ContentType[] | undefined;
+        learning_objectives?: string[] | undefined;
         user_segments?: LearningAnalyticsSegment[] | undefined;
     }, {
-        skill_levels?: any[] | undefined;
-        learning_objectives?: string[] | undefined;
         skill_domains?: any[] | undefined;
+        skill_levels?: any[] | undefined;
         content_types?: ContentType[] | undefined;
+        learning_objectives?: string[] | undefined;
         user_segments?: LearningAnalyticsSegment[] | undefined;
     }>>;
     performance_filters: z.ZodOptional<z.ZodObject<{
@@ -818,10 +818,10 @@ export declare const LearningAnalyticsQuerySchema: z.ZodObject<{
     }>>;
 }, "strip", z.ZodTypeAny, {
     learning_filters?: {
-        skill_levels?: any[] | undefined;
-        learning_objectives?: string[] | undefined;
         skill_domains?: any[] | undefined;
+        skill_levels?: any[] | undefined;
         content_types?: ContentType[] | undefined;
+        learning_objectives?: string[] | undefined;
         user_segments?: LearningAnalyticsSegment[] | undefined;
     } | undefined;
     performance_filters?: {
@@ -835,10 +835,10 @@ export declare const LearningAnalyticsQuerySchema: z.ZodObject<{
     } | undefined;
 }, {
     learning_filters?: {
-        skill_levels?: any[] | undefined;
-        learning_objectives?: string[] | undefined;
         skill_domains?: any[] | undefined;
+        skill_levels?: any[] | undefined;
         content_types?: ContentType[] | undefined;
+        learning_objectives?: string[] | undefined;
         user_segments?: LearningAnalyticsSegment[] | undefined;
     } | undefined;
     performance_filters?: {

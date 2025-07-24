@@ -1,9 +1,9 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { TextFieldEditor } from '../TextFieldEditor';
-import { SelectEditor } from '../SelectEditor';
-import { VariationList } from '../VariationList';
-import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
-import { WeightSlider } from '../WeightSlider';
+import { TextFieldEditor } from '../TextFieldEditor.js';
+import { SelectEditor } from '../SelectEditor.js';
+import { VariationList } from '../VariationList.js';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection.js';
+import { WeightSlider } from '../WeightSlider.js';
 /**
  * Epic 8.4 - Sequential Editor with Progressive Disclosure
  *

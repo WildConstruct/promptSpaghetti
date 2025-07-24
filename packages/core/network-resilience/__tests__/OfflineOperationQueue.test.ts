@@ -105,7 +105,7 @@ describe('OfflineOperationQueue', () => {
       expect(queue.size()).toBe(0);
     });
 
-    test('should handle operation failure with retry', (done) => {
+    test('should handle operation failure with retry', async () => {
       const operationId = queue.enqueue({
         type: 'graph_update',
         payload: { nodeId: 'test' },
@@ -120,15 +120,24 @@ describe('OfflineOperationQueue', () => {
       expect(batch).toHaveLength(1);
 
       // Listen for retry event
-      queue.on('operation_retry', (operation, backoffTime) => {
-        expect(operation.id).toBe(operationId);
-        expect(operation.retryCount).toBe(1);
-        expect(backoffTime).toBeGreaterThan(0);
-        done();
+      const retryPromise = new Promise<void>((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new Error('Retry event timeout after 3s'));
+        }, 3000);
+        
+        queue.on('operation_retry', (operation, backoffTime) => {
+          expect(operation.id).toBe(operationId);
+          expect(operation.retryCount).toBe(1);
+          expect(backoffTime).toBeGreaterThan(0);
+          clearTimeout(timeout);
+          resolve();
+        });
       });
 
       queue.markFailure(operationId, new Error('Test error'));
       expect(queue.size()).toBe(0); // Operation is in retry queue
+      
+      await retryPromise;
     });
 
     test('should fail operation permanently after max retries', () => {

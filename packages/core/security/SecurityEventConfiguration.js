@@ -3,7 +3,7 @@
  * Centralized configuration for security logging and compliance requirements
  * Part of Epic 19 - Security & Compliance Framework
  */
-import { ComplianceFramework, DataSensitivityLevel } from './DataProtectionEventLogger';
+import { ComplianceFramework, DataSensitivityLevel } from './DataProtectionEventLogger.js';
 /**
  * Default Security Event Configuration
  * Production-ready configuration with security best practices

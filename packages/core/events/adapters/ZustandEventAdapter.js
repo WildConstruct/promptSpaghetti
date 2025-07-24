@@ -4,7 +4,7 @@
  * Bridges Zustand state management with the centralized event bus.
  * Converts state changes to events and allows event-driven state updates.
  */
-import { globalEventBus, EventCategory, EventPriority } from '../EventSystem';
+import { globalEventBus, EventCategory, EventPriority } from '../EventSystem.js';
 /**
  * Zustand Event Adapter Class
  */
@@ -232,10 +232,20 @@ export class ZustandEventAdapter {
         };
     }
 }
-return adapter.middleware;
-;
-return adapter.middleware(stateCreator);
-;
+/**
+ * Factory function to create Zustand event middleware
+ */
+export const createZustandEventMiddleware = () => {
+    const adapter = new ZustandEventAdapter();
+    return adapter.middleware;
+};
+/**
+ * Enhanced Zustand store creator with event integration
+ */
+export const createEventEnabledStore = (stateCreator) => {
+    const adapter = new ZustandEventAdapter();
+    return adapter.middleware(stateCreator);
+};
 /**
  * Utility functions for Zustand-Event integration
  */
@@ -273,4 +283,9 @@ export const ZustandEventUtils = {
         }, { priority: EventPriority.HIGH });
     }
 };
-;
+/**
+ * Pre-configured adapters for common stores
+ */
+export const graphStoreAdapter = new ZustandEventAdapter();
+export const uiStoreAdapter = new ZustandEventAdapter();
+export const previewStoreAdapter = new ZustandEventAdapter();

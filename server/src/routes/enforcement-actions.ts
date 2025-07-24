@@ -20,7 +20,7 @@ import {
   TargetType,
   ViolationCategory,
   AppealStatus
-} from '../../packages/core/types/EnforcementTypes';
+} from '../../../packages/core/types/EnforcementTypes';
 
 // Request/Response type definitions
 interface CreateEnforcementActionRequest {

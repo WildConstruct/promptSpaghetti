@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { NotificationType } from '../types/workspace';
+import { NotificationType } from '../types/workspace.js';
 export class WorkspaceNotificationSystem extends EventEmitter {
     dao;
     preferences = new Map();

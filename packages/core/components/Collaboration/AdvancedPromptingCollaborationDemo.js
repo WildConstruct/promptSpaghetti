@@ -6,8 +6,8 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * collaboration features into the Wild Construct film industry demo.
  */
 import { useState } from 'react';
-import { AdvancedPromptingCollaborationPanel } from './AdvancedPromptingCollaborationPanel';
-import { useAdvancedPromptingCollaboration } from '../../hooks/useAdvancedPromptingCollaboration';
+import { AdvancedPromptingCollaborationPanel } from './AdvancedPromptingCollaborationPanel.js';
+import { useAdvancedPromptingCollaboration } from '../../hooks/useAdvancedPromptingCollaboration.js';
 export const AdvancedPromptingCollaborationDemo = ({ className }) => {
     const [showPanel, setShowPanel] = useState(false);
     const [demoStep, setDemoStep] = useState(0);

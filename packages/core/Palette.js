@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { professionalColors } from './styles/professional-design-system';
+import { professionalColors } from './styles/professional-design-system.js';
 export const Palette = ({ nodes, collapsed, onToggle, onDragStart }) => {
     return (_jsxs("aside", { "aria-label": "Node Palette", style: {
             width: collapsed ? 56 : 200,

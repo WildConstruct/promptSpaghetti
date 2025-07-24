@@ -15,12 +15,26 @@ export class EnhancedBaseAdaptor {
         // Pipeline stages
         this.validationPipeline = [];
         this.transformationPipeline = [];
-        if (context) {
-            this.logger = context.logger;
-            this.cache = context.cache;
-            this.metrics = context.metrics;
-            this.config = context.config;
-        }
+        // Initialize with context or defaults
+        this.logger = context?.logger || {
+            debug: () => { },
+            info: () => { },
+            warn: () => { },
+            error: () => { }
+        };
+        this.cache = context?.cache || {
+            get: async () => undefined,
+            set: async () => { },
+            del: async () => { },
+            exists: async () => false
+        };
+        this.metrics = context?.metrics || {
+            counter: () => { },
+            gauge: () => { },
+            histogram: () => { },
+            timer: () => ({ end: () => { } })
+        };
+        this.config = context?.config || {};
         this.healthMetrics = {
             uptime: 0,
             requestCount: 0,
@@ -29,6 +43,19 @@ export class EnhancedBaseAdaptor {
             errorRate: 0
         };
         this.setupDefaultPipelines();
+    }
+    // Optional lifecycle hooks with default implementations
+    async beforeValidate(graph) {
+        return graph;
+    }
+    async afterValidate(graph, results) {
+        return results;
+    }
+    async beforeTransform(graph) {
+        return graph;
+    }
+    async afterTransform(graph, result) {
+        return result;
     }
     /**
      * Initialize the adaptor with context and configuration
@@ -192,7 +219,8 @@ export class EnhancedBaseAdaptor {
                     }
                     catch (error) {
                         if (stage.onError) {
-                            const errorResults = await stage.onError(error, processedGraph, context);
+                            const typedError = error instanceof Error ? error : new Error(String(error));
+                            const errorResults = await stage.onError(typedError, processedGraph, context);
                             if (errorResults) {
                                 allResults.push(...errorResults);
                             }
@@ -238,7 +266,8 @@ export class EnhancedBaseAdaptor {
             return allResults;
         }
         catch (error) {
-            this.updateErrorMetrics(Date.now() - startTime, error);
+            const typedError = error instanceof Error ? error : new Error(String(error));
+            this.updateErrorMetrics(Date.now() - startTime, typedError);
             this.metrics.counter('adaptor.validate.error', 1, {
                 adaptor: this.id,
                 platform: this.platform
@@ -334,7 +363,8 @@ export class EnhancedBaseAdaptor {
                     }
                     catch (error) {
                         if (stage.onError) {
-                            const errorResult = await stage.onError(error, processedGraph, context);
+                            const typedError = error instanceof Error ? error : new Error(String(error));
+                            const errorResult = await stage.onError(typedError, processedGraph, context);
                             if (errorResult) {
                                 // Handle error recovery
                             }
@@ -387,7 +417,8 @@ export class EnhancedBaseAdaptor {
             return result;
         }
         catch (error) {
-            this.updateErrorMetrics(Date.now() - startTime, error);
+            const typedError = error instanceof Error ? error : new Error(String(error));
+            this.updateErrorMetrics(Date.now() - startTime, typedError);
             this.metrics.counter('adaptor.transform.error', 1, {
                 adaptor: this.id,
                 platform: this.platform
@@ -462,9 +493,10 @@ export class EnhancedBaseAdaptor {
             });
         }
         catch (error) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
             this.logger.error('Adaptor destruction failed', {
                 adaptorId: this.id,
-                error: error.message
+                error: errorMessage
             });
             this.metrics.counter('adaptor.destroy.error', 1, {
                 adaptor_id: this.id,

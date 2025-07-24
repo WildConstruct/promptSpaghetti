@@ -1,36 +1,293 @@
-# PromptScape Randomizer Graph — Product Requirements Document (PRD)
+# Integration Remediation Brownfield Enhancement PRD
 
-_Version 0.1 · 2025-07-09_
+_Version 1.0 · 2025-01-23_
 
 ---
 
-## 1 · Goals and Background Context
+## 1 · Intro Project Analysis and Context
 
-### Goals
-- Deliver an MVP of PromptScape Randomizer Graph that lets prompt artists create deterministic branching grammars via a React-Flow UI and Node/TS executor.
-- Generate five seeded prompt variants in < 1 s, both in-app and via CLI.
-- Provide a clear integration path to the existing Randomizer Engine (exporter ⇄ bundle).
-- Meet stated non-functional targets (performance, accessibility, security).
+### Existing Project Overview
 
-### Background Context
-Creative-AI teams need repeatable, deterministic prompt generation to scale content while avoiding noisy randomness. A node-based grammar designer gives artists granular control and unlocks automation for QA and pipelines. The MVP focuses on six core node types and deterministic seed handling, forming the foundation for an expanded node library and Python bridge in later phases.
+**Analysis Source**: User-provided comprehensive QA technical debt analysis
+
+**Current Project State**: 
+You have built a sophisticated visual prompt engineering platform ("Photoshop for AI prompts") with:
+- Advanced runtime engine with deterministic execution
+- Multi-agent workflow orchestration system  
+- Real-time analytics dashboards
+- Comprehensive security framework
+- Complex monorepo structure with React frontend, Node.js Fastify backend, and shared TypeScript libraries
+
+The system currently suffers from rapid development technical debt that poses $100K/month ongoing costs in reduced productivity and increased maintenance overhead.
+
+### Available Documentation Analysis
+
+Based on your QA analysis, you have:
+- ✅ **Technical Debt Documentation** - Comprehensive analysis in `docs/INTEGRATION_TECHNICAL_DEBT_REPORT.md`
+- ✅ **Architecture Documentation** - Current/target diagrams in `docs/INTEGRATION_ARCHITECTURE_DIAGRAMS.md` 
+- ✅ **Tech Stack Documentation** - Identified in QA analysis (includes version conflicts)
+- ✅ **Integration Analysis** - 290+ service classes, 4+ auth implementations documented
+- ⚠️ **API Documentation** - May need updates post-remediation
+- ⚠️ **UX/UI Guidelines** - May need consistency review
+- ⚠️ **Coding Standards** - May need enforcement post-cleanup
+
+### Enhancement Scope Definition
+
+**Enhancement Type**: ✅ **Integration with New Systems** + **Performance/Scalability Improvements** + **Technology Stack Upgrade**
+
+**Enhancement Description**: 
+Comprehensive technical debt remediation to consolidate fragmented architecture, resolve dependency conflicts, unify authentication systems, standardize data access patterns, and integrate analytics systems - transforming the current fragmented state into a cohesive, maintainable platform.
+
+**Impact Assessment**: ✅ **Major Impact** (architectural changes required)
+
+### Goals and Background Context
+
+**Goals**:
+- Eliminate $100K/month productivity losses from technical debt
+- Consolidate 290+ fragmented service classes into cohesive architecture
+- Resolve critical dependency version conflicts (Zod 3.0.0 vs 3.22.4 vs 3.25.76)
+- Unify 4+ separate authentication implementations
+- Standardize 10+ direct database connection patterns
+- Integrate 6+ competing analytics systems
+- Achieve 30-40% developer productivity improvement
+- Reduce maintenance overhead by 60%
+
+**Background Context**:
+Rapid development of your sophisticated prompt engineering platform created substantial technical debt across 5 major categories. While the core capabilities are powerful and well-designed, the underlying integration architecture has become fragmented, creating production risks, developer friction, and escalating maintenance costs. This remediation will preserve all existing functionality while creating a sustainable foundation for future growth.
 
 ### Change Log
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| 2025-07-09 | 0.1 | Initial PRD draft (Goals / Background) | PM-agent |
+
+| Change | Date | Version | Description | Author |
+|--------|------|---------|-------------|--------|
+| Initial Creation | 2025-01-23 | 1.0 | Created comprehensive PRD for integration remediation project | Sarah (PO) |
 
 ---
 
 ## 2 · Requirements
 
-### 2.1 Functional Requirements (FR)
-1. FR1: Graph JSON schema must validate `nodes[]`, `edges[]`, and `globalSeed` using Zod with unit tests.
-2. FR2: React-Flow editor loads an empty graph, supports drag-add, connect, move, and delete nodes.
-3. FR3: Node Inspector side-panel renders typed forms for selected nodes and live-updates the graph JSON.
-4. FR4: Executor traverses the graph depth-first, supports `WeightedChoice`, `Concat`, `Output`, and returns a prompt string.
-5. FR5: Deterministic RNG passes a seed top-down; sub-seeds = `hash(nodeId + parentSeed)`; identical graph+seed ⇒ identical output.
-6. FR6: “Preview 5” UI button runs the executor five times with sequential seeds and shows results in a modal.
+### Functional Requirements
+
+**FR1**: Architecture Consolidation - The system shall consolidate 290+ fragmented service classes into a cohesive architecture using service registry pattern without breaking existing functionality.
+
+**FR2**: Dependency Resolution - The system shall resolve critical version conflicts (Zod 3.0.0 vs 3.22.4 vs 3.25.76, etc.) through standardized dependency management and automated conflict detection.
+
+**FR3**: Authentication Unification - The system shall consolidate 4+ separate authentication implementations into a single, secure authentication service while maintaining all current authentication methods and user sessions.
+
+**FR4**: Data Access Standardization - The system shall standardize 10+ direct database connection patterns through repository pattern implementation while maintaining existing data integrity and performance.
+
+**FR5**: Analytics Integration - The system shall integrate 6+ competing analytics systems into a unified event bus architecture with backward compatibility for existing analytics data.
+
+**FR6**: Performance Preservation - The system shall maintain or improve current performance characteristics during remediation, with automated rollback if performance degrades beyond 10%.
+
+**FR7**: Service Registry Implementation - The system shall implement a service registry to manage service discovery and communication patterns across the consolidated architecture.
+
+**FR8**: Event Bus Architecture - The system shall implement a pub/sub event system to decouple services and enable reliable inter-service communication.
+
+### Non-Functional Requirements  
+
+**NFR1**: Availability - System availability must remain above 99.5% throughout the 5-sprint remediation process with zero-downtime deployment strategies.
+
+**NFR2**: Performance Impact - The remediation shall not exceed current memory usage by more than 20% and must improve overall system performance by 15-30%.
+
+**NFR3**: Developer Productivity - The remediation shall achieve 30-40% improvement in developer productivity as measured by build times, test execution, and deployment frequency.
+
+**NFR4**: Maintenance Overhead - The remediation shall reduce maintenance overhead by 60% through automated dependency management, standardized patterns, and consolidated architecture.
+
+**NFR5**: Backward Compatibility - All existing APIs, database schemas, and UI components must remain functional throughout the remediation process.
+
+**NFR6**: Security Compliance - All security frameworks and authentication mechanisms must maintain current security standards while being consolidated.
+
+**NFR7**: Testing Coverage - The remediation must maintain current test coverage levels while improving test execution time by 40%.
+
+### Compatibility Requirements
+
+**CR1**: API Compatibility - All existing internal and external APIs must remain functional with no breaking changes during the remediation process.
+
+**CR2**: Database Schema Compatibility - Database migrations must be backward compatible with rollback capabilities at each sprint boundary.
+
+**CR3**: UI/UX Consistency - The sophisticated prompt engineering interface must maintain all current capabilities while improving consistency through the design system.
+
+**CR4**: Integration Compatibility - All existing integrations with external systems must continue to function during and after the remediation process.
+
+---
+
+## 3 · Technical Constraints and Integration Requirements
+
+### Existing Technology Stack
+
+**Languages**: TypeScript (Node.js 18), JavaScript (React 18)
+**Frameworks**: React with Vite frontend, Node.js Fastify backend, React Flow for node-based UI  
+**Database**: Multiple database connections (10+ direct patterns identified), likely PostgreSQL-based
+**Infrastructure**: Monorepo structure with pnpm workspaces, Vercel deployment, GitHub Actions CI/CD
+**External Dependencies**: 
+- Zod for validation (multiple conflicting versions: 3.0.0, 3.22.4, 3.25.76)
+- Analytics systems (6+ competing implementations)
+- Authentication services (4+ separate implementations)
+- React Flow for sophisticated graph editing capabilities
+
+### Integration Approach
+
+**Database Integration Strategy**: Implement repository pattern to consolidate 10+ direct database connections into standardized data access layer with connection pooling and transaction management.
+
+**API Integration Strategy**: Establish service registry pattern for 290+ service classes with standardized REST/GraphQL interfaces and automated service discovery.
+
+**Frontend Integration Strategy**: Maintain React Flow-based sophisticated prompt engineering interface while consolidating component libraries and standardizing state management patterns.
+
+**Testing Integration Strategy**: Preserve existing test coverage while consolidating test frameworks and improving test execution performance by 40%.
+
+### Code Organization and Standards
+
+**File Structure Approach**: Maintain current monorepo structure (client/, server/, packages/core/) while implementing domain-driven organization within consolidated services.
+
+**Naming Conventions**: Standardize service naming, API endpoints, and database entities following established patterns from the core prompt engine.
+
+**Coding Standards**: Enforce consistent TypeScript standards across all services with automated linting and formatting integrated into CI/CD pipeline.
+
+**Documentation Standards**: Implement comprehensive API documentation, architecture decision records, and integration guides for the consolidated system.
+
+### Deployment and Operations
+
+**Build Process Integration**: Optimize existing pnpm workspace builds to support consolidated services while maintaining independent deployability.
+
+**Deployment Strategy**: Implement blue-green deployment with automated rollback capabilities to ensure zero-downtime during remediation sprints.
+
+**Monitoring and Logging**: Consolidate logging from 6+ analytics systems into unified observability platform with distributed tracing.
+
+**Configuration Management**: Centralize configuration management while maintaining environment-specific overrides and secure secret management.
+
+### Risk Assessment and Mitigation
+
+**Technical Risks**: 
+- Dependency version conflicts causing runtime failures
+- Service consolidation breaking existing integrations
+- Performance degradation during architecture changes
+- Data consistency issues during repository pattern migration
+
+**Integration Risks**:
+- Authentication system consolidation impacting user sessions
+- Analytics data loss during system integration
+- API compatibility breaks affecting external integrations
+- Database migration failures in production environment
+
+**Deployment Risks**:
+- Zero-downtime deployment complexity with consolidated services
+- Rollback complications across multiple integrated systems
+- Configuration drift between development and production
+- Performance monitoring gaps during transition
+
+**Mitigation Strategies**:
+- Incremental migration with feature flags and circuit breakers
+- Comprehensive integration testing with staging environment validation
+- Automated rollback triggers based on performance and error thresholds
+- Parallel system operation during critical migration phases
+
+---
+
+## 4 · Epic and Story Structure
+
+Based on my analysis of your existing project and the comprehensive nature of this integration remediation, I believe this enhancement should be structured as a **single comprehensive epic** because all 5 technical debt categories are interconnected and require coordinated remediation to avoid creating new integration issues.
+
+**Epic Structure Decision**: Single epic with coordinated story sequence to ensure architectural consistency and minimize integration risks during the consolidation process.
+
+**Rationale**: The 290+ service classes, 4+ authentication systems, 6+ analytics systems, and dependency conflicts are all interconnected. Attempting to remediate these as separate epics would create integration complexity and potential system instability. A single epic allows for proper sequencing and dependency management across the remediation.
+
+---
+
+## 5 · Epic 1: Integration Architecture Remediation
+
+**Epic Goal**: Consolidate fragmented architecture across 5 major technical debt categories, transforming the sophisticated prompt engineering platform from fragmented services into a cohesive, maintainable system while preserving all existing functionality and achieving $600K annual cost savings.
+
+**Integration Requirements**: This epic must maintain zero disruption to the sophisticated React Flow-based prompt engineering interface, preserve deterministic execution capabilities, and ensure all existing APIs and integrations remain functional throughout the remediation process.
+
+### Story 1.1: Dependency Standardization and Conflict Resolution
+
+As a development team member,
+I want to resolve critical dependency version conflicts and establish standardized dependency management,
+so that the system has consistent, secure dependencies without runtime conflicts.
+
+**Acceptance Criteria**:
+1. All Zod version conflicts (3.0.0 vs 3.22.4 vs 3.25.76) resolved to single standardized version
+2. Automated dependency conflict detection integrated into CI/CD pipeline
+3. Standardized package.json structure across all monorepo workspaces
+4. Security vulnerability scanning implemented for all dependencies
+5. Dependency update automation with testing validation
+
+**Integration Verification**:
+IV1: Existing React Flow prompt engineering interface functions correctly with updated dependencies
+IV2: All API endpoints continue to validate requests/responses correctly with standardized Zod version
+IV3: Performance benchmarks show no degradation from dependency updates
+
+### Story 1.2: Authentication System Consolidation
+
+As a system administrator,
+I want to consolidate 4+ separate authentication implementations into a unified authentication service,
+so that security is enhanced and maintenance overhead is reduced.
+
+**Acceptance Criteria**:
+1. Single authentication service implemented with support for all existing authentication methods
+2. User session migration completed without user disruption
+3. All existing authentication endpoints remain functional during transition
+4. Enhanced security features implemented (MFA, session management, audit logging)
+5. Standardized authorization patterns across all services
+
+**Integration Verification**:
+IV1: All existing user sessions remain active during authentication system migration
+IV2: External integrations using authentication continue to function without changes
+IV3: Performance of authentication operations matches or exceeds current benchmarks
+
+### Story 1.3: Service Architecture Consolidation
+
+As a platform architect,
+I want to consolidate 290+ fragmented service classes into a cohesive service registry pattern,
+so that service discovery, communication, and maintenance are standardized and efficient.
+
+**Acceptance Criteria**:
+1. Service registry implemented with automated service discovery
+2. 290+ service classes organized into logical service boundaries
+3. Standardized REST/GraphQL interfaces for inter-service communication
+4. Service health monitoring and circuit breaker patterns implemented
+5. Documentation generated for all consolidated services
+
+**Integration Verification**:
+IV1: Sophisticated prompt engineering features continue to function without interruption
+IV2: API response times remain within current performance thresholds
+IV3: All existing external integrations continue to work with consolidated services
+
+### Story 1.4: Data Access Standardization
+
+As a database administrator,
+I want to standardize 10+ direct database connection patterns through repository pattern implementation,
+so that data access is consistent, secure, and maintainable.
+
+**Acceptance Criteria**:
+1. Repository pattern implemented for all data access operations
+2. Connection pooling and transaction management standardized
+3. Database migration scripts created with rollback capabilities
+4. Data consistency validation across all repositories
+5. Performance optimization through query standardization
+
+**Integration Verification**:
+IV1: All existing data operations continue to function with identical results
+IV2: Database performance meets or exceeds current benchmarks
+IV3: Data integrity validation passes for all migrated operations
+
+### Story 1.5: Analytics and Monitoring Integration
+
+As a product manager,
+I want to integrate 6+ competing analytics systems into a unified event bus architecture,
+so that we have consistent, comprehensive analytics without data fragmentation.
+
+**Acceptance Criteria**:
+1. Unified event bus implemented with pub/sub architecture
+2. All existing analytics data successfully migrated and integrated
+3. Real-time analytics dashboard consolidated from multiple sources
+4. Historical analytics data preserved and accessible
+5. Performance monitoring integrated with unified observability platform
+
+**Integration Verification**:
+IV1: All existing analytics reports continue to function with historical data intact
+IV2: Real-time analytics performance matches or exceeds current capabilities
+IV3: Analytics API endpoints remain compatible with existing integrations
 7. FR7: CLI wrapper `npx promptgraph exec <graph.json> --seed 1234` prints the final prompt and exits with code 0.
 8. FR8: Exporter converts a saved graph to a valid `GeneratorBundle` JSON envelope that the existing Randomizer Engine consumes.
 9. FR9: Importer opens a legacy GeneratorBundle back into the editor (`bundleToGraph`).

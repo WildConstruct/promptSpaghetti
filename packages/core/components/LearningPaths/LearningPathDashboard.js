@@ -6,7 +6,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * with personalized recommendations, progress tracking, and analytics.
  */
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { LearningCategory, DifficultyLevel, TargetAudience, EnrollmentStatus } from '../../services/Epic16LearningPathService';
+import { LearningCategory, DifficultyLevel, TargetAudience, EnrollmentStatus } from '../../services/Epic16LearningPathService.js';
 export const LearningPathDashboard = ({ learningService, userId, userRole, onPathSelect }) => {
     // State management
     const [availablePaths, setAvailablePaths] = useState([]);

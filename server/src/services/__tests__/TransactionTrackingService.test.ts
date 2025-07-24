@@ -15,11 +15,10 @@ import {
   TransactionType,
   PaymentProvider,
   DEFAULT_TRANSACTION_TRACKING_CONFIG
-} from '../../../packages/core/types/TransactionTrackingTypes';
+} from '../../../../packages/core/types/TransactionTrackingTypes';
 
 // Mock Database
 jest.mock('../../database/connection');
-const MockDatabase = Database as jest.MockedClass<typeof Database>;
 
 describe('TransactionTrackingService', () => {
   let service: TransactionTrackingService;
@@ -102,7 +101,6 @@ describe('TransactionTrackingService', () => {
     mockDb = {
       query: jest.fn<unknown[], unknown>()
     } as any;
-    MockDatabase.mockImplementation(() => mockDb);
     service = new TransactionTrackingService(mockDb);
   });
 
@@ -157,7 +155,7 @@ describe('TransactionTrackingService', () => {
         }]
       };
 
-      mockDb.query.mockResolvedValue(mockResult as unknown);
+      mockDb.query.mockResolvedValue(mockResult as unknown as unknown);
 
       const result = await service.getTransaction('tx_test_123');
 
@@ -172,7 +170,7 @@ describe('TransactionTrackingService', () => {
     });
 
     it('should return null for non-existent transaction', async () => {
-      mockDb.query.mockResolvedValue({ rows: [] } as unknown);
+      mockDb.query.mockResolvedValue({ rows: [] } as unknown as unknown);
 
       const result = await service.getTransaction('non_existent');
 
@@ -412,7 +410,7 @@ describe('TransactionTrackingService', () => {
         }]
       };
 
-      mockDb.query.mockResolvedValue(mockResult as unknown);
+      mockDb.query.mockResolvedValue(mockResult as unknown as unknown);
 
       const result = await service.addAdminNote(
         'tx_test_123',
@@ -445,7 +443,7 @@ describe('TransactionTrackingService', () => {
         }]
       };
 
-      mockDb.query.mockResolvedValue(mockResult as unknown);
+      mockDb.query.mockResolvedValue(mockResult as unknown as unknown);
 
       const result = await service.addAdminNote(
         'tx_test_123',
@@ -474,7 +472,7 @@ describe('TransactionTrackingService', () => {
         }]
       };
 
-      mockDb.query.mockResolvedValue(mockResult as unknown);
+      mockDb.query.mockResolvedValue(mockResult as unknown as unknown);
 
       const result = await service.addAdminFlag(
         'tx_test_123',
@@ -511,7 +509,7 @@ describe('TransactionTrackingService', () => {
         pagination: { page: 1, pageSize: 50, total: 1, totalPages: 1 },
         aggregations: {} as any,
         filters: { count: 0, filters: [] }
-      } as unknown);
+      } as unknown as unknown);
     });
 
     it('should export transactions in CSV format', async () => {
@@ -581,7 +579,7 @@ describe('TransactionTrackingService', () => {
   describe('Real-time Monitoring', () => {
     beforeEach(() => {
       // Mock getRecentTransactions
-      jest.spyOn(service, 'getRecentTransactions').mockResolvedValue([mockTransaction] as unknown);
+      jest.spyOn(service, 'getRecentTransactions').mockResolvedValue([mockTransaction] as unknown as unknown);
     });
 
     it('should start real-time monitoring', async () => {
@@ -627,7 +625,7 @@ describe('TransactionTrackingService', () => {
         }))
       };
 
-      mockDb.query.mockResolvedValue(mockResult as unknown);
+      mockDb.query.mockResolvedValue(mockResult as unknown as unknown);
 
       const result = await service.getRecentTransactions();
 
@@ -640,7 +638,7 @@ describe('TransactionTrackingService', () => {
 
     it('should get recent transactions with custom limit', async () => {
       const mockResult = { rows: [] };
-      mockDb.query.mockResolvedValue(mockResult as unknown);
+      mockDb.query.mockResolvedValue(mockResult as unknown as unknown);
 
       await service.getRecentTransactions(25);
 
@@ -667,7 +665,7 @@ describe('TransactionTrackingService', () => {
         }]
       };
 
-      mockDb.query.mockResolvedValue(malformedResult as unknown);
+      mockDb.query.mockResolvedValue(malformedResult as unknown as unknown);
 
       const result = await service.getTransaction('tx_malformed');
 
@@ -687,7 +685,7 @@ describe('TransactionTrackingService', () => {
         }))
       };
 
-      mockDb.query.mockResolvedValue(largeResult as unknown);
+      mockDb.query.mockResolvedValue(largeResult as unknown as unknown);
 
       const start = Date.now();
       await service.searchTransactions({ page: 1, pageSize: 1000 });

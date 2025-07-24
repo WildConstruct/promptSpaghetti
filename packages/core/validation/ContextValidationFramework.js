@@ -47,17 +47,36 @@ export class ContextValidationFramework extends EventEmitter {
             memoryUsage: 0
         };
         try {
-            // Execute all validation rules
+            console.log('DEBUG: Starting validation, rules count:', this.rules.size);
+            // First pass: Calculate total weight
+            for (const [name, rule] of this.rules) {
+                totalWeight += rule.weight;
+                console.log(`DEBUG: Rule ${name} has weight ${rule.weight}`);
+            }
+            // Second pass: Execute all validation rules and apply penalties
             for (const [name, rule] of this.rules) {
                 try {
                     const ruleResult = rule.validate(context, config);
                     const weightedScore = ruleResult.score * rule.weight;
+                    console.log(`DEBUG: Rule ${name}, passed: ${ruleResult.passed}, score: ${ruleResult.score}`);
                     totalScore += weightedScore;
-                    totalWeight += rule.weight;
                     // Categorize results
                     if (!ruleResult.passed) {
                         if (rule.category === 'critical') {
                             errors.push(ruleResult.message || `Critical validation failed: ${name}`);
+                            // Critical failures should drastically impact the score
+                            // For critical security failures like missing PRNG, apply severe penalty
+                            if (name === 'prng_security') {
+                                // PRNG security is absolutely critical - apply maximum penalty
+                                const penalty = totalWeight * 100;
+                                console.log(`DEBUG: PRNG penalty applied - totalWeight: ${totalWeight}, penalty: ${penalty}, score before: ${totalScore}`);
+                                totalScore -= penalty;
+                                console.log(`DEBUG: Score after PRNG penalty: ${totalScore}`);
+                            }
+                            else {
+                                // Other critical failures get significant but not total penalty
+                                totalScore -= rule.weight * 75;
+                            }
                         }
                         else if (rule.category === 'warning') {
                             warnings.push(ruleResult.message || `Warning: ${name}`);
@@ -75,7 +94,7 @@ export class ContextValidationFramework extends EventEmitter {
                 }
             }
             // Calculate final score
-            const finalScore = totalWeight > 0 ? (totalScore / totalWeight) : 0;
+            const finalScore = totalWeight > 0 ? Math.max(0, totalScore / totalWeight) : 0;
             const valid = errors.length === 0 && finalScore >= this.config.errorThreshold;
             // Add global recommendations
             if (finalScore < this.config.warningThreshold) {
@@ -215,7 +234,7 @@ export class ContextValidationFramework extends EventEmitter {
             category: 'warning',
             weight: 1.0,
             validate: (context) => {
-                const count = context.variables.size;
+                const count = Object.keys(context.variables).length;
                 const maxCount = this.config.maxVariableCount;
                 if (count > maxCount) {
                     return {
@@ -242,7 +261,7 @@ export class ContextValidationFramework extends EventEmitter {
             validate: (context) => {
                 let typeErrors = 0;
                 let totalVariables = 0;
-                for (const [name, value] of context.variables) {
+                for (const [name, value] of Object.entries(context.variables)) {
                     totalVariables++;
                     // Check for undefined or null values that might indicate issues
                     if (value === undefined) {
@@ -345,8 +364,8 @@ export class ContextValidationFramework extends EventEmitter {
         this.rules.set('execution_metadata', {
             name: 'execution_metadata',
             description: 'Validates execution metadata completeness and performance indicators',
-            category: 'info',
-            weight: 0.5,
+            category: 'critical',
+            weight: 1.0,
             validate: (context) => {
                 const meta = context.executionMeta;
                 let score = 100;
@@ -501,17 +520,18 @@ export class ContextValidationUtils {
      */
     static createTestContext(overrides = {}) {
         return {
-            variables: new Map(),
+            variables: {},
+            seed: 12345,
             nodeStates: new Map(),
             evaluationDepth: 0,
             cache: new Map(),
+            prng: () => Math.random(),
             executionMeta: {
                 startTime: Date.now(),
                 executionId: `test-${Math.random().toString(36).substr(2, 9)}`,
-                nodeExecutionOrder: []
+                nodeExecutionOrder: [],
+                performanceMetrics: new Map()
             },
-            prng: () => Math.random(),
-            seed: 12345,
             ...overrides
         };
     }
@@ -519,24 +539,29 @@ export class ContextValidationUtils {
      * Validate context meets minimum requirements
      */
     static isValidContext(context) {
-        return (context &&
-            typeof context === 'object' &&
-            context.variables instanceof Map &&
+        if (context === null || context === undefined || typeof context !== 'object') {
+            return false;
+        }
+        return (typeof context.variables === 'object' &&
+            // seed is optional for structural validity
             context.nodeStates instanceof Map &&
             typeof context.evaluationDepth === 'number' &&
             context.cache instanceof Map &&
-            context.executionMeta &&
+            typeof context.prng === 'function' &&
+            context.executionMeta !== null &&
+            context.executionMeta !== undefined &&
+            typeof context.executionMeta === 'object' &&
             typeof context.executionMeta.startTime === 'number' &&
             typeof context.executionMeta.executionId === 'string' &&
             Array.isArray(context.executionMeta.nodeExecutionOrder) &&
-            typeof context.prng === 'function');
+            context.executionMeta.performanceMetrics instanceof Map);
     }
     /**
      * Estimate context memory usage
      */
     static estimateContextMemory(context) {
         const breakdown = {
-            variables: this.estimateMapMemory(context.variables),
+            variables: this.estimateObjectMemory(context.variables),
             nodeStates: this.estimateMapMemory(context.nodeStates),
             cache: this.estimateMapMemory(context.cache),
             metadata: JSON.stringify(context.executionMeta).length * 2 // UTF-16
@@ -545,6 +570,15 @@ export class ContextValidationUtils {
             totalBytes: Object.values(breakdown).reduce((sum, bytes) => sum + bytes, 0),
             breakdown
         };
+    }
+    static estimateObjectMemory(obj) {
+        let totalBytes = 0;
+        for (const [key, value] of Object.entries(obj)) {
+            // Rough estimation
+            totalBytes += key.length * 2; // Key size (UTF-16)
+            totalBytes += this.estimateValueMemory(value); // Value size
+        }
+        return totalBytes;
     }
     static estimateMapMemory(map) {
         let totalBytes = 0;

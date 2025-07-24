@@ -260,8 +260,12 @@ describe('AuditLogger', () => {
       // Advance timer
       jest.advanceTimersByTime(1000);
       
-      // Wait for async flush
-      await new Promise(resolve => setTimeout(resolve, 10));
+      // Wait for async flush using fake timers
+      const flushPromise = new Promise(resolve => {
+        jest.advanceTimersByTime(10);
+        resolve(undefined);
+      });
+      await flushPromise;
       
       // Should be flushed
       logs = await backend.query({});
@@ -291,6 +295,7 @@ describe('AuditLogger', () => {
         resourceId: 'test2'
       });
       
+      await filteredLogger.flush();
       const logs = await filteredLogger.query({});
       expect(logs).toHaveLength(1);
       expect(logs[0].operation).toBe(AuditOperation.WRITE);
@@ -317,6 +322,7 @@ describe('AuditLogger', () => {
         resourceId: 'test123'
       });
       
+      await filteredLogger.flush();
       const logs = await filteredLogger.query({});
       expect(logs).toHaveLength(1);
       expect(logs[0].operation).toBe(AuditOperation.READ);
@@ -366,6 +372,8 @@ describe('AuditLogger', () => {
           resourceId: 'test123'
         });
       }
+      
+      await logger.flush();
     });
     
     it('should filter by user ID', async () => {
@@ -621,6 +629,7 @@ describe('AuditLogger', () => {
         // No optional fields
       });
       
+      await logger.flush();
       const logs = await logger.query({});
       expect(logs[0]).toMatchObject({
         userId: 'user123',
@@ -646,6 +655,7 @@ describe('AuditLogger', () => {
       
       await Promise.all(promises);
       
+      await logger.flush();
       const logs = await logger.query({});
       expect(logs).toHaveLength(10);
     });

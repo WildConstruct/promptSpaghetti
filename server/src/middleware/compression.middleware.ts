@@ -7,7 +7,12 @@
  */
 
 import { FastifyRequest, FastifyReply, FastifyInstance } from 'fastify';
-import { compressionService, CompressionAlgorithm, CompressionLevel, DataType } from '../../packages/core/utils/CompressionService';
+import { 
+  compressionService,
+  CompressionAlgorithm,
+  CompressionLevel,
+  DataType
+} from '../../../packages/core/utils/CompressionService';
 
 export interface CompressionMiddlewareOptions {
   threshold?: number; // Minimum response size to compress (bytes)
@@ -114,8 +119,7 @@ export class CompressionMiddleware {
     originalSend: (payload: any) => FastifyReply,
     acceptEncoding: string
   ): Promise<FastifyReply> {
-    const startTime = performance.now();
-    this.stats.totalRequests++;
+        this.stats.totalRequests++;
     
     try {
       // Get content type

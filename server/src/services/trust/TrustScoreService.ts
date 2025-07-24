@@ -32,7 +32,7 @@ import {
   TrustInsight,
   TrustRecommendation,
   VerificationStatus
-} from '../../../packages/core/types/TrustTypes';
+} from '../../../../packages/core/types/TrustTypes';
 
 // Import enforcement types for integration
 import {
@@ -40,7 +40,7 @@ import {
   ViolationReport,
   ViolationCategory,
   ActionSeverity
-} from '../../../packages/core/types/EnforcementTypes';
+} from '../../../../packages/core/types/EnforcementTypes';
 
 export class TrustScoreService {
   private db: Database;
@@ -1184,7 +1184,11 @@ export class TrustScoreService {
     return 78;
   }
 
-  private async calculateTemplateSafety(templateId: string, securityScan: unknown, _____templateData: unknown): Promise<unknown> {
+  private async calculateTemplateSafety(
+    templateId: string,
+    securityScan: unknown,
+    _____templateData: unknown
+  ): Promise<unknown> {
     const securityScore = securityScan?.overallSecurity || 85;
     const privacyScore = securityScan?.privacyScore || 90;
     const complianceScore = securityScan?.complianceScore || 88;
@@ -1242,7 +1246,11 @@ export class TrustScoreService {
     };
   }
 
-  private async calculateTemplateCommunityScore(templateId: string, reviewsData: unknown, usageMetrics: unknown): Promise<unknown> {
+  private async calculateTemplateCommunityScore(
+    templateId: string,
+    reviewsData: unknown,
+    usageMetrics: unknown
+  ): Promise<unknown> {
     const reviewScore = reviewsData?.averageRating ? (reviewsData.averageRating / 5) * 100 : 70;
     const adoptionScore = Math.min(100, (usageMetrics?.downloadCount || 0) / 10);
     const engagementScore = Math.min(100, (reviewsData?.reviewCount || 0) * 5);
@@ -1498,7 +1506,11 @@ export class TrustScoreService {
     };
   }
 
-  private async assessTransactionRisk(factors: unknown, context: unknown, _____transactionData: unknown): Promise<unknown> {
+  private async assessTransactionRisk(
+    factors: unknown,
+    context: unknown,
+    _____transactionData: unknown
+  ): Promise<unknown> {
     const riskScore = this.calculateTransactionRiskScore(factors, context);
     
     return {
@@ -1534,7 +1546,11 @@ export class TrustScoreService {
     return Math.min(100, fraudScore);
   }
 
-  private async detectFraudIndicators(transactionData: unknown, context: unknown, _____factors: unknown): Promise<FraudIndicator[]> {
+  private async detectFraudIndicators(
+    transactionData: unknown,
+    context: unknown,
+    _____factors: unknown
+  ): Promise<FraudIndicator[]> {
     const indicators: FraudIndicator[] = [];
     
     if (context?.locationInfo?.isVPN) {

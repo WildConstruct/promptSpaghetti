@@ -1,13 +1,13 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from 'react';
-import { useExport } from '../../hooks/useExport';
-import { ExportTemplateList } from './ExportTemplateList';
-import { ExportJobList } from './ExportJobList';
-import { ExportWizard } from './ExportWizard';
-import { ExportStatsDashboard } from './ExportStatsDashboard';
-import { ShareManager } from './ShareManager';
-import { ShareDialog } from './ShareDialog';
-import { ImportDialog } from './ImportDialog';
+import { useExport } from '../../hooks/useExport.js';
+import { ExportTemplateList } from './ExportTemplateList.js';
+import { ExportJobList } from './ExportJobList.js';
+import { ExportWizard } from './ExportWizard.js';
+import { ExportStatsDashboard } from './ExportStatsDashboard.js';
+import { ShareManager } from './ShareManager.js';
+import { ShareDialog } from './ShareDialog.js';
+import { ImportDialog } from './ImportDialog.js';
 import { FiDownload, FiFile, FiClock, FiBarChart3, FiPlus, FiRefreshCw, FiShare2, FiUpload } from 'react-icons/fi';
 export const ExportManager = ({ projectId, className = '' }) => {
     const [activeTab, setActiveTab] = useState('templates');

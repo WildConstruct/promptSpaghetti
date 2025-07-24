@@ -405,7 +405,9 @@ export const useExternalDataImport = ({
 };
 
 // Specialized hook for historical query building
-export   const [isValid, setIsValid] = useState(false);
+export const useQueryBuilder = () => {
+  const [query, setQuery] = useState<Partial<HistoricalQuery>>({});
+  const [isValid, setIsValid] = useState(false);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
   const updateQuery = useCallback((updates: Partial<HistoricalQuery>) => {
@@ -454,7 +456,17 @@ export   const [isValid, setIsValid] = useState(false);
 };
 
 // Hook for caching management and statistics
-export     const cache = (manager as any).cache;
+export const useCacheManagement = () => {
+  const [cacheStats, setCacheStats] = useState({
+    size: 0,
+    hitRate: 0,
+    lastCleanup: '',
+    entries: 0
+  });
+
+  const getCacheStats = useCallback(() => {
+    const manager = dataSourceManager;
+    const cache = (manager as any).cache;
     
     let totalSize = 0;
     for (const [, entry] of cache.entries()) {

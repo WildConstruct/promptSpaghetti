@@ -331,7 +331,7 @@ export class ContextValidationFramework extends EventEmitter {
       category: 'warning',
       weight: 1.0,
       validate: (context) => {
-        const count = context.variables.size;
+        const count = Object.keys(context.variables).length;
         const maxCount = this.config.maxVariableCount;
         
         if (count > maxCount) {
@@ -362,7 +362,7 @@ export class ContextValidationFramework extends EventEmitter {
         let typeErrors = 0;
         let totalVariables = 0;
 
-        for (const [name, value] of context.variables) {
+        for (const [name, value] of Object.entries(context.variables)) {
           totalVariables++;
           
           // Check for undefined or null values that might indicate issues
@@ -477,8 +477,8 @@ export class ContextValidationFramework extends EventEmitter {
     this.rules.set('execution_metadata', {
       name: 'execution_metadata',
       description: 'Validates execution metadata completeness and performance indicators',
-      category: 'info',
-      weight: 0.5,
+      category: 'critical',
+      weight: 1.0,
       validate: (context) => {
         const meta = context.executionMeta;
         let score = 100;
@@ -671,16 +671,20 @@ export class ContextValidationUtils {
    * Validate context meets minimum requirements
    */
   static isValidContext(context: any): context is AdvancedExecutionContext {
+    if (context === null || context === undefined || typeof context !== 'object') {
+      return false;
+    }
+    
     return (
-      context &&
-      typeof context === 'object' &&
       typeof context.variables === 'object' &&
-      typeof context.seed !== 'undefined' &&
+      // seed is optional for structural validity
       context.nodeStates instanceof Map &&
       typeof context.evaluationDepth === 'number' &&
       context.cache instanceof Map &&
       typeof context.prng === 'function' &&
-      context.executionMeta &&
+      context.executionMeta !== null &&
+      context.executionMeta !== undefined &&
+      typeof context.executionMeta === 'object' &&
       typeof context.executionMeta.startTime === 'number' &&
       typeof context.executionMeta.executionId === 'string' &&
       Array.isArray(context.executionMeta.nodeExecutionOrder) &&
@@ -701,7 +705,7 @@ export class ContextValidationUtils {
     };
   } {
     const breakdown = {
-      variables: this.estimateMapMemory(context.variables),
+      variables: this.estimateObjectMemory(context.variables),
       nodeStates: this.estimateMapMemory(context.nodeStates),
       cache: this.estimateMapMemory(context.cache),
       metadata: JSON.stringify(context.executionMeta).length * 2 // UTF-16
@@ -711,6 +715,18 @@ export class ContextValidationUtils {
       totalBytes: Object.values(breakdown).reduce((sum, bytes) => sum + bytes, 0),
       breakdown
     };
+  }
+
+  private static estimateObjectMemory(obj: Record<string, any>): number {
+    let totalBytes = 0;
+
+    for (const [key, value] of Object.entries(obj)) {
+      // Rough estimation
+      totalBytes += key.length * 2; // Key size (UTF-16)
+      totalBytes += this.estimateValueMemory(value); // Value size
+    }
+
+    return totalBytes;
   }
 
   private static estimateMapMemory(map: Map<any, any>): number {

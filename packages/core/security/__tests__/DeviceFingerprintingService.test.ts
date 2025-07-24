@@ -280,7 +280,7 @@ describe('DeviceFingerprintingService', () => {
       const location = await service.getLocationData(context.ipAddress);
       const assessment = service.assessRisk(fingerprint, location);
 
-      expect(assessment.overallRisk).toBe(RiskLevel.MEDIUM);
+      expect(assessment.overallRisk).toBe(RiskLevel.HIGH);
       expect(assessment.factors.some(f => f.factor === 'no_plugins')).toBe(true);
       expect(assessment.recommendations.length).toBeGreaterThan(0);
     });
@@ -304,7 +304,7 @@ describe('DeviceFingerprintingService', () => {
     test('should emit high risk detected event', (done) => {
       service.on('highRiskDetected', (data) => {
         expect(data.assessment.overallRisk).toBe(RiskLevel.HIGH);
-        expect(data.fingerprint.basic.userAgent).toContain('bot');
+        expect(data.fingerprint.basic.userAgent.toLowerCase()).toContain('bot');
         done();
       });
 

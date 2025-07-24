@@ -1,6 +1,6 @@
 // packages/core/runtime/ast-node-whitelist.ts
 // AST node whitelist filter for secure expression evaluation
-import { securityAudit } from './security-audit-logger';
+import { securityAudit } from './security-audit-logger.js';
 /**
  * Safety levels for AST nodes
  */

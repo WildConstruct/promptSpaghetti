@@ -21,7 +21,7 @@ import {
   DisputeOutcome,
   DisputeSearchCriteria,
   DisputeEvidence
-} from '../../packages/core/types/DisputeTypes';
+} from '../../../packages/core/types/DisputeTypes';
 
 export interface CreateDisputeRequest {
   transactionId: string;

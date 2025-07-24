@@ -6,8 +6,8 @@
  * analytics infrastructure, providing comprehensive insights into learning effectiveness,
  * community engagement, and knowledge base usage.
  */
-import { LearningMetricType } from './LearningAnalyticsExtension';
-import { TimeRange } from '../../server/src/marketplace/analytics.types';
+import { LearningMetricType } from './LearningAnalyticsExtension.js';
+import { TimeRange } from '../../server/src/marketplace/analytics.types.js';
 export class LearningAnalyticsServiceImpl {
     apiClient;
     skillAssessmentEngine;

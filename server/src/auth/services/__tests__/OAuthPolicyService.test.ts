@@ -61,25 +61,25 @@ describe('OAuthPolicyService', () => {
     ) as jest.Mocked<OAuthGuidanceService>;
 
     // Mock service methods
-    mockAuditService.logEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown);
-    mockDbService.query = jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown as unknown);
-    mockPolicyAuthoringService.createPolicy = jest.fn<unknown[], unknown>().mockResolvedValue('policy-123' as unknown as unknown);
+    mockAuditService.logEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown);
+    mockDbService.query = jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown as unknown as unknown);
+    mockPolicyAuthoringService.createPolicy = jest.fn<unknown[], unknown>().mockResolvedValue('policy-123' as unknown as unknown as unknown);
     mockPolicyAuthoringService.getPolicyByType = jest.fn<unknown[], unknown>().mockResolvedValue({
       policyId: 'oauth-token-policy-123',
       policyType: 'OAUTH_TOKEN_LIFECYCLE',
       title: 'OAuth Token Lifecycle Policy',
       version: '1.0'
-    } as unknown as unknown);
-    mockPolicyAcceptanceService.recordPolicyAcceptance = jest.fn<unknown[], unknown>().mockResolvedValue('consent-123' as unknown as unknown);
-    mockComplianceReportingService.generateReport = jest.fn<unknown[], unknown>().mockResolvedValue('report-123' as unknown as unknown);
+    } as unknown as unknown as unknown);
+    mockPolicyAcceptanceService.recordPolicyAcceptance = jest.fn<unknown[], unknown>().mockResolvedValue('consent-123' as unknown as unknown as unknown);
+    mockComplianceReportingService.generateReport = jest.fn<unknown[], unknown>().mockResolvedValue('report-123' as unknown as unknown as unknown);
     mockRuleEvaluationEngine.evaluateRules = jest.fn<unknown[], unknown>().mockResolvedValue({
       passed: true,
       evaluationId: 'eval-123',
       policyId: 'policy-123'
-    } as unknown as unknown);
+    } as unknown as unknown as unknown);
     mockRuleEvaluationEngine.loadRulesByCategory = jest.fn<unknown[], unknown>().mockResolvedValue([
       { ruleId: 'oauth-rule-001', expression: 'clientType === "CONFIDENTIAL"' }
-    ] as unknown as unknown);
+    ] as unknown as unknown as unknown);
 
     // Create OAuth Policy Service
     oauthPolicyService = new OAuthPolicyService(
@@ -112,7 +112,7 @@ describe('OAuthPolicyService', () => {
         description: 'Policy for web app client registration',
         frameworks: ['OAuth2.1', 'GDPR'],
         template: { approvalRequired: false }
-      } as unknown as unknown);
+      } as unknown as unknown as unknown);
 
       const policyId = await oauthPolicyService.createOAuthPolicyFromTemplate(
         templateId,
@@ -190,12 +190,15 @@ describe('OAuthPolicyService', () => {
         passed: true,
         evaluationId: 'eval-123',
         policyId: 'client-reg-policy-123'
-      } as unknown as unknown);
+      } as unknown as unknown as unknown);
 
-      jest.spyOn(oauthPolicyService as any, 'mapViolations').mockReturnValue([] as unknown as unknown);
-      jest.spyOn(oauthPolicyService as any, 'generateRecommendations').mockReturnValue([] as unknown as unknown);
-      jest.spyOn(oauthPolicyService as any, 'generateEnforcementActions').mockReturnValue([] as unknown as unknown);
-      jest.spyOn(oauthPolicyService as any, 'calculateNextEvaluation').mockReturnValue(new Date( as unknown as unknown));
+      jest.spyOn(oauthPolicyService as any, 'mapViolations').mockReturnValue([] as unknown as unknown as unknown);
+      jest.spyOn(oauthPolicyService as any, 'generateRecommendations').mockReturnValue([] as unknown as unknown as unknown);
+      jest.spyOn(oauthPolicyService as any, 'generateEnforcementActions').mockReturnValue([] as unknown as unknown as unknown);
+      jest.spyOn(
+        oauthPolicyService as any,
+        'calculateNextEvaluation'
+      ).mockReturnValue(new Date( as unknown) as unknown as unknown);
 
       const result = await oauthPolicyService.enforceClientRegistrationPolicy(oauthConfig, userId);
 
@@ -259,7 +262,7 @@ describe('OAuthPolicyService', () => {
             remediationSuggestion: 'Enable PKCE for public client'
           }
         ]
-      } as unknown as unknown);
+      } as unknown as unknown as unknown);
 
       const result = await oauthPolicyService.enforceClientRegistrationPolicy(oauthConfig, userId);
 
@@ -332,10 +335,13 @@ describe('OAuthPolicyService', () => {
         isCompliant: true,
         violations: [],
         recommendations: []
-      } as unknown as unknown);
+      } as unknown as unknown as unknown);
 
-      jest.spyOn(oauthPolicyService as any, 'generateEnforcementActions').mockReturnValue([] as unknown as unknown);
-      jest.spyOn(oauthPolicyService as any, 'calculateNextEvaluation').mockReturnValue(new Date( as unknown as unknown));
+      jest.spyOn(oauthPolicyService as any, 'generateEnforcementActions').mockReturnValue([] as unknown as unknown as unknown);
+      jest.spyOn(
+        oauthPolicyService as any,
+        'calculateNextEvaluation'
+      ).mockReturnValue(new Date( as unknown) as unknown as unknown);
 
       const result = await oauthPolicyService.enforceTokenLifecyclePolicy(tokenConfig, clientId, userId);
 
@@ -396,7 +402,7 @@ describe('OAuthPolicyService', () => {
             estimatedEffort: '1 hour'
           }
         ]
-      } as unknown as unknown);
+      } as unknown as unknown as unknown);
 
       const result = await oauthPolicyService.enforceTokenLifecyclePolicy(tokenConfig, clientId, userId);
 
@@ -600,19 +606,19 @@ describe('OAuthPolicyService', () => {
 
       jest.spyOn(oauthPolicyService as any, 'getDefaultOAuthPolicyTemplates').mockResolvedValue([
         { templateId: 'template-1', policyType: 'OAUTH_CLIENT_REGISTRATION' }
-      ] as unknown as unknown);
+      ] as unknown as unknown as unknown);
       jest.spyOn(oauthPolicyService as any, 'getDefaultEnforcementMechanisms').mockReturnValue([
         { mechanismId: 'mechanism-1', name: 'Client Validation' }
-      ] as unknown as unknown);
+      ] as unknown as unknown as unknown);
       jest.spyOn(oauthPolicyService as any, 'getDefaultReportingSchedule').mockReturnValue({
         monthly: ['OAuth Security Assessment']
-      } as unknown as unknown);
+      } as unknown as unknown as unknown);
       jest.spyOn(oauthPolicyService as any, 'getComplianceRequirements').mockReturnValue([
         { frameworkId: 'OAuth2.1', requirementId: 'OAUTH-REQ-001' }
-      ] as unknown as unknown);
+      ] as unknown as unknown as unknown);
       jest.spyOn(oauthPolicyService as any, 'getDefaultApprovalWorkflows').mockReturnValue([
         { workflowId: 'workflow-1', name: 'Client Approval' }
-      ] as unknown as unknown);
+      ] as unknown as unknown as unknown);
 
       const framework = await oauthPolicyService.createOAuthGovernanceFramework(
         title,

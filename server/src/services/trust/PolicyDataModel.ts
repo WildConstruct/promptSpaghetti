@@ -801,14 +801,13 @@ export class PolicyDataService {
 
     // Evaluate conditions
     for (const condition of rule.conditions) {
-      const _____startTime = Date.now();
-      const met = this.evaluateCondition(condition, context);
+            const met = this.evaluateCondition(condition, context);
       
       conditionsMetResults.push({
         condition_id: condition.id,
         met,
         value: context.context_data[condition.field],
-        evaluation_time
+        evaluation_time: Date.now()
       });
     }
 

@@ -4,7 +4,7 @@
  *
  * Service layer for node validation with caching, monitoring, and integration
  */
-import { NodeValidationFramework } from './NodeValidationFramework';
+import { NodeValidationFramework } from './NodeValidationFramework.js';
 import { EventEmitter } from 'events';
 /**
  * Node Validation Service with caching, monitoring, and batch operations

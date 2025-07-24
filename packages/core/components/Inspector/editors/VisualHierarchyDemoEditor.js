@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
-import { HierarchyField, HierarchyHeader, ComplexityIndicator, HierarchyColors, TypographyScale, SpacingScale } from '../../VisualHierarchy/HierarchyDesignSystem';
-import { useUISettingsStore } from '../../../stores/uiSettingsStore';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection.js';
+import { HierarchyField, HierarchyHeader, ComplexityIndicator, HierarchyColors, TypographyScale, SpacingScale } from '../../VisualHierarchy/HierarchyDesignSystem.js';
+import { useUISettingsStore } from '../../../stores/uiSettingsStore.js';
 /**
  * Epic 8.4 Task 2 - Visual Hierarchy Design Demo
  *

@@ -642,9 +642,9 @@ export declare const MergeRequestFilterSchema: z.ZodObject<{
     status?: "closed" | "open" | "draft" | "merged" | undefined;
     projectId?: string | undefined;
     createdBy?: string | undefined;
-    assignedTo?: string | undefined;
     createdAfter?: Date | undefined;
     createdBefore?: Date | undefined;
+    assignedTo?: string | undefined;
     sourceBranchId?: string | undefined;
     targetBranchId?: string | undefined;
     reviewerId?: string | undefined;
@@ -656,9 +656,9 @@ export declare const MergeRequestFilterSchema: z.ZodObject<{
     sortOrder?: "asc" | "desc" | undefined;
     projectId?: string | undefined;
     createdBy?: string | undefined;
-    assignedTo?: string | undefined;
     createdAfter?: Date | undefined;
     createdBefore?: Date | undefined;
+    assignedTo?: string | undefined;
     sourceBranchId?: string | undefined;
     targetBranchId?: string | undefined;
     reviewerId?: string | undefined;
@@ -704,12 +704,6 @@ export declare const BranchStatsResponseSchema: z.ZodObject<{
         activityDate: Date;
     }>, "many">;
 }, "strip", z.ZodTypeAny, {
-    totalBranches: number;
-    activeBranches: number;
-    mergedBranches: number;
-    abandonedBranches: number;
-    byType: Record<string, number>;
-    byStatus: Record<string, number>;
     recentActivity: {
         userId: string;
         userName: string;
@@ -718,13 +712,13 @@ export declare const BranchStatsResponseSchema: z.ZodObject<{
         activityType: string;
         activityDate: Date;
     }[];
+    totalBranches: number;
+    activeBranches: number;
+    mergedBranches: number;
+    abandonedBranches: number;
+    byType: Record<string, number>;
+    byStatus: Record<string, number>;
 }, {
-    totalBranches: number;
-    activeBranches: number;
-    mergedBranches: number;
-    abandonedBranches: number;
-    byType: Record<string, number>;
-    byStatus: Record<string, number>;
     recentActivity: {
         userId: string;
         userName: string;
@@ -733,6 +727,12 @@ export declare const BranchStatsResponseSchema: z.ZodObject<{
         activityType: string;
         activityDate: Date;
     }[];
+    totalBranches: number;
+    activeBranches: number;
+    mergedBranches: number;
+    abandonedBranches: number;
+    byType: Record<string, number>;
+    byStatus: Record<string, number>;
 }>;
 export declare const BranchTimelineResponseSchema: z.ZodObject<{
     timeline: z.ZodArray<z.ZodObject<{

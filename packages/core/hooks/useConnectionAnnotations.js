@@ -1,7 +1,7 @@
 // packages/core/hooks/useConnectionAnnotations.ts
 // Epic 8.7 Task 4: Connection Annotations Management Hook
 import { useState, useCallback, useMemo } from 'react';
-import { createAnnotatedEdge, updateEdgeLabel, toggleEdgeLabel, optimizeLabelPositions } from '../components/Annotations/ConnectionAnnotations';
+import { createAnnotatedEdge, updateEdgeLabel, toggleEdgeLabel, optimizeLabelPositions } from '../components/Annotations/ConnectionAnnotations.js';
 export const useConnectionAnnotations = ({ edges, onEdgesChange, autoOptimizePositions = true }) => {
     const [state, setState] = useState({
         selectedEdgeId: null,

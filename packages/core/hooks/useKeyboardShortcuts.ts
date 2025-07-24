@@ -105,14 +105,16 @@ export const useKeyboardShortcuts = ({
 /**
  * Hook for command palette specific shortcuts
  */
-export   
+export const useCommandPaletteShortcuts = (shortcuts: KeyboardShortcut[]) => {
   return useKeyboardShortcuts({ shortcuts, enabled: true });
 };
 
 /**
  * Default keyboard shortcuts for the graph editor
  */
-export   onRedo?: () => void;
+export const createDefaultShortcuts = (actions: {
+  onUndo?: () => void;
+  onRedo?: () => void;
   onSave?: () => void;
   onCopy?: () => void;
   onPaste?: () => void;
@@ -269,7 +271,9 @@ export   onRedo?: () => void;
 /**
  * Format keyboard shortcut for display
  */
-export   const isMac = navigator.platform.includes('Mac');
+export const formatKeyCombo = (shortcut: KeyboardShortcut): string => {
+  const parts: string[] = [];
+  const isMac = navigator.platform.includes('Mac');
   
   if (shortcut.ctrl && !shortcut.cmd) {
     parts.push(isMac ? '⌃' : 'Ctrl');
@@ -315,7 +319,16 @@ export   const isMac = navigator.platform.includes('Mac');
 /**
  * Check if a keyboard shortcut conflicts with browser shortcuts
  */
-export   
+export const checkBrowserConflicts = (shortcut: KeyboardShortcut): boolean => {
+  const browserShortcuts = [
+    { key: 'r', cmd: true }, // Refresh
+    { key: 't', cmd: true }, // New tab
+    { key: 'w', cmd: true }, // Close tab
+    { key: 'l', cmd: true }, // Address bar
+    { key: 'j', cmd: true }, // Downloads
+    { key: 'k', cmd: true }, // Search
+  ];
+  
   return browserShortcuts.some(browser => 
     browser.key === shortcut.key.toLowerCase() && 
     !!browser.cmd === !!shortcut.cmd &&

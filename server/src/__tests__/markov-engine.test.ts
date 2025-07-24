@@ -2,7 +2,7 @@
 // Test Markov node integration with the engine
 
 import { executeGraph } from '../engine';
-import type { Graph } from '../../../packages/core/graphSchema';
+import type { Graph } from '../../../../packages/core/graphSchema';
 
 describe('Markov Node Engine Integration', () => {
   test('should execute Markov node with simple toggle', async () => {

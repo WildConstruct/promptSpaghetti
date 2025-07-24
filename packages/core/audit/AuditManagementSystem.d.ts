@@ -96,7 +96,6 @@ export declare const AuditEventSchema: z.ZodObject<{
     title: string;
     severity: AuditSeverity;
     event_type: AuditEventType;
-    escalation_level: number;
     compliance_frameworks: ComplianceFramework[];
     system_component: string;
     risk_score: number;
@@ -106,6 +105,7 @@ export declare const AuditEventSchema: z.ZodObject<{
     chain_hash: string;
     alert_triggered: boolean;
     notification_sent: boolean;
+    escalation_level: number;
     metadata?: Record<string, unknown> | undefined;
     endpoint?: string | undefined;
     user_id?: string | undefined;
@@ -136,7 +136,6 @@ export declare const AuditEventSchema: z.ZodObject<{
     title: string;
     severity: AuditSeverity;
     event_type: AuditEventType;
-    escalation_level: number;
     compliance_frameworks: ComplianceFramework[];
     system_component: string;
     risk_score: number;
@@ -146,6 +145,7 @@ export declare const AuditEventSchema: z.ZodObject<{
     chain_hash: string;
     alert_triggered: boolean;
     notification_sent: boolean;
+    escalation_level: number;
     metadata?: Record<string, unknown> | undefined;
     endpoint?: string | undefined;
     user_id?: string | undefined;
@@ -192,11 +192,11 @@ export declare const AuditQuerySchema: z.ZodObject<{
     start_date?: Date | undefined;
     end_date?: Date | undefined;
     user_id?: string | undefined;
+    severities?: AuditSeverity[] | undefined;
     compliance_frameworks?: ComplianceFramework[] | undefined;
     statuses?: AuditStatus[] | undefined;
     ip_address?: string | undefined;
     event_types?: AuditEventType[] | undefined;
-    severities?: AuditSeverity[] | undefined;
     search_text?: string | undefined;
     min_risk_score?: number | undefined;
     max_risk_score?: number | undefined;
@@ -207,11 +207,11 @@ export declare const AuditQuerySchema: z.ZodObject<{
     end_date?: Date | undefined;
     user_id?: string | undefined;
     sort_order?: "asc" | "desc" | undefined;
+    severities?: AuditSeverity[] | undefined;
     compliance_frameworks?: ComplianceFramework[] | undefined;
     statuses?: AuditStatus[] | undefined;
     ip_address?: string | undefined;
     event_types?: AuditEventType[] | undefined;
-    severities?: AuditSeverity[] | undefined;
     search_text?: string | undefined;
     min_risk_score?: number | undefined;
     max_risk_score?: number | undefined;
@@ -246,11 +246,11 @@ export declare const AuditAnalyticsSchema: z.ZodObject<{
         start_date?: Date | undefined;
         end_date?: Date | undefined;
         user_id?: string | undefined;
+        severities?: AuditSeverity[] | undefined;
         compliance_frameworks?: ComplianceFramework[] | undefined;
         statuses?: AuditStatus[] | undefined;
         ip_address?: string | undefined;
         event_types?: AuditEventType[] | undefined;
-        severities?: AuditSeverity[] | undefined;
         search_text?: string | undefined;
         min_risk_score?: number | undefined;
         max_risk_score?: number | undefined;
@@ -261,11 +261,11 @@ export declare const AuditAnalyticsSchema: z.ZodObject<{
         end_date?: Date | undefined;
         user_id?: string | undefined;
         sort_order?: "asc" | "desc" | undefined;
+        severities?: AuditSeverity[] | undefined;
         compliance_frameworks?: ComplianceFramework[] | undefined;
         statuses?: AuditStatus[] | undefined;
         ip_address?: string | undefined;
         event_types?: AuditEventType[] | undefined;
-        severities?: AuditSeverity[] | undefined;
         search_text?: string | undefined;
         min_risk_score?: number | undefined;
         max_risk_score?: number | undefined;
@@ -282,11 +282,11 @@ export declare const AuditAnalyticsSchema: z.ZodObject<{
         start_date?: Date | undefined;
         end_date?: Date | undefined;
         user_id?: string | undefined;
+        severities?: AuditSeverity[] | undefined;
         compliance_frameworks?: ComplianceFramework[] | undefined;
         statuses?: AuditStatus[] | undefined;
         ip_address?: string | undefined;
         event_types?: AuditEventType[] | undefined;
-        severities?: AuditSeverity[] | undefined;
         search_text?: string | undefined;
         min_risk_score?: number | undefined;
         max_risk_score?: number | undefined;
@@ -302,11 +302,11 @@ export declare const AuditAnalyticsSchema: z.ZodObject<{
         end_date?: Date | undefined;
         user_id?: string | undefined;
         sort_order?: "asc" | "desc" | undefined;
+        severities?: AuditSeverity[] | undefined;
         compliance_frameworks?: ComplianceFramework[] | undefined;
         statuses?: AuditStatus[] | undefined;
         ip_address?: string | undefined;
         event_types?: AuditEventType[] | undefined;
-        severities?: AuditSeverity[] | undefined;
         search_text?: string | undefined;
         min_risk_score?: number | undefined;
         max_risk_score?: number | undefined;
@@ -411,7 +411,6 @@ export declare const createAuditEvent: (eventData: Omit<AuditEvent, "id" | "time
     title: string;
     severity: AuditSeverity;
     event_type: AuditEventType;
-    escalation_level: number;
     compliance_frameworks: ComplianceFramework[];
     system_component: string;
     risk_score: number;
@@ -421,6 +420,7 @@ export declare const createAuditEvent: (eventData: Omit<AuditEvent, "id" | "time
     chain_hash: string;
     alert_triggered: boolean;
     notification_sent: boolean;
+    escalation_level: number;
     metadata?: Record<string, unknown> | undefined;
     endpoint?: string | undefined;
     user_id?: string | undefined;

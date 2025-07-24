@@ -4,8 +4,8 @@
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
-import { DataSensitivityLevel } from '../../packages/core/security/DataSensitivityLevels';
-import { DataClassificationService } from '../../packages/core/security/DataClassificationHelpers';
+import { DataSensitivityLevel } from '../../../packages/core/security/DataSensitivityLevels';
+import { DataClassificationService } from '../../../packages/core/security/DataClassificationHelpers';
 import { AccessControlManager } from './AccessControlManager';
 
 export interface DataAccessRequest {

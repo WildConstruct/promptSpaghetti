@@ -3,7 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Enhanced NodeRenderer with dynamic variable ports from template parsing
 import React, { memo, useMemo } from 'react';
 import { Handle, Position } from 'reactflow';
-import { parseTemplate } from '../utils/templateParser';
+import { parseTemplate } from '../utils/templateParser.js';
 export const VariablePortNodeRenderer = memo(({ id, data, selected = false, onSelect, getNodeMeta, getCategoryColor }) => {
     // Parse template to extract variables for dynamic ports
     const templateField = data?.template || data?.text || data?.content || '';

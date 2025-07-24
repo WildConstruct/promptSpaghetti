@@ -4,7 +4,7 @@ import { jsxs as _jsxs, jsx as _jsx, Fragment as _Fragment } from "react/jsx-run
  * Integrates client-side provider hooking into the GraphEditor
  */
 import React, { useEffect, useMemo, useState } from 'react';
-import { useEditorProviders } from '../hooks/useEditorProviders';
+import { useEditorProviders } from '../hooks/useEditorProviders.js';
 export const EditorProviderWrapper = ({ children, initialNodes, initialEdges, selectedNodeId, validationErrors = [], enableBuiltInProviders = {
     consoleLogger: true,
     autoSave: { interval: 30000 },

@@ -17,7 +17,7 @@
  * - Real-time content updates
  */
 import { EventEmitter } from 'events';
-import { EmbedAnalytics } from '../analytics/EmbedAnalytics';
+import { EmbedAnalytics } from '../analytics/EmbedAnalytics.js';
 // Runtime Classes
 export class EmbeddableContent extends EventEmitter {
     config;

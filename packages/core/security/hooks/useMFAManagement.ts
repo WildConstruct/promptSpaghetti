@@ -257,7 +257,8 @@ export const useMFAManagement = (options: UseMFAManagementOptions): UseMFAManage
   useEffect(() => {
     if (!enableRetryHandling) return;
 
-            
+    const handleOperationRetry = (data: any) => {
+      if (data.context?.userId === userId) {
         onSecurityEvent?.('mfa_operation_retry', {
           operation: data.operation,
           attempt: data.context.attempt,

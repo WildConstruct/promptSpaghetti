@@ -13,9 +13,9 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * - Integration with enhanced preview modal for detailed analysis
  */
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
-import { EnhancedPreviewModal } from '../PreviewModal/EnhancedPreviewModal';
-import { useEnhancedPreview } from '../../hooks/useEnhancedPreview';
-import { useRealTimePreview } from '../../hooks/useRealTimePreview';
+import { EnhancedPreviewModal } from '../PreviewModal/EnhancedPreviewModal.js';
+import { useEnhancedPreview } from '../../hooks/useEnhancedPreview.js';
+import { useRealTimePreview } from '../../hooks/useRealTimePreview.js';
 export const RealTimePreviewIntegration = ({ nodes, edges, enableRealTime = true, previewCount = 3, autoRefresh = true, showVarianceAnalysis = true, onPreviewUpdate, onHighlightPath, onError }) => {
     // State for preview integration
     const [showEnhancedModal, setShowEnhancedModal] = useState(false);
@@ -31,7 +31,7 @@ export const RealTimePreviewIntegration = ({ nodes, edges, enableRealTime = true
         autoRefresh
     }), [previewCount, autoRefresh]);
     // Real-time preview hook
-    const { variants, isGenerating: realTimeGenerating, performance, error: realTimeError, generateVariants, _____clearVariants } = useRealTimePreview(realTimeConfig);
+    const { variants, isGenerating: realTimeGenerating, performance, error: realTimeError, generateVariants, clearVariants } = useRealTimePreview(realTimeConfig);
     // Enhanced preview for detailed analysis
     const { loading: enhancedLoading, error: enhancedError, results: enhancedResults, varianceAnalysis, runEnhancedPreview, cancelPreview } = useEnhancedPreview();
     // Track graph changes for real-time updates

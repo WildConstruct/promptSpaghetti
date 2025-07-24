@@ -1107,7 +1107,7 @@ class ABACEngine {
     const matchedPolicies: string[] = [];
     const obligations: PolicyObligation[] = [];
     const conditions: AccessCondition[] = [];
-    let confidence = 100;
+    const confidence = 100;
 
     // Simplified ABAC evaluation
     // In a real implementation, this would evaluate complex attribute-based policies

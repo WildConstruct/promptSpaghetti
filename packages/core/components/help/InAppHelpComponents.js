@@ -18,9 +18,9 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  */
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { HelpCircle, X, ChevronLeft, ChevronRight, Play, Pause, SkipForward, ArrowLeft, Info, Lightbulb, BookOpen, Video, FileText, Search, Star, ThumbsUp, ThumbsDown, MessageCircle, ExternalLink, Minimize2, Check, Target, Clock } from 'lucide-react';
-import { Button } from '../ui/Button';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Badge } from '../ui/Badge';
+import { Button } from '../ui/Button.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
+import { Badge } from '../ui/Badge.js';
 export const HelpTooltip = ({ content, title, position = 'top', trigger = 'hover', delay = 300, maxWidth = 300, showArrow = true, helpLink, helpText, className = '', children, onShow, onHide }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
@@ -101,7 +101,7 @@ export const HelpTooltip = ({ content, title, position = 'top', trigger = 'hover
                     zIndex: 9999
                 }, children: [showArrow && _jsx("div", { className: `help-tooltip-arrow help-tooltip-arrow-${position}` }), _jsxs("div", { className: "help-tooltip-content", children: [title && _jsx("div", { className: "help-tooltip-title", children: title }), _jsx("div", { className: "help-tooltip-body", children: content }), (helpLink || helpText) && (_jsx("div", { className: "help-tooltip-actions", children: helpLink && (_jsxs(Button, { variant: "ghost", size: "sm", onClick: () => window.open(helpLink, '_blank'), className: "help-tooltip-link", children: [_jsx(ExternalLink, { size: 12 }), helpText || 'Learn more'] })) }))] })] }))] }));
 };
-export const ContextualHelpPanel = ({ title, content, _____context, position = 'right', collapsible = true, defaultCollapsed = false, searchable = true, filterable = true, className = '', onContentSelect, onFeedback }) => {
+export const ContextualHelpPanel = ({ title, content, context, position = 'right', collapsible = true, defaultCollapsed = false, searchable = true, filterable = true, className = '', onContentSelect, onFeedback }) => {
     const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedFilter, setSelectedFilter] = useState('all');

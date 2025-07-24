@@ -15,7 +15,7 @@
  */
 import { EventEmitter } from 'events';
 import crypto from 'crypto';
-import { AdminRole } from './AccountLockoutService';
+import { AdminRole } from './AccountLockoutService.js';
 // Exemption Types
 export var ExemptionType;
 (function (ExemptionType) {

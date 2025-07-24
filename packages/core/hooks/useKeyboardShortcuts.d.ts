@@ -30,13 +30,13 @@ export declare const useKeyboardShortcuts: ({ shortcuts, enabled, preventDefault
 /**
  * Hook for command palette specific shortcuts
  */
-export declare const useCommandPaletteShortcuts: () => {
+export declare const useCommandPaletteShortcuts: (shortcuts: KeyboardShortcut[]) => {
     shortcuts: KeyboardShortcut[];
 };
 /**
  * Default keyboard shortcuts for the graph editor
  */
-export declare const createDefaultShortcuts: ({ onUndo, onRedo, onSave, onCopy, onPaste, onDelete, onSelectAll, onDuplicate, onFitView, onZoomIn, onZoomOut, onNewNode, onExport }: {
+export declare const createDefaultShortcuts: (actions: {
     onUndo?: () => void;
     onRedo?: () => void;
     onSave?: () => void;
@@ -54,10 +54,10 @@ export declare const createDefaultShortcuts: ({ onUndo, onRedo, onSave, onCopy, 
 /**
  * Format keyboard shortcut for display
  */
-export declare const isMac: boolean;
+export declare const formatKeyCombo: (shortcut: KeyboardShortcut) => string;
 /**
  * Check if a keyboard shortcut conflicts with browser shortcuts
  */
-export declare const conflictsWithBrowser: (shortcut: KeyboardShortcut) => boolean;
+export declare const checkBrowserConflicts: (shortcut: KeyboardShortcut) => boolean;
 export default useKeyboardShortcuts;
 //# sourceMappingURL=useKeyboardShortcuts.d.ts.map

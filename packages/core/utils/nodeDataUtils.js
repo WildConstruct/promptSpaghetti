@@ -1,4 +1,4 @@
-import { createNodeData } from '../types/NodeTypes';
+import { createNodeData } from '../types/NodeTypes.js';
 // Legacy function - delegates to new factory system
 export const createDefaultNodeData = (type) => {
     const id = `${type}-${Date.now()}`;

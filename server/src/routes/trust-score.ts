@@ -24,7 +24,7 @@ import {
   TransactionTrustScore,
   TrustScoreAnalytics,
   TrustFactor
-} from '../../packages/core/types/TrustTypes';
+} from '../../../packages/core/types/TrustTypes';
 import { Database } from '../database';
 
 // Request type definitions

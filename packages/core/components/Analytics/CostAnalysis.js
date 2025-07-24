@@ -1,13 +1,13 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { Badge } from '../ui/Badge';
-import { Input } from '../ui/Input';
-import { Label } from '../ui/Label';
-import { Progress } from '../ui/Progress';
-import { Alert, AlertDescription } from '../ui/Alert';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
+import { Button } from '../ui/Button.js';
+import { Badge } from '../ui/Badge.js';
+import { Input } from '../ui/Input.js';
+import { Label } from '../ui/Label.js';
+import { Progress } from '../ui/Progress.js';
+import { Alert, AlertDescription } from '../ui/Alert.js';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
 import { DollarSign, TrendingUp, AlertCircle, PieChart, BarChart3 } from 'lucide-react';
 import { PieChart as RechartsPieChart, Cell, ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 /**

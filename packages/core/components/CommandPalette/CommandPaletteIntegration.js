@@ -7,13 +7,13 @@ import { jsx as _jsx } from "react/jsx-runtime";
  */
 import { useState, useCallback } from 'react';
 import { useReactFlow, useNodes, useEdges } from 'reactflow';
-import { CommandPalette } from './CommandPalette';
-import { useCommandPaletteShortcuts } from '../hooks/useKeyboardShortcuts';
-import { useGraphStore } from '../graphStore';
+import { CommandPalette } from './CommandPalette.js';
+import { useCommandPaletteShortcuts } from '../hooks/useKeyboardShortcuts.js';
+import { useGraphStore } from '../graphStore.js';
 /**
  * Command palette integration component for the graph editor
  */
-export const CommandPaletteIntegration = ({ theme = 'cinema', onNodeCreate, onNodesDelete, onExport, onTemplateApply, _____onSave, selectedNodes = [], customActions = [], disabled = false }) => {
+export const CommandPaletteIntegration = ({ theme = 'cinema', onNodeCreate, onNodesDelete, onExport, onTemplateApply, onSave, selectedNodes = [], customActions = [], disabled = false }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [recentCommands, setRecentCommands] = useState([]);
     const [_____isGenerating, setIsGenerating] = useState(false);
@@ -167,7 +167,7 @@ export const CommandPaletteIntegration = ({ theme = 'cinema', onNodeCreate, onNo
     };
     // Dialogue generator
     const generateDialogueNode = async (params, startPosition) => {
-        const { 'scene-description': description, '_____characters-present': _____characters, 'scene-tone': tone } = params;
+        const { 'scene-description': description, 'characters-present': characters, 'scene-tone': tone } = params;
         const dialogueStyles = generateDialogueStylesForTone(tone);
         const dialogueNode = createCharacterNode(`${tone} Dialogue`, {
             choices: dialogueStyles.map((style, index) => ({

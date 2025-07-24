@@ -9,7 +9,10 @@ import {
 import { GeolocationService, GeolocationData } from '../auth/services/GeolocationService';
 import { VerificationThresholdService } from '../services/VerificationThresholdService';
 import { ChallengeService } from '../auth/services/ChallengeService';
-import { VerificationCodeManager, VerificationCodeType } from '../../../packages/core/security/VerificationCodeManager';
+import { 
+  VerificationCodeManager,
+  VerificationCodeType
+} from '../../../../packages/core/security/VerificationCodeManager';
 import { EmailService } from '../auth/services/EmailService';
 import { AuditService } from '../auth/services/AuditService';
 import { DatabaseService } from '../auth/database/DatabaseService';

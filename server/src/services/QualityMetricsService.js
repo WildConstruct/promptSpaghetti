@@ -853,7 +853,7 @@ export class QualityMetricsService extends EventEmitter {
             return null;
         }
     }
-    extractPackageCoverage(coverageData) {
+    extractPackageCoverage(_____coverageData) {
         // Extract package-level coverage from Jest coverage data
         return [
             { name: 'packages/core', percentage: 85, linesTotal: 1200, linesCovered: 1020 },
@@ -861,7 +861,7 @@ export class QualityMetricsService extends EventEmitter {
             { name: 'server/src', percentage: 82, linesTotal: 1500, linesCovered: 1230 }
         ];
     }
-    extractComponentCoverage(coverageData) {
+    extractComponentCoverage(_____coverageData) {
         return [
             { name: 'GraphEditor', type: 'component', percentage: 75, criticalPaths: 12, uncoveredPaths: 3 },
             { name: 'QualityMetricsService', type: 'service', percentage: 90, criticalPaths: 8, uncoveredPaths: 1 }
@@ -875,13 +875,13 @@ export class QualityMetricsService extends EventEmitter {
             changeFromLastMonth: 7
         };
     }
-    identifyUncoveredCriticalPaths(coverageData) {
+    identifyUncoveredCriticalPaths(_____coverageData) {
         return [
             'packages/core/runtime/advanced.ts:342-358',
             'server/src/auth/AuthService.ts:125-140'
         ];
     }
-    identifyCoverageHotspots(coverageData) {
+    identifyCoverageHotspots(_____coverageData) {
         return [
             {
                 file: 'packages/core/runtime/advanced.ts',
@@ -1003,11 +1003,11 @@ export class QualityMetricsService extends EventEmitter {
         }
         return alerts;
     }
-    aggregateMetricsByGranularity(metrics, granularity) {
+    aggregateMetricsByGranularity(metrics, _____granularity) {
         // For now, return as-is. In a real implementation, this would aggregate data points
         return metrics;
     }
-    calculateTrendsFromHistorical(metrics) {
+    calculateTrendsFromHistorical(_____metrics) {
         return this.getEmptyTrends();
     }
     getEmptyTrends() {

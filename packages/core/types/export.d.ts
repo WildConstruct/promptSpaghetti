@@ -32,9 +32,9 @@ export declare const ExportTemplateSchema: z.ZodObject<{
     usage_count: number;
     created_by: string;
     updated_at: string;
-    template_type: "custom" | "summary" | "full" | "diff";
     export_format: "markdown" | "json" | "html" | "csv" | "yaml" | "xml" | "pdf" | "zip";
     project_id: string;
+    template_type: "custom" | "summary" | "full" | "diff";
     include_metadata: boolean;
     include_attribution: boolean;
     include_history: boolean;
@@ -55,9 +55,9 @@ export declare const ExportTemplateSchema: z.ZodObject<{
     created_at: string;
     created_by: string;
     updated_at: string;
-    template_type: "custom" | "summary" | "full" | "diff";
     export_format: "markdown" | "json" | "html" | "csv" | "yaml" | "xml" | "pdf" | "zip";
     project_id: string;
+    template_type: "custom" | "summary" | "full" | "diff";
     description?: string | undefined;
     usage_count?: number | undefined;
     include_metadata?: boolean | undefined;
@@ -101,9 +101,9 @@ export declare const CreateExportTemplateSchema: z.ZodObject<Omit<{
 }, "id" | "created_at" | "usage_count" | "updated_at" | "last_used_at">, "strip", z.ZodTypeAny, {
     name: string;
     created_by: string;
-    template_type: "custom" | "summary" | "full" | "diff";
     export_format: "markdown" | "json" | "html" | "csv" | "yaml" | "xml" | "pdf" | "zip";
     project_id: string;
+    template_type: "custom" | "summary" | "full" | "diff";
     include_metadata: boolean;
     include_attribution: boolean;
     include_history: boolean;
@@ -120,9 +120,9 @@ export declare const CreateExportTemplateSchema: z.ZodObject<Omit<{
 }, {
     name: string;
     created_by: string;
-    template_type: "custom" | "summary" | "full" | "diff";
     export_format: "markdown" | "json" | "html" | "csv" | "yaml" | "xml" | "pdf" | "zip";
     project_id: string;
+    template_type: "custom" | "summary" | "full" | "diff";
     description?: string | undefined;
     include_metadata?: boolean | undefined;
     include_attribution?: boolean | undefined;
@@ -141,9 +141,9 @@ export declare const UpdateExportTemplateSchema: z.ZodObject<{
     name: z.ZodOptional<z.ZodString>;
     description: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     created_by: z.ZodOptional<z.ZodString>;
-    template_type: z.ZodOptional<z.ZodEnum<["full", "summary", "diff", "custom"]>>;
     export_format: z.ZodOptional<z.ZodEnum<["json", "yaml", "xml", "csv", "markdown", "pdf", "html", "zip"]>>;
     project_id: z.ZodOptional<z.ZodString>;
+    template_type: z.ZodOptional<z.ZodEnum<["full", "summary", "diff", "custom"]>>;
     include_metadata: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
     include_attribution: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
     include_history: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
@@ -160,9 +160,9 @@ export declare const UpdateExportTemplateSchema: z.ZodObject<{
     name?: string | undefined;
     description?: string | undefined;
     created_by?: string | undefined;
-    template_type?: "custom" | "summary" | "full" | "diff" | undefined;
     export_format?: "markdown" | "json" | "html" | "csv" | "yaml" | "xml" | "pdf" | "zip" | undefined;
     project_id?: string | undefined;
+    template_type?: "custom" | "summary" | "full" | "diff" | undefined;
     include_metadata?: boolean | undefined;
     include_attribution?: boolean | undefined;
     include_history?: boolean | undefined;
@@ -179,9 +179,9 @@ export declare const UpdateExportTemplateSchema: z.ZodObject<{
     name?: string | undefined;
     description?: string | undefined;
     created_by?: string | undefined;
-    template_type?: "custom" | "summary" | "full" | "diff" | undefined;
     export_format?: "markdown" | "json" | "html" | "csv" | "yaml" | "xml" | "pdf" | "zip" | undefined;
     project_id?: string | undefined;
+    template_type?: "custom" | "summary" | "full" | "diff" | undefined;
     include_metadata?: boolean | undefined;
     include_attribution?: boolean | undefined;
     include_history?: boolean | undefined;

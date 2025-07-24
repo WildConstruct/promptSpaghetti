@@ -197,7 +197,7 @@ describe('Epic 24.2 - Extension Lifecycle Manager Unit Tests', () => {
       const extension1 = createMockExtension('duplicate-extension');
       const extension2 = createMockExtension('duplicate-extension');
 
-      lifecycleManager.registerExtension.mockImplementationOnce((ext: Extension) => {
+      lifecycleManager.registerExtension.mockImplementation((ext: Extension) => {
         if (mockExtensions.has(ext.id)) {
           throw new Error(`Extension ${ext.id} already registered`);
         }

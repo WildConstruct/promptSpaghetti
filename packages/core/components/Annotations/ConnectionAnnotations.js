@@ -4,7 +4,7 @@ import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-run
 import { useState, useCallback, useMemo } from 'react';
 import { getBezierPath } from 'reactflow';
 // Floating connection label component
-export const ConnectionLabel = ({ edge, x, y, onLabelChange, _____onLabelStyleChange }) => {
+export const ConnectionLabel = ({ edge, x, y, onLabelChange, onLabelStyleChange }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(edge.label || '');
     const labelStyle = useMemo(() => ({

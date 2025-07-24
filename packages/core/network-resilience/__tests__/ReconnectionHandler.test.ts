@@ -16,7 +16,7 @@ describe('ReconnectionHandler', () => {
       enableJitter: false, // Disable for predictable tests
       enableCircuitBreaker: true,
       circuitBreakerThreshold: 2,
-      circuitBreakerResetTime: 2000
+      circuitBreakerResetTime: 100 // Reduced from 2000ms to 100ms for speed
     });
 
     mockConnectionFactory = jest.fn();
@@ -54,7 +54,7 @@ describe('ReconnectionHandler', () => {
       expect(handler.getState()).toBe(ReconnectionState.IDLE);
     });
 
-    test('should retry on failure', (done) => {
+    test('should retry on failure', async () => {
       let attempts = 0;
       mockConnectionFactory.mockImplementation(() => {
         attempts++;
@@ -67,30 +67,44 @@ describe('ReconnectionHandler', () => {
       const successEvents: any[] = [];
       const retryEvents: any[] = [];
       
-      handler.on('reconnection_success', (event) => {
-        successEvents.push(event);
-        expect(successEvents).toHaveLength(1);
-        expect(attempts).toBe(3);
-        done();
+      const successPromise = new Promise<void>((resolve) => {
+        handler.on('reconnection_success', (event) => {
+          successEvents.push(event);
+          expect(successEvents).toHaveLength(1);
+          expect(attempts).toBe(3);
+          resolve();
+        });
       });
       
       handler.on('reconnection_scheduled', (event) => retryEvents.push(event));
 
       handler.startReconnection();
+      
+      await Promise.race([
+        successPromise,
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Test timeout after 5s')), 5000))
+      ]);
     });
 
-    test('should fail after max attempts', (done) => {
+    test('should fail after max attempts', async () => {
       mockConnectionFactory.mockResolvedValue(false);
 
       const failureEvents: any[] = [];
-      handler.on('reconnection_failed', (event) => {
-        failureEvents.push(event);
-        expect(failureEvents).toHaveLength(1);
-        expect(event.totalAttempts).toBe(3);
-        done();
+      const failurePromise = new Promise<void>((resolve) => {
+        handler.on('reconnection_failed', (event) => {
+          failureEvents.push(event);
+          expect(failureEvents).toHaveLength(1);
+          expect(event.totalAttempts).toBe(3);
+          resolve();
+        });
       });
 
       handler.startReconnection();
+      
+      await Promise.race([
+        failurePromise,
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Test timeout after 5s')), 5000))
+      ]);
     });
   });
 
@@ -153,7 +167,10 @@ describe('ReconnectionHandler', () => {
       handler.setConnectionFactory(mockConnectionFactory);
 
       mockConnectionFactory.mockImplementation(() => 
-        new Promise(resolve => setTimeout(() => resolve(true), 2000)) // 2s delay
+        new Promise((resolve, reject) => {
+          // Simulate timeout immediately for speed
+          setTimeout(() => reject(new Error('Connection timeout')), 10);
+        })
       );
 
       const failureEvents: any[] = [];
@@ -181,17 +198,26 @@ describe('ReconnectionHandler', () => {
   });
 
   describe('Circuit Breaker', () => {
-    test('should trip circuit breaker after threshold', (done) => {
+    test('should trip circuit breaker after threshold', async () => {
       mockConnectionFactory.mockResolvedValue(false);
 
       const circuitBreakerEvents: any[] = [];
-      handler.on('circuit_breaker_tripped', (event) => {
-        circuitBreakerEvents.push(event);
-        expect(handler.isCircuitBreakerActive()).toBe(true);
-        done();
+      const circuitBreakerPromise = new Promise<void>((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new Error('Circuit breaker event timeout after 5s'));
+        }, 5000);
+        
+        handler.on('circuit_breaker_tripped', (event) => {
+          circuitBreakerEvents.push(event);
+          expect(handler.isCircuitBreakerActive()).toBe(true);
+          clearTimeout(timeout);
+          resolve();
+        });
       });
 
       handler.startReconnection();
+      
+      await circuitBreakerPromise;
     });
 
     test.skip('should block reconnection when circuit breaker is open', async () => {
@@ -212,7 +238,7 @@ describe('ReconnectionHandler', () => {
       expect(blockedEvents[0].reason).toBe('circuit_breaker_open');
     });
 
-    test('should reset circuit breaker automatically', (done) => {
+    test('should reset circuit breaker automatically', async () => {
       const handler = new ReconnectionHandler({
         maxAttempts: 3,
         circuitBreakerThreshold: 1,
@@ -227,29 +253,52 @@ describe('ReconnectionHandler', () => {
         expect(handler.isCircuitBreakerActive()).toBe(true);
       });
 
-      handler.on('circuit_breaker_reset', (event) => {
-        expect(event.manual).toBe(false);
-        expect(handler.isCircuitBreakerActive()).toBe(false);
-        handler.cleanup();
-        done();
+      const resetPromise = new Promise<void>((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          handler.cleanup();
+          reject(new Error('Circuit breaker reset timeout after 3s'));
+        }, 3000);
+        
+        handler.on('circuit_breaker_reset', (event) => {
+          expect(event.manual).toBe(false);
+          expect(handler.isCircuitBreakerActive()).toBe(false);
+          handler.cleanup();
+          clearTimeout(timeout);
+          resolve();
+        });
       });
 
       handler.startReconnection();
+      
+      await resetPromise;
     });
 
-    test('should allow manual circuit breaker reset', (done) => {
+    test('should allow manual circuit breaker reset', async () => {
       mockConnectionFactory.mockResolvedValue(false);
 
-      handler.on('circuit_breaker_tripped', () => {
-        expect(handler.isCircuitBreakerActive()).toBe(true);
+      const resetPromise = new Promise<void>((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new Error('Manual reset timeout after 3s'));
+        }, 3000);
         
-        handler.resetCircuitBreaker();
+        handler.on('circuit_breaker_tripped', () => {
+          expect(handler.isCircuitBreakerActive()).toBe(true);
+          
+          // Manually reset the circuit breaker
+          handler.resetCircuitBreaker();
+        });
         
-        expect(handler.isCircuitBreakerActive()).toBe(false);
-        done();
+        handler.on('circuit_breaker_reset', (event) => {
+          expect(event.manual).toBe(true);
+          expect(handler.isCircuitBreakerActive()).toBe(false);
+          clearTimeout(timeout);
+          resolve();
+        });
       });
 
       handler.startReconnection();
+      
+      await resetPromise;
     });
   });
 

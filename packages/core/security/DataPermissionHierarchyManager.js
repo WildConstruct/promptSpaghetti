@@ -7,7 +7,7 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
 import { EventEmitter } from 'events';
-import { STANDARD_PERMISSION_LEVELS, OPERATION_PERMISSION_MATRIX, STANDARD_ESCALATION_PATHS } from './DataPermissionHierarchy';
+import { STANDARD_PERMISSION_LEVELS, OPERATION_PERMISSION_MATRIX, STANDARD_ESCALATION_PATHS } from './DataPermissionHierarchy.js';
 export class DataPermissionHierarchyManager extends EventEmitter {
     hierarchy;
     activeGrants;

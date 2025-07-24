@@ -9,14 +9,14 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Epic: 17 - Backstage Admin Controls, Substory: 17.1.6 (Audit Logging)
  */
 import { useState, useEffect } from 'react';
-import { Card, CardContent } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { Badge } from '../ui/Badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
-import { Input } from '../ui/Input';
-import { Select } from '../ui/Select';
+import { Card, CardContent } from '../ui/Card.js';
+import { Button } from '../ui/Button.js';
+import { Badge } from '../ui/Badge.js';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
+import { Input } from '../ui/Input.js';
+import { Select } from '../ui/Select.js';
 import { Search, Filter, Download, RefreshCw, Clock, User, Shield, AlertTriangle, CheckCircle, XCircle, Settings, BarChart3, FileText, Save, ChevronDown, ChevronUp, Activity, Zap, Target, Database, Lock, Unlock, AlertCircle, Minus } from 'lucide-react';
-import { AuditEventType, AuditCategory, AuditSeverity, ComplianceStandard } from '../../services/audit-service';
+import { AuditEventType, AuditCategory, AuditSeverity, ComplianceStandard } from '../../services/audit-service.js';
 const SEVERITY_CONFIG = {
     low: { color: 'text-blue-600 bg-blue-100', icon: Minus, label: 'Low' },
     medium: { color: 'text-yellow-600 bg-yellow-100', icon: AlertCircle, label: 'Medium' },
@@ -50,7 +50,7 @@ const TIME_PRESETS = [
     { value: 'last_quarter', label: 'Last Quarter' },
     { value: 'last_year', label: 'Last Year' }
 ];
-export const AuditLogDashboard = ({ className = '', userId, _____userRole }) => {
+export const AuditLogDashboard = ({ className = '', userId, userRole }) => {
     const [activeTab, setActiveTab] = useState('logs');
     const [searchResults, setSearchResults] = useState(null);
     const [loading, setLoading] = useState(false);

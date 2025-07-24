@@ -6,10 +6,10 @@
  * contract analysis, compliance checking, citation management, and terminology validation
  */
 // Main components
-export { LegalDocumentParser } from './LegalDocumentParser';
-export { ContractAnalyzer } from './ContractAnalyzer';
-export { ComplianceChecker } from './ComplianceChecker';
-export { CitationManager } from './CitationManager';
-export { TerminologyValidator } from './TerminologyValidator';
+export { LegalDocumentParser } from './LegalDocumentParser.js';
+export { ContractAnalyzer } from './ContractAnalyzer.js';
+export { ComplianceChecker } from './ComplianceChecker.js';
+export { CitationManager } from './CitationManager.js';
+export { TerminologyValidator } from './TerminologyValidator.js';
 // Type definitions
-export * from './types';
+export * from './types.js';

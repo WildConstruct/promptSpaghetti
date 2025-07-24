@@ -210,7 +210,7 @@ export interface SelectionRange {
 export interface ConflictMarker {
   id: string;
   resource_id: string;
-  conflict_type: 'content' | 'structure' | 'metadata';
+  conflict_type: 'content' | 'structure' | 'metadata' | 'cursor' | 'selection';
   location: CursorPosition['position'];
   local_version: unknown;
   remote_version: unknown;

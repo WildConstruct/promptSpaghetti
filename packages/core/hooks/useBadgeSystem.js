@@ -4,7 +4,7 @@
  * Provides easy-to-use React integration for the badge and achievement system.
  */
 import { useEffect, useState, useCallback } from 'react';
-import { badgeSystem } from '../gamification/BadgeSystem';
+import { badgeSystem } from '../gamification/BadgeSystem.js';
 export const useBadgeSystem = (config = {}) => {
     const { userId, autoCheckBadges = true, enableNotifications = true, checkInterval = 30000 // 30 seconds
      } = config;

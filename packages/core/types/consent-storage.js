@@ -7,4 +7,4 @@
 // ===================================================================
 // Export Types
 // ===================================================================
-export * from './consent'; // Re-export existing consent types for compatibility
+export * from './consent.js'; // Re-export existing consent types for compatibility

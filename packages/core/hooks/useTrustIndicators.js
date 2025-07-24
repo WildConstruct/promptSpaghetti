@@ -5,8 +5,8 @@
  * across the Wild Construct platform interface.
  */
 import { useEffect, useState, useCallback, useMemo } from 'react';
-import { identityValidationService } from '../auth/IdentityValidation';
-import { marketplaceMetrics } from '../analytics/MarketplaceMetrics';
+import { identityValidationService } from '../auth/IdentityValidation.js';
+import { marketplaceMetrics } from '../analytics/MarketplaceMetrics.js';
 const TRUST_CACHE_KEY = 'wildConstruct_trustCache';
 const DEFAULT_CACHE_TIMEOUT = 5 * 60 * 1000; // 5 minutes
 export const useTrustIndicators = (config = {}) => {

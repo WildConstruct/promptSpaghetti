@@ -1,5 +1,5 @@
-import { WorkspaceRole, ProjectRole } from '../types/workspace';
-import { QueryBuilder, bindParams } from '../database/connection';
+import { WorkspaceRole, ProjectRole } from '../types/workspace.js';
+import { QueryBuilder, bindParams } from '../database/connection.js';
 export class WorkspaceDAO {
     db;
     constructor(db) {

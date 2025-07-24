@@ -1,9 +1,9 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { TextFieldEditor } from '../TextFieldEditor';
-import { SelectEditor } from '../SelectEditor';
-import { VariationList } from '../VariationList';
-import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
-import { TemplateEditor } from '../TemplateEditor';
+import { TextFieldEditor } from '../TextFieldEditor.js';
+import { SelectEditor } from '../SelectEditor.js';
+import { VariationList } from '../VariationList.js';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection.js';
+import { TemplateEditor } from '../TemplateEditor.js';
 const GRAMMATICAL_NUMBERS = [
     { value: 'singular', label: 'Singular' },
     { value: 'plural', label: 'Plural' },

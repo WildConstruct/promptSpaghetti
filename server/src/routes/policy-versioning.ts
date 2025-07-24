@@ -15,7 +15,7 @@ import {
   UpdatePolicyVersionRequest,
   PublishPolicyVersionRequest,
   PolicyVersionSearchQuery
-} from '../../packages/core/types/PolicyVersionTypes';
+} from '../../../packages/core/types/PolicyVersionTypes';
 
 // Initialize service with database connection
 const db = getDatabase();

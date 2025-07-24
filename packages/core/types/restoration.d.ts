@@ -528,21 +528,21 @@ export declare const RestorationPreviewResponseSchema: z.ZodObject<{
         estimatedDuration: z.ZodNumber;
         riskLevel: z.ZodEnum<["low", "medium", "high"]>;
     }, "strip", z.ZodTypeAny, {
-        estimatedDuration: number;
         riskLevel: "low" | "medium" | "high";
+        estimatedDuration: number;
         totalChanges: number;
         totalConflicts: number;
     }, {
-        estimatedDuration: number;
         riskLevel: "low" | "medium" | "high";
+        estimatedDuration: number;
         totalChanges: number;
         totalConflicts: number;
     }>;
     expiresAt: z.ZodDate;
 }, "strip", z.ZodTypeAny, {
     summary: {
-        estimatedDuration: number;
         riskLevel: "low" | "medium" | "high";
+        estimatedDuration: number;
         totalChanges: number;
         totalConflicts: number;
     };
@@ -574,8 +574,8 @@ export declare const RestorationPreviewResponseSchema: z.ZodObject<{
     }[];
 }, {
     summary: {
-        estimatedDuration: number;
         riskLevel: "low" | "medium" | "high";
+        estimatedDuration: number;
         totalChanges: number;
         totalConflicts: number;
     };
@@ -626,8 +626,8 @@ export declare const RestorationProgressResponseSchema: z.ZodObject<{
     operationsCompleted: number;
     conflictsResolved: number;
     errorMessage?: string | undefined;
-    currentOperation?: string | undefined;
     estimatedTimeRemaining?: number | undefined;
+    currentOperation?: string | undefined;
 }, {
     status: "pending" | "completed" | "failed" | "cancelled" | "in_progress";
     totalOperations: number;
@@ -637,8 +637,8 @@ export declare const RestorationProgressResponseSchema: z.ZodObject<{
     operationsCompleted: number;
     conflictsResolved: number;
     errorMessage?: string | undefined;
-    currentOperation?: string | undefined;
     estimatedTimeRemaining?: number | undefined;
+    currentOperation?: string | undefined;
 }>;
 export declare const RestorationStatsResponseSchema: z.ZodObject<{
     totalAttempts: z.ZodNumber;

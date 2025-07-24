@@ -14,7 +14,7 @@ import {
   ChallengeRequest,
   ChallengeValidation
 } from '../types';
-import { RateLimiter } from '../../../packages/core/security/RateLimiter';
+import { RateLimiter } from '../../../../packages/core/security/RateLimiter';
 
 // ========================================
 // Middleware Configuration

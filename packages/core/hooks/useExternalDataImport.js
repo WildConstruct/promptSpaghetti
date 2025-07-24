@@ -1,7 +1,7 @@
 // packages/core/hooks/useExternalDataImport.ts
 // Epic 8.8 Task 1: Data Import Hooks with Caching System
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { dataSourceManager } from '../external-data/DataSourceManager';
+import { dataSourceManager } from '../external-data/DataSourceManager.js';
 export const useExternalDataImport = ({ autoRefresh = false, refreshInterval = 300000, // 5 minutes
 enableRealTimeUpdates = false, cacheStrategy = 'conservative', onError, onSuccess } = {}) => {
     const [state, setState] = useState({
@@ -275,49 +275,57 @@ enableRealTimeUpdates = false, cacheStrategy = 'conservative', onError, onSucces
     };
 };
 // Specialized hook for historical query building
-export const [isValid, setIsValid] = useState(false);
-const [validationErrors, setValidationErrors] = useState([]);
-const updateQuery = useCallback((updates) => {
-    const newQuery = { ...query, ...updates };
-    setQuery(newQuery);
-    // Validate the query
-    const required = ['category', 'era'];
-    const errors = required.filter(field => !newQuery[field]);
-    setValidationErrors(errors.map(field => `${field} is required`));
-    setIsValid(errors.length === 0);
-}, [query]);
-const resetQuery = useCallback(() => {
-    setQuery({});
-    setIsValid(false);
-    setValidationErrors([]);
-}, []);
-const buildQuery = useCallback(() => {
-    if (!isValid)
-        return null;
+export const useQueryBuilder = () => {
+    const [query, setQuery] = useState({});
+    const [isValid, setIsValid] = useState(false);
+    const [validationErrors, setValidationErrors] = useState([]);
+    const updateQuery = useCallback((updates) => {
+        const newQuery = { ...query, ...updates };
+        setQuery(newQuery);
+        // Validate the query
+        const required = ['category', 'era'];
+        const errors = required.filter(field => !newQuery[field]);
+        setValidationErrors(errors.map(field => `${field} is required`));
+        setIsValid(errors.length === 0);
+    }, [query]);
+    const resetQuery = useCallback(() => {
+        setQuery({});
+        setIsValid(false);
+        setValidationErrors([]);
+    }, []);
+    const buildQuery = useCallback(() => {
+        if (!isValid)
+            return null;
+        return {
+            era: query.era || '',
+            region: query.region,
+            category: query.category || '',
+            subcategory: query.subcategory,
+            keywords: query.keywords,
+            filters: query.filters || {},
+            limit: query.limit || 50,
+            offset: query.offset || 0,
+            sortBy: query.sortBy,
+            sortOrder: query.sortOrder || 'desc'
+        };
+    }, [query, isValid]);
     return {
-        era: query.era || '',
-        region: query.region,
-        category: query.category || '',
-        subcategory: query.subcategory,
-        keywords: query.keywords,
-        filters: query.filters || {},
-        limit: query.limit || 50,
-        offset: query.offset || 0,
-        sortBy: query.sortBy,
-        sortOrder: query.sortOrder || 'desc'
+        query,
+        isValid,
+        validationErrors,
+        updateQuery,
+        resetQuery,
+        buildQuery
     };
-}, [query, isValid]);
-return {
-    query,
-    isValid,
-    validationErrors,
-    updateQuery,
-    resetQuery,
-    buildQuery
 };
-;
 // Hook for caching management and statistics
-export const useCacheStats = () => {
+export const useCacheManagement = () => {
+    const [cacheStats, setCacheStats] = useState({
+        size: 0,
+        hitRate: 0,
+        lastCleanup: '',
+        entries: 0
+    });
     const getCacheStats = useCallback(() => {
         const manager = dataSourceManager;
         const cache = manager.cache;

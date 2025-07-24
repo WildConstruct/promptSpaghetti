@@ -14,7 +14,7 @@ import {
   PolicyStatus,
   PolicyEvaluationContext,
   ComplianceFramework
-} from '../../packages/core/services/PolicyManagement';
+} from '../../../packages/core/services/PolicyManagement';
 
 // Request/Response Types
 interface CreatePolicyRequest {

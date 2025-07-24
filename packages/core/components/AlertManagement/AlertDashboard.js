@@ -6,14 +6,14 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * and configuring alert rules.
  */
 import { useState, useEffect, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { Badge } from '../ui/Badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
-import { Input } from '../ui/Input';
-import { Select } from '../ui/Select';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
+import { Button } from '../ui/Button.js';
+import { Badge } from '../ui/Badge.js';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
+import { Input } from '../ui/Input.js';
+import { Select } from '../ui/Select.js';
 import { AlertTriangle, Shield, Clock, CheckCircle, XCircle, Search, Bell, Settings, TrendingUp, AlertOctagon, Info } from 'lucide-react';
-import { alertSystem } from '../../services/AlertSystem';
+import { alertSystem } from '../../services/AlertSystem.js';
 /**
  * Severity configurations for UI styling
  */
@@ -150,7 +150,7 @@ export const AlertDashboard = ({ className }) => {
                                             .filter(([, alerts]) => alerts.length > 0)
                                             .map(([severity, severityAlerts]) => (_jsxs("div", { children: [_jsx("div", { className: "flex items-center mb-3", children: _jsxs(Badge, { className: SEVERITY_CONFIG[severity].badgeColor, children: [severity.toUpperCase(), " (", severityAlerts.length, ")"] }) }), _jsxs("div", { className: "space-y-2", children: [severityAlerts.slice(0, 5).map(alert => (_jsx(AlertCard, { alert: alert, onAcknowledge: handleAcknowledgeAlert, onResolve: handleResolveAlert, onSuppress: handleSuppressAlert, onClick: setSelectedAlert }, alert.id))), severityAlerts.length > 5 && (_jsxs("div", { className: "text-sm text-gray-500 text-center py-2", children: ["and ", severityAlerts.length - 5, " more..."] }))] })] }, severity))) }) }), _jsx(TabsContent, { value: "all", className: "mt-6", children: _jsx(AlertList, { alerts: filteredAlerts, onAcknowledge: handleAcknowledgeAlert, onResolve: handleResolveAlert, onSuppress: handleSuppressAlert, onSelectAlert: setSelectedAlert }) }), _jsx(TabsContent, { value: "active", className: "mt-6", children: _jsx(AlertList, { alerts: filteredAlerts.filter(a => a.status === 'active'), onAcknowledge: handleAcknowledgeAlert, onResolve: handleResolveAlert, onSuppress: handleSuppressAlert, onSelectAlert: setSelectedAlert }) })] }) })] }), selectedAlert && (_jsx(AlertDetailModal, { alert: selectedAlert, onClose: () => setSelectedAlert(null), onAcknowledge: handleAcknowledgeAlert, onResolve: handleResolveAlert, onSuppress: handleSuppressAlert }))] }));
 };
-const AlertCard = ({ alert, onAcknowledge, onResolve, _____onSuppress, onClick }) => {
+const AlertCard = ({ alert, onAcknowledge, onResolve, onSuppress, onClick }) => {
     const severityConfig = SEVERITY_CONFIG[alert.severity];
     const statusConfig = STATUS_CONFIG[alert.status];
     const SeverityIcon = severityConfig.icon;

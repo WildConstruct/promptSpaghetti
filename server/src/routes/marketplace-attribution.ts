@@ -14,7 +14,7 @@ import {
   CreateAttributionClaimRequestSchema,
   UpdateRevenueAttributionRequestSchema,
   MarketplaceAttributionFilterSchema
-} from '../../packages/core/types/marketplaceAttribution';
+} from '../../../packages/core/types/marketplaceAttribution';
 
 interface AttributionRouteOptions {
   database: Database;

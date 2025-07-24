@@ -1,0 +1,166 @@
+/**
+ * AI Multi-Model Integration Framework
+ * Epic 35.1.1 - Multi-Model Infrastructure
+ * 
+ * Unified exports for all AI model components
+ */
+
+// Base classes and interfaces
+export * from './BaseAIModel';
+
+// Concrete adapters
+export { default as OpenAIAdapter } from './adapters/OpenAIAdapter';
+export type { OpenAIConfig, OpenAIRequestOptions, ChatMessage, OpenAIResponse } from './adapters/OpenAIAdapter';
+
+export { default as AnthropicAdapter } from './adapters/AnthropicAdapter';
+export type { AnthropicConfig, AnthropicRequestOptions, ClaudeMessage, AnthropicResponse } from './adapters/AnthropicAdapter';
+
+export { default as GenericHTTPAdapter } from './adapters/GenericHTTPAdapter';
+export type { HTTPConfig, HTTPRequestOptions, HTTPRequestMapping, GenericHTTPResponse } from './adapters/GenericHTTPAdapter';
+
+export { default as LocalModelAdapter } from './adapters/LocalModelAdapter';
+export type { LocalModelConfig, LocalRequestOptions, OllamaMessage, LocalModelResponse } from './adapters/LocalModelAdapter';
+
+// Image generation adapters
+export { default as DALLEAdapter } from './adapters/DALLEAdapter';
+export type { DALLEConfig, DALLERequestOptions, ImageGenerationResult, ImagePromptOptimization } from './adapters/DALLEAdapter';
+
+export { default as MidjourneyAdapter } from './adapters/MidjourneyAdapter';
+export type { MidjourneyConfig, MidjourneyRequestOptions, MidjourneyJobStatus, MidjourneyGenerationResult } from './adapters/MidjourneyAdapter';
+
+export { default as StableDiffusionAdapter } from './adapters/StableDiffusionAdapter';
+export type { StableDiffusionConfig, StableDiffusionRequestOptions, StableDiffusionGenerationResult, ModelInfo } from './adapters/StableDiffusionAdapter';
+
+// Audio generation and processing adapters
+export { default as OpenAITTSAdapter } from './adapters/OpenAITTSAdapter';
+export type { OpenAITTSConfig, TTSRequestOptions, TTSGenerationResult, VoiceInfo } from './adapters/OpenAITTSAdapter';
+
+export { default as ElevenLabsAdapter } from './adapters/ElevenLabsAdapter';
+export type { ElevenLabsConfig, ElevenLabsRequestOptions, ElevenLabsGenerationResult, ElevenLabsVoice, ElevenLabsModel } from './adapters/ElevenLabsAdapter';
+
+export { default as WhisperAdapter } from './adapters/WhisperAdapter';
+export type { WhisperConfig, WhisperRequestOptions, WhisperTranscriptionResult, AudioFileInfo } from './adapters/WhisperAdapter';
+
+// Video generation and processing adapters
+export { default as RunwayMLAdapter } from './adapters/RunwayMLAdapter';
+export type { RunwayMLConfig, RunwayMLRequestOptions, RunwayMLGenerationResult, RunwayMLTask } from './adapters/RunwayMLAdapter';
+
+export { default as StableVideoAdapter } from './adapters/StableVideoAdapter';
+export type { StableVideoConfig, StableVideoRequestOptions, StableVideoGenerationResult, SVDModelInfo } from './adapters/StableVideoAdapter';
+
+// Multimodal and cross-modal intelligence adapters
+export { default as MultimodalAdapter } from './adapters/MultimodalAdapter';
+export type { MultimodalConfig, MultimodalInput, MultimodalRequestOptions, MultimodalUnderstandingResult } from './adapters/MultimodalAdapter';
+
+// Factory and management
+export { default as AIModelFactory } from './AIModelFactory';
+export type { FactoryConfig, ModelRegistration } from './AIModelFactory';
+
+export { default as ModelManager } from './ModelManager';
+export type { 
+  CacheConfig, 
+  LoadBalancingConfig, 
+  ModelPool, 
+  ModelPerformanceMetrics, 
+  WarmupStrategy, 
+  ModelCache, 
+  LoadBalancer, 
+  HealthMonitor 
+} from './ModelManager';
+
+export { default as ConfigurationManager } from './ConfigurationManager';
+export type {
+  EnvironmentConfig,
+  ConfigurationSchema,
+  ValidationRule,
+  ValidationResult,
+  ConfigurationUpdate,
+  ConfigurationHistory,
+  ConfigurationValidator
+} from './ConfigurationManager';
+
+// Image processing utilities
+export { default as ImageProcessor } from './utils/ImageProcessor';
+export type { 
+  ImageMetadata, 
+  ImageProcessingOptions, 
+  ImageVariationOptions, 
+  ImageBatchProcessingOptions 
+} from './utils/ImageProcessor';
+
+// Re-export key types for convenience
+export type {
+  AIModelType,
+  AIModelProvider,
+  AIModelStatus,
+  ModelCapabilities,
+  ModelMetadata,
+  CostEstimate,
+  HealthStatus,
+  AIRequest,
+  AIResponse,
+  ModelConfiguration,
+  AIModelFactory as IAIModelFactory
+} from './BaseAIModel';
+
+// Performance optimization exports
+export * from './performance';
+
+// Utility functions and helpers
+export const createOpenAIModel = async (id: string, apiKey: string, modelName: string = 'gpt-3.5-turbo') => {
+  const factory = new AIModelFactory();
+  return factory.createModel({
+    id,
+    type: 'text' as any,
+    provider: 'openai' as any,
+    modelName,
+    apiKey
+  });
+};
+
+export const createAnthropicModel = async (id: string, apiKey: string, modelName: string = 'claude-3-sonnet-20240229') => {
+  const factory = new AIModelFactory();
+  return factory.createModel({
+    id,
+    type: 'text' as any,
+    provider: 'anthropic' as any,
+    modelName,
+    apiKey
+  });
+};
+
+export const createLocalModel = async (id: string, endpoint: string, modelName: string) => {
+  const factory = new AIModelFactory();
+  return factory.createModel({
+    id,
+    type: 'text' as any,
+    provider: 'local' as any,
+    modelName,
+    endpoint
+  });
+};
+
+export const createCustomHTTPModel = async (
+  id: string, 
+  endpoint: string, 
+  requestMapping: HTTPRequestMapping,
+  apiKey?: string
+) => {
+  const factory = new AIModelFactory();
+  const registration = {
+    id,
+    provider: 'custom' as any,
+    modelName: 'custom-model',
+    config: { baseURL: endpoint, apiKey },
+    requestMapping
+  };
+  
+  factory.registerModel(registration);
+  return factory.createModel({
+    id,
+    type: 'text' as any,
+    provider: 'custom' as any,
+    endpoint,
+    apiKey
+  });
+};

@@ -6,11 +6,11 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * for the Epic 16 Marketplace & Community system.
  */
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { InteractiveElementType, Epic16InteractiveElementsService } from '../../services/Epic16InteractiveElementsService';
-import { LiveChatWidget } from './LiveChatWidget';
-import { GamifiedProgressBar } from './GamifiedProgressBar';
-import { QuickPreviewWidget } from './QuickPreviewWidget';
-export const Epic16InteractiveElements = ({ userId, userName, userAvatar, userRole, userTier, pageContext, onElementInteraction, _____onAnalyticsUpdate }) => {
+import { InteractiveElementType, Epic16InteractiveElementsService } from '../../services/Epic16InteractiveElementsService.js';
+import { LiveChatWidget } from './LiveChatWidget.js';
+import { GamifiedProgressBar } from './GamifiedProgressBar.js';
+import { QuickPreviewWidget } from './QuickPreviewWidget.js';
+export const Epic16InteractiveElements = ({ userId, userName, userAvatar, userRole, userTier, pageContext, onElementInteraction, onAnalyticsUpdate }) => {
     // Service initialization
     const interactiveService = useMemo(() => new Epic16InteractiveElementsService(), []);
     // State management

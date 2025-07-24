@@ -2,7 +2,8 @@
 // Business logic for workflow state management
 
 import { WorkflowDAO } from '../database/workflow-dao';
-import { Database } from '../database/connection';
+import Database from 'better-sqlite3';
+import { z } from 'zod';
 import {
   WorkflowState,
   WorkflowTransition,
@@ -29,7 +30,7 @@ export class WorkflowService {
   private eventHandlers: Map<string, WorkflowEventHandler[]> = new Map();
   private config: WorkflowConfiguration;
 
-  constructor(db: Database) {
+  constructor(db: Database.Database) {
     this.dao = new WorkflowDAO(db);
     this.config = this.getDefaultConfiguration();
   }
@@ -93,7 +94,7 @@ export class WorkflowService {
   // WORKFLOW STATE MANAGEMENT
   // =============================================================================
 
-  async createWorkflowState(data: Zod.infer<typeof CreateWorkflowStateSchema>): Promise<WorkflowState> {
+  async createWorkflowState(data: z.infer<typeof CreateWorkflowStateSchema>): Promise<WorkflowState> {
     const state = await this.dao.createWorkflowState(data);
     
     await this.emitEvent({
@@ -124,7 +125,7 @@ export class WorkflowService {
   // WORKFLOW TRANSITIONS
   // =============================================================================
 
-  async createWorkflowTransition(data: Zod.infer<typeof CreateWorkflowTransitionSchema>): Promise<WorkflowTransition> {
+  async createWorkflowTransition(data: z.infer<typeof CreateWorkflowTransitionSchema>): Promise<WorkflowTransition> {
     return this.dao.createWorkflowTransition(data);
   }
 
@@ -204,7 +205,7 @@ export class WorkflowService {
   // APPROVAL MANAGEMENT
   // =============================================================================
 
-  async createWorkflowApproval(data: Zod.infer<typeof CreateWorkflowApprovalSchema>): Promise<WorkflowApproval> {
+  async createWorkflowApproval(data: z.infer<typeof CreateWorkflowApprovalSchema>): Promise<WorkflowApproval> {
     // Set default due date if not provided
     if (!data.due_date) {
       const dueDate = new Date();

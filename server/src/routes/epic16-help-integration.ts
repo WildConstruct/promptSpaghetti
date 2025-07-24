@@ -9,7 +9,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { Epic16HelpIntegrationAPIService } from '../services/Epic16HelpIntegrationAPIService';
 import { Epic16SupportEscalationService } from '../admin/Epic16SupportEscalationService';
-import { Epic16TicketIntegrationService } from '../../packages/core/services/Epic16TicketIntegrationService';
+import { Epic16TicketIntegrationService } from '../../../packages/core/services/Epic16TicketIntegrationService';
 import { Database } from '../database/connection';
 
 interface HelpIntegrationRouteOptions {

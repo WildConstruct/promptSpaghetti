@@ -6,7 +6,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Provides full CRUD operations, filtering, status management, and real-time updates.
  */
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { MarketplaceTicketType, TicketStatus, TicketPriority } from '../../services/Epic16TicketIntegrationService';
+import { MarketplaceTicketType, TicketStatus, TicketPriority } from '../../services/Epic16TicketIntegrationService.js';
 export const TicketManagementDashboard = ({ ticketService, userId, userRole, onTicketSelect }) => {
     // State management
     const [tickets, setTickets] = useState([]);
@@ -189,7 +189,7 @@ export const TicketManagementDashboard = ({ ticketService, userId, userRole, onT
                                             onTicketSelect?.(ticket);
                                         }, onStatusUpdate: handleStatusUpdate, onAssign: handleAssignment, onEscalate: handleEscalation, currentUserId: userId, userRole: userRole, selected: selectedTicket?.id === ticket.id, renderStatusBadge: renderStatusBadge, renderPriorityBadge: renderPriorityBadge }, ticket.id))) })) }), pagination.total > pagination.limit && (_jsx("div", { className: "bg-white border-t border-gray-200 px-4 py-3", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsx("button", { onClick: () => setPagination(prev => ({ ...prev, page: Math.max(0, prev.page - 1) })), disabled: pagination.page === 0, className: "px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50", children: "Previous" }), _jsxs("span", { className: "text-sm text-gray-700", children: ["Page ", pagination.page + 1, " of ", Math.ceil(pagination.total / pagination.limit)] }), _jsx("button", { onClick: () => setPagination(prev => ({ ...prev, page: prev.page + 1 })), disabled: !pagination.hasMore, className: "px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50", children: "Next" })] }) }))] })] })] }));
 };
-const TicketListItem = ({ ticket, onSelect, onStatusUpdate, _____onAssign, onEscalate, currentUserId, userRole, selected, renderStatusBadge, renderPriorityBadge }) => {
+const TicketListItem = ({ ticket, onSelect, onStatusUpdate, onAssign, onEscalate, currentUserId, userRole, selected, renderStatusBadge, renderPriorityBadge }) => {
     const [showActions, setShowActions] = useState(false);
     const canModify = userRole === 'admin' || (userRole === 'agent' && ticket.assignedTo === currentUserId);
     const isOverdue = ticket.sla.responseTime.deadline < new Date() && !ticket.sla.responseTime.actual;

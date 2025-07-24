@@ -7,11 +7,19 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
 
-import { TemporaryAccessGrantService, GrantCreationRequest, GrantRevocationRequest } from '../TemporaryAccessGrantService';
+import { 
+  TemporaryAccessGrantService,
+  GrantCreationRequest,
+  GrantRevocationRequest
+} from '../TemporaryAccessGrantService';
 import { AuditService } from '../../auth/services/AuditService';
 import { DataAccessControlService } from '../DataAccessControlService';
 import { AccessRequestWorkflowService } from '../AccessRequestWorkflowService';
-import { DataClassificationLevel, DataOperation, OperationContext } from '../../../packages/core/types/DataClassification';
+import { 
+  DataClassificationLevel,
+  DataOperation,
+  OperationContext
+} from '../../../../packages/core/types/DataClassification';
 
 // Mock the dependencies
 jest.mock('../../auth/services/AuditService');
@@ -43,7 +51,7 @@ describe('TemporaryAccessGrantService', () => {
     mockWorkflowService = new AccessRequestWorkflowService() as jest.Mocked<AccessRequestWorkflowService>;
 
     // Mock the audit service methods
-    mockAuditService.logEvent = jest.fn().mockResolvedValue(undefined);
+    mockAuditService.logEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
 
     service = new TemporaryAccessGrantService(
       mockAuditService,
@@ -332,7 +340,7 @@ describe('TemporaryAccessGrantService', () => {
   });
 
   describe('Access Validation', () => {
-    let testGrant: any;
+    let testGrant: unknown;
 
     beforeEach(async () => {
       const grantRequest: GrantCreationRequest = {
@@ -478,7 +486,7 @@ describe('TemporaryAccessGrantService', () => {
   });
 
   describe('Grant Revocation', () => {
-    let testGrant: any;
+    let testGrant: unknown;
 
     beforeEach(async () => {
       const grantRequest: GrantCreationRequest = {
@@ -583,7 +591,7 @@ describe('TemporaryAccessGrantService', () => {
   });
 
   describe('Grant Extension', () => {
-    let testGrant: any;
+    let testGrant: unknown;
 
     beforeEach(async () => {
       const grantRequest: GrantCreationRequest = {

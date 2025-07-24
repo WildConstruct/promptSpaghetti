@@ -1,7 +1,7 @@
 // packages/core/runtime/nodes/WeightedAdvanced.ts
 // Advanced weighted choice node with complex distribution support
-import { AdvancedRuntimeNode, ValidationHelpers } from '../advanced';
-import { AdvancedIOHandler, IOSpecBuilder } from '../io-system';
+import { AdvancedRuntimeNode, ValidationHelpers } from '../advanced.js';
+import { AdvancedIOHandler, IOSpecBuilder } from '../io-system.js';
 /**
  * Advanced weighted choice node with support for complex weight distributions
  * Extends basic WeightedChoice with:
@@ -148,7 +148,7 @@ export class WeightedAdvancedNode extends AdvancedRuntimeNode {
     /**
      * Get effective choices from constructor data or dynamic inputs
      */
-    getEffectiveChoices(ctx) {
+    getEffectiveChoices(______ctx) {
         // For now, use constructor choices
         // In full implementation, would merge with dynamic inputs from I/O system
         return this.choices;
@@ -226,7 +226,7 @@ export class WeightedAdvancedNode extends AdvancedRuntimeNode {
     /**
      * Custom distribution - apply user-defined transformation
      */
-    applyCustomDistribution(choices, parameters) {
+    applyCustomDistribution(choices, ______parameters) {
         // Placeholder for custom distribution logic
         // In full implementation, would support user-defined functions
         return choices;

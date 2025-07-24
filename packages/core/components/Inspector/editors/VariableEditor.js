@@ -1,9 +1,9 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
-import { TextFieldEditor } from '../TextFieldEditor';
-import { SelectEditor } from '../SelectEditor';
-import { TemplateEditor } from '../TemplateEditor';
-import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
-import { useUISettingsStore } from '../../stores/uiSettingsStore';
+import { TextFieldEditor } from '../TextFieldEditor.js';
+import { SelectEditor } from '../SelectEditor.js';
+import { TemplateEditor } from '../TemplateEditor.js';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection.js';
+import { useUISettingsStore } from '../../stores/uiSettingsStore.js';
 const VARIABLE_TYPES = [
     { value: 'string', label: 'Text (String)' },
     { value: 'number', label: 'Number' },

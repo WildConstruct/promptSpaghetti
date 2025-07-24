@@ -1,11 +1,11 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { Badge } from '../ui/Badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
-import { Alert, AlertDescription } from '../ui/Alert';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
+import { Button } from '../ui/Button.js';
+import { Badge } from '../ui/Badge.js';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select.js';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
+import { Alert, AlertDescription } from '../ui/Alert.js';
 import { Activity, Calendar, Clock, MousePointer, Route, Eye, Map } from 'lucide-react';
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Area, AreaChart } from 'recharts';
 /**
@@ -53,7 +53,7 @@ const UserJourneyFlow = ({ journeyData }) => {
 /**
  * Usage patterns component
  */
-export const UsagePatterns = ({ analyticsClient, timeRange, _____userId, _____organizationId }) => {
+export const UsagePatterns = ({ analyticsClient, timeRange, userId, organizationId }) => {
     const [state, setState] = useState({
         loading: true,
         error: null,

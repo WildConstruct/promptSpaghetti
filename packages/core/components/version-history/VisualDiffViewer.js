@@ -4,7 +4,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Advanced visual comparison of graph versions with side-by-side and overlay views
  */
 import { useState, useEffect, useMemo, useRef } from 'react';
-import { GraphDiffEngine } from './GraphDiffEngine';
+import { GraphDiffEngine } from './GraphDiffEngine.js';
 export const VisualDiffViewer = ({ fromGraphData, toGraphData, diff: externalDiff, isOpen, onClose, onApplyChange, onRejectChange, className = '' }) => {
     const [diff, setDiff] = useState(externalDiff || null);
     const [viewMode, setViewMode] = useState('side-by-side');

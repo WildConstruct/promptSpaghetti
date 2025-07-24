@@ -197,9 +197,9 @@ export declare const tutorialCompletionSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     userId: string;
     progress: number;
-    tutorialId: string;
     timeSpent: number;
     currentStep: number;
+    tutorialId: string;
     startedAt: Date;
     rating?: number | undefined;
     score?: number | undefined;
@@ -209,9 +209,9 @@ export declare const tutorialCompletionSchema: z.ZodObject<{
 }, {
     userId: string;
     progress: number;
-    tutorialId: string;
     timeSpent: number;
     currentStep: number;
+    tutorialId: string;
     startedAt: Date;
     rating?: number | undefined;
     score?: number | undefined;
@@ -424,14 +424,14 @@ export declare const tutorialSchema: z.ZodObject<{
         completionRate: z.ZodDefault<z.ZodNumber>;
     }, "strip", z.ZodTypeAny, {
         averageRating: number;
-        completionRate: number;
         totalViews: number;
+        completionRate: number;
         totalCompletions: number;
         averageCompletionTime: number;
     }, {
         averageRating?: number | undefined;
-        completionRate?: number | undefined;
         totalViews?: number | undefined;
+        completionRate?: number | undefined;
         totalCompletions?: number | undefined;
         averageCompletionTime?: number | undefined;
     }>>;
@@ -496,8 +496,8 @@ export declare const tutorialSchema: z.ZodObject<{
     }[];
     analytics?: {
         averageRating: number;
-        completionRate: number;
         totalViews: number;
+        completionRate: number;
         totalCompletions: number;
         averageCompletionTime: number;
     } | undefined;
@@ -561,8 +561,8 @@ export declare const tutorialSchema: z.ZodObject<{
     status?: "draft" | "published" | "review" | "archived" | "suspended" | undefined;
     analytics?: {
         averageRating?: number | undefined;
-        completionRate?: number | undefined;
         totalViews?: number | undefined;
+        completionRate?: number | undefined;
         totalCompletions?: number | undefined;
         averageCompletionTime?: number | undefined;
     } | undefined;
@@ -877,14 +877,14 @@ export declare const schemas: {
             completionRate: z.ZodDefault<z.ZodNumber>;
         }, "strip", z.ZodTypeAny, {
             averageRating: number;
-            completionRate: number;
             totalViews: number;
+            completionRate: number;
             totalCompletions: number;
             averageCompletionTime: number;
         }, {
             averageRating?: number | undefined;
-            completionRate?: number | undefined;
             totalViews?: number | undefined;
+            completionRate?: number | undefined;
             totalCompletions?: number | undefined;
             averageCompletionTime?: number | undefined;
         }>>;
@@ -949,8 +949,8 @@ export declare const schemas: {
         }[];
         analytics?: {
             averageRating: number;
-            completionRate: number;
             totalViews: number;
+            completionRate: number;
             totalCompletions: number;
             averageCompletionTime: number;
         } | undefined;
@@ -1014,8 +1014,8 @@ export declare const schemas: {
         status?: "draft" | "published" | "review" | "archived" | "suspended" | undefined;
         analytics?: {
             averageRating?: number | undefined;
-            completionRate?: number | undefined;
             totalViews?: number | undefined;
+            completionRate?: number | undefined;
             totalCompletions?: number | undefined;
             averageCompletionTime?: number | undefined;
         } | undefined;
@@ -1211,9 +1211,9 @@ export declare const schemas: {
     }, "strip", z.ZodTypeAny, {
         userId: string;
         progress: number;
-        tutorialId: string;
         timeSpent: number;
         currentStep: number;
+        tutorialId: string;
         startedAt: Date;
         rating?: number | undefined;
         score?: number | undefined;
@@ -1223,9 +1223,9 @@ export declare const schemas: {
     }, {
         userId: string;
         progress: number;
-        tutorialId: string;
         timeSpent: number;
         currentStep: number;
+        tutorialId: string;
         startedAt: Date;
         rating?: number | undefined;
         score?: number | undefined;

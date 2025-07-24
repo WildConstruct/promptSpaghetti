@@ -13,7 +13,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 import { PolicyAcceptanceTrackingService } from './PolicyAcceptanceTrackingService';
 import { PolicyEffectivenessTrackingService } from './PolicyEffectivenessTrackingService';
-import { OperationContext } from '../../packages/core/types/DataClassification';
+import { OperationContext } from '../../../packages/core/types/DataClassification';
 
 export interface ComplianceViolation {
   violationId: string;
@@ -844,7 +844,10 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
   /**
    * Add or update a compliance monitoring rule
    */
-  async addMonitoringRule(rule: Omit<ComplianceMonitoringRule, 'ruleId' | 'createdAt' | 'detectionCount' | 'falsePositiveRate'>): Promise<string> {
+  async addMonitoringRule(
+    rule: Omit<ComplianceMonitoringRule,
+    'ruleId' | 'createdAt' | 'detectionCount' | 'falsePositiveRate'>
+  ): Promise<string> {
     const ruleId = `rule_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     const completeRule: ComplianceMonitoringRule = {
@@ -925,8 +928,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
         rule.lastTriggered = new Date();
 
         // Create violation based on rule
-        const _____violation = await this.createViolationFromRule(rule, context);
-        await this.detectViolations(context);
+                await this.detectViolations(context);
       }
 
     } catch (error) {
@@ -934,7 +936,10 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
     }
   }
 
-  private async createViolationFromRule(rule: ComplianceMonitoringRule, context: OperationContext): Promise<ComplianceViolation> {
+  private async createViolationFromRule(
+    rule: ComplianceMonitoringRule,
+    context: OperationContext
+  ): Promise<ComplianceViolation> {
     const violationId = `viol_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
     return {
@@ -1051,7 +1056,10 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
     ]);
   }
 
-  private async triggerImmediateRemediation(violation: ComplianceViolation, _____context: OperationContext): Promise<void> {
+  private async triggerImmediateRemediation(
+    violation: ComplianceViolation,
+    _____context: OperationContext
+  ): Promise<void> {
     // Implement immediate remediation logic
     console.log(`Triggering immediate remediation for critical violation: ${violation.violationId}`);
   }

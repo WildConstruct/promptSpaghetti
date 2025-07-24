@@ -7,7 +7,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * and coordinating editorial workflows.
  */
 import { useState, useEffect } from 'react';
-import { ContentVersionManager } from '../../community/ContentVersionManager';
+import { ContentVersionManager } from '../../community/ContentVersionManager.js';
 export const ContentVersionControl = ({ contentId, currentVersionId, onVersionSelect, onVersionCreate, onVersionPublish, showEditorialWorkflow = true, readOnly = false, className = '' }) => {
     const [versions, setVersions] = useState([]);
     const [selectedVersions, setSelectedVersions] = useState(null);

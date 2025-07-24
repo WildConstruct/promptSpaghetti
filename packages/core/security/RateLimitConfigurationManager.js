@@ -4,7 +4,7 @@
  * Epic 19: Authentication Enhancement & Security Hardening
  */
 import { z } from 'zod';
-import { RateLimitKeyGenerator, RateLimitScope } from './RateLimiter';
+import { RateLimitKeyGenerator, RateLimitScope } from './RateLimiter.js';
 // ========================================
 // Validation Schemas
 // ========================================

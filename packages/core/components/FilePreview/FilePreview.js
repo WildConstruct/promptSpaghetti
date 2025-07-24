@@ -5,7 +5,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Shows graph thumbnails, node counts, metadata, and last modified information
  */
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
-import { projectManager } from '../../projectManager';
+import { projectManager } from '../../projectManager.js';
 export const FilePreview = ({ file, mode = 'compact', isHover = false, onClick, onToggleFavorite, style, className }) => {
     const [thumbnail, setThumbnail] = useState(file.metadata.thumbnail || null);
     const [isLoadingThumbnail, setIsLoadingThumbnail] = useState(false);

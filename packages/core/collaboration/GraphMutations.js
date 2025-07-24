@@ -5,7 +5,7 @@
  * Integrates with existing WebSocket collaboration infrastructure
  */
 import { z } from 'zod';
-import { NodeTypeEnum } from '../graphSchema';
+import { NodeTypeEnum } from '../graphSchema.js';
 /**
  * Operation priority for conflict resolution
  */

@@ -15,7 +15,7 @@ import {
   DataClassificationLevel, 
   DataOperation, 
   OperationContext 
-} from '../../packages/core/types/DataClassification';
+} from '../../../packages/core/types/DataClassification';
 
 export interface TemporaryAccessGrant {
   id: string;
@@ -614,7 +614,10 @@ export class TemporaryAccessGrantService extends EventEmitter {
         timeWindow: {
           ...request.timeWindow,
           allowedHours: await this.getDefaultAllowedHours(riskAssessment.overallRisk),
-          blackoutPeriods: await this.getApplicableBlackoutPeriods(request.timeWindow.startTime, request.timeWindow.endTime)
+          blackoutPeriods: await this.getApplicableBlackoutPeriods(
+            request.timeWindow.startTime,
+            request.timeWindow.endTime
+          )
         },
         conditions: request.conditions?.map((c, index) => ({
           ...c,
@@ -1248,7 +1251,15 @@ export class TemporaryAccessGrantService extends EventEmitter {
     };
 
     // Calculate status distribution
-    for (const status of ['PENDING_ACTIVATION', 'ACTIVE', 'SUSPENDED', 'EXPIRED', 'REVOKED', 'USED_UP', 'FAILED_CONDITIONS'] as GrantStatus[]) {
+    for (
+      const status of ['PENDING_ACTIVATION',
+      'ACTIVE',
+      'SUSPENDED',
+      'EXPIRED',
+      'REVOKED',
+      'USED_UP',
+      'FAILED_CONDITIONS'] as GrantStatus[]
+    ) {
       analytics.grantsByStatus[status] = filteredGrants.filter(g => g.status === status).length;
     }
 

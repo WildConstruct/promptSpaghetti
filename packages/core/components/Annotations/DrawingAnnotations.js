@@ -6,12 +6,12 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Canvas-based overlay system for visual communication and creative direction.
  */
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { Badge } from '../ui/Badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
-import { Slider } from '../ui/Slider';
-import { Switch } from '../ui/Switch';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
+import { Button } from '../ui/Button.js';
+import { Badge } from '../ui/Badge.js';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select.js';
+import { Slider } from '../ui/Slider.js';
+import { Switch } from '../ui/Switch.js';
 import { Pen, Circle, Square, ArrowRight, Minus, Type, Eraser, Undo, Redo, Trash2, Save, Download, Palette, Layers } from 'lucide-react';
 // Drawing tool configurations
 const DRAWING_TOOLS = {

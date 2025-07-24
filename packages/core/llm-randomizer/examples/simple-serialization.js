@@ -1,7 +1,7 @@
 // Epic 12 - Simple Serialization Example
 // Demonstrates the LLM-friendly serialization format
-import { GraphSerializer } from '../serialization/serializer';
-import { validateFormat } from '../serialization/validator';
+import { GraphSerializer } from '../serialization/serializer.js';
+import { validateFormat } from '../serialization/validator.js';
 // Example: Simple greeting generator
 const simpleGraph = {
     nodes: [

@@ -4,7 +4,7 @@
  */
 import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import { useReactFlow } from 'reactflow';
-import { useGraphStore } from '../graphStore';
+import { useGraphStore } from '../graphStore.js';
 // Global provider registry
 const providerRegistry = new Map();
 export const useEditorProviders = (initialNodes, initialEdges, selectedNodeId, validationErrors = []) => {

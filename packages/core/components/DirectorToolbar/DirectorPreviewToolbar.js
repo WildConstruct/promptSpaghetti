@@ -12,7 +12,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * - Professional film industry styling
  */
 import { useState, useCallback, useMemo } from 'react';
-import { RealTimePreviewIntegration } from '../RealTimePreview/RealTimePreviewIntegration';
+import { RealTimePreviewIntegration } from '../RealTimePreview/RealTimePreviewIntegration.js';
 export const DirectorPreviewToolbar = ({ nodes, edges, isPreviewOpen, onPreviewToggle, onHighlightPath, className = '', compactMode = false }) => {
     // State for director controls
     const [realTimeEnabled, setRealTimeEnabled] = useState(true);

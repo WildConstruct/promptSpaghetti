@@ -15,8 +15,8 @@ import {
 import { 
   RateLimitConfigurationManager,
   RateLimitConfigurationPresets 
-} from '../../../packages/core/security/RateLimitConfigurationManager';
-import { RateLimitPresets } from '../../../packages/core/security/RateLimiter';
+} from '../../../../packages/core/security/RateLimitConfigurationManager';
+import { RateLimitPresets } from '../../../../packages/core/security/RateLimiter';
 
 /**
  * Setup rate limiting for the application

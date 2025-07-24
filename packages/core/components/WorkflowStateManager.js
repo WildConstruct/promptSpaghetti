@@ -3,13 +3,13 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Main UI component for managing workflow states and transitions
 import { useState, useEffect, useCallback } from 'react';
 import { CheckCircleIcon, ClockIcon, XCircleIcon, DocumentTextIcon, EyeIcon, GlobeAltIcon, ArchiveBoxIcon, PlusIcon, PencilIcon, ChevronDownIcon, ChevronRightIcon, LockClosedIcon, ClipboardDocumentListIcon } from '@heroicons/react/24/outline';
-import { useWorkflowStore } from '../stores/workflowStore';
+import { useWorkflowStore } from '../stores/workflowStore.js';
 export const WorkflowStateManager = ({ workspaceId, resourceId, currentUserId, onStateChange, onLockAcquired, onLockReleased }) => {
-    const { states, transitions, approvals, locks, statistics, loading, error, fetchStates, fetchTransitions, fetchApprovals, fetchLocks, fetchStatistics, transitionResourceState, approveWorkflow, rejectWorkflow, acquireLock, releaseLock, _____createState, _____updateState, _____deleteState, _____createTransition, _____deleteTransition } = useWorkflowStore();
+    const { states, transitions, approvals, locks, statistics, loading, error, fetchStates, fetchTransitions, fetchApprovals, fetchLocks, fetchStatistics, transitionResourceState, approveWorkflow, rejectWorkflow, acquireLock, releaseLock, createState, updateState, deleteState, createTransition, deleteTransition } = useWorkflowStore();
     const [activeTab, setActiveTab] = useState('states');
-    const [_____showCreateState, setShowCreateState] = useState(false);
-    const [_____showCreateTransition, _____setShowCreateTransition] = useState(false);
-    const [_____selectedState, setSelectedState] = useState(null);
+    const [__showCreateState, setShowCreateState] = useState(false);
+    const [__showCreateTransition, __setShowCreateTransition] = useState(false);
+    const [__selectedState, setSelectedState] = useState(null);
     const [expandedStates, setExpandedStates] = useState(new Set());
     // Load initial data
     useEffect(() => {

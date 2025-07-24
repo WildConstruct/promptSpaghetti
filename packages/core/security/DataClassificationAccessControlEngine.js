@@ -6,7 +6,7 @@
  *
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-import { ACCESS_CONTROL_MATRIX } from './DataClassificationAccessControl';
+import { ACCESS_CONTROL_MATRIX } from './DataClassificationAccessControl.js';
 export class DataClassificationAccessControlEngine {
     rbacModel;
     abacModel;

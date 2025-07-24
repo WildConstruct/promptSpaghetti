@@ -26,20 +26,20 @@ describe('DataClassificationService', () => {
   beforeEach(() => {
     // Mock database
     mockDb = {
-      query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown as unknown)
-    };
+      query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown)
+    } as any;
 
     // Mock Redis
     mockRedis = {
-      get: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown as unknown),
-      setex: jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown as unknown),
-      del: jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown as unknown)
-    };
+      get: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown),
+      setex: jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown),
+      del: jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown)
+    } as any;
 
     // Mock audit service
     mockAuditService = {
-      logEvent: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown as unknown)
-    };
+      logEvent: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown)
+    } as any;
 
     // Test configuration
     testConfig = {
@@ -80,9 +80,9 @@ describe('DataClassificationService', () => {
     };
 
     dataClassificationService = new DataClassificationService(
-      mockDb,
-      mockRedis,
-      mockAuditService,
+      mockDb as any,
+      mockRedis as any,
+      mockAuditService as any,
       testConfig
     );
   });
@@ -106,7 +106,7 @@ describe('DataClassificationService', () => {
       expect(result.ruleName).toBe('Default Classification');
       expect(result.reasoning).toContain('No matching rules found, using default classification: internal');
       
-      expect(mockDb.query).toHaveBeenCalledWith(
+      expect((mockDb as any).query).toHaveBeenCalledWith(
         expect.stringContaining('INSERT INTO data_classifications'),
         expect.arrayContaining([
           expect.stringContaining('classification_'),
@@ -141,9 +141,9 @@ describe('DataClassificationService', () => {
 
       testConfig.classificationRules = [confidentialRule];
       dataClassificationService = new DataClassificationService(
-        mockDb,
-        mockRedis,
-        mockAuditService,
+        mockDb as any,
+        mockRedis as any,
+        mockAuditService as any,
         testConfig
       );
 
@@ -186,9 +186,9 @@ describe('DataClassificationService', () => {
 
       testConfig.classificationRules = [restrictedRule];
       dataClassificationService = new DataClassificationService(
-        mockDb,
-        mockRedis,
-        mockAuditService,
+        mockDb as any,
+        mockRedis as any,
+        mockAuditService as any,
         testConfig
       );
 
@@ -217,7 +217,7 @@ describe('DataClassificationService', () => {
         classifiedAt: new Date()
       };
 
-      mockRedis.get.mockResolvedValueOnce(JSON.stringify(cachedResult));
+      (mockRedis as any).get.mockResolvedValueOnce(JSON.stringify(cachedResult));
 
       const result = await dataClassificationService.classifyData(
         'test-data-123',
@@ -225,7 +225,7 @@ describe('DataClassificationService', () => {
       );
 
       expect(result).toEqual(cachedResult);
-      expect(mockDb.query).not.toHaveBeenCalled();
+      expect((mockDb as any).query).not.toHaveBeenCalled();
     });
 
     it('should handle metadata-based classification', async () => {
@@ -249,9 +249,9 @@ describe('DataClassificationService', () => {
 
       testConfig.classificationRules = [metadataRule];
       dataClassificationService = new DataClassificationService(
-        mockDb,
-        mockRedis,
-        mockAuditService,
+        mockDb as any,
+        mockRedis as any,
+        mockAuditService as any,
         testConfig
       );
 
@@ -338,9 +338,9 @@ describe('DataClassificationService', () => {
 
       testConfig.transferPolicies = [customPolicy];
       dataClassificationService = new DataClassificationService(
-        mockDb,
-        mockRedis,
-        mockAuditService,
+        mockDb as any,
+        mockRedis as any,
+        mockAuditService as any,
         testConfig
       );
 
@@ -394,9 +394,9 @@ describe('DataClassificationService', () => {
 
       testConfig.transferPolicies = [roleBasedPolicy];
       dataClassificationService = new DataClassificationService(
-        mockDb,
-        mockRedis,
-        mockAuditService,
+        mockDb as any,
+        mockRedis as any,
+        mockAuditService as any,
         testConfig
       );
 
@@ -459,9 +459,9 @@ describe('DataClassificationService', () => {
 
       testConfig.transferPolicies = [timeBasedPolicy];
       dataClassificationService = new DataClassificationService(
-        mockDb,
-        mockRedis,
-        mockAuditService,
+        mockDb as any,
+        mockRedis as any,
+        mockAuditService as any,
         testConfig
       );
 
@@ -482,7 +482,7 @@ describe('DataClassificationService', () => {
       };
 
       // Mock current time to be within business hours (e.g., 14:00)
-      jest.spyOn(Date.prototype, 'getHours').mockReturnValue(14 as unknown as unknown);
+      jest.spyOn(Date.prototype, 'getHours').mockReturnValue(14 as unknown);
 
       const decision = await dataClassificationService.evaluateTransferRequest(transferRequest);
       
@@ -518,7 +518,7 @@ describe('DataClassificationService', () => {
       expect(rule.classification).toBe('internal');
       expect(rule.conditions).toEqual(ruleData.conditions);
       
-      expect(mockDb.query).toHaveBeenCalledWith(
+      expect((mockDb as any).query).toHaveBeenCalledWith(
         expect.stringContaining('INSERT INTO data_classification_rules'),
         expect.arrayContaining([
           rule.id,
@@ -531,7 +531,7 @@ describe('DataClassificationService', () => {
         ])
       );
 
-      expect(mockAuditService.logEvent).toHaveBeenCalledWith({
+      expect((mockAuditService as any).logEvent).toHaveBeenCalledWith({
         userId: undefined,
         action: 'data_classification_rule_created',
         details: {
@@ -558,9 +558,9 @@ describe('DataClassificationService', () => {
 
       testConfig.classificationRules = [existingRule];
       dataClassificationService = new DataClassificationService(
-        mockDb,
-        mockRedis,
-        mockAuditService,
+        mockDb as any,
+        mockRedis as any,
+        mockAuditService as any,
         testConfig
       );
 
@@ -605,7 +605,7 @@ describe('DataClassificationService', () => {
       expect(policy.sourceClassification).toBe('confidential');
       expect(policy.action).toBe('deny');
       
-      expect(mockDb.query).toHaveBeenCalledWith(
+      expect((mockDb as any).query).toHaveBeenCalledWith(
         expect.stringContaining('INSERT INTO data_transfer_policies'),
         expect.arrayContaining([
           policy.id,
@@ -623,7 +623,7 @@ describe('DataClassificationService', () => {
         ])
       );
 
-      expect(mockAuditService.logEvent).toHaveBeenCalledWith({
+      expect((mockAuditService as any).logEvent).toHaveBeenCalledWith({
         userId: undefined,
         action: 'data_transfer_policy_created',
         details: {
@@ -662,7 +662,7 @@ describe('DataClassificationService', () => {
         }
       ];
 
-      mockDb.query.mockResolvedValueOnce({ rows: mockHistory });
+      (mockDb as any).query.mockResolvedValueOnce({ rows: mockHistory });
 
       const history = await dataClassificationService.getClassificationHistory('data-123');
 
@@ -672,14 +672,14 @@ describe('DataClassificationService', () => {
       expect(history[0].reasoning).toEqual(['Test reasoning']);
       expect(history[1].classification).toBe('confidential');
       
-      expect(mockDb.query).toHaveBeenCalledWith(
+      expect((mockDb as any).query).toHaveBeenCalledWith(
         expect.stringContaining('SELECT * FROM data_classifications'),
         ['data-123']
       );
     });
 
     it('should return empty array when database query fails', async () => {
-      mockDb.query.mockRejectedValueOnce(new Error('Database error'));
+      (mockDb as any).query.mockRejectedValueOnce(new Error('Database error'));
 
       const history = await dataClassificationService.getClassificationHistory('data-123');
 
@@ -707,7 +707,7 @@ describe('DataClassificationService', () => {
         }
       ];
 
-      mockDb.query.mockResolvedValueOnce({ rows: mockAuditLog });
+      (mockDb as any).query.mockResolvedValueOnce({ rows: mockAuditLog });
 
       const filters = {
         dataId: 'data-123',
@@ -723,14 +723,14 @@ describe('DataClassificationService', () => {
       expect(auditLog[0].dataId).toBe('data-123');
       expect(auditLog[0].decision).toBe('denied');
       
-      expect(mockDb.query).toHaveBeenCalledWith(
+      expect((mockDb as any).query).toHaveBeenCalledWith(
         expect.stringContaining('SELECT * FROM transfer_audit_log'),
         expect.arrayContaining(['data-123', 'user-123', 'confidential', 10])
       );
     });
 
     it('should return empty array when database query fails', async () => {
-      mockDb.query.mockRejectedValueOnce(new Error('Database error'));
+      (mockDb as any).query.mockRejectedValueOnce(new Error('Database error'));
 
       const auditLog = await dataClassificationService.getTransferAuditLog();
 
@@ -740,7 +740,7 @@ describe('DataClassificationService', () => {
 
   describe('error handling', () => {
     it('should handle database errors in classifyData', async () => {
-      mockDb.query.mockRejectedValueOnce(new Error('Database connection failed'));
+      (mockDb as any).query.mockRejectedValueOnce(new Error('Database connection failed'));
 
       await expect(
         dataClassificationService.classifyData('data-123', 'content')
@@ -748,7 +748,7 @@ describe('DataClassificationService', () => {
     });
 
     it('should handle database errors in evaluateTransferRequest', async () => {
-      mockDb.query.mockRejectedValueOnce(new Error('Database connection failed'));
+      (mockDb as any).query.mockRejectedValueOnce(new Error('Database connection failed'));
 
       const transferRequest: DataTransferRequest = {
         id: 'transfer-123',
@@ -772,7 +772,7 @@ describe('DataClassificationService', () => {
     });
 
     it('should handle audit service errors gracefully', async () => {
-      mockAuditService.logEvent.mockRejectedValueOnce(new Error('Audit service down'));
+      (mockAuditService as any).logEvent.mockRejectedValueOnce(new Error('Audit service down'));
 
       // Should not throw even if audit fails
       const result = await dataClassificationService.classifyData('data-123', 'content');
@@ -803,7 +803,7 @@ describe('DataClassificationService', () => {
       // Test classification auditing
       await dataClassificationService.classifyData('data-123', 'test content');
       
-      expect(mockAuditService.logEvent).toHaveBeenCalledWith({
+      expect((mockAuditService as any).logEvent).toHaveBeenCalledWith({
         userId: undefined,
         action: 'data_classified',
         details: expect.objectContaining({
@@ -832,7 +832,7 @@ describe('DataClassificationService', () => {
 
       await dataClassificationService.evaluateTransferRequest(transferRequest);
 
-      expect(mockAuditService.logEvent).toHaveBeenCalledWith({
+      expect((mockAuditService as any).logEvent).toHaveBeenCalledWith({
         userId: testUserId,
         action: 'data_transfer_evaluated',
         details: expect.objectContaining({
@@ -936,9 +936,9 @@ describe('DataClassificationService', () => {
 
       testConfig.classificationRules = [confidentialRule];
       dataClassificationService = new DataClassificationService(
-        mockDb,
-        mockRedis,
-        mockAuditService,
+        mockDb as any,
+        mockRedis as any,
+        mockAuditService as any,
         testConfig
       );
 
@@ -963,7 +963,7 @@ describe('DataClassificationService', () => {
       );
 
       // Verify drift event was stored
-      expect(mockDb.query).toHaveBeenCalledWith(
+      expect((mockDb as any).query).toHaveBeenCalledWith(
         expect.stringContaining('INSERT INTO classification_drift_events'),
         expect.arrayContaining([
           expect.stringContaining('drift_'),
@@ -982,7 +982,7 @@ describe('DataClassificationService', () => {
       );
 
       // Verify audit event was logged
-      expect(mockAuditService.logEvent).toHaveBeenCalledWith(
+      expect((mockAuditService as any).logEvent).toHaveBeenCalledWith(
         expect.objectContaining({
           action: 'classification_drift_detected',
           details: expect.objectContaining({
@@ -1017,9 +1017,9 @@ describe('DataClassificationService', () => {
 
       testConfig.classificationRules = [internalRule];
       dataClassificationService = new DataClassificationService(
-        mockDb,
-        mockRedis,
-        mockAuditService,
+        mockDb as any,
+        mockRedis as any,
+        mockAuditService as any,
         testConfig
       );
 
@@ -1029,7 +1029,7 @@ describe('DataClassificationService', () => {
       );
 
       // Verify drift event was NOT stored
-      expect(mockDb.query).not.toHaveBeenCalledWith(
+      expect((mockDb as any).query).not.toHaveBeenCalledWith(
         expect.stringContaining('INSERT INTO classification_drift_events'),
         expect.anything()
       );
@@ -1102,9 +1102,9 @@ describe('DataClassificationService', () => {
 
       testConfig.classificationRules = [confidentialRule];
       dataClassificationService = new DataClassificationService(
-        mockDb,
-        mockRedis,
-        mockAuditService,
+        mockDb as any,
+        mockRedis as any,
+        mockAuditService as any,
         testConfig
       );
 
@@ -1114,7 +1114,7 @@ describe('DataClassificationService', () => {
       );
 
       // Verify oscillation was detected (drift_type should be 'oscillation')
-      expect(mockDb.query).toHaveBeenCalledWith(
+      expect((mockDb as any).query).toHaveBeenCalledWith(
         expect.stringContaining('INSERT INTO classification_drift_events'),
         expect.arrayContaining([
           expect.stringContaining('drift_'),
@@ -1133,7 +1133,7 @@ describe('DataClassificationService', () => {
       );
 
       // Verify rule instability alert was created
-      expect(mockDb.query).toHaveBeenCalledWith(
+      expect((mockDb as any).query).toHaveBeenCalledWith(
         expect.stringContaining('INSERT INTO classification_drift_alerts'),
         expect.arrayContaining([
           expect.stringContaining('alert_'),
@@ -1195,16 +1195,16 @@ describe('DataClassificationService', () => {
 
         testConfig.classificationRules = [rule];
         dataClassificationService = new DataClassificationService(
-          mockDb,
-          mockRedis,
-          mockAuditService,
+          mockDb as any,
+          mockRedis as any,
+          mockAuditService as any,
           testConfig
         );
 
         await dataClassificationService.classifyData('test-data', 'test content');
 
         if (testCase.from !== testCase.to) {
-          expect(mockDb.query).toHaveBeenCalledWith(
+          expect((mockDb as any).query).toHaveBeenCalledWith(
             expect.stringContaining('INSERT INTO classification_drift_events'),
             expect.arrayContaining([
               expect.anything(),
@@ -1266,9 +1266,9 @@ describe('DataClassificationService', () => {
 
       testConfig.classificationRules = [internalRule];
       dataClassificationService = new DataClassificationService(
-        mockDb,
-        mockRedis,
-        mockAuditService,
+        mockDb as any,
+        mockRedis as any,
+        mockAuditService as any,
         testConfig
       );
 
@@ -1278,7 +1278,7 @@ describe('DataClassificationService', () => {
       );
 
       // Verify downgrade alert was created
-      expect(mockDb.query).toHaveBeenCalledWith(
+      expect((mockDb as any).query).toHaveBeenCalledWith(
         expect.stringContaining('INSERT INTO classification_drift_alerts'),
         expect.arrayContaining([
           expect.stringContaining('alert_'),
@@ -1328,10 +1328,10 @@ describe('DataClassificationService', () => {
 
       // Mock getDriftEvents
       jest.spyOn(dataClassificationService, 'getDriftEvents')
-        .mockResolvedValueOnce(mockDriftEvents);
+        .mockResolvedValueOnce(mockDriftEvents as any);
 
       // Mock getTotalClassificationsInRange
-      mockDb.query.mockResolvedValueOnce({ rows: [{ count: '30' }] });
+      (mockDb as any).query.mockResolvedValueOnce({ rows: [{ count: '30' }] });
 
       const timeRange = {
         start: new Date(Date.now() - 24 * 60 * 60 * 1000), // 24 hours ago
@@ -1359,16 +1359,20 @@ describe('DataClassificationService', () => {
         dataId: `data-${i}`,
         previousClassification: 'internal',
         newClassification: 'confidential',
+        previousRuleId: `rule-${i}-prev`,
+        newRuleId: `rule-${i}-new`,
         driftType: i < 3 ? 'oscillation' : 'upgrade', // 30% oscillations
         severity: i < 2 ? 'critical' : 'low',
         confidence: i < 4 ? 0.5 : 0.9, // 40% low confidence
+        reasoning: `Drift detected for data-${i}`,
+        metadata: { source: 'test' },
         detectedAt: new Date()
       }));
 
       jest.spyOn(dataClassificationService, 'getDriftEvents')
-        .mockResolvedValueOnce(mockDriftEvents);
+        .mockResolvedValueOnce(mockDriftEvents as any);
 
-      mockDb.query.mockResolvedValueOnce({ rows: [{ count: '100' }] });
+      (mockDb as any).query.mockResolvedValueOnce({ rows: [{ count: '100' }] });
 
       const timeRange = {
         start: new Date(Date.now() - 24 * 60 * 60 * 1000),
@@ -1408,7 +1412,7 @@ describe('DataClassificationService', () => {
         }
       ];
 
-      mockDb.query.mockResolvedValueOnce({ rows: mockRows });
+      (mockDb as any).query.mockResolvedValueOnce({ rows: mockRows });
 
       const events = await dataClassificationService.getDriftEvents({
         dataId: 'data-1',
@@ -1423,7 +1427,7 @@ describe('DataClassificationService', () => {
       expect(events[0].severity).toBe('medium');
       expect(events[0].reasoning).toEqual(['Test reasoning']);
 
-      expect(mockDb.query).toHaveBeenCalledWith(
+      expect((mockDb as any).query).toHaveBeenCalledWith(
         expect.stringContaining('SELECT * FROM classification_drift_events'),
         expect.arrayContaining(['data-1', 'upgrade', 'medium', 10])
       );
@@ -1443,7 +1447,7 @@ describe('DataClassificationService', () => {
         }
       ];
 
-      mockDb.query.mockResolvedValueOnce({ rows: mockRows });
+      (mockDb as any).query.mockResolvedValueOnce({ rows: mockRows });
 
       const alerts = await dataClassificationService.getDriftAlerts({
         type: 'significant_change',
@@ -1457,7 +1461,7 @@ describe('DataClassificationService', () => {
       expect(alerts[0].dataItems).toEqual(['data-1', 'data-2']);
       expect(alerts[0].affectedPercentage).toBe(15.5);
 
-      expect(mockDb.query).toHaveBeenCalledWith(
+      expect((mockDb as any).query).toHaveBeenCalledWith(
         expect.stringContaining('SELECT * FROM classification_drift_alerts'),
         expect.arrayContaining(['high', 'significant_change', 5])
       );
@@ -1468,9 +1472,9 @@ describe('DataClassificationService', () => {
     it('should skip drift detection when disabled', async () => {
       testConfig.driftDetection.enabled = false;
       dataClassificationService = new DataClassificationService(
-        mockDb,
-        mockRedis,
-        mockAuditService,
+        mockDb as any,
+        mockRedis as any,
+        mockAuditService as any,
         testConfig
       );
 
@@ -1515,7 +1519,7 @@ describe('DataClassificationService', () => {
       );
 
       // Verify drift detection was skipped
-      expect(mockDb.query).not.toHaveBeenCalledWith(
+      expect((mockDb as any).query).not.toHaveBeenCalledWith(
         expect.stringContaining('INSERT INTO classification_drift_events'),
         expect.anything()
       );

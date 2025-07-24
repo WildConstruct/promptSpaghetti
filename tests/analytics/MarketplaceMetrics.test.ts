@@ -4,8 +4,8 @@
  * Comprehensive tests for marketplace analytics functionality
  */
 
-import { MarketplaceMetrics } from '../../packages/core/analytics/MarketplaceMetrics';
-import { conversionTracker } from '../../packages/core/analytics/ConversionTracker';
+import { MarketplaceMetrics } from '../packages/core/analytics/MarketplaceMetrics';
+import { conversionTracker } from '../packages/core/analytics/ConversionTracker';
 
 // Mock browser APIs
 Object.defineProperty(window, 'localStorage', {
@@ -36,7 +36,7 @@ Object.defineProperty(document, 'referrer', {
 });
 
 // Mock conversion tracker
-jest.mock('../../packages/core/analytics/ConversionTracker', () => ({
+jest.mock('../packages/core/analytics/ConversionTracker', () => ({
   conversionTracker: {
     trackEvent: jest.fn<unknown[], unknown>()
   }
@@ -463,7 +463,7 @@ describe('MarketplaceMetrics', () => {
 describe('MarketplaceMetrics React Integration', () => {
   test('can be imported and used in React components', () => {
     // This test ensures the module structure is compatible with React
-    const { MarketplaceMetrics, marketplaceMetrics } = require('../../packages/core/analytics/MarketplaceMetrics');
+    const { MarketplaceMetrics, marketplaceMetrics } = require('../packages/core/analytics/MarketplaceMetrics');
     
     expect(MarketplaceMetrics).toBeDefined();
     expect(marketplaceMetrics).toBeDefined();

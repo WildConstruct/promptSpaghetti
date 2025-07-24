@@ -1,10 +1,10 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React from 'react';
-import { TextFieldEditor } from '../TextFieldEditor';
-import { EnhancedTextAreaEditor } from '../EnhancedTextAreaEditor';
-import { SelectEditor } from '../SelectEditor';
-import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
-import { TemplateEditor } from '../TemplateEditor';
+import { useState } from 'react';
+import { TextFieldEditor } from '../TextFieldEditor.js';
+import { EnhancedTextAreaEditor } from '../EnhancedTextAreaEditor.js';
+import { SelectEditor } from '../SelectEditor.js';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection.js';
+import { TemplateEditor } from '../TemplateEditor.js';
 const SEPARATOR_PRESETS = [
     { value: '', label: 'No separator (direct concatenation)' },
     { value: ' ', label: 'Space' },
@@ -33,7 +33,7 @@ export const ConcatEditor = ({ _____nodeId, nodeData, onChange }) => {
     const trimInputs = nodeData.trimInputs ?? true;
     const preserveOrder = nodeData.preserveOrder ?? true;
     // Progressive disclosure - no manual collapse state needed
-    const [separatorMode, setSeparatorMode] = React.useState(SEPARATOR_PRESETS.find(preset => preset.value === separator) ? separator : 'custom');
+    const [separatorMode, setSeparatorMode] = useState(SEPARATOR_PRESETS.find(preset => preset.value === separator) ? separator : 'custom');
     const handleFieldChange = (field, value) => {
         onChange({ [field]: value });
     };

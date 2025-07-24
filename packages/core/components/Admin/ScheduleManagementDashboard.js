@@ -9,12 +9,12 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Epic: 17 - Backstage Admin Controls
  */
 import { useState, useEffect, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { Badge } from '../ui/Badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
-import { Input } from '../ui/Input';
-import { Select } from '../ui/Select';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
+import { Button } from '../ui/Button.js';
+import { Badge } from '../ui/Badge.js';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
+import { Input } from '../ui/Input.js';
+import { Select } from '../ui/Select.js';
 import { Calendar, Clock, PlayCircle, PauseCircle, StopCircle, Edit, FileText, Plus, Search, Download, RefreshCw, CheckCircle, XCircle, BarChart3, Bell, Activity, Zap, Target, Trash2 } from 'lucide-react';
 const STATUS_CONFIG = {
     pending: { color: 'text-yellow-600 bg-yellow-100', icon: Clock },
@@ -27,7 +27,7 @@ const TYPE_CONFIG = {
     feature_toggle: { color: 'text-blue-600 bg-blue-100', icon: Zap, label: 'Feature Toggle' },
     content: { color: 'text-green-600 bg-green-100', icon: FileText, label: 'Content' }
 };
-export const ScheduleManagementDashboard = ({ className = '', _____userId, _____userRole }) => {
+export const ScheduleManagementDashboard = ({ className = '', userId, userRole }) => {
     const [activeTab, setActiveTab] = useState('overview');
     const [schedules, setSchedules] = useState([]);
     const [analytics, setAnalytics] = useState(null);

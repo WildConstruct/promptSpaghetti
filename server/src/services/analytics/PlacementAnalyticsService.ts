@@ -20,7 +20,7 @@ import {
   PlacementSlot,
   ContentPlacement,
   PlacementCampaign
-} from '../../../packages/core/types/PlacementTypes';
+} from '../../../../packages/core/types/PlacementTypes';
 
 export interface AnalyticsConfig {
   metricsCalculationInterval: number; // minutes
@@ -257,7 +257,10 @@ export class PlacementAnalyticsService {
       anomalies.push({
         type: 'performance_drop',
         severity: this.calculateSeverity(currentMetrics.clickThroughRate, baseline.baselineMetrics.averageCTR),
-        description: `Click-through rate dropped by ${this.calculatePercentageChange(currentMetrics.clickThroughRate, baseline.baselineMetrics.averageCTR)}%`,
+        description: `Click-through rate dropped by ${this.calculatePercentageChange(
+          currentMetrics.clickThroughRate,
+          baseline.baselineMetrics.averageCTR
+        )}%`,
         affectedMetrics: ['click_through_rate'],
         detectedAt: new Date(),
         confidence: this.calculateConfidence(currentMetrics.impressions, baseline.sampleSize),
@@ -270,11 +273,18 @@ export class PlacementAnalyticsService {
     }
 
     // Check for unusual spikes
-    if (this.isSignificantSpike(currentMetrics.impressions, baseline.baselineMetrics.averageImpressions, threshold * 2)) {
+    if (
+      this.isSignificantSpike(currentMetrics.impressions,
+      baseline.baselineMetrics.averageImpressions,
+      threshold * 2
+    )) {
       anomalies.push({
         type: 'unusual_spike',
         severity: 'medium',
-        description: `Impressions increased by ${this.calculatePercentageChange(currentMetrics.impressions, baseline.baselineMetrics.averageImpressions)}%`,
+        description: `Impressions increased by ${this.calculatePercentageChange(
+          currentMetrics.impressions,
+          baseline.baselineMetrics.averageImpressions
+        )}%`,
         affectedMetrics: ['impressions'],
         detectedAt: new Date(),
         confidence: 85,
@@ -560,20 +570,41 @@ export class PlacementAnalyticsService {
     };
   }
 
-  private async getTopPerformingSlots(_____period: MetricsPeriod, _____limit: number): Promise<PlacementSlotMetrics[]> { return []; }
-  private async getTopPerformingPlacements(_____period: MetricsPeriod, _____limit: number): Promise<ContentPlacementMetrics[]> { return []; }
-  private async getTopPerformingCampaigns(_____period: MetricsPeriod, _____limit: number): Promise<CampaignMetrics[]> { return []; }
+  private async getTopPerformingSlots(
+    _____period: MetricsPeriod,
+    _____limit: number
+  ): Promise<PlacementSlotMetrics[]> { return []; }
+  private async getTopPerformingPlacements(
+    _____period: MetricsPeriod,
+    _____limit: number
+  ): Promise<ContentPlacementMetrics[]> { return []; }
+  private async getTopPerformingCampaigns(
+    _____period: MetricsPeriod,
+    _____limit: number
+  ): Promise<CampaignMetrics[]> { return []; }
   private async getPerformanceData(_____period: MetricsPeriod): Promise<unknown> { return {}; }
   private async getUnderperformingPlacements(_____period: MetricsPeriod): Promise<any[]> { return []; }
   private async getOptimizationOpportunities(_____period: MetricsPeriod): Promise<any[]> { return []; }
   private async analyzeContentPerformance(_____period: MetricsPeriod): Promise<unknown> { return {}; }
 
-  private async generatePerformanceInsights(_____data: Record<string, unknown>): Promise<PlacementInsight[]> { return []; }
+  private async generatePerformanceInsights(
+    _____data: Record<string,
+    unknown>
+  ): Promise<PlacementInsight[]> { return []; }
   private async generateTrendInsights(_____data: Record<string, unknown>): Promise<PlacementInsight[]> { return []; }
-  private async generateOptimizationInsights(_____data: Record<string, unknown>): Promise<PlacementInsight[]> { return []; }
+  private async generateOptimizationInsights(
+    _____data: Record<string,
+    unknown>
+  ): Promise<PlacementInsight[]> { return []; }
 
-  private generateUnderperformanceRecommendations(_____data: Record<string, unknown>[]): PlacementRecommendation[] { return []; }
-  private generateOptimizationRecommendations(_____data: Record<string, unknown>[]): PlacementRecommendation[] { return []; }
+  private generateUnderperformanceRecommendations(
+    _____data: Record<string,
+    unknown>[]
+  ): PlacementRecommendation[] { return []; }
+  private generateOptimizationRecommendations(
+    _____data: Record<string,
+    unknown>[]
+  ): PlacementRecommendation[] { return []; }
   private generateContentRecommendations(_____data: Record<string, unknown>): PlacementRecommendation[] { return []; }
 
   // Storage methods

@@ -6,7 +6,7 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Supports real-time search, autocomplete, and intelligent result ranking.
  */
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { KnowledgeCategory, ArticleType, ReadingLevel, SuggestionType } from '../../services/Epic16KnowledgeBaseService';
+import { KnowledgeCategory, ArticleType, ReadingLevel, SuggestionType } from '../../services/Epic16KnowledgeBaseService.js';
 export const KnowledgeBaseSearch = ({ knowledgeService, userId, onArticleSelect, onSearchPerformed, className = '' }) => {
     // State management
     const [searchState, setSearchState] = useState({

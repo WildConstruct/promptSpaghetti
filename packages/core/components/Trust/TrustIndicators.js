@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { Badge } from '../ui/Badge';
-import { Progress } from '../ui/Progress';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/Tooltip';
+import { Badge } from '../ui/Badge.js';
+import { Progress } from '../ui/Progress.js';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/Tooltip.js';
 import { Shield, Star, Award, CheckCircle, Verified, Crown, TrendingUp, Users, ExternalLink, Info } from 'lucide-react';
 /**
  * Main trust indicator component
@@ -51,7 +51,7 @@ export const TrustIndicator = ({ trustScore, size = 'medium', variant = 'detaile
 /**
  * Creator trust badge with comprehensive information
  */
-export const CreatorTrustBadge = ({ _____creatorId, creatorName, trustScore, verifications = [], showFullDetails = false, className = '' }) => {
+export const CreatorTrustBadge = ({ creatorId, creatorName, trustScore, verifications = [], showFullDetails = false, className = '' }) => {
     const hasHighTrust = trustScore && trustScore.overall >= 80;
     const hasVerifications = verifications.length > 0;
     return (_jsxs("div", { className: `creator-trust-badge ${className}`, children: [_jsxs("div", { className: "creator-info", children: [_jsx("div", { className: "creator-avatar", children: _jsx("div", { className: "avatar-placeholder", children: creatorName.charAt(0).toUpperCase() }) }), _jsxs("div", { className: "creator-details", children: [_jsxs("div", { className: "creator-name", children: [_jsx("span", { children: creatorName }), hasHighTrust && (_jsx(Verified, { className: "verified-icon" }))] }), _jsxs("div", { className: "trust-indicators", children: [_jsx(TrustIndicator, { trustScore: trustScore, size: "small", variant: "compact", showTooltip: true }), hasVerifications && (_jsx(VerificationBadges, { verifications: verifications, maxDisplay: 3, size: "small" }))] })] })] }), showFullDetails && trustScore && (_jsx("div", { className: "trust-details", children: _jsx(TrustScoreDisplay, { trustScore: trustScore }) }))] }));

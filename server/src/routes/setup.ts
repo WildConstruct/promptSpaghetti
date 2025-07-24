@@ -7,14 +7,14 @@
 import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { executeGraph, initializeAnalytics } from '../engine';
-import { Graph } from '../../../packages/core/graphSchema';
+import { Graph } from '../../../../packages/core/graphSchema';
 import { validateGraph } from '../graphValidator';
-import { GraphExecutionTracker, ExecutionPathAnalyzer } from '../../../packages/core/execution/ExecutionTracker.js';
+import { GraphExecutionTracker, ExecutionPathAnalyzer } from '../../../../packages/core/execution/ExecutionTracker.js';
 import { 
   PreviewResultWithPath,
   ExecutionPath,
   NodeHighlightStyle
-} from '../../../packages/core/types/ExecutionPath.js';
+} from '../../../../packages/core/types/ExecutionPath.js';
 import { initDatabase, healthCheck, getDatabase, runMigrations } from '../database/connection';
 import { correctionsRoutes } from './corrections';
 import { workspaceRoutes } from './workspace';
@@ -30,7 +30,7 @@ import { CostTracker } from '../analytics/CostTracker';
 import { AnalyticsDAO } from '../database/analytics-dao';
 import { MetricsCollector } from '../performance/MetricsCollector';
 import { PerformanceDashboard } from '../performance/PerformanceDashboard';
-import { ExtensionLifecycleManager } from '../../../packages/core/extensions/ExtensionLifecycleManager';
+import { ExtensionLifecycleManager } from '../../../../packages/core/extensions/ExtensionLifecycleManager';
 import { WebSocketServer } from '../websocket/WebSocketServer';
 import { WSServerConfig } from '../websocket/types';
 import { AnalyticsWebSocketServer } from '../websocket/AnalyticsWebSocketServer';

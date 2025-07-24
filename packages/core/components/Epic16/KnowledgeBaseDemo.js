@@ -6,7 +6,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * work together in the Epic 16 template marketplace ecosystem.
  */
 import { useState, useMemo } from 'react';
-import { ArticleManagement, KnowledgeBaseLayout } from './index';
+import { ArticleManagement, KnowledgeBaseLayout } from './index.js';
 // Demo data
 const demoAuthors = [
     {

@@ -10,7 +10,7 @@
  */
 
 import { Database } from '../../database';
-import { RateLimitingService } from '../../../packages/core/security/RateLimitingService';
+import { RateLimitingService } from '../../../../packages/core/security/RateLimitingService';
 import { FraudMonitoringService } from '../fraud/FraudMonitoringService';
 import { EnforcementActionService } from '../enforcement/EnforcementActionService';
 import { AuditService } from '../auth/services/AuditService';
@@ -32,8 +32,8 @@ import {
   ScopeType,
   ViolationStatus,
   QuotaEventType
-} from '../../../packages/core/types/UsageQuotaTypes';
-import { ActionSeverity } from '../../../packages/core/types/EnforcementTypes';
+} from '../../../../packages/core/types/UsageQuotaTypes';
+import { ActionSeverity } from '../../../../packages/core/types/EnforcementTypes';
 
 export class UsageQuotaService {
   private db: Database;
@@ -75,7 +75,11 @@ export class UsageQuotaService {
     const startTime = Date.now();
     
     try {
-      console.log(`🔍 Checking quota for user ${request.userId}, type ${request.quotaType}, resource ${request.resourceIdentifier}`);
+      console.log(
+        `🔍 Checking quota for user ${request.userId},
+        type ${request.quotaType},
+        resource ${request.resourceIdentifier}`
+      );
 
       // Find applicable quotas
       const quotas = await this.findApplicableQuotas(request);
@@ -707,7 +711,10 @@ export class UsageQuotaService {
   /**
    * Generate recommendations based on quota state
    */
-  private generateQuotaRecommendations(quota: UsageQuota, result: QuotaCheckResult): Array<{ type: string; title: string; description: string; actionUrl?: string; priority: string }> {
+  private generateQuotaRecommendations(
+    quota: UsageQuota,
+    result: QuotaCheckResult
+  ): Array<{ type: string; title: string; description: string; actionUrl?: string; priority: string }> {
     const recommendations = [];
 
     if (result.utilizationPercentage >= 90) {
@@ -951,22 +958,47 @@ export class UsageQuotaService {
   private async insertViolation(_____violation: QuotaViolation): Promise<void> { }
   private async sendWarningNotification(_____violation: QuotaViolation, _____quota: UsageQuota): Promise<void> { }
   private async applyThrottling(_____userId: string, _____quota: UsageQuota): Promise<void> { }
-  private async applySoftBlock(_____userId: string, _____quota: UsageQuota, _____violation: QuotaViolation): Promise<void> { }
-  private async applyHardBlock(_____userId: string, _____quota: UsageQuota, _____violation: QuotaViolation): Promise<void> { }
+  private async applySoftBlock(
+    _____userId: string,
+    _____quota: UsageQuota,
+    _____violation: QuotaViolation
+  ): Promise<void> { }
+  private async applyHardBlock(
+    _____userId: string,
+    _____quota: UsageQuota,
+    _____violation: QuotaViolation
+  ): Promise<void> { }
   private async queueForReview(_____violation: QuotaViolation, _____quota: UsageQuota): Promise<void> { }
   private async applyServiceDegradation(_____userId: string, _____quota: UsageQuota): Promise<void> { }
   private async setupTrafficRedirect(_____userId: string, _____quota: UsageQuota): Promise<void> { }
-  private async sendUpgradePrompt(_____userId: string, _____quota: UsageQuota, _____violation: QuotaViolation): Promise<void> { }
+  private async sendUpgradePrompt(
+    _____userId: string,
+    _____quota: UsageQuota,
+    _____violation: QuotaViolation
+  ): Promise<void> { }
   private getViolationSeverity(_____result: QuotaCheckResult): ActionSeverity { return 'medium'; }
-  private async assessViolationImpact(_____quota: UsageQuota, _____request: QuotaCheckRequest): Promise<unknown> { return {}; }
+  private async assessViolationImpact(
+    _____quota: UsageQuota,
+    _____request: QuotaCheckRequest
+  ): Promise<unknown> { return {}; }
   private async isSuspiciousViolation(_____violation: QuotaViolation): Promise<boolean> { return false; }
   private async getRecentViolationCount(_____userId: string): Promise<number> { return 0; }
   private async getUserQuotas(_____userId: string): Promise<UsageQuota[]> { return []; }
-  private async getUserQuotaViolations(_____userId: string, _____quotaId: string, _____period: unknown): Promise<QuotaViolation[]> { return []; }
+  private async getUserQuotaViolations(
+    _____userId: string,
+    _____quotaId: string,
+    _____period: unknown
+  ): Promise<QuotaViolation[]> { return []; }
   private async calculateUsageTrend(_____quotaId: string, _____userId: string): Promise<string> { return 'stable'; }
   private async getUserViolationCount(_____userId: string, _____period: unknown): Promise<number> { return 0; }
   private async getUserActiveViolations(_____userId: string): Promise<QuotaViolation[]> { return []; }
   private calculateUserRiskScore(_____quotaDetails: unknown[], _____activeViolationCount: number): number { return 0; }
-  private async generateUpgradeRecommendations(_____userId: string, _____quotaDetails: unknown[]): Promise<any[]> { return []; }
-  private async generateUsageProjections(_____userId: string, _____quotaDetails: unknown[]): Promise<any[]> { return []; }
+  private async generateUpgradeRecommendations(
+    _____userId: string,
+    _____quotaDetails: unknown[]
+  ): Promise<any[]> { return []; }
+  private async generateUsageProjections(
+    _____userId: string,
+    _____quotaDetails: unknown[]
+  ): Promise<any[]> { return []; }
 }

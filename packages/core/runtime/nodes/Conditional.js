@@ -1,10 +1,10 @@
 // packages/core/runtime/nodes/Conditional.ts
 // Advanced conditional node with expression-based branching
-import { AdvancedRuntimeNode } from '../advanced';
-import { AdvancedIOHandler, IOSpecBuilder } from '../io-system';
-import { SafeExpressionEvaluator } from '../expression-evaluator';
-import { securityAudit, SecuritySeverity, SecurityEventCategory } from '../security-audit-logger';
-import { ErrorFactory } from '../../errors/ErrorFactory';
+import { AdvancedRuntimeNode } from '../advanced.js';
+import { AdvancedIOHandler, IOSpecBuilder } from '../io-system.js';
+import { SafeExpressionEvaluator } from '../expression-evaluator.js';
+import { securityAudit, SecuritySeverity, SecurityEventCategory } from '../security-audit-logger.js';
+import { ErrorFactory } from '../../errors/ErrorFactory.js';
 /**
  * Advanced conditional node with expression-based branching logic
  * Supports multiple conditions, variable access, and custom functions
@@ -159,7 +159,7 @@ export class ConditionalNode extends AdvancedRuntimeNode {
     /**
      * Get effective branches from constructor data or dynamic inputs
      */
-    getEffectiveBranches(ctx) {
+    getEffectiveBranches(_______ctx) {
         // For now, use constructor branches
         // In full implementation, would merge with dynamic inputs from I/O system
         return this.branches;
@@ -313,6 +313,6 @@ export class ConditionalBuilder {
 /**
  * Fluent API for building conditional nodes
  */
-export function conditional(id) {
+export function conditional(_______id) {
     return new ConditionalBuilder();
 }

@@ -7,7 +7,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  */
 import { useState, useEffect } from 'react';
 import { Plus, Edit3, Trash2, Save, X, AlertTriangle, Info, CheckCircle, Settings, Download, Upload } from 'lucide-react';
-import { HISTORICAL_ERAS } from '../../types/UTDG';
+import { HISTORICAL_ERAS } from '../../types/UTDG.js';
 import './ConstraintRuleManager.css';
 export const ConstraintRuleManager = ({ validator, onConstraintsChange, onClose }) => {
     const [constraints, setConstraints] = useState([]);

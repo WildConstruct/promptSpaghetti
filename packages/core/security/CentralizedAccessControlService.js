@@ -77,11 +77,7 @@ export class CentralizedAccessControlService extends EventEmitter {
                 abacDecision = await this.abacEngine.evaluate(request);
             }
             // Combine decisions
-            const finalDecision = await this.combineDe, cisions;
-            (request,
-                rbacDecision,
-                abacDecision,
-                effectivePermissions);
+            const finalDecision = await this.combineDecisions(request, rbacDecision, abacDecision, effectivePermissions);
             // Apply policy obligations
             await this.applyObligations(finalDecision);
             // Cache decision if enabled
@@ -882,7 +878,7 @@ class ABACEngine {
         const matchedPolicies = [];
         const obligations = [];
         const conditions = [];
-        let confidence = 100;
+        const confidence = 100;
         // Simplified ABAC evaluation
         // In a real implementation, this would evaluate complex attribute-based policies
         // Example time-based policy

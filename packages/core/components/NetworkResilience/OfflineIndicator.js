@@ -1,6 +1,6 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import { useState, useEffect } from 'react';
-import { ConnectionState } from '../../network-resilience/ConnectionStateManager';
+import { ConnectionState } from '../../network-resilience/ConnectionStateManager.js';
 export const OfflineIndicator = ({ status, position = 'top', showQueueInfo = true, showActions = true, onRetryConnection, onViewQueue, className = '' }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [canDismiss, setCanDismiss] = useState(false);

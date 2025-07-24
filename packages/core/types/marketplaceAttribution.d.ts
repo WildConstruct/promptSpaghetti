@@ -100,18 +100,18 @@ export declare const TemplateAttributionSchema: z.ZodObject<{
         claimType: "collaboration" | "derivation" | "ownership" | "inspiration";
         claimDescription: string;
         evidenceUrls: string[];
-        resolvedAt?: Date | undefined;
         reviewedAt?: Date | undefined;
         reviewedBy?: string | undefined;
+        resolvedAt?: Date | undefined;
     }, {
         status: "pending" | "approved" | "rejected" | "disputed";
         claimId: string;
         claimantId: string;
         claimType: "collaboration" | "derivation" | "ownership" | "inspiration";
         claimDescription: string;
-        resolvedAt?: Date | undefined;
         reviewedAt?: Date | undefined;
         reviewedBy?: string | undefined;
+        resolvedAt?: Date | undefined;
         evidenceUrls?: string[] | undefined;
     }>, "many">>;
     isVerified: z.ZodDefault<z.ZodBoolean>;
@@ -157,9 +157,9 @@ export declare const TemplateAttributionSchema: z.ZodObject<{
         claimType: "collaboration" | "derivation" | "ownership" | "inspiration";
         claimDescription: string;
         evidenceUrls: string[];
-        resolvedAt?: Date | undefined;
         reviewedAt?: Date | undefined;
         reviewedBy?: string | undefined;
+        resolvedAt?: Date | undefined;
     }[];
     attributionMethod: "manual" | "ai_analysis" | "git_history" | "session_tracking" | "user_declaration";
     sourceMetadata: Record<string, unknown>;
@@ -193,6 +193,7 @@ export declare const TemplateAttributionSchema: z.ZodObject<{
     confidenceScore?: number | undefined;
     isVerified?: boolean | undefined;
     verifiedBy?: string | undefined;
+    verifiedAt?: Date | undefined;
     collaborators?: {
         userId: string;
         userName: string;
@@ -203,7 +204,6 @@ export declare const TemplateAttributionSchema: z.ZodObject<{
         verifiedAt?: Date | undefined;
         contributionDescription?: string | undefined;
     }[] | undefined;
-    verifiedAt?: Date | undefined;
     derivedFrom?: {
         originalTemplateId: string;
         originalCreatorId: string;
@@ -218,9 +218,9 @@ export declare const TemplateAttributionSchema: z.ZodObject<{
         claimantId: string;
         claimType: "collaboration" | "derivation" | "ownership" | "inspiration";
         claimDescription: string;
-        resolvedAt?: Date | undefined;
         reviewedAt?: Date | undefined;
         reviewedBy?: string | undefined;
+        resolvedAt?: Date | undefined;
         evidenceUrls?: string[] | undefined;
     }[] | undefined;
     sourceMetadata?: Record<string, unknown> | undefined;
@@ -277,9 +277,9 @@ export declare const RevenueAttributionSchema: z.ZodObject<{
     isVerified: boolean;
     templateId: string;
     currency: string;
-    buyerId: string;
     templateVersion: string;
     purchaseDate: Date;
+    buyerId: string;
     purchaseId: string;
     totalRevenue: number;
     attributionMethod: "automated" | "manual_review" | "dispute_resolution";
@@ -302,9 +302,9 @@ export declare const RevenueAttributionSchema: z.ZodObject<{
     createdAt: Date;
     updatedAt: Date;
     templateId: string;
-    buyerId: string;
     templateVersion: string;
     purchaseDate: Date;
+    buyerId: string;
     purchaseId: string;
     totalRevenue: number;
     attributionMethod: "automated" | "manual_review" | "dispute_resolution";
@@ -470,8 +470,8 @@ export declare const MarketplaceAttributionAnalyticsSchema: z.ZodObject<{
         verificationRate: z.ZodDefault<z.ZodNumber>;
     }, "strip", z.ZodTypeAny, {
         averageRating: number;
-        templatesCreated: number;
         totalViews: number;
+        templatesCreated: number;
         attributionClaims: number;
         collaborationsInitiated: number;
         revenueGenerated: number;
@@ -483,8 +483,8 @@ export declare const MarketplaceAttributionAnalyticsSchema: z.ZodObject<{
         verificationRate: number;
     }, {
         averageRating?: number | undefined;
-        templatesCreated?: number | undefined;
         totalViews?: number | undefined;
+        templatesCreated?: number | undefined;
         attributionClaims?: number | undefined;
         collaborationsInitiated?: number | undefined;
         revenueGenerated?: number | undefined;
@@ -525,8 +525,8 @@ export declare const MarketplaceAttributionAnalyticsSchema: z.ZodObject<{
     expiresAt: Date;
     metrics: {
         averageRating: number;
-        templatesCreated: number;
         totalViews: number;
+        templatesCreated: number;
         attributionClaims: number;
         collaborationsInitiated: number;
         revenueGenerated: number;
@@ -557,8 +557,8 @@ export declare const MarketplaceAttributionAnalyticsSchema: z.ZodObject<{
     expiresAt: Date;
     metrics: {
         averageRating?: number | undefined;
-        templatesCreated?: number | undefined;
         totalViews?: number | undefined;
+        templatesCreated?: number | undefined;
         attributionClaims?: number | undefined;
         collaborationsInitiated?: number | undefined;
         revenueGenerated?: number | undefined;
@@ -664,8 +664,8 @@ export declare const MarketplaceChangeAttributionSchema: z.ZodObject<{
     newValue?: Record<string, unknown> | undefined;
     authorId?: string | undefined;
     authorName?: string | undefined;
-    authorEmail?: string | undefined;
     batchId?: string | undefined;
+    authorEmail?: string | undefined;
     parentChangeId?: string | undefined;
     changeReason?: string | undefined;
     changeDescription?: string | undefined;
@@ -699,10 +699,10 @@ export declare const MarketplaceChangeAttributionSchema: z.ZodObject<{
     newValue?: Record<string, unknown> | undefined;
     authorId?: string | undefined;
     authorName?: string | undefined;
+    batchId?: string | undefined;
     authorEmail?: string | undefined;
     changeData?: Record<string, unknown> | undefined;
     changeSize?: number | undefined;
-    batchId?: string | undefined;
     parentChangeId?: string | undefined;
     changeReason?: string | undefined;
     changeDescription?: string | undefined;
@@ -761,15 +761,15 @@ export declare const MarketplaceAttributionFilterSchema: z.ZodObject<{
     resourceId?: string | undefined;
     resourceType?: "template" | "position" | "graph" | "node" | "property" | "edge" | "creator_profile" | "template_version" | "template_purchase" | "template_review" | "template_collection" | "revenue_record" | "attribution_claim" | undefined;
     templateId?: string | undefined;
-    creatorId?: string | undefined;
-    authorType?: "system" | "anonymous" | "api" | "user" | "guest" | "template_creator" | "template_collaborator" | "marketplace_curator" | "revenue_system" | "attribution_engine" | undefined;
+    verificationStatus?: "verified" | "disputed" | "unverified" | undefined;
     authorId?: string | undefined;
     dateFrom?: Date | undefined;
     dateTo?: Date | undefined;
-    changeType?: "move" | "delete" | "update" | "create" | "property_change" | "connection_change" | "template_purchase" | "template_review" | "template_create" | "template_publish" | "revenue_earned" | "attribution_assigned" | "collaboration_joined" | "template_derived" | "collection_add" | "creator_verified" | undefined;
+    creatorId?: string | undefined;
+    authorType?: "system" | "anonymous" | "api" | "user" | "guest" | "template_creator" | "template_collaborator" | "marketplace_curator" | "revenue_system" | "attribution_engine" | undefined;
     batchId?: string | undefined;
+    changeType?: "move" | "delete" | "update" | "create" | "property_change" | "connection_change" | "template_purchase" | "template_review" | "template_create" | "template_publish" | "revenue_earned" | "attribution_assigned" | "collaboration_joined" | "template_derived" | "collection_add" | "creator_verified" | undefined;
     minConfidenceScore?: number | undefined;
-    verificationStatus?: "verified" | "disputed" | "unverified" | undefined;
     revenueRange?: {
         min?: number | undefined;
         max?: number | undefined;
@@ -787,15 +787,15 @@ export declare const MarketplaceAttributionFilterSchema: z.ZodObject<{
     resourceId?: string | undefined;
     resourceType?: "template" | "position" | "graph" | "node" | "property" | "edge" | "creator_profile" | "template_version" | "template_purchase" | "template_review" | "template_collection" | "revenue_record" | "attribution_claim" | undefined;
     templateId?: string | undefined;
-    creatorId?: string | undefined;
-    authorType?: "system" | "anonymous" | "api" | "user" | "guest" | "template_creator" | "template_collaborator" | "marketplace_curator" | "revenue_system" | "attribution_engine" | undefined;
+    verificationStatus?: "verified" | "disputed" | "unverified" | undefined;
     authorId?: string | undefined;
     dateFrom?: Date | undefined;
     dateTo?: Date | undefined;
-    changeType?: "move" | "delete" | "update" | "create" | "property_change" | "connection_change" | "template_purchase" | "template_review" | "template_create" | "template_publish" | "revenue_earned" | "attribution_assigned" | "collaboration_joined" | "template_derived" | "collection_add" | "creator_verified" | undefined;
+    creatorId?: string | undefined;
+    authorType?: "system" | "anonymous" | "api" | "user" | "guest" | "template_creator" | "template_collaborator" | "marketplace_curator" | "revenue_system" | "attribution_engine" | undefined;
     batchId?: string | undefined;
+    changeType?: "move" | "delete" | "update" | "create" | "property_change" | "connection_change" | "template_purchase" | "template_review" | "template_create" | "template_publish" | "revenue_earned" | "attribution_assigned" | "collaboration_joined" | "template_derived" | "collection_add" | "creator_verified" | undefined;
     minConfidenceScore?: number | undefined;
-    verificationStatus?: "verified" | "disputed" | "unverified" | undefined;
     revenueRange?: {
         min?: number | undefined;
         max?: number | undefined;
@@ -1024,18 +1024,18 @@ export declare const TemplateAttributionResponseSchema: z.ZodObject<{
             claimType: "collaboration" | "derivation" | "ownership" | "inspiration";
             claimDescription: string;
             evidenceUrls: string[];
-            resolvedAt?: Date | undefined;
             reviewedAt?: Date | undefined;
             reviewedBy?: string | undefined;
+            resolvedAt?: Date | undefined;
         }, {
             status: "pending" | "approved" | "rejected" | "disputed";
             claimId: string;
             claimantId: string;
             claimType: "collaboration" | "derivation" | "ownership" | "inspiration";
             claimDescription: string;
-            resolvedAt?: Date | undefined;
             reviewedAt?: Date | undefined;
             reviewedBy?: string | undefined;
+            resolvedAt?: Date | undefined;
             evidenceUrls?: string[] | undefined;
         }>, "many">>;
         isVerified: z.ZodDefault<z.ZodBoolean>;
@@ -1081,9 +1081,9 @@ export declare const TemplateAttributionResponseSchema: z.ZodObject<{
             claimType: "collaboration" | "derivation" | "ownership" | "inspiration";
             claimDescription: string;
             evidenceUrls: string[];
-            resolvedAt?: Date | undefined;
             reviewedAt?: Date | undefined;
             reviewedBy?: string | undefined;
+            resolvedAt?: Date | undefined;
         }[];
         attributionMethod: "manual" | "ai_analysis" | "git_history" | "session_tracking" | "user_declaration";
         sourceMetadata: Record<string, unknown>;
@@ -1117,6 +1117,7 @@ export declare const TemplateAttributionResponseSchema: z.ZodObject<{
         confidenceScore?: number | undefined;
         isVerified?: boolean | undefined;
         verifiedBy?: string | undefined;
+        verifiedAt?: Date | undefined;
         collaborators?: {
             userId: string;
             userName: string;
@@ -1127,7 +1128,6 @@ export declare const TemplateAttributionResponseSchema: z.ZodObject<{
             verifiedAt?: Date | undefined;
             contributionDescription?: string | undefined;
         }[] | undefined;
-        verifiedAt?: Date | undefined;
         derivedFrom?: {
             originalTemplateId: string;
             originalCreatorId: string;
@@ -1142,9 +1142,9 @@ export declare const TemplateAttributionResponseSchema: z.ZodObject<{
             claimantId: string;
             claimType: "collaboration" | "derivation" | "ownership" | "inspiration";
             claimDescription: string;
-            resolvedAt?: Date | undefined;
             reviewedAt?: Date | undefined;
             reviewedBy?: string | undefined;
+            resolvedAt?: Date | undefined;
             evidenceUrls?: string[] | undefined;
         }[] | undefined;
         sourceMetadata?: Record<string, unknown> | undefined;
@@ -1217,9 +1217,9 @@ export declare const TemplateAttributionResponseSchema: z.ZodObject<{
             claimType: "collaboration" | "derivation" | "ownership" | "inspiration";
             claimDescription: string;
             evidenceUrls: string[];
-            resolvedAt?: Date | undefined;
             reviewedAt?: Date | undefined;
             reviewedBy?: string | undefined;
+            resolvedAt?: Date | undefined;
         }[];
         attributionMethod: "manual" | "ai_analysis" | "git_history" | "session_tracking" | "user_declaration";
         sourceMetadata: Record<string, unknown>;
@@ -1267,6 +1267,7 @@ export declare const TemplateAttributionResponseSchema: z.ZodObject<{
         confidenceScore?: number | undefined;
         isVerified?: boolean | undefined;
         verifiedBy?: string | undefined;
+        verifiedAt?: Date | undefined;
         collaborators?: {
             userId: string;
             userName: string;
@@ -1277,7 +1278,6 @@ export declare const TemplateAttributionResponseSchema: z.ZodObject<{
             verifiedAt?: Date | undefined;
             contributionDescription?: string | undefined;
         }[] | undefined;
-        verifiedAt?: Date | undefined;
         derivedFrom?: {
             originalTemplateId: string;
             originalCreatorId: string;
@@ -1292,9 +1292,9 @@ export declare const TemplateAttributionResponseSchema: z.ZodObject<{
             claimantId: string;
             claimType: "collaboration" | "derivation" | "ownership" | "inspiration";
             claimDescription: string;
-            resolvedAt?: Date | undefined;
             reviewedAt?: Date | undefined;
             reviewedBy?: string | undefined;
+            resolvedAt?: Date | undefined;
             evidenceUrls?: string[] | undefined;
         }[] | undefined;
         sourceMetadata?: Record<string, unknown> | undefined;
@@ -1530,18 +1530,18 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
                 claimType: "collaboration" | "derivation" | "ownership" | "inspiration";
                 claimDescription: string;
                 evidenceUrls: string[];
-                resolvedAt?: Date | undefined;
                 reviewedAt?: Date | undefined;
                 reviewedBy?: string | undefined;
+                resolvedAt?: Date | undefined;
             }, {
                 status: "pending" | "approved" | "rejected" | "disputed";
                 claimId: string;
                 claimantId: string;
                 claimType: "collaboration" | "derivation" | "ownership" | "inspiration";
                 claimDescription: string;
-                resolvedAt?: Date | undefined;
                 reviewedAt?: Date | undefined;
                 reviewedBy?: string | undefined;
+                resolvedAt?: Date | undefined;
                 evidenceUrls?: string[] | undefined;
             }>, "many">>;
             isVerified: z.ZodDefault<z.ZodBoolean>;
@@ -1587,9 +1587,9 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
                 claimType: "collaboration" | "derivation" | "ownership" | "inspiration";
                 claimDescription: string;
                 evidenceUrls: string[];
-                resolvedAt?: Date | undefined;
                 reviewedAt?: Date | undefined;
                 reviewedBy?: string | undefined;
+                resolvedAt?: Date | undefined;
             }[];
             attributionMethod: "manual" | "ai_analysis" | "git_history" | "session_tracking" | "user_declaration";
             sourceMetadata: Record<string, unknown>;
@@ -1623,6 +1623,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
             confidenceScore?: number | undefined;
             isVerified?: boolean | undefined;
             verifiedBy?: string | undefined;
+            verifiedAt?: Date | undefined;
             collaborators?: {
                 userId: string;
                 userName: string;
@@ -1633,7 +1634,6 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
                 verifiedAt?: Date | undefined;
                 contributionDescription?: string | undefined;
             }[] | undefined;
-            verifiedAt?: Date | undefined;
             derivedFrom?: {
                 originalTemplateId: string;
                 originalCreatorId: string;
@@ -1648,9 +1648,9 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
                 claimantId: string;
                 claimType: "collaboration" | "derivation" | "ownership" | "inspiration";
                 claimDescription: string;
-                resolvedAt?: Date | undefined;
                 reviewedAt?: Date | undefined;
                 reviewedBy?: string | undefined;
+                resolvedAt?: Date | undefined;
                 evidenceUrls?: string[] | undefined;
             }[] | undefined;
             sourceMetadata?: Record<string, unknown> | undefined;
@@ -1733,9 +1733,9 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
                 claimType: "collaboration" | "derivation" | "ownership" | "inspiration";
                 claimDescription: string;
                 evidenceUrls: string[];
-                resolvedAt?: Date | undefined;
                 reviewedAt?: Date | undefined;
                 reviewedBy?: string | undefined;
+                resolvedAt?: Date | undefined;
             }[];
             attributionMethod: "manual" | "ai_analysis" | "git_history" | "session_tracking" | "user_declaration";
             sourceMetadata: Record<string, unknown>;
@@ -1784,6 +1784,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
             confidenceScore?: number | undefined;
             isVerified?: boolean | undefined;
             verifiedBy?: string | undefined;
+            verifiedAt?: Date | undefined;
             collaborators?: {
                 userId: string;
                 userName: string;
@@ -1794,7 +1795,6 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
                 verifiedAt?: Date | undefined;
                 contributionDescription?: string | undefined;
             }[] | undefined;
-            verifiedAt?: Date | undefined;
             derivedFrom?: {
                 originalTemplateId: string;
                 originalCreatorId: string;
@@ -1809,9 +1809,9 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
                 claimantId: string;
                 claimType: "collaboration" | "derivation" | "ownership" | "inspiration";
                 claimDescription: string;
-                resolvedAt?: Date | undefined;
                 reviewedAt?: Date | undefined;
                 reviewedBy?: string | undefined;
+                resolvedAt?: Date | undefined;
                 evidenceUrls?: string[] | undefined;
             }[] | undefined;
             sourceMetadata?: Record<string, unknown> | undefined;
@@ -1861,8 +1861,8 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
             verificationRate: z.ZodDefault<z.ZodNumber>;
         }, "strip", z.ZodTypeAny, {
             averageRating: number;
-            templatesCreated: number;
             totalViews: number;
+            templatesCreated: number;
             attributionClaims: number;
             collaborationsInitiated: number;
             revenueGenerated: number;
@@ -1874,8 +1874,8 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
             verificationRate: number;
         }, {
             averageRating?: number | undefined;
-            templatesCreated?: number | undefined;
             totalViews?: number | undefined;
+            templatesCreated?: number | undefined;
             attributionClaims?: number | undefined;
             collaborationsInitiated?: number | undefined;
             revenueGenerated?: number | undefined;
@@ -1916,8 +1916,8 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
         expiresAt: Date;
         metrics: {
             averageRating: number;
-            templatesCreated: number;
             totalViews: number;
+            templatesCreated: number;
             attributionClaims: number;
             collaborationsInitiated: number;
             revenueGenerated: number;
@@ -1948,8 +1948,8 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
         expiresAt: Date;
         metrics: {
             averageRating?: number | undefined;
-            templatesCreated?: number | undefined;
             totalViews?: number | undefined;
+            templatesCreated?: number | undefined;
             attributionClaims?: number | undefined;
             collaborationsInitiated?: number | undefined;
             revenueGenerated?: number | undefined;
@@ -2026,9 +2026,9 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
                 claimType: "collaboration" | "derivation" | "ownership" | "inspiration";
                 claimDescription: string;
                 evidenceUrls: string[];
-                resolvedAt?: Date | undefined;
                 reviewedAt?: Date | undefined;
                 reviewedBy?: string | undefined;
+                resolvedAt?: Date | undefined;
             }[];
             attributionMethod: "manual" | "ai_analysis" | "git_history" | "session_tracking" | "user_declaration";
             sourceMetadata: Record<string, unknown>;
@@ -2090,8 +2090,8 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
         expiresAt: Date;
         metrics: {
             averageRating: number;
-            templatesCreated: number;
             totalViews: number;
+            templatesCreated: number;
             attributionClaims: number;
             collaborationsInitiated: number;
             revenueGenerated: number;
@@ -2153,6 +2153,7 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
             confidenceScore?: number | undefined;
             isVerified?: boolean | undefined;
             verifiedBy?: string | undefined;
+            verifiedAt?: Date | undefined;
             collaborators?: {
                 userId: string;
                 userName: string;
@@ -2163,7 +2164,6 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
                 verifiedAt?: Date | undefined;
                 contributionDescription?: string | undefined;
             }[] | undefined;
-            verifiedAt?: Date | undefined;
             derivedFrom?: {
                 originalTemplateId: string;
                 originalCreatorId: string;
@@ -2178,9 +2178,9 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
                 claimantId: string;
                 claimType: "collaboration" | "derivation" | "ownership" | "inspiration";
                 claimDescription: string;
-                resolvedAt?: Date | undefined;
                 reviewedAt?: Date | undefined;
                 reviewedBy?: string | undefined;
+                resolvedAt?: Date | undefined;
                 evidenceUrls?: string[] | undefined;
             }[] | undefined;
             sourceMetadata?: Record<string, unknown> | undefined;
@@ -2232,8 +2232,8 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
         expiresAt: Date;
         metrics: {
             averageRating?: number | undefined;
-            templatesCreated?: number | undefined;
             totalViews?: number | undefined;
+            templatesCreated?: number | undefined;
             attributionClaims?: number | undefined;
             collaborationsInitiated?: number | undefined;
             revenueGenerated?: number | undefined;

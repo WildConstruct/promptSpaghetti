@@ -80,7 +80,7 @@ export const defaultSecurityConfig: SecurityHeadersConfig = {
     directive: 'strict-origin-when-cross-origin'
   },
   strictTransportSecurity: {
-    enabled: process.env.NODE_ENV === 'production',
+    enabled: true, // Will be conditionally applied based on environment and HTTPS
     maxAge: 31536000, // 1 year
     includeSubDomains: true,
     preload: true
@@ -130,75 +130,120 @@ function buildPermissionsPolicyHeader(directives: Record<string, string[]>): str
     .join(', ');
 }
 
+// Deep merge configuration with defaults
+function mergeWithDefaults(config: SecurityHeadersConfig): SecurityHeadersConfig {
+  return {
+    contentSecurityPolicy: {
+      ...defaultSecurityConfig.contentSecurityPolicy,
+      ...config.contentSecurityPolicy
+    },
+    frameOptions: {
+      ...defaultSecurityConfig.frameOptions,
+      ...config.frameOptions
+    },
+    contentTypeOptions: {
+      ...defaultSecurityConfig.contentTypeOptions,
+      ...config.contentTypeOptions
+    },
+    referrerPolicy: {
+      ...defaultSecurityConfig.referrerPolicy,
+      ...config.referrerPolicy
+    },
+    strictTransportSecurity: {
+      ...defaultSecurityConfig.strictTransportSecurity,
+      ...config.strictTransportSecurity
+    },
+    permissionsPolicy: {
+      ...defaultSecurityConfig.permissionsPolicy,
+      ...config.permissionsPolicy
+    },
+    crossOriginEmbedderPolicy: {
+      ...defaultSecurityConfig.crossOriginEmbedderPolicy,
+      ...config.crossOriginEmbedderPolicy
+    },
+    crossOriginOpenerPolicy: {
+      ...defaultSecurityConfig.crossOriginOpenerPolicy,
+      ...config.crossOriginOpenerPolicy
+    },
+    crossOriginResourcePolicy: {
+      ...defaultSecurityConfig.crossOriginResourcePolicy,
+      ...config.crossOriginResourcePolicy
+    }
+  };
+}
+
 // Security headers middleware
-export function securityHeadersMiddleware(config: SecurityHeadersConfig = defaultSecurityConfig) {
+export function securityHeadersMiddleware(config?: SecurityHeadersConfig) {
+  // Deep merge with defaults
+  const mergedConfig = config ? mergeWithDefaults(config) : defaultSecurityConfig;
+  
   return async (request: FastifyRequest, reply: FastifyReply) => {
     // Content Security Policy
-    if (config.contentSecurityPolicy?.enabled) {
-      const cspValue = buildCSPHeader(config.contentSecurityPolicy.directives);
-      const headerName = config.contentSecurityPolicy.reportOnly 
+    if (mergedConfig.contentSecurityPolicy?.enabled) {
+      const cspValue = buildCSPHeader(mergedConfig.contentSecurityPolicy.directives);
+      const headerName = mergedConfig.contentSecurityPolicy.reportOnly 
         ? 'Content-Security-Policy-Report-Only' 
         : 'Content-Security-Policy';
       
       reply.header(headerName, cspValue);
       
       // Add report-uri if specified
-      if (config.contentSecurityPolicy.reportUri) {
-        const cspWithReport = `${cspValue}; report-uri ${config.contentSecurityPolicy.reportUri}`;
+      if (mergedConfig.contentSecurityPolicy.reportUri) {
+        const cspWithReport = `${cspValue}; report-uri ${mergedConfig.contentSecurityPolicy.reportUri}`;
         reply.header(headerName, cspWithReport);
       }
     }
 
     // X-Frame-Options
-    if (config.frameOptions?.enabled) {
-      let frameOptionsValue = config.frameOptions.directive;
-      if (config.frameOptions.directive === 'ALLOW-FROM' && config.frameOptions.allowFromUri) {
-        frameOptionsValue += ` ${config.frameOptions.allowFromUri}`;
+    if (mergedConfig.frameOptions?.enabled) {
+      let frameOptionsValue = mergedConfig.frameOptions.directive;
+      if (mergedConfig.frameOptions.directive === 'ALLOW-FROM' && mergedConfig.frameOptions.allowFromUri) {
+        frameOptionsValue += ` ${mergedConfig.frameOptions.allowFromUri}`;
       }
       reply.header('X-Frame-Options', frameOptionsValue);
     }
 
     // X-Content-Type-Options
-    if (config.contentTypeOptions?.enabled) {
+    if (mergedConfig.contentTypeOptions?.enabled) {
       reply.header('X-Content-Type-Options', 'nosniff');
     }
 
     // Referrer-Policy
-    if (config.referrerPolicy?.enabled) {
-      reply.header('Referrer-Policy', config.referrerPolicy.directive);
+    if (mergedConfig.referrerPolicy?.enabled) {
+      reply.header('Referrer-Policy', mergedConfig.referrerPolicy.directive);
     }
 
     // Strict-Transport-Security (only in production with HTTPS)
-    if (config.strictTransportSecurity?.enabled && request.protocol === 'https') {
-      let hstsValue = `max-age=${config.strictTransportSecurity.maxAge}`;
-      if (config.strictTransportSecurity.includeSubDomains) {
+    if (mergedConfig.strictTransportSecurity?.enabled && request.protocol === 'https' && process.env.NODE_ENV === 'production') {
+      let hstsValue = `max-age=${mergedConfig.strictTransportSecurity.maxAge}`;
+      if (mergedConfig.strictTransportSecurity.includeSubDomains) {
         hstsValue += '; includeSubDomains';
       }
-      if (config.strictTransportSecurity.preload) {
+      if (mergedConfig.strictTransportSecurity.preload) {
         hstsValue += '; preload';
       }
       reply.header('Strict-Transport-Security', hstsValue);
     }
 
     // Permissions-Policy
-    if (config.permissionsPolicy?.enabled) {
-      const permissionsPolicyValue = buildPermissionsPolicyHeader(config.permissionsPolicy.directives);
+    if (mergedConfig.permissionsPolicy?.enabled) {
+      const permissionsPolicyValue = buildPermissionsPolicyHeader(mergedConfig.permissionsPolicy.directives);
       reply.header('Permissions-Policy', permissionsPolicyValue);
     }
 
     // Cross-Origin-Embedder-Policy
-    if (config.crossOriginEmbedderPolicy?.enabled) {
-      reply.header('Cross-Origin-Embedder-Policy', config.crossOriginEmbedderPolicy.directive);
+    if (mergedConfig.crossOriginEmbedderPolicy?.enabled) {
+      reply.header('Cross-Origin-Embedder-Policy', mergedConfig.crossOriginEmbedderPolicy.directive);
     }
 
     // Cross-Origin-Opener-Policy
-    if (config.crossOriginOpenerPolicy?.enabled) {
-      reply.header('Cross-Origin-Opener-Policy', config.crossOriginOpenerPolicy.directive);
+    if (mergedConfig.crossOriginOpenerPolicy?.enabled) {
+      reply.header('Cross-Origin-Opener-Policy', mergedConfig.crossOriginOpenerPolicy.directive);
     }
 
     // Cross-Origin-Resource-Policy
-    if (config.crossOriginResourcePolicy?.enabled) {
-      reply.header('Cross-Origin-Resource-Policy', config.crossOriginResourcePolicy.directive);
+    if (mergedConfig.crossOriginResourcePolicy?.enabled) {
+      reply.header('Cross-Origin-Resource-Policy', mergedConfig.crossOriginResourcePolicy.directive);
     }
 
     // Additional security headers
@@ -271,12 +316,6 @@ export function auditSecurityHeaders(responseHeaders: Record<string, string>): S
       severity: 'low' as const,
       score: 5,
       recommendation: 'Isolate browsing context'
-    },
-    {
-      name: 'Cross-Origin-Resource-Policy',
-      severity: 'medium' as const,
-      score: 7,
-      recommendation: 'Control cross-origin resource access'
     }
   ];
 

@@ -16,7 +16,7 @@
  * - Rate limiting and notification batching
  */
 import { EventEmitter } from 'events';
-import { ConflictResolution } from './SessionPriorityManager';
+import { ConflictResolution } from './SessionPriorityManager.js';
 // Notification Types
 export var NotificationType;
 (function (NotificationType) {

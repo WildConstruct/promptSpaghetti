@@ -12,7 +12,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React, { useState, useMemo, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Shield, ToggleLeft, Users, FileText, ShoppingCart, BarChart3, Settings, Key, ScrollText, ChevronRight, ChevronDown, Search, Star, Clock, Menu, X, Home, ArrowLeft, Bell, HelpCircle, Zap } from 'lucide-react';
-import { useEpic17Authorization } from '../../../client/src/hooks/useEpic17Authorization';
+import { useEpic17Authorization } from '../../../client/src/hooks/useEpic17Authorization.js';
 // Epic 17 Navigation Configuration
 const EPIC17_NAVIGATION = [
     {
@@ -328,7 +328,7 @@ const EPIC17_NAVIGATION = [
         }
     }
 ];
-export const Epic17NavigationSystem = ({ _____currentSection = 'overview', onSectionChange, variant = 'sidebar', showBreadcrumbs = true, showQuickActions = true, enableSearch = true }) => {
+export const Epic17NavigationSystem = ({ currentSection = 'overview', onSectionChange, variant = 'sidebar', showBreadcrumbs = true, showQuickActions = true, enableSearch = true }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const { canAccess, userRoles, availableSections } = useEpic17Authorization();

@@ -20,12 +20,12 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * @since 2025-07-22
  */
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { DashboardType, SecurityRole, DashboardTheme } from '../../security/dashboard/SecurityDashboardFramework';
-import { SecurityDashboardWorkflow } from '../../security/dashboard/SecurityDashboardWorkflow';
-import { OperationalSecurityDashboard } from '../../security/dashboard/OperationalSecurityDashboard';
-import { ExecutiveSecurityDashboard } from '../../security/dashboard/ExecutiveSecurityDashboard';
-import { ComplianceSecurityDashboard } from '../../security/dashboard/ComplianceSecurityDashboard';
-import { SecurityDashboardDataService } from './SecurityDashboardDataService';
+import { DashboardType, SecurityRole, DashboardTheme } from '../../security/dashboard/SecurityDashboardFramework.js';
+import { SecurityDashboardWorkflow } from '../../security/dashboard/SecurityDashboardWorkflow.js';
+import { OperationalSecurityDashboard } from '../../security/dashboard/OperationalSecurityDashboard.js';
+import { ExecutiveSecurityDashboard } from '../../security/dashboard/ExecutiveSecurityDashboard.js';
+import { ComplianceSecurityDashboard } from '../../security/dashboard/ComplianceSecurityDashboard.js';
+import { SecurityDashboardDataService } from './SecurityDashboardDataService.js';
 /**
  * Main Security Dashboard Component
  */

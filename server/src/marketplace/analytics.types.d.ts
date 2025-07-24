@@ -249,9 +249,9 @@ export declare const AnalyticsEventSchema: z.ZodObject<{
         } | undefined;
         referrer?: string | undefined;
         session_id?: string | undefined;
+        device_type?: string | undefined;
         ip_address?: string | undefined;
         user_agent?: string | undefined;
-        device_type?: string | undefined;
     }, {
         location?: {
             region?: string | undefined;
@@ -260,9 +260,9 @@ export declare const AnalyticsEventSchema: z.ZodObject<{
         } | undefined;
         referrer?: string | undefined;
         session_id?: string | undefined;
+        device_type?: string | undefined;
         ip_address?: string | undefined;
         user_agent?: string | undefined;
-        device_type?: string | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
     metadata: {
@@ -273,9 +273,9 @@ export declare const AnalyticsEventSchema: z.ZodObject<{
         } | undefined;
         referrer?: string | undefined;
         session_id?: string | undefined;
+        device_type?: string | undefined;
         ip_address?: string | undefined;
         user_agent?: string | undefined;
-        device_type?: string | undefined;
     };
     event_type: MetricType;
     template_id: string;
@@ -290,9 +290,9 @@ export declare const AnalyticsEventSchema: z.ZodObject<{
         } | undefined;
         referrer?: string | undefined;
         session_id?: string | undefined;
+        device_type?: string | undefined;
         ip_address?: string | undefined;
         user_agent?: string | undefined;
-        device_type?: string | undefined;
     };
     event_type: MetricType;
     template_id: string;

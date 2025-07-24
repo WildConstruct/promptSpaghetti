@@ -15,17 +15,17 @@ import {
   DataRetrievalRateLimit,
   DataRequestDetails,
   DataRetrievalDecision
-} from '../../packages/core/security/DataRetrievalRateLimit';
+} from '../../../packages/core/security/DataRetrievalRateLimit';
 import {
   DataRetrievalConfigurationFactory
-} from '../../packages/core/security/DataRetrievalConfiguration';
-import { RateLimitingService } from '../../packages/core/security/RateLimitingService';
+} from '../../../packages/core/security/DataRetrievalConfiguration';
+import { RateLimitingService } from '../../../packages/core/security/RateLimitingService';
 import {
   SubjectAttributes,
   ObjectAttributes,
   DataOperation,
   DataClassificationLevel
-} from '../../packages/core/security/DataClassificationAccessControl';
+} from '../../../packages/core/security/DataClassificationAccessControl';
 
 interface DataRetrievalRateLimitOptions {
   environment: 'DEVELOPMENT' | 'STAGING' | 'PRODUCTION';

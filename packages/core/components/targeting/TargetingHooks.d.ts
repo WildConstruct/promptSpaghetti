@@ -81,12 +81,12 @@ export declare const useGeographicTargeting: () => {
     }) => void;
 };
 export declare const useTargetingAnalytics: () => {
-    analytics: any;
-    timeRange: "30d" | "7d" | "90d" | "24h";
+    analytics: unknown;
+    timeRange: "24h" | "7d" | "30d" | "90d";
     loading: boolean;
     error: string | null;
-    changeTimeRange: (range: "30d" | "7d" | "90d" | "24h") => void;
-    fetchAnalytics: (range: "30d" | "7d" | "90d" | "24h") => Promise<void>;
+    changeTimeRange: (range: "24h" | "7d" | "30d" | "90d") => void;
+    fetchAnalytics: (range: "24h" | "7d" | "30d" | "90d") => Promise<void>;
 };
 export declare const useDebounce: <T>(value: T, delay: number) => T;
 //# sourceMappingURL=TargetingHooks.d.ts.map

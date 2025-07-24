@@ -10,11 +10,11 @@
  *
  * Epic 19 Task T-1752989143998-485: Implement audit logging for data access
  */
-import { AuditOperation, AuditLogLevel, createAuditLogger } from '../AuditLogger';
-import { createAuditIntegration } from '../AuditIntegration';
-import { DataClassifier } from '../DataClassifier';
-import { ClassificationEnforcer } from '../ClassificationEnforcer';
-import { DataClassificationLevel } from '../../types/DataClassification';
+import { AuditOperation, AuditLogLevel, createAuditLogger } from '../AuditLogger.js';
+import { createAuditIntegration } from '../AuditIntegration.js';
+import { DataClassifier } from '../DataClassifier.js';
+import { ClassificationEnforcer } from '../ClassificationEnforcer.js';
+import { DataClassificationLevel } from '../../types/DataClassification.js';
 /**
  * Example 1: Basic audit logging setup
  */

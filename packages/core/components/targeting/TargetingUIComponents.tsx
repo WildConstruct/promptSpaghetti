@@ -112,7 +112,18 @@ interface AudienceSelectorProps {
   compact?: boolean;
 }
 
-export   const [sortBy, setSortBy] = useState<'name' | 'reach' | 'updated'>('name');
+export const AudienceSelector: React.FC<AudienceSelectorProps> = ({
+  audiences,
+  selectedAudience,
+  onSelect,
+  onCreate,
+  onEdit,
+  onDelete,
+  showAnalytics = false,
+  compact = false
+}) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState<'name' | 'reach' | 'updated'>('name');
 
   const filteredAudiences = useMemo(() => {
     const filtered = audiences.filter(audience =>
@@ -287,7 +298,15 @@ interface AdvancedConditionBuilderProps {
   showVisualBuilder?: boolean;
 }
 
-export   const [previewLoading, setPreviewLoading] = useState(false);
+export const AdvancedConditionBuilder: React.FC<AdvancedConditionBuilderProps> = ({
+  conditions,
+  onChange,
+  availableFields,
+  onPreview,
+  showVisualBuilder = false
+}) => {
+  const [preview, setPreview] = useState<TargetingPreview | null>(null);
+  const [previewLoading, setPreviewLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [draggedCondition, setDraggedCondition] = useState<string | null>(null);
 
@@ -652,7 +671,18 @@ interface GeographicTargetingProps {
   onExcludeModeChange?: (exclude: boolean) => void;
 }
 
-export   const [searchTerm, setSearchTerm] = useState('');
+export const GeographicTargeting: React.FC<GeographicTargetingProps> = ({
+  selectedCountries,
+  selectedRegions,
+  selectedCities,
+  onCountriesChange,
+  onRegionsChange,
+  onCitiesChange,
+  excludeMode = false,
+  onExcludeModeChange
+}) => {
+  const [activeTab, setActiveTab] = useState<'countries' | 'regions' | 'cities'>('countries');
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Mock data - in real implementation, this would come from props or API
   const countries = [
@@ -769,7 +799,15 @@ interface SegmentManagementProps {
   onDuplicateSegment: (id: string) => void;
 }
 
-export   const [editingSegment, setEditingSegment] = useState<string | null>(null);
+export const SegmentManagement: React.FC<SegmentManagementProps> = ({
+  segments,
+  onCreateSegment,
+  onUpdateSegment,
+  onDeleteSegment,
+  onDuplicateSegment
+}) => {
+  const [expandedSegment, setExpandedSegment] = useState<string | null>(null);
+  const [editingSegment, setEditingSegment] = useState<string | null>(null);
 
   return (
     <div className="segment-management">
