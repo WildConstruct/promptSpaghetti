@@ -1875,22 +1875,48 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({
                   target.style.background = professionalColors.accent.orange + '20';
                 }}
                 onMouseDown={(e) => {
+                  // Prevent drag if double-clicking to edit
+                  if (e.detail === 2) return;
+                  
                   const note = e.currentTarget;
-                  const startX = e.clientX - note.offsetLeft;
-                  const startY = e.clientY - note.offsetTop;
+                  const rect = note.getBoundingClientRect();
+                  const startX = e.clientX - rect.left;
+                  const startY = e.clientY - rect.top;
+                  let isDragging = false;
                   
                   const handleMouseMove = (e: MouseEvent) => {
-                    note.style.left = (e.clientX - startX) + 'px';
-                    note.style.top = (e.clientY - startY) + 'px';
+                    if (!isDragging) {
+                      // Start dragging only after mouse moves a bit (prevents accidental drags)
+                      const moveDistance = Math.abs(e.clientX - (rect.left + startX)) + Math.abs(e.clientY - (rect.top + startY));
+                      if (moveDistance < 5) return;
+                      isDragging = true;
+                      note.style.cursor = 'grabbing';
+                      note.style.zIndex = '1000';
+                    }
+                    
+                    const parentRect = note.parentElement!.getBoundingClientRect();
+                    const newLeft = e.clientX - parentRect.left - startX;
+                    const newTop = e.clientY - parentRect.top - startY;
+                    
+                    // Keep note within bounds
+                    const maxLeft = parentRect.width - note.offsetWidth;
+                    const maxTop = parentRect.height - note.offsetHeight;
+                    
+                    note.style.left = Math.max(0, Math.min(newLeft, maxLeft)) + 'px';
+                    note.style.top = Math.max(0, Math.min(newTop, maxTop)) + 'px';
                   };
                   
                   const handleMouseUp = () => {
                     document.removeEventListener('mousemove', handleMouseMove);
                     document.removeEventListener('mouseup', handleMouseUp);
+                    note.style.cursor = 'move';
+                    note.style.zIndex = '999';
+                    isDragging = false;
                   };
                   
                   document.addEventListener('mousemove', handleMouseMove);
                   document.addEventListener('mouseup', handleMouseUp);
+                  e.preventDefault();
                 }}
               >
                 💡 Double-click to edit this professional sticky note. Drag to move around the canvas.
@@ -1930,22 +1956,48 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({
                   target.style.background = professionalColors.accent.green + '20';
                 }}
                 onMouseDown={(e) => {
+                  // Prevent drag if double-clicking to edit
+                  if (e.detail === 2) return;
+                  
                   const note = e.currentTarget;
-                  const startX = e.clientX - note.offsetLeft;
-                  const startY = e.clientY - note.offsetTop;
+                  const rect = note.getBoundingClientRect();
+                  const startX = e.clientX - rect.left;
+                  const startY = e.clientY - rect.top;
+                  let isDragging = false;
                   
                   const handleMouseMove = (e: MouseEvent) => {
-                    note.style.left = (e.clientX - startX) + 'px';
-                    note.style.top = (e.clientY - startY) + 'px';
+                    if (!isDragging) {
+                      // Start dragging only after mouse moves a bit (prevents accidental drags)
+                      const moveDistance = Math.abs(e.clientX - (rect.left + startX)) + Math.abs(e.clientY - (rect.top + startY));
+                      if (moveDistance < 5) return;
+                      isDragging = true;
+                      note.style.cursor = 'grabbing';
+                      note.style.zIndex = '1000';
+                    }
+                    
+                    const parentRect = note.parentElement!.getBoundingClientRect();
+                    const newLeft = e.clientX - parentRect.left - startX;
+                    const newTop = e.clientY - parentRect.top - startY;
+                    
+                    // Keep note within bounds
+                    const maxLeft = parentRect.width - note.offsetWidth;
+                    const maxTop = parentRect.height - note.offsetHeight;
+                    
+                    note.style.left = Math.max(0, Math.min(newLeft, maxLeft)) + 'px';
+                    note.style.top = Math.max(0, Math.min(newTop, maxTop)) + 'px';
                   };
                   
                   const handleMouseUp = () => {
                     document.removeEventListener('mousemove', handleMouseMove);
                     document.removeEventListener('mouseup', handleMouseUp);
+                    note.style.cursor = 'move';
+                    note.style.zIndex = '999';
+                    isDragging = false;
                   };
                   
                   document.addEventListener('mousemove', handleMouseMove);
                   document.addEventListener('mouseup', handleMouseUp);
+                  e.preventDefault();
                 }}
               >
                 ✅ Note: Check panel weight distribution for better randomization results.
