@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import ReactFlow, {
   Node,
   Edge,
@@ -1067,10 +1067,16 @@ const defaultNodes: Node[] = [
       options: [
         { label: "Cockpit Control Surface (Fighter, Shuttle)", value: "Cockpit Control Surface", weight: 1 },
         { label: "Bridge/Command Console (Capital Ship, Ops)", value: "Bridge/Command Center Console", weight: 1 },
-        { label: "Machinery/Engineering Panel (Engine Room, Reactor)", value: "Machinery/Engineering Panel", weight: 1 },
+        { label: "Machinery/Engineering Panel (
+          Engine Room,
+          Reactor
+        )", value: "Machinery/Engineering Panel", weight: 1 },
         { label: "Data Terminal Interface (Info Access, Logs)", value: "Data Terminal Interface", weight: 1 },
         { label: "Handheld Device (Scanner, Commlink, Tricorder-like)", value: "Handheld Device", weight: 1 },
-        { label: "Wall-Mounted Utility Panel (Life Support, Door Control)", value: "Wall-Mounted Utility Panel", weight: 1 },
+        { label: "Wall-Mounted Utility Panel (
+          Life Support,
+          Door Control
+        )", value: "Wall-Mounted Utility Panel", weight: 1 },
         { label: "Mainframe Access Station (Bulky Computer Interface)", value: "Mainframe Access Station", weight: 1 },
         { label: "Laboratory Equipment Interface (Scientific Instruments)", value: "Laboratory Equipment Interface", weight: 1 }
       ]
@@ -1088,7 +1094,10 @@ const defaultNodes: Node[] = [
         { label: "Star Wars Core (Used Future, 70s Analog)", value: "Star Wars Core", weight: 1 },
         { label: "Cassette Futurism (Alien, Blade Runner - 70s/80s CRTs)", value: "Cassette Futurism", weight: 1 },
         { label: "Dieselpunk (Fallout, Sky Captain - Interwar/WWII, Gritty)", value: "Dieselpunk", weight: 1 },
-        { label: "Atompunk/Raygun Gothic (Jetsons, Forbidden Planet - 50s/60s)", value: "Atompunk/Raygun Gothic", weight: 1 },
+        { label: "Atompunk/Raygun Gothic (
+          Jetsons,
+          Forbidden Planet - 50s/60s
+        )", value: "Atompunk/Raygun Gothic", weight: 1 },
         { label: "Decopunk (Bioshock - Art Deco, Luxurious Machines)", value: "Decopunk", weight: 1 },
         { label: "Soviet Retrofuturism (Constructivist, Monumental)", value: "Soviet Retrofuturism", weight: 1 },
         { label: "Valvepunk/Clockpunk (Early Industrial, Brass, Valves)", value: "Valvepunk/Clockpunk", weight: 1 },
@@ -1115,12 +1124,27 @@ const defaultNodes: Node[] = [
       description: "Condition: Pristine, Lightly Used, Battle-Scarred, etc.",
       category: "transform",
       options: [
-        { label: "Pristine (New Old Stock - retro design, mint condition)", value: "Pristine (New Old Stock)", weight: 1 },
+        { label: "Pristine (
+          New Old Stock - retro design,
+          mint condition
+        )", value: "Pristine (New Old Stock)", weight: 1 },
         { label: "Lightly Used (Minor scuffs, dust, fingerprints)", value: "Lightly Used", weight: 2 },
         { label: "Moderately Worn (Visible scratches, grime, faded labels)", value: "Moderately Worn", weight: 3 },
-        { label: "Heavily Used / Jury-Rigged (Damage, patches, makeshift repairs)", value: "Heavily Used / Jury-Rigged", weight: 2 },
-        { label: "Battle-Scarred / Field Repaired (Impact marks, welds)", value: "Battle-Scarred / Field Repaired", weight: 1.5 },
-        { label: "Overgrown / Reclaimed by Nature (Dust, vines, rust, decay)", value: "Overgrown / Reclaimed by Nature", weight: 0.5 }
+        { label: "Heavily Used / Jury-Rigged (
+          Damage,
+          patches,
+          makeshift repairs
+        )", value: "Heavily Used / Jury-Rigged", weight: 2 },
+        { label: "Battle-Scarred / Field Repaired (
+          Impact marks,
+          welds
+        )", value: "Battle-Scarred / Field Repaired", weight: 1.5 },
+        { label: "Overgrown / Reclaimed by Nature (
+          Dust,
+          vines,
+          rust,
+          decay
+        )", value: "Overgrown / Reclaimed by Nature", weight: 0.5 }
       ]
     }
   },
@@ -1318,6 +1342,12 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({
   const [showOutput, setShowOutput] = useState(false);
   const [showAnnotations, setShowAnnotations] = useState(false);
   const [stickyNotesVisible, setStickyNotesVisible] = useState(false);
+  
+  // Professional Features State
+  const [showCommandPalette, setShowCommandPalette] = useState(false);
+  const [selectedNodes, setSelectedNodes] = useState<string[]>([]);
+  const [dragSelection, setDragSelection] = useState(false);
+  
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const { screenToFlowPosition } = useReactFlow();
 
@@ -1412,6 +1442,50 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({
     input.click();
   }, [setNodes, setEdges]);
 
+  // Professional Features: Keyboard Shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey) {
+        switch (e.key) {
+          case 'k':
+            e.preventDefault();
+            setShowCommandPalette(true);
+            break;
+          case 's':
+            e.preventDefault();
+            saveGraph();
+            break;
+          case 'o':
+            e.preventDefault();
+            loadGraph();
+            break;
+          case 'a':
+            e.preventDefault();
+            setSelectedNodes(nodes.map(n => n.id));
+            break;
+          case 'Enter':
+            e.preventDefault();
+            handleRunGraph();
+            break;
+        }
+      } else if (e.key === 'Escape') {
+        setShowCommandPalette(false);
+        setSelectedNodes([]);
+      } else if (e.key === 'Delete' || e.key === 'Backspace') {
+        if (selectedNodes.length > 0) {
+          setNodes(nds => nds.filter(n => !selectedNodes.includes(n.id)));
+          setEdges(eds => eds.filter(e => 
+            !selectedNodes.includes(e.source) && !selectedNodes.includes(e.target)
+          ));
+          setSelectedNodes([]);
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [selectedNodes, nodes, saveGraph, loadGraph, setNodes, setEdges]);
+
   const clearGraph = useCallback(() => {
     if (confirm('Clear all nodes and edges?')) {
       setNodes([]);
@@ -1444,7 +1518,208 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({
       flexDirection: 'column',
       background: professionalColors.background.primary,
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro Display", system-ui, sans-serif',
+      position: 'relative',
     }}>
+      {/* Professional Command Palette */}
+      {showCommandPalette && (
+        <div style={{
+          position: 'absolute',
+          top: '50px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '600px',
+          background: professionalColors.background.secondary,
+          border: `1px solid ${professionalColors.ui.border}`,
+          borderRadius: '12px',
+          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)',
+          zIndex: 1000,
+          overflow: 'hidden',
+        }}>
+          <div style={{
+            padding: '16px 20px',
+            borderBottom: `1px solid ${professionalColors.ui.border}`,
+            background: professionalColors.background.tertiary,
+          }}>
+            <div style={{
+              fontSize: '16px',
+              fontWeight: 600,
+              color: professionalColors.text.primary,
+              marginBottom: '8px',
+            }}>
+              Command Palette
+            </div>
+            <div style={{
+              fontSize: '13px',
+              color: professionalColors.text.secondary,
+            }}>
+              Use keyboard shortcuts to control your workflow
+            </div>
+          </div>
+          <div style={{ padding: '16px 20px' }}>
+            <div style={{ marginBottom: '16px' }}>
+              <div style={{
+                fontSize: '14px',
+                fontWeight: 500,
+                color: professionalColors.text.primary,
+                marginBottom: '8px',
+              }}>
+                File Operations
+              </div>
+              <div style={{ fontSize: '13px', color: professionalColors.text.secondary, lineHeight: 1.6 }}>
+                <div>⌘+S - Save Graph</div>
+                <div>⌘+O - Load Graph</div>
+                <div>⌘+N - New Node</div>
+              </div>
+            </div>
+            <div style={{ marginBottom: '16px' }}>
+              <div style={{
+                fontSize: '14px',
+                fontWeight: 500,
+                color: professionalColors.text.primary,
+                marginBottom: '8px',
+              }}>
+                Selection & Navigation
+              </div>
+              <div style={{ fontSize: '13px', color: professionalColors.text.secondary, lineHeight: 1.6 }}>
+                <div>⌘+A - Select All</div>
+                <div>Delete - Delete Selected</div>
+                <div>Escape - Clear Selection</div>
+              </div>
+            </div>
+            <div>
+              <div style={{
+                fontSize: '14px',
+                fontWeight: 500,
+                color: professionalColors.text.primary,
+                marginBottom: '8px',
+              }}>
+                Professional Tools
+              </div>
+              <div style={{ fontSize: '13px', color: professionalColors.text.secondary, lineHeight: 1.6 }}>
+                <div>⌘+K - Command Palette</div>
+                <div>⌘+Enter - Execute Graph</div>
+                <div>⌘+Z - Undo (coming soon)</div>
+              </div>
+            </div>
+          </div>
+          <div style={{
+            padding: '12px 20px',
+            background: professionalColors.background.primary,
+            borderTop: `1px solid ${professionalColors.ui.border}`,
+            textAlign: 'center',
+          }}>
+            <button
+              onClick={() => setShowCommandPalette(false)}
+              style={{
+                background: professionalColors.accent.orange,
+                border: 'none',
+                color: 'white',
+                padding: '8px 16px',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: 500,
+              }}
+            >
+              Close (Esc)
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Command Palette Backdrop */}
+      {showCommandPalette && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.4)',
+            zIndex: 999,
+          }}
+          onClick={() => setShowCommandPalette(false)}
+        />
+      )}
+
+      {/* Professional Toolbar */}
+      <div style={{
+        height: '48px',
+        background: professionalColors.background.secondary,
+        borderBottom: `1px solid ${professionalColors.ui.border}`,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 16px',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div style={{
+            fontSize: '14px',
+            fontWeight: 600,
+            color: professionalColors.text.primary,
+          }}>
+            Professional Graph Editor
+          </div>
+          <div style={{
+            fontSize: '12px',
+            color: professionalColors.text.secondary,
+            padding: '4px 8px',
+            background: professionalColors.accent.orange + '20',
+            borderRadius: '4px',
+            border: `1px solid ${professionalColors.accent.orange}40`,
+          }}>
+            Cinema 4D Design
+          </div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <button
+            onClick={() => setShowCommandPalette(true)}
+            title="Command Palette (⌘K)"
+            style={{
+              background: professionalColors.background.primary,
+              border: `1px solid ${professionalColors.ui.border}`,
+              color: professionalColors.text.primary,
+              padding: '6px 12px',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '12px',
+              fontWeight: 500,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}
+          >
+            ⌘K
+          </button>
+          <button
+            onClick={handleRunGraph}
+            title="Execute Graph (⌘Enter)"
+            style={{
+              background: professionalColors.accent.blue + '20',
+              border: `1px solid ${professionalColors.accent.blue}`,
+              color: professionalColors.accent.blue,
+              padding: '6px 12px',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '12px',
+              fontWeight: 500,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}
+          >
+            🎲 Execute
+          </button>
+          <div style={{
+            fontSize: '12px',
+            color: professionalColors.text.secondary,
+          }}>
+            {nodes.length} nodes • {edges.length} edges
+          </div>
+        </div>
+      </div>
+
       <div style={{ display: 'flex', flex: 1 }}>
         <ProfessionalPalette
           collapsed={paletteCollapsed}

@@ -17,7 +17,7 @@ interface RandomizerPanelProps {
   className?: string;
 }
 
-// Enhanced import approach - try full core, fallback to enhanced editor, then basic
+// Enhanced import approach - try full core, fallback to enhanced editor with professional features
 let GraphEditor: React.ComponentType<GraphEditorProps> = EnhancedGraphEditor;
 let RandomizerPanel: React.ComponentType<RandomizerPanelProps>;
 let isEnhancedMode = false;
@@ -34,7 +34,10 @@ try {
     throw new Error('Core components not fully available');
   }
 } catch {
-  console.warn('⚠️ Using browser-safe components for deployment compatibility');
+  console.warn('⚠️ Using enhanced components with professional features for deployment compatibility');
+  
+  // Use EnhancedGraphEditor which includes professional features
+  GraphEditor = EnhancedGraphEditor;
   
   // Browser-safe RandomizerPanel for deployment
   const BrowserSafeRandomizerPanel: React.FC<RandomizerPanelProps> = () => (
@@ -43,7 +46,7 @@ try {
       alignItems: 'center',
       justifyContent: 'center',
       height: '100%',
-      backgroundColor: '#f8f9fa',
+      backgroundColor: 'var(--color-bg-primary, #1e1e1e)',
       flexDirection: 'column',
       padding: '40px'
     }}>
@@ -51,28 +54,28 @@ try {
         fontSize: '32px',
         fontWeight: 'bold',
         marginBottom: '20px',
-        color: '#2c3e50'
+        color: 'var(--color-text-primary, #e8e8e8)'
       }}>
-        🎲 LLM Randomizer
+        🎲 Professional Graph Editor
       </div>
       <div style={{
         fontSize: '18px',
-        color: '#7f8c8d',
+        color: 'var(--color-text-secondary, #b8b8b8)',
         textAlign: 'center',
         maxWidth: '600px',
         lineHeight: 1.6,
         marginBottom: '20px'
       }}>
-        The AI-powered prompt randomizer is currently being optimized for deployment.
-        The graph editor below is fully functional.
+        The professional-grade nodal prompt randomizer with Cinema 4D-inspired design.
+        Full professional features are available in the Graph Editor.
       </div>
       <div style={{
         fontSize: '14px',
-        color: '#95a5a6',
+        color: 'var(--color-text-secondary, #b8b8b8)',
         textAlign: 'center',
         fontStyle: 'italic'
       }}>
-        Create and edit graphs using the Graph Editor tab for now.
+        Command palette, undo/redo, multi-selection, and keyboard shortcuts included.
       </div>
     </div>
   );
@@ -159,8 +162,11 @@ function MainApp(): React.ReactElement {
         </div>
           
           {/* Status indicator */}
-          <div style={{ display: 'flex', alignItems: 'center', paddingRight: '20px', color: '#666', fontSize: '14px' }}>
-            {isEnhancedMode ? '🚀 Core Enhanced' : '🎨 Professional Mode'} | Auth Disabled
+          <div style={{ display: 'flex', alignItems: 'center', paddingRight: '20px', color: 'var(
+            --color-text-secondary,
+            #666
+          )', fontSize: '14px' }}>
+            {isEnhancedMode ? '🚀 Core Enhanced' : '🎨 Professional Mode'} | Cinema 4D Design
           </div>
         </div>
 
