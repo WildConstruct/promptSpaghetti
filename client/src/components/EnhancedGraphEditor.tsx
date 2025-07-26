@@ -119,7 +119,7 @@ interface NodeData {
 const TextNode = ({ data, selected }: { data: NodeData; selected: boolean }) => (
   <div style={{
     background: `linear-gradient(135deg, ${professionalColors.nodes.text}15, ${professionalColors.nodes.text}25)`,
-    border: `2px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.text}`,
+    border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.text}`,
     borderRadius: '8px',
     padding: '12px 16px',
     minWidth: '160px',
@@ -173,7 +173,7 @@ const TextNode = ({ data, selected }: { data: NodeData; selected: boolean }) => 
 const LogicNode = ({ data, selected }: { data: NodeData; selected: boolean }) => (
   <div style={{
     background: `linear-gradient(135deg, ${professionalColors.nodes.logic}15, ${professionalColors.nodes.logic}25)`,
-    border: `2px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.logic}`,
+    border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.logic}`,
     borderRadius: '8px',
     padding: '12px 16px',
     minWidth: '160px',
@@ -227,7 +227,7 @@ const LogicNode = ({ data, selected }: { data: NodeData; selected: boolean }) =>
 const OutputNode = ({ data, selected }: { data: NodeData; selected: boolean }) => (
   <div style={{
     background: `linear-gradient(135deg, ${professionalColors.nodes.output}15, ${professionalColors.nodes.output}25)`,
-    border: `2px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.output}`,
+    border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.output}`,
     borderRadius: '8px',
     padding: '12px 16px',
     minWidth: '160px',
@@ -275,7 +275,7 @@ const VariableNode = ({ data, selected }: { data: NodeData; selected: boolean })
       ${professionalColors.nodes.variable}15,
       ${professionalColors.nodes.variable}25
     )`,
-    border: `2px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.variable}`,
+    border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.variable}`,
     borderRadius: '8px',
     padding: '12px 16px',
     minWidth: '160px',
@@ -333,7 +333,7 @@ const TransformNode = ({ data, selected }: { data: NodeData; selected: boolean }
       ${professionalColors.nodes.transform}15,
       ${professionalColors.nodes.transform}25
     )`,
-    border: `2px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.transform}`,
+    border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.transform}`,
     borderRadius: '8px',
     padding: '12px 16px',
     minWidth: '160px',
@@ -1496,6 +1496,19 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro Display", system-ui, sans-serif',
       position: 'relative',
     }}>
+      {/* Override ReactFlow default selection styles */}
+      <style>{`
+        .professional-reactflow .react-flow__node.selected {
+          outline: none !important;
+          box-shadow: none !important;
+        }
+        .professional-reactflow .react-flow__node {
+          outline: none !important;
+        }
+        .professional-reactflow .react-flow__node:focus {
+          outline: none !important;
+        }
+      `}</style>
       {/* Professional Command Palette */}
       {showCommandPalette && (
         <div style={{
@@ -1798,6 +1811,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({
               style: { stroke: professionalColors.accent.cyan, strokeWidth: 2 },
               type: 'smoothstep',
             }}
+            className="professional-reactflow"
           >
             <Controls 
               style={{ 
@@ -1849,7 +1863,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({
                   width: '200px',
                   height: '150px',
                   background: professionalColors.accent.orange + '20',
-                  border: `2px solid ${professionalColors.accent.orange}`,
+                  border: `1px solid ${professionalColors.accent.orange}`,
                   borderRadius: '8px',
                   boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
                   padding: '12px',
@@ -1930,7 +1944,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({
                   width: '180px',
                   height: '120px',
                   background: professionalColors.accent.green + '20',
-                  border: `2px solid ${professionalColors.accent.green}`,
+                  border: `1px solid ${professionalColors.accent.green}`,
                   borderRadius: '8px',
                   boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
                   padding: '12px',
