@@ -162,10 +162,7 @@ function MainApp(): React.ReactElement {
         </div>
           
           {/* Status indicator */}
-          <div style={{ display: 'flex', alignItems: 'center', paddingRight: '20px', color: 'var(
-            --color-text-secondary,
-            #666
-          )', fontSize: '14px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', paddingRight: '20px', color: 'var(--color-text-secondary, #666)', fontSize: '14px' }}>
             {isEnhancedMode ? '🚀 Core Enhanced' : '🎨 Professional Mode'} | Cinema 4D Design
           </div>
         </div>
