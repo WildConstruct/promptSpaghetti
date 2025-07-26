@@ -35,33 +35,17 @@ export type {
 } from '../ContextualHelp/ContextualHelpSystem';
 
 export { HelpContentManager } from '../ContextualHelp/HelpContentManager';
+
+// Import Epic16HelpSystem for local use
+import { Epic16HelpSystem } from './Epic16HelpSystem';
 export type { 
   UserProfile, 
   LearningPath 
 } from '../ContextualHelp/HelpContentManager';
 
 // Helper functions for help system integration
-export const createMarketplaceHelpContext = (
-  page: string,
-  userRole: string,
-  templateData?: any,
-  userBehavior?: any
-) => ({
-  currentPage: page,
-  userRole,
-  pageContext: {
-    template: templateData,
-    cartItems: userBehavior?.templatesAddedToCart || 0,
-    purchaseStage: userBehavior?.purchaseStage || 'browsing',
-    forumContext: userBehavior?.forumContext
-  }
-});
-
-export const initializeHelpAnalytics = () => {
-  const analytics = {
-    helpInteractions: [] as any[],
-    userStruggles: [] as any[],
-    effectiveness: {} as Record<string, { views: number; helpful: number }>
+export 
+export     effectiveness: {} as Record<string, { views: number; helpful: number }>
   };
 
   const trackEvent = (event: string, data: Record<string, any>) => {
@@ -136,27 +120,5 @@ export const initializeHelpAnalytics = () => {
 };
 
 // Constants for help system configuration
-export const HELP_SYSTEM_DEFAULTS = {
-  TRIGGER_SENSITIVITY: {
-    LOW: { timeThreshold: 30000, interactionThreshold: 10 },
-    MEDIUM: { timeThreshold: 15000, interactionThreshold: 5 },
-    HIGH: { timeThreshold: 5000, interactionThreshold: 2 }
-  },
-  
-  COOLDOWN_PERIODS: {
-    FIRST_TIME: 0,
-    QUICK_TIP: 5 * 60 * 1000,  // 5 minutes
-    FEATURE_HELP: 15 * 60 * 1000, // 15 minutes
-    STRUGGLE_HELP: 10 * 60 * 1000, // 10 minutes
-    TOUR_PROMPT: 60 * 60 * 1000   // 1 hour
-  },
-  
-  USER_LEVELS: {
-    BEGINNER: { maxComplexity: 'intermediate', autoTrigger: true },
-    INTERMEDIATE: { maxComplexity: 'advanced', autoTrigger: true },
-    ADVANCED: { maxComplexity: 'professional', autoTrigger: false },
-    PROFESSIONAL: { maxComplexity: 'professional', autoTrigger: false }
-  }
-};
-
+export 
 export default Epic16HelpSystem;

@@ -6,7 +6,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Provides comprehensive visualization, analysis, and management capabilities.
  */
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { DependencyType } from '../../services/FeatureToggleDependencyService.js';
+import { DependencyType } from '../../services/FeatureToggleDependencyService';
 export const DependencyVisualizationDashboard = ({ dependencyService, selectedToggles = [], onToggleSelect, onDependencyCreate, onConflictResolve }) => {
     // State management
     const [graph, setGraph] = useState(null);

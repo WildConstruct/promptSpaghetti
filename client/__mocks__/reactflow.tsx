@@ -4,7 +4,7 @@ import { jest } from '@jest/globals';
 // Very small subset of the public API that App and our tests actually use.
 export interface XYPosition { x: number; y: number }
 export interface Viewport extends XYPosition { zoom: number }
-export interface Node<T = any> {
+export interface Node<T = Record<string, unknown>> {
   id: string;
   position: XYPosition;
   data: T & { label?: string; nodeType?: string };
@@ -12,6 +12,17 @@ export interface Node<T = any> {
 }
 export interface Edge {
   id: string;
+  source?: string;
+  target?: string;
+  sourceHandle?: string;
+  targetHandle?: string;
+}
+
+export interface Connection {
+  source: string;
+  target: string;
+  sourceHandle?: string;
+  targetHandle?: string;
 }
 
 // Add missing enum exports
@@ -62,8 +73,8 @@ export const ReactFlow: React.FC<ReactFlowProps> = ({
   onPaneClick,
   children,
   style,
-  className,
-  ..._props
+  className
+  // Additional props are accepted but not used in mock
 }) => {
   const handleDrop = (e: React.DragEvent) => {
     // Ensure clientX and clientY are available for tests
@@ -200,12 +211,12 @@ export const ConnectionMode = {
 } as const;
 
 // Add utility functions
-export const addEdge = jest.fn((connection: any, edges: Edge[]) => [
+export const addEdge = jest.fn((connection: Connection, edges: Edge[]) => [
   ...edges, 
-  { ...(connection as object), id: `e-${Date.now()}` }
+  { ...connection, id: `e-${Date.now()}` }
 ]);
-export const useNodesState = jest.fn((initialNodes: Node[]) => [initialNodes, jest.fn()]);
-export const useEdgesState = jest.fn((initialEdges: Edge[]) => [initialEdges, jest.fn()]);
+export const useNodesState = jest.fn((initialNodes: Node[]) => [initialNodes, jest.fn<unknown[], unknown>()]);
+export const useEdgesState = jest.fn((initialEdges: Edge[]) => [initialEdges, jest.fn<unknown[], unknown>()]);
 
 // Default export fallback
 export default {

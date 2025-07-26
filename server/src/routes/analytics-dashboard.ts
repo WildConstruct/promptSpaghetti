@@ -18,7 +18,7 @@ const DashboardConfigSchema = z.object({
   refreshInterval: z.number().min(1000).max(300000).default(5000), // milliseconds
   maxEvents: z.number().min(10).max(1000).default(100),
   enableRealTime: z.boolean().default(true),
-  widgetFilters: z.record(z.any()).optional()
+  widgetFilters: z.record(z.unknown()).optional()
 });
 
 // Dashboard Query Schema
@@ -371,7 +371,7 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
       const authorizedFilter = queryAuth.filteredQuery!;
 
       // Get widget-specific data based on widget type
-      let widgetData: any = {};
+      let widgetData: Record<string, unknown> = {};
       
       switch (widgetConfig.type) {
         case 'event_stream':

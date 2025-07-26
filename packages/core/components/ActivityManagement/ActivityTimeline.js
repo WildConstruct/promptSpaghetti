@@ -6,14 +6,14 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * real-time updates, collaboration tracking, and analytics.
  */
 import { useState, useEffect, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
-import { Input } from '../ui/Input.js';
-import { Select } from '../ui/Select.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
+import { Input } from '../ui/Input';
+import { Select } from '../ui/Select';
 import { Clock, User, Users, Activity as ActivityIcon, TrendingUp, Search, Calendar, Globe, Zap, AlertTriangle, CheckCircle, XCircle, GitBranch, FileText, Settings, BarChart3 } from 'lucide-react';
-import { activityTimeline } from '../../services/ActivityTimeline.js';
+import { activityTimeline } from '../../services/ActivityTimeline';
 /**
  * Activity type configurations for UI styling
  */
@@ -192,7 +192,7 @@ const ListView = ({ activities, onSelectActivity, compact }) => {
     }
     return (_jsx("div", { className: "space-y-2", children: activities.map(activity => (_jsx(ActivityCard, { activity: activity, onClick: () => onSelectActivity(activity), compact: compact, showDate: true }, activity.id))) }));
 };
-const AnalyticsView = ({ stats, _____activities }) => {
+const AnalyticsView = ({ stats, _activities }) => {
     if (!stats)
         return null;
     return (_jsxs("div", { className: "space-y-6", children: [_jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-6", children: [_jsxs(Card, { children: [_jsx(CardHeader, { children: _jsx(CardTitle, { children: "Activity Types" }) }), _jsx(CardContent, { children: _jsx("div", { className: "space-y-3", children: Object.entries(stats.byType)

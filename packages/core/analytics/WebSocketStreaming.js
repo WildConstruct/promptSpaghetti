@@ -22,7 +22,7 @@ export var WSMessageType;
 export const WSMessageSchema = z.object({
     type: z.nativeEnum(WSMessageType),
     id: z.string().optional(),
-    payload: z.any().optional(),
+    payload: z.unknown().optional(),
     timestamp: z.number(),
     clientId: z.string().optional()
 });
@@ -287,7 +287,14 @@ export class WebSocketStreamingServer extends EventEmitter {
             // Authorize subscription filter if authenticated
             let authorizedFilter = subscriptionConfig.filter;
             if (client.authContext) {
-                const queryAuth = await this.authService.authorizeAnalyticsQuery(subscriptionConfig.filter || {}, client.authContext);
+                // Convert string arrays to proper enum types for EventFilter
+                const eventFilter = {
+                    ...subscriptionConfig.filter,
+                    types: subscriptionConfig.filter?.types,
+                    categories: subscriptionConfig.filter?.categories,
+                    severities: subscriptionConfig.filter?.severities
+                };
+                const queryAuth = await this.authService.authorizeAnalyticsQuery(eventFilter, client.authContext);
                 if (!queryAuth.allowed) {
                     await this.sendError(client, 'Subscription access denied');
                     return;
@@ -408,7 +415,8 @@ export class WebSocketStreamingServer extends EventEmitter {
             handler: (event) => {
                 this.broadcastEvent(event);
             },
-            priority: 500
+            priority: 500,
+            enabled: true
         });
     }
     /**
@@ -421,7 +429,14 @@ export class WebSocketStreamingServer extends EventEmitter {
                 continue;
             // Check each subscription for matches
             for (const [subscriptionId, config] of client.subscriptions) {
-                if (this.eventMatchesFilter(event, config.filter)) {
+                // Convert subscription filter to EventFilter format
+                const eventFilter = config.filter ? {
+                    ...config.filter,
+                    types: config.filter.types,
+                    categories: config.filter.categories,
+                    severities: config.filter.severities
+                } : undefined;
+                if (this.eventMatchesFilter(event, eventFilter)) {
                     broadcastPromises.push(this.sendEventToClient(client, event, subscriptionId, config));
                 }
             }

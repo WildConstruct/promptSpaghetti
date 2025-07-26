@@ -3,7 +3,7 @@ import { EventEmitter } from 'events';
 /**
  * Analytics API response wrapper
  */
-export interface AnalyticsResponse<T = any> {
+export interface AnalyticsResponse<T = unknown> {
   success: boolean;
   data?: T;
   error?: string;
@@ -461,6 +461,4 @@ export class AnalyticsClient extends EventEmitter {
 /**
  * Default analytics client instance
  */
-export const createAnalyticsClient = (config: AnalyticsClientConfig): AnalyticsClient => {
-  return new AnalyticsClient(config);
-};
+export };

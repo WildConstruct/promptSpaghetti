@@ -7,33 +7,61 @@
  */
 
 // Core consent types
-export enum ConsentType {
-  NECESSARY = 'necessary',
-  ANALYTICS = 'analytics',
-  MARKETING = 'marketing',
-  PERSONALIZATION = 'personalization',
-  ADVERTISING = 'advertising',
-  SOCIAL_MEDIA = 'social_media',
-  FUNCTIONAL = 'functional',
-  PERFORMANCE = 'performance'
-}
+export type ConsentType = 
+  | 'necessary'
+  | 'analytics'
+  | 'marketing'
+  | 'personalization'
+  | 'advertising'
+  | 'social_media'
+  | 'functional'
+  | 'performance';
 
-export enum ConsentStatus {
-  GRANTED = 'granted',
-  DENIED = 'denied',
-  PENDING = 'pending',
-  WITHDRAWN = 'withdrawn',
-  EXPIRED = 'expired'
-}
+// Legacy enum values for backwards compatibility
+export const ConsentType = {
+  NECESSARY: 'necessary' as const,
+  ANALYTICS: 'analytics' as const,
+  MARKETING: 'marketing' as const,
+  PERSONALIZATION: 'personalization' as const,
+  ADVERTISING: 'advertising' as const,
+  SOCIAL_MEDIA: 'social_media' as const,
+  FUNCTIONAL: 'functional' as const,
+  PERFORMANCE: 'performance' as const
+} as const;
 
-export enum LegalBasis {
-  CONSENT = 'consent',
-  LEGITIMATE_INTEREST = 'legitimate_interest',
-  CONTRACT = 'contract',
-  LEGAL_OBLIGATION = 'legal_obligation',
-  VITAL_INTERESTS = 'vital_interests',
-  PUBLIC_TASK = 'public_task'
-}
+export type ConsentStatus = 
+  | 'granted'
+  | 'denied'
+  | 'pending'
+  | 'withdrawn'
+  | 'expired';
+
+// Legacy enum values for backwards compatibility
+export const ConsentStatus = {
+  GRANTED: 'granted' as const,
+  DENIED: 'denied' as const,
+  PENDING: 'pending' as const,
+  WITHDRAWN: 'withdrawn' as const,
+  EXPIRED: 'expired' as const
+} as const;
+
+export type LegalBasis = 
+  | 'consent'
+  | 'legitimate_interest'
+  | 'contract'
+  | 'legal_obligation'
+  | 'vital_interests'
+  | 'public_task';
+
+// Legacy enum values for backwards compatibility
+export const LegalBasis = {
+  CONSENT: 'consent' as const,
+  LEGITIMATE_INTEREST: 'legitimate_interest' as const,
+  CONTRACT: 'contract' as const,
+  LEGAL_OBLIGATION: 'legal_obligation' as const,
+  VITAL_INTERESTS: 'vital_interests' as const,
+  PUBLIC_TASK: 'public_task' as const
+} as const;
 
 // Consent record structure
 export interface ConsentRecord {

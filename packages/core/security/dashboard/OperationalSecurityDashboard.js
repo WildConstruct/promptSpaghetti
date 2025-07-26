@@ -26,7 +26,7 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * @since 2024-01-22
  */
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { DashboardTheme } from './SecurityDashboardFramework.js';
+import { DashboardTheme } from './SecurityDashboardFramework';
 /**
  * Operational Security Dashboard Component
  */

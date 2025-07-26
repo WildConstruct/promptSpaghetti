@@ -1,4 +1,6 @@
 /**
+import { CheckSquare } from 'lucide-react';
+
  * VFX Checklist Templates - E17-1753114397304-B22E55
  * 
  * Pre-built checklist templates for common VFX workflows and production phases.

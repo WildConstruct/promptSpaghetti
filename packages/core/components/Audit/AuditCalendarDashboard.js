@@ -5,11 +5,11 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Interactive calendar interface for managing audit schedules, viewing upcoming activities,
  * and monitoring compliance deadlines in PromptScape.
  */
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Card, Calendar, Badge, Timeline, Table, Select, DatePicker, Button, Space, Tag, Statistic, Row, Col, Alert, Modal, Form, Input, Tabs, Progress, Tooltip, Drawer, List, Avatar } from 'antd';
 import { CalendarOutlined, ClockCircleOutlined, ExclamationTriangleOutlined, CheckCircleOutlined, PlusOutlined, EditOutlined, BellOutlined, TeamOutlined, FileTextOutlined, WarningOutlined, SyncOutlined, FilterOutlined } from '@ant-design/icons';
 import moment from 'moment';
-import { AuditActivityType, SchedulePriority, ScheduleStatus, RecurrencePattern, auditCalendarSystem } from '../audit/AuditCalendarSystem.js';
+import { AuditActivityType, SchedulePriority, ScheduleStatus, RecurrencePattern, auditCalendarSystem } from '../audit/AuditCalendarSystem';
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -87,7 +87,7 @@ export const AuditCalendarDashboard = () => {
     };
     const loadMonitoringData = () => {
         try {
-            const _____monitoring = auditCalendarSystem.processScheduleMonitoring();
+            const _monitoring = auditCalendarSystem.processScheduleMonitoring();
             const upcomingDeadlines = auditCalendarSystem.getUpcomingDeadlines(7);
             const overdueSchedules = auditCalendarSystem.getOverdueSchedules();
             setCalendarState(prev => ({
@@ -108,7 +108,7 @@ export const AuditCalendarDashboard = () => {
                                     handleEventClick(event);
                                 }, children: event.title.length > 15 ? `${event.title.slice(0, 15)}...` : event.title }) }) }) }, event.id))), dayEvents.length > 3 && (_jsx("li", { children: _jsx(Badge, { status: "default", text: `+${dayEvents.length - 3} more` }) }))] }));
     };
-    const monthCellRender = (_____value) => {
+    const monthCellRender = (_value) => {
         // Month view cell rendering if needed
         return null;
     };
@@ -440,8 +440,8 @@ const CalendarAnalyticsView = () => {
     ]);
     useEffect(() => {
         loadAnalyticsData();
-    }, [dateRange]);
-    const loadAnalyticsData = () => {
+    }, [dateRange, loadAnalyticsData]);
+    const loadAnalyticsData = useCallback(() => {
         setLoading(true);
         try {
             const analytics = auditCalendarSystem.generateScheduleAnalytics({
@@ -456,7 +456,7 @@ const CalendarAnalyticsView = () => {
         finally {
             setLoading(false);
         }
-    };
+    }, [dateRange]);
     if (loading) {
         return (_jsx(Card, { children: _jsxs("div", { style: { textAlign: 'center', padding: '40px' }, children: [_jsx(SyncOutlined, { spin: true, style: { fontSize: '24px' } }), _jsx("p", { children: "Loading analytics..." })] }) }));
     }

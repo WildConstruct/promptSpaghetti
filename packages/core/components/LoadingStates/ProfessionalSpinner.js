@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
-import { animationDurations, createSmoothTransition } from '../../utils/smoothAnimations.js';
+import { animationDurations, createSmoothTransition } from '../../utils/smoothAnimations';
 import '../../styles/smoothAnimations.css';
 export const ProfessionalSpinner = ({ size = 'medium', variant = 'primary', type = 'spinner', message, progress }) => {
     const getSizeConfig = () => {

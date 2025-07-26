@@ -5,11 +5,11 @@
  * Central export file for all community content management components.
  */
 // Version Control Components
-export { ContentVersionControl } from './ContentVersionControl.js';
+export { ContentVersionControl } from './ContentVersionControl';
 // Quality Assessment Components  
-export { QualityAssessmentDashboard } from './QualityAssessmentDashboard.js';
-export { ContentVersionManager } from '../../community/ContentVersionManager.js';
-export { ContentQualityAssessmentService, QUALITY_ASSESSMENT_CONFIG } from '../../community/ContentQualityAssessment.js';
+export { QualityAssessmentDashboard } from './QualityAssessmentDashboard';
+export { ContentVersionManager } from '../../community/ContentVersionManager';
+export { ContentQualityAssessmentService, QUALITY_ASSESSMENT_CONFIG } from '../../community/ContentQualityAssessment';
 // Default configurations
 export const CONTENT_VERSION_DEFAULTS = {
     showEditorialWorkflow: true,

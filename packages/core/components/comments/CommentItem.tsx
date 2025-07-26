@@ -10,7 +10,7 @@ import { CommentForm } from './CommentForm';
 interface CommentItemProps {
   comment: Comment;
   userId: string;
-  onUpdate: (commentId: string, content: string, metadata?: any) => Promise<void>;
+  onUpdate: (commentId: string, content: string, metadata?: Record<string, unknown>) => Promise<void>;
   onDelete: (commentId: string) => Promise<void>;
   onResolve?: (commentId: string, resolved: boolean) => Promise<void>;
   onReply?: () => void;

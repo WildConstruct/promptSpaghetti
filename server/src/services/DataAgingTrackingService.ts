@@ -361,7 +361,7 @@ export interface AgingPrediction {
   predictionId: string;
   type: PredictionType;
   horizon: number; // days
-  prediction: any;
+  prediction: unknown;
   confidence: number;
   factors: string[];
 }
@@ -1032,7 +1032,7 @@ export class DataAgingTrackingService {
   }
 
   // Placeholder implementations for complex analytics
-  private async generateAgingSummary(records: DataAgingRecord[]): Promise<any> {
+  private async generateAgingSummary(records: DataAgingRecord[]): Promise<unknown> {
     return {
       totalRecords: records.length,
       averageAge: records.reduce((sum, r) => sum + r.agingMetrics.chronologicalAge.days, 0) / records.length,
@@ -1041,11 +1041,11 @@ export class DataAgingTrackingService {
     };
   }
 
-  private async calculateAgeDistribution(__records: DataAgingRecord[]): Promise<any> {
+  private async calculateAgeDistribution(__records: DataAgingRecord[]): Promise<unknown> {
     return {};
   }
 
-  private async performRiskAnalysis(__records: DataAgingRecord[]): Promise<any> {
+  private async performRiskAnalysis(__records: DataAgingRecord[]): Promise<unknown> {
     return {};
   }
 
@@ -1057,7 +1057,7 @@ export class DataAgingTrackingService {
     return [];
   }
 
-  private async calculateAgingCosts(__records: DataAgingRecord[]): Promise<any> {
+  private async calculateAgingCosts(__records: DataAgingRecord[]): Promise<unknown> {
     return {};
   }
 
@@ -1070,11 +1070,11 @@ export class DataAgingTrackingService {
 interface AgingReport {
   reportId: string;
   generatedAt: Date;
-  summary: any;
-  distribution: any;
-  riskAnalysis: any;
-  recommendations: any[];
-  trends: any[];
-  costs: any;
+  summary: unknown;
+  distribution: unknown;
+  riskAnalysis: unknown;
+  recommendations: unknown[];
+  trends: unknown[];
+  costs: unknown;
   records: DataAgingRecord[];
 }

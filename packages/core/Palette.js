@@ -1,6 +1,6 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { professionalColors } from './styles/professional-design-system.js';
-export const Palette = ({ nodes, collapsed, onToggle, onDragStart }) => {
+import { professionalColors } from './styles/professional-design-system';
+export const Palette = ({ nodes, collapsed, onToggle, onDragStart }: { nodes: any[]; collapsed: boolean; onToggle: () => void; onDragStart?: (nodeId: string) => void }) => {
     return (_jsxs("aside", { "aria-label": "Node Palette", style: {
             width: collapsed ? 56 : 200,
             background: professionalColors.background.primary,
@@ -24,7 +24,7 @@ export const Palette = ({ nodes, collapsed, onToggle, onDragStart }) => {
                     transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
                 }, children: collapsed ? '»' : '«' }), _jsx("div", { style: { flex: 1, overflowY: 'auto', padding: collapsed ? 0 : 8 }, children: collapsed ? (
                 // Collapsed view - show icons only
-                nodes.map((node) => (_jsxs("div", { role: "button", tabIndex: 0, draggable: true, "aria-label": `${node.label} - ${node.tooltip}`.trim(), "aria-describedby": `tooltip-${node.id}`, "aria-grabbed": "false", onDragStart: (e) => {
+                nodes.map((node: any) => (_jsxs("div", { role: "button", tabIndex: 0, draggable: true, "aria-label": `${node.label} - ${node.tooltip}`.trim(), "aria-describedby": `tooltip-${node.id}`, "aria-grabbed": "false", onDragStart: (e) => {
                         e.dataTransfer?.setData?.('application/node-type', node.id);
                         onDragStart?.(node.id);
                     }, title: node.tooltip, style: {
@@ -44,7 +44,7 @@ export const Palette = ({ nodes, collapsed, onToggle, onDragStart }) => {
                     }, children: [_jsx("span", { id: `tooltip-${node.id}`, style: { position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }, children: node.tooltip }), _jsx("span", { style: { fontSize: 22, width: 28, textAlign: 'center' }, children: node.icon })] }, node.id)))) : (
                 // Expanded view - show by category
                 (() => {
-                    const categories = nodes.reduce((acc, node) => {
+                    const categories = nodes.reduce((acc: any, node: any) => {
                         const category = node.category || 'other';
                         if (!acc[category])
                             acc[category] = [];

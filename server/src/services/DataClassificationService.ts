@@ -1053,7 +1053,7 @@ export class DataClassificationService {
     condition: ClassificationCondition,
     data: { content: string; metadata: Record<string, any>; filename: string; size: number }
   ): { matches: boolean; reason: string } {
-    let fieldValue: any;
+    let fieldValue: Error;
     
     switch (condition.field) {
     case 'content':
@@ -1413,7 +1413,7 @@ export class DataClassificationService {
   private determineDriftType(
     previousClassification: DataClassification,
     newClassification: DataClassification,
-    _____dataId: string
+    _dataId: string
   ): DriftType {
     const classificationLevels = {
       'public': 0,

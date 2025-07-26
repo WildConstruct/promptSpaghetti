@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { Badge } from '../ui/Badge.js';
-import { Progress } from '../ui/Progress.js';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/Tooltip.js';
+import { Badge } from '../ui/Badge';
+import { Progress } from '../ui/Progress';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/Tooltip';
 import { Shield, Star, Award, CheckCircle, Verified, Crown, TrendingUp, Users, ExternalLink, Info } from 'lucide-react';
 /**
  * Main trust indicator component

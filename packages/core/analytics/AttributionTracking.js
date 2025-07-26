@@ -48,7 +48,7 @@ export class AttributionTracker extends EventEmitter {
             return touchPoint.id;
         }
         catch (error) {
-            this.emit('trackingError', { type: 'touchpoint', error: error.message });
+            this.emit('trackingError', { type: 'touchpoint', error: error instanceof Error ? error.message : String(error) });
             throw error;
         }
     }
@@ -65,7 +65,7 @@ export class AttributionTracker extends EventEmitter {
             return conversion.id;
         }
         catch (error) {
-            this.emit('trackingError', { type: 'conversion', error: error.message });
+            this.emit('trackingError', { type: 'conversion', error: error instanceof Error ? error.message : String(error) });
             throw error;
         }
     }
@@ -367,7 +367,7 @@ export class AttributionTracker extends EventEmitter {
                 name: 'First Touch',
                 type: 'first_touch',
                 description: 'Gives 100% credit to the first touchpoint',
-                configuration: {},
+                configuration: { parameters: {} },
                 weights: {
                     byPosition: [{ position: 'first', weight: 1.0 }],
                     byChannel: [],
@@ -387,7 +387,7 @@ export class AttributionTracker extends EventEmitter {
                 name: 'Last Touch',
                 type: 'last_touch',
                 description: 'Gives 100% credit to the last touchpoint',
-                configuration: {},
+                configuration: { parameters: {} },
                 weights: {
                     byPosition: [{ position: 'last', weight: 1.0 }],
                     byChannel: [],
@@ -407,7 +407,7 @@ export class AttributionTracker extends EventEmitter {
                 name: 'Linear',
                 type: 'linear',
                 description: 'Distributes credit equally across all touchpoints',
-                configuration: {},
+                configuration: { parameters: {} },
                 weights: {
                     byPosition: [],
                     byChannel: [],
@@ -572,11 +572,12 @@ export class AttributionTracker extends EventEmitter {
         const firstTouchPoint = touchPoints[0];
         return {
             touchPoints: [{
-                    touchPointId: firstTouchPoint.id,
                     credit: 1.0,
-                    percentage: 100,
-                    channel: firstTouchPoint.channel,
-                    position: 1
+                    weight: 1.0,
+                    models: { [model.id]: 1.0 },
+                    rank: 1,
+                    influence: 1.0,
+                    decay: 1.0
                 }],
             models: {
                 [model.id]: {
@@ -623,11 +624,12 @@ export class AttributionTracker extends EventEmitter {
         const lastTouchPoint = touchPoints[touchPoints.length - 1];
         return {
             touchPoints: [{
-                    touchPointId: lastTouchPoint.id,
                     credit: 1.0,
-                    percentage: 100,
-                    channel: lastTouchPoint.channel,
-                    position: touchPoints.length
+                    weight: 1.0,
+                    models: { [model.id]: 1.0 },
+                    rank: touchPoints.length,
+                    influence: 1.0,
+                    decay: 1.0
                 }],
             models: {
                 [model.id]: {
@@ -681,11 +683,12 @@ export class AttributionTracker extends EventEmitter {
         }));
         return {
             touchPoints: credits.map(c => ({
-                touchPointId: c.touchPointId,
                 credit: c.credit,
-                percentage: c.percentage,
-                channel: c.channel,
-                position: c.position
+                weight: c.credit,
+                models: { [model.id]: c.credit },
+                rank: c.position,
+                influence: c.credit,
+                decay: 1.0
             })),
             models: {
                 [model.id]: {
@@ -738,11 +741,12 @@ export class AttributionTracker extends EventEmitter {
         });
         return {
             touchPoints: credits.map(c => ({
-                touchPointId: c.touchPointId,
                 credit: c.credit,
-                percentage: c.percentage,
-                channel: c.channel,
-                position: c.position
+                weight: c.credit,
+                models: { [model.id]: c.credit },
+                rank: c.position,
+                influence: c.credit,
+                decay: c.credit
             })),
             models: {
                 [model.id]: {
@@ -835,11 +839,12 @@ export class AttributionTracker extends EventEmitter {
         }
         return {
             touchPoints: credits.map(c => ({
-                touchPointId: c.touchPointId,
                 credit: c.credit,
-                percentage: c.percentage,
-                channel: c.channel,
-                position: c.position
+                weight: c.credit,
+                models: { [model.id]: c.credit },
+                rank: c.position,
+                influence: c.credit,
+                decay: 1.0
             })),
             models: {
                 [model.id]: {
@@ -940,7 +945,7 @@ export class AttributionTracker extends EventEmitter {
         const conversionTime = conversion.timestamp.getTime();
         return journey.touchPoints.filter(tp => {
             const timeDiff = (conversionTime - tp.timestamp.getTime()) / (24 * 60 * 60 * 1000);
-            const window = lookbackWindow[tp.type] || lookbackWindow.click;
+            const window = lookbackWindow[tp.type] || lookbackWindow.custom[tp.type] || lookbackWindow.click;
             return timeDiff <= window;
         });
     }

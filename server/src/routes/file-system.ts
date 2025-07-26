@@ -44,7 +44,7 @@ export interface TreeNode {
 export interface FileOperationResponse {
   success: boolean;
   message?: string;
-  data?: any;
+  data?: unknown;
   error?: string;
 }
 

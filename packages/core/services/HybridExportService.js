@@ -11,10 +11,10 @@
 import { WildConstructVFXExporter } from './VFXExporter.js';
 // === HYBRID EXPORT SERVICE ===
 export class HybridPromptExportService {
-    vfxExporter;
-    marsExtractor;
-    zadaGenerator;
-    seedManager;
+    vfxExporter: any;
+    marsExtractor: any;
+    zadaGenerator: any;
+    seedManager: any;
     constructor() {
         this.vfxExporter = WildConstructVFXExporter.getInstance();
         this.marsExtractor = new MARSFrameworkExtractor();
@@ -24,13 +24,13 @@ export class HybridPromptExportService {
     /**
      * Export graph with hybrid prompting approach combining all methodologies
      */
-    async exportHybridPrompt(graph, executionResults, options = {
+    async exportHybridPrompt(graph: any, executionResults: any, options: any = {
         includeMARS: true,
         includeZada: true,
         includeHollywoodProtocol: true,
         quality: 'production',
         targetAudience: 'mixed_crew'
-    }) {
+    }): Promise<any> {
         // Start with base VFX export
         const baseExport = await this.vfxExporter.exportGraph(graph, executionResults, { quality: options.quality });
         // Build hybrid extensions
@@ -42,7 +42,7 @@ export class HybridPromptExportService {
         };
         return hybridExport;
     }
-    async buildHybridExtensions(graph, executionResults, options) {
+    async buildHybridExtensions(graph: any, executionResults: any, options: any): Promise<any> {
         const extensions = {
             mars: {
                 framework: 'MARS-v1.0',

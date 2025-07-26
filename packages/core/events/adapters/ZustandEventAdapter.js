@@ -4,7 +4,7 @@
  * Bridges Zustand state management with the centralized event bus.
  * Converts state changes to events and allows event-driven state updates.
  */
-import { globalEventBus, EventCategory, EventPriority } from '../EventSystem.js';
+import { globalEventBus, EventCategory, EventPriority } from '../EventSystem';
 /**
  * Zustand Event Adapter Class
  */

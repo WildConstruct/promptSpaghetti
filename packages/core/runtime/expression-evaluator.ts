@@ -490,7 +490,7 @@ export class SafeExpressionEvaluator {
       const wrappedExpression = `(${expression})`;
       
       // Parse using acorn
-      const program = acorn.parse(wrappedExpression, ACORN_OPTIONS) as unknown;
+      const program = acorn.parse(wrappedExpression, ACORN_OPTIONS) as any;
       
       // Extract the expression from the ExpressionStatement
       if (program.type !== 'Program' || 
@@ -540,17 +540,17 @@ export class SafeExpressionEvaluator {
       const right = this.evaluateAST(node.right!, context);
         
       switch (node.operator) {
-      case '+': return left + right;
-      case '-': return left - right;
-      case '*': return left * right;
-      case '/': return left / right;
-      case '%': return left % right;
-      case '<': return left < right;
-      case '>': return left > right;
-      case '<=': return left <= right;
-      case '>=': return left >= right;
-      case '==': return left == right;
-      case '!=': return left != right;
+      case '+': return (left as any) + (right as any);
+      case '-': return (left as any) - (right as any);
+      case '*': return (left as any) * (right as any);
+      case '/': return (left as any) / (right as any);
+      case '%': return (left as any) % (right as any);
+      case '<': return (left as any) < (right as any);
+      case '>': return (left as any) > (right as any);
+      case '<=': return (left as any) <= (right as any);
+      case '>=': return (left as any) >= (right as any);
+      case '==': return (left as any) == (right as any);
+      case '!=': return (left as any) != (right as any);
       case '===': return left === right;
       case '!==': return left !== right;
       default:
@@ -596,7 +596,7 @@ export class SafeExpressionEvaluator {
       if (node.computed) {
         property = String(this.evaluateAST(node.property!, context));
       } else {
-        const propNode = node.property! as unknown;
+        const propNode = node.property! as any;
         property = propNode.name || String(propNode.value);
       }
         
@@ -661,8 +661,8 @@ export class SafeExpressionEvaluator {
     
     // Add safe utility functions
     context.getType = (value: unknown) => typeof value;
-    context.length = (value: unknown) => value?.length ?? 0;
-    context.isEmpty = (value: unknown) => !value || value.length === 0;
+    context.length = (value: unknown) => (value as any)?.length ?? 0;
+    context.isEmpty = (value: unknown) => !value || (value as any).length === 0;
     context.includes = (value: unknown, item: unknown) => {
       if (typeof value === 'string') {
         return String(value).includes(String(item));

@@ -218,7 +218,7 @@ describe('usePasswordReset', () => {
       mockPasswordResetTokenManager.generateToken.mockResolvedValue({
         token: 'mock-token',
         tokenId: 'mock-token-id'
-      } as unknown);
+      } as unknown as unknown);
 
       const onSecurityEvent = jest.fn<unknown[], unknown>();
       const { result } = renderHook(() => usePasswordReset({ onSecurityEvent }));
@@ -252,7 +252,7 @@ describe('usePasswordReset', () => {
     });
 
     test('should handle request failure', async () => {
-      mockPasswordResetTokenManager.generateToken.mockResolvedValue(null as unknown);
+      mockPasswordResetTokenManager.generateToken.mockResolvedValue(null as unknown as unknown);
 
       const onError = jest.fn<unknown[], unknown>();
       const { result } = renderHook(() => usePasswordReset({ onError }));
@@ -301,7 +301,7 @@ describe('usePasswordReset', () => {
       mockPasswordResetTokenManager.generateToken.mockResolvedValue({
         token: 'mock-token',
         tokenId: 'mock-token-id'
-      } as unknown);
+      } as unknown as unknown);
 
       mockPasswordResetTokenManager.validateToken.mockResolvedValue({
         valid: true,
@@ -311,7 +311,7 @@ describe('usePasswordReset', () => {
           email: 'test@example.com'
         } as any,
         riskScore: 10
-      } as unknown);
+      } as unknown as unknown);
 
       const { result } = renderHook(() => usePasswordReset());
 
@@ -347,12 +347,12 @@ describe('usePasswordReset', () => {
       mockPasswordResetTokenManager.generateToken.mockResolvedValue({
         token: 'mock-token',
         tokenId: 'mock-token-id'
-      } as unknown);
+      } as unknown as unknown);
 
       mockPasswordResetTokenManager.validateToken.mockResolvedValue({
         valid: false,
         reason: 'token_expired'
-      } as unknown);
+      } as unknown as unknown);
 
       const { result } = renderHook(() => usePasswordReset());
 
@@ -405,17 +405,17 @@ describe('usePasswordReset', () => {
   });
 
   describe('Reset Flow - Password Reset Step', () => {
-    const setupForPasswordReset = async (result: any) => {
+    const setupForPasswordReset = async (result: unknown) => {
       mockPasswordResetTokenManager.generateToken.mockResolvedValue({
         token: 'mock-token',
         tokenId: 'mock-token-id'
-      } as unknown);
+      } as unknown as unknown);
 
       mockPasswordResetTokenManager.validateToken.mockResolvedValue({
         valid: true,
         token: { id: 'mock-token-id' } as any,
         riskScore: 10
-      } as unknown);
+      } as unknown as unknown);
 
       act(() => {
         result.current.setEmail('test@example.com');
@@ -438,7 +438,7 @@ describe('usePasswordReset', () => {
       mockPasswordResetTokenManager.useToken.mockResolvedValue({
         success: true,
         token: { id: 'mock-token-id' } as any
-      } as unknown);
+      } as unknown as unknown);
 
       const { result } = renderHook(() => usePasswordReset());
 
@@ -514,7 +514,7 @@ describe('usePasswordReset', () => {
       mockPasswordResetTokenManager.useToken.mockResolvedValue({
         success: false,
         reason: 'token_already_used'
-      } as unknown);
+      } as unknown as unknown);
 
       const { result } = renderHook(() => usePasswordReset());
 
@@ -545,7 +545,7 @@ describe('usePasswordReset', () => {
       mockPasswordResetTokenManager.generateToken.mockResolvedValue({
         token: 'new-mock-token',
         tokenId: 'new-mock-token-id'
-      } as unknown);
+      } as unknown as unknown);
 
       const { result } = renderHook(() => usePasswordReset());
 
@@ -740,7 +740,7 @@ describe('usePasswordReset', () => {
       mockPasswordResetTokenManager.generateToken.mockResolvedValue({
         token: 'mock-token',
         tokenId: 'mock-token-id'
-      } as unknown);
+      } as unknown as unknown);
 
       const { result } = renderHook(() => usePasswordReset({ autoAdvance: false }));
 

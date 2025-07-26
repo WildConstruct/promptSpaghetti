@@ -7,7 +7,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * displaying quality metrics, and coordinating editorial reviews.
  */
 import { useState, useEffect } from 'react';
-import { ContentQualityAssessmentService } from '../../community/ContentQualityAssessment.js';
+import { ContentQualityAssessmentService } from '../../community/ContentQualityAssessment';
 export const QualityAssessmentDashboard = ({ contentId, versionId, userRole = 'author', onQualityImproved, onWorkflowUpdate, showReviewInterface = false, readOnly = false, className = '' }) => {
     const [qualityMetrics, setQualityMetrics] = useState(null);
     const [workflow, setWorkflow] = useState(null);

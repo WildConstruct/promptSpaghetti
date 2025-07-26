@@ -3,9 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-ro
 import 'reactflow/dist/style.css';
 import './randomizer.css';
 
-import BrowserSafeGraphEditor from './components/BrowserSafeGraphEditor';
 import EnhancedGraphEditor from './components/EnhancedGraphEditor';
-import FileBrowser from './components/file-browser/FileBrowser';
 
 interface GraphEditorProps {
   initialNodes?: unknown[];
@@ -31,7 +29,6 @@ try {
     GraphEditor = coreModule.GraphEditor;
     RandomizerPanel = coreModule.RandomizerPanel;
     isEnhancedMode = true;
-    console.log('✅ Enhanced core components loaded successfully');
   } else {
     throw new Error('Core components not fully available');
   }
@@ -86,13 +83,13 @@ try {
  * Main application interface with tab navigation.
  * Handles graph editor and LLM randomizer functionality.
  */
-function MainApp() {
+function MainApp(): React.ReactElement {
   const location = useLocation();
   const navigate = useNavigate();
   const [generatedGraph, setGeneratedGraph] = useState<unknown>(null);
 
   // Determine active tab based on current route (simplified, no auth)
-  const getActiveTab = () => {
+  const getActiveTab = (): string => {
     if (location.pathname === '/randomizer') return 'randomizer';
     if (location.pathname === '/files') return 'files';
     return 'editor';
@@ -118,13 +115,6 @@ function MainApp() {
     alert(`Generation failed: ${error.message}`);
   }, []);
 
-  const handleFileLoad = useCallback((fileData: unknown) => {
-    // Load graph data from file browser
-    if (fileData && typeof fileData === 'object' && 'nodes' in fileData && 'edges' in fileData) {
-      setGeneratedGraph(fileData);
-      navigate('/'); // Navigate to editor tab
-    }
-  }, [navigate]);
 
   return (
     <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -203,7 +193,7 @@ function MainApp() {
  * Root App component with routing.
  * Simplified version with authentication disabled.
  */
-export default function App() {
+export default function App(): React.ReactElement {
   return (
     <BrowserRouter>
       <Routes>

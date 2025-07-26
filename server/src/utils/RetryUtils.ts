@@ -14,7 +14,7 @@ export interface RetryOptions {
   jitter?: boolean;
   retryableErrors?: Array<string | number | RegExp>;
   onAttempt?: (attempt: number, error: Error) => void;
-  onSuccess?: (attempt: number, result: any) => void;
+  onSuccess?: <T>(attempt: number, result: T) => void;
   onFailure?: (attempts: number, finalError: Error) => void;
 }
 
@@ -175,7 +175,7 @@ export class RetryUtils {
   /**
    * Create a retryable version of an async function
    */
-  public static retryable<TArgs extends any[], TReturn>(
+  public static retryable<TArgs extends unknown[], TReturn>(
     fn: (...args: TArgs) => Promise<TReturn>,
     options: RetryOptions = {}
   ): (...args: TArgs) => Promise<TReturn> {
@@ -309,7 +309,10 @@ export class RetryUtils {
       
       if (typeof pattern === 'number') {
         // For HTTP status codes
-        return (error as any).status === pattern || (error as any).statusCode === pattern;
+        return (
+          error as Record<string,
+          unknown>
+        ).status === pattern || (error as Record<string, unknown>).statusCode === pattern;
       }
       
       if (pattern instanceof RegExp) {
@@ -381,10 +384,10 @@ class CircuitBreakerState {
  * Retry decorators for class methods
  */
 export function retryable(options: RetryOptions = {}) {
-  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+  return function (target: Record<string, unknown>, propertyKey: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
     
-    descriptor.value = async function (...args: any[]) {
+    descriptor.value = async function (...args: unknown[]) {
       return RetryUtils.execute(() => originalMethod.apply(this, args), options);
     };
     
@@ -393,10 +396,10 @@ export function retryable(options: RetryOptions = {}) {
 }
 
 export function retryableDatabase(options: Partial<RetryOptions> = {}) {
-  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+  return function (target: Record<string, unknown>, propertyKey: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
     
-    descriptor.value = async function (...args: any[]) {
+    descriptor.value = async function (...args: unknown[]) {
       return RetryUtils.executeDatabase(() => originalMethod.apply(this, args), options);
     };
     
@@ -405,10 +408,10 @@ export function retryableDatabase(options: Partial<RetryOptions> = {}) {
 }
 
 export function retryableHttp(options: Partial<RetryOptions> = {}) {
-  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+  return function (target: Record<string, unknown>, propertyKey: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
     
-    descriptor.value = async function (...args: any[]) {
+    descriptor.value = async function (...args: unknown[]) {
       return RetryUtils.executeHttp(() => originalMethod.apply(this, args), options);
     };
     

@@ -4,7 +4,7 @@
  *
  * Flexible configuration management with environment-specific settings and runtime updates
  */
-import { AIModelType, AIModelProvider } from './BaseAIModel.js';
+import { AIModelType, AIModelProvider } from './BaseAIModel';
 export class ConfigurationValidator {
     rules = [];
     constructor() {
@@ -510,6 +510,12 @@ export class ConfigurationManager {
                     parameters: {}
                 },
                 [AIModelProvider.MIDJOURNEY]: {
+                    parameters: {}
+                },
+                [AIModelProvider.PIKA_LABS]: {
+                    parameters: {}
+                },
+                [AIModelProvider.SORA]: {
                     parameters: {}
                 }
             },

@@ -155,7 +155,7 @@ export interface ChartExportData {
   metadata: {
     exportedAt: number;
     timeRange: { start: number; end: number };
-    filters: any[];
+    filters: unknown[];
   };
 }
 
@@ -495,7 +495,7 @@ const FunnelChartHeader: React.FC<FunnelChartHeaderProps> = ({
  */
 interface StandardFunnelChartProps {
   data: FunnelChartData;
-  dimensions: any;
+  dimensions: unknown;
   interactionState: InteractionState;
   onStepHover: (stepId: string | null, event?: React.MouseEvent) => void;
   onStepClick: (stepId: string) => void;

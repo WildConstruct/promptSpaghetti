@@ -19,25 +19,16 @@ import {
   Plus,
   Edit,
   Trash2,
-  Clock,
   Calendar,
   Shield,
   AlertTriangle,
-  CheckCircle,
   Play,
   Pause,
-  Copy,
-  Download,
-  Upload,
-  Filter,
   Search,
   MoreVertical,
   Settings,
-  Eye,
-  History,
   FileText,
   Zap,
-  Timer,
   BarChart3
 } from 'lucide-react';
 
@@ -106,8 +97,8 @@ interface PolicyExecutionResult {
 
 const DataRetentionManager: React.FC = () => {
   const [policies, setPolicies] = useState<RetentionPolicy[]>([]);
-  const [___templates, setTemplates] = useState<PolicyTemplate[]>([]);
-  const [___executionResults, setExecutionResults] = useState<PolicyExecutionResult[]>([]);
+  const [, setTemplates] = useState<PolicyTemplate[]>([]);
+  const [, setExecutionResults] = useState<PolicyExecutionResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
@@ -116,19 +107,19 @@ const DataRetentionManager: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [frameworkFilter, setFrameworkFilter] = useState<string>('all');
-  const [sortBy, ___setSortBy] = useState<'name' | 'created' | 'execution' | 'affected'>('name');
-  const [sortOrder, ___setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [sortBy] = useState<'name' | 'created' | 'execution' | 'affected'>('name');
+  const [sortOrder] = useState<'asc' | 'desc'>('asc');
   
   // Modal states
-  const [___showCreateModal, setShowCreateModal] = useState(false);
-  const [___showTemplateModal, setShowTemplateModal] = useState(false);
-  const [___selectedPolicy, setSelectedPolicy] = useState<RetentionPolicy | null>(null);
-  const [___selectedTemplate, ___setSelectedTemplate] = useState<PolicyTemplate | null>(null);
-  const [___showBulkActions, ___setShowBulkActions] = useState(false);
-  const [___selectedPolicies, ___setSelectedPolicies] = useState<Set<string>>(new Set());
+  const [, setShowCreateModal] = useState(false);
+  const [, setShowTemplateModal] = useState(false);
+  const [, setSelectedPolicy] = useState<RetentionPolicy | null>(null);
+  const [,] = useState<PolicyTemplate | null>(null);
+  const [,] = useState(false);
+  const [,] = useState<Set<string>>(new Set());
 
   // Form state for policy creation/editing
-  const [policyForm, setPolicyForm] = useState<Partial<RetentionPolicy>>({
+  const [, ] = useState<Partial<RetentionPolicy>>({
     name: '',
     description: '',
     dataType: '',
@@ -272,35 +263,26 @@ const DataRetentionManager: React.FC = () => {
       }
     });
 
-  const ___handleCreatePolicy = async () => {
-    try {
-      const response = await fetch('/api/data-retention/policies', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(policyForm)
-      });
-
-      if (response.ok) {
-        await loadRetentionData();
-        setShowCreateModal(false);
-        setPolicyForm({
-          name: '',
-          description: '',
-          dataType: '',
-          dataCategory: 'user_data',
-          retentionPeriod: 30,
-          retentionUnit: 'days',
-          autoDelete: false,
-          status: 'draft'
-        });
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create policy');
-    }
-  };
+  // TODO: Connect this function to the create policy modal
+  // 
+  //     if (response.ok) {
+  //       await loadRetentionData();
+  //       setShowCreateModal(false);
+  //       setPolicyForm({
+  //         name: '',
+  //         description: '',
+  //         dataType: '',
+  //         dataCategory: 'user_data',
+  //         retentionPeriod: 30,
+  //         retentionUnit: 'days',
+  //         autoDelete: false,
+  //         status: 'draft'
+  //       });
+  //     }
+  //   } catch (err) {
+  //     setError(err instanceof Error ? err.message : 'Failed to create policy');
+  //   }
+  // };
 
   const handleDeletePolicy = async (policyId: string) => {
     if (!confirm('Are you sure you want to delete this retention policy?')) {
@@ -492,7 +474,10 @@ const DataRetentionManager: React.FC = () => {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600">Retention Period</span>
-                    <span className="font-medium">{formatRetentionPeriod(policy.retentionPeriod, policy.retentionUnit)}</span>
+                    <span className="font-medium">{formatRetentionPeriod(
+                      policy.retentionPeriod,
+                      policy.retentionUnit
+                    )}</span>
                   </div>
 
                   <div className="flex items-center justify-between text-sm">

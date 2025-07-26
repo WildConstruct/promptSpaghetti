@@ -3,18 +3,18 @@
  * Provides real-time compliance checking for security, privacy, and regulatory requirements
  */
 export class ComplianceMonitor {
-    checks = new Map();
-    results = [];
-    violations = [];
-    isMonitoring = false;
-    monitoringIntervals = new Map();
+    checks: Map<string, any> = new Map();
+    results: any[] = [];
+    violations: any[] = [];
+    isMonitoring: boolean = false;
+    monitoringIntervals: Map<string, any> = new Map();
     constructor() {
         this.initializeComplianceChecks();
     }
     /**
      * Initialize all compliance checks
      */
-    initializeComplianceChecks() {
+    initializeComplianceChecks(): void {
         const checks = [
             // GDPR Compliance Checks
             {
@@ -199,7 +199,7 @@ export class ComplianceMonitor {
     /**
      * Run a specific compliance check
      */
-    async runComplianceCheck(checkId, context) {
+    async runComplianceCheck(checkId: string, context?: any): Promise<any> {
         const check = this.checks.get(checkId);
         if (!check) {
             throw new Error(`Compliance check not found: ${checkId}`);
@@ -240,7 +240,7 @@ export class ComplianceMonitor {
     /**
      * Run full compliance scan across all checks
      */
-    async runFullComplianceScan() {
+    async runFullComplianceScan(): Promise<any> {
         console.log('🔍 Running full compliance scan...');
         const scanResults = [];
         // Run all checks in parallel
@@ -260,7 +260,7 @@ export class ComplianceMonitor {
     /**
      * Get current compliance dashboard
      */
-    generateComplianceDashboard() {
+    generateComplianceDashboard(): any {
         const recentResults = this.results.filter(r => Date.now() - r.timestamp.getTime() < 24 * 60 * 60 * 1000 // Last 24 hours
         );
         // Calculate overall score
@@ -298,7 +298,7 @@ export class ComplianceMonitor {
     /**
      * Handle compliance violation
      */
-    async handleComplianceViolation(result, check) {
+    async handleComplianceViolation(result: any, check: any) {
         const violation = {
             id: `violation_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
             checkId: result.checkId,
@@ -317,7 +317,7 @@ export class ComplianceMonitor {
     /**
      * Attempt automatic remediation
      */
-    async attemptAutoRemediation(result, check) {
+    async attemptAutoRemediation(result: any, check: any) {
         if (!result.remediation || result.remediation.length === 0) {
             return;
         }
@@ -344,7 +344,7 @@ export class ComplianceMonitor {
     /**
      * Send critical compliance alert
      */
-    async sendCriticalComplianceAlert(violation, result) {
+    async sendCriticalComplianceAlert(violation: any) {
         // In a real implementation, this would send alerts via email, Slack, etc.
         console.error('🚨 CRITICAL COMPLIANCE VIOLATION DETECTED!');
         console.error(`Check: ${violation.checkId}`);
@@ -399,7 +399,7 @@ export class ComplianceMonitor {
     /**
      * Convert frequency string to milliseconds
      */
-    getIntervalMs(frequency) {
+    getIntervalMs(frequency: string) {
         switch (frequency) {
             case 'hourly': return 60 * 60 * 1000;
             case 'daily': return 24 * 60 * 60 * 1000;
@@ -412,7 +412,7 @@ export class ComplianceMonitor {
     /**
      * Check data encryption compliance (GDPR)
      */
-    async checkDataEncryption(context) {
+    async checkDataEncryption() {
         const evidence = [];
         let score = 100;
         const issues = [];
@@ -431,7 +431,7 @@ export class ComplianceMonitor {
                 timestamp: new Date()
             });
         }
-        catch (error) {
+        catch {
             score -= 50;
             issues.push('Unable to verify database encryption');
         }
@@ -462,7 +462,7 @@ export class ComplianceMonitor {
     /**
      * Check consent management compliance (GDPR)
      */
-    async checkConsentManagement(context) {
+    async checkConsentManagement(context: any) {
         let score = 100;
         const issues = [];
         const evidence = [];
@@ -500,7 +500,7 @@ export class ComplianceMonitor {
     /**
      * Check data retention compliance (GDPR)
      */
-    async checkDataRetention(context) {
+    async checkDataRetention() {
         let score = 100;
         const issues = [];
         const remediation = [];
@@ -535,7 +535,7 @@ export class ComplianceMonitor {
     /**
      * Check data portability support (GDPR)
      */
-    async checkDataPortability(context) {
+    async checkDataPortability(context: any) {
         let score = 100;
         const issues = [];
         // Check if data export functionality exists
@@ -565,7 +565,7 @@ export class ComplianceMonitor {
     /**
      * Check access controls (SOC 2)
      */
-    async checkAccessControls(context) {
+    async checkAccessControls(context: any) {
         let score = 100;
         const issues = [];
         const evidence = [];
@@ -607,7 +607,7 @@ export class ComplianceMonitor {
     /**
      * Check audit logging (SOC 2)
      */
-    async checkAuditLogging(context) {
+    async checkAuditLogging(context: any) {
         let score = 100;
         const issues = [];
         // Check if audit logging is enabled
@@ -641,7 +641,7 @@ export class ComplianceMonitor {
     /**
      * Check encryption standards (SOC 2)
      */
-    async checkEncryptionStandards(context) {
+    async checkEncryptionStandards(context: any) {
         let score = 100;
         const issues = [];
         // Check encryption algorithms
@@ -676,7 +676,7 @@ export class ComplianceMonitor {
     /**
      * Check content encryption (MPA)
      */
-    async checkContentEncryption(context) {
+    async checkContentEncryption(context: any) {
         let score = 100;
         const issues = [];
         // Check if content is classified as pre-release
@@ -708,7 +708,7 @@ export class ComplianceMonitor {
     /**
      * Check content access tracking (MPA)
      */
-    async checkContentAccessTracking(context) {
+    async checkContentAccessTracking(context: any) {
         let score = 100;
         const issues = [];
         // Check if access is being tracked
@@ -736,7 +736,7 @@ export class ComplianceMonitor {
     /**
      * Check SSL certificates (Internal)
      */
-    async checkSSLCertificates(context) {
+    async checkSSLCertificates(context: any) {
         let score = 100;
         const issues = [];
         const remediation = [];
@@ -782,7 +782,7 @@ export class ComplianceMonitor {
     /**
      * Check security headers (Internal)
      */
-    async checkSecurityHeaders(context) {
+    async checkSecurityHeaders(context: any) {
         let score = 100;
         const issues = [];
         const remediation = [];
@@ -830,7 +830,7 @@ export class ComplianceMonitor {
     /**
      * Check rate limiting (Internal)
      */
-    async checkRateLimiting(context) {
+    async checkRateLimiting(context: any) {
         let score = 100;
         const issues = [];
         // Mock rate limiting check
@@ -985,7 +985,7 @@ export class EnhancedComplianceMonitor extends ComplianceMonitor {
     /**
      * Record compliance measurement and update baselines
      */
-    async recordComplianceMeasurement(framework, metricName, actualValue, context) {
+    async recordComplianceMeasurement(framework: string, metricName: string, actualValue: number, context?: any) {
         if (!this.baselineTracker)
             return;
         try {
@@ -1003,7 +1003,7 @@ export class EnhancedComplianceMonitor extends ComplianceMonitor {
     /**
      * Get compliance trend analysis for a specific framework
      */
-    async getFrameworkTrendAnalysis(framework, daysPeriod = 30) {
+    async getFrameworkTrendAnalysis(framework: string, daysPeriod: number = 30) {
         if (!this.historicalAnalyzer)
             return null;
         try {
@@ -1050,7 +1050,7 @@ export class EnhancedComplianceMonitor extends ComplianceMonitor {
             return [];
         }
     }
-    async calculateAuditReadiness(baselineDashboard) {
+    async calculateAuditReadiness(baselineDashboard: any) {
         const frameworkReadiness = {};
         const frameworks = ['GDPR', 'SOC2', 'MPA', 'INTERNAL'];
         let overallReadinessTotal = 0;
@@ -1086,7 +1086,7 @@ export class EnhancedComplianceMonitor extends ComplianceMonitor {
             frameworkReadiness
         };
     }
-    identifyMissingEvidence(framework, frameworkHealth) {
+    identifyMissingEvidence(framework: string, frameworkHealth: any) {
         const missingEvidence = [];
         if (frameworkHealth.score < 90) {
             switch (framework) {
@@ -1113,7 +1113,7 @@ export class EnhancedComplianceMonitor extends ComplianceMonitor {
         }
         return missingEvidence;
     }
-    getNextAuditDate(framework) {
+    getNextAuditDate(framework: string) {
         // Mock audit dates - in practice, these would come from audit scheduling system
         const auditDates = {
             'GDPR': new Date('2025-09-15'),

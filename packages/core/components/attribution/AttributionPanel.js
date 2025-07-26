@@ -2,9 +2,9 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from 'react';
 import { Card, Avatar, Typography, Tag, Tooltip, Space, Button, Drawer, List, Badge, Switch, Alert, Empty } from 'antd';
 import { UserOutlined, SettingOutlined, TeamOutlined, ClockCircleOutlined, EditOutlined, DeleteOutlined, PlusOutlined, NodeIndexOutlined, ShareAltOutlined } from '@ant-design/icons';
-import { CHANGE_TYPE_DESCRIPTIONS, RESOURCE_TYPE_DESCRIPTIONS } from '../../types/attribution.js';
-import { useAttribution } from '../../hooks/useAttribution.js';
-import { ContributorVisualization } from './ContributorVisualization.js';
+import { CHANGE_TYPE_DESCRIPTIONS, RESOURCE_TYPE_DESCRIPTIONS } from '../../types/attribution';
+import { useAttribution } from '../../hooks/useAttribution';
+import { ContributorVisualization } from './ContributorVisualization';
 const { Text, _____Title } = Typography;
 const AuthorIndicator = ({ attribution, showDetails = true, onClick }) => {
     const getAuthorInitials = (name) => {

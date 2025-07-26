@@ -50,9 +50,9 @@ export interface ConflictContext {
   resource_id: string;
   workspace_id: string;
   conflicting_sessions: EditSession[];
-  base_version: any;              // Common ancestor version
-  local_version: any;             // User A's version
-  remote_version: any;            // User B's version
+  base_version: unknown;              // Common ancestor version
+  local_version: unknown;             // User A's version
+  remote_version: unknown;            // User B's version
   conflict_location: {
     path: string;                 // JSON path or node ID
     line_number?: number;
@@ -66,7 +66,7 @@ export interface ConflictContext {
 export interface ResolutionResult {
   success: boolean;
   resolution_strategy: ResolutionStrategy;
-  resolved_content: any;
+  resolved_content: unknown;
   conflicts_remaining: ConflictMarker[];
   rollback_point?: string;        // Version ID for rollback
   metadata: {
@@ -84,7 +84,7 @@ export interface Operation {
   id: string;
   type: 'insert' | 'delete' | 'replace' | 'move' | 'format';
   position: number | string;      // Position in text or node ID
-  content?: any;
+  content?: unknown;
   length?: number;
   user_id: string;
   timestamp: Date;
@@ -287,7 +287,7 @@ export class ConflictResolutionEngine extends EventEmitter {
   async resolveConflicts(
     resourceId: string,
     strategy: ResolutionStrategy,
-    manualResolution?: any
+    manualResolution?: unknown
   ): Promise<ResolutionResult> {
     const startTime = Date.now();
     const context = this.activeConflicts.get(resourceId);
@@ -533,7 +533,7 @@ export class ConflictResolutionEngine extends EventEmitter {
    */
   private async resolveWithManualInput(
     context: ConflictContext,
-    manualResolution: any
+    manualResolution: unknown
   ): Promise<ResolutionResult> {
     if (!manualResolution) {
       return {
@@ -702,7 +702,7 @@ export class ConflictResolutionEngine extends EventEmitter {
   /**
    * Apply operations to base content
    */
-  private applyOperations(baseContent: any, operations: Operation[]): any {
+  private applyOperations(baseContent: unknown, operations: Operation[]): unknown {
     let content = baseContent;
     
     // Apply operations in order
@@ -716,7 +716,7 @@ export class ConflictResolutionEngine extends EventEmitter {
   /**
    * Apply single operation to content
    */
-  private applyOperation(content: any, operation: Operation): any {
+  private applyOperation(content: unknown, operation: Operation): unknown {
     // Simplified operation application
     // In practice, this would handle different content types (text, JSON, etc.)
     
@@ -749,10 +749,10 @@ export class ConflictResolutionEngine extends EventEmitter {
    * Perform three-way merge
    */
   private performThreeWayMerge(
-    baseVersion: any,
-    localVersion: any,
-    remoteVersion: any
-  ): { merged_content: any; conflicts: ConflictMarker[]; confidence_score: number } {
+    baseVersion: unknown,
+    localVersion: unknown,
+    remoteVersion: unknown
+  ): { merged_content: unknown; conflicts: ConflictMarker[]; confidence_score: number } {
     const conflicts: ConflictMarker[] = [];
     let mergedContent = baseVersion;
     let confidence = 1.0;
@@ -803,7 +803,7 @@ export class ConflictResolutionEngine extends EventEmitter {
   /**
    * Create rollback point
    */
-  createRollbackPoint(resourceId: string, content: any, label?: string): string {
+  createRollbackPoint(resourceId: string, content: unknown, label?: string): string {
     const rollbackId = `rollback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     if (!this.rollbackPoints.has(resourceId)) {
@@ -830,7 +830,7 @@ export class ConflictResolutionEngine extends EventEmitter {
   /**
    * Perform rollback to specific point
    */
-  performRollback(resourceId: string, rollbackId?: string): any | null {
+  performRollback(resourceId: string, rollbackId?: string): unknown | null {
     const rollbackPoints = this.rollbackPoints.get(resourceId);
     if (!rollbackPoints || rollbackPoints.length === 0) {
       return null;
@@ -855,7 +855,7 @@ export class ConflictResolutionEngine extends EventEmitter {
   /**
    * Get available rollback points
    */
-  getRollbackPoints(resourceId: string): any[] {
+  getRollbackPoints(resourceId: string): unknown[] {
     return this.rollbackPoints.get(resourceId) || [];
   }
 

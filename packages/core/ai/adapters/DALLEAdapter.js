@@ -4,7 +4,7 @@
  *
  * Comprehensive adapter for OpenAI DALL-E 3 image generation
  */
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel.js';
+import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
 export class DALLEAdapter extends BaseAIModel {
     config;
     apiEndpoint;

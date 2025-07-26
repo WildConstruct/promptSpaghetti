@@ -13,11 +13,11 @@
  * ML flagging infrastructure for comprehensive content moderation.
  */
 export class UserFlaggingService {
-    baseUrl;
-    config;
-    flagReports = new Map();
-    contentSummaries = new Map();
-    constructor(baseUrl = 'http://localhost:8000', config) {
+    baseUrl: string;
+    config: any;
+    flagReports: Map<string, any> = new Map();
+    contentSummaries: Map<string, any> = new Map();
+    constructor(baseUrl: string = 'http://localhost:8000', config: any) {
         this.baseUrl = baseUrl;
         this.config = {
             enableUserFlagging: true,
@@ -40,7 +40,7 @@ export class UserFlaggingService {
     /**
      * Submit a user flag report
      */
-    async submitFlag(submission) {
+    async submitFlag(submission: any): Promise<any> {
         try {
             // Validate submission
             this.validateFlagSubmission(submission);

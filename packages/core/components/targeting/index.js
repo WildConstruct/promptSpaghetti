@@ -3,6 +3,6 @@
  *
  * DEPLOYMENT BLOCKER FIX: Central export point for all targeting UI components
  */
-export { AudienceSelector, AdvancedConditionBuilder, GeographicTargeting, SegmentManagement, TargetingAnalytics } from './TargetingUIComponents.js';
+export { AudienceSelector, AdvancedConditionBuilder, GeographicTargeting, SegmentManagement, TargetingAnalytics } from './TargetingUIComponents';
 // Re-export for convenience
-export * from './TargetingUIComponents.js';
+export * from './TargetingUIComponents';

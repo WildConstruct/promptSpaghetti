@@ -822,7 +822,7 @@ export class ConversionDataRelationshipManager {
   ): Promise<FlexibleConversionEvent> {
     const userEntity = await this.getUserEntity(baseEvent.userId);
     const templateEntity = baseEvent.properties?.templateId 
-      ? await this.getTemplateEntity(baseEvent.properties.templateId)
+      ? await this.getTemplateEntity(String(baseEvent.properties.templateId))
       : undefined;
 
     // Build flexible properties
@@ -848,10 +848,10 @@ export class ConversionDataRelationshipManager {
       schemaVersion: '1.0.0',
       validation,
       funnelContext: {
-        funnelId: baseEvent.properties?.funnelId || 'unknown',
-        stepId: baseEvent.properties?.stepId || 'unknown',
-        stepOrder: baseEvent.properties?.stepOrder || 0,
-        pathId: baseEvent.properties?.pathId,
+        funnelId: String(baseEvent.properties?.funnelId || 'unknown'),
+        stepId: String(baseEvent.properties?.stepId || 'unknown'),
+        stepOrder: Number(baseEvent.properties?.stepOrder) || 0,
+        pathId: baseEvent.properties?.pathId ? String(baseEvent.properties.pathId) : undefined,
         timeInFunnel: this.calculateTimeInFunnel(baseEvent, userEntity),
         previousSteps: this.getPreviousSteps(baseEvent, userEntity),
         isBacktracking: this.isBacktracking(baseEvent, userEntity)
@@ -1195,8 +1195,6 @@ export class ConversionDataRelationshipManager {
 /**
  * Factory function to create ConversionDataRelationshipManager
  */
-export const createConversionDataRelationshipManager = (): ConversionDataRelationshipManager => {
-  return new ConversionDataRelationshipManager();
-};
+export };
 
 export default ConversionDataRelationshipManager;

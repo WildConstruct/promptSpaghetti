@@ -6,7 +6,7 @@ import { jsxs as _jsxs, jsx as _jsx, Fragment as _Fragment } from "react/jsx-run
  * and SLA tracking. Provides full ticket management capabilities.
  */
 import { useState, useMemo } from 'react';
-import { TicketStatus, TicketPriority } from '../../services/Epic16TicketIntegrationService.js';
+import { TicketStatus, TicketPriority } from '../../services/Epic16TicketIntegrationService';
 export const TicketDetailsView = ({ ticket, ticketService, userId, userRole, onClose, onTicketUpdate }) => {
     const [currentTicket, setCurrentTicket] = useState(ticket);
     const [loading, setLoading] = useState(false);

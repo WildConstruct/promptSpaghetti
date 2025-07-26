@@ -272,8 +272,8 @@ export interface ContentVersionDiff {
   
   metadata_changes: Array<{
     field: string;
-    old_value: any;
-    new_value: any;
+    old_value: unknown;
+    new_value: unknown;
     change_type: 'added' | 'removed' | 'modified';
   }>;
   
@@ -307,10 +307,10 @@ export interface ContentVersionDiff {
 
 export class ContentVersionManager {
   private versions = new Map<string, ContentVersion>();
-  private apiClient: any;
+  private apiClient: unknown;
 
   constructor(
-    apiClient: any,
+    apiClient: unknown,
     private contentId: string,
     private userId: string
   ) {
@@ -419,7 +419,11 @@ export class ContentVersionManager {
   }
 
   // Review and Editorial Workflow
-  async addReviewFeedback(versionId: string, feedback: Omit<ReviewFeedback, 'id' | 'reviewer_id' | 'reviewer_name' | 'review_date'>): Promise<ReviewFeedback> {
+  async addReviewFeedback(
+    versionId: string,
+    feedback: Omit<ReviewFeedback,
+    'id' | 'reviewer_id' | 'reviewer_name' | 'review_date'>
+  ): Promise<ReviewFeedback> {
     try {
       const response = await this.apiClient.post(`/api/content-versions/${versionId}/feedback`, feedback);
       

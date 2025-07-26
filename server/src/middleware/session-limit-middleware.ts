@@ -132,8 +132,8 @@ export class SessionLimitMiddleware {
   async enforceWebSocket(
     connectionId: string,
     userId: string,
-    sessionData: any,
-    metadata: any
+    sessionData: Record<string, unknown>,
+    metadata: Record<string, unknown>
   ): Promise<{ allowed: boolean; reason?: string; action?: SessionEnforcementAction }> {
     try {
       if (!this.options.enableSessionLimits) {
@@ -193,7 +193,7 @@ export class SessionLimitMiddleware {
   async enforceAPIToken(
     tokenId: string,
     userId: string,
-    metadata: any
+    metadata: Record<string, unknown>
   ): Promise<{ allowed: boolean; reason?: string }> {
     try {
       if (!this.options.enableSessionLimits) {
@@ -346,7 +346,7 @@ export class SessionLimitMiddleware {
   
   private async handleLimitViolation(
     sessionContext: RequestSessionContext,
-    limitCheck: any,
+    limitCheck: Record<string, unknown>,
     request: FastifyRequest,
     reply: FastifyReply
   ): Promise<void> {
@@ -438,7 +438,7 @@ export class SessionLimitMiddleware {
   private async checkAPITokenLimits(
     userId: string,
     tokenId: string,
-    metadata: any
+    metadata: Record<string, unknown>
   ): Promise<{ allowed: boolean; reason?: string }> {
     // Implementation for API token specific limits
     // This would check rate limits, concurrent API sessions, etc.
@@ -532,7 +532,7 @@ export class SessionLimitMiddleware {
     });
   }
   
-  private async logMiddlewareError(error: any, request: FastifyRequest): Promise<void> {
+  private async logMiddlewareError(error: unknown, request: FastifyRequest): Promise<void> {
     console.error('Session limit middleware error:', error);
     
     // Log to audit system
@@ -571,7 +571,7 @@ export class SessionLimitMiddleware {
   private async sendWebhookNotification(
     webhookUrl: string,
     eventType: string,
-    data: any
+    data: Record<string, unknown>
   ): Promise<void> {
     try {
       // Implementation for webhook notifications

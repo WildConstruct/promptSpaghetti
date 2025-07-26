@@ -11,13 +11,73 @@ import { ReactElement, ReactNode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
+// Type definitions for test data
+interface TestTemplate {
+  id: number;
+  name: string;
+  description: string;
+  category_id: number;
+  tags: string[];
+  author_id: number;
+  version: string;
+  is_public: boolean;
+  graph_data: Record<string, unknown>;
+  created_at: Date;
+  updated_at: Date;
+  [key: string]: unknown;
+}
+
+interface TestUser {
+  id: number;
+  email: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  avatar: string;
+  role: string;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  [key: string]: unknown;
+}
+
+interface TestGraphNode {
+  id: string;
+  type: string;
+  position: { x: number; y: number };
+  data: {
+    label: string;
+    value: string;
+    config: Record<string, unknown>;
+  };
+  [key: string]: unknown;
+}
+
+interface TestGraphEdge {
+  id: string;
+  source: string;
+  target: string;
+  type: string;
+  animated: boolean;
+  [key: string]: unknown;
+}
+
+interface TestApiError {
+  error: string;
+  message: string;
+  status: number;
+  timestamp: string;
+  path: string;
+  [key: string]: unknown;
+}
+
 // Test data generators
 export const TestDataGenerators = {
   
   /**
    * Generate template test data
    */
-  template: (overrides?: Partial<any>) => ({
+  template: (overrides?: Partial<TestTemplate>) => ({
     id: faker.number.int({ min: 1, max: 10000 }),
     name: faker.lorem.words(3),
     description: faker.lorem.paragraph(),
@@ -51,7 +111,7 @@ export const TestDataGenerators = {
   /**
    * Generate user test data
    */
-  user: (overrides?: Partial<any>) => ({
+  user: (overrides?: Partial<TestUser>) => ({
     id: faker.number.int({ min: 1, max: 10000 }),
     email: faker.internet.email(),
     username: faker.internet.userName(),
@@ -68,7 +128,7 @@ export const TestDataGenerators = {
   /**
    * Generate graph node test data
    */
-  graphNode: (overrides?: Partial<any>) => ({
+  graphNode: (overrides?: Partial<TestGraphNode>) => ({
     id: faker.string.uuid(),
     type: faker.helpers.arrayElement(['input', 'output', 'process', 'conditional', 'loop']),
     position: { 
@@ -90,7 +150,7 @@ export const TestDataGenerators = {
   /**
    * Generate graph edge test data
    */
-  graphEdge: (sourceId?: string, targetId?: string, overrides?: Partial<any>) => ({
+  graphEdge: (sourceId?: string, targetId?: string, overrides?: Partial<TestGraphEdge>) => ({
     id: faker.string.uuid(),
     source: sourceId || faker.string.uuid(),
     target: targetId || faker.string.uuid(),
@@ -102,7 +162,7 @@ export const TestDataGenerators = {
   /**
    * Generate API error response
    */
-  apiError: (status = 400, overrides?: Partial<any>) => ({
+  apiError: (status = 400, overrides?: Partial<TestApiError>) => ({
     error: faker.helpers.arrayElement(['Validation Error', 'Not Found', 'Unauthorized', 'Internal Server Error']),
     message: faker.lorem.sentence(),
     status,
@@ -297,7 +357,7 @@ export const PerformanceTestUtils = {
    */
   getMemoryUsage: () => {
     if (typeof window !== 'undefined' && 'memory' in performance) {
-      return (performance as any).memory;
+      return (performance as unknown as { memory: Record<string, unknown> }).memory;
     }
     
     if (typeof process !== 'undefined' && process.memoryUsage) {
@@ -347,14 +407,7 @@ export const PerformanceTestUtils = {
 };
 
 // Custom Jest matchers
-export const customMatchers = {
-  
-  /**
-   * Check if element has specific CSS class
-   */
-  toHaveClass: (received: Element, className: string) => {
-    const pass = received.classList.contains(className);
-    return {
+export     return {
       message: () =>
         pass
           ? `expected element not to have class "${className}"`
@@ -366,7 +419,7 @@ export const customMatchers = {
   /**
    * Check if API response has expected structure
    */
-  toMatchAPIResponse: (received: any, expected: any) => {
+  toMatchAPIResponse: (received: Record<string, unknown>, expected: Record<string, unknown>) => {
     const requiredFields = Object.keys(expected);
     const receivedFields = Object.keys(received);
     
@@ -385,7 +438,7 @@ export const customMatchers = {
   /**
    * Check if execution time is within expected range
    */
-  toCompleteWithin: (received: Promise<any>, maxTime: number) => {
+  toCompleteWithin: (received: Promise<unknown>, maxTime: number) => {
     return PerformanceTestUtils.measureTime(() => received).then(({ duration }) => {
       const pass = duration <= maxTime;
       return {
@@ -452,7 +505,7 @@ export const TestDataUtils = {
   /**
    * Save test data to temporary file
    */
-  saveTestData: (data: any, filename: string) => {
+  saveTestData: (data: unknown, filename: string) => {
     const fs = require('fs');
     const path = require('path');
     
@@ -486,7 +539,7 @@ export const TestDataUtils = {
   /**
    * Generate test dataset and save
    */
-  generateAndSave: (generator: () => any, count: number, filename: string) => {
+  generateAndSave: (generator: () => unknown, count: number, filename: string) => {
     const data = Array.from({ length: count }, generator);
     return TestDataUtils.saveTestData(data, filename);
   }
@@ -503,28 +556,13 @@ declare global {
   namespace jest {
     interface Matchers<R> {
       toHaveClass(className: string): R;
-      toMatchAPIResponse(expected: any): R;
+      toMatchAPIResponse(expected: Record<string, unknown>): R;
       toCompleteWithin(maxTime: number): R;
     }
   }
 }
 
 // Export test categories for organization
-export const TEST_CATEGORIES = {
-  UNIT: 'unit',
-  INTEGRATION: 'integration',
-  E2E: 'e2e',
-  PERFORMANCE: 'performance',
-  ACCESSIBILITY: 'accessibility',
-  VISUAL: 'visual',
-  SECURITY: 'security'
-} as const;
-
+export 
 // Export common test timeouts
-export const TEST_TIMEOUTS = {
-  UNIT: 5000,
-  INTEGRATION: 15000,
-  E2E: 30000,
-  PERFORMANCE: 60000,
-  DATABASE: 120000
-} as const;
+export } as const;

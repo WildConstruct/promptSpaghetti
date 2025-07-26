@@ -6,7 +6,7 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * with message history, typing indicators, file uploads, and moderation.
  */
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { InteractionType } from '../../services/Epic16InteractiveElementsService.js';
+import { InteractionType } from '../../services/Epic16InteractiveElementsService';
 export const LiveChatWidget = ({ element, interactiveService, userId, userName, userAvatar, isMinimized = false, onMinimize, onClose }) => {
     // State management
     const [messages, setMessages] = useState([]);

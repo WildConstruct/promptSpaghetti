@@ -154,21 +154,24 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
     let comparison = 0;
     
     switch (sortBy) {
-    case 'priority':
+    case 'priority': {
       const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
       comparison = (priorityOrder[a.priority as keyof typeof priorityOrder] || 0) - 
                     (priorityOrder[b.priority as keyof typeof priorityOrder] || 0);
       break;
-    case 'impact':
+    }
+    case 'impact': {
       const impactOrder = { high: 3, medium: 2, low: 1 };
       comparison = (impactOrder[a.impact as keyof typeof impactOrder] || 0) - 
                     (impactOrder[b.impact as keyof typeof impactOrder] || 0);
       break;
-    case 'effort':
+    }
+    case 'effort': {
       const effortOrder = { low: 3, medium: 2, high: 1 };
       comparison = (effortOrder[a.effort as keyof typeof effortOrder] || 0) - 
                     (effortOrder[b.effort as keyof typeof effortOrder] || 0);
       break;
+    }
     case 'createdAt':
       comparison = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
       break;
@@ -180,7 +183,10 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
   });
 
   // Handle recommendation actions
-  const handleRecommendationAction = (recommendationId: string, action: 'acknowledge' | 'start' | 'complete' | 'dismiss') => {
+  const handleRecommendationAction = (
+    recommendationId: string,
+    action: 'acknowledge' | 'start' | 'complete' | 'dismiss'
+  ) => {
     if (onRecommendationAction) {
       onRecommendationAction(recommendationId, action);
     }

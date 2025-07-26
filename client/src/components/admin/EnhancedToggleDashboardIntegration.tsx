@@ -148,7 +148,25 @@ export const useEnhancedToggleEvaluation = () => {
 
   const evaluateBulkToggles = useCallback(async (
     toggleKeys: string[],
-    context?: any
+    context?: {
+      claudeContext?: {
+        modelVersion?: string;
+        promptType?: 'creative' | 'analytical' | 'conversational' | 'code';
+        tokensUsed?: number;
+        riskLevel?: 'low' | 'medium' | 'high' | 'critical';
+        costImpact?: 'none' | 'low' | 'medium' | 'high';
+      };
+      performanceHints?: {
+        priority?: 'low' | 'normal' | 'high' | 'critical';
+        maxEvaluationTime?: number;
+      };
+      dependencyContext?: {
+        enforceDependencies?: boolean;
+        cascadeEvaluation?: boolean;
+        impactAnalysis?: boolean;
+      };
+      traceEnabled?: boolean;
+    }
   ): Promise<Record<string, EnhancedEvaluationResult> | null> => {
     setLoading(true);
     setError(null);
@@ -307,7 +325,25 @@ export const useImpactPreview = () => {
       targetToggleId: string;
       reason: string;
     },
-    context?: any
+    context?: {
+      claudeContext?: {
+        modelVersion?: string;
+        promptType?: 'creative' | 'analytical' | 'conversational' | 'code';
+        tokensUsed?: number;
+        riskLevel?: 'low' | 'medium' | 'high' | 'critical';
+        costImpact?: 'none' | 'low' | 'medium' | 'high';
+      };
+      performanceHints?: {
+        priority?: 'low' | 'normal' | 'high' | 'critical';
+        maxEvaluationTime?: number;
+      };
+      dependencyContext?: {
+        enforceDependencies?: boolean;
+        cascadeEvaluation?: boolean;
+        impactAnalysis?: boolean;
+      };
+      traceEnabled?: boolean;
+    }
   ): Promise<ImpactPreview | null> => {
     setLoading(true);
     setError(null);
@@ -364,7 +400,7 @@ export const RiskAssessmentBadge: React.FC<{
 }> = ({ riskAssessment }) => {
   if (!riskAssessment) return null;
 
-  const { riskScore, ___recommendation } = riskAssessment;
+  const { riskScore } = riskAssessment;
   
   const getRiskColor = () => {
     if (riskScore >= 0.8) return 'text-red-600 bg-red-50 border-red-200';

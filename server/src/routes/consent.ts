@@ -28,8 +28,8 @@ interface SavePreferencesRequest {
   Body: {
     userId?: string;
     sessionId: string;
-    consents: Record<string, any>;
-    userPreferences: any;
+    consents: Record<string, unknown>;
+    userPreferences: Record<string, unknown>;
     lastUpdated: string;
   };
 }
@@ -43,7 +43,7 @@ interface ConsentEventRequest {
     sessionId: string;
     consentType?: string;
     source: string;
-    metadata: Record<string, any>;
+    metadata: Record<string, unknown>;
   };
 }
 
@@ -667,12 +667,12 @@ async function getUserConsentPreferences(userId: string) {
   };
 }
 
-async function saveUserConsentPreferences(preferences: any) {
+async function saveUserConsentPreferences(preferences: Record<string, unknown>) {
   // Mock implementation - would save to database
   console.log('Saving consent preferences:', preferences);
 }
 
-async function storeConsentEvent(event: any) {
+async function storeConsentEvent(event: Record<string, unknown>) {
   // Mock implementation - would save to database
   console.log('Storing consent event:', event);
 }

@@ -241,7 +241,15 @@ export class AccessibilityManager extends EventEmitter {
     const profile: UserAccessibilityProfile = {
       userId,
       needs: profileData.needs || [],
-      severityLevels: profileData.severityLevels || {},
+      severityLevels: profileData.severityLevels || {
+        [AccessibilityNeed.VISUAL_IMPAIRMENT]: SeverityLevel.MILD,
+        [AccessibilityNeed.HEARING_IMPAIRMENT]: SeverityLevel.MILD,
+        [AccessibilityNeed.MOTOR_IMPAIRMENT]: SeverityLevel.MILD,
+        [AccessibilityNeed.COGNITIVE_IMPAIRMENT]: SeverityLevel.MILD,
+        [AccessibilityNeed.SPEECH_IMPAIRMENT]: SeverityLevel.MILD,
+        [AccessibilityNeed.TEMPORARY_DISABILITY]: SeverityLevel.MILD,
+        [AccessibilityNeed.MULTIPLE_DISABILITIES]: SeverityLevel.MILD
+      },
       assistiveTechnologies: profileData.assistiveTechnologies || [],
       preferredFallbacks: profileData.preferredFallbacks || [],
       interfaceAdaptations: profileData.interfaceAdaptations || [],
@@ -956,6 +964,5 @@ export class AccessibilityManager extends EventEmitter {
 }
 
 // Export default instance
-export const accessibilityManager = new AccessibilityManager();
-
+export 
 export default AccessibilityManager;

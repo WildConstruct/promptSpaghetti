@@ -8,7 +8,7 @@
  * - Clear and reset functionality
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 
 export interface FileSearchOptions {
   includeContents: boolean;
@@ -51,8 +51,8 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({
   });
 
   // Debounced search
-  const debouncedOnChange = useCallback(
-    debounce((searchValue: string) => {
+  const debouncedOnChange = useMemo(
+    () => debounce((searchValue: string) => {
       onChange(searchValue);
     }, debounceMs),
     [onChange, debounceMs]
@@ -99,9 +99,7 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({
     onAdvancedSearch?.(newOptions);
   };
 
-  const ___handleTagClick = (tag: string) => {
-    onTagFilter?.(tag);
-  };
+    };
 
   return (
     <div 
@@ -291,7 +289,7 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({
 };
 
 // Debounce utility function
-function debounce<T extends (...args: unknown[]) => any>(
+function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {

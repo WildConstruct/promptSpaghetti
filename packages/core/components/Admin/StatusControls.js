@@ -9,10 +9,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Epic: 17 - Backstage Admin Controls
  */
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { PlayCircle, PauseCircle, StopCircle, RefreshCw, AlertTriangle, CheckCircle, XCircle, Clock, Activity, Settings, Users, Server, Cpu, Memory, Eye, Pause, Play, RotateCcw } from 'lucide-react';
 const SERVICE_STATUS_CONFIG = {
     running: {

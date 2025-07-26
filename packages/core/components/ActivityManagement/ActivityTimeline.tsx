@@ -565,7 +565,7 @@ interface AnalyticsViewProps {
   activities: ActivityEvent[];
 }
 
-const AnalyticsView: React.FC<AnalyticsViewProps> = ({ stats, _____activities }) => {
+const AnalyticsView: React.FC<AnalyticsViewProps> = ({ stats, _activities }) => {
   if (!stats) return null;
 
   return (

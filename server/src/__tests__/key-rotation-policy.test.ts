@@ -23,19 +23,19 @@ describe('KeyRotationPolicyService', () => {
   beforeEach(() => {
     // Mock database
     mockDb = {
-      query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown)
+      query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown as unknown)
     };
 
     // Mock Redis
     mockRedis = {
-      get: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown),
-      setex: jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown),
-      del: jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown)
+      get: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown as unknown),
+      setex: jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown as unknown),
+      del: jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown as unknown)
     };
 
     // Mock audit service
     mockAuditService = {
-      logEvent: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown)
+      logEvent: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown as unknown)
     };
 
     // Mock key management service
@@ -273,8 +273,8 @@ describe('KeyRotationPolicyService', () => {
         priority: 100
       };
 
-      mockKeyManagementService.getMasterKey.mockResolvedValue(mockKey as unknown);
-      mockDb.query.mockResolvedValue({ rows: [mockPolicy] } as unknown);
+      mockKeyManagementService.getMasterKey.mockResolvedValue(mockKey as unknown as unknown);
+      mockDb.query.mockResolvedValue({ rows: [mockPolicy] } as unknown as unknown);
 
       const evaluations = await rotationPolicyService.evaluateKey('test-key-123');
 
@@ -301,8 +301,8 @@ describe('KeyRotationPolicyService', () => {
         priority: 200
       };
 
-      mockKeyManagementService.getMasterKey.mockResolvedValue(highUsageKey as unknown);
-      mockDb.query.mockResolvedValue({ rows: [mockPolicy] } as unknown);
+      mockKeyManagementService.getMasterKey.mockResolvedValue(highUsageKey as unknown as unknown);
+      mockDb.query.mockResolvedValue({ rows: [mockPolicy] } as unknown as unknown);
 
       const evaluations = await rotationPolicyService.evaluateKey('test-key-123');
 
@@ -323,8 +323,8 @@ describe('KeyRotationPolicyService', () => {
         priority: 300
       };
 
-      mockKeyManagementService.getMasterKey.mockResolvedValue(mockKey as unknown);
-      mockDb.query.mockResolvedValue({ rows: [mockPolicy] } as unknown);
+      mockKeyManagementService.getMasterKey.mockResolvedValue(mockKey as unknown as unknown);
+      mockDb.query.mockResolvedValue({ rows: [mockPolicy] } as unknown as unknown);
 
       const evaluations = await rotationPolicyService.evaluateKey('test-key-123');
 
@@ -349,8 +349,8 @@ describe('KeyRotationPolicyService', () => {
         priority: 150
       };
 
-      mockKeyManagementService.getMasterKey.mockResolvedValue(inactiveKey as unknown);
-      mockDb.query.mockResolvedValue({ rows: [mockPolicy] } as unknown);
+      mockKeyManagementService.getMasterKey.mockResolvedValue(inactiveKey as unknown as unknown);
+      mockDb.query.mockResolvedValue({ rows: [mockPolicy] } as unknown as unknown);
 
       const evaluations = await rotationPolicyService.evaluateKey('test-key-123');
 
@@ -386,8 +386,8 @@ describe('KeyRotationPolicyService', () => {
         }
       ];
 
-      mockKeyManagementService.getMasterKey.mockResolvedValue(multiTriggerKey as unknown);
-      mockDb.query.mockResolvedValue({ rows: mockPolicies } as unknown);
+      mockKeyManagementService.getMasterKey.mockResolvedValue(multiTriggerKey as unknown as unknown);
+      mockDb.query.mockResolvedValue({ rows: mockPolicies } as unknown as unknown);
 
       const evaluations = await rotationPolicyService.evaluateKey('test-key-123');
 
@@ -417,8 +417,8 @@ describe('KeyRotationPolicyService', () => {
         priority: 100
       };
 
-      mockKeyManagementService.getMasterKey.mockResolvedValue(compliantKey as unknown);
-      mockDb.query.mockResolvedValue({ rows: [mockPolicy] } as unknown);
+      mockKeyManagementService.getMasterKey.mockResolvedValue(compliantKey as unknown as unknown);
+      mockDb.query.mockResolvedValue({ rows: [mockPolicy] } as unknown as unknown);
 
       const evaluations = await rotationPolicyService.evaluateKey('compliant-key');
 
@@ -426,7 +426,7 @@ describe('KeyRotationPolicyService', () => {
     });
 
     it('should handle non-existent key', async () => {
-      mockKeyManagementService.getMasterKey.mockResolvedValue(null as unknown);
+      mockKeyManagementService.getMasterKey.mockResolvedValue(null as unknown as unknown);
 
       await expect(
         rotationPolicyService.evaluateKey('non-existent-key')
@@ -450,7 +450,7 @@ describe('KeyRotationPolicyService', () => {
     beforeEach(() => {
       // Mock getPolicy method
       jest.spyOn(rotationPolicyService as any, 'getPolicy')
-        .mockResolvedValue(mockPolicy as unknown);
+        .mockResolvedValue(mockPolicy as unknown as unknown);
     });
 
     it('should schedule rotation without approval', async () => {
@@ -482,7 +482,7 @@ describe('KeyRotationPolicyService', () => {
       };
 
       jest.spyOn(rotationPolicyService as any, 'getPolicy')
-        .mockResolvedValue(approvalPolicy as unknown);
+        .mockResolvedValue(approvalPolicy as unknown as unknown);
 
       const scheduledDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
@@ -527,7 +527,7 @@ describe('KeyRotationPolicyService', () => {
 
     it('should handle non-existent policy', async () => {
       jest.spyOn(rotationPolicyService as any, 'getPolicy')
-        .mockResolvedValue(null as unknown);
+        .mockResolvedValue(null as unknown as unknown);
 
       const scheduledDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
@@ -577,9 +577,9 @@ describe('KeyRotationPolicyService', () => {
 
     beforeEach(() => {
       jest.spyOn(rotationPolicyService as any, 'getRotationSchedule')
-        .mockResolvedValue(mockSchedule as unknown);
+        .mockResolvedValue(mockSchedule as unknown as unknown);
       jest.spyOn(rotationPolicyService as any, 'canExecuteRotation')
-        .mockReturnValue(true as unknown);
+        .mockReturnValue(true as unknown as unknown);
     });
 
     it('should execute rotation successfully', async () => {
@@ -589,7 +589,7 @@ describe('KeyRotationPolicyService', () => {
         algorithm: 'aes-256-gcm'
       };
 
-      mockKeyManagementService.rotateKey.mockResolvedValue(newKey as unknown);
+      mockKeyManagementService.rotateKey.mockResolvedValue(newKey as unknown as unknown);
 
       const result = await rotationPolicyService.executeRotation('schedule-123', testUserId);
 
@@ -642,9 +642,9 @@ describe('KeyRotationPolicyService', () => {
       };
 
       jest.spyOn(rotationPolicyService as any, 'getRotationSchedule')
-        .mockResolvedValue(pastWindowSchedule as unknown);
+        .mockResolvedValue(pastWindowSchedule as unknown as unknown);
       jest.spyOn(rotationPolicyService as any, 'canExecuteRotation')
-        .mockReturnValue(false as unknown);
+        .mockReturnValue(false as unknown as unknown);
 
       await expect(
         rotationPolicyService.executeRotation('schedule-123', testUserId)
@@ -653,7 +653,7 @@ describe('KeyRotationPolicyService', () => {
 
     it('should handle non-existent schedule', async () => {
       jest.spyOn(rotationPolicyService as any, 'getRotationSchedule')
-        .mockResolvedValue(null as unknown);
+        .mockResolvedValue(null as unknown as unknown);
 
       await expect(
         rotationPolicyService.executeRotation('non-existent', testUserId)
@@ -672,7 +672,7 @@ describe('KeyRotationPolicyService', () => {
 
     beforeEach(() => {
       jest.spyOn(rotationPolicyService as any, 'getRotationSchedule')
-        .mockResolvedValue(mockSchedule as unknown);
+        .mockResolvedValue(mockSchedule as unknown as unknown);
     });
 
     it('should approve rotation successfully', async () => {
@@ -714,7 +714,7 @@ describe('KeyRotationPolicyService', () => {
       };
 
       jest.spyOn(rotationPolicyService as any, 'getRotationSchedule')
-        .mockResolvedValue(noApprovalSchedule as unknown);
+        .mockResolvedValue(noApprovalSchedule as unknown as unknown);
 
       await expect(
         rotationPolicyService.approveRotation('schedule-123', 'approver-456')
@@ -728,7 +728,7 @@ describe('KeyRotationPolicyService', () => {
       };
 
       jest.spyOn(rotationPolicyService as any, 'getRotationSchedule')
-        .mockResolvedValue(approvedSchedule as unknown);
+        .mockResolvedValue(approvedSchedule as unknown as unknown);
 
       await expect(
         rotationPolicyService.approveRotation('schedule-123', 'approver-456')
@@ -767,7 +767,7 @@ describe('KeyRotationPolicyService', () => {
         }
       ];
 
-      mockDb.query.mockResolvedValue({ rows: mockRotations } as unknown);
+      mockDb.query.mockResolvedValue({ rows: mockRotations } as unknown as unknown);
 
       const result = await rotationPolicyService.getUpcomingRotations(7);
 
@@ -779,7 +779,7 @@ describe('KeyRotationPolicyService', () => {
     });
 
     it('should handle empty results', async () => {
-      mockDb.query.mockResolvedValue({ rows: [] } as unknown);
+      mockDb.query.mockResolvedValue({ rows: [] } as unknown as unknown);
 
       const result = await rotationPolicyService.getUpcomingRotations(30);
 
@@ -946,7 +946,7 @@ describe('KeyRotationPolicyService', () => {
           id: 'policy-1',
           requiresApproval: false,
           overlapPeriodHours: 2
-        } as unknown);
+        } as unknown as unknown);
 
       // Mock too many concurrent rotations
       mockDb.query.mockResolvedValueOnce({

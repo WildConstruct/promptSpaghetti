@@ -8,8 +8,8 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * API, and security monitoring with role-based views and real-time updates.
  */
 import { useState, useEffect, useCallback } from 'react';
-import { HealthDashboard } from './HealthDashboard.js';
-import { UsageQuotaDashboard } from './UsageQuotaDashboard.js';
+import { HealthDashboard } from './HealthDashboard';
+import { UsageQuotaDashboard } from './UsageQuotaDashboard';
 export const MonitoringInterface = ({ userRole, userId, onAlertAction, onExport, className = '' }) => {
     // State Management
     const [currentView, setCurrentView] = useState('executive');

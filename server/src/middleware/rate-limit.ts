@@ -383,7 +383,7 @@ export class RateLimitMiddleware {
    * Get statistics about rate limiting
    */
   async getStats() {
-    const stats: any = {
+    const stats: Record<string, unknown> = {
       limiters: this.limiters.size,
       redis: {
         available: false,
@@ -422,7 +422,7 @@ export class RateLimitMiddleware {
 // ========================================
 
 export function createRateLimitPlugin(config: RateLimitMiddlewareConfig = {}) {
-  return async function rateLimitPlugin(fastify: FastifyInstance, options: any) {
+  return async function rateLimitPlugin(fastify: FastifyInstance, options: Record<string, unknown>) {
     const middleware = new RateLimitMiddleware(config);
 
     // Decorate Fastify instance with rate limit methods

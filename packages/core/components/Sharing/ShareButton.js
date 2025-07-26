@@ -8,7 +8,7 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Task: E16-1753114247020-65B7A3 - Design sharing system
  */
 import { useState } from 'react';
-import { ShareModal } from './ShareModal.js';
+import { ShareModal } from './ShareModal';
 export const ShareButton = ({ resourceId, resourceType, resourceTitle, resourceDescription, variant = 'primary', size = 'medium', disabled = false, onShareCreated }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handleOpenModal = () => {

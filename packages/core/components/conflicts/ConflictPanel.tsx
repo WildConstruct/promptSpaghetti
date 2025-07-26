@@ -21,21 +21,13 @@ export interface ConflictData {
 
 export interface ConflictPanelProps {
   conflicts: ConflictData[];
-  onResolveConflict: (conflictId: string, strategy: string, userSelection?: any) => void;
+  onResolveConflict: (conflictId: string, strategy: string, userSelection?: Record<string, unknown>) => void;
   onViewConflict: (conflictId: string) => void;
   currentUserId: string;
   className?: string;
 }
 
-export const ConflictPanel: React.FC<ConflictPanelProps> = ({
-  conflicts,
-  onResolveConflict,
-  onViewConflict,
-  currentUserId,
-  className = ''
-}) => {
-  const [expandedConflict, setExpandedConflict] = useState<string | null>(null);
-  const [selectedStrategy, setSelectedStrategy] = useState<string>('last_writer_wins');
+export   const [selectedStrategy, setSelectedStrategy] = useState<string>('last_writer_wins');
 
   const formatTimestamp = (timestamp: number): string => {
     const date = new Date(timestamp);
@@ -305,10 +297,7 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = ({
 };
 
 // Notification component for conflict alerts
-export const ConflictNotification: React.FC<{
-  conflict: ConflictData;
-  onResolve: () => void;
-  onDismiss: () => void;
+export   onDismiss: () => void;
 }> = ({ conflict, onResolve, onDismiss }) => {
   return (
     <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 shadow-lg">

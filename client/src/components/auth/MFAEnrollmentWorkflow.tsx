@@ -18,8 +18,7 @@ import {
   Check, 
   AlertTriangle,
   Download,
-  Copy,
-  RefreshCw
+  Copy
 } from 'lucide-react';
 import type { 
   MFAMethodType, 
@@ -169,7 +168,7 @@ export function MFAEnrollmentWorkflow({
     } catch (error) {
       setState(prev => ({
         ...prev,
-        error: error.message,
+        error: error instanceof Error ? error.message : 'Operation failed',
         isLoading: false
       }));
     }
@@ -199,7 +198,7 @@ export function MFAEnrollmentWorkflow({
           setState(prev => ({
             ...prev,
             step: 'backup',
-            backupCodes: state.totpData!.backupCodes,
+            backupCodes: state.totpData?.backupCodes ?? [],
             isLoading: false
           }));
         } else {
@@ -215,7 +214,7 @@ export function MFAEnrollmentWorkflow({
     } catch (error) {
       setState(prev => ({
         ...prev,
-        error: error.message,
+        error: error instanceof Error ? error.message : 'Operation failed',
         isLoading: false
       }));
     }
@@ -424,7 +423,7 @@ export function MFAEnrollmentWorkflow({
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => navigator.clipboard.writeText(state.totpData!.secret.manualEntryKey)}
+                  onClick={() => state.totpData?.secret.manualEntryKey && navigator.clipboard.writeText(state.totpData.secret.manualEntryKey)}
                 >
                   <Copy className="h-4 w-4 mr-1" />
                   Copy Key
@@ -437,7 +436,7 @@ export function MFAEnrollmentWorkflow({
                   <strong>Instructions:</strong>
                   <ol className="list-decimal list-inside mt-2 space-y-1">
                     <li>Open your authenticator app (Google Authenticator, Authy, etc.)</li>
-                    <li>Tap "Add Account" or "+"</li>
+                    <li>Tap &quot;Add Account&quot; or &quot;+&quot;</li>
                     <li>Scan the QR code or enter the key manually</li>
                     <li>Your app will generate a 6-digit code</li>
                   </ol>

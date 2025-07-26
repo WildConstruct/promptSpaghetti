@@ -337,7 +337,7 @@ export class EvidenceClassificationService {
 
   private async performSensitivityAnalysis(evidence: EvidenceItem): Promise<SensitivityAnalysisResult> {
     const patterns = this.config.sensitivityAnalysis.patterns;
-    const contentMatches: any[] = [];
+    const contentMatches: unknown[] = [];
     let overallScore = 0;
 
     // Analyze content against sensitivity patterns
@@ -372,12 +372,12 @@ export class EvidenceClassificationService {
     };
   }
 
-  private async performContentAnalysis(evidence: EvidenceItem): Promise<any> {
+  private async performContentAnalysis(evidence: EvidenceItem): Promise<unknown> {
     if (!this.config.contentAnalysis.enabled) {
       return { enabled: false };
     }
 
-    const analysis: any = {
+    const analysis: unknown = {
       enabled: true,
       textAnalysis: null,
       metadataAnalysis: null,
@@ -399,7 +399,7 @@ export class EvidenceClassificationService {
     return analysis;
   }
 
-  private async performComplianceAnalysis(evidence: EvidenceItem): Promise<any> {
+  private async performComplianceAnalysis(evidence: EvidenceItem): Promise<unknown> {
     if (!evidence.complianceFramework) {
       return { applicable: false };
     }
@@ -458,8 +458,8 @@ export class EvidenceClassificationService {
 
   private calculateWeightedClassification(
     sensitivityAnalysis: SensitivityAnalysisResult,
-    contentAnalysis: any,
-    complianceAnalysis: any,
+    contentAnalysis: unknown,
+    complianceAnalysis: unknown,
     matchingRules: EvidenceClassificationRule[]
   ): {
     classification: DataClassification;
@@ -624,7 +624,7 @@ export class EvidenceClassificationService {
     return Math.min(score, 1.0);
   }
 
-  private analyzeTextContent(content: string): any {
+  private analyzeTextContent(content: string): unknown {
     return {
       length: content.length,
       wordCount: content.split(/\s+/).length,
@@ -634,7 +634,7 @@ export class EvidenceClassificationService {
     };
   }
 
-  private analyzeMetadataContent(metadata: Record<string, any>): any {
+  private analyzeMetadataContent(metadata: Record<string, any>): unknown {
     return {
       fieldCount: Object.keys(metadata).length,
       hasNestedObjects: Object.values(metadata).some(v => typeof v === 'object'),
@@ -642,7 +642,7 @@ export class EvidenceClassificationService {
     };
   }
 
-  private analyzeStructuralContent(evidence: EvidenceItem): any {
+  private analyzeStructuralContent(evidence: EvidenceItem): unknown {
     return {
       hasFilename: !!evidence.filename,
       fileExtension: evidence.filename ? evidence.filename.split('.').pop() : null,
@@ -651,7 +651,7 @@ export class EvidenceClassificationService {
   }
 
   private evaluateCondition(evidence: EvidenceItem, condition: EvidenceClassificationCondition): boolean {
-    let fieldValue: any;
+    let fieldValue: Error;
     
     switch (condition.field) {
     case 'content':
@@ -683,9 +683,9 @@ export class EvidenceClassificationService {
   }
 
   private evaluateOperator(
-    fieldValue: any,
+    fieldValue: Error,
     operator: string,
-    conditionValue: any,
+    conditionValue: Error,
     caseSensitive: boolean = true
   ): boolean {
     const normalize = (val: string) => caseSensitive ? val : val.toLowerCase();

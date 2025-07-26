@@ -264,5 +264,5 @@ export class ModelUnavailableError extends Error {
         this.name = 'ModelUnavailableError';
     }
 }
-// Export all types and classes
+// Export the default class
 export { BaseAIModel as default };

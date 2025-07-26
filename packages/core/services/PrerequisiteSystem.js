@@ -47,7 +47,7 @@ export class PrerequisiteSecurity {
     /**
      * Validates prerequisite input for security threats
      */
-    static validatePrerequisiteInput(input) {
+    static validatePrerequisiteInput(input: any): any {
         const errors = [];
         // Check for injection attempts
         if (/<script|javascript:|data:|eval\(|function\(/i.test(input)) {

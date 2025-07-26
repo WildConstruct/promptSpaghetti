@@ -35,6 +35,20 @@ interface AnalyticsEvent {
   properties: Record<string, any>;
 }
 
+interface MetricQuery {
+  metric: string;
+  filters?: Record<string, any>;
+  timeRange?: { start: number; end: number };
+  groupBy?: string[];
+}
+
+interface MetricResult {
+  metric: string;
+  value: number;
+  timestamp: number;
+  dimensions?: Record<string, any>;
+}
+
 interface AnalyticsInfrastructure {
   processEvent(event: AnalyticsEvent): Promise<void>;
   getMetrics(query: MetricQuery): Promise<MetricResult[]>;
@@ -743,6 +757,7 @@ export interface ProcessingConfig {
   transformation: TransformationConfig;
   aggregation: AggregationConfig;
   storage: StorageConfig;
+  calculations: any;
   batchSize: number;
   continueOnError: boolean;
   forwardToEpic1: boolean;
@@ -872,14 +887,14 @@ export interface MetricCalculator {
 // Concrete metric calculators (simplified implementations)
 class ConversionRateCalculator implements MetricCalculator {
   async calculate(events: FlexibleConversionEvent[]): Promise<number> {
-    const conversions = events.filter(e => e.type.includes('conversion') || e.value > 0);
+    const conversions = events.filter(e => e.type.includes('conversion') || (e.value || 0) > 0);
     return events.length > 0 ? (conversions.length / events.length) * 100 : 0;
   }
 }
 
 class DropOffRateCalculator implements MetricCalculator {
   async calculate(events: FlexibleConversionEvent[]): Promise<number> {
-    const conversions = events.filter(e => e.type.includes('conversion') || e.value > 0);
+    const conversions = events.filter(e => e.type.includes('conversion') || (e.value || 0) > 0);
     return events.length > 0 ? ((events.length - conversions.length) / events.length) * 100 : 0;
   }
 }
@@ -1134,11 +1149,7 @@ class ConversionAnalyticsAPI {
 }
 
 // Factory function
-export const createConversionAnalyticsInfrastructure = (
-  epic1Analytics: AnalyticsInfrastructure,
-  config: {
-    dataWarehouse: DataWarehouseConfig;
-    api: AnalyticsAPIConfig;
+export     api: AnalyticsAPIConfig;
     processing: ProcessingConfig;
   }
 ): ConversionAnalyticsInfrastructure => {

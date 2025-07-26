@@ -140,17 +140,35 @@ export const FieldImportanceStyles = {
 // Field priority classification system
 export type FieldPriority = 'critical' | 'important' | 'standard' | 'supplementary';
 
-export const classifyFieldPriority = (fieldName: string, _____nodeType?: string): FieldPriority => {
+export const classifyFieldPriority = (fieldName: string, nodeType = 'generic'): FieldPriority => {
   const lowerName = fieldName.toLowerCase();
+  const lowerNodeType = nodeType.toLowerCase();
   
-  // Critical fields - always essential for node function
+  // Node-type specific critical fields
+  const nodeTypeCriticalFields: Record<string, string[]> = {
+    'weightedchoice': ['choices', 'weights', 'name'],
+    'concat': ['template', 'joinmode', 'name'],
+    'output': ['template', 'name'],
+    'conditional': ['condition', 'defaultresponse', 'name'],
+    'sequential': ['items', 'pattern', 'name'],
+    'setvariable': ['variablename', 'value', 'name'],
+    'getvariable': ['variablename', 'name'],
+  };
+  
+  // Check node-type specific critical fields first
+  const nodeSpecificCritical = nodeTypeCriticalFields[lowerNodeType];
+  if (nodeSpecificCritical && nodeSpecificCritical.some(field => lowerName.includes(field))) {
+    return 'critical';
+  }
+  
+  // General critical fields - always essential for node function
   const criticalPatterns = ['template', 'text', 'content', 'name', 'choices', 'output'];
   if (criticalPatterns.some(pattern => lowerName.includes(pattern))) {
     return 'critical';
   }
   
   // Important fields - commonly used advanced features
-  const importantPatterns = ['weight', 'probability', 'seed', 'variable', 'count'];
+  const importantPatterns = ['weight', 'probability', 'seed', 'variable', 'count', 'condition'];
   if (importantPatterns.some(pattern => lowerName.includes(pattern))) {
     return 'important';
   }

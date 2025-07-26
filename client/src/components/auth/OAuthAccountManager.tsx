@@ -125,7 +125,7 @@ export const OAuthAccountManager: React.FC<OAuthAccountManagerProps> = ({
   const getUnlinkedProviders = () => {
     const allProviders = ['google', 'github', 'microsoft'];
     const linkedProviderIds = linkedAccounts.map(account => account.provider);
-    return allProviders.filter(provider => !linkedProviderIds.includes(provider as any));
+    return allProviders.filter(provider => !linkedProviderIds.includes(provider as 'google' | 'github' | 'microsoft'));
   };
 
   if (!user) {

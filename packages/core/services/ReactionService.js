@@ -12,12 +12,12 @@
  * Provides reaction tracking, analytics, moderation, and real-time capabilities.
  */
 export class ReactionService {
-    baseUrl;
-    config;
-    reactions = new Map();
-    summaries = new Map();
-    realtimeSubscriptions = new Map();
-    constructor(baseUrl = 'http://localhost:8000', config) {
+    baseUrl: string;
+    config: any;
+    reactions: Map<string, any> = new Map();
+    summaries: Map<string, any> = new Map();
+    realtimeSubscriptions: Map<string, any> = new Map();
+    constructor(baseUrl: string = 'http://localhost:8000', config: any) {
         this.baseUrl = baseUrl;
         this.config = {
             enabledReactions: ['love', 'like', 'helpful', 'amazing', 'funny', 'thinking', 'confused', 'dislike', 'angry', 'rocket'],

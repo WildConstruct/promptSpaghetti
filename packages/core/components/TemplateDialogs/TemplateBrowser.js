@@ -2,7 +2,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // packages/core/components/TemplateDialogs/TemplateBrowser.tsx
 // Epic 8.7 Task 6: Template Library - Template Browser Component
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { templateService } from '../../services/TemplateService.js';
+import { templateService } from '../../services/TemplateService';
 const TEMPLATE_CATEGORIES = [
     { value: 'all', label: 'All Categories' },
     { value: 'character', label: 'Character' },

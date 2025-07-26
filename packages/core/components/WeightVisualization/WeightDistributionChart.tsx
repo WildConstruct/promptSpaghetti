@@ -376,6 +376,7 @@ export const WeightDistributionChart: React.FC<WeightDistributionChartProps> = (
       <svg
         width={width}
         height={height}
+        role="img"
         style={{
           background: 'transparent',
           overflow: 'visible'

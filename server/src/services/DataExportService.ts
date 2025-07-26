@@ -435,7 +435,7 @@ export class DataExportService {
   }
 
   private async extractData(request: ExportRequest, jobId: string): Promise<any[]> {
-    let data: any[] = [];
+    let data: Record<string, unknown>[] = [];
 
     await this.updateJobStatus(jobId, ExportJobStatus.PROCESSING, 20);
 
@@ -466,7 +466,7 @@ export class DataExportService {
     return data;
   }
 
-  private async processData(data: any[], request: ExportRequest, jobId: string): Promise<any[]> {
+  private async processData(data: Record<string, unknown>[], request: ExportRequest, jobId: string): Promise<any[]> {
     let processedData = [...data];
 
     // Apply filters
@@ -489,7 +489,12 @@ export class DataExportService {
     return processedData;
   }
 
-  private async generateOutputFile(data: any[], request: ExportRequest, jobId: string): Promise<string> {
+  private async generateOutputFile(
+    data: Record<string,
+    unknown>[],
+    request: ExportRequest,
+    jobId: string
+  ): Promise<string> {
     const fileName = `export_${jobId}_${Date.now()}.${request.format.toLowerCase()}`;
     const filePath = path.join(this.exportDir, fileName);
 
@@ -516,7 +521,12 @@ export class DataExportService {
     return filePath;
   }
 
-  private async createExportManifest(data: any[], request: ExportRequest, outputPath: string): Promise<ExportManifest> {
+  private async createExportManifest(
+    data: Record<string,
+    unknown>[],
+    request: ExportRequest,
+    outputPath: string
+  ): Promise<ExportManifest> {
     const stats = fs.statSync(outputPath);
     const checksum = await this.calculateChecksum(outputPath);
 
@@ -551,7 +561,7 @@ export class DataExportService {
     return `JOB-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private mapToExportJob(row: any): ExportJob {
+  private mapToExportJob(row: unknown): ExportJob {
     return {
       jobId: row.job_id,
       requestId: row.request_id,
@@ -587,15 +597,15 @@ export class DataExportService {
   private async extractSystemLogs(__request: ExportRequest): Promise<any[]> { return []; }
   private async extractComplianceData(__request: ExportRequest): Promise<any[]> { return []; }
   private async extractSecurityEvents(__request: ExportRequest): Promise<any[]> { return []; }
-  private async applyFilters(data: any[], __filters: ExportFilters): Promise<any[]> { return data; }
-  private async anonymizeData(data: any[], __categories: string[]): Promise<any[]> { return data; }
-  private async sanitizeData(data: any[]): Promise<any[]> { return data; }
-  private async writeJsonFile(__filePath: string, __data: any[]): Promise<void> { }
-  private async writeCsvFile(__filePath: string, __data: any[]): Promise<void> { }
-  private async writeXmlFile(__filePath: string, __data: any[]): Promise<void> { }
+  private async applyFilters(data: Record<string, unknown>[], __filters: ExportFilters): Promise<any[]> { return data; }
+  private async anonymizeData(data: Record<string, unknown>[], __categories: string[]): Promise<any[]> { return data; }
+  private async sanitizeData(data: Record<string, unknown>[]): Promise<any[]> { return data; }
+  private async writeJsonFile(__filePath: string, __data: Record<string, unknown>[]): Promise<void> { }
+  private async writeCsvFile(__filePath: string, __data: Record<string, unknown>[]): Promise<void> { }
+  private async writeXmlFile(__filePath: string, __data: Record<string, unknown>[]): Promise<void> { }
   private async encryptFile(filePath: string): Promise<string> { return filePath; }
   private async calculateChecksum(__filePath: string): Promise<string> { return ''; }
-  private async getDataClassifications(__data: any[]): Promise<string[]> { return []; }
+  private async getDataClassifications(__data: Record<string, unknown>[]): Promise<string[]> { return []; }
   private async createExportJob(
     __jobId: string,
     __requestId: string,

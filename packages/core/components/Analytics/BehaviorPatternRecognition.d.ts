@@ -47,7 +47,7 @@ export interface RecognitionAlgorithm {
 }
 export type AlgorithmType = 'sequence_analysis' | 'clustering' | 'classification' | 'time_series' | 'neural_network' | 'decision_tree' | 'ensemble' | 'deep_learning';
 export interface AlgorithmParameters {
-    [key: string]: any;
+    [key: string]: unknown;
     learningRate?: number;
     iterations?: number;
     features?: string[];
@@ -127,7 +127,7 @@ export interface ModelFeature {
     correlation: number;
 }
 export interface ModelHyperparameters {
-    [key: string]: any;
+    [key: string]: unknown;
 }
 export interface ClusteringConfig {
     algorithms: ClusteringAlgorithm[];
@@ -486,7 +486,7 @@ export interface PatternInstance {
 }
 export interface PatternElement {
     elementType: string;
-    value: any;
+    value: Error;
     timestamp: number;
     confidence: number;
 }
@@ -547,7 +547,7 @@ export type InsightType = 'user_behavior' | 'conversion_opportunity' | 'usabilit
 export type ImpactLevel = 'low' | 'medium' | 'high' | 'critical';
 export interface EvidenceItem {
     type: 'statistical' | 'visual' | 'temporal' | 'comparative';
-    data: any;
+    data: Record<string, unknown>;
     description: string;
     confidence: number;
 }
@@ -716,7 +716,7 @@ export interface InsightVisualization {
 }
 export type VisualizationType = 'line_chart' | 'bar_chart' | 'scatter_plot' | 'heatmap' | 'treemap' | 'sankey_diagram' | 'network_graph' | 'flow_diagram';
 export interface VisualizationData {
-    [key: string]: any;
+    [key: string]: unknown;
 }
 export interface VisualizationConfig {
     width: number;

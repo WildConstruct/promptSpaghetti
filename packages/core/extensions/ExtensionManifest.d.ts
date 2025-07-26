@@ -59,17 +59,17 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
         css: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         components: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>;
     }, "strip", z.ZodTypeAny, {
-        category?: string | undefined;
-        components?: Record<string, string> | undefined;
-        themes?: string[] | undefined;
         icon?: string | undefined;
+        category?: string | undefined;
+        themes?: string[] | undefined;
         css?: string[] | undefined;
+        components?: Record<string, string> | undefined;
     }, {
-        category?: string | undefined;
-        components?: Record<string, string> | undefined;
-        themes?: string[] | undefined;
         icon?: string | undefined;
+        category?: string | undefined;
+        themes?: string[] | undefined;
         css?: string[] | undefined;
+        components?: Record<string, string> | undefined;
     }>>;
     runtime: z.ZodOptional<z.ZodObject<{
         node_types: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -127,21 +127,21 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
         changelog: z.ZodOptional<z.ZodString>;
         readme: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        categories?: string[] | undefined;
         license?: string | undefined;
         repository?: string | undefined;
         homepage?: string | undefined;
         bugs?: string | undefined;
         keywords?: string[] | undefined;
+        categories?: string[] | undefined;
         changelog?: string | undefined;
         readme?: string | undefined;
     }, {
-        categories?: string[] | undefined;
         license?: string | undefined;
         repository?: string | undefined;
         homepage?: string | undefined;
         bugs?: string | undefined;
         keywords?: string[] | undefined;
+        categories?: string[] | undefined;
         changelog?: string | undefined;
         readme?: string | undefined;
     }>>;
@@ -170,8 +170,8 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
             enabled: boolean;
             permissions?: string[] | undefined;
         }, {
-            enabled?: boolean | undefined;
             permissions?: string[] | undefined;
+            enabled?: boolean | undefined;
         }>>;
         trusted_domains: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     }, "strip", z.ZodTypeAny, {
@@ -184,8 +184,8 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     }, {
         content_security_policy?: string | undefined;
         sandbox?: {
-            enabled?: boolean | undefined;
             permissions?: string[] | undefined;
+            enabled?: boolean | undefined;
         } | undefined;
         trusted_domains?: string[] | undefined;
     }>>;
@@ -197,43 +197,48 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         private: boolean;
         access: "private" | "public" | "restricted";
-        registry?: string | undefined;
         tags?: string[] | undefined;
+        registry?: string | undefined;
     }, {
+        tags?: string[] | undefined;
         private?: boolean | undefined;
         registry?: string | undefined;
         access?: "private" | "public" | "restricted" | undefined;
-        tags?: string[] | undefined;
     }>>;
 }, "strip", z.ZodTypeAny, {
-    version: string;
+    main: string;
     id: string;
-    description: string;
     name: string;
+    description: string;
+    version: string;
     author: {
         name: string;
         email?: string | undefined;
         url?: string | undefined;
     };
-    main: string;
     manifest_version: "1.0";
-    extension_type: "transform" | "node" | "storage" | "ui";
+    extension_type: "node" | "transform" | "ui" | "storage";
+    configuration?: {
+        schema?: Record<string, any> | undefined;
+        defaults?: Record<string, any> | undefined;
+        ui_schema?: Record<string, any> | undefined;
+    } | undefined;
     metadata?: {
-        categories?: string[] | undefined;
         license?: string | undefined;
         repository?: string | undefined;
         homepage?: string | undefined;
         bugs?: string | undefined;
         keywords?: string[] | undefined;
+        categories?: string[] | undefined;
         changelog?: string | undefined;
         readme?: string | undefined;
     } | undefined;
     ui?: {
-        category?: string | undefined;
-        components?: Record<string, string> | undefined;
-        themes?: string[] | undefined;
         icon?: string | undefined;
+        category?: string | undefined;
+        themes?: string[] | undefined;
         css?: string[] | undefined;
+        components?: Record<string, string> | undefined;
     } | undefined;
     runtime?: {
         node_types?: string[] | undefined;
@@ -241,22 +246,17 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
         storage_providers?: string[] | undefined;
         background_tasks?: string[] | undefined;
     } | undefined;
-    dependencies?: {
-        system?: string | undefined;
-        extensions?: Record<string, string> | undefined;
-        npm?: Record<string, string> | undefined;
-    } | undefined;
-    permissions?: ("storage" | "file-system-write" | "network" | "file-system-read" | "ui-components" | "runtime-nodes" | "system-info" | "extensions-api")[] | undefined;
-    configuration?: {
-        schema?: Record<string, any> | undefined;
-        defaults?: Record<string, any> | undefined;
-        ui_schema?: Record<string, any> | undefined;
-    } | undefined;
     capabilities?: {
         optional?: string[] | undefined;
         provides?: string[] | undefined;
         requires?: string[] | undefined;
     } | undefined;
+    dependencies?: {
+        system?: string | undefined;
+        extensions?: Record<string, string> | undefined;
+        npm?: Record<string, string> | undefined;
+    } | undefined;
+    permissions?: ("storage" | "file-system-read" | "file-system-write" | "network" | "ui-components" | "runtime-nodes" | "system-info" | "extensions-api")[] | undefined;
     build?: {
         output_dir: string;
         entry_point?: string | undefined;
@@ -281,38 +281,43 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     publishing?: {
         private: boolean;
         access: "private" | "public" | "restricted";
-        registry?: string | undefined;
         tags?: string[] | undefined;
+        registry?: string | undefined;
     } | undefined;
 }, {
-    version: string;
+    main: string;
     id: string;
-    description: string;
     name: string;
+    description: string;
+    version: string;
     author: {
         name: string;
         email?: string | undefined;
         url?: string | undefined;
     };
-    main: string;
     manifest_version: "1.0";
-    extension_type: "transform" | "node" | "storage" | "ui";
+    extension_type: "node" | "transform" | "ui" | "storage";
+    configuration?: {
+        schema?: Record<string, any> | undefined;
+        defaults?: Record<string, any> | undefined;
+        ui_schema?: Record<string, any> | undefined;
+    } | undefined;
     metadata?: {
-        categories?: string[] | undefined;
         license?: string | undefined;
         repository?: string | undefined;
         homepage?: string | undefined;
         bugs?: string | undefined;
         keywords?: string[] | undefined;
+        categories?: string[] | undefined;
         changelog?: string | undefined;
         readme?: string | undefined;
     } | undefined;
     ui?: {
-        category?: string | undefined;
-        components?: Record<string, string> | undefined;
-        themes?: string[] | undefined;
         icon?: string | undefined;
+        category?: string | undefined;
+        themes?: string[] | undefined;
         css?: string[] | undefined;
+        components?: Record<string, string> | undefined;
     } | undefined;
     runtime?: {
         node_types?: string[] | undefined;
@@ -320,22 +325,17 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
         storage_providers?: string[] | undefined;
         background_tasks?: string[] | undefined;
     } | undefined;
-    dependencies?: {
-        system?: string | undefined;
-        extensions?: Record<string, string> | undefined;
-        npm?: Record<string, string> | undefined;
-    } | undefined;
-    permissions?: ("storage" | "file-system-write" | "network" | "file-system-read" | "ui-components" | "runtime-nodes" | "system-info" | "extensions-api")[] | undefined;
-    configuration?: {
-        schema?: Record<string, any> | undefined;
-        defaults?: Record<string, any> | undefined;
-        ui_schema?: Record<string, any> | undefined;
-    } | undefined;
     capabilities?: {
         optional?: string[] | undefined;
         provides?: string[] | undefined;
         requires?: string[] | undefined;
     } | undefined;
+    dependencies?: {
+        system?: string | undefined;
+        extensions?: Record<string, string> | undefined;
+        npm?: Record<string, string> | undefined;
+    } | undefined;
+    permissions?: ("storage" | "file-system-read" | "file-system-write" | "network" | "ui-components" | "runtime-nodes" | "system-info" | "extensions-api")[] | undefined;
     build?: {
         output_dir?: string | undefined;
         entry_point?: string | undefined;
@@ -352,16 +352,16 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     security?: {
         content_security_policy?: string | undefined;
         sandbox?: {
-            enabled?: boolean | undefined;
             permissions?: string[] | undefined;
+            enabled?: boolean | undefined;
         } | undefined;
         trusted_domains?: string[] | undefined;
     } | undefined;
     publishing?: {
+        tags?: string[] | undefined;
         private?: boolean | undefined;
         registry?: string | undefined;
         access?: "private" | "public" | "restricted" | undefined;
-        tags?: string[] | undefined;
     } | undefined;
 }>;
 export type ExtensionManifest = z.infer<typeof ExtensionManifestSchema>;
@@ -381,7 +381,11 @@ export declare class ExtensionManifestParser {
     /**
      * Validate manifest dependencies
      */
-    validateDependencies(manifest: ExtensionManifest, availableExtensions: Map<string, ExtensionManifest>): ExtensionValidationResult;
+    validateDependencies(
+      manifest: ExtensionManifest,
+      availableExtensions: Map<string,
+      ExtensionManifest>
+    ): ExtensionValidationResult;
     /**
      * Check compatibility with system
      */

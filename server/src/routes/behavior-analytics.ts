@@ -186,7 +186,7 @@ export async function behaviorAnalyticsRoutes(
   }, async (request: FastifyRequest<AnalyzeBehaviorRequest>, reply: FastifyReply) => {
     try {
       const { sessionData, userId } = request.body;
-      const targetUserId = userId || (request.user as any).id;
+      const targetUserId = userId || (request.user as Record<string, unknown> & { id: string }).id;
 
       // Convert date strings to Date objects
       const processedSessionData = {
@@ -291,14 +291,14 @@ export async function behaviorAnalyticsRoutes(
   }, async (request: FastifyRequest<GetProfileRequest>, reply: FastifyReply) => {
     try {
       const { userId } = request.params;
-      const user = request.user as any;
+      const user = request.user as Record<string, unknown> & { id: string; roles?: string[] };
 
       // Check permissions - users can only view their own profile unless admin
       if (userId !== user.id && !user.roles?.includes('admin')) {
         return reply.status(403).send({ error: 'Forbidden' });
       }
 
-      const profile = await (behaviorAnalyticsService as any).getUserBehaviorProfile(userId);
+      const profile = await (behaviorAnalyticsService as unknown as { getUserBehaviorProfile: (userId: string) => Promise<unknown> }).getUserBehaviorProfile(userId);
 
       // Sanitize sensitive data for response
       const sanitizedProfile = {
@@ -316,7 +316,7 @@ export async function behaviorAnalyticsRoutes(
           typicalActionsPerSession: profile.baseline.typicalActionsPerSession,
           errorRate: profile.baseline.errorRate
         },
-        patterns: profile.patterns.map((p: any) => ({
+        patterns: profile.patterns.map((p: Record<string, unknown>) => ({
           id: p.id,
           type: p.type,
           description: p.description,
@@ -324,7 +324,7 @@ export async function behaviorAnalyticsRoutes(
           lastOccurrence: p.lastOccurrence,
           confidence: p.confidence
         })),
-        recentAnomalies: profile.anomalies.slice(-10).map((a: any) => ({
+        recentAnomalies: profile.anomalies.slice(-10).map((a: Record<string, unknown>) => ({
           id: a.id,
           timestamp: a.timestamp,
           type: a.type,
@@ -369,7 +369,7 @@ export async function behaviorAnalyticsRoutes(
     try {
       const { userId } = request.params;
       const { updateType, reason } = request.body;
-      const user = request.user as any;
+      const user = request.user as Record<string, unknown> & { id: string; roles?: string[] };
 
       // Admin only
       if (!user.roles?.includes('admin')) {
@@ -380,15 +380,24 @@ export async function behaviorAnalyticsRoutes(
       switch (updateType) {
       case 'reset':
         // Reset profile to learning mode
-        await (behaviorAnalyticsService as any).resetUserProfile(userId, reason);
+        await (
+          behaviorAnalyticsService as unknown as { resetUserProfile: (userId: string,
+          reason?: string
+        ) => Promise<void> }).resetUserProfile(userId, reason);
         break;
       case 'recalibrate':
         // Force recalibration of baseline
-        await (behaviorAnalyticsService as any).recalibrateUserProfile(userId, reason);
+        await (
+          behaviorAnalyticsService as unknown as { recalibrateUserProfile: (userId: string,
+          reason?: string
+        ) => Promise<void> }).recalibrateUserProfile(userId, reason);
         break;
       case 'suspend':
         // Suspend profile monitoring
-        await (behaviorAnalyticsService as any).suspendUserProfile(userId, reason);
+        await (
+          behaviorAnalyticsService as unknown as { suspendUserProfile: (userId: string,
+          reason?: string
+        ) => Promise<void> }).suspendUserProfile(userId, reason);
         break;
       }
 
@@ -427,7 +436,7 @@ export async function behaviorAnalyticsRoutes(
     }
   }, async (request: FastifyRequest<GetAnomaliesRequest>, reply: FastifyReply) => {
     try {
-      const user = request.user as any;
+      const user = request.user as Record<string, unknown> & { id: string; roles?: string[] };
       const { userId, startDate, endDate, type, severity, resolved, limit = 50, offset = 0 } = request.query;
 
       // Users can only view their own anomalies unless admin
@@ -437,7 +446,7 @@ export async function behaviorAnalyticsRoutes(
 
       const targetUserId = userId || (user.roles?.includes('admin') ? undefined : user.id);
 
-      const anomalies = await (behaviorAnalyticsService as any).getAnomalies({
+      const anomalies = await (behaviorAnalyticsService as unknown as { getAnomalies: (params: unknown) => Promise<unknown> }).getAnomalies({
         userId: targetUserId,
         startDate: startDate ? new Date(startDate) : undefined,
         endDate: endDate ? new Date(endDate) : undefined,
@@ -484,14 +493,19 @@ export async function behaviorAnalyticsRoutes(
     try {
       const { anomalyId } = request.params;
       const { resolution, notes } = request.body;
-      const user = request.user as any;
+      const user = request.user as Record<string, unknown> & { id: string; roles?: string[] };
 
       // Admin only
       if (!user.roles?.includes('admin')) {
         return reply.status(403).send({ error: 'Forbidden - Admin access required' });
       }
 
-      await (behaviorAnalyticsService as any).resolveAnomaly(anomalyId, resolution, user.id, notes);
+      await (
+        behaviorAnalyticsService as unknown as { resolveAnomaly: (anomalyId: string,
+        resolution: string,
+        userId: string,
+        notes?: string
+      ) => Promise<void> }).resolveAnomaly(anomalyId, resolution, user.id, notes);
 
       return reply.status(200).send({ 
         success: true,
@@ -523,14 +537,14 @@ export async function behaviorAnalyticsRoutes(
   }, async (request: FastifyRequest<GetRiskScoreRequest>, reply: FastifyReply) => {
     try {
       const { userId } = request.params;
-      const user = request.user as any;
+      const user = request.user as Record<string, unknown> & { id: string; roles?: string[] };
 
       // Check permissions
       if (userId !== user.id && !user.roles?.includes('admin')) {
         return reply.status(403).send({ error: 'Forbidden' });
       }
 
-      const profile = await (behaviorAnalyticsService as any).getUserBehaviorProfile(userId);
+      const profile = await (behaviorAnalyticsService as unknown as { getUserBehaviorProfile: (userId: string) => Promise<unknown> }).getUserBehaviorProfile(userId);
 
       return reply.status(200).send({
         userId,
@@ -575,18 +589,18 @@ export async function behaviorAnalyticsRoutes(
     try {
       const { userId } = request.params;
       const { type, limit = 10 } = request.query;
-      const user = request.user as any;
+      const user = request.user as Record<string, unknown> & { id: string; roles?: string[] };
 
       // Check permissions
       if (userId !== user.id && !user.roles?.includes('admin')) {
         return reply.status(403).send({ error: 'Forbidden' });
       }
 
-      const profile = await (behaviorAnalyticsService as any).getUserBehaviorProfile(userId);
+      const profile = await (behaviorAnalyticsService as unknown as { getUserBehaviorProfile: (userId: string) => Promise<unknown> }).getUserBehaviorProfile(userId);
       
       let patterns = profile.patterns;
       if (type) {
-        patterns = patterns.filter((p: any) => p.type === type);
+        patterns = patterns.filter((p: unknown) => (p as { type: string }).type === type);
       }
       
       patterns = patterns.slice(0, limit);
@@ -665,14 +679,14 @@ export async function behaviorAnalyticsRoutes(
     }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const user = request.user as any;
+      const user = request.user as Record<string, unknown> & { id: string; roles?: string[] };
 
       // Admin only
       if (!user.roles?.includes('admin')) {
         return reply.status(403).send({ error: 'Forbidden - Admin access required' });
       }
 
-      const stats = await (behaviorAnalyticsService as any).getStatistics();
+      const stats = await (behaviorAnalyticsService as unknown as { getStatistics: () => Promise<unknown> }).getStatistics();
 
       return reply.status(200).send(stats);
     } catch (error) {

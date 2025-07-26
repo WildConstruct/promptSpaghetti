@@ -25,29 +25,20 @@ export const createDefaultCacheConfig = () => ({
     }
 });
 export const createDefaultLoadBalancerConfig = () => ({
-    strategy: 'adaptive',
+    strategy: 'round-robin',
     healthCheckInterval: 30000, // 30 seconds
     failoverThreshold: 3,
     maxRetries: 3,
     timeoutMs: 30000,
-    circuitBreakerEnabled: true,
-    metricsCollection: true
+    maxConcurrentRequests: 100,
+    enableFailover: true
 });
 export const createDefaultMonitoringConfig = () => ({
     enabled: true,
+    interval: 10000, // 10 seconds
     collectionInterval: 10000, // 10 seconds
     retentionPeriod: 86400000, // 24 hours
-    alerting: {
-        enabled: true
-    },
-    thresholds: [],
-    sampling: {
-        enabled: true,
-        rate: 0.1 // 10% sampling
-    },
-    storage: {
-        type: 'memory'
-    }
+    alerting: true
 });
 export const createDefaultResourceOptimizationConfig = () => ({
     enabled: true,
@@ -60,17 +51,11 @@ export const createDefaultResourceOptimizationConfig = () => ({
     },
     strategies: {
         memoryOptimization: true,
+        cpuOptimization: true,
+        cacheOptimization: true,
+        modelCompression: true,
         modelPooling: true,
-        requestBatching: true,
-        dynamicScaling: true,
-        intelligentCaching: true,
-        resourcePreemption: false
-    },
-    limits: {
-        maxMemoryUsage: 2 * 1024 * 1024 * 1024, // 2GB
-        maxConcurrentRequests: 100,
-        maxModelInstances: 10,
-        maxCacheSize: 500 * 1024 * 1024 // 500MB
+        requestBatching: true
     }
 });
 // Performance analysis utilities
@@ -83,12 +68,12 @@ export const analyzePerformanceMetrics = (metrics) => {
             recommendations: []
         };
     }
-    const averageResponseTime = metrics.reduce((sum, m) => sum + m.averageResponseTime, 0) / metrics.length;
-    const successRateAverage = metrics.reduce((sum, m) => sum + m.successRate, 0) / metrics.length;
+    const averageResponseTime = metrics.reduce((sum, m) => sum + (m.averageResponseTime || 0), 0) / metrics.length;
+    const successRateAverage = metrics.reduce((sum, m) => sum + (m.successRate || 0), 0) / metrics.length;
     // Determine cost trend
     let costTrend = 'stable';
     if (metrics.length >= 2) {
-        const recentCosts = metrics.slice(-5).map(m => m.totalCost);
+        const recentCosts = metrics.slice(-5).map(m => m.totalCost || 0);
         const earlyAvg = recentCosts.slice(0, Math.floor(recentCosts.length / 2)).reduce((sum, c) => sum + c, 0) / Math.floor(recentCosts.length / 2);
         const lateAvg = recentCosts.slice(Math.floor(recentCosts.length / 2)).reduce((sum, c) => sum + c, 0) / Math.ceil(recentCosts.length / 2);
         if (lateAvg > earlyAvg * 1.1)
@@ -120,9 +105,9 @@ export const analyzePerformanceMetrics = (metrics) => {
 };
 export const calculateResourceEfficiency = (usage, performance) => {
     // Calculate efficiency score based on resource usage vs performance
-    const memoryEfficiency = 1 - usage.memory.percentage;
-    const cpuEfficiency = 1 - (usage.cpu.usage / 100);
-    const performanceScore = performance.successRate * (1 / Math.max(performance.averageResponseTime / 1000, 0.1));
+    const memoryEfficiency = 1 - (usage.memory / 100);
+    const cpuEfficiency = 1 - (usage.cpu / 100);
+    const performanceScore = (performance.successRate || 0) * (1 / Math.max((performance.averageResponseTime || 1000) / 1000, 0.1));
     return (memoryEfficiency * 0.3) + (cpuEfficiency * 0.3) + (performanceScore * 0.4);
 };
 export const generateOptimizationReport = (cacheMetrics, performanceMetrics, resourceUsage) => {
@@ -132,7 +117,7 @@ export const generateOptimizationReport = (cacheMetrics, performanceMetrics, res
     if (cacheMetrics.hitRate < 0.6) {
         cacheRecommendations.push('Low cache hit rate - consider increasing cache size or TTL');
     }
-    if (cacheMetrics.memoryUsage / (1024 * 1024) > 400) {
+    if ((cacheMetrics.memoryUsage || 0) / (1024 * 1024) > 400) {
         cacheRecommendations.push('High cache memory usage - consider compression or eviction optimization');
     }
     // Performance analysis

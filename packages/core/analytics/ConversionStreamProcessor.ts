@@ -105,22 +105,22 @@ export class ConversionStreamProcessor extends EventEmitter {
     super();
     
     this.config = {
-      batchSize: 100,
-      flushInterval: 5000,
-      retryPolicy: {
+      streamName: config.streamName || 'conversion-events',
+      batchSize: config.batchSize || 100,
+      flushInterval: config.flushInterval || 5000,
+      retryPolicy: config.retryPolicy || {
         maxRetries: 3,
         backoffMultiplier: 2,
         maxBackoffTime: 30000
       },
-      deadLetterQueue: {
+      deadLetterQueue: config.deadLetterQueue || {
         enabled: true,
         maxAge: 24
       },
-      partitioning: {
+      partitioning: config.partitioning || {
         strategy: 'user_id',
         partitionCount: 10
-      },
-      ...config
+      }
     };
     
     this.initializePartitions();
@@ -620,8 +620,6 @@ export class ConversionStreamProcessor extends EventEmitter {
 /**
  * Factory function to create ConversionStreamProcessor
  */
-export const createConversionStreamProcessor = (config: FunnelStreamConfig): ConversionStreamProcessor => {
-  return new ConversionStreamProcessor(config);
-};
+export };
 
 export default ConversionStreamProcessor;

@@ -240,13 +240,13 @@ export interface ExampleSpec {
   description: string;
   request?: {
     headers?: Record<string, string>;
-    query?: Record<string, any>;
-    body?: any;
+    query?: Record<string, unknown>;
+    body?: unknown;
   };
   response?: {
     status: number;
     headers?: Record<string, string>;
-    body?: any;
+    body?: unknown;
   };
   curl?: string;
 }
@@ -259,8 +259,8 @@ export interface JsonSchema {
   additionalProperties?: boolean | JsonSchema;
   description?: string;
   format?: string;
-  enum?: any[];
-  example?: any;
+  enum?: unknown[];
+  example?: unknown;
 }
 
 export interface EndpointMetrics {
@@ -402,9 +402,9 @@ export interface RegistryEvent {
   timestamp: Date;
   entityType: 'endpoint' | 'service';
   entityId: string;
-  changes?: Record<string, { old: any; new: any }>;
+  changes?: Record<string, { old: unknown; new: unknown }>;
   userId?: string;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
 }
 
 export enum RegistryEventType {

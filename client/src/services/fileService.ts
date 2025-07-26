@@ -1,10 +1,37 @@
 /**
  * File Service - API client for file operations
  * 
- * Provides comprehensive file management API calls using the established auth patterns
+ * Enhanced with dependency injection for better testability and separation of concerns
  */
 
 import { useAuthStore } from '../stores/authStore';
+
+// Dependency Injection Interfaces
+export interface HttpClient {
+  request<T>(url: string, options?: RequestInit): Promise<T>;
+}
+
+export interface AuthProvider {
+  getToken(): string | null;
+}
+
+export interface Logger {
+  error(message: string, context?: Record<string, unknown>): void;
+  info(message: string, context?: Record<string, unknown>): void;
+  warn(message: string, context?: Record<string, unknown>): void;
+}
+
+export interface FileServiceConfig {
+  baseUrl: string;
+  enableMockFallback: boolean;
+}
+
+export interface FileServiceDependencies {
+  httpClient: HttpClient;
+  authProvider: AuthProvider;
+  logger: Logger;
+  config: FileServiceConfig;
+}
 
 export interface FileOperationResponse {
   success: boolean;
@@ -48,17 +75,26 @@ export interface FileStats {
 }
 
 class FileService {
-  private baseUrl: string;
+  constructor(private deps: FileServiceDependencies) {}
 
-  constructor() {
-    this.baseUrl = import.meta.env.VITE_API_URL || '';
+  // Factory method for creating with default dependencies
+  static createDefault(): FileService {
+    return new FileService({
+      httpClient: new DefaultHttpClient(),
+      authProvider: new AuthStoreProvider(),
+      logger: new ConsoleLogger(),
+      config: {
+        baseUrl: import.meta.env.VITE_API_URL || '',
+        enableMockFallback: true
+      }
+    });
   }
 
   /**
    * Get authenticated headers for API requests
    */
   private getHeaders(): HeadersInit {
-    const token = useAuthStore.getState().token;
+    const token = this.deps.authProvider.getToken();
     return {
       'Content-Type': 'application/json',
       'Authorization': token ? `Bearer ${token}` : ''
@@ -66,23 +102,16 @@ class FileService {
   }
 
   /**
-   * Make authenticated API request
+   * Make authenticated API request using injected HTTP client
    */
   private async makeRequest<T>(url: string, options: RequestInit = {}): Promise<T> {
-    const response = await fetch(`${this.baseUrl}${url}`, {
+    return this.deps.httpClient.request<T>(`${this.deps.config.baseUrl}${url}`, {
       ...options,
       headers: {
         ...this.getHeaders(),
         ...options.headers
       }
     });
-
-    if (!response.ok) {
-      const error = await response.text();
-      throw new Error(`API request failed: ${response.status} - ${error}`);
-    }
-
-    return await response.json();
   }
 
   /**
@@ -92,7 +121,12 @@ class FileService {
     try {
       return await this.makeRequest<TreeNode[]>(`/api/files/list?path=${encodeURIComponent(path)}`);
     } catch (error) {
-      console.error('Failed to list directory:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.error('Failed to list directory:', {
+        error: errorMessage,
+        path,
+        timestamp: new Date().toISOString()
+      });
       // Return mock data for development
       return this.getMockDirectoryData(path);
     }
@@ -108,7 +142,13 @@ class FileService {
         body: JSON.stringify({ sourcePath, targetPath })
       });
     } catch (error) {
-      console.error('Failed to move file:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.error('Failed to move file:', {
+        error: errorMessage,
+        sourcePath,
+        targetPath,
+        timestamp: new Date().toISOString()
+      });
       // Return mock success for development
       return {
         success: true,
@@ -128,7 +168,13 @@ class FileService {
         body: JSON.stringify({ sourcePath, targetPath })
       });
     } catch (error) {
-      console.error('Failed to copy file:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.error('Failed to copy file:', {
+        error: errorMessage,
+        sourcePath,
+        targetPath,
+        timestamp: new Date().toISOString()
+      });
       // Return mock success for development
       return {
         success: true,
@@ -289,7 +335,11 @@ class FileService {
   /**
    * Batch file operations (move, copy, delete multiple items)
    */
-  async batchOperation(operation: 'move' | 'copy' | 'delete', paths: string[], targetPath?: string): Promise<FileOperationResponse[]> {
+  async batchOperation(
+    operation: 'move' | 'copy' | 'delete',
+    paths: string[],
+    targetPath?: string
+  ): Promise<FileOperationResponse[]> {
     try {
       return await this.makeRequest<FileOperationResponse[]>('/api/files/batch', {
         method: 'POST',

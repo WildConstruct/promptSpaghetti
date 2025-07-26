@@ -93,7 +93,7 @@ export interface SessionSnapshot {
   createdBy: string;
   createdAt: number;
   documentVersion: number;
-  documentState: any;
+  documentState: unknown;
   participantCount: number;
   tags: string[];
 }
@@ -138,8 +138,8 @@ export interface CollaborationEvent {
   type: CollaborationEventType;
   userId: string;
   timestamp: number;
-  data: any;
-  metadata?: any;
+  data: unknown;
+  metadata?: unknown;
 }
 
 export enum CollaborationEventType {
@@ -754,16 +754,16 @@ export class EnhancedCollaborationService extends EventEmitter {
    */
   private setupEventHandlers(): void {
     // Listen to WebSocket server events
-    this.wsServer.on('graph_update', (documentId: string, updatePayload: any, connectionInfo: any) => {
+    this.wsServer.on('graph_update', (documentId: string, updatePayload: unknown, connectionInfo: unknown) => {
       this.handleGraphUpdate(documentId, updatePayload, connectionInfo);
     });
 
     // Listen to conflict resolver events
-    this.conflictResolver.on('conflict_detected', (conflict: any) => {
+    this.conflictResolver.on('conflict_detected', (conflict: unknown) => {
       this.handleConflictDetected(conflict);
     });
 
-    this.conflictResolver.on('conflict_resolved', (resolution: any) => {
+    this.conflictResolver.on('conflict_resolved', (resolution: unknown) => {
       this.handleConflictResolved(resolution);
     });
   }
@@ -771,7 +771,7 @@ export class EnhancedCollaborationService extends EventEmitter {
   /**
    * Handle graph update from WebSocket
    */
-  private handleGraphUpdate(documentId: string, updatePayload: any, connectionInfo: any): void {
+  private handleGraphUpdate(documentId: string, updatePayload: unknown, connectionInfo: unknown): void {
     const sessions = this.getDocumentSessions(documentId);
     
     for (const session of sessions) {
@@ -803,7 +803,7 @@ export class EnhancedCollaborationService extends EventEmitter {
   /**
    * Handle conflict detection
    */
-  private handleConflictDetected(conflict: any): void {
+  private handleConflictDetected(conflict: unknown): void {
     const sessions = this.getDocumentSessions(conflict.documentId);
     
     for (const session of sessions) {
@@ -841,7 +841,7 @@ export class EnhancedCollaborationService extends EventEmitter {
   /**
    * Handle conflict resolution
    */
-  private handleConflictResolved(resolution: any): void {
+  private handleConflictResolved(resolution: unknown): void {
     const sessions = this.getDocumentSessions(resolution.conflict.documentId);
     
     for (const session of sessions) {
@@ -889,7 +889,7 @@ export class EnhancedCollaborationService extends EventEmitter {
   /**
    * Broadcast message to all participants in a session
    */
-  private broadcastToSession(sessionId: string, message: any, excludeUserId?: string): void {
+  private broadcastToSession(sessionId: string, message: unknown, excludeUserId?: string): void {
     const session = this.sessions.get(sessionId);
     if (!session) return;
 
@@ -1062,7 +1062,7 @@ export class EnhancedCollaborationService extends EventEmitter {
     }
   }
 
-  private serializeDocumentState(documentState: any): any {
+  private serializeDocumentState(documentState: unknown): unknown {
     return {
       version: documentState.version,
       nodes: Object.fromEntries(documentState.nodes),

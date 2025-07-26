@@ -10,7 +10,7 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
 import { useState, useEffect, useMemo } from 'react';
 import { Card, Row, Col, Button, Select, Tabs, Tag, Statistic, Timeline, Progress, Space, Typography, Alert, Badge, Tooltip, Carousel, Radio, Switch, Slider } from 'antd';
 import { PlayCircleOutlined, PauseCircleOutlined, EyeOutlined, ClockCircleOutlined, TrophyOutlined, ThunderboltOutlined, ExperimentOutlined, SettingOutlined } from '@ant-design/icons';
-import { useTemplatePreview } from '../../hooks/useTemplatePreview.js';
+import { useTemplatePreview } from '../../hooks/useTemplatePreview';
 const { Title, Text, _Paragraph } = Typography;
 const { TabPane } = Tabs;
 const { _Option } = Select;

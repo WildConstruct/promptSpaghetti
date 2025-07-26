@@ -37,26 +37,26 @@ describe('NewDeviceDetectionService', () => {
   beforeEach(() => {
     // Mock database
     mockDb = {
-      query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown)
+      query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown as unknown)
     };
 
     // Mock Redis
     mockRedis = {
-      get: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown),
-      setex: jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown),
-      del: jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown)
+      get: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown as unknown),
+      setex: jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown as unknown),
+      del: jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown as unknown)
     };
 
     // Mock audit service
     mockAuditService = {
-      logEvent: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown)
+      logEvent: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown as unknown)
     };
 
     // Mock device fingerprinting service
     mockDeviceService = {
-      calculateFingerprintSimilarity: jest.fn<unknown[], unknown>().mockReturnValue(50 as unknown),
-      markDeviceAsTrusted: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown),
-      blockDevice: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown)
+      calculateFingerprintSimilarity: jest.fn<unknown[], unknown>().mockReturnValue(50 as unknown as unknown),
+      markDeviceAsTrusted: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown as unknown),
+      blockDevice: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown as unknown)
     };
 
     // Mock verification service
@@ -64,12 +64,12 @@ describe('NewDeviceDetectionService', () => {
       assessVerificationRequirement: jest.fn<unknown[], unknown>().mockResolvedValue({
         required: false,
         level: 'none'
-      } as unknown)
+      } as unknown as unknown)
     };
 
     // Mock email service
     mockEmailService = {
-      sendEmail: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown)
+      sendEmail: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown as unknown)
     };
 
     // Test policy configuration
@@ -322,7 +322,7 @@ describe('NewDeviceDetectionService', () => {
         return Promise.resolve({ rows: [] });
       });
 
-      mockDeviceService.calculateFingerprintSimilarity.mockReturnValue(85 as unknown);
+      mockDeviceService.calculateFingerprintSimilarity.mockReturnValue(85 as unknown as unknown);
 
       const result = await detectionService.detectNewDevice(testContext);
 
@@ -424,7 +424,7 @@ describe('NewDeviceDetectionService', () => {
         return Promise.resolve({ rows: [] });
       });
 
-      mockDeviceService.calculateFingerprintSimilarity.mockReturnValue(80 as unknown);
+      mockDeviceService.calculateFingerprintSimilarity.mockReturnValue(80 as unknown as unknown);
 
       // Set time to business hours
       const businessHourContext = {
@@ -441,7 +441,7 @@ describe('NewDeviceDetectionService', () => {
     });
 
     it('should require verification outside business hours', async () => {
-      mockDb.query.mockResolvedValue({ rows: [] } as unknown);
+      mockDb.query.mockResolvedValue({ rows: [] } as unknown as unknown);
 
       // Set time to late night
       const lateNightContext = {
@@ -636,7 +636,7 @@ describe('NewDeviceDetectionService', () => {
           verification_status: 'verified',
           trust_score: 85
         }]
-      } as unknown);
+      } as unknown as unknown);
 
       const status = await detectionService.getDeviceVerificationStatus(
         testUserId,
@@ -648,7 +648,7 @@ describe('NewDeviceDetectionService', () => {
     });
 
     it('should return unverified status for new device', async () => {
-      mockDb.query.mockResolvedValue({ rows: [] } as unknown);
+      mockDb.query.mockResolvedValue({ rows: [] } as unknown as unknown);
 
       const status = await detectionService.getDeviceVerificationStatus(
         testUserId,
@@ -668,7 +668,7 @@ describe('NewDeviceDetectionService', () => {
           verification_status: 'unverified',
           trust_score: 25
         }]
-      } as unknown);
+      } as unknown as unknown);
 
       const status = await detectionService.getDeviceVerificationStatus(
         testUserId,
@@ -699,7 +699,7 @@ describe('NewDeviceDetectionService', () => {
         }
       ];
 
-      mockDb.query.mockResolvedValue({ rows: recentDevices } as unknown);
+      mockDb.query.mockResolvedValue({ rows: recentDevices } as unknown as unknown);
 
       const devices = await detectionService.getRecentNewDevices(testUserId, 30);
 
@@ -710,7 +710,7 @@ describe('NewDeviceDetectionService', () => {
     });
 
     it('should handle empty device list', async () => {
-      mockDb.query.mockResolvedValue({ rows: [] } as unknown);
+      mockDb.query.mockResolvedValue({ rows: [] } as unknown as unknown);
 
       const devices = await detectionService.getRecentNewDevices(testUserId);
 
@@ -730,7 +730,7 @@ describe('NewDeviceDetectionService', () => {
       mockRedis.get.mockRejectedValue(new Error('Redis connection failed'));
       
       // Should continue without cache
-      mockDb.query.mockResolvedValue({ rows: [] } as unknown);
+      mockDb.query.mockResolvedValue({ rows: [] } as unknown as unknown);
 
       const result = await detectionService.detectNewDevice(testContext);
       
@@ -740,7 +740,7 @@ describe('NewDeviceDetectionService', () => {
 
     it('should handle email service errors gracefully', async () => {
       mockEmailService.sendEmail.mockRejectedValue(new Error('Email service down'));
-      mockDb.query.mockResolvedValue({ rows: [] } as unknown);
+      mockDb.query.mockResolvedValue({ rows: [] } as unknown as unknown);
 
       // Should not throw, just log error
       await expect(detectionService.detectNewDevice(testContext))
@@ -753,7 +753,7 @@ describe('NewDeviceDetectionService', () => {
       const listener = jest.fn<unknown[], unknown>();
       detectionService.on('new_device_detected', listener);
 
-      mockDb.query.mockResolvedValue({ rows: [] } as unknown);
+      mockDb.query.mockResolvedValue({ rows: [] } as unknown as unknown);
       const result = await detectionService.detectNewDevice(testContext);
 
       expect(listener).toHaveBeenCalledWith(testContext, result);
@@ -762,7 +762,7 @@ describe('NewDeviceDetectionService', () => {
 
   describe('audit logging', () => {
     it('should log all detection events', async () => {
-      mockDb.query.mockResolvedValue({ rows: [] } as unknown);
+      mockDb.query.mockResolvedValue({ rows: [] } as unknown as unknown);
 
       await detectionService.detectNewDevice(testContext);
 

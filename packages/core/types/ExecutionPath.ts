@@ -10,14 +10,14 @@ export interface NodeExecutionStep {
   timestamp: number;
   executionTimeMs: number;
   inputs: ExecutionInput[];
-  output: any;
+  output: unknown;
   randomChoice?: RandomChoiceInfo;
   error?: string;
 }
 
 export interface ExecutionInput {
   sourceNodeId?: string;
-  value: any;
+  value: unknown;
   inputIndex: number;
 }
 
@@ -57,7 +57,7 @@ export interface ExecutionFlowEdge {
   from: string;
   to: string;
   stepIndex: number;
-  dataFlow: any;
+  dataFlow: unknown;
   executionTimeMs: number;
   isRandomChoice: boolean;
 }
@@ -154,3 +154,6 @@ export interface ExecutionVisualizationConfig {
   colorByVariance: boolean;
   showDebugInfo: boolean;
 }
+
+// Default visualization configuration
+export };

@@ -5,7 +5,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Epic 19: Authentication Enhancement & Security Hardening
  */
 import { useMemo, useEffect, useState } from 'react';
-import { PasswordComplexityValidator } from '../auth/PasswordComplexityValidator.js';
+import { PasswordComplexityValidator } from '../auth/PasswordComplexityValidator';
 // ========================================
 // Strength Meter Component
 // ========================================

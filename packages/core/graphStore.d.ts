@@ -1,9 +1,22 @@
 import { Edge, Node } from 'reactflow';
 import { ProjectMetadata, ProjectSettings, SaveProjectOptions } from './projectManager';
 import { Template, TemplateSaveData, TemplateInstantiationOptions, GraphData } from './types/TemplateTypes';
+import { 
+  StickyNote,
+  GraphAnnotations,
+  NodeLabelConfig,
+  NodeLabelPreferences,
+  RegionGroup,
+  RegionGroupPreferences,
+  ConnectionLabel,
+  ConnectionAnnotation,
+  ConnectionAnnotationPreferences
+} from './types/CollaborationTypes';
 export interface GraphState {
     nodes: Node[];
     edges: Edge[];
+    stickyNotes: StickyNote[];
+    annotations: GraphAnnotations;
     currentProject: ProjectMetadata | null;
     projectSettings: ProjectSettings;
     hasUnsavedChanges: boolean;
@@ -19,6 +32,30 @@ export interface GraphState {
     reorderVariations: (nodeId: string, fromIndex: number, toIndex: number) => void;
     duplicateNode: (nodeId: string) => void;
     deleteNode: (nodeId: string) => void;
+    setStickyNotes: (notes: StickyNote[]) => void;
+    addStickyNote: (note: StickyNote) => void;
+    updateStickyNote: (noteId: string, updates: Partial<StickyNote>) => void;
+    deleteStickyNote: (noteId: string) => void;
+    setNodeLabelConfigs: (configs: Record<string, NodeLabelConfig>) => void;
+    addNodeLabelConfig: (config: NodeLabelConfig) => void;
+    updateNodeLabelConfig: (labelId: string, updates: Partial<NodeLabelConfig>) => void;
+    deleteNodeLabelConfig: (labelId: string) => void;
+    setLabelPreferences: (preferences: Partial<NodeLabelPreferences>) => void;
+    setRegionGroups: (groups: RegionGroup[]) => void;
+    addRegionGroup: (group: RegionGroup) => void;
+    updateRegionGroup: (groupId: string, updates: Partial<RegionGroup>) => void;
+    deleteRegionGroup: (groupId: string) => void;
+    setRegionGroupPreferences: (preferences: Partial<RegionGroupPreferences>) => void;
+    setConnectionLabels: (labels: ConnectionLabel[]) => void;
+    addConnectionLabel: (label: ConnectionLabel) => void;
+    updateConnectionLabel: (labelId: string, updates: Partial<ConnectionLabel>) => void;
+    removeConnectionLabel: (labelId: string) => void;
+    setConnectionAnnotations: (annotations: ConnectionAnnotation[]) => void;
+    addConnectionAnnotation: (annotation: ConnectionAnnotation) => void;
+    updateConnectionAnnotation: (annotationId: string, updates: Partial<ConnectionAnnotation>) => void;
+    removeConnectionAnnotation: (annotationId: string) => void;
+    setConnectionAnnotationPreferences: (preferences: Partial<ConnectionAnnotationPreferences>) => void;
+    connectionAnnotationPreferences?: ConnectionAnnotationPreferences;
     saveProject: (options: SaveProjectOptions) => Promise<{
         success: boolean;
         error?: string;
@@ -48,9 +85,9 @@ export interface GraphState {
         success: boolean;
         error?: string;
     }>;
-    listUserProjects: (userId?: number, query?: any) => Promise<{
+    listUserProjects: (userId?: number, query?: Record<string, unknown>) => Promise<{
         success: boolean;
-        projects?: any[];
+        projects?: ProjectMetadata[];
         error?: string;
     }>;
     newProject: () => void;

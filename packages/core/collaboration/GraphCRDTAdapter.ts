@@ -13,7 +13,7 @@ export interface CollaborativeGraphOptions {
   documentId: string;
   userId: string;
   onGraphChange?: (graph: Graph) => void;
-  onUserPresence?: (users: Map<string, any>) => void;
+  onUserPresence?: (users: Map<string, unknown>) => void;
   onConnectionStatus?: (connected: boolean) => void;
 }
 
@@ -174,7 +174,7 @@ export class GraphCRDTAdapter {
   /**
    * Extract node metadata
    */
-  private extractNodeMetadata(node: Node): Record<string, any> {
+  private extractNodeMetadata(node: Node): Record<string, unknown> {
     return {
       created: Date.now(),
       lastModified: Date.now()
@@ -184,7 +184,7 @@ export class GraphCRDTAdapter {
   /**
    * Extract edge metadata
    */
-  private extractEdgeMetadata(edge: Edge): Record<string, any> {
+  private extractEdgeMetadata(edge: Edge): Record<string, unknown> {
     return {
       created: Date.now()
     };

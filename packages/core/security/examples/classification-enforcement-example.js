@@ -5,8 +5,8 @@
  * for securing data access based on classification levels
  */
 import express from 'express';
-import { ClassificationEnforcer, createClassificationEnforcer } from '../ClassificationEnforcer.js';
-import { createClassificationEnforcementMiddleware, createAccessControlMiddleware, createOperationValidationMiddleware, enforceClassification } from '../ClassificationEnforcementMiddleware.js';
+import { ClassificationEnforcer, createClassificationEnforcer } from '../ClassificationEnforcer';
+import { createClassificationEnforcementMiddleware, createAccessControlMiddleware, createOperationValidationMiddleware, enforceClassification } from '../ClassificationEnforcementMiddleware';
 // Create Express app
 const app = express();
 // Initialize enforcer with production settings

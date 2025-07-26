@@ -18,16 +18,16 @@
  * Enhanced Activity Timeline Service
  */
 export class ActivityTimelineService {
-    static instance;
-    activities = new Map();
-    sessions = new Map();
-    listeners = new Map();
-    currentSession = null;
+    static instance: ActivityTimelineService;
+    activities: Map<string, any> = new Map();
+    sessions: Map<string, any> = new Map();
+    listeners: Map<string, any> = new Map();
+    currentSession: any = null;
     constructor() {
         this.initializeSession();
         this.startBackgroundProcessing();
     }
-    static getInstance() {
+    static getInstance(): ActivityTimelineService {
         if (!ActivityTimelineService.instance) {
             ActivityTimelineService.instance = new ActivityTimelineService();
         }
@@ -36,7 +36,7 @@ export class ActivityTimelineService {
     /**
      * Track a new activity event
      */
-    async trackActivity(event) {
+    async trackActivity(event: any): Promise<any> {
         const fullEvent = {
             id: this.generateEventId(),
             timestamp: new Date(),

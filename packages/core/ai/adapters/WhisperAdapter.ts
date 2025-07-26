@@ -5,7 +5,18 @@
  * Adapter for OpenAI Whisper models for audio transcription and translation
  */
 
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelMetadata, ModelCapabilities, CostEstimate, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
+import { 
+  BaseAIModel,
+  AIModelType,
+  AIModelProvider,
+  AIModelStatus,
+  ModelMetadata,
+  ModelCapabilities,
+  CostEstimate,
+  ModelInitializationError,
+  ModelProcessingError,
+  ModelUnavailableError
+} from '../BaseAIModel';
 
 export interface WhisperConfig {
   apiKey: string;
@@ -465,12 +476,15 @@ export class WhisperAdapter extends BaseAIModel {
     // Check file type if it's a File or Blob
     if ((file instanceof File || file instanceof Blob) && file.type) {
       if (!this.supportedFormats.includes(file.type)) {
-        throw new Error(`Unsupported audio format: ${file.type}. Supported formats: ${this.supportedFormats.join(', ')}`);
+        throw new Error(
+          `Unsupported audio format: ${file.type}. Supported formats: ${this.supportedFormats.join(',
+          '
+        )}`);
       }
     }
   }
 
-  private _processOptions(options?: WhisperRequestOptions): Required<Pick<WhisperRequestOptions, 'model' | 'response_format' | 'task' | 'temperature'>> & WhisperRequestOptions {
+  private _processOptions(options?: WhisperRequestOptions): Required<Pick<WhisperRequestOptions, 'model' | 'response_format' | 'task' | 'temperature'>> & Omit<WhisperRequestOptions, 'file'> {
     const defaults = {
       model: 'whisper-1' as const,
       response_format: 'verbose_json' as const,
@@ -486,7 +500,11 @@ export class WhisperAdapter extends BaseAIModel {
     return processed;
   }
 
-  private async _transcribeAudio(file: File | Blob | ArrayBuffer, options: WhisperRequestOptions): Promise<any> {
+  private async _transcribeAudio(
+    file: File | Blob | ArrayBuffer,
+    options: Omit<WhisperRequestOptions,
+    'file'>
+  ): Promise<any> {
     const formData = new FormData();
     
     // Convert ArrayBuffer to Blob if necessary

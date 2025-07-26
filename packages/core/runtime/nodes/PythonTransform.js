@@ -2,14 +2,14 @@
  * PythonTransform Node Implementation
  * Epic 8 Story 8.1.4: Python executor integration
  */
-import { AdvancedRuntimeNode } from '../advanced.js';
-import { IOSpecBuilder, AdvancedIOHandler } from '../io-system.js';
-import { PythonExecutorClient, pythonExecutorClient } from '../../python-executor-client.js';
+import { AdvancedRuntimeNode } from '../advanced';
+import { IOSpecBuilder, AdvancedIOHandler } from '../io-system';
+import { PythonExecutorClient, pythonExecutorClient } from '../../python-executor-client';
 export class PythonTransformNode extends AdvancedRuntimeNode {
     pythonClient;
     pythonConfig;
     ioHandler;
-    constructor(id, config) {
+    constructor(id: string, config: any) {
         // Create AdvancedNodeConfig for base class
         const advancedConfig = {
             deterministic: true, // Python execution is deterministic with same inputs
@@ -77,7 +77,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
     /**
      * Main execution method required by AdvancedRuntimeNode
      */
-    async run(context) {
+    async run(context: any) {
         // Record this node's execution
         context.executionMeta.nodeExecutionOrder.push(this.id);
         // Execute with performance tracking
@@ -135,7 +135,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
     /**
      * Get typed input helper
      */
-    getTypedInput(inputId, context) {
+    getTypedInput(inputId: string, context: any) {
         // For now, we'll read from inputs directly
         if (context.inputs && typeof context.inputs === 'object' && inputId in context.inputs) {
             return String(context.inputs[inputId]);
@@ -145,14 +145,14 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
     /**
      * Set output helper
      */
-    setOutput(outputId, value, context) {
+    setOutput(outputId: string, value: any, context: any) {
         // Store output in context for later retrieval
         if (!context.outputs) {
             context.outputs = {};
         }
         context.outputs[outputId] = value;
     }
-    async executeCore(context) {
+    async executeCore(context: any) {
         const inputData = this.getTypedInput('input', context);
         // Validate that we have code to execute
         if (!this.pythonConfig.code || this.pythonConfig.code.trim() === '') {
@@ -204,7 +204,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
     /**
      * Extract relevant context data for Python execution
      */
-    extractContextForPython(context) {
+    extractContextForPython(context: any) {
         return {
             variables: context.variables,
             nodeId: this.id,
@@ -215,7 +215,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
     /**
      * Process the Python execution result
      */
-    processResult(result) {
+    processResult(result: any) {
         // Ensure result is a string
         if (typeof result === 'string') {
             return result;
@@ -230,7 +230,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
     /**
      * Handle Python execution failure
      */
-    handleExecutionFailure(result) {
+    handleExecutionFailure(result: any) {
         const fallbackBehavior = this.pythonConfig.pythonConfig?.fallbackBehavior || 'error';
         switch (fallbackBehavior) {
             case 'skip':
@@ -259,7 +259,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
     /**
      * Handle client errors (network, service unavailable, etc.)
      */
-    handleClientError(error) {
+    handleClientError(error: any) {
         const fallbackBehavior = this.pythonConfig.pythonConfig?.fallbackBehavior || 'error';
         switch (fallbackBehavior) {
             case 'skip':
@@ -280,7 +280,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
     /**
      * Log security events from Python execution
      */
-    logSecurityEvents(events, ______context) {
+    logSecurityEvents(events: any[], ______context: any) {
         for (const event of events) {
             console.warn(`Python security event in node ${this.id}:`, {
                 level: event.level,
@@ -294,7 +294,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
     /**
      * Log warnings from Python execution
      */
-    logWarnings(warnings, ______context) {
+    logWarnings(warnings: any[], ______context: any) {
         for (const warning of warnings) {
             console.warn(`Python warning in node ${this.id}:`, {
                 warning,
@@ -311,7 +311,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
     /**
      * Update node configuration
      */
-    updateConfig(newConfig) {
+    updateConfig(newConfig: any) {
         this.pythonConfig = { ...this.pythonConfig, ...newConfig };
         // Update Python client if executor URL changed
         if (newConfig.pythonConfig?.executorUrl &&
@@ -379,7 +379,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
     /**
      * Get execution statistics
      */
-    getExecutionStats(context) {
+    getExecutionStats(context: any) {
         const state = this.getState(context);
         const executions = state?.executions || [];
         if (executions.length === 0) {
@@ -403,7 +403,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
     /**
      * Store execution metadata for statistics
      */
-    storeExecutionMetadata(context, success, executionTime, securityViolations) {
+    storeExecutionMetadata(context: any, success: boolean, executionTime: number, securityViolations: number) {
         const state = this.getState(context) || {};
         if (!state.executions) {
             state.executions = [];

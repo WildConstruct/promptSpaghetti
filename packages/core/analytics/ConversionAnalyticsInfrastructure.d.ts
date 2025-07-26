@@ -21,6 +21,21 @@ interface AnalyticsEvent {
     sessionId: string;
     properties: Record<string, any>;
 }
+interface MetricQuery {
+    metric: string;
+    filters?: Record<string, any>;
+    timeRange?: {
+        start: number;
+        end: number;
+    };
+    groupBy?: string[];
+}
+interface MetricResult {
+    metric: string;
+    value: number;
+    timestamp: number;
+    dimensions?: Record<string, any>;
+}
 interface AnalyticsInfrastructure {
     processEvent(event: AnalyticsEvent): Promise<void>;
     getMetrics(query: MetricQuery): Promise<MetricResult[]>;
@@ -201,7 +216,10 @@ export declare class ConversionMetricsCalculator {
     private config;
     private metricCache;
     constructor(config: MetricCalculationConfig);
-    calculateMetrics(query: ConversionMetricQuery, events: FlexibleConversionEvent[]): Promise<ConversionMetricResult[]>;
+    calculateMetrics(
+      query: ConversionMetricQuery,
+      events: FlexibleConversionEvent[]
+    ): Promise<ConversionMetricResult[]>;
     private calculateSingleMetric;
     private getMetricCalculator;
     private applyFilters;
@@ -224,6 +242,7 @@ export interface ProcessingConfig {
     transformation: TransformationConfig;
     aggregation: AggregationConfig;
     storage: StorageConfig;
+    calculations: any;
     batchSize: number;
     continueOnError: boolean;
     forwardToEpic1: boolean;
@@ -330,10 +349,5 @@ export interface StageProcessingResult {
 export interface MetricCalculator {
     calculate(events: FlexibleConversionEvent[], query: ConversionMetricQuery): Promise<number>;
 }
-export declare const createConversionAnalyticsInfrastructure: (epic1Analytics: AnalyticsInfrastructure, config: {
-    dataWarehouse: DataWarehouseConfig;
-    api: AnalyticsAPIConfig;
-    processing: ProcessingConfig;
-}) => ConversionAnalyticsInfrastructure;
-export default ConversionAnalyticsInfrastructure;
+export declare export default ConversionAnalyticsInfrastructure;
 //# sourceMappingURL=ConversionAnalyticsInfrastructure.d.ts.map

@@ -245,7 +245,11 @@ export interface MappingEngine {
     /**
      * Batch translate to multiple platforms
      */
-    translateBatch(graph: any, targetPlatforms: string[], config?: AdaptorConfig): Promise<Record<string, PlatformPrompt>>;
+    translateBatch(
+      graph: any,
+      targetPlatforms: string[],
+      config?: AdaptorConfig
+    ): Promise<Record<string, PlatformPrompt>>;
     /**
      * Validate translation without executing
      */
@@ -299,8 +303,8 @@ export declare const PlatformCapabilitiesSchema: z.ZodObject<{
     negativePromptSupport: z.ZodBoolean;
     customParameters: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
 }, "strip", z.ZodTypeAny, {
-    version: string;
     platform: string;
+    version: string;
     parameterRanges: Record<string, [number, number]>;
     features: string[];
     styleSupport: boolean;
@@ -309,8 +313,8 @@ export declare const PlatformCapabilitiesSchema: z.ZodObject<{
     supportedAspectRatios?: string[] | undefined;
     customParameters?: Record<string, unknown> | undefined;
 }, {
-    version: string;
     platform: string;
+    version: string;
     parameterRanges: Record<string, [number, number]>;
     features: string[];
     styleSupport: boolean;
@@ -339,7 +343,7 @@ export declare const ValidationResultSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         code: string;
         message: string;
-        severity: "warning" | "error" | "info";
+        severity: "error" | "warning" | "info";
         source?: {
             nodeId?: string | undefined;
             property?: string | undefined;
@@ -348,7 +352,7 @@ export declare const ValidationResultSchema: z.ZodObject<{
     }, {
         code: string;
         message: string;
-        severity: "warning" | "error" | "info";
+        severity: "error" | "warning" | "info";
         source?: {
             nodeId?: string | undefined;
             property?: string | undefined;
@@ -372,63 +376,63 @@ export declare const ValidationResultSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         code: string;
         message: string;
-        optimization?: string | undefined;
         source?: {
             nodeId?: string | undefined;
             property?: string | undefined;
         } | undefined;
+        optimization?: string | undefined;
     }, {
         code: string;
         message: string;
-        optimization?: string | undefined;
         source?: {
             nodeId?: string | undefined;
             property?: string | undefined;
         } | undefined;
+        optimization?: string | undefined;
     }>, "many">;
     compatibilityScore: z.ZodNumber;
 }, "strip", z.ZodTypeAny, {
+    warnings: {
+        code: string;
+        message: string;
+        source?: {
+            nodeId?: string | undefined;
+            property?: string | undefined;
+        } | undefined;
+        optimization?: string | undefined;
+    }[];
     valid: boolean;
     errors: {
         code: string;
         message: string;
-        severity: "warning" | "error" | "info";
+        severity: "error" | "warning" | "info";
         source?: {
             nodeId?: string | undefined;
             property?: string | undefined;
         } | undefined;
         suggestion?: string | undefined;
-    }[];
-    warnings: {
-        code: string;
-        message: string;
-        optimization?: string | undefined;
-        source?: {
-            nodeId?: string | undefined;
-            property?: string | undefined;
-        } | undefined;
     }[];
     compatibilityScore: number;
 }, {
+    warnings: {
+        code: string;
+        message: string;
+        source?: {
+            nodeId?: string | undefined;
+            property?: string | undefined;
+        } | undefined;
+        optimization?: string | undefined;
+    }[];
     valid: boolean;
     errors: {
         code: string;
         message: string;
-        severity: "warning" | "error" | "info";
+        severity: "error" | "warning" | "info";
         source?: {
             nodeId?: string | undefined;
             property?: string | undefined;
         } | undefined;
         suggestion?: string | undefined;
-    }[];
-    warnings: {
-        code: string;
-        message: string;
-        optimization?: string | undefined;
-        source?: {
-            nodeId?: string | undefined;
-            property?: string | undefined;
-        } | undefined;
     }[];
     compatibilityScore: number;
 }>;
@@ -443,36 +447,36 @@ export declare const PlatformPromptSchema: z.ZodObject<{
         qualityScore: z.ZodNumber;
         optimizations: z.ZodArray<z.ZodString, "many">;
     }, "strip", z.ZodTypeAny, {
-        timestamp: Date;
         sourceHash: string;
+        timestamp: Date;
         qualityScore: number;
         optimizations: string[];
     }, {
-        timestamp: Date;
         sourceHash: string;
+        timestamp: Date;
         qualityScore: number;
         optimizations: string[];
     }>;
 }, "strip", z.ZodTypeAny, {
-    prompt: string;
     metadata: {
-        timestamp: Date;
         sourceHash: string;
+        timestamp: Date;
         qualityScore: number;
         optimizations: string[];
     };
     platform: string;
+    prompt: string;
     parameters: Record<string, unknown>;
     negativePrompt?: string | undefined;
 }, {
-    prompt: string;
     metadata: {
-        timestamp: Date;
         sourceHash: string;
+        timestamp: Date;
         qualityScore: number;
         optimizations: string[];
     };
     platform: string;
+    prompt: string;
     parameters: Record<string, unknown>;
     negativePrompt?: string | undefined;
 }>;
@@ -484,13 +488,13 @@ export declare const AdaptorConfigSchema: z.ZodObject<{
     customMappings: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
 }, "strip", z.ZodTypeAny, {
     qualityPreference?: number | undefined;
-    stylePreference?: "minimal" | "default" | "artistic" | "photorealistic" | undefined;
+    stylePreference?: "default" | "artistic" | "photorealistic" | "minimal" | undefined;
     platformOverrides?: Record<string, unknown> | undefined;
     enableOptimizations?: boolean | undefined;
     customMappings?: Record<string, unknown> | undefined;
 }, {
     qualityPreference?: number | undefined;
-    stylePreference?: "minimal" | "default" | "artistic" | "photorealistic" | undefined;
+    stylePreference?: "default" | "artistic" | "photorealistic" | "minimal" | undefined;
     platformOverrides?: Record<string, unknown> | undefined;
     enableOptimizations?: boolean | undefined;
     customMappings?: Record<string, unknown> | undefined;
@@ -502,7 +506,13 @@ export declare class PromptTargetingError extends Error {
     code: string;
     platform?: string | undefined;
     details?: Record<string, unknown> | undefined;
-    constructor(message: string, code: string, platform?: string | undefined, details?: Record<string, unknown> | undefined);
+    constructor(
+      message: string,
+      code: string,
+      platform?: string | undefined,
+      details?: Record<string,
+      unknown> | undefined
+    );
 }
 export declare class AdaptorError extends PromptTargetingError {
     adaptorId: string;

@@ -23,21 +23,7 @@ interface CreateToggleData {
   enabled: boolean;
 }
 
-export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({
-  isOpen,
-  onClose,
-  onSubmit
-}) => {
-  const [formData, setFormData] = useState<CreateToggleData>({
-    key: '',
-    name: '',
-    description: '',
-    type: 'boolean',
-    value: { enabled: false },
-    claudeImpact: 'NONE',
-    enabled: false
-  });
-
+export 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -317,6 +303,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({
                 ...prev,
                 value: { ...prev.value, rules }
               }))}
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               onTestRule={async (_rules) => {
                 // Mock test implementation
                 return {

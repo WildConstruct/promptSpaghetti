@@ -21,7 +21,7 @@ export interface AdvancedNodeData {
     id: string;
     type: string;
     config: AdvancedNodeConfig;
-    data: Record<string, any>;
+    data: Record<string, unknown>;
     metadata?: {
         version: string;
         created: string;
@@ -33,11 +33,11 @@ export interface AdvancedNodeData {
  */
 export interface AdvancedExecutionContext extends ExecutionContext {
     /** State storage for stateful nodes (nodeId -> state) */
-    nodeStates: Map<string, any>;
+    nodeStates: Map<string, unknown>;
     /** Current evaluation depth (for cycle detection) */
     evaluationDepth: number;
     /** Performance cache for expensive operations (key -> result) */
-    cache: Map<string, any>;
+    cache: Map<string, unknown>;
     /** Pseudorandom number generator function for deterministic execution */
     prng: () => number;
     /** Execution metadata and debugging info */
@@ -48,9 +48,9 @@ export interface AdvancedExecutionContext extends ExecutionContext {
         performanceMetrics: Map<string, number>;
     };
     /** Optional inputs for nodes */
-    inputs?: Record<string, any>;
+    inputs?: Record<string, unknown>;
     /** Optional outputs storage */
-    outputs?: Record<string, any>;
+    outputs?: Record<string, unknown>;
 }
 /**
  * Abstract base class for all advanced rule nodes in Epic 7
@@ -81,7 +81,7 @@ export declare abstract class AdvancedRuntimeNode<TOutput = unknown> extends Run
     /**
      * Set the current state for this node in the execution context
      */
-    protected setState(ctx: AdvancedExecutionContext, state: any): void;
+    protected setState(ctx: AdvancedExecutionContext, state: unknown): void;
     /**
      * Create a seeded random number generator for this node
      * Uses node ID and execution context for deterministic behavior
@@ -113,22 +113,22 @@ export declare abstract class AdvancedRuntimeNode<TOutput = unknown> extends Run
  * Concrete implementation of AdvancedExecutionContext for tests and direct instantiation
  */
 export declare class AdvancedExecutionContextImpl implements AdvancedExecutionContext {
-    variables: Record<string, any>;
+    variables: Record<string, unknown>;
     seed: string | number;
     nodeStates: Map<string, any>;
     evaluationDepth: number;
     cache: Map<string, any>;
     executionMeta: {
         startTime: number;
+        executionId: string;
         nodeExecutionOrder: string[];
         performanceMetrics: Map<string, number>;
     };
-    inputs?: Record<string, any>;
-    outputs?: Record<string, any>;
-    constructor(seed: string | number, variables?: Record<string, any>);
+    inputs?: Record<string, unknown>;
+    outputs?: Record<string, unknown>;
+    constructor(seed: string | number, variables?: Record<string, unknown>);
 }
 export { AdvancedExecutionContextImpl as AdvancedExecutionContext };
-export type { AdvancedExecutionContext as AdvancedExecutionContextInterface };
 /**
  * Utility functions for working with advanced execution contexts
  */
@@ -144,7 +144,7 @@ export declare class AdvancedExecutionUtils {
     /**
      * Check for potential infinite loops in stateful node execution
      */
-    static detectInfiniteLoop(ctx: AdvancedExecutionContext, _______nodeId: string): boolean;
+    static detectInfiniteLoop(ctx: AdvancedExecutionContext, nodeId: string): boolean;
     /**
      * Get execution statistics from the context
      */
@@ -161,16 +161,16 @@ export declare class AdvancedExecutionUtils {
 export declare class ValidationHelpers {
     static createValidResult(): ValidationResult;
     static createInvalidResult(errors: string[], warnings?: string[]): ValidationResult;
-    static validateRequired(value: any, fieldName: string): string[];
-    static validateArray(value: any, fieldName: string, minLength?: number): string[];
-    static validateNumericRange(value: any, fieldName: string, min?: number, max?: number): string[];
+    static validateRequired(value: unknown, fieldName: string): string[];
+    static validateArray(value: unknown, fieldName: string, minLength?: number): string[];
+    static validateNumericRange(value: unknown, fieldName: string, min?: number, max?: number): string[];
 }
 /**
  * Enhanced AdvancedRuntimeNode with I/O system integration
  */
 export declare abstract class AdvancedRuntimeNodeWithIO<TOutput = unknown> extends AdvancedRuntimeNode<TOutput> {
     protected ioHandler: unknown;
-    constructor(id: string, config: AdvancedNodeConfig, ioSpec?: any);
+    constructor(id: string, config: AdvancedNodeConfig, ioSpec?: unknown);
     /**
      * Validate node configuration including I/O specification
      */
@@ -184,7 +184,13 @@ export declare abstract class AdvancedRuntimeNodeWithIO<TOutput = unknown> exten
  * Standard node data serialization helpers
  */
 export declare class SerializationHelpers {
-    static createAdvancedNodeData(id: string, type: string, config: AdvancedNodeConfig, data: Record<string, any>): AdvancedNodeData;
+    static createAdvancedNodeData(
+      id: string,
+      type: string,
+      config: AdvancedNodeConfig,
+      data: Record<string,
+      unknown>
+    ): AdvancedNodeData;
     static validateSerializedData(data: AdvancedNodeData): ValidationResult;
 }
 //# sourceMappingURL=advanced.d.ts.map

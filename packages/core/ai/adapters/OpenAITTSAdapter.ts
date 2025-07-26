@@ -5,7 +5,18 @@
  * Adapter for OpenAI's TTS models with voice selection and SSML support
  */
 
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelMetadata, ModelCapabilities, CostEstimate, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
+import { 
+  BaseAIModel,
+  AIModelType,
+  AIModelProvider,
+  AIModelStatus,
+  ModelMetadata,
+  ModelCapabilities,
+  CostEstimate,
+  ModelInitializationError,
+  ModelProcessingError,
+  ModelUnavailableError
+} from '../BaseAIModel';
 
 export interface OpenAITTSConfig {
   apiKey: string;
@@ -172,8 +183,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
       const generationTime = Date.now() - startTime;
       
       // Process and analyze audio data
-      const audioMetadata = await this._analyzeAudioData(audioData, processedOptions.response_format!);
-      
+            
       const result: TTSGenerationResult = {
         audio: {
           data: audioData,
@@ -406,7 +416,10 @@ export class OpenAITTSAdapter extends BaseAIModel {
     return JSON.stringify(input);
   }
 
-  private _processOptions(options?: TTSRequestOptions, text?: string): Required<Pick<TTSRequestOptions, 'voice' | 'model' | 'response_format' | 'speed'>> & TTSRequestOptions {
+  private _processOptions(
+    options?: TTSRequestOptions,
+    text?: string
+  ): Required<Pick<TTSRequestOptions, 'voice' | 'model' | 'response_format' | 'speed' | 'text'>> & Omit<TTSRequestOptions, 'text'> & { text: string } {
     const defaults = {
       voice: 'alloy' as const,
       model: 'tts-1' as const,
@@ -415,6 +428,9 @@ export class OpenAITTSAdapter extends BaseAIModel {
     };
 
     const processed = { ...defaults, ...options };
+
+    // Set text if provided, or ensure it exists
+    processed.text = text || processed.text || ''; // Ensure text is always a string
 
     // Validate voice
     const validVoices = ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer'];
@@ -431,7 +447,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
     // Validate speed
     processed.speed = Math.max(0.25, Math.min(4.0, processed.speed));
 
-    return processed;
+    return processed as Required<Pick<TTSRequestOptions, 'voice' | 'model' | 'response_format' | 'speed' | 'text'>> & Omit<TTSRequestOptions, 'text'> & { text: string };
   }
 
   private async _generateSpeech(text: string, options: TTSRequestOptions): Promise<ArrayBuffer> {

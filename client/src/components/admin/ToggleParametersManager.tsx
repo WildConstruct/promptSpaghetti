@@ -42,8 +42,8 @@ export enum ToggleType {
 interface ToggleParametersProps {
   toggleId: string;
   toggleType: ToggleType;
-  currentValue: Record<string, any>;
-  onParametersChange: (value: Record<string, any>) => void;
+  currentValue: Record<string, unknown>;
+  onParametersChange: (value: Record<string, unknown>) => void;
   onSave?: () => void;
   readonly?: boolean;
 }
@@ -113,7 +113,7 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({
   onSave,
   readonly = false
 }) => {
-  const [parameters, setParameters] = useState<Record<string, any>>(currentValue);
+  const [parameters, setParameters] = useState<Record<string, unknown>>(currentValue);
   const [validation, setValidation] = useState<{ isValid: boolean; errors: string[] }>({ isValid: true, errors: [] });
   const [previewMode, setPreviewMode] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -121,9 +121,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({
   useEffect(() => {
     setParameters(currentValue);
     validateParameters(currentValue);
-  }, [currentValue, toggleType]);
+  }, [currentValue, toggleType, validateParameters]);
 
-  const validateParameters = useCallback((params: Record<string, any>) => {
+  const validateParameters = useCallback((params: Record<string, unknown>) => {
     const errors: string[] = [];
     let isValid = true;
 
@@ -145,7 +145,10 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({
 
       case ToggleType.MULTIVARIATE:
         const multivariateParams = params as MultivariateParams;
-        const totalPercentage = multivariateParams.variants?.reduce((sum, v) => sum + (v.enabled ? v.percentage : 0), 0) || 0;
+        const totalPercentage = multivariateParams.variants?.reduce(
+          (sum,
+          v
+        ) => sum + (v.enabled ? v.percentage : 0), 0) || 0;
         if (Math.abs(totalPercentage - 100) > 0.01) {
           errors.push(`Total variant percentages must equal 100% (currently ${totalPercentage.toFixed(1)}%)`);
           isValid = false;
@@ -183,7 +186,7 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({
     return { isValid, errors };
   }, [toggleType]);
 
-  const handleParametersUpdate = useCallback((newParams: Record<string, any>) => {
+  const handleParametersUpdate = useCallback((newParams: Record<string, unknown>) => {
     setParameters(newParams);
     const validation = validateParameters(newParams);
     
@@ -668,7 +671,7 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({
                       ...params,
                       recurrence: {
                         ...params.recurrence,
-                        type: e.target.value as any,
+                        type: e.target.value as 'none' | 'daily' | 'weekly' | 'monthly',
                         interval: params.recurrence?.interval || 1
                       }
                     })}
@@ -767,7 +770,7 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({
                   value={params.evaluationMode || 'first_match'}
                   onChange={(e) => handleParametersUpdate({
                     ...params,
-                    evaluationMode: e.target.value as any
+                    evaluationMode: e.target.value as 'first_match' | 'all_rules' | 'weighted'
                   })}
                   disabled={readonly}
                   className="form-control"
@@ -784,7 +787,7 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({
                   value={params.fallbackBehavior || 'default'}
                   onChange={(e) => handleParametersUpdate({
                     ...params,
-                    fallbackBehavior: e.target.value as any
+                    fallbackBehavior: e.target.value as 'default' | 'disable' | 'error'
                   })}
                   disabled={readonly}
                   className="form-control"
@@ -888,7 +891,7 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({
                         value={rule.operator}
                         onChange={(e) => updateRule(index, {
                           ...rule,
-                          operator: e.target.value as any
+                          operator: e.target.value as 'equals' | 'not_equals' | 'in' | 'not_in' | 'contains' | 'not_contains' | 'starts_with' | 'ends_with' | 'greater_than' | 'less_than' | 'greater_equal' | 'less_equal'
                         })}
                         disabled={readonly || !rule.enabled}
                         className="form-control"

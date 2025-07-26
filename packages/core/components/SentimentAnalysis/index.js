@@ -6,6 +6,6 @@
  *
  * Task: E16-1753114247016-0B348A - Create sentiment analysis
  */
-export { SentimentDashboard } from './SentimentDashboard.js';
+export { SentimentDashboard } from './SentimentDashboard';
 // Re-export service for convenience
-export { SentimentAnalysisService } from '../../services/SentimentAnalysisService.js';
+export { SentimentAnalysisService } from '../../services/SentimentAnalysisService';

@@ -1,9 +1,9 @@
 // Epic 12 - LLM Agent Randomizer System
 // Story 12.3 - Parser Implementation
 // Main parser interface that coordinates lexer, AST builder, and semantic analyzer
-import { GraphLexer } from './lexer/graph-lexer.js';
-import { ASTBuilder } from './ast/ast-builder.js';
-import { SemanticAnalyzer } from './semantic/semantic-analyzer.js';
+import { GraphLexer } from './lexer/graph-lexer';
+import { ASTBuilder } from './ast/ast-builder';
+import { SemanticAnalyzer } from './semantic/semantic-analyzer';
 export class GraphParser {
     options;
     constructor(options = {}) {

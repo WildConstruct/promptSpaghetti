@@ -112,41 +112,41 @@ describe('EvidenceAccessAuditService', () => {
   beforeEach(() => {
     // Setup mocks
     mockAuditService = {
-      log: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown),
-      logEvent: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown),
-      logSecurityEvent: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown),
-      getAuditLogs: jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown),
-      getAuditStats: jest.fn<unknown[], unknown>().mockResolvedValue({} as unknown),
-      logAction: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown),
-      logResourceAccess: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown)
+      log: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown),
+      logEvent: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown),
+      logSecurityEvent: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown),
+      getAuditLogs: jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown as unknown),
+      getAuditStats: jest.fn<unknown[], unknown>().mockResolvedValue({} as unknown as unknown),
+      logAction: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown),
+      logResourceAccess: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown)
     } as any;
     mockAccessControlFramework = {} as jest.Mocked<AccessControlFramework>;
     mockEvidenceVersioningService = {} as jest.Mocked<EvidenceVersioningService>;
     mockDatabaseService = {
-      getConnection: jest.fn<unknown[], unknown>().mockResolvedValue(mockConnection as unknown),
-      query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown),
+      getConnection: jest.fn<unknown[], unknown>().mockResolvedValue(mockConnection as unknown as unknown),
+      query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown as unknown),
       transaction: jest.fn<unknown[], unknown>(),
-      healthCheck: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown),
-      initializeSchema: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown),
-      close: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown),
-      findUserById: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown),
+      healthCheck: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown as unknown),
+      initializeSchema: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown),
+      close: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown),
+      findUserById: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown as unknown),
       createUser: jest.fn<unknown[], unknown>(),
       updateUser: jest.fn<unknown[], unknown>()
     } as any;
     mockUserAccessTransparency = {
-      recordDataAccess: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown)
+      recordDataAccess: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown)
     } as any;
 
     // Setup database connection mock
     mockConnection = {
-      query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown),
+      query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown as unknown),
       release: jest.fn<unknown[], unknown>()
     };
     
     // Configure mock methods
-    (mockDatabaseService as any).getConnection.mockResolvedValue(mockConnection as unknown);
-    (mockAuditService as any).log.mockResolvedValue(undefined as unknown);
-    (mockUserAccessTransparency as any).recordDataAccess.mockResolvedValue(undefined as unknown);
+    (mockDatabaseService as any).getConnection.mockResolvedValue(mockConnection as unknown as unknown);
+    (mockAuditService as any).log.mockResolvedValue(undefined as unknown as unknown);
+    (mockUserAccessTransparency as any).recordDataAccess.mockResolvedValue(undefined as unknown as unknown);
 
     // Create service instance
     auditService = new EvidenceAccessAuditService(
@@ -371,7 +371,7 @@ describe('EvidenceAccessAuditService', () => {
         }
       ];
       
-      mockConnection.query.mockResolvedValue({ rows: mockRows } as unknown);
+      mockConnection.query.mockResolvedValue({ rows: mockRows } as unknown as unknown);
 
       const result = await auditService.getAuditTrail({
         evidenceId: 'evidence789',
@@ -401,7 +401,7 @@ describe('EvidenceAccessAuditService', () => {
     });
 
     it('should apply multiple filters correctly', async () => {
-      mockConnection.query.mockResolvedValue({ rows: [] } as unknown);
+      mockConnection.query.mockResolvedValue({ rows: [] } as unknown as unknown);
 
       await auditService.getAuditTrail({
         evidenceId: 'evidence789',
@@ -447,7 +447,7 @@ describe('EvidenceAccessAuditService', () => {
         }
       ];
 
-      jest.spyOn(auditService, 'getAuditTrail').mockResolvedValue(mockEntries as EvidenceAccessAuditEntry[] as unknown);
+      jest.spyOn(auditService, 'getAuditTrail').mockResolvedValue(mockEntries as EvidenceAccessAuditEntry[] as unknown as unknown);
 
       const report = await auditService.generateAuditReport({
         dateFrom: new Date('2023-06-01'),
@@ -486,7 +486,7 @@ describe('EvidenceAccessAuditService', () => {
         processingTime: 100
       }));
 
-      jest.spyOn(auditService, 'getAuditTrail').mockResolvedValue(mockEntries as EvidenceAccessAuditEntry[] as unknown);
+      jest.spyOn(auditService, 'getAuditTrail').mockResolvedValue(mockEntries as EvidenceAccessAuditEntry[] as unknown as unknown);
 
       const report = await auditService.generateAuditReport({});
 
@@ -511,7 +511,7 @@ describe('EvidenceAccessAuditService', () => {
         }
       ];
 
-      jest.spyOn(auditService, 'getAuditTrail').mockResolvedValue(mockEntries as EvidenceAccessAuditEntry[] as unknown);
+      jest.spyOn(auditService, 'getAuditTrail').mockResolvedValue(mockEntries as EvidenceAccessAuditEntry[] as unknown as unknown);
 
       const report = await auditService.generateAuditReport({});
 
@@ -540,7 +540,7 @@ describe('EvidenceAccessAuditService', () => {
         }
       ];
 
-      jest.spyOn(auditService, 'getAuditTrail').mockResolvedValue(mockEntries as EvidenceAccessAuditEntry[] as unknown);
+      jest.spyOn(auditService, 'getAuditTrail').mockResolvedValue(mockEntries as EvidenceAccessAuditEntry[] as unknown as unknown);
 
       // Mock hash calculation to return expected values
       const originalCalculateChainHash = (auditService as any).calculateChainHash;
@@ -578,7 +578,7 @@ describe('EvidenceAccessAuditService', () => {
         }
       ];
 
-      jest.spyOn(auditService, 'getAuditTrail').mockResolvedValue(mockEntries as EvidenceAccessAuditEntry[] as unknown);
+      jest.spyOn(auditService, 'getAuditTrail').mockResolvedValue(mockEntries as EvidenceAccessAuditEntry[] as unknown as unknown);
 
       // Mock hash calculation
       (auditService as any).calculateChainHash = jest.fn<unknown[], unknown>()
@@ -610,7 +610,7 @@ describe('EvidenceAccessAuditService', () => {
     });
 
     it('should prevent SQL injection in audit queries', async () => {
-      mockConnection.query.mockResolvedValue({ rows: [] } as unknown);
+      mockConnection.query.mockResolvedValue({ rows: [] } as unknown as unknown);
 
       await auditService.getAuditTrail({
         evidenceId: 'evidence\'; DROP TABLE evidence_access_audit; --',

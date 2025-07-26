@@ -4,6 +4,8 @@ import { ValidationError } from '../validation';
 import { WebSocketStatusIcon, WebSocketDetails } from './WebSocketStatus';
 import { EncryptionStatusIcon, EncryptionDetails, EncryptionState } from './EncryptionStatus';
 import { ConnectionState } from '../websocket/WebSocketClient';
+import { RecentProjectsMenu } from './RecentProjects/RecentProjectsMenu';
+import { RecentProjectEntry } from '../managers/RecentProjectsManager';
 
 interface StatusBarProps {
   statusMessage: string;
@@ -13,6 +15,7 @@ interface StatusBarProps {
   onExportBundle?: () => void;
   onSaveProject?: () => void;
   onLoadProject?: () => void;
+  onLoadRecentProject?: (entry: RecentProjectEntry) => void;
   onNewProject?: () => void;
   hasUnsavedChanges?: boolean;
   currentProjectName?: string;
@@ -42,40 +45,7 @@ interface StatusBarProps {
   onBrowseTemplates?: () => void;
 }
 
-export const StatusBar: React.FC<StatusBarProps> = ({
-  statusMessage,
-  errors,
-  onPreview,
-  onSaveJson,
-  onExportBundle,
-  onSaveProject,
-  onLoadProject,
-  onNewProject,
-  hasUnsavedChanges,
-  currentProjectName,
-  onCorrections,
-  correctionsEnabled,
-  correctionsOpen,
-  onStats,
-  statsOpen,
-  onExtensions,
-  extensionsOpen,
-  connectionState,
-  queuedMessages,
-  onClearQueue,
-  onReconnect,
-  onDisconnect,
-  encryptionState,
-  onEncrypt,
-  onDecrypt,
-  onChangeAlgorithm,
-  onOptimization,
-  optimizationEnabled,
-  onSaveTemplate,
-  onBrowseTemplates
-}) => {
-  const [showWebSocketDetails, setShowWebSocketDetails] = useState(false);
-  const [showEncryptionDetails, setShowEncryptionDetails] = useState(false);
+export   const [showEncryptionDetails, setShowEncryptionDetails] = useState(false);
   const wsDetailsRef = useRef<HTMLDivElement>(null);
   const encryptionDetailsRef = useRef<HTMLDivElement>(null);
   
@@ -186,22 +156,26 @@ export const StatusBar: React.FC<StatusBarProps> = ({
         )}
         
         {onLoadProject && (
-          <button
-            onClick={onLoadProject}
-            title="Load project from .psg file"
-            style={{ 
-              marginRight: 16, 
-              padding: '6px 16px', 
-              background: '#eee', 
-              color: '#23272f', 
-              border: '1px solid #ccc', 
-              borderRadius: 4, 
-              fontWeight: 500, 
-              cursor: 'pointer' 
-            }}
-          >
-            📂 Load Project
-          </button>
+          <div style={{ display: 'inline-flex', marginRight: 16 }}>
+            <button
+              onClick={onLoadProject}
+              title="Load project from .psg file"
+              style={{ 
+                padding: '6px 16px', 
+                background: '#eee', 
+                color: '#23272f', 
+                border: '1px solid #ccc', 
+                borderRadius: '4px 0 0 4px', 
+                fontWeight: 500, 
+                cursor: 'pointer' 
+              }}
+            >
+              📂 Load Project
+            </button>
+            {onLoadRecentProject && (
+              <RecentProjectsMenu onLoadRecentProject={onLoadRecentProject} />
+            )}
+          </div>
         )}
 
         <button

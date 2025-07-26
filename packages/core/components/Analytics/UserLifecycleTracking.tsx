@@ -89,7 +89,7 @@ export interface StageCondition {
   type: ConditionType;
   field: string;
   operator: ConditionOperator;
-  value: any;
+  value: Error;
   weight: number; // 0-1
   required: boolean;
 }
@@ -301,7 +301,7 @@ export type TriggerType =
 export interface TriggerCondition {
   field: string;
   operator: ConditionOperator;
-  value: any;
+  value: Error;
   persistence: number; // days condition must persist
 }
 
@@ -379,7 +379,7 @@ export type TransformationMethod =
   | 'binning';
 
 export interface TransformationParameters {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export type WeightingScheme = 'equal' | 'performance_based' | 'dynamic' | 'user_defined';
@@ -506,7 +506,7 @@ export type ChannelType =
 
 export interface ChannelConstraint {
   constraint: string;
-  value: any;
+  value: Error;
   impact: number; // 0-1
 }
 
@@ -651,7 +651,7 @@ export interface DynamicSource {
 export type SourceType = 'api' | 'database' | 'file' | 'real_time_feed';
 
 export interface SourceParameters {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface CachingStrategy {
@@ -702,7 +702,7 @@ export interface TimingLearning {
 
 export interface TimingConstraint {
   constraint: string;
-  value: any;
+  value: Error;
   flexibility: number; // 0-1
 }
 
@@ -882,7 +882,7 @@ export interface CohortRule {
   ruleId: string;
   field: string;
   operator: ConditionOperator;
-  value: any;
+  value: Error;
   weight: number; // 0-1
 }
 
@@ -923,7 +923,7 @@ export interface CohortCharacteristics {
 }
 
 export interface DemographicProfile {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface BehaviorProfile {
@@ -1474,7 +1474,7 @@ export interface ExportDestination {
 export type DestinationType = 'file_system' | 's3' | 'gcs' | 'azure_blob' | 'ftp' | 'sftp' | 'database';
 
 export interface DestinationConfiguration {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface DestinationCredentials {
@@ -1491,7 +1491,7 @@ export interface ExportContentSettings {
 export interface ExportFilter {
   field: string;
   operator: ConditionOperator;
-  value: any;
+  value: Error;
 }
 
 export interface ExportAggregation {
@@ -1523,7 +1523,7 @@ export interface ImportSource {
 }
 
 export interface SourceConfiguration {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface SourceAuthentication {
@@ -1556,14 +1556,14 @@ export interface ValidationRule {
 }
 
 export interface ValidationParameters {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export type ValidationSeverity = 'warning' | 'error' | 'critical';
 
 export interface ValidationErrorHandling {
   strategy: ErrorHandlingStrategy;
-  fallbackValue?: any;
+  fallbackValue?: unknown;
   skipRecord: boolean;
 }
 
@@ -1585,7 +1585,7 @@ export type TransformationLanguage = 'javascript' | 'python' | 'sql' | 'regex';
 
 export interface DefaultValue {
   field: string;
-  value: any;
+  value: Error;
   condition?: string;
 }
 
@@ -1690,7 +1690,7 @@ export interface ContextEvent {
 
 export interface ContextCondition {
   condition: string;
-  value: any;
+  value: Error;
   met: boolean;
   confidence: number; // 0-1
 }
@@ -2943,10 +2943,10 @@ export interface LifecycleInsight {
     successMetrics: string[];
   }>;
   data: {
-    charts: any[];
-    tables: any[];
-    statistics: any[];
-    comparisons: any[];
+    charts: unknown[];
+    tables: unknown[];
+    statistics: unknown[];
+    comparisons: unknown[];
   };
 }
 

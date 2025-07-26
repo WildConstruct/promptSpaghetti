@@ -8,7 +8,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * and real-time moderation capabilities.
  */
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { TrendingCommentCard } from '../TrendingComments/TrendingCommentCard.js';
+import { TrendingCommentCard } from '../TrendingComments/TrendingCommentCard';
 export const CommentModerationPanel = ({ config, onAction, onFiltersChange, onStatsUpdate, className = '' }) => {
     // State management
     const [comments, setComments] = useState([]);

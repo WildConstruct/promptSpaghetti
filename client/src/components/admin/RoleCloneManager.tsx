@@ -202,7 +202,7 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({
   onClose,
   className = ''
 }) => {
-  const { user: ___currentUser } = useAuthStore();
+  const { user: _currentUser } = useAuthStore();
   const [state, setState] = useState<RoleCloneState>({
     availableRoles: mockRoles,
     availablePermissions: mockPermissions,
@@ -352,7 +352,7 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({
 
       // Update source role clone count
       const updatedRoles = state.availableRoles.map(role =>
-        role.id === state.selectedSourceRole!.id
+        role.id === state.selectedSourceRole?.id
           ? {
             ...role,
             metadata: {
@@ -754,7 +754,7 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({
                       </div>
                       {permissions.map(permission => {
                         const isSelected = state.selectedPermissions.has(permission.id);
-                        const wasInSource = state.selectedSourceRole!.permissions.includes(permission.id);
+                        const wasInSource = state.selectedSourceRole?.permissions.includes(permission.id) ?? false;
                         
                         return (
                           <div

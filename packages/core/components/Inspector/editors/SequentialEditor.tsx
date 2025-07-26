@@ -6,6 +6,13 @@ import { VariationList } from '../VariationList';
 import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 import { WeightSlider } from '../WeightSlider';
 import { SequencePatternConfig } from '../../../runtime/nodes/Sequential';
+import { 
+  ContextualTooltip, 
+  HelpfulInput, 
+  HelpfulButton,
+  HelpfulSection,
+  useContextualHelp 
+} from '../../Help';
 
 export interface SequentialEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   // Sequential node editor with three-tier progressive disclosure
@@ -94,6 +101,46 @@ export const SequentialEditor: React.FC<SequentialEditorProps> = ({ _____nodeId,
     { value: 'weighted', label: 'Weighted - Probability-based selection' }
   ];
 
+  // Contextual help for the sequence name field
+  const { wrapWithHelp: wrapNameHelp } = useContextualHelp({
+    id: 'sequential-sequence-name',
+    title: 'Sequence Name',
+    description: 'Give your sequential node a descriptive name that explains what sequence it manages.',
+    category: 'basic',
+    trigger: 'focus',
+    position: 'right',
+    showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
+    examples: ['Dialogue Styles', 'Scene Transitions', 'Character Arcs'],
+    priority: 'high'
+  });
+
+  // Contextual help for sequence items
+  const { wrapWithHelp: wrapItemsHelp } = useContextualHelp({
+    id: 'sequential-sequence-items',
+    title: 'Sequence Items',
+    description: 'Add items that will be cycled through in your chosen pattern. The order matters for linear and cyclical patterns.',
+    category: 'basic',
+    trigger: 'hover',
+    position: 'left',
+    showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
+    examples: ['Dramatic pause', 'Quick cut', 'Character entrance'],
+    relatedFeatures: ['drag-reorder', 'pattern-selection'],
+    priority: 'high'
+  });
+
+  // Contextual help for pattern selection
+  const { wrapWithHelp: wrapPatternHelp } = useContextualHelp({
+    id: 'sequential-pattern-selection',
+    title: 'Selection Method',
+    description: 'Choose how items are selected from your sequence. Linear goes in order, cyclical repeats infinitely, random is unpredictable, and weighted uses probability.',
+    category: 'advanced',
+    trigger: 'hover',
+    position: 'top',
+    showOnDisclosureLevel: ['advanced', 'debug'],
+    examples: ['Linear: 1→2→3→3...', 'Cyclical: 1→2→3→1→2...', 'Random: 2→1→3→1...'],
+    priority: 'medium'
+  });
+
   return (
     <div className="sequential-editor">
       {/* BASIC LEVEL: Essential fields for filmmakers */}
@@ -105,58 +152,62 @@ export const SequentialEditor: React.FC<SequentialEditorProps> = ({ _____nodeId,
         priority="critical"
         fieldName="sequence"
       >
-        <div style={{ marginBottom: 16 }}>
-          <TextFieldEditor
-            label="Sequence Name"
-            value={name}
-            fieldKey="name"
-            zodType={null}
-            onChange={handleNameChange}
-            placeholder="e.g., Dialogue Styles, Scene Transitions, Character Arcs"
-          />
-        </div>
-
-        <div style={{ marginBottom: 8 }}>
-          <label style={{ 
-            display: 'block', 
-            fontWeight: 500, 
-            marginBottom: 8,
-            color: '#e2e8f0',
-            fontSize: 12
-          }}>
-            Sequence Items
-          </label>
-          <VariationList
-            nodeId={nodeData.id as string}
-            variations={sequence}
-            onAdd={(item) => handleSequenceChange([...sequence, item])}
-            onRemove={(index) => {
-              const newSequence = sequence.filter((_, i) => i !== index);
-              handleSequenceChange(newSequence);
-            }}
-            onUpdate={(index, newValue) => {
-              const newSequence = [...sequence];
-              newSequence[index] = newValue;
-              handleSequenceChange(newSequence);
-            }}
-            onReorder={(fromIndex, toIndex) => {
-              const newSequence = [...sequence];
-              const [movedItem] = newSequence.splice(fromIndex, 1);
-              newSequence.splice(toIndex, 0, movedItem);
-              handleSequenceChange(newSequence);
-            }}
-            placeholder="Add sequence item... e.g., 'Dramatic pause', 'Quick cut', 'Character entrance'"
-            maxVariations={100}
-            allowQuickEntry={true}
-          />
-          <div style={{
-            fontSize: 10,
-            color: '#a0aec0',
-            marginTop: 4
-          }}>
-            Add items that will be cycled through in your chosen pattern
+        {wrapNameHelp(
+          <div style={{ marginBottom: 16 }}>
+            <TextFieldEditor
+              label="Sequence Name"
+              value={name}
+              fieldKey="name"
+              zodType={null}
+              onChange={handleNameChange}
+              placeholder="e.g., Dialogue Styles, Scene Transitions, Character Arcs"
+            />
           </div>
-        </div>
+        )}
+
+        {wrapItemsHelp(
+          <div style={{ marginBottom: 8 }}>
+            <label style={{ 
+              display: 'block', 
+              fontWeight: 500, 
+              marginBottom: 8,
+              color: '#e2e8f0',
+              fontSize: 12
+            }}>
+              Sequence Items
+            </label>
+            <VariationList
+              nodeId={nodeData.id as string}
+              variations={sequence}
+              onAdd={(item) => handleSequenceChange([...sequence, item])}
+              onRemove={(index) => {
+                const newSequence = sequence.filter((_, i) => i !== index);
+                handleSequenceChange(newSequence);
+              }}
+              onUpdate={(index, newValue) => {
+                const newSequence = [...sequence];
+                newSequence[index] = newValue;
+                handleSequenceChange(newSequence);
+              }}
+              onReorder={(fromIndex, toIndex) => {
+                const newSequence = [...sequence];
+                const [movedItem] = newSequence.splice(fromIndex, 1);
+                newSequence.splice(toIndex, 0, movedItem);
+                handleSequenceChange(newSequence);
+              }}
+              placeholder="Add sequence item... e.g., 'Dramatic pause', 'Quick cut', 'Character entrance'"
+              maxVariations={100}
+              allowQuickEntry={true}
+            />
+            <div style={{
+              fontSize: 10,
+              color: '#a0aec0',
+              marginTop: 4
+            }}>
+              Add items that will be cycled through in your chosen pattern
+            </div>
+          </div>
+        )}
       </ProgressiveDisclosureSection>
 
       {/* ADVANCED LEVEL: Pattern configuration for power users */}
@@ -168,23 +219,25 @@ export const SequentialEditor: React.FC<SequentialEditorProps> = ({ _____nodeId,
         priority="important"
         fieldName="patternType"
       >
-        <div style={{ marginBottom: 16 }}>
-          <SelectEditor
-            label="Selection Method"
-            value={patternType}
-            fieldKey="patternType"
-            zodType={null}
-            onChange={handlePatternTypeChange}
-            options={patternOptions}
-          />
-          <div style={{
-            fontSize: 10,
-            color: '#a0aec0',
-            marginTop: 4
-          }}>
-            Choose how the system selects items from your sequence
+        {wrapPatternHelp(
+          <div style={{ marginBottom: 16 }}>
+            <SelectEditor
+              label="Selection Method"
+              value={patternType}
+              fieldKey="patternType"
+              zodType={null}
+              onChange={handlePatternTypeChange}
+              options={patternOptions}
+            />
+            <div style={{
+              fontSize: 10,
+              color: '#a0aec0',
+              marginTop: 4
+            }}>
+              Choose how the system selects items from your sequence
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Pattern-specific configuration */}
         {patternType === 'weighted' && sequence.length > 0 && (

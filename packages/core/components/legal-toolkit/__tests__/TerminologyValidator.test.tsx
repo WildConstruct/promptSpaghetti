@@ -16,14 +16,6 @@ import { TermValidationResult, LegalTerminology } from '../types';
 // Mock data
 const mockText = 'This contract establishes consideration for services provided. The parties agree to indemnify each other against claims. Force majeure events shall excuse non-performance. This agreement is governed by jurisdiction laws.';
 
-const mockValidationResults: TermValidationResult[] = [
-  {
-    term: 'indemnify',
-    position: { start: 95, end: 104 },
-    isValid: true,
-    suggestions: [
-      {
-        term: 'indemnify',
         definition: 'To compensate for harm or loss; to provide security against legal responsibility',
         context: 'liability',
         jurisdiction: 'US',

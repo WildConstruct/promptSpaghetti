@@ -225,7 +225,7 @@ const UserDataTransparencyDashboard: React.FC = () => {
     }
   };
 
-  const getClassificationColor = (classification: string) => {
+  const getClassificationColor = (classification: string): string => {
     switch (classification) {
     case 'PUBLIC': return 'bg-green-100 text-green-800';
     case 'INTERNAL': return 'bg-blue-100 text-blue-800';
@@ -235,7 +235,7 @@ const UserDataTransparencyDashboard: React.FC = () => {
     }
   };
 
-  const getRiskColor = (level: string) => {
+  const getRiskColor = (level: string): string => {
     switch (level) {
     case 'LOW': return 'text-green-600';
     case 'MEDIUM': return 'text-yellow-600';
@@ -245,7 +245,7 @@ const UserDataTransparencyDashboard: React.FC = () => {
     }
   };
 
-  const getTrendIcon = (direction: string) => {
+  const getTrendIcon = (direction: string): React.ReactElement | null => {
     switch (direction) {
     case 'IMPROVING': return <TrendingUp className="h-4 w-4 text-green-600" />;
     case 'DEGRADING': return <TrendingDown className="h-4 w-4 text-red-600" />;

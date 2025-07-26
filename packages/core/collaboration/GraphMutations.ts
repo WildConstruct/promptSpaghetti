@@ -66,8 +66,8 @@ export interface NodeUpdateOperation extends BaseMutationOperation {
   type: 'NODE_UPDATE';
   nodeId: string;
   propertyPath: string[];
-  oldValue: any;
-  newValue: any;
+  oldValue: unknown;
+  newValue: unknown;
   partialUpdate: boolean;
   validationSchema?: string;
   priority?: OperationPriority;
@@ -124,8 +124,8 @@ export interface EdgeUpdateOperation extends BaseMutationOperation {
   type: 'EDGE_UPDATE';
   edgeId: string;
   property: 'source' | 'target' | 'sourcePort' | 'targetPort' | 'metadata' | 'type';
-  oldValue: any;
-  newValue: any;
+  oldValue: unknown;
+  newValue: unknown;
   priority?: OperationPriority;
 }
 
@@ -154,8 +154,8 @@ export interface ParameterUpdateOperation extends BaseMutationOperation {
   parameterKey: string;
   parameterPath?: string[];
   valueType: 'string' | 'number' | 'boolean' | 'object' | 'array';
-  oldValue: any;
-  newValue: any;
+  oldValue: unknown;
+  newValue: unknown;
   validationSchema?: string;
   priority?: OperationPriority;
 }
@@ -252,7 +252,7 @@ export interface ConflictResolution {
   strategy: ResolutionStrategy;
   affectedOperations: string[];
   affectedElements: string[];
-  resolutionData?: any;
+  resolutionData?: Record<string, unknown>;
   resolvedBy: string;
   timestamp: number;
   automatic: boolean;
@@ -267,9 +267,9 @@ export interface ConflictOperation {
   nodeId?: string;
   edgeId?: string;
   property?: string;
-  localValue: any;
-  remoteValue: any;
-  baseValue?: any;
+  localValue: unknown;
+  remoteValue: unknown;
+  baseValue?: unknown;
   userId: string;
   timestamp: number;
   documentId: string;
@@ -285,7 +285,7 @@ export interface ResolutionOption {
   strategy: ResolutionStrategy;
   label: string;
   description: string;
-  preview?: any;
+  preview?: Record<string, unknown>;
   recommended: boolean;
 }
 
@@ -417,7 +417,7 @@ export const NodeAddOperationSchema = z.object({
   nodeId: z.string().min(1),
   nodeType: NodeTypeEnum,
   position: PositionSchema,
-  initialData: z.record(z.any()).optional(),
+  initialData: z.record(z.unknown()).optional(),
   parentId: z.string().optional(),
   timestamp: z.number().positive(),
   userId: z.string().min(1),
@@ -436,8 +436,8 @@ export const NodeUpdateOperationSchema = z.object({
   documentId: z.string().min(1),
   nodeId: z.string().min(1),
   propertyPath: z.array(z.string()),
-  oldValue: z.any(),
-  newValue: z.any(),
+  oldValue: z.unknown(),
+  newValue: z.unknown(),
   partialUpdate: z.boolean(),
   validationSchema: z.string().optional(),
   timestamp: z.number().positive(),
@@ -461,7 +461,7 @@ export const EdgeAddOperationSchema = z.object({
   sourcePort: z.string().optional(),
   targetPort: z.string().optional(),
   edgeType: z.enum(['data', 'control', 'conditional']),
-  metadata: z.record(z.any()).optional(),
+  metadata: z.record(z.unknown()).optional(),
   timestamp: z.number().positive(),
   userId: z.string().min(1),
   clientId: z.string().optional(),

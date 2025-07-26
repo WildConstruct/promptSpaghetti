@@ -41,17 +41,21 @@ export abstract class BaseAnalyticsAdapter {
 
     try {
       const transformedEvent = this.transformEvent(legacyEvent);
+      const { id, timestamp, ...eventWithoutIdAndTimestamp } = transformedEvent;
       return await this.eventBus.publishEvent({
         source: this.systemName,
         category: EventCategory.SYSTEM,
         severity: EventSeverity.INFO,
         type: AnalyticsEventType.INFO_EVENT,
+        version: '1.0',
+        environment: 'production',
+        tags: ['adapter', this.systemName],
         data: {},
         metadata: {
           originalSystem: this.systemName,
           adaptedAt: Date.now()
         },
-        ...transformedEvent
+        ...eventWithoutIdAndTimestamp
       });
     } catch (error) {
       console.error(`[${this.systemName}] Failed to publish event:`, error);

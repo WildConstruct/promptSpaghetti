@@ -364,14 +364,14 @@ export declare const CaseStudyMediaSchema: z.ZodObject<{
     uploadedBy: string;
     description?: string | undefined;
     duration?: number | undefined;
+    fileSize?: number | undefined;
+    mimeType?: string | undefined;
     dimensions?: {
         width: number;
         height: number;
     } | undefined;
     thumbnailUrl?: string | undefined;
     altText?: string | undefined;
-    fileSize?: number | undefined;
-    mimeType?: string | undefined;
 }, {
     id: string;
     type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
@@ -381,14 +381,14 @@ export declare const CaseStudyMediaSchema: z.ZodObject<{
     uploadedBy: string;
     description?: string | undefined;
     duration?: number | undefined;
+    fileSize?: number | undefined;
+    mimeType?: string | undefined;
     dimensions?: {
         width: number;
         height: number;
     } | undefined;
     thumbnailUrl?: string | undefined;
     altText?: string | undefined;
-    fileSize?: number | undefined;
-    mimeType?: string | undefined;
 }>;
 export declare const ROIMetricsSchema: z.ZodObject<{
     timeSaved: z.ZodObject<{
@@ -397,11 +397,11 @@ export declare const ROIMetricsSchema: z.ZodObject<{
         description: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         description: string;
-        period: "month" | "week" | "day" | "project";
+        period: "project" | "month" | "week" | "day";
         hours: number;
     }, {
         description: string;
-        period: "month" | "week" | "day" | "project";
+        period: "project" | "month" | "week" | "day";
         hours: number;
     }>;
     costSavings: z.ZodObject<{
@@ -411,12 +411,12 @@ export declare const ROIMetricsSchema: z.ZodObject<{
         calculation: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         amount: number;
-        period: "month" | "week" | "day" | "project";
+        period: "project" | "month" | "week" | "day";
         currency: string;
         calculation: string;
     }, {
         amount: number;
-        period: "month" | "week" | "day" | "project";
+        period: "project" | "month" | "week" | "day";
         currency: string;
         calculation: string;
     }>;
@@ -475,6 +475,12 @@ export declare const ROIMetricsSchema: z.ZodObject<{
         consistencyImprovement: number;
     }>>;
 }, "strip", z.ZodTypeAny, {
+    costSavings: {
+        amount: number;
+        period: "project" | "month" | "week" | "day";
+        currency: string;
+        calculation: string;
+    };
     qualityMetrics: {
         before: string | number;
         after: string | number;
@@ -484,14 +490,8 @@ export declare const ROIMetricsSchema: z.ZodObject<{
     }[];
     timeSaved: {
         description: string;
-        period: "month" | "week" | "day" | "project";
+        period: "project" | "month" | "week" | "day";
         hours: number;
-    };
-    costSavings: {
-        amount: number;
-        period: "month" | "week" | "day" | "project";
-        currency: string;
-        calculation: string;
     };
     productivityGains: {
         description: string;
@@ -507,6 +507,12 @@ export declare const ROIMetricsSchema: z.ZodObject<{
         consistencyImprovement: number;
     } | undefined;
 }, {
+    costSavings: {
+        amount: number;
+        period: "project" | "month" | "week" | "day";
+        currency: string;
+        calculation: string;
+    };
     qualityMetrics: {
         before: string | number;
         after: string | number;
@@ -516,14 +522,8 @@ export declare const ROIMetricsSchema: z.ZodObject<{
     }[];
     timeSaved: {
         description: string;
-        period: "month" | "week" | "day" | "project";
+        period: "project" | "month" | "week" | "day";
         hours: number;
-    };
-    costSavings: {
-        amount: number;
-        period: "month" | "week" | "day" | "project";
-        currency: string;
-        calculation: string;
     };
     productivityGains: {
         description: string;
@@ -551,10 +551,10 @@ export declare const TemplateReferenceSchema: z.ZodObject<{
     purchaseDate: z.ZodOptional<z.ZodString>;
     cost: z.ZodOptional<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
-    templateName: string;
     templateId: string;
-    templateCategory: string;
+    templateName: string;
     templateVersion: string;
+    templateCategory: string;
     usageDescription: string;
     customizations: string[];
     resultsWithTemplate: string;
@@ -562,10 +562,10 @@ export declare const TemplateReferenceSchema: z.ZodObject<{
     cost?: number | undefined;
     purchaseDate?: string | undefined;
 }, {
-    templateName: string;
     templateId: string;
-    templateCategory: string;
+    templateName: string;
     templateVersion: string;
+    templateCategory: string;
     usageDescription: string;
     customizations: string[];
     resultsWithTemplate: string;
@@ -593,16 +593,16 @@ export declare const CaseStudySchema: z.ZodObject<{
         nextSteps: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         results: string;
+        implementation: string;
         challenge: string;
         solution: string;
-        implementation: string;
         learnings: string;
         nextSteps?: string | undefined;
     }, {
         results: string;
+        implementation: string;
         challenge: string;
         solution: string;
-        implementation: string;
         learnings: string;
         nextSteps?: string | undefined;
     }>;
@@ -639,14 +639,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }, {
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
@@ -656,14 +656,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }>, "many">;
         screenshots: z.ZodArray<z.ZodObject<{
             id: z.ZodString;
@@ -697,14 +697,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }, {
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
@@ -714,14 +714,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }>, "many">;
         videos: z.ZodArray<z.ZodObject<{
             id: z.ZodString;
@@ -755,14 +755,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }, {
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
@@ -772,14 +772,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }>, "many">;
         documents: z.ZodArray<z.ZodObject<{
             id: z.ZodString;
@@ -813,14 +813,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }, {
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
@@ -830,14 +830,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }>, "many">;
         charts: z.ZodArray<z.ZodObject<{
             id: z.ZodString;
@@ -871,14 +871,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }, {
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
@@ -888,14 +888,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }>, "many">;
     }, "strip", z.ZodTypeAny, {
         featured: {
@@ -907,14 +907,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }[];
         documents: {
             id: string;
@@ -925,14 +925,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }[];
         screenshots: {
             id: string;
@@ -943,14 +943,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }[];
         videos: {
             id: string;
@@ -961,14 +961,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }[];
         charts: {
             id: string;
@@ -979,14 +979,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }[];
     }, {
         featured: {
@@ -998,14 +998,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }[];
         documents: {
             id: string;
@@ -1016,14 +1016,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }[];
         screenshots: {
             id: string;
@@ -1034,14 +1034,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }[];
         videos: {
             id: string;
@@ -1052,14 +1052,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }[];
         charts: {
             id: string;
@@ -1070,14 +1070,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }[];
     }>;
     featuredImage: z.ZodOptional<z.ZodObject<{
@@ -1112,14 +1112,14 @@ export declare const CaseStudySchema: z.ZodObject<{
         uploadedBy: string;
         description?: string | undefined;
         duration?: number | undefined;
+        fileSize?: number | undefined;
+        mimeType?: string | undefined;
         dimensions?: {
             width: number;
             height: number;
         } | undefined;
         thumbnailUrl?: string | undefined;
         altText?: string | undefined;
-        fileSize?: number | undefined;
-        mimeType?: string | undefined;
     }, {
         id: string;
         type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
@@ -1129,14 +1129,14 @@ export declare const CaseStudySchema: z.ZodObject<{
         uploadedBy: string;
         description?: string | undefined;
         duration?: number | undefined;
+        fileSize?: number | undefined;
+        mimeType?: string | undefined;
         dimensions?: {
             width: number;
             height: number;
         } | undefined;
         thumbnailUrl?: string | undefined;
         altText?: string | undefined;
-        fileSize?: number | undefined;
-        mimeType?: string | undefined;
     }>>;
     templatesUsed: z.ZodArray<z.ZodObject<{
         templateId: z.ZodString;
@@ -1150,10 +1150,10 @@ export declare const CaseStudySchema: z.ZodObject<{
         purchaseDate: z.ZodOptional<z.ZodString>;
         cost: z.ZodOptional<z.ZodNumber>;
     }, "strip", z.ZodTypeAny, {
-        templateName: string;
         templateId: string;
-        templateCategory: string;
+        templateName: string;
         templateVersion: string;
+        templateCategory: string;
         usageDescription: string;
         customizations: string[];
         resultsWithTemplate: string;
@@ -1161,10 +1161,10 @@ export declare const CaseStudySchema: z.ZodObject<{
         cost?: number | undefined;
         purchaseDate?: string | undefined;
     }, {
-        templateName: string;
         templateId: string;
-        templateCategory: string;
+        templateName: string;
         templateVersion: string;
+        templateCategory: string;
         usageDescription: string;
         customizations: string[];
         resultsWithTemplate: string;
@@ -1185,10 +1185,10 @@ export declare const CaseStudySchema: z.ZodObject<{
             purchaseDate: z.ZodOptional<z.ZodString>;
             cost: z.ZodOptional<z.ZodNumber>;
         }, "strip", z.ZodTypeAny, {
-            templateName: string;
             templateId: string;
-            templateCategory: string;
+            templateName: string;
             templateVersion: string;
+            templateCategory: string;
             usageDescription: string;
             customizations: string[];
             resultsWithTemplate: string;
@@ -1196,10 +1196,10 @@ export declare const CaseStudySchema: z.ZodObject<{
             cost?: number | undefined;
             purchaseDate?: string | undefined;
         }, {
-            templateName: string;
             templateId: string;
-            templateCategory: string;
+            templateName: string;
             templateVersion: string;
+            templateCategory: string;
             usageDescription: string;
             customizations: string[];
             resultsWithTemplate: string;
@@ -1213,12 +1213,12 @@ export declare const CaseStudySchema: z.ZodObject<{
             impact: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             description: string;
-            reasonForChange: string;
             impact: string;
+            reasonForChange: string;
         }, {
             description: string;
-            reasonForChange: string;
             impact: string;
+            reasonForChange: string;
         }>, "many">;
         results: z.ZodObject<{
             outputExamples: z.ZodArray<z.ZodString, "many">;
@@ -1244,14 +1244,14 @@ export declare const CaseStudySchema: z.ZodObject<{
         recommendations: string[];
         customizations: {
             description: string;
-            reasonForChange: string;
             impact: string;
+            reasonForChange: string;
         }[];
         originalTemplate: {
-            templateName: string;
             templateId: string;
-            templateCategory: string;
+            templateName: string;
             templateVersion: string;
+            templateCategory: string;
             usageDescription: string;
             customizations: string[];
             resultsWithTemplate: string;
@@ -1269,14 +1269,14 @@ export declare const CaseStudySchema: z.ZodObject<{
         recommendations: string[];
         customizations: {
             description: string;
-            reasonForChange: string;
             impact: string;
+            reasonForChange: string;
         }[];
         originalTemplate: {
-            templateName: string;
             templateId: string;
-            templateCategory: string;
+            templateName: string;
             templateVersion: string;
+            templateCategory: string;
             usageDescription: string;
             customizations: string[];
             resultsWithTemplate: string;
@@ -1293,11 +1293,11 @@ export declare const CaseStudySchema: z.ZodObject<{
             description: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             description: string;
-            period: "month" | "week" | "day" | "project";
+            period: "project" | "month" | "week" | "day";
             hours: number;
         }, {
             description: string;
-            period: "month" | "week" | "day" | "project";
+            period: "project" | "month" | "week" | "day";
             hours: number;
         }>;
         costSavings: z.ZodObject<{
@@ -1307,12 +1307,12 @@ export declare const CaseStudySchema: z.ZodObject<{
             calculation: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             amount: number;
-            period: "month" | "week" | "day" | "project";
+            period: "project" | "month" | "week" | "day";
             currency: string;
             calculation: string;
         }, {
             amount: number;
-            period: "month" | "week" | "day" | "project";
+            period: "project" | "month" | "week" | "day";
             currency: string;
             calculation: string;
         }>;
@@ -1371,6 +1371,12 @@ export declare const CaseStudySchema: z.ZodObject<{
             consistencyImprovement: number;
         }>>;
     }, "strip", z.ZodTypeAny, {
+        costSavings: {
+            amount: number;
+            period: "project" | "month" | "week" | "day";
+            currency: string;
+            calculation: string;
+        };
         qualityMetrics: {
             before: string | number;
             after: string | number;
@@ -1380,14 +1386,8 @@ export declare const CaseStudySchema: z.ZodObject<{
         }[];
         timeSaved: {
             description: string;
-            period: "month" | "week" | "day" | "project";
+            period: "project" | "month" | "week" | "day";
             hours: number;
-        };
-        costSavings: {
-            amount: number;
-            period: "month" | "week" | "day" | "project";
-            currency: string;
-            calculation: string;
         };
         productivityGains: {
             description: string;
@@ -1403,6 +1403,12 @@ export declare const CaseStudySchema: z.ZodObject<{
             consistencyImprovement: number;
         } | undefined;
     }, {
+        costSavings: {
+            amount: number;
+            period: "project" | "month" | "week" | "day";
+            currency: string;
+            calculation: string;
+        };
         qualityMetrics: {
             before: string | number;
             after: string | number;
@@ -1412,14 +1418,8 @@ export declare const CaseStudySchema: z.ZodObject<{
         }[];
         timeSaved: {
             description: string;
-            period: "month" | "week" | "day" | "project";
+            period: "project" | "month" | "week" | "day";
             hours: number;
-        };
-        costSavings: {
-            amount: number;
-            period: "month" | "week" | "day" | "project";
-            currency: string;
-            calculation: string;
         };
         productivityGains: {
             description: string;
@@ -1541,20 +1541,20 @@ export declare const CaseStudySchema: z.ZodObject<{
         helpfulVotes: z.ZodNumber;
         followUps: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
-        comments: number;
-        views: number;
-        likes: number;
-        helpfulVotes: number;
-        shares: number;
         bookmarks: number;
+        views: number;
+        comments: number;
+        likes: number;
+        shares: number;
+        helpfulVotes: number;
         followUps: number;
     }, {
-        comments: number;
-        views: number;
-        likes: number;
-        helpfulVotes: number;
-        shares: number;
         bookmarks: number;
+        views: number;
+        comments: number;
+        likes: number;
+        shares: number;
+        helpfulVotes: number;
         followUps: number;
     }>;
     moderation: z.ZodObject<{
@@ -1640,7 +1640,7 @@ export declare const CaseStudySchema: z.ZodObject<{
     createdAt: string;
     updatedAt: string;
     description: string;
-    status: "draft" | "featured" | "approved" | "rejected" | "archived" | "submitted" | "under-review";
+    status: "draft" | "featured" | "approved" | "rejected" | "submitted" | "archived" | "under-review";
     type: "template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case";
     config: {
         priority: number;
@@ -1662,16 +1662,16 @@ export declare const CaseStudySchema: z.ZodObject<{
         profileUrl?: string | undefined;
         avatar?: string | undefined;
     };
-    summary: string;
-    title: string;
     content: {
         results: string;
+        implementation: string;
         challenge: string;
         solution: string;
-        implementation: string;
         learnings: string;
         nextSteps?: string | undefined;
     };
+    summary: string;
+    title: string;
     performanceMetrics: {
         efficiency: number;
         templatesUsed: number;
@@ -1688,6 +1688,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             unit?: string | undefined;
         }[];
     };
+    difficulty: "expert" | "advanced" | "intermediate" | "beginner";
     media: {
         featured: {
             id: string;
@@ -1698,14 +1699,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }[];
         documents: {
             id: string;
@@ -1716,14 +1717,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }[];
         screenshots: {
             id: string;
@@ -1734,14 +1735,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }[];
         videos: {
             id: string;
@@ -1752,14 +1753,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }[];
         charts: {
             id: string;
@@ -1770,23 +1771,23 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }[];
     };
     engagement: {
-        comments: number;
-        views: number;
-        likes: number;
-        helpfulVotes: number;
-        shares: number;
         bookmarks: number;
+        views: number;
+        comments: number;
+        likes: number;
+        shares: number;
+        helpfulVotes: number;
         followUps: number;
     };
     seo: {
@@ -1796,7 +1797,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         metaDescription: string;
         canonicalUrl?: string | undefined;
     };
-    industry: "other" | "publishing" | "education" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "technology" | "e-commerce" | "non-profit";
+    industry: "other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit";
     moderation: {
         submittedAt: string;
         submittedBy: string;
@@ -1807,18 +1808,11 @@ export declare const CaseStudySchema: z.ZodObject<{
         featuredAt?: string | undefined;
         featuredBy?: string | undefined;
     };
-    difficulty: "expert" | "advanced" | "intermediate" | "beginner";
-    collaborators: {
-        name: string;
-        userId: string;
-        role: string;
-        contribution: string;
-    }[];
     templatesUsed: {
-        templateName: string;
         templateId: string;
-        templateCategory: string;
+        templateName: string;
         templateVersion: string;
+        templateCategory: string;
         usageDescription: string;
         customizations: string[];
         resultsWithTemplate: string;
@@ -1835,14 +1829,14 @@ export declare const CaseStudySchema: z.ZodObject<{
         recommendations: string[];
         customizations: {
             description: string;
-            reasonForChange: string;
             impact: string;
+            reasonForChange: string;
         }[];
         originalTemplate: {
-            templateName: string;
             templateId: string;
-            templateCategory: string;
+            templateName: string;
             templateVersion: string;
+            templateCategory: string;
             usageDescription: string;
             customizations: string[];
             resultsWithTemplate: string;
@@ -1853,6 +1847,12 @@ export declare const CaseStudySchema: z.ZodObject<{
         lessonsLearned: string[];
     }[];
     roiMetrics: {
+        costSavings: {
+            amount: number;
+            period: "project" | "month" | "week" | "day";
+            currency: string;
+            calculation: string;
+        };
         qualityMetrics: {
             before: string | number;
             after: string | number;
@@ -1862,14 +1862,8 @@ export declare const CaseStudySchema: z.ZodObject<{
         }[];
         timeSaved: {
             description: string;
-            period: "month" | "week" | "day" | "project";
+            period: "project" | "month" | "week" | "day";
             hours: number;
-        };
-        costSavings: {
-            amount: number;
-            period: "month" | "week" | "day" | "project";
-            currency: string;
-            calculation: string;
         };
         productivityGains: {
             description: string;
@@ -1885,8 +1879,13 @@ export declare const CaseStudySchema: z.ZodObject<{
             consistencyImprovement: number;
         } | undefined;
     };
+    collaborators: {
+        name: string;
+        userId: string;
+        role: string;
+        contribution: string;
+    }[];
     previousVersions: string[];
-    publishedAt?: string | undefined;
     subtitle?: string | undefined;
     featuredImage?: {
         id: string;
@@ -1897,22 +1896,23 @@ export declare const CaseStudySchema: z.ZodObject<{
         uploadedBy: string;
         description?: string | undefined;
         duration?: number | undefined;
+        fileSize?: number | undefined;
+        mimeType?: string | undefined;
         dimensions?: {
             width: number;
             height: number;
         } | undefined;
         thumbnailUrl?: string | undefined;
         altText?: string | undefined;
-        fileSize?: number | undefined;
-        mimeType?: string | undefined;
     } | undefined;
+    publishedAt?: string | undefined;
     archivedAt?: string | undefined;
 }, {
     id: string;
     createdAt: string;
     updatedAt: string;
     description: string;
-    status: "draft" | "featured" | "approved" | "rejected" | "archived" | "submitted" | "under-review";
+    status: "draft" | "featured" | "approved" | "rejected" | "submitted" | "archived" | "under-review";
     type: "template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case";
     config: {
         priority: number;
@@ -1934,16 +1934,16 @@ export declare const CaseStudySchema: z.ZodObject<{
         profileUrl?: string | undefined;
         avatar?: string | undefined;
     };
-    summary: string;
-    title: string;
     content: {
         results: string;
+        implementation: string;
         challenge: string;
         solution: string;
-        implementation: string;
         learnings: string;
         nextSteps?: string | undefined;
     };
+    summary: string;
+    title: string;
     performanceMetrics: {
         efficiency: number;
         templatesUsed: number;
@@ -1960,6 +1960,7 @@ export declare const CaseStudySchema: z.ZodObject<{
             unit?: string | undefined;
         }[];
     };
+    difficulty: "expert" | "advanced" | "intermediate" | "beginner";
     media: {
         featured: {
             id: string;
@@ -1970,14 +1971,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }[];
         documents: {
             id: string;
@@ -1988,14 +1989,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }[];
         screenshots: {
             id: string;
@@ -2006,14 +2007,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }[];
         videos: {
             id: string;
@@ -2024,14 +2025,14 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }[];
         charts: {
             id: string;
@@ -2042,23 +2043,23 @@ export declare const CaseStudySchema: z.ZodObject<{
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }[];
     };
     engagement: {
-        comments: number;
-        views: number;
-        likes: number;
-        helpfulVotes: number;
-        shares: number;
         bookmarks: number;
+        views: number;
+        comments: number;
+        likes: number;
+        shares: number;
+        helpfulVotes: number;
         followUps: number;
     };
     seo: {
@@ -2068,7 +2069,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         metaDescription: string;
         canonicalUrl?: string | undefined;
     };
-    industry: "other" | "publishing" | "education" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "technology" | "e-commerce" | "non-profit";
+    industry: "other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit";
     moderation: {
         submittedAt: string;
         submittedBy: string;
@@ -2079,18 +2080,11 @@ export declare const CaseStudySchema: z.ZodObject<{
         featuredAt?: string | undefined;
         featuredBy?: string | undefined;
     };
-    difficulty: "expert" | "advanced" | "intermediate" | "beginner";
-    collaborators: {
-        name: string;
-        userId: string;
-        role: string;
-        contribution: string;
-    }[];
     templatesUsed: {
-        templateName: string;
         templateId: string;
-        templateCategory: string;
+        templateName: string;
         templateVersion: string;
+        templateCategory: string;
         usageDescription: string;
         customizations: string[];
         resultsWithTemplate: string;
@@ -2107,14 +2101,14 @@ export declare const CaseStudySchema: z.ZodObject<{
         recommendations: string[];
         customizations: {
             description: string;
-            reasonForChange: string;
             impact: string;
+            reasonForChange: string;
         }[];
         originalTemplate: {
-            templateName: string;
             templateId: string;
-            templateCategory: string;
+            templateName: string;
             templateVersion: string;
+            templateCategory: string;
             usageDescription: string;
             customizations: string[];
             resultsWithTemplate: string;
@@ -2125,6 +2119,12 @@ export declare const CaseStudySchema: z.ZodObject<{
         lessonsLearned: string[];
     }[];
     roiMetrics: {
+        costSavings: {
+            amount: number;
+            period: "project" | "month" | "week" | "day";
+            currency: string;
+            calculation: string;
+        };
         qualityMetrics: {
             before: string | number;
             after: string | number;
@@ -2134,14 +2134,8 @@ export declare const CaseStudySchema: z.ZodObject<{
         }[];
         timeSaved: {
             description: string;
-            period: "month" | "week" | "day" | "project";
+            period: "project" | "month" | "week" | "day";
             hours: number;
-        };
-        costSavings: {
-            amount: number;
-            period: "month" | "week" | "day" | "project";
-            currency: string;
-            calculation: string;
         };
         productivityGains: {
             description: string;
@@ -2157,8 +2151,13 @@ export declare const CaseStudySchema: z.ZodObject<{
             consistencyImprovement: number;
         } | undefined;
     };
+    collaborators: {
+        name: string;
+        userId: string;
+        role: string;
+        contribution: string;
+    }[];
     previousVersions: string[];
-    publishedAt?: string | undefined;
     subtitle?: string | undefined;
     featuredImage?: {
         id: string;
@@ -2169,15 +2168,16 @@ export declare const CaseStudySchema: z.ZodObject<{
         uploadedBy: string;
         description?: string | undefined;
         duration?: number | undefined;
+        fileSize?: number | undefined;
+        mimeType?: string | undefined;
         dimensions?: {
             width: number;
             height: number;
         } | undefined;
         thumbnailUrl?: string | undefined;
         altText?: string | undefined;
-        fileSize?: number | undefined;
-        mimeType?: string | undefined;
     } | undefined;
+    publishedAt?: string | undefined;
     archivedAt?: string | undefined;
 }>;
 export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
@@ -2197,16 +2197,16 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
         nextSteps: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         results: string;
+        implementation: string;
         challenge: string;
         solution: string;
-        implementation: string;
         learnings: string;
         nextSteps?: string | undefined;
     }, {
         results: string;
+        implementation: string;
         challenge: string;
         solution: string;
-        implementation: string;
         learnings: string;
         nextSteps?: string | undefined;
     }>;
@@ -2247,11 +2247,11 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
             description: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             description: string;
-            period: "month" | "week" | "day" | "project";
+            period: "project" | "month" | "week" | "day";
             hours: number;
         }, {
             description: string;
-            period: "month" | "week" | "day" | "project";
+            period: "project" | "month" | "week" | "day";
             hours: number;
         }>>;
         costSavings: z.ZodOptional<z.ZodObject<{
@@ -2261,12 +2261,12 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
             calculation: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             amount: number;
-            period: "month" | "week" | "day" | "project";
+            period: "project" | "month" | "week" | "day";
             currency: string;
             calculation: string;
         }, {
             amount: number;
-            period: "month" | "week" | "day" | "project";
+            period: "project" | "month" | "week" | "day";
             currency: string;
             calculation: string;
         }>>;
@@ -2325,6 +2325,12 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
             consistencyImprovement: number;
         }>>>;
     }, "strip", z.ZodTypeAny, {
+        costSavings?: {
+            amount: number;
+            period: "project" | "month" | "week" | "day";
+            currency: string;
+            calculation: string;
+        } | undefined;
         qualityMetrics?: {
             before: string | number;
             after: string | number;
@@ -2334,14 +2340,8 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
         }[] | undefined;
         timeSaved?: {
             description: string;
-            period: "month" | "week" | "day" | "project";
+            period: "project" | "month" | "week" | "day";
             hours: number;
-        } | undefined;
-        costSavings?: {
-            amount: number;
-            period: "month" | "week" | "day" | "project";
-            currency: string;
-            calculation: string;
         } | undefined;
         productivityGains?: {
             description: string;
@@ -2357,6 +2357,12 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
             consistencyImprovement: number;
         } | undefined;
     }, {
+        costSavings?: {
+            amount: number;
+            period: "project" | "month" | "week" | "day";
+            currency: string;
+            calculation: string;
+        } | undefined;
         qualityMetrics?: {
             before: string | number;
             after: string | number;
@@ -2366,14 +2372,8 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
         }[] | undefined;
         timeSaved?: {
             description: string;
-            period: "month" | "week" | "day" | "project";
+            period: "project" | "month" | "week" | "day";
             hours: number;
-        } | undefined;
-        costSavings?: {
-            amount: number;
-            period: "month" | "week" | "day" | "project";
-            currency: string;
-            calculation: string;
         } | undefined;
         productivityGains?: {
             description: string;
@@ -2490,17 +2490,17 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
     description: string;
     type: "template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case";
     tags: string[];
-    title: string;
     content: {
         results: string;
+        implementation: string;
         challenge: string;
         solution: string;
-        implementation: string;
         learnings: string;
         nextSteps?: string | undefined;
     };
-    industry: "other" | "publishing" | "education" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "technology" | "e-commerce" | "non-profit";
+    title: string;
     difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+    industry: "other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit";
     templatesUsed: {
         templateId: string;
         templateVersion: string;
@@ -2536,14 +2536,14 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
             unit?: string | undefined;
         }[] | undefined;
     } | undefined;
-    collaborators?: {
-        name: string;
-        userId: string;
-        role: string;
-        contribution: string;
-    }[] | undefined;
     subtitle?: string | undefined;
     roiMetrics?: {
+        costSavings?: {
+            amount: number;
+            period: "project" | "month" | "week" | "day";
+            currency: string;
+            calculation: string;
+        } | undefined;
         qualityMetrics?: {
             before: string | number;
             after: string | number;
@@ -2553,14 +2553,8 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
         }[] | undefined;
         timeSaved?: {
             description: string;
-            period: "month" | "week" | "day" | "project";
+            period: "project" | "month" | "week" | "day";
             hours: number;
-        } | undefined;
-        costSavings?: {
-            amount: number;
-            period: "month" | "week" | "day" | "project";
-            currency: string;
-            calculation: string;
         } | undefined;
         productivityGains?: {
             description: string;
@@ -2576,21 +2570,27 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
             consistencyImprovement: number;
         } | undefined;
     } | undefined;
+    collaborators?: {
+        name: string;
+        userId: string;
+        role: string;
+        contribution: string;
+    }[] | undefined;
 }, {
     description: string;
     type: "template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case";
     tags: string[];
-    title: string;
     content: {
         results: string;
+        implementation: string;
         challenge: string;
         solution: string;
-        implementation: string;
         learnings: string;
         nextSteps?: string | undefined;
     };
-    industry: "other" | "publishing" | "education" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "technology" | "e-commerce" | "non-profit";
+    title: string;
     difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+    industry: "other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit";
     templatesUsed: {
         templateId: string;
         templateVersion: string;
@@ -2626,14 +2626,14 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
             unit?: string | undefined;
         }[] | undefined;
     } | undefined;
-    collaborators?: {
-        name: string;
-        userId: string;
-        role: string;
-        contribution: string;
-    }[] | undefined;
     subtitle?: string | undefined;
     roiMetrics?: {
+        costSavings?: {
+            amount: number;
+            period: "project" | "month" | "week" | "day";
+            currency: string;
+            calculation: string;
+        } | undefined;
         qualityMetrics?: {
             before: string | number;
             after: string | number;
@@ -2643,14 +2643,8 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
         }[] | undefined;
         timeSaved?: {
             description: string;
-            period: "month" | "week" | "day" | "project";
+            period: "project" | "month" | "week" | "day";
             hours: number;
-        } | undefined;
-        costSavings?: {
-            amount: number;
-            period: "month" | "week" | "day" | "project";
-            currency: string;
-            calculation: string;
         } | undefined;
         productivityGains?: {
             description: string;
@@ -2666,6 +2660,12 @@ export declare const CreateCaseStudyRequestSchema: z.ZodObject<{
             consistencyImprovement: number;
         } | undefined;
     } | undefined;
+    collaborators?: {
+        name: string;
+        userId: string;
+        role: string;
+        contribution: string;
+    }[] | undefined;
 }>;
 export declare const CaseStudyFilterSchema: z.ZodObject<{
     type: z.ZodOptional<z.ZodUnion<[z.ZodEnum<["template-success", "user-story", "roi-analysis", "before-after", "industry-showcase", "community-highlight", "innovation-case"]>, z.ZodArray<z.ZodEnum<["template-success", "user-story", "roi-analysis", "before-after", "industry-showcase", "community-highlight", "innovation-case"]>, "many">]>>;
@@ -2691,11 +2691,11 @@ export declare const CaseStudyFilterSchema: z.ZodObject<{
     featuredOnly: z.ZodOptional<z.ZodBoolean>;
 }, "strict", z.ZodTypeAny, {
     search?: string | undefined;
-    status?: "draft" | "featured" | "approved" | "rejected" | "archived" | "submitted" | "under-review" | ("draft" | "featured" | "approved" | "rejected" | "archived" | "submitted" | "under-review")[] | undefined;
+    status?: "draft" | "featured" | "approved" | "rejected" | "submitted" | "archived" | "under-review" | ("draft" | "featured" | "approved" | "rejected" | "submitted" | "archived" | "under-review")[] | undefined;
     type?: "template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case" | ("template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case")[] | undefined;
     tags?: string[] | undefined;
-    industry?: "other" | "publishing" | "education" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "technology" | "e-commerce" | "non-profit" | ("other" | "publishing" | "education" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "technology" | "e-commerce" | "non-profit")[] | undefined;
     difficulty?: ("expert" | "advanced" | "intermediate" | "beginner")[] | undefined;
+    industry?: "other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit" | ("other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit")[] | undefined;
     templateIds?: string[] | undefined;
     templateCategories?: string[] | undefined;
     minROI?: number | undefined;
@@ -2713,11 +2713,11 @@ export declare const CaseStudyFilterSchema: z.ZodObject<{
     featuredOnly?: boolean | undefined;
 }, {
     search?: string | undefined;
-    status?: "draft" | "featured" | "approved" | "rejected" | "archived" | "submitted" | "under-review" | ("draft" | "featured" | "approved" | "rejected" | "archived" | "submitted" | "under-review")[] | undefined;
+    status?: "draft" | "featured" | "approved" | "rejected" | "submitted" | "archived" | "under-review" | ("draft" | "featured" | "approved" | "rejected" | "submitted" | "archived" | "under-review")[] | undefined;
     type?: "template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case" | ("template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case")[] | undefined;
     tags?: string[] | undefined;
-    industry?: "other" | "publishing" | "education" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "technology" | "e-commerce" | "non-profit" | ("other" | "publishing" | "education" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "technology" | "e-commerce" | "non-profit")[] | undefined;
     difficulty?: ("expert" | "advanced" | "intermediate" | "beginner")[] | undefined;
+    industry?: "other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit" | ("other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit")[] | undefined;
     templateIds?: string[] | undefined;
     templateCategories?: string[] | undefined;
     minROI?: number | undefined;
@@ -2759,16 +2759,16 @@ declare const _default: {
             nextSteps: z.ZodOptional<z.ZodString>;
         }, "strip", z.ZodTypeAny, {
             results: string;
+            implementation: string;
             challenge: string;
             solution: string;
-            implementation: string;
             learnings: string;
             nextSteps?: string | undefined;
         }, {
             results: string;
+            implementation: string;
             challenge: string;
             solution: string;
-            implementation: string;
             learnings: string;
             nextSteps?: string | undefined;
         }>;
@@ -2805,14 +2805,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }, {
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
@@ -2822,14 +2822,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }>, "many">;
             screenshots: z.ZodArray<z.ZodObject<{
                 id: z.ZodString;
@@ -2863,14 +2863,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }, {
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
@@ -2880,14 +2880,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }>, "many">;
             videos: z.ZodArray<z.ZodObject<{
                 id: z.ZodString;
@@ -2921,14 +2921,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }, {
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
@@ -2938,14 +2938,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }>, "many">;
             documents: z.ZodArray<z.ZodObject<{
                 id: z.ZodString;
@@ -2979,14 +2979,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }, {
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
@@ -2996,14 +2996,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }>, "many">;
             charts: z.ZodArray<z.ZodObject<{
                 id: z.ZodString;
@@ -3037,14 +3037,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }, {
                 id: string;
                 type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
@@ -3054,14 +3054,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }>, "many">;
         }, "strip", z.ZodTypeAny, {
             featured: {
@@ -3073,14 +3073,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }[];
             documents: {
                 id: string;
@@ -3091,14 +3091,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }[];
             screenshots: {
                 id: string;
@@ -3109,14 +3109,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }[];
             videos: {
                 id: string;
@@ -3127,14 +3127,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }[];
             charts: {
                 id: string;
@@ -3145,14 +3145,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }[];
         }, {
             featured: {
@@ -3164,14 +3164,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }[];
             documents: {
                 id: string;
@@ -3182,14 +3182,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }[];
             screenshots: {
                 id: string;
@@ -3200,14 +3200,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }[];
             videos: {
                 id: string;
@@ -3218,14 +3218,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }[];
             charts: {
                 id: string;
@@ -3236,14 +3236,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }[];
         }>;
         featuredImage: z.ZodOptional<z.ZodObject<{
@@ -3278,14 +3278,14 @@ declare const _default: {
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }, {
             id: string;
             type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
@@ -3295,14 +3295,14 @@ declare const _default: {
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         }>>;
         templatesUsed: z.ZodArray<z.ZodObject<{
             templateId: z.ZodString;
@@ -3316,10 +3316,10 @@ declare const _default: {
             purchaseDate: z.ZodOptional<z.ZodString>;
             cost: z.ZodOptional<z.ZodNumber>;
         }, "strip", z.ZodTypeAny, {
-            templateName: string;
             templateId: string;
-            templateCategory: string;
+            templateName: string;
             templateVersion: string;
+            templateCategory: string;
             usageDescription: string;
             customizations: string[];
             resultsWithTemplate: string;
@@ -3327,10 +3327,10 @@ declare const _default: {
             cost?: number | undefined;
             purchaseDate?: string | undefined;
         }, {
-            templateName: string;
             templateId: string;
-            templateCategory: string;
+            templateName: string;
             templateVersion: string;
+            templateCategory: string;
             usageDescription: string;
             customizations: string[];
             resultsWithTemplate: string;
@@ -3351,10 +3351,10 @@ declare const _default: {
                 purchaseDate: z.ZodOptional<z.ZodString>;
                 cost: z.ZodOptional<z.ZodNumber>;
             }, "strip", z.ZodTypeAny, {
-                templateName: string;
                 templateId: string;
-                templateCategory: string;
+                templateName: string;
                 templateVersion: string;
+                templateCategory: string;
                 usageDescription: string;
                 customizations: string[];
                 resultsWithTemplate: string;
@@ -3362,10 +3362,10 @@ declare const _default: {
                 cost?: number | undefined;
                 purchaseDate?: string | undefined;
             }, {
-                templateName: string;
                 templateId: string;
-                templateCategory: string;
+                templateName: string;
                 templateVersion: string;
+                templateCategory: string;
                 usageDescription: string;
                 customizations: string[];
                 resultsWithTemplate: string;
@@ -3379,12 +3379,12 @@ declare const _default: {
                 impact: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 description: string;
-                reasonForChange: string;
                 impact: string;
+                reasonForChange: string;
             }, {
                 description: string;
-                reasonForChange: string;
                 impact: string;
+                reasonForChange: string;
             }>, "many">;
             results: z.ZodObject<{
                 outputExamples: z.ZodArray<z.ZodString, "many">;
@@ -3410,14 +3410,14 @@ declare const _default: {
             recommendations: string[];
             customizations: {
                 description: string;
-                reasonForChange: string;
                 impact: string;
+                reasonForChange: string;
             }[];
             originalTemplate: {
-                templateName: string;
                 templateId: string;
-                templateCategory: string;
+                templateName: string;
                 templateVersion: string;
+                templateCategory: string;
                 usageDescription: string;
                 customizations: string[];
                 resultsWithTemplate: string;
@@ -3435,14 +3435,14 @@ declare const _default: {
             recommendations: string[];
             customizations: {
                 description: string;
-                reasonForChange: string;
                 impact: string;
+                reasonForChange: string;
             }[];
             originalTemplate: {
-                templateName: string;
                 templateId: string;
-                templateCategory: string;
+                templateName: string;
                 templateVersion: string;
+                templateCategory: string;
                 usageDescription: string;
                 customizations: string[];
                 resultsWithTemplate: string;
@@ -3459,11 +3459,11 @@ declare const _default: {
                 description: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 description: string;
-                period: "month" | "week" | "day" | "project";
+                period: "project" | "month" | "week" | "day";
                 hours: number;
             }, {
                 description: string;
-                period: "month" | "week" | "day" | "project";
+                period: "project" | "month" | "week" | "day";
                 hours: number;
             }>;
             costSavings: z.ZodObject<{
@@ -3473,12 +3473,12 @@ declare const _default: {
                 calculation: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 amount: number;
-                period: "month" | "week" | "day" | "project";
+                period: "project" | "month" | "week" | "day";
                 currency: string;
                 calculation: string;
             }, {
                 amount: number;
-                period: "month" | "week" | "day" | "project";
+                period: "project" | "month" | "week" | "day";
                 currency: string;
                 calculation: string;
             }>;
@@ -3537,6 +3537,12 @@ declare const _default: {
                 consistencyImprovement: number;
             }>>;
         }, "strip", z.ZodTypeAny, {
+            costSavings: {
+                amount: number;
+                period: "project" | "month" | "week" | "day";
+                currency: string;
+                calculation: string;
+            };
             qualityMetrics: {
                 before: string | number;
                 after: string | number;
@@ -3546,14 +3552,8 @@ declare const _default: {
             }[];
             timeSaved: {
                 description: string;
-                period: "month" | "week" | "day" | "project";
+                period: "project" | "month" | "week" | "day";
                 hours: number;
-            };
-            costSavings: {
-                amount: number;
-                period: "month" | "week" | "day" | "project";
-                currency: string;
-                calculation: string;
             };
             productivityGains: {
                 description: string;
@@ -3569,6 +3569,12 @@ declare const _default: {
                 consistencyImprovement: number;
             } | undefined;
         }, {
+            costSavings: {
+                amount: number;
+                period: "project" | "month" | "week" | "day";
+                currency: string;
+                calculation: string;
+            };
             qualityMetrics: {
                 before: string | number;
                 after: string | number;
@@ -3578,14 +3584,8 @@ declare const _default: {
             }[];
             timeSaved: {
                 description: string;
-                period: "month" | "week" | "day" | "project";
+                period: "project" | "month" | "week" | "day";
                 hours: number;
-            };
-            costSavings: {
-                amount: number;
-                period: "month" | "week" | "day" | "project";
-                currency: string;
-                calculation: string;
             };
             productivityGains: {
                 description: string;
@@ -3707,20 +3707,20 @@ declare const _default: {
             helpfulVotes: z.ZodNumber;
             followUps: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
-            comments: number;
-            views: number;
-            likes: number;
-            helpfulVotes: number;
-            shares: number;
             bookmarks: number;
+            views: number;
+            comments: number;
+            likes: number;
+            shares: number;
+            helpfulVotes: number;
             followUps: number;
         }, {
-            comments: number;
-            views: number;
-            likes: number;
-            helpfulVotes: number;
-            shares: number;
             bookmarks: number;
+            views: number;
+            comments: number;
+            likes: number;
+            shares: number;
+            helpfulVotes: number;
             followUps: number;
         }>;
         moderation: z.ZodObject<{
@@ -3806,7 +3806,7 @@ declare const _default: {
         createdAt: string;
         updatedAt: string;
         description: string;
-        status: "draft" | "featured" | "approved" | "rejected" | "archived" | "submitted" | "under-review";
+        status: "draft" | "featured" | "approved" | "rejected" | "submitted" | "archived" | "under-review";
         type: "template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case";
         config: {
             priority: number;
@@ -3828,16 +3828,16 @@ declare const _default: {
             profileUrl?: string | undefined;
             avatar?: string | undefined;
         };
-        summary: string;
-        title: string;
         content: {
             results: string;
+            implementation: string;
             challenge: string;
             solution: string;
-            implementation: string;
             learnings: string;
             nextSteps?: string | undefined;
         };
+        summary: string;
+        title: string;
         performanceMetrics: {
             efficiency: number;
             templatesUsed: number;
@@ -3854,6 +3854,7 @@ declare const _default: {
                 unit?: string | undefined;
             }[];
         };
+        difficulty: "expert" | "advanced" | "intermediate" | "beginner";
         media: {
             featured: {
                 id: string;
@@ -3864,14 +3865,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }[];
             documents: {
                 id: string;
@@ -3882,14 +3883,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }[];
             screenshots: {
                 id: string;
@@ -3900,14 +3901,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }[];
             videos: {
                 id: string;
@@ -3918,14 +3919,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }[];
             charts: {
                 id: string;
@@ -3936,23 +3937,23 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }[];
         };
         engagement: {
-            comments: number;
-            views: number;
-            likes: number;
-            helpfulVotes: number;
-            shares: number;
             bookmarks: number;
+            views: number;
+            comments: number;
+            likes: number;
+            shares: number;
+            helpfulVotes: number;
             followUps: number;
         };
         seo: {
@@ -3962,7 +3963,7 @@ declare const _default: {
             metaDescription: string;
             canonicalUrl?: string | undefined;
         };
-        industry: "other" | "publishing" | "education" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "technology" | "e-commerce" | "non-profit";
+        industry: "other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit";
         moderation: {
             submittedAt: string;
             submittedBy: string;
@@ -3973,18 +3974,11 @@ declare const _default: {
             featuredAt?: string | undefined;
             featuredBy?: string | undefined;
         };
-        difficulty: "expert" | "advanced" | "intermediate" | "beginner";
-        collaborators: {
-            name: string;
-            userId: string;
-            role: string;
-            contribution: string;
-        }[];
         templatesUsed: {
-            templateName: string;
             templateId: string;
-            templateCategory: string;
+            templateName: string;
             templateVersion: string;
+            templateCategory: string;
             usageDescription: string;
             customizations: string[];
             resultsWithTemplate: string;
@@ -4001,14 +3995,14 @@ declare const _default: {
             recommendations: string[];
             customizations: {
                 description: string;
-                reasonForChange: string;
                 impact: string;
+                reasonForChange: string;
             }[];
             originalTemplate: {
-                templateName: string;
                 templateId: string;
-                templateCategory: string;
+                templateName: string;
                 templateVersion: string;
+                templateCategory: string;
                 usageDescription: string;
                 customizations: string[];
                 resultsWithTemplate: string;
@@ -4019,6 +4013,12 @@ declare const _default: {
             lessonsLearned: string[];
         }[];
         roiMetrics: {
+            costSavings: {
+                amount: number;
+                period: "project" | "month" | "week" | "day";
+                currency: string;
+                calculation: string;
+            };
             qualityMetrics: {
                 before: string | number;
                 after: string | number;
@@ -4028,14 +4028,8 @@ declare const _default: {
             }[];
             timeSaved: {
                 description: string;
-                period: "month" | "week" | "day" | "project";
+                period: "project" | "month" | "week" | "day";
                 hours: number;
-            };
-            costSavings: {
-                amount: number;
-                period: "month" | "week" | "day" | "project";
-                currency: string;
-                calculation: string;
             };
             productivityGains: {
                 description: string;
@@ -4051,8 +4045,13 @@ declare const _default: {
                 consistencyImprovement: number;
             } | undefined;
         };
+        collaborators: {
+            name: string;
+            userId: string;
+            role: string;
+            contribution: string;
+        }[];
         previousVersions: string[];
-        publishedAt?: string | undefined;
         subtitle?: string | undefined;
         featuredImage?: {
             id: string;
@@ -4063,22 +4062,23 @@ declare const _default: {
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         } | undefined;
+        publishedAt?: string | undefined;
         archivedAt?: string | undefined;
     }, {
         id: string;
         createdAt: string;
         updatedAt: string;
         description: string;
-        status: "draft" | "featured" | "approved" | "rejected" | "archived" | "submitted" | "under-review";
+        status: "draft" | "featured" | "approved" | "rejected" | "submitted" | "archived" | "under-review";
         type: "template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case";
         config: {
             priority: number;
@@ -4100,16 +4100,16 @@ declare const _default: {
             profileUrl?: string | undefined;
             avatar?: string | undefined;
         };
-        summary: string;
-        title: string;
         content: {
             results: string;
+            implementation: string;
             challenge: string;
             solution: string;
-            implementation: string;
             learnings: string;
             nextSteps?: string | undefined;
         };
+        summary: string;
+        title: string;
         performanceMetrics: {
             efficiency: number;
             templatesUsed: number;
@@ -4126,6 +4126,7 @@ declare const _default: {
                 unit?: string | undefined;
             }[];
         };
+        difficulty: "expert" | "advanced" | "intermediate" | "beginner";
         media: {
             featured: {
                 id: string;
@@ -4136,14 +4137,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }[];
             documents: {
                 id: string;
@@ -4154,14 +4155,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }[];
             screenshots: {
                 id: string;
@@ -4172,14 +4173,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }[];
             videos: {
                 id: string;
@@ -4190,14 +4191,14 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }[];
             charts: {
                 id: string;
@@ -4208,23 +4209,23 @@ declare const _default: {
                 uploadedBy: string;
                 description?: string | undefined;
                 duration?: number | undefined;
+                fileSize?: number | undefined;
+                mimeType?: string | undefined;
                 dimensions?: {
                     width: number;
                     height: number;
                 } | undefined;
                 thumbnailUrl?: string | undefined;
                 altText?: string | undefined;
-                fileSize?: number | undefined;
-                mimeType?: string | undefined;
             }[];
         };
         engagement: {
-            comments: number;
-            views: number;
-            likes: number;
-            helpfulVotes: number;
-            shares: number;
             bookmarks: number;
+            views: number;
+            comments: number;
+            likes: number;
+            shares: number;
+            helpfulVotes: number;
             followUps: number;
         };
         seo: {
@@ -4234,7 +4235,7 @@ declare const _default: {
             metaDescription: string;
             canonicalUrl?: string | undefined;
         };
-        industry: "other" | "publishing" | "education" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "technology" | "e-commerce" | "non-profit";
+        industry: "other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit";
         moderation: {
             submittedAt: string;
             submittedBy: string;
@@ -4245,18 +4246,11 @@ declare const _default: {
             featuredAt?: string | undefined;
             featuredBy?: string | undefined;
         };
-        difficulty: "expert" | "advanced" | "intermediate" | "beginner";
-        collaborators: {
-            name: string;
-            userId: string;
-            role: string;
-            contribution: string;
-        }[];
         templatesUsed: {
-            templateName: string;
             templateId: string;
-            templateCategory: string;
+            templateName: string;
             templateVersion: string;
+            templateCategory: string;
             usageDescription: string;
             customizations: string[];
             resultsWithTemplate: string;
@@ -4273,14 +4267,14 @@ declare const _default: {
             recommendations: string[];
             customizations: {
                 description: string;
-                reasonForChange: string;
                 impact: string;
+                reasonForChange: string;
             }[];
             originalTemplate: {
-                templateName: string;
                 templateId: string;
-                templateCategory: string;
+                templateName: string;
                 templateVersion: string;
+                templateCategory: string;
                 usageDescription: string;
                 customizations: string[];
                 resultsWithTemplate: string;
@@ -4291,6 +4285,12 @@ declare const _default: {
             lessonsLearned: string[];
         }[];
         roiMetrics: {
+            costSavings: {
+                amount: number;
+                period: "project" | "month" | "week" | "day";
+                currency: string;
+                calculation: string;
+            };
             qualityMetrics: {
                 before: string | number;
                 after: string | number;
@@ -4300,14 +4300,8 @@ declare const _default: {
             }[];
             timeSaved: {
                 description: string;
-                period: "month" | "week" | "day" | "project";
+                period: "project" | "month" | "week" | "day";
                 hours: number;
-            };
-            costSavings: {
-                amount: number;
-                period: "month" | "week" | "day" | "project";
-                currency: string;
-                calculation: string;
             };
             productivityGains: {
                 description: string;
@@ -4323,8 +4317,13 @@ declare const _default: {
                 consistencyImprovement: number;
             } | undefined;
         };
+        collaborators: {
+            name: string;
+            userId: string;
+            role: string;
+            contribution: string;
+        }[];
         previousVersions: string[];
-        publishedAt?: string | undefined;
         subtitle?: string | undefined;
         featuredImage?: {
             id: string;
@@ -4335,15 +4334,16 @@ declare const _default: {
             uploadedBy: string;
             description?: string | undefined;
             duration?: number | undefined;
+            fileSize?: number | undefined;
+            mimeType?: string | undefined;
             dimensions?: {
                 width: number;
                 height: number;
             } | undefined;
             thumbnailUrl?: string | undefined;
             altText?: string | undefined;
-            fileSize?: number | undefined;
-            mimeType?: string | undefined;
         } | undefined;
+        publishedAt?: string | undefined;
         archivedAt?: string | undefined;
     }>;
     CreateCaseStudyRequestSchema: z.ZodObject<{
@@ -4363,16 +4363,16 @@ declare const _default: {
             nextSteps: z.ZodOptional<z.ZodString>;
         }, "strip", z.ZodTypeAny, {
             results: string;
+            implementation: string;
             challenge: string;
             solution: string;
-            implementation: string;
             learnings: string;
             nextSteps?: string | undefined;
         }, {
             results: string;
+            implementation: string;
             challenge: string;
             solution: string;
-            implementation: string;
             learnings: string;
             nextSteps?: string | undefined;
         }>;
@@ -4413,11 +4413,11 @@ declare const _default: {
                 description: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 description: string;
-                period: "month" | "week" | "day" | "project";
+                period: "project" | "month" | "week" | "day";
                 hours: number;
             }, {
                 description: string;
-                period: "month" | "week" | "day" | "project";
+                period: "project" | "month" | "week" | "day";
                 hours: number;
             }>>;
             costSavings: z.ZodOptional<z.ZodObject<{
@@ -4427,12 +4427,12 @@ declare const _default: {
                 calculation: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 amount: number;
-                period: "month" | "week" | "day" | "project";
+                period: "project" | "month" | "week" | "day";
                 currency: string;
                 calculation: string;
             }, {
                 amount: number;
-                period: "month" | "week" | "day" | "project";
+                period: "project" | "month" | "week" | "day";
                 currency: string;
                 calculation: string;
             }>>;
@@ -4491,6 +4491,12 @@ declare const _default: {
                 consistencyImprovement: number;
             }>>>;
         }, "strip", z.ZodTypeAny, {
+            costSavings?: {
+                amount: number;
+                period: "project" | "month" | "week" | "day";
+                currency: string;
+                calculation: string;
+            } | undefined;
             qualityMetrics?: {
                 before: string | number;
                 after: string | number;
@@ -4500,14 +4506,8 @@ declare const _default: {
             }[] | undefined;
             timeSaved?: {
                 description: string;
-                period: "month" | "week" | "day" | "project";
+                period: "project" | "month" | "week" | "day";
                 hours: number;
-            } | undefined;
-            costSavings?: {
-                amount: number;
-                period: "month" | "week" | "day" | "project";
-                currency: string;
-                calculation: string;
             } | undefined;
             productivityGains?: {
                 description: string;
@@ -4523,6 +4523,12 @@ declare const _default: {
                 consistencyImprovement: number;
             } | undefined;
         }, {
+            costSavings?: {
+                amount: number;
+                period: "project" | "month" | "week" | "day";
+                currency: string;
+                calculation: string;
+            } | undefined;
             qualityMetrics?: {
                 before: string | number;
                 after: string | number;
@@ -4532,14 +4538,8 @@ declare const _default: {
             }[] | undefined;
             timeSaved?: {
                 description: string;
-                period: "month" | "week" | "day" | "project";
+                period: "project" | "month" | "week" | "day";
                 hours: number;
-            } | undefined;
-            costSavings?: {
-                amount: number;
-                period: "month" | "week" | "day" | "project";
-                currency: string;
-                calculation: string;
             } | undefined;
             productivityGains?: {
                 description: string;
@@ -4656,17 +4656,17 @@ declare const _default: {
         description: string;
         type: "template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case";
         tags: string[];
-        title: string;
         content: {
             results: string;
+            implementation: string;
             challenge: string;
             solution: string;
-            implementation: string;
             learnings: string;
             nextSteps?: string | undefined;
         };
-        industry: "other" | "publishing" | "education" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "technology" | "e-commerce" | "non-profit";
+        title: string;
         difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+        industry: "other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit";
         templatesUsed: {
             templateId: string;
             templateVersion: string;
@@ -4702,14 +4702,14 @@ declare const _default: {
                 unit?: string | undefined;
             }[] | undefined;
         } | undefined;
-        collaborators?: {
-            name: string;
-            userId: string;
-            role: string;
-            contribution: string;
-        }[] | undefined;
         subtitle?: string | undefined;
         roiMetrics?: {
+            costSavings?: {
+                amount: number;
+                period: "project" | "month" | "week" | "day";
+                currency: string;
+                calculation: string;
+            } | undefined;
             qualityMetrics?: {
                 before: string | number;
                 after: string | number;
@@ -4719,14 +4719,8 @@ declare const _default: {
             }[] | undefined;
             timeSaved?: {
                 description: string;
-                period: "month" | "week" | "day" | "project";
+                period: "project" | "month" | "week" | "day";
                 hours: number;
-            } | undefined;
-            costSavings?: {
-                amount: number;
-                period: "month" | "week" | "day" | "project";
-                currency: string;
-                calculation: string;
             } | undefined;
             productivityGains?: {
                 description: string;
@@ -4742,21 +4736,27 @@ declare const _default: {
                 consistencyImprovement: number;
             } | undefined;
         } | undefined;
+        collaborators?: {
+            name: string;
+            userId: string;
+            role: string;
+            contribution: string;
+        }[] | undefined;
     }, {
         description: string;
         type: "template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case";
         tags: string[];
-        title: string;
         content: {
             results: string;
+            implementation: string;
             challenge: string;
             solution: string;
-            implementation: string;
             learnings: string;
             nextSteps?: string | undefined;
         };
-        industry: "other" | "publishing" | "education" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "technology" | "e-commerce" | "non-profit";
+        title: string;
         difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+        industry: "other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit";
         templatesUsed: {
             templateId: string;
             templateVersion: string;
@@ -4792,14 +4792,14 @@ declare const _default: {
                 unit?: string | undefined;
             }[] | undefined;
         } | undefined;
-        collaborators?: {
-            name: string;
-            userId: string;
-            role: string;
-            contribution: string;
-        }[] | undefined;
         subtitle?: string | undefined;
         roiMetrics?: {
+            costSavings?: {
+                amount: number;
+                period: "project" | "month" | "week" | "day";
+                currency: string;
+                calculation: string;
+            } | undefined;
             qualityMetrics?: {
                 before: string | number;
                 after: string | number;
@@ -4809,14 +4809,8 @@ declare const _default: {
             }[] | undefined;
             timeSaved?: {
                 description: string;
-                period: "month" | "week" | "day" | "project";
+                period: "project" | "month" | "week" | "day";
                 hours: number;
-            } | undefined;
-            costSavings?: {
-                amount: number;
-                period: "month" | "week" | "day" | "project";
-                currency: string;
-                calculation: string;
             } | undefined;
             productivityGains?: {
                 description: string;
@@ -4832,6 +4826,12 @@ declare const _default: {
                 consistencyImprovement: number;
             } | undefined;
         } | undefined;
+        collaborators?: {
+            name: string;
+            userId: string;
+            role: string;
+            contribution: string;
+        }[] | undefined;
     }>;
     CaseStudyFilterSchema: z.ZodObject<{
         type: z.ZodOptional<z.ZodUnion<[z.ZodEnum<["template-success", "user-story", "roi-analysis", "before-after", "industry-showcase", "community-highlight", "innovation-case"]>, z.ZodArray<z.ZodEnum<["template-success", "user-story", "roi-analysis", "before-after", "industry-showcase", "community-highlight", "innovation-case"]>, "many">]>>;
@@ -4857,11 +4857,11 @@ declare const _default: {
         featuredOnly: z.ZodOptional<z.ZodBoolean>;
     }, "strict", z.ZodTypeAny, {
         search?: string | undefined;
-        status?: "draft" | "featured" | "approved" | "rejected" | "archived" | "submitted" | "under-review" | ("draft" | "featured" | "approved" | "rejected" | "archived" | "submitted" | "under-review")[] | undefined;
+        status?: "draft" | "featured" | "approved" | "rejected" | "submitted" | "archived" | "under-review" | ("draft" | "featured" | "approved" | "rejected" | "submitted" | "archived" | "under-review")[] | undefined;
         type?: "template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case" | ("template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case")[] | undefined;
         tags?: string[] | undefined;
-        industry?: "other" | "publishing" | "education" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "technology" | "e-commerce" | "non-profit" | ("other" | "publishing" | "education" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "technology" | "e-commerce" | "non-profit")[] | undefined;
         difficulty?: ("expert" | "advanced" | "intermediate" | "beginner")[] | undefined;
+        industry?: "other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit" | ("other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit")[] | undefined;
         templateIds?: string[] | undefined;
         templateCategories?: string[] | undefined;
         minROI?: number | undefined;
@@ -4879,11 +4879,11 @@ declare const _default: {
         featuredOnly?: boolean | undefined;
     }, {
         search?: string | undefined;
-        status?: "draft" | "featured" | "approved" | "rejected" | "archived" | "submitted" | "under-review" | ("draft" | "featured" | "approved" | "rejected" | "archived" | "submitted" | "under-review")[] | undefined;
+        status?: "draft" | "featured" | "approved" | "rejected" | "submitted" | "archived" | "under-review" | ("draft" | "featured" | "approved" | "rejected" | "submitted" | "archived" | "under-review")[] | undefined;
         type?: "template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case" | ("template-success" | "user-story" | "roi-analysis" | "before-after" | "industry-showcase" | "community-highlight" | "innovation-case")[] | undefined;
         tags?: string[] | undefined;
-        industry?: "other" | "publishing" | "education" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "technology" | "e-commerce" | "non-profit" | ("other" | "publishing" | "education" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "technology" | "e-commerce" | "non-profit")[] | undefined;
         difficulty?: ("expert" | "advanced" | "intermediate" | "beginner")[] | undefined;
+        industry?: "other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit" | ("other" | "publishing" | "education" | "technology" | "finance" | "legal" | "consulting" | "film-production" | "advertising" | "gaming" | "healthcare" | "e-commerce" | "non-profit")[] | undefined;
         templateIds?: string[] | undefined;
         templateCategories?: string[] | undefined;
         minROI?: number | undefined;
@@ -4932,14 +4932,14 @@ declare const _default: {
         uploadedBy: string;
         description?: string | undefined;
         duration?: number | undefined;
+        fileSize?: number | undefined;
+        mimeType?: string | undefined;
         dimensions?: {
             width: number;
             height: number;
         } | undefined;
         thumbnailUrl?: string | undefined;
         altText?: string | undefined;
-        fileSize?: number | undefined;
-        mimeType?: string | undefined;
     }, {
         id: string;
         type: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
@@ -4949,14 +4949,14 @@ declare const _default: {
         uploadedBy: string;
         description?: string | undefined;
         duration?: number | undefined;
+        fileSize?: number | undefined;
+        mimeType?: string | undefined;
         dimensions?: {
             width: number;
             height: number;
         } | undefined;
         thumbnailUrl?: string | undefined;
         altText?: string | undefined;
-        fileSize?: number | undefined;
-        mimeType?: string | undefined;
     }>;
     ROIMetricsSchema: z.ZodObject<{
         timeSaved: z.ZodObject<{
@@ -4965,11 +4965,11 @@ declare const _default: {
             description: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             description: string;
-            period: "month" | "week" | "day" | "project";
+            period: "project" | "month" | "week" | "day";
             hours: number;
         }, {
             description: string;
-            period: "month" | "week" | "day" | "project";
+            period: "project" | "month" | "week" | "day";
             hours: number;
         }>;
         costSavings: z.ZodObject<{
@@ -4979,12 +4979,12 @@ declare const _default: {
             calculation: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             amount: number;
-            period: "month" | "week" | "day" | "project";
+            period: "project" | "month" | "week" | "day";
             currency: string;
             calculation: string;
         }, {
             amount: number;
-            period: "month" | "week" | "day" | "project";
+            period: "project" | "month" | "week" | "day";
             currency: string;
             calculation: string;
         }>;
@@ -5043,6 +5043,12 @@ declare const _default: {
             consistencyImprovement: number;
         }>>;
     }, "strip", z.ZodTypeAny, {
+        costSavings: {
+            amount: number;
+            period: "project" | "month" | "week" | "day";
+            currency: string;
+            calculation: string;
+        };
         qualityMetrics: {
             before: string | number;
             after: string | number;
@@ -5052,14 +5058,8 @@ declare const _default: {
         }[];
         timeSaved: {
             description: string;
-            period: "month" | "week" | "day" | "project";
+            period: "project" | "month" | "week" | "day";
             hours: number;
-        };
-        costSavings: {
-            amount: number;
-            period: "month" | "week" | "day" | "project";
-            currency: string;
-            calculation: string;
         };
         productivityGains: {
             description: string;
@@ -5075,6 +5075,12 @@ declare const _default: {
             consistencyImprovement: number;
         } | undefined;
     }, {
+        costSavings: {
+            amount: number;
+            period: "project" | "month" | "week" | "day";
+            currency: string;
+            calculation: string;
+        };
         qualityMetrics: {
             before: string | number;
             after: string | number;
@@ -5084,14 +5090,8 @@ declare const _default: {
         }[];
         timeSaved: {
             description: string;
-            period: "month" | "week" | "day" | "project";
+            period: "project" | "month" | "week" | "day";
             hours: number;
-        };
-        costSavings: {
-            amount: number;
-            period: "month" | "week" | "day" | "project";
-            currency: string;
-            calculation: string;
         };
         productivityGains: {
             description: string;
@@ -5119,10 +5119,10 @@ declare const _default: {
         purchaseDate: z.ZodOptional<z.ZodString>;
         cost: z.ZodOptional<z.ZodNumber>;
     }, "strip", z.ZodTypeAny, {
-        templateName: string;
         templateId: string;
-        templateCategory: string;
+        templateName: string;
         templateVersion: string;
+        templateCategory: string;
         usageDescription: string;
         customizations: string[];
         resultsWithTemplate: string;
@@ -5130,10 +5130,10 @@ declare const _default: {
         cost?: number | undefined;
         purchaseDate?: string | undefined;
     }, {
-        templateName: string;
         templateId: string;
-        templateCategory: string;
+        templateName: string;
         templateVersion: string;
+        templateCategory: string;
         usageDescription: string;
         customizations: string[];
         resultsWithTemplate: string;

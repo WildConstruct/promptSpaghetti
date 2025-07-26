@@ -62,7 +62,7 @@ interface UserManagementState {
 
 const UserManagementDashboard: React.FC = () => {
   const navigate = useNavigate();
-  const { user: ___currentUser } = useAuthStore();
+  const { user: _currentUser } = useAuthStore();
   
   // State management
   const [state, setState] = useState<UserManagementState>({
@@ -865,7 +865,10 @@ const UserManagementDashboard: React.FC = () => {
           </h3>
           
           <div style={{ fontSize: '14px', color: '#6b7280' }}>
-            Showing {startIndex + 1}-{Math.min(startIndex + state.pageSize, filteredAndSortedUsers.length)} of {filteredAndSortedUsers.length}
+            Showing {startIndex + 1}-{Math.min(
+              startIndex + state.pageSize,
+              filteredAndSortedUsers.length
+            )} of {filteredAndSortedUsers.length}
           </div>
         </div>
 

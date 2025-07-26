@@ -113,7 +113,7 @@ describe('DataRetrievalRateLimit', () => {
         result: RateLimitResult.ALLOWED,
         reason: 'Within limits',
         retryAfter: 0
-      } as unknown as unknown),
+      } as unknown as unknown as unknown),
       recordAttempt: jest.fn<unknown[], unknown>(),
       updateConfiguration: jest.fn<unknown[], unknown>(),
       getMetrics: jest.fn<unknown[], unknown>(),
@@ -167,7 +167,7 @@ describe('DataRetrievalRateLimit', () => {
         result: RateLimitResult.BLOCKED,
         reason: 'Rate limit exceeded',
         retryAfter: 60
-      } as unknown as unknown);
+      } as unknown as unknown as unknown);
 
       const subject = createTestSubject();
       const object = createTestObject();
@@ -365,7 +365,7 @@ describe('DataRetrievalRateLimit', () => {
 
     test('should apply time-based adjustments for off-hours access', async () => {
       // Mock current time to be outside typical hours
-      jest.spyOn(Date.prototype, 'getHours').mockReturnValue(2 as unknown as unknown); // 2 AM
+      jest.spyOn(Date.prototype, 'getHours').mockReturnValue(2 as unknown as unknown as unknown); // 2 AM
 
       const subject = createTestSubject();
       const object = createTestObject({ classification: 'RESTRICTED' });
@@ -405,7 +405,7 @@ describe('DataRetrievalRateLimit', () => {
     });
 
     test('should detect off-hours access anomaly', async () => {
-      jest.spyOn(Date.prototype, 'getHours').mockReturnValue(3 as unknown as unknown); // 3 AM
+      jest.spyOn(Date.prototype, 'getHours').mockReturnValue(3 as unknown as unknown as unknown); // 3 AM
 
       const subject = createTestSubject({
         behaviorProfile: {

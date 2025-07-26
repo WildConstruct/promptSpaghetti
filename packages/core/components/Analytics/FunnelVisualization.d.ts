@@ -13,7 +13,12 @@
  * - Export and sharing capabilities
  */
 import React from 'react';
-import { ConversionFunnelDefinition, ConversionStep, UserSegment, ConversionCohort } from '../../analytics/ConversionDataModel';
+import { 
+  ConversionFunnelDefinition,
+  ConversionStep,
+  UserSegment,
+  ConversionCohort
+} from '../../analytics/ConversionDataModel';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 export interface FunnelVisualizationProps {
     funnelDefinition: ConversionFunnelDefinition;
@@ -60,7 +65,7 @@ export interface FunnelConfiguration {
 export type MetricDisplay = 'conversion_rate' | 'drop_off_rate' | 'user_count' | 'value_generated' | 'time_spent' | 'exit_reasons';
 export interface FunnelFilter {
     type: 'segment' | 'cohort' | 'time_range' | 'device' | 'location' | 'source';
-    value: any;
+    value: string | number;
     operator: 'equals' | 'in' | 'between' | 'greater_than' | 'less_than';
 }
 export interface FunnelGrouping {

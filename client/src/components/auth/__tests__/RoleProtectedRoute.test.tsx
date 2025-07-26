@@ -44,7 +44,7 @@ describe('RoleProtectedRoute', () => {
       isAuthenticated: false,
       isLoading: false,
       user: null,
-      checkAuthStatus: jest.fn<unknown[], unknown>(),
+      checkAuthStatus: jest.fn<unknown[], unknown>( as unknown),
       setReturnUrl: jest.fn<unknown[], unknown>(),
       accessToken: null,
       refreshToken: null,
@@ -82,7 +82,7 @@ describe('RoleProtectedRoute', () => {
         isEmailVerified: true,
         roles: ['admin', 'user'] 
       },
-      checkAuthStatus: jest.fn<unknown[], unknown>(),
+      checkAuthStatus: jest.fn<unknown[], unknown>( as unknown),
       setReturnUrl: jest.fn<unknown[], unknown>(),
       accessToken: 'token',
       refreshToken: 'refresh',
@@ -119,7 +119,7 @@ describe('RoleProtectedRoute', () => {
         isEmailVerified: true,
         roles: ['user'] // Missing 'admin' role
       },
-      checkAuthStatus: jest.fn<unknown[], unknown>(),
+      checkAuthStatus: jest.fn<unknown[], unknown>( as unknown),
       setReturnUrl: jest.fn<unknown[], unknown>(),
       accessToken: 'token',
       refreshToken: 'refresh',
@@ -158,7 +158,7 @@ describe('RoleProtectedRoute', () => {
         isEmailVerified: true,
         roles: ['user'] 
       },
-      checkAuthStatus: jest.fn<unknown[], unknown>(),
+      checkAuthStatus: jest.fn<unknown[], unknown>( as unknown),
       setReturnUrl: jest.fn<unknown[], unknown>(),
       accessToken: 'token',
       refreshToken: 'refresh',
@@ -195,7 +195,7 @@ describe('RoleProtectedRoute', () => {
         isEmailVerified: true,
         roles: ['admin'] // Has admin but not 'moderator'
       },
-      checkAuthStatus: jest.fn<unknown[], unknown>(),
+      checkAuthStatus: jest.fn<unknown[], unknown>( as unknown),
       setReturnUrl: jest.fn<unknown[], unknown>(),
       accessToken: 'token',
       refreshToken: 'refresh',
@@ -233,7 +233,7 @@ describe('RoleProtectedRoute', () => {
         isEmailVerified: true,
         roles: ['admin'] // Has admin, missing 'moderator', but requireAll=false
       },
-      checkAuthStatus: jest.fn<unknown[], unknown>(),
+      checkAuthStatus: jest.fn<unknown[], unknown>( as unknown),
       setReturnUrl: jest.fn<unknown[], unknown>(),
       accessToken: 'token',
       refreshToken: 'refresh',
@@ -270,7 +270,7 @@ describe('RoleProtectedRoute', () => {
         isEmailVerified: true,
         roles: ['user'] // User has basic role
       },
-      checkAuthStatus: jest.fn<unknown[], unknown>(),
+      checkAuthStatus: jest.fn<unknown[], unknown>( as unknown),
       setReturnUrl: jest.fn<unknown[], unknown>(),
       accessToken: 'token',
       refreshToken: 'refresh',

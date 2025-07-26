@@ -1,11 +1,11 @@
 // Core Network Resilience Components
-export { OfflineOperationQueue } from './OfflineOperationQueue.js';
-export { ConnectionStateManager } from './ConnectionStateManager.js';
-export { ReconnectionHandler } from './ReconnectionHandler.js';
-export { SynchronizationRecovery } from './SynchronizationRecovery.js';
-export { NetworkResilienceManager } from './NetworkResilienceManager.js';
+export { OfflineOperationQueue } from './OfflineOperationQueue';
+export { ConnectionStateManager } from './ConnectionStateManager';
+export { ReconnectionHandler } from './ReconnectionHandler';
+export { SynchronizationRecovery } from './SynchronizationRecovery';
+export { NetworkResilienceManager } from './NetworkResilienceManager';
 // Enums
-export { ConnectionState, ConnectionQuality } from './ConnectionStateManager.js';
-export { ReconnectionState } from './ReconnectionHandler.js';
+export { ConnectionState, ConnectionQuality } from './ConnectionStateManager';
+export { ReconnectionState } from './ReconnectionHandler';
 // UI Components
-export { ConnectionStatusIndicator, OfflineIndicator, NetworkResiliencePanel } from '../components/NetworkResilience.js';
+export { ConnectionStatusIndicator, OfflineIndicator, NetworkResiliencePanel } from '../components/NetworkResilience';

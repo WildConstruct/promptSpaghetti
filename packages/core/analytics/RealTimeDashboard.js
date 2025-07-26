@@ -6,7 +6,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * through the unified event bus with WebSocket streaming and performance widgets.
  */
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { AnalyticsEventType, EventCategory } from './UnifiedEventBus.js';
+import { AnalyticsEventType, EventCategory } from './UnifiedEventBus';
 import './RealTimeDashboard.css';
 // Widget Types
 export var WidgetType;

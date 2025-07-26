@@ -3,7 +3,7 @@ import { useReactFlow } from 'reactflow';
 /**
  * Individual user cursor component
  */
-const UserCursor = ({ user, position, nodeId }) => {
+const UserCursor = ({ user, position, nodeId }: { user: any; position: any; nodeId?: string }) => {
     const cursorStyle = {
         position: 'absolute',
         left: position.x,
@@ -28,7 +28,7 @@ const UserCursor = ({ user, position, nodeId }) => {
 /**
  * Selection overlay for nodes being edited by other users
  */
-const NodeSelectionOverlay = ({ nodeId, users, nodePosition, nodeWidth, nodeHeight }) => {
+const NodeSelectionOverlay = ({ nodeId, users, nodePosition, nodeWidth, nodeHeight }: { nodeId: string; users: any[]; nodePosition: any; nodeWidth: number; nodeHeight: number }) => {
     const primaryUser = users[0]; // Use first user's color
     const overlayStyle = {
         position: 'absolute',
@@ -56,17 +56,17 @@ const NodeSelectionOverlay = ({ nodeId, users, nodePosition, nodeWidth, nodeHeig
         whiteSpace: 'nowrap',
         boxShadow: '0 1px 3px rgba(0,0,0,0.3)'
     };
-    const userNames = users.map(u => u.name).join(', ');
+    const userNames = users.map((u: any) => u.name).join(', ');
     const isMultiple = users.length > 1;
     return (_jsx("div", { style: overlayStyle, children: _jsx("div", { style: labelStyle, children: isMultiple ? `${users.length} users` : userNames }) }));
 };
 /**
  * Main collaborative presence overlay component
  */
-export const CollaborativePresence = ({ userCursors, remoteSelections, className }) => {
+export const CollaborativePresence = ({ userCursors, remoteSelections, className }: { userCursors: any[]; remoteSelections: Map<string, any[]>; className?: string }) => {
     const reactFlow = useReactFlow();
     // Get node positions for selection overlays
-    const getNodeRect = (nodeId) => {
+    const getNodeRect = (nodeId: string): any => {
         const node = reactFlow.getNode(nodeId);
         if (!node)
             return null;
@@ -95,10 +95,10 @@ export const CollaborativePresence = ({ userCursors, remoteSelections, className
 /**
  * Connection status indicator component
  */
-export const CollaborationStatus = ({ isCollaborative, connectionStatus, connectedUserCount, className }) => {
+export const CollaborationStatus = ({ isCollaborative, connectionStatus, connectedUserCount, className }: { isCollaborative: boolean; connectionStatus: string; connectedUserCount: number; className?: string }) => {
     if (!isCollaborative)
         return null;
-    const getStatusColor = () => {
+    const getStatusColor = (): string => {
         switch (connectionStatus) {
             case 'connected': return '#10b981';
             case 'connecting': return '#f59e0b';
@@ -107,7 +107,7 @@ export const CollaborationStatus = ({ isCollaborative, connectionStatus, connect
             default: return '#6b7280';
         }
     };
-    const getStatusText = () => {
+    const getStatusText = (): string => {
         switch (connectionStatus) {
             case 'connected': return `Connected • ${connectedUserCount} user${connectedUserCount !== 1 ? 's' : ''}`;
             case 'connecting': return 'Connecting...';
@@ -142,9 +142,9 @@ export const CollaborationStatus = ({ isCollaborative, connectionStatus, connect
 /**
  * Connected users avatar list
  */
-export const UserAvatars = ({ connectedUsers, localUserId, maxVisible = 5, className }) => {
+export const UserAvatars = ({ connectedUsers, localUserId, maxVisible = 5, className }: { connectedUsers: Map<string, any>; localUserId: string; maxVisible?: number; className?: string }) => {
     const users = Array.from(connectedUsers.values())
-        .filter(user => user.userId !== localUserId)
+        .filter((user: any) => user.userId !== localUserId)
         .slice(0, maxVisible);
     const extraCount = Math.max(0, connectedUsers.size - maxVisible - 1); // -1 for local user
     if (users.length === 0)
@@ -154,7 +154,7 @@ export const UserAvatars = ({ connectedUsers, localUserId, maxVisible = 5, class
         alignItems: 'center',
         gap: '4px'
     };
-    const avatarStyle = (color) => ({
+    const avatarStyle = (color: string) => ({
         width: '24px',
         height: '24px',
         borderRadius: '50%',
@@ -168,9 +168,9 @@ export const UserAvatars = ({ connectedUsers, localUserId, maxVisible = 5, class
         border: '2px solid white',
         boxShadow: '0 1px 3px rgba(0,0,0,0.2)'
     });
-    const getInitials = (name) => {
+    const getInitials = (name: string): string => {
         return name.split(' ')
-            .map(word => word[0])
+            .map((word: string) => word[0])
             .join('')
             .toUpperCase()
             .slice(0, 2);

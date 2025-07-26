@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 import { Card, Table, Select, DatePicker, Button, Space, Tag, Statistic, Row, Col, Alert, Input, Modal, Tabs, Progress } from 'antd';
 import { Bar, Pie } from '@ant-design/plots';
 import { SecurityScanOutlined, AlertOutlined, UserOutlined, FileTextOutlined, ExclamationTriangleOutlined, CheckCircleOutlined, ClockCircleOutlined, DownloadOutlined, FilterOutlined, ReloadOutlined } from '@ant-design/icons';
-import { AuditEventType, AuditSeverity, ComplianceFramework, AuditStatus, auditManagementSystem } from '../audit/AuditManagementSystem.js';
+import { AuditEventType, AuditSeverity, ComplianceFramework, AuditStatus, auditManagementSystem } from '../audit/AuditManagementSystem';
 const { RangePicker } = DatePicker;
 const { Search } = Input;
 const { TabPane } = Tabs;

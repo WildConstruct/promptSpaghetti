@@ -1,4 +1,6 @@
 /**
+import { Plus, FileText, X } from 'lucide-react';
+
 import { Plus } from 'lucide-react';
 
  * Tutorial UI Components (Epic 16)

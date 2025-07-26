@@ -12,10 +12,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * - Help analytics and effectiveness measurement
  */
 import { useState, useCallback, useEffect, useMemo } from 'react';
-import { ContextualHelpSystem } from '../ContextualHelp/ContextualHelpSystem.js';
-import { HelpContentManager } from '../ContextualHelp/HelpContentManager.js';
-import { MarketplaceHelpOverlay } from './MarketplaceHelpOverlay.js';
-import { MarketplaceContextualHelp } from './MarketplaceContextualHelp.js';
+import { ContextualHelpSystem } from '../ContextualHelp/ContextualHelpSystem';
+import { HelpContentManager } from '../ContextualHelp/HelpContentManager';
+import { MarketplaceHelpOverlay } from './MarketplaceHelpOverlay';
+import { MarketplaceContextualHelp } from './MarketplaceContextualHelp';
 export const Epic16HelpSystem = ({ nodes = [], edges = [], selectedNodeId, currentPage = '', userRole = 'new-user', userLevel = 'beginner', pageContext = {}, helpEnabled = true, autoContextualHelp = true, showGuidedTours = true, helpComplexity = 'beginner', onHelpAnalytics }) => {
     // State management
     const [helpContentManager] = useState(() => new HelpContentManager());

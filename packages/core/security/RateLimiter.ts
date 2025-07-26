@@ -33,7 +33,7 @@ export interface RateLimitContext {
   method?: string;
   path?: string;
   headers?: Record<string, string>;
-  body?: any;
+  body?: unknown;
   timestamp?: number;
   sessionId?: string;
   organizationId?: string;
@@ -315,7 +315,7 @@ export abstract class RateLimitStrategy {
 }
 
 export class FixedWindowStrategy extends RateLimitStrategy {
-  async checkLimit(key: string, context: RateLimitContext): Promise<RateLimitResult> {
+  async checkLimit(key: string): Promise<RateLimitResult> {
     try {
       const { hits, resetTime } = await this.store.increment(key, this.config.windowMs);
       
@@ -479,7 +479,6 @@ export class RateLimiter {
     
     if (!data) return null;
 
-    const now = new Date();
     const resetTime = new Date(data.resetTime);
     const windowStart = new Date(data.windowStart);
     
@@ -693,7 +692,7 @@ export class RateLimitUtils {
   /**
    * Calculate optimal window size based on expected traffic
    */
-  static calculateOptimalWindow(expectedRequestsPerHour: number, maxConcurrentUsers: number): number {
+  static calculateOptimalWindow(expectedRequestsPerHour: number): number {
     // Simple heuristic: window should be long enough to smooth traffic spikes
     // but short enough to be responsive to attacks
     const requestsPerMinute = expectedRequestsPerHour / 60;

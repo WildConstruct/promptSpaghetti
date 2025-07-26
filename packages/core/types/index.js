@@ -4,15 +4,14 @@
  * Central export file for all policy-related TypeScript interfaces
  * and types used throughout the application.
  */
-// Export all policy interfaces
-export * from './PolicyInterfaces.js';
-// Export policy service interfaces
-export * from './PolicyServices.js';
-// Export policy event interfaces
-export * from './PolicyEvents.js';
+// Temporarily commenting out problematic exports to identify issues
+// TODO: Fix duplicate export conflicts and re-enable these exports
+// export * from './PolicyInterfaces';
+// export * from './PolicyServices'; 
+// export * from './PolicyEvents';
 // Export promotion interfaces
-export * from './PromotionTypes.js';
+export * from './PromotionTypes';
 // Export existing types for compatibility
-export * from './TrustTypes.js';
-export * from './EnforcementTypes.js';
+export * from './TrustTypes';
+export * from './EnforcementTypes';
 //# sourceMappingURL=index.js.map

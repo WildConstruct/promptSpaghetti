@@ -1,7 +1,7 @@
 import { jsxs as _jsxs, jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
 import { useState, useRef, useEffect } from 'react';
-import { useGraphStore } from '../../graphStore.js';
-export const VariationList = ({ nodeId, variations, onAdd, onRemove, onUpdate, onReorder, maxVariations = 50, placeholder = 'Add a variation...', allowQuickEntry = true }) => {
+import { useGraphStore } from '../../graphStore';
+export const VariationList = ({ nodeId, variations, onAdd, onRemove, onUpdate, onReorder, maxVariations = 50, placeholder = 'Add a variation...', allowQuickEntry = true }: { nodeId: string, variations: string[], onAdd?: (variation: string) => void, onRemove?: (index: number) => void, onUpdate?: (index: number, value: string) => void, onReorder?: (fromIndex: number, toIndex: number) => void, maxVariations?: number, placeholder?: string, allowQuickEntry?: boolean }) => {
     const [newVariation, setNewVariation] = useState('');
     const [editingIndex, setEditingIndex] = useState(null);
     const [editingValue, setEditingValue] = useState('');
@@ -29,7 +29,7 @@ export const VariationList = ({ nodeId, variations, onAdd, onRemove, onUpdate, o
         }
         setNewVariation('');
     };
-    const handleRemove = (index) => {
+    const handleRemove = (index: number) => {
         if (onRemove) {
             onRemove(index);
         }
@@ -37,7 +37,7 @@ export const VariationList = ({ nodeId, variations, onAdd, onRemove, onUpdate, o
             removeVariation(nodeId, index);
         }
     };
-    const handleUpdate = (index, newValue) => {
+    const handleUpdate = (index: number, newValue: string) => {
         if (onUpdate) {
             onUpdate(index, newValue);
         }
@@ -45,7 +45,7 @@ export const VariationList = ({ nodeId, variations, onAdd, onRemove, onUpdate, o
             updateVariation(nodeId, index, newValue);
         }
     };
-    const handleReorder = (fromIndex, toIndex) => {
+    const handleReorder = (fromIndex: number, toIndex: number) => {
         if (onReorder) {
             onReorder(fromIndex, toIndex);
         }
@@ -53,7 +53,7 @@ export const VariationList = ({ nodeId, variations, onAdd, onRemove, onUpdate, o
             reorderVariations(nodeId, fromIndex, toIndex);
         }
     };
-    const startEdit = (index) => {
+    const startEdit = (index: number) => {
         setEditingIndex(index);
         setEditingValue(variations[index]);
     };
@@ -79,17 +79,17 @@ export const VariationList = ({ nodeId, variations, onAdd, onRemove, onUpdate, o
         setQuickEntryText('');
         setQuickEntryMode(false);
     };
-    const handleDragStart = (e, index) => {
+    const handleDragStart = (e: any, index: number) => {
         setDraggedIndex(index);
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/plain', index.toString());
     };
-    const handleDragOver = (e, index) => {
+    const handleDragOver = (e: any, index: number) => {
         e.preventDefault();
         e.dataTransfer.dropEffect = 'move';
         setDragOverIndex(index);
     };
-    const handleDrop = (e, index) => {
+    const handleDrop = (e: any, index: number) => {
         e.preventDefault();
         if (draggedIndex !== null && draggedIndex !== index) {
             handleReorder(draggedIndex, index);

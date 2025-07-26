@@ -5,7 +5,7 @@
  * with conflict resolution and presence management.
  */
 import { EventEmitter } from 'events';
-import { ConflictResolver } from './ConflictResolver.js';
+import { ConflictResolver } from './ConflictResolver';
 /**
  * Simple WebSocket implementation for collaborative editing
  */

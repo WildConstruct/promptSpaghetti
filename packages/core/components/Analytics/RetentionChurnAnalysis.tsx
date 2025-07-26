@@ -256,7 +256,10 @@ export const RetentionChurnAnalysis: React.FC<RetentionChurnAnalysisProps> = ({
     return {
       totalUsers: churnPredictions.length,
       highRisk: (riskDistribution.high || 0) + (riskDistribution.critical || 0),
-      averageChurnProbability: Math.round(churnPredictions.reduce((sum, p) => sum + p.churnProbability, 0) / churnPredictions.length * 100),
+      averageChurnProbability: Math.round(
+        churnPredictions.reduce((sum,
+        p
+      ) => sum + p.churnProbability, 0) / churnPredictions.length * 100),
       riskDistribution
     };
   }, [churnPredictions]);
@@ -491,7 +494,7 @@ export interface CohortDefinition {
 export interface CohortCriteria {
   field: string;
   operator: string;
-  value: any;
+  value: Error;
 }
 
 export interface RetentionPeriod {

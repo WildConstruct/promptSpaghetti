@@ -13,7 +13,7 @@ interface EnhancedTemplateVersion {
   status: 'draft' | 'published' | 'deprecated' | 'archived';
   visibility: 'public' | 'private' | 'beta';
   claude_model: string;
-  graph_json: Record<string, any>;
+  graph_json: Record<string, unknown>;
   prompt_yaml?: string;
   release_notes: string;
   compatibility_level: 'breaking' | 'major' | 'minor' | 'patch';

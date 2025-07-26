@@ -5,7 +5,7 @@
  * enhanced navigation, breadcrumbs, and state management
  */
 
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import { RouteGuard } from './RouteGuard';
@@ -48,9 +48,12 @@ interface AuthBreadcrumbProps {
   currentPath: string;
 }
 
-const AuthBreadcrumb: React.FC<AuthBreadcrumbProps> = ({ currentPath }) => {
-  const route = AUTH_ROUTE_CONFIG.public.find(r => r.path === currentPath) ||
-                AUTH_ROUTE_CONFIG.protected.find(r => r.path === currentPath);
+const AuthBreadcrumb: React.FC<AuthBreadcrumbProps> = React.memo(({ currentPath }) => {
+  const route = useMemo(() => 
+    AUTH_ROUTE_CONFIG.public.find(r => r.path === currentPath) ||
+    AUTH_ROUTE_CONFIG.protected.find(r => r.path === currentPath),
+    [currentPath]
+  );
   
   if (!route) return null;
 
@@ -70,12 +73,14 @@ const AuthBreadcrumb: React.FC<AuthBreadcrumbProps> = ({ currentPath }) => {
       <span>🔐 {route.title}</span>
     </div>
   );
-};
+});
+
+AuthBreadcrumb.displayName = 'AuthBreadcrumb';
 
 /**
  * Authentication progress indicator
  */
-const AuthProgressIndicator: React.FC = () => {
+const AuthProgressIndicator: React.FC = React.memo(() => {
   const { isLoading } = useAuthStore();
   
   if (!isLoading) return null;
@@ -106,7 +111,9 @@ const AuthProgressIndicator: React.FC = () => {
       `}</style>
     </div>
   );
-};
+});
+
+AuthProgressIndicator.displayName = 'AuthProgressIndicator';
 
 /**
  * Authentication error boundary
@@ -130,7 +137,13 @@ class AuthErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Authentication error:', error, errorInfo);
+    // TODO: Replace with structured error reporting service
+    console.error('Authentication error:', {
+      message: error.message,
+      stack: error.stack,
+      componentStack: errorInfo.componentStack,
+      timestamp: new Date().toISOString()
+    });
   }
 
   render() {
@@ -186,21 +199,38 @@ class AuthErrorBoundary extends React.Component<
               Something went wrong with the authentication system. Please try again.
             </p>
             
-            <button
-              onClick={() => window.location.reload()}
-              style={{
-                padding: '12px 24px',
-                backgroundColor: '#007bff',
-                color: 'white',
-                border: 'none',
-                borderRadius: '6px',
-                fontSize: '14px',
-                fontWeight: '500',
-                cursor: 'pointer'
-              }}
-            >
-              Reload Page
-            </button>
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+              <button
+                onClick={() => window.location.reload()}
+                style={{
+                  padding: '12px 24px',
+                  backgroundColor: '#007bff',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  cursor: 'pointer'
+                }}
+              >
+                Reload Page
+              </button>
+              <button
+                onClick={() => window.location.href = '/login'}
+                style={{
+                  padding: '12px 24px',
+                  backgroundColor: '#6c757d',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  cursor: 'pointer'
+                }}
+              >
+                Back to Login
+              </button>
+            </div>
           </div>
         </div>
       );
@@ -213,51 +243,63 @@ class AuthErrorBoundary extends React.Component<
 /**
  * Main Authentication Router Component
  */
-export const AuthenticationRouter: React.FC = () => {
+export const AuthenticationRouter: React.FC = React.memo(() => {
   const { isAuthenticated } = useAuthStore();
+  
+  const currentPath = useMemo(() => window.location.pathname, []);
+  
+  const publicRoutes = useMemo(() => 
+    AUTH_ROUTE_CONFIG.public.map(({ path, component: Component }) => (
+      <Route
+        key={path}
+        path={path}
+        element={
+          <RouteGuard access={{ requireAuth: false }}>
+            <Component />
+          </RouteGuard>
+        }
+      />
+    )), []
+  );
+  
+  const protectedRoutes = useMemo(() => 
+    AUTH_ROUTE_CONFIG.protected.map(({ path, component: Component }) => (
+      <Route
+        key={path}
+        path={path}
+        element={
+          <RouteGuard access={{ requireAuth: true }}>
+            <Component />
+          </RouteGuard>
+        }
+      />
+    )), []
+  );
+  
+  const redirectElement = useMemo(() => (
+    <Navigate 
+      to={isAuthenticated ? '/' : '/login'} 
+      replace 
+    />
+  ), [isAuthenticated]);
 
   return (
     <AuthErrorBoundary>
       <AuthenticationMiddleware>
         <AuthProgressIndicator />
-        <AuthBreadcrumb currentPath={window.location.pathname} />
+        <AuthBreadcrumb currentPath={currentPath} />
         
         <Routes>
           {/* Public Authentication Routes */}
-          {AUTH_ROUTE_CONFIG.public.map(({ path, component: Component }) => (
-            <Route
-              key={path}
-              path={path}
-              element={
-                <RouteGuard access={{ requireAuth: false }}>
-                  <Component />
-                </RouteGuard>
-              }
-            />
-          ))}
+          {publicRoutes}
           
           {/* Protected Authentication Routes */}
-          {AUTH_ROUTE_CONFIG.protected.map(({ path, component: Component }) => (
-            <Route
-              key={path}
-              path={path}
-              element={
-                <RouteGuard access={{ requireAuth: true }}>
-                  <Component />
-                </RouteGuard>
-              }
-            />
-          ))}
+          {protectedRoutes}
           
           {/* Authentication redirects */}
           <Route 
             path="/auth" 
-            element={
-              <Navigate 
-                to={isAuthenticated ? '/' : '/login'} 
-                replace 
-              />
-            } 
+            element={redirectElement}
           />
           
           {/* Catch-all for auth routes */}
@@ -269,7 +311,9 @@ export const AuthenticationRouter: React.FC = () => {
       </AuthenticationMiddleware>
     </AuthErrorBoundary>
   );
-};
+});
+
+AuthenticationRouter.displayName = 'AuthenticationRouter';
 
 /**
  * Authentication route utilities
@@ -279,7 +323,7 @@ export const AuthRouteUtils = {
    * Get authentication route metadata
    */
   getRouteInfo: (path: string) => {
-    return AUTH_ROUTE_CONFIG.public.find(r => r.path === path) ||
+    return AUTH_ROUTE_CONFIG.public.find(r => r.path === path) ??
            AUTH_ROUTE_CONFIG.protected.find(r => r.path === path);
   },
 
@@ -301,18 +345,14 @@ export const AuthRouteUtils = {
   getNextStep: (currentPath: string, isAuthenticated: boolean): string => {
     if (isAuthenticated) return '/';
     
-    switch (currentPath) {
-    case '/register':
-      return '/verify-email';
-    case '/verify-email':
-      return '/login';
-    case '/login':
-      return '/';
-    case '/reset-password':
-      return '/login';
-    default:
-      return '/login';
-    }
+    const stepMap: Record<string, string> = {
+      '/register': '/verify-email',
+      '/verify-email': '/login',
+      '/login': '/',
+      '/reset-password': '/login'
+    };
+    
+    return stepMap[currentPath] ?? '/login';
   },
 
   /**

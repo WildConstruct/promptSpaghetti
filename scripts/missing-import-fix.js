@@ -30,6 +30,17 @@ const importMappings = {
   'Upload': "import { Upload } from 'lucide-react';",
   'Eye': "import { Eye } from 'lucide-react';",
   'EyeOff': "import { EyeOff } from 'lucide-react';",
+  'CheckSquare': "import { CheckSquare } from 'lucide-react';",
+  'Pie': "import { Pie } from 'lucide-react';",
+  'BarChart': "import { BarChart } from 'lucide-react';",
+  'LineChart': "import { LineChart } from 'lucide-react';",
+  'Activity': "import { Activity } from 'lucide-react';",
+  'TrendingUp': "import { TrendingUp } from 'lucide-react';",
+  'RefreshCw': "import { RefreshCw } from 'lucide-react';",
+  'Filter': "import { Filter } from 'lucide-react';",
+  'Save': "import { Save } from 'lucide-react';",
+  'Copy': "import { Copy } from 'lucide-react';",
+  'External': "import { External } from 'lucide-react';",
   
   // React hooks
   'useState': "import { useState } from 'react';",

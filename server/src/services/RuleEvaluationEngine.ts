@@ -886,12 +886,12 @@ export class RuleEvaluationEngine extends EventEmitter {
     };
   }
 
-  private async isRuleApplicable(rule: ComplianceRule, _____context: RuleEvaluationContext): Promise<boolean> {
+  private async isRuleApplicable(rule: ComplianceRule, _context: RuleEvaluationContext): Promise<boolean> {
     // Simplified applicability check - in production, this would evaluate scope conditions
     return rule.status === 'ACTIVE';
   }
 
-  private optimizeConditions(conditions: RuleCondition[], _____context: RuleEvaluationContext): RuleCondition[] {
+  private optimizeConditions(conditions: RuleCondition[], _context: RuleEvaluationContext): RuleCondition[] {
     // Reorder conditions by estimated evaluation cost (cheap conditions first)
     return [...conditions].sort((a, b) => {
       const costA = this.estimateConditionCost(a);
@@ -950,7 +950,7 @@ export class RuleEvaluationEngine extends EventEmitter {
     return {
       result: allRequiredPassed ? (allConditionsPassed ? 'PASS' : 'CONDITIONAL') : 'FAIL',
       verdict: allRequiredPassed ? 'COMPLIANT' : 'NON_COMPLIANT',
-      severity: rule.severity as any,
+      severity: rule.severity as ErrorSeverity,
       impact: {},
       recommendations: [],
       nextActions: [],
@@ -987,7 +987,7 @@ export class RuleEvaluationEngine extends EventEmitter {
       outcome: {
         result: 'UNKNOWN',
         verdict: 'REQUIRES_REVIEW',
-        severity: 'INFO' as any,
+        severity: ErrorSeverity.LOW,
         impact: {},
         recommendations: [],
         nextActions: [],

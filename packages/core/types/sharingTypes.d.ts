@@ -26,23 +26,23 @@ export declare const SharePermissionSchema: z.ZodObject<{
     maxShares: z.ZodOptional<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
     canEdit: boolean;
-    canComment: boolean;
     canView: boolean;
+    canComment: boolean;
     canClone: boolean;
     canShare: boolean;
     canEmbed: boolean;
     canDownload: boolean;
     requiresAuth: boolean;
-    expiresAt?: Date | undefined;
     allowedDomains?: string[] | undefined;
+    expiresAt?: Date | undefined;
     maxViews?: number | undefined;
     maxShares?: number | undefined;
 }, {
-    canEdit?: boolean | undefined;
-    canComment?: boolean | undefined;
-    expiresAt?: Date | undefined;
     allowedDomains?: string[] | undefined;
+    canEdit?: boolean | undefined;
+    expiresAt?: Date | undefined;
     canView?: boolean | undefined;
+    canComment?: boolean | undefined;
     canClone?: boolean | undefined;
     canShare?: boolean | undefined;
     canEmbed?: boolean | undefined;
@@ -77,23 +77,23 @@ export declare const ShareConfigSchema: z.ZodObject<{
         maxShares: z.ZodOptional<z.ZodNumber>;
     }, "strip", z.ZodTypeAny, {
         canEdit: boolean;
-        canComment: boolean;
         canView: boolean;
+        canComment: boolean;
         canClone: boolean;
         canShare: boolean;
         canEmbed: boolean;
         canDownload: boolean;
         requiresAuth: boolean;
-        expiresAt?: Date | undefined;
         allowedDomains?: string[] | undefined;
+        expiresAt?: Date | undefined;
         maxViews?: number | undefined;
         maxShares?: number | undefined;
     }, {
-        canEdit?: boolean | undefined;
-        canComment?: boolean | undefined;
-        expiresAt?: Date | undefined;
         allowedDomains?: string[] | undefined;
+        canEdit?: boolean | undefined;
+        expiresAt?: Date | undefined;
         canView?: boolean | undefined;
+        canComment?: boolean | undefined;
         canClone?: boolean | undefined;
         canShare?: boolean | undefined;
         canEmbed?: boolean | undefined;
@@ -251,17 +251,17 @@ export declare const ShareConfigSchema: z.ZodObject<{
         prerequisites: string[];
         relatedResources: string[];
         category?: string | undefined;
-        estimatedTime?: number | undefined;
         difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+        estimatedTime?: number | undefined;
     }, {
         createdAt: Date;
         updatedAt: Date;
         createdBy: string;
         category?: string | undefined;
         version?: string | undefined;
+        difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
         prerequisites?: string[] | undefined;
         estimatedTime?: number | undefined;
-        difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
         relatedResources?: string[] | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
@@ -275,28 +275,28 @@ export declare const ShareConfigSchema: z.ZodObject<{
         prerequisites: string[];
         relatedResources: string[];
         category?: string | undefined;
-        estimatedTime?: number | undefined;
         difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+        estimatedTime?: number | undefined;
     };
     title: string;
     permissions: {
         canEdit: boolean;
-        canComment: boolean;
         canView: boolean;
+        canComment: boolean;
         canClone: boolean;
         canShare: boolean;
         canEmbed: boolean;
         canDownload: boolean;
         requiresAuth: boolean;
-        expiresAt?: Date | undefined;
         allowedDomains?: string[] | undefined;
+        expiresAt?: Date | undefined;
         maxViews?: number | undefined;
         maxShares?: number | undefined;
     };
     resourceId: string;
     resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
     shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
-    shareFormat: "link" | "embed" | "export" | "clone";
+    shareFormat: "link" | "embed" | "clone" | "export";
     customization: {
         layout?: {
             width: number;
@@ -334,18 +334,18 @@ export declare const ShareConfigSchema: z.ZodObject<{
         createdBy: string;
         category?: string | undefined;
         version?: string | undefined;
+        difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
         prerequisites?: string[] | undefined;
         estimatedTime?: number | undefined;
-        difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
         relatedResources?: string[] | undefined;
     };
     title: string;
     permissions: {
-        canEdit?: boolean | undefined;
-        canComment?: boolean | undefined;
-        expiresAt?: Date | undefined;
         allowedDomains?: string[] | undefined;
+        canEdit?: boolean | undefined;
+        expiresAt?: Date | undefined;
         canView?: boolean | undefined;
+        canComment?: boolean | undefined;
         canClone?: boolean | undefined;
         canShare?: boolean | undefined;
         canEmbed?: boolean | undefined;
@@ -357,7 +357,7 @@ export declare const ShareConfigSchema: z.ZodObject<{
     resourceId: string;
     resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
     shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
-    shareFormat: "link" | "embed" | "export" | "clone";
+    shareFormat: "link" | "embed" | "clone" | "export";
     description?: string | undefined;
     tags?: string[] | undefined;
     thumbnailUrl?: string | undefined;
@@ -670,13 +670,13 @@ export declare const ShareAnalyticsEventSchema: z.ZodObject<{
         timezone: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         region?: string | undefined;
-        timezone?: string | undefined;
         country?: string | undefined;
+        timezone?: string | undefined;
         city?: string | undefined;
     }, {
         region?: string | undefined;
-        timezone?: string | undefined;
         country?: string | undefined;
+        timezone?: string | undefined;
         city?: string | undefined;
     }>>;
     deviceInfo: z.ZodOptional<z.ZodObject<{
@@ -685,12 +685,12 @@ export declare const ShareAnalyticsEventSchema: z.ZodObject<{
         browser: z.ZodOptional<z.ZodString>;
         screenSize: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        type?: "desktop" | "mobile" | "tablet" | undefined;
+        type?: "mobile" | "desktop" | "tablet" | undefined;
         browser?: string | undefined;
         os?: string | undefined;
         screenSize?: string | undefined;
     }, {
-        type?: "desktop" | "mobile" | "tablet" | undefined;
+        type?: "mobile" | "desktop" | "tablet" | undefined;
         browser?: string | undefined;
         os?: string | undefined;
         screenSize?: string | undefined;
@@ -699,23 +699,23 @@ export declare const ShareAnalyticsEventSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     id: string;
     timestamp: Date;
-    eventType: "view" | "rating" | "comment" | "click" | "clone" | "share" | "referral" | "download" | "embed_load" | "social_share";
+    eventType: "view" | "rating" | "comment" | "download" | "click" | "clone" | "share" | "referral" | "embed_load" | "social_share";
     shareLinkId: string;
     contextData: Record<string, unknown>;
     userId?: string | undefined;
     sessionId?: string | undefined;
-    platform?: "email" | "slack" | "twitter" | "linkedin" | "github" | "teams" | "discord" | undefined;
     ipAddress?: string | undefined;
     userAgent?: string | undefined;
+    platform?: "email" | "slack" | "twitter" | "linkedin" | "github" | "teams" | "discord" | undefined;
     geolocation?: {
         region?: string | undefined;
-        timezone?: string | undefined;
         country?: string | undefined;
+        timezone?: string | undefined;
         city?: string | undefined;
     } | undefined;
     referer?: string | undefined;
     deviceInfo?: {
-        type?: "desktop" | "mobile" | "tablet" | undefined;
+        type?: "mobile" | "desktop" | "tablet" | undefined;
         browser?: string | undefined;
         os?: string | undefined;
         screenSize?: string | undefined;
@@ -723,22 +723,22 @@ export declare const ShareAnalyticsEventSchema: z.ZodObject<{
 }, {
     id: string;
     timestamp: Date;
-    eventType: "view" | "rating" | "comment" | "click" | "clone" | "share" | "referral" | "download" | "embed_load" | "social_share";
+    eventType: "view" | "rating" | "comment" | "download" | "click" | "clone" | "share" | "referral" | "embed_load" | "social_share";
     shareLinkId: string;
     userId?: string | undefined;
     sessionId?: string | undefined;
-    platform?: "email" | "slack" | "twitter" | "linkedin" | "github" | "teams" | "discord" | undefined;
     ipAddress?: string | undefined;
     userAgent?: string | undefined;
+    platform?: "email" | "slack" | "twitter" | "linkedin" | "github" | "teams" | "discord" | undefined;
     geolocation?: {
         region?: string | undefined;
-        timezone?: string | undefined;
         country?: string | undefined;
+        timezone?: string | undefined;
         city?: string | undefined;
     } | undefined;
     referer?: string | undefined;
     deviceInfo?: {
-        type?: "desktop" | "mobile" | "tablet" | undefined;
+        type?: "mobile" | "desktop" | "tablet" | undefined;
         browser?: string | undefined;
         os?: string | undefined;
         screenSize?: string | undefined;
@@ -752,11 +752,11 @@ export declare const ShareMetricsSchema: z.ZodObject<{
         start: z.ZodDate;
         end: z.ZodDate;
     }, "strip", z.ZodTypeAny, {
-        end: Date;
         start: Date;
+        end: Date;
     }, {
-        end: Date;
         start: Date;
+        end: Date;
     }>;
     metrics: z.ZodObject<{
         totalViews: z.ZodDefault<z.ZodNumber>;
@@ -904,10 +904,9 @@ export declare const ShareMetricsSchema: z.ZodObject<{
         }[];
     };
     timeRange: {
-        end: Date;
         start: Date;
+        end: Date;
     };
-    shareLinkId: string;
     breakdowns: {
         byPlatform: Record<string, number>;
         byGeography: Record<string, number>;
@@ -916,6 +915,7 @@ export declare const ShareMetricsSchema: z.ZodObject<{
         byDayOfWeek: number[];
         byReferrer: Record<string, number>;
     };
+    shareLinkId: string;
 }, {
     metrics: {
         averageRating?: number | undefined;
@@ -931,8 +931,8 @@ export declare const ShareMetricsSchema: z.ZodObject<{
         engagementScore?: number | undefined;
     };
     timeRange: {
-        end: Date;
         start: Date;
+        end: Date;
     };
     shareLinkId: string;
     trends?: {
@@ -972,16 +972,16 @@ export declare const SocialIntegrationSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         defaultHashtags: string[];
         autoPost: boolean;
-        customMessage?: string | undefined;
         webhookUrl?: string | undefined;
         appId?: string | undefined;
         appSecret?: string | undefined;
-    }, {
         customMessage?: string | undefined;
+    }, {
         webhookUrl?: string | undefined;
         appId?: string | undefined;
         appSecret?: string | undefined;
         defaultHashtags?: string[] | undefined;
+        customMessage?: string | undefined;
         autoPost?: boolean | undefined;
     }>>;
     templates: z.ZodDefault<z.ZodObject<{
@@ -999,28 +999,28 @@ export declare const SocialIntegrationSchema: z.ZodObject<{
     }>>;
 }, "strip", z.ZodTypeAny, {
     enabled: boolean;
-    platform: "email" | "slack" | "twitter" | "linkedin" | "github" | "teams" | "discord";
     templates: {
         shareMessage: string;
         embedMessage: string;
         achievementMessage: string;
     };
+    platform: "email" | "slack" | "twitter" | "linkedin" | "github" | "teams" | "discord";
     configuration?: {
         defaultHashtags: string[];
         autoPost: boolean;
-        customMessage?: string | undefined;
         webhookUrl?: string | undefined;
         appId?: string | undefined;
         appSecret?: string | undefined;
+        customMessage?: string | undefined;
     } | undefined;
 }, {
     platform: "email" | "slack" | "twitter" | "linkedin" | "github" | "teams" | "discord";
     configuration?: {
-        customMessage?: string | undefined;
         webhookUrl?: string | undefined;
         appId?: string | undefined;
         appSecret?: string | undefined;
         defaultHashtags?: string[] | undefined;
+        customMessage?: string | undefined;
         autoPost?: boolean | undefined;
     } | undefined;
     enabled?: boolean | undefined;
@@ -1061,23 +1061,23 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             maxShares: z.ZodOptional<z.ZodNumber>;
         }, "strip", z.ZodTypeAny, {
             canEdit: boolean;
-            canComment: boolean;
             canView: boolean;
+            canComment: boolean;
             canClone: boolean;
             canShare: boolean;
             canEmbed: boolean;
             canDownload: boolean;
             requiresAuth: boolean;
-            expiresAt?: Date | undefined;
             allowedDomains?: string[] | undefined;
+            expiresAt?: Date | undefined;
             maxViews?: number | undefined;
             maxShares?: number | undefined;
         }, {
-            canEdit?: boolean | undefined;
-            canComment?: boolean | undefined;
-            expiresAt?: Date | undefined;
             allowedDomains?: string[] | undefined;
+            canEdit?: boolean | undefined;
+            expiresAt?: Date | undefined;
             canView?: boolean | undefined;
+            canComment?: boolean | undefined;
             canClone?: boolean | undefined;
             canShare?: boolean | undefined;
             canEmbed?: boolean | undefined;
@@ -1235,17 +1235,17 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             prerequisites: string[];
             relatedResources: string[];
             category?: string | undefined;
-            estimatedTime?: number | undefined;
             difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+            estimatedTime?: number | undefined;
         }, {
             createdAt: Date;
             updatedAt: Date;
             createdBy: string;
             category?: string | undefined;
             version?: string | undefined;
+            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
             prerequisites?: string[] | undefined;
             estimatedTime?: number | undefined;
-            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
             relatedResources?: string[] | undefined;
         }>;
     }, "strip", z.ZodTypeAny, {
@@ -1259,28 +1259,28 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             prerequisites: string[];
             relatedResources: string[];
             category?: string | undefined;
-            estimatedTime?: number | undefined;
             difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+            estimatedTime?: number | undefined;
         };
         title: string;
         permissions: {
             canEdit: boolean;
-            canComment: boolean;
             canView: boolean;
+            canComment: boolean;
             canClone: boolean;
             canShare: boolean;
             canEmbed: boolean;
             canDownload: boolean;
             requiresAuth: boolean;
-            expiresAt?: Date | undefined;
             allowedDomains?: string[] | undefined;
+            expiresAt?: Date | undefined;
             maxViews?: number | undefined;
             maxShares?: number | undefined;
         };
         resourceId: string;
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
         shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
-        shareFormat: "link" | "embed" | "export" | "clone";
+        shareFormat: "link" | "embed" | "clone" | "export";
         customization: {
             layout?: {
                 width: number;
@@ -1318,18 +1318,18 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             createdBy: string;
             category?: string | undefined;
             version?: string | undefined;
+            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
             prerequisites?: string[] | undefined;
             estimatedTime?: number | undefined;
-            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
             relatedResources?: string[] | undefined;
         };
         title: string;
         permissions: {
-            canEdit?: boolean | undefined;
-            canComment?: boolean | undefined;
-            expiresAt?: Date | undefined;
             allowedDomains?: string[] | undefined;
+            canEdit?: boolean | undefined;
+            expiresAt?: Date | undefined;
             canView?: boolean | undefined;
+            canComment?: boolean | undefined;
             canClone?: boolean | undefined;
             canShare?: boolean | undefined;
             canEmbed?: boolean | undefined;
@@ -1341,7 +1341,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
         resourceId: string;
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
         shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
-        shareFormat: "link" | "embed" | "export" | "clone";
+        shareFormat: "link" | "embed" | "clone" | "export";
         description?: string | undefined;
         tags?: string[] | undefined;
         thumbnailUrl?: string | undefined;
@@ -1426,28 +1426,28 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             prerequisites: string[];
             relatedResources: string[];
             category?: string | undefined;
-            estimatedTime?: number | undefined;
             difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+            estimatedTime?: number | undefined;
         };
         title: string;
         permissions: {
             canEdit: boolean;
-            canComment: boolean;
             canView: boolean;
+            canComment: boolean;
             canClone: boolean;
             canShare: boolean;
             canEmbed: boolean;
             canDownload: boolean;
             requiresAuth: boolean;
-            expiresAt?: Date | undefined;
             allowedDomains?: string[] | undefined;
+            expiresAt?: Date | undefined;
             maxViews?: number | undefined;
             maxShares?: number | undefined;
         };
         resourceId: string;
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
         shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
-        shareFormat: "link" | "embed" | "export" | "clone";
+        shareFormat: "link" | "embed" | "clone" | "export";
         customization: {
             layout?: {
                 width: number;
@@ -1501,18 +1501,18 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             createdBy: string;
             category?: string | undefined;
             version?: string | undefined;
+            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
             prerequisites?: string[] | undefined;
             estimatedTime?: number | undefined;
-            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
             relatedResources?: string[] | undefined;
         };
         title: string;
         permissions: {
-            canEdit?: boolean | undefined;
-            canComment?: boolean | undefined;
-            expiresAt?: Date | undefined;
             allowedDomains?: string[] | undefined;
+            canEdit?: boolean | undefined;
+            expiresAt?: Date | undefined;
             canView?: boolean | undefined;
+            canComment?: boolean | undefined;
             canClone?: boolean | undefined;
             canShare?: boolean | undefined;
             canEmbed?: boolean | undefined;
@@ -1524,7 +1524,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
         resourceId: string;
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
         shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
-        shareFormat: "link" | "embed" | "export" | "clone";
+        shareFormat: "link" | "embed" | "clone" | "export";
         description?: string | undefined;
         tags?: string[] | undefined;
         thumbnailUrl?: string | undefined;
@@ -1591,23 +1591,23 @@ export declare const CreateShareRequestSchema: z.ZodObject<{
         maxShares: z.ZodOptional<z.ZodNumber>;
     }, "strip", z.ZodTypeAny, {
         canEdit: boolean;
-        canComment: boolean;
         canView: boolean;
+        canComment: boolean;
         canClone: boolean;
         canShare: boolean;
         canEmbed: boolean;
         canDownload: boolean;
         requiresAuth: boolean;
-        expiresAt?: Date | undefined;
         allowedDomains?: string[] | undefined;
+        expiresAt?: Date | undefined;
         maxViews?: number | undefined;
         maxShares?: number | undefined;
     }, {
-        canEdit?: boolean | undefined;
-        canComment?: boolean | undefined;
-        expiresAt?: Date | undefined;
         allowedDomains?: string[] | undefined;
+        canEdit?: boolean | undefined;
+        expiresAt?: Date | undefined;
         canView?: boolean | undefined;
+        canComment?: boolean | undefined;
         canClone?: boolean | undefined;
         canShare?: boolean | undefined;
         canEmbed?: boolean | undefined;
@@ -1623,20 +1623,20 @@ export declare const CreateShareRequestSchema: z.ZodObject<{
     resourceId: string;
     resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
     shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
-    shareFormat: "link" | "embed" | "export" | "clone";
+    shareFormat: "link" | "embed" | "clone" | "export";
     socialPlatforms: ("email" | "slack" | "twitter" | "linkedin" | "github" | "teams" | "discord")[];
     description?: string | undefined;
     permissions?: {
         canEdit: boolean;
-        canComment: boolean;
         canView: boolean;
+        canComment: boolean;
         canClone: boolean;
         canShare: boolean;
         canEmbed: boolean;
         canDownload: boolean;
         requiresAuth: boolean;
-        expiresAt?: Date | undefined;
         allowedDomains?: string[] | undefined;
+        expiresAt?: Date | undefined;
         maxViews?: number | undefined;
         maxShares?: number | undefined;
     } | undefined;
@@ -1647,11 +1647,11 @@ export declare const CreateShareRequestSchema: z.ZodObject<{
     resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
     description?: string | undefined;
     permissions?: {
-        canEdit?: boolean | undefined;
-        canComment?: boolean | undefined;
-        expiresAt?: Date | undefined;
         allowedDomains?: string[] | undefined;
+        canEdit?: boolean | undefined;
+        expiresAt?: Date | undefined;
         canView?: boolean | undefined;
+        canComment?: boolean | undefined;
         canClone?: boolean | undefined;
         canShare?: boolean | undefined;
         canEmbed?: boolean | undefined;
@@ -1661,7 +1661,7 @@ export declare const CreateShareRequestSchema: z.ZodObject<{
         maxShares?: number | undefined;
     } | undefined;
     shareTarget?: "private" | "public" | "organization" | "workspace" | "unlisted" | undefined;
-    shareFormat?: "link" | "embed" | "export" | "clone" | undefined;
+    shareFormat?: "link" | "embed" | "clone" | "export" | undefined;
     customization?: {} | undefined;
     socialPlatforms?: ("email" | "slack" | "twitter" | "linkedin" | "github" | "teams" | "discord")[] | undefined;
 }>;
@@ -1691,23 +1691,23 @@ export declare const ShareResponseSchema: z.ZodObject<{
             maxShares: z.ZodOptional<z.ZodNumber>;
         }, "strip", z.ZodTypeAny, {
             canEdit: boolean;
-            canComment: boolean;
             canView: boolean;
+            canComment: boolean;
             canClone: boolean;
             canShare: boolean;
             canEmbed: boolean;
             canDownload: boolean;
             requiresAuth: boolean;
-            expiresAt?: Date | undefined;
             allowedDomains?: string[] | undefined;
+            expiresAt?: Date | undefined;
             maxViews?: number | undefined;
             maxShares?: number | undefined;
         }, {
-            canEdit?: boolean | undefined;
-            canComment?: boolean | undefined;
-            expiresAt?: Date | undefined;
             allowedDomains?: string[] | undefined;
+            canEdit?: boolean | undefined;
+            expiresAt?: Date | undefined;
             canView?: boolean | undefined;
+            canComment?: boolean | undefined;
             canClone?: boolean | undefined;
             canShare?: boolean | undefined;
             canEmbed?: boolean | undefined;
@@ -1865,17 +1865,17 @@ export declare const ShareResponseSchema: z.ZodObject<{
             prerequisites: string[];
             relatedResources: string[];
             category?: string | undefined;
-            estimatedTime?: number | undefined;
             difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+            estimatedTime?: number | undefined;
         }, {
             createdAt: Date;
             updatedAt: Date;
             createdBy: string;
             category?: string | undefined;
             version?: string | undefined;
+            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
             prerequisites?: string[] | undefined;
             estimatedTime?: number | undefined;
-            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
             relatedResources?: string[] | undefined;
         }>;
     }, "strip", z.ZodTypeAny, {
@@ -1889,28 +1889,28 @@ export declare const ShareResponseSchema: z.ZodObject<{
             prerequisites: string[];
             relatedResources: string[];
             category?: string | undefined;
-            estimatedTime?: number | undefined;
             difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+            estimatedTime?: number | undefined;
         };
         title: string;
         permissions: {
             canEdit: boolean;
-            canComment: boolean;
             canView: boolean;
+            canComment: boolean;
             canClone: boolean;
             canShare: boolean;
             canEmbed: boolean;
             canDownload: boolean;
             requiresAuth: boolean;
-            expiresAt?: Date | undefined;
             allowedDomains?: string[] | undefined;
+            expiresAt?: Date | undefined;
             maxViews?: number | undefined;
             maxShares?: number | undefined;
         };
         resourceId: string;
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
         shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
-        shareFormat: "link" | "embed" | "export" | "clone";
+        shareFormat: "link" | "embed" | "clone" | "export";
         customization: {
             layout?: {
                 width: number;
@@ -1948,18 +1948,18 @@ export declare const ShareResponseSchema: z.ZodObject<{
             createdBy: string;
             category?: string | undefined;
             version?: string | undefined;
+            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
             prerequisites?: string[] | undefined;
             estimatedTime?: number | undefined;
-            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
             relatedResources?: string[] | undefined;
         };
         title: string;
         permissions: {
-            canEdit?: boolean | undefined;
-            canComment?: boolean | undefined;
-            expiresAt?: Date | undefined;
             allowedDomains?: string[] | undefined;
+            canEdit?: boolean | undefined;
+            expiresAt?: Date | undefined;
             canView?: boolean | undefined;
+            canComment?: boolean | undefined;
             canClone?: boolean | undefined;
             canShare?: boolean | undefined;
             canEmbed?: boolean | undefined;
@@ -1971,7 +1971,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
         resourceId: string;
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
         shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
-        shareFormat: "link" | "embed" | "export" | "clone";
+        shareFormat: "link" | "embed" | "clone" | "export";
         description?: string | undefined;
         tags?: string[] | undefined;
         thumbnailUrl?: string | undefined;
@@ -2271,12 +2271,12 @@ export declare const ShareResponseSchema: z.ZodObject<{
         customizable: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         basic: string;
-        responsive: string;
         customizable: string;
+        responsive: string;
     }, {
         basic: string;
-        responsive: string;
         customizable: string;
+        responsive: string;
     }>;
     qrCode: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
@@ -2291,28 +2291,28 @@ export declare const ShareResponseSchema: z.ZodObject<{
             prerequisites: string[];
             relatedResources: string[];
             category?: string | undefined;
-            estimatedTime?: number | undefined;
             difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
+            estimatedTime?: number | undefined;
         };
         title: string;
         permissions: {
             canEdit: boolean;
-            canComment: boolean;
             canView: boolean;
+            canComment: boolean;
             canClone: boolean;
             canShare: boolean;
             canEmbed: boolean;
             canDownload: boolean;
             requiresAuth: boolean;
-            expiresAt?: Date | undefined;
             allowedDomains?: string[] | undefined;
+            expiresAt?: Date | undefined;
             maxViews?: number | undefined;
             maxShares?: number | undefined;
         };
         resourceId: string;
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
         shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
-        shareFormat: "link" | "embed" | "export" | "clone";
+        shareFormat: "link" | "embed" | "clone" | "export";
         customization: {
             layout?: {
                 width: number;
@@ -2393,8 +2393,8 @@ export declare const ShareResponseSchema: z.ZodObject<{
     socialLinks: Record<string, string>;
     embedCodes: {
         basic: string;
-        responsive: string;
         customizable: string;
+        responsive: string;
     };
     qrCode?: string | undefined;
 }, {
@@ -2406,18 +2406,18 @@ export declare const ShareResponseSchema: z.ZodObject<{
             createdBy: string;
             category?: string | undefined;
             version?: string | undefined;
+            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
             prerequisites?: string[] | undefined;
             estimatedTime?: number | undefined;
-            difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
             relatedResources?: string[] | undefined;
         };
         title: string;
         permissions: {
-            canEdit?: boolean | undefined;
-            canComment?: boolean | undefined;
-            expiresAt?: Date | undefined;
             allowedDomains?: string[] | undefined;
+            canEdit?: boolean | undefined;
+            expiresAt?: Date | undefined;
             canView?: boolean | undefined;
+            canComment?: boolean | undefined;
             canClone?: boolean | undefined;
             canShare?: boolean | undefined;
             canEmbed?: boolean | undefined;
@@ -2429,7 +2429,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
         resourceId: string;
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
         shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
-        shareFormat: "link" | "embed" | "export" | "clone";
+        shareFormat: "link" | "embed" | "clone" | "export";
         description?: string | undefined;
         tags?: string[] | undefined;
         thumbnailUrl?: string | undefined;
@@ -2510,18 +2510,15 @@ export declare const ShareResponseSchema: z.ZodObject<{
     };
     embedCodes: {
         basic: string;
-        responsive: string;
         customizable: string;
+        responsive: string;
     };
     qrCode?: string | undefined;
     socialLinks?: Record<string, string> | undefined;
 }>;
 export type CreateShareRequest = z.infer<typeof CreateShareRequestSchema>;
 export type ShareResponse = z.infer<typeof ShareResponseSchema>;
-export declare const validateCreateShareRequest: (data: unknown) => CreateShareRequest;
-export declare const validateShareConfig: (data: unknown) => ShareConfig;
-export declare const validateShareAnalyticsEvent: (data: unknown) => ShareAnalyticsEvent;
-declare const ShareableResourceTypeSchema: z.ZodEnum<["template", "graph", "collection", "case_study", "tutorial", "marketplace_item"]>;
+export declare export declare export declare declare const ShareableResourceTypeSchema: z.ZodEnum<["template", "graph", "collection", "case_study", "tutorial", "marketplace_item"]>;
 declare const ShareTargetSchema: z.ZodEnum<["public", "workspace", "organization", "private", "unlisted"]>;
 declare const ShareFormatSchema: z.ZodEnum<["link", "embed", "export", "clone"]>;
 declare const SocialPlatformSchema: z.ZodEnum<["twitter", "linkedin", "discord", "slack", "teams", "email", "github"]>;

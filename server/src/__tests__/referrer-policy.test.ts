@@ -26,17 +26,17 @@ describe('ReferrerPolicyService', () => {
   beforeEach(() => {
     // Create mock instances with required constructors
     mockDb = {
-      query: jest.fn(),
-      close: jest.fn()
-    } as any as jest.Mocked<DatabaseService>;
+      query: jest.fn<unknown[], unknown>(),
+      close: jest.fn<unknown[], unknown>()
+    } as jest.Mocked<DatabaseService>;
     
     mockRedis = {
-      get: jest.fn().mockResolvedValue(null),
-      setex: jest.fn().mockResolvedValue('OK'),
-      del: jest.fn().mockResolvedValue(1),
-      keys: jest.fn().mockResolvedValue([]),
-      close: jest.fn()
-    } as any as jest.Mocked<RedisService>;
+      get: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown),
+      setex: jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown),
+      del: jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown),
+      keys: jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown),
+      close: jest.fn<unknown[], unknown>()
+    } as jest.Mocked<RedisService>;
 
     service = new ReferrerPolicyService(mockDb, mockRedis, {
       defaultPolicy: 'strict-origin-when-cross-origin',
@@ -56,9 +56,9 @@ describe('ReferrerPolicyService', () => {
     } as any as FastifyRequest;
 
     mockReply = {
-      header: jest.fn().mockReturnThis(),
-      status: jest.fn().mockReturnThis(),
-      send: jest.fn().mockReturnThis()
+      header: jest.fn<unknown[], unknown>().mockReturnThis(),
+      status: jest.fn<unknown[], unknown>().mockReturnThis(),
+      send: jest.fn<unknown[], unknown>().mockReturnThis()
     } as any as FastifyReply;
   });
 
@@ -569,13 +569,13 @@ describe('ReferrerPolicyService Integration', () => {
   let mockRedis: jest.Mocked<RedisService>;
 
   beforeEach(() => {
-    mockDb = new DatabaseService() as jest.Mocked<DatabaseService>;
+    mockDb = new DatabaseService({} as any) as jest.Mocked<DatabaseService>;
     mockRedis = new RedisService() as jest.Mocked<RedisService>;
     
-    mockRedis.get = jest.fn().mockResolvedValue(null);
-    mockRedis.setex = jest.fn().mockResolvedValue('OK');
-    mockRedis.del = jest.fn().mockResolvedValue(1);
-    mockRedis.keys = jest.fn().mockResolvedValue([]);
+    mockRedis.get = jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown);
+    mockRedis.setex = jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown);
+    mockRedis.del = jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown);
+    mockRedis.keys = jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown);
 
     service = new ReferrerPolicyService(mockDb, mockRedis);
   });
@@ -648,9 +648,9 @@ describe('ReferrerPolicyService Integration', () => {
     };
 
     const mockReply = {
-      header: jest.fn().mockReturnThis(),
-      status: jest.fn().mockReturnThis(),
-      send: jest.fn().mockReturnThis()
+      header: jest.fn<unknown[], unknown>().mockReturnThis(),
+      status: jest.fn<unknown[], unknown>().mockReturnThis(),
+      send: jest.fn<unknown[], unknown>().mockReturnThis()
     };
 
     const middleware = service.middleware();

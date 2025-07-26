@@ -7,10 +7,10 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * form validation, and user experience optimization.
  */
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Input } from '../ui/Input.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Input } from '../ui/Input';
 import { Save, Send, AlertTriangle, CheckCircle, XCircle, RefreshCw, Star, ThumbsUp, MessageSquare, Share2, Edit, Trash2, Eye, Clock, User } from 'lucide-react';
 // Security and validation utilities
 export class ContributionValidator {

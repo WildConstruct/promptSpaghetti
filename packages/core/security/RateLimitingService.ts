@@ -368,6 +368,13 @@ export class RateLimitingService extends EventEmitter {
   }
   
   /**
+   * Get recent attempts for integration purposes (public version)
+   */
+  public getRecentAttemptsForIntegration(identifier: string, endpoint: string): RateLimitAttempt[] {
+    return this.getRecentAttempts(identifier, endpoint);
+  }
+  
+  /**
    * Get rate limiting statistics
    */
   public getStatistics(): {

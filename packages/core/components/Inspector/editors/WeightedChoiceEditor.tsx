@@ -1,14 +1,18 @@
 import React, { useCallback } from 'react';
-import { BaseNodeEditor, BaseNodeEditorProps } from '../BaseNodeEditor';
+import { BaseNodeEditorProps } from '../BaseNodeEditor';
 import { TextFieldEditor } from '../TextFieldEditor';
 import { VariationList } from '../VariationList';
 import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
-import { WeightSlider } from '../WeightSlider';
 import { WeightControlSlider, WeightControlOption, useWeightControlIntegration } from '../WeightControlSlider';
-import { WeightVisualizationPanel } from '../../WeightVisualization';
 import { useRealTimePreview } from '../../../hooks/useRealTimePreview';
 import { useUISettingsStore } from '../../../stores/uiSettingsStore';
 import { useGraphStore } from '../../../graphStore';
+import { 
+  HelpfulInput, 
+  HelpfulButton,
+  HelpfulSection,
+  useContextualHelp 
+} from '../../Help';
 
 export interface WeightedChoiceEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   // WeightedChoice specific props can be added here
@@ -82,8 +86,8 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = ({
     requestPreview(weightOptions);
   }, [onChange, onGlobalPreviewRequest, requestPreview]);
 
-  // Weight control integration
-  const { handleOptionsChange } = useWeightControlIntegration(
+  // Weight control integration with Epic 8.5 Task 6 enhancements
+  const { handleOptionsChange, lastUpdateTime } = useWeightControlIntegration(
     weightOptions,
     handleGlobalPreviewRequest
   );
@@ -96,15 +100,54 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = ({
     });
   };
 
-  const handleWeightChange = (index: number, weight: number) => {
-    const newWeights = [...weights];
-    newWeights[index] = Math.max(0, weight); // Ensure non-negative weights
+      newWeights[index] = Math.max(0, weight); // Ensure non-negative weights
     onChange({ weights: newWeights });
   };
 
   const handleNameChange = (value: unknown) => {
     onChange({ name: value as string, label: value as string });
   };
+
+  // Contextual help for the node name field
+  const { wrapWithHelp: wrapNameHelp } = useContextualHelp({
+    id: 'weighted-choice-name',
+    title: 'Node Name',
+    description: 'Give your weighted choice node a descriptive name to identify it in your graph workflow.',
+    category: 'basic',
+    trigger: 'focus',
+    position: 'right',
+    showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
+    examples: ['Character Selection', 'Action Randomizer', 'Spell Generator'],
+    priority: 'high'
+  });
+
+  // Contextual help for choice options
+  const { wrapWithHelp: wrapChoicesHelp } = useContextualHelp({
+    id: 'weighted-choice-options',
+    title: 'Choice Options',
+    description: 'Add the different options that this node can randomly select from. Each option can have its own probability weight.',
+    category: 'basic',
+    trigger: 'hover',
+    position: 'left',
+    showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
+    examples: ['Fire Spell', 'Ice Spell', 'Lightning Spell'],
+    relatedFeatures: ['weight-controls', 'drag-reorder'],
+    priority: 'high'
+  });
+
+  // Contextual help for weight controls
+  const { wrapWithHelp: wrapWeightsHelp } = useContextualHelp({
+    id: 'weighted-choice-weights',
+    title: 'Weight Controls',
+    description: 'Adjust the probability of each option being selected. Higher weights make options more likely to appear in results.',
+    category: 'advanced',
+    trigger: 'hover',
+    position: 'top',
+    showOnDisclosureLevel: ['advanced', 'debug'],
+    examples: ['70% Fire, 20% Ice, 10% Lightning'],
+    relatedFeatures: ['weight-presets', 'distribution-charts'],
+    priority: 'medium'
+  });
 
   return (
     <div className="weighted-choice-editor">
@@ -117,14 +160,16 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = ({
         priority="critical"
         fieldName="name"
       >
-        <TextFieldEditor
-          label="Choice Name"
-          value={name}
-          fieldKey="name"
-          zodType={null as any}
-          onChange={handleNameChange}
-          placeholder="Enter a name for this weighted choice node..."
-        />
+        {wrapNameHelp(
+          <TextFieldEditor
+            label="Choice Name"
+            value={name}
+            fieldKey="name"
+            zodType={null}
+            onChange={handleNameChange}
+            placeholder="Enter a name for this weighted choice node..."
+          />
+        )}
       </ProgressiveDisclosureSection>
 
       {/* BASIC LEVEL: Choice options configuration */}
@@ -136,40 +181,42 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = ({
         priority="critical"
         fieldName="choices"
       >
-        <div style={{ marginBottom: 12 }}>
-          <label style={{ 
-            display: 'block', 
-            fontWeight: 500, 
-            marginBottom: 8,
-            color: '#e2e8f0',
-            fontSize: 12
-          }}>
-            Available Choices
-          </label>
-          <VariationList
-            nodeId={nodeData.id as string}
-            variations={choices}
-            onAdd={(choice) => handleChoicesChange([...choices, choice])}
-            onRemove={(index) => {
-              const newChoices = choices.filter((_, i) => i !== index);
-              handleChoicesChange(newChoices);
-            }}
-            onUpdate={(index, newValue) => {
-              const newChoices = [...choices];
-              newChoices[index] = newValue;
-              handleChoicesChange(newChoices);
-            }}
-            onReorder={(fromIndex, toIndex) => {
-              const newChoices = [...choices];
-              const [movedItem] = newChoices.splice(fromIndex, 1);
-              newChoices.splice(toIndex, 0, movedItem);
-              handleChoicesChange(newChoices);
-            }}
-            placeholder="Enter choice option..."
-            maxVariations={20}
-            allowQuickEntry={true}
-          />
-        </div>
+{wrapChoicesHelp(
+          <div style={{ marginBottom: 12 }}>
+            <label style={{ 
+              display: 'block', 
+              fontWeight: 500, 
+              marginBottom: 8,
+              color: '#e2e8f0',
+              fontSize: 12
+            }}>
+              Available Choices
+            </label>
+            <VariationList
+              nodeId={nodeData.id as string}
+              variations={choices}
+              onAdd={(choice) => handleChoicesChange([...choices, choice])}
+              onRemove={(index) => {
+                const newChoices = choices.filter((_, i) => i !== index);
+                handleChoicesChange(newChoices);
+              }}
+              onUpdate={(index, newValue) => {
+                const newChoices = [...choices];
+                newChoices[index] = newValue;
+                handleChoicesChange(newChoices);
+              }}
+              onReorder={(fromIndex, toIndex) => {
+                const newChoices = [...choices];
+                const [movedItem] = newChoices.splice(fromIndex, 1);
+                newChoices.splice(toIndex, 0, movedItem);
+                handleChoicesChange(newChoices);
+              }}
+              placeholder="Enter choice option..."
+              maxVariations={20}
+              allowQuickEntry={true}
+            />
+          </div>
+        )}
       </ProgressiveDisclosureSection>
 
       {/* ADVANCED LEVEL: Weight Controls */}
@@ -182,17 +229,20 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = ({
           priority="important"
           fieldName="weights"
         >
-          <WeightControlSlider
-            options={weightOptions}
-            onOptionsChange={handleOptionsChange}
-            onPreviewRequest={handleGlobalPreviewRequest}
-            showPreview={true}
-            previewDebounceMs={300}
-            showPresets={true}
-            allowCustomPresets={complexityLevel !== 'basic'}
-          />
+{wrapWeightsHelp(
+            <WeightControlSlider
+              options={weightOptions}
+              onOptionsChange={handleOptionsChange}
+              onPreviewRequest={handleGlobalPreviewRequest}
+              visualization={complexityLevel === 'basic' ? 'slider-only' : 'pie'}
+              showLegend={true}
+              enableDragReorder={complexityLevel !== 'basic'}
+              showPresets={true}
+              compactPresets={complexityLevel === 'basic'}
+            />
+          )}
           
-          {/* Epic 8.5-5: Real-time Weight Integration Status */}
+          {/* Epic 8.5 Task 6: Real-time Weight Integration Status */}
           {complexityLevel !== 'basic' && (
             <div style={{
               marginTop: 12,
@@ -203,42 +253,51 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = ({
               fontSize: 11,
               color: '#4d7cff'
             }}>
-              🎬 <strong>Epic 8.5 Real-Time Integration:</strong> Weight changes automatically trigger 5-seed preview generation for film industry demo quality.
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                🎬 <strong>Epic 8.5 Real-Time Integration</strong>
+                <span style={{
+                  fontSize: 8,
+                  background: 'rgba(77, 124, 255, 0.3)',
+                  padding: '1px 4px',
+                  borderRadius: 6,
+                  fontWeight: 600
+                }}>
+                  TASK 6
+                </span>
+              </div>
+              <div style={{ fontSize: 10, opacity: 0.9 }}>
+                Weight changes automatically trigger debounced 5-seed preview generation
+              </div>
+              <div style={{ 
+                fontSize: 9, 
+                opacity: 0.7, 
+                marginTop: 4,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 4
+              }}>
+                <span>Last update:</span>
+                <span style={{ 
+                  fontFamily: 'monospace',
+                  background: 'rgba(255, 255, 255, 0.2)',
+                  padding: '1px 4px',
+                  borderRadius: 2
+                }}>
+                  {new Date(lastUpdateTime).toLocaleTimeString()}
+                </span>
+                <div style={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: '50%',
+                  background: Date.now() - lastUpdateTime < 2000 ? '#10b981' : '#6b7280',
+                  animation: Date.now() - lastUpdateTime < 2000 ? 'pulse 1.5s infinite' : 'none'
+                }} />
+              </div>
             </div>
           )}
         </ProgressiveDisclosureSection>
       )}
 
-      {/* ADVANCED LEVEL: Weight Distribution Visualization */}
-      {choices.length > 0 && weightOptions.length > 0 && (
-        <ProgressiveDisclosureSection
-          title="Weight Distribution Visualization"
-          level="advanced"
-          description="Visual representation of choice probabilities and statistics"
-          defaultExpanded={false}
-          priority="standard"
-          fieldName="visualization"
-        >
-          <WeightVisualizationPanel
-            options={weightOptions}
-            title="Weight Distribution"
-            defaultChartType="pie"
-            showChartControls={true}
-            showStatistics={true}
-            collapsed={false}
-            onCollapseChange={() => {}}
-            onOptionHover={(option) => {
-              // Optional: Could highlight the option in the weight controls
-              console.log('Hovered option:', option?.text);
-            }}
-            onOptionClick={(option) => {
-              // Optional: Could focus the weight slider for this option
-              console.log('Clicked option:', option.text);
-            }}
-            style={{ marginBottom: 16 }}
-          />
-        </ProgressiveDisclosureSection>
-      )}
 
       {/* ADVANCED LEVEL: Real-Time Preview Results */}
       {variants.length > 0 && (

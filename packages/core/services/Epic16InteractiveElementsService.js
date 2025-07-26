@@ -141,10 +141,10 @@ export var IntegrationType;
 })(IntegrationType || (IntegrationType = {}));
 // Service class
 export class Epic16InteractiveElementsService extends EventEmitter {
-    elements = new Map();
-    activeElements = new Set();
-    userSessions = new Map();
-    analyticsData = new Map();
+    elements: Map<string, any> = new Map();
+    activeElements: Set<string> = new Set();
+    userSessions: Map<string, any> = new Map();
+    analyticsData: Map<string, any> = new Map();
     constructor() {
         super();
     }

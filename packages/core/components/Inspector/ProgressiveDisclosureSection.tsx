@@ -75,12 +75,15 @@ const ProgressiveDisclosureSection: React.FC<ProgressiveDisclosureSectionProps> 
   const shouldAutoExpand = level === 'basic' || complexityLevel === 'expert';
   const effectivelyExpanded = shouldAutoExpand ? true : isExpanded;
 
-  // Get visual hierarchy colors and styles
-  const colors = HierarchyColors[level];
-  const typography = priority === 'critical' ? TypographyScale.secondary : TypographyScale.tertiary;
+  // Memoize visual hierarchy colors and styles for performance
+  const colors = React.useMemo(() => HierarchyColors[level], [level]);
+  const typography = React.useMemo(() => 
+    priority === 'critical' ? TypographyScale.secondary : TypographyScale.tertiary, 
+    [priority]
+  );
   
-  // Enhanced section styles using design system
-  const getSectionStyles = () => {
+  // Enhanced section styles using design system - memoized for performance
+  const sectionStyles = React.useMemo(() => {
     const baseStyles = {
       marginBottom: SpacingScale.md,
       borderRadius: 6,
@@ -106,32 +109,31 @@ const ProgressiveDisclosureSection: React.FC<ProgressiveDisclosureSectionProps> 
       ...priorityIndicator,
       border: `1px solid ${colors.border}`,
     };
-  };
+  }, [colors, priority]);
 
-  const getHeaderStyles = () => {
-    return {
-      ...ComponentSizes.header,
-      cursor: shouldAutoExpand ? 'default' : 'pointer',
-      display: 'flex' as const,
-      alignItems: 'center' as const,
-      justifyContent: 'space-between' as const,
-      userSelect: 'none' as const,
-      backgroundColor: colors.background,
-      borderBottom: effectivelyExpanded ? `1px solid ${colors.border}` : 'none',
-      transition: 'all 0.2s ease-in-out',
-      ...typography,
-      // Enhanced focus styles for accessibility
-      ':focus': {
-        outline: `2px solid ${colors.primary}`,
-        outlineOffset: 2,
-      },
-      ':hover': shouldAutoExpand ? {} : {
-        backgroundColor: colors.accent,
-        transform: 'translateY(-1px)',
-        boxShadow: `0 4px 12px ${colors.primary}20`,
-      }
-    };
-  };
+  // Memoize header styles for performance
+  const headerStyles = React.useMemo(() => ({
+    ...ComponentSizes.header,
+    cursor: shouldAutoExpand ? 'default' : 'pointer',
+    display: 'flex' as const,
+    alignItems: 'center' as const,
+    justifyContent: 'space-between' as const,
+    userSelect: 'none' as const,
+    backgroundColor: colors.background,
+    borderBottom: effectivelyExpanded ? `1px solid ${colors.border}` : 'none',
+    transition: 'all 0.2s ease-in-out',
+    ...typography,
+    // Enhanced focus styles for accessibility
+    ':focus': {
+      outline: `2px solid ${colors.primary}`,
+      outlineOffset: 2,
+    },
+    ':hover': shouldAutoExpand ? {} : {
+      backgroundColor: colors.accent,
+      transform: 'translateY(-1px)',
+      boxShadow: `0 4px 12px ${colors.primary}20`,
+    }
+  }), [colors, typography, shouldAutoExpand, effectivelyExpanded]);
 
   const getLevelIndicator = () => {
     switch (level) {
@@ -148,14 +150,14 @@ const ProgressiveDisclosureSection: React.FC<ProgressiveDisclosureSectionProps> 
 
   return (
     <div 
-      style={getSectionStyles()} 
+      style={sectionStyles} 
       className={className}
       role="region"
       aria-labelledby={`section-header-${title.replace(/\s+/g, '-').toLowerCase()}`}
     >
       <div
         id={`section-header-${title.replace(/\s+/g, '-').toLowerCase()}`}
-        style={getHeaderStyles()}
+        style={headerStyles}
         onClick={shouldAutoExpand ? undefined : () => setIsExpanded(!isExpanded)}
         role={shouldAutoExpand ? undefined : "button"}
         tabIndex={shouldAutoExpand ? undefined : 0}

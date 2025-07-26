@@ -222,11 +222,11 @@ export class EnhancedErrorReporter {
       actualBehavior?: string;
       workaround?: string;
       tags?: string[];
-      metadata?: Record<string, any>;
+      metadata?: Record<string, unknown>;
     } = {}
   ): ErrorReport {
     if (!this.reportingEnabled) {
-      return null as unknown;
+      return {} as ErrorReport;
     }
 
     const errorType = ErrorClassifier.classifyError(error);

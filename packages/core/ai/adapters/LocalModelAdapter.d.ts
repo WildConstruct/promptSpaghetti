@@ -70,6 +70,7 @@ export declare class LocalModelAdapter extends BaseAIModel {
     private _estimateTokenCount;
     private _updateCapabilitiesFromModelInfo;
     protected _performHealthCheck(): Promise<void>;
+    private updateMetadata;
 }
 export default LocalModelAdapter;
 //# sourceMappingURL=LocalModelAdapter.d.ts.map

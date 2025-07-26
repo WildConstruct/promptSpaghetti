@@ -62,7 +62,7 @@ export const ModerationAnalytics: React.FC = () => {
     fetchAnalyticsData();
   }, [timeRange]);
 
-  const fetchAnalyticsData = async () => {
+  const fetchAnalyticsData = async (): Promise<void> => {
     try {
       setIsLoading(true);
       // Simulate API call
@@ -131,19 +131,19 @@ export const ModerationAnalytics: React.FC = () => {
         { type: 'Copyright Violation', count: 18, severity: 'major', source: 'automated', trend: 5.4 },
         { type: 'Hate Speech', count: 6, severity: 'critical', source: 'user_report', trend: -12.5 }
       ]);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to fetch analytics data:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const formatNumber = (num: number) => {
+  const formatNumber = (num: number): string => {
     if (num >= 1000) return `${(num / 1000).toFixed(1)}k`;
     return num.toString();
   };
 
-  const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
+  const getTrendIcon = (trend: 'up' | 'down' | 'stable'): string => {
     switch (trend) {
     case 'up': return '📈';
     case 'down': return '📉';
@@ -151,7 +151,7 @@ export const ModerationAnalytics: React.FC = () => {
     }
   };
 
-  const getSeverityColor = (severity: string) => {
+  const getSeverityColor = (severity: string): string => {
     switch (severity) {
     case 'critical': return '#dc3545';
     case 'major': return '#fd7e14';
@@ -160,7 +160,7 @@ export const ModerationAnalytics: React.FC = () => {
     }
   };
 
-  const getRiskLevelColor = (risk: string) => {
+  const getRiskLevelColor = (risk: string): string => {
     switch (risk) {
     case 'high': return '#dc3545';
     case 'medium': return '#ffc107';
@@ -341,7 +341,10 @@ export const ModerationAnalytics: React.FC = () => {
               </div>
               <div className="team-stat">
                 <span className="stat-label">Average Accuracy</span>
-                <span className="stat-value">{(moderatorStats.reduce((sum, m) => sum + m.accuracy, 0) / moderatorStats.length).toFixed(1)}%</span>
+                <span className="stat-value">{(
+                  moderatorStats.reduce((sum,
+                  m
+                ) => sum + m.accuracy, 0) / moderatorStats.length).toFixed(1)}%</span>
               </div>
             </div>
           </div>

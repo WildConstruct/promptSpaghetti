@@ -7,13 +7,12 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   PolicyAssignment, 
   BulkPolicyAssignment,
   AssignmentTargetType,
   ConflictResolutionStrategy,
-  AssignmentCondition,
   InheritanceType,
   RiskLevel,
   PolicyConflict,
@@ -104,9 +103,9 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
     if (currentStep === 3 && formData.assignments.length > 0) {
       analyzeConflicts();
     }
-  }, [currentStep]);
+  }, [currentStep, analyzeConflicts, formData.assignments.length]);
 
-  const analyzeConflicts = async () => {
+  const analyzeConflicts = useCallback(async () => {
     setIsAnalyzing(true);
     try {
       const response = await fetch('/api/policy-assignments/assignments/analyze-conflicts', {
@@ -124,7 +123,7 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  }, [formData.assignments]);
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
@@ -559,7 +558,7 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
 
         {conflicts.length > 0 && (
           <div className="review-warning">
-            ⚠️ This bulk assignment has {conflicts.length} conflicts that will be resolved using the "{formData.strategy.conflictResolution}" strategy.
+            ⚠️ This bulk assignment has {conflicts.length} conflicts that will be resolved using the &quot;{formData.strategy.conflictResolution}&quot; strategy.
           </div>
         )}
       </div>

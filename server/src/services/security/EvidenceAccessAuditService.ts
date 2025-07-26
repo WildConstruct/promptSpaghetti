@@ -598,7 +598,7 @@ export class EvidenceAccessAuditService {
 
   private determineComplianceFlags(evidenceMetadata: {
     complianceFrameworks: string[];
-    [key: string]: any;
+    [key: string]: unknown;
   }, action: EvidenceAccessAction): string[] {
     const flags: string[] = [];
     
@@ -613,7 +613,7 @@ export class EvidenceAccessAuditService {
     return flags;
   }
 
-  private mapRowToAuditEntry(row: any): EvidenceAccessAuditEntry {
+  private mapRowToAuditEntry(row: unknown): EvidenceAccessAuditEntry {
     // Map database row to audit entry object
     return {
       id: row.id,

@@ -36,7 +36,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * @since 2024-01-22
  */
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { DashboardTheme } from './SecurityDashboardFramework.js';
+import { DashboardTheme } from './SecurityDashboardFramework';
 export var ComplianceFramework;
 (function (ComplianceFramework) {
     ComplianceFramework["SOC2_TYPE1"] = "soc2_type1";

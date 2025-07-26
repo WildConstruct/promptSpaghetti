@@ -70,7 +70,7 @@ export interface MultimodalAnalysis {
         relationship: string;
         confidence: number;
     }>;
-    metadata: Record<string, any>;
+    metadata: Record<string, unknown>;
 }
 export interface MultimodalUnderstandingResult {
     understanding: {
@@ -127,15 +127,38 @@ export declare class MultimodalAdapter extends BaseAIModel {
     private supportedModalities;
     constructor(id: string, config: MultimodalConfig);
     initialize(): Promise<void>;
-    process(input: any, options?: MultimodalRequestOptions): Promise<MultimodalUnderstandingResult>;
+    process(input: MultimodalInput[], options?: MultimodalRequestOptions): Promise<MultimodalUnderstandingResult>;
     cleanup(): Promise<void>;
-    estimate(input: any, options?: MultimodalRequestOptions): Promise<CostEstimate>;
-    understandContent(inputs: MultimodalInput[], options?: Partial<MultimodalRequestOptions>): Promise<MultimodalUnderstandingResult>;
-    compareContent(inputs: MultimodalInput[], comparisonAspects?: string[], options?: Partial<MultimodalRequestOptions>): Promise<MultimodalUnderstandingResult>;
-    describeMultimodal(inputs: MultimodalInput[], detailLevel?: 'brief' | 'detailed' | 'comprehensive', options?: Partial<MultimodalRequestOptions>): Promise<MultimodalUnderstandingResult>;
-    analyzeContent(inputs: MultimodalInput[], analysisTypes?: string[], options?: Partial<MultimodalRequestOptions>): Promise<MultimodalUnderstandingResult>;
-    summarizeMultimodal(inputs: MultimodalInput[], summaryLength?: 'short' | 'medium' | 'long', options?: Partial<MultimodalRequestOptions>): Promise<MultimodalUnderstandingResult>;
-    extractInformation(inputs: MultimodalInput[], extractionTargets?: string[], options?: Partial<MultimodalRequestOptions>): Promise<Record<string, any>>;
+    estimate(input: MultimodalInput[], options?: MultimodalRequestOptions): Promise<CostEstimate>;
+    understandContent(
+      inputs: MultimodalInput[],
+      options?: Partial<MultimodalRequestOptions>
+    ): Promise<MultimodalUnderstandingResult>;
+    compareContent(
+      inputs: MultimodalInput[],
+      comparisonAspects?: string[],
+      options?: Partial<MultimodalRequestOptions>
+    ): Promise<MultimodalUnderstandingResult>;
+    describeMultimodal(
+      inputs: MultimodalInput[],
+      detailLevel?: 'brief' | 'detailed' | 'comprehensive',
+      options?: Partial<MultimodalRequestOptions>
+    ): Promise<MultimodalUnderstandingResult>;
+    analyzeContent(
+      inputs: MultimodalInput[],
+      analysisTypes?: string[],
+      options?: Partial<MultimodalRequestOptions>
+    ): Promise<MultimodalUnderstandingResult>;
+    summarizeMultimodal(
+      inputs: MultimodalInput[],
+      summaryLength?: 'short' | 'medium' | 'long',
+      options?: Partial<MultimodalRequestOptions>
+    ): Promise<MultimodalUnderstandingResult>;
+    extractInformation(
+      inputs: MultimodalInput[],
+      extractionTargets?: string[],
+      options?: Partial<MultimodalRequestOptions>
+    ): Promise<Record<string, unknown>>;
     static getSupportedModalities(): string[];
     static getTaskTypes(): string[];
     static createTextInput(content: string, role?: 'user' | 'assistant' | 'system'): MultimodalInput;
@@ -144,6 +167,8 @@ export declare class MultimodalAdapter extends BaseAIModel {
     static createVideoInput(videoData: File | Blob | ArrayBuffer, description?: string): MultimodalInput;
     private _getProviderEnum;
     private _getProviderCosts;
+    private static _getProviderEnumStatic;
+    private static _getProviderCostsStatic;
     private _testConnection;
     private _getDefaultBaseURL;
     private _buildHeaders;

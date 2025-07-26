@@ -17,8 +17,8 @@
  * - QR code generation
  */
 import { EventEmitter } from 'events';
-import { AttributionTracker } from '../analytics/AttributionTracking.js';
-import { EmbedAnalytics } from '../analytics/EmbedAnalytics.js';
+import { AttributionTracker } from '../analytics/AttributionTracking';
+import { EmbedAnalytics } from '../analytics/EmbedAnalytics';
 // Main Direct Link Sharing System
 export class DirectLinkSharing extends EventEmitter {
     config;

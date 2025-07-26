@@ -35,7 +35,10 @@ import {
   ListItemText,
   CircularProgress,
   LinearProgress,
-  Badge
+  Badge,
+  Dialog,
+  DialogTitle,
+  DialogContent
 } from '@mui/material';
 import {
   Timeline as TimelineIcon,
@@ -191,11 +194,9 @@ const SimpleChart: React.FC<{ data: ChartData[]; height?: number; type?: 'line' 
   );
 };
 
-export const LogVisualizationDashboard: React.FC = () => {
-  const [timeRange, setTimeRange] = useState<string>('1h');
-  const [autoRefresh, setAutoRefresh] = useState<boolean>(true);
-  const [selectedSources, ___setSelectedSources] = useState<string[]>(LOG_SOURCES);
-  const [___selectedLevels, ___setSelectedLevels] = useState<string[]>(['warn', 'error', 'fatal']);
+export   const [autoRefresh, setAutoRefresh] = useState<boolean>(true);
+  const [selectedSources, _setSelectedSources] = useState<string[]>(LOG_SOURCES);
+  const [_selectedLevels, _setSelectedLevels] = useState<string[]>(['warn', 'error', 'fatal']);
   const [loading, setLoading] = useState<boolean>(false);
   const [metrics, setMetrics] = useState<LogMetrics | null>(null);
   const [sources, setSources] = useState<LogSource[]>([]);
@@ -327,7 +328,7 @@ export const LogVisualizationDashboard: React.FC = () => {
       mockAlerts.push({
         id: `alert-${i}`,
         type: alertTypes[Math.floor(Math.random() * alertTypes.length)],
-        severity: ['low', 'medium', 'high', 'critical'][Math.floor(Math.random() * 4)] as any,
+        severity: ['low', 'medium', 'high', 'critical'][Math.floor(Math.random() * 4)] as 'low' | 'medium' | 'high' | 'critical',
         title: `Alert ${i + 1}`,
         description: `Detected anomaly in ${LOG_SOURCES[Math.floor(Math.random() * LOG_SOURCES.length)]} logs`,
         timestamp: new Date(now.getTime() - Math.random() * 60 * 60 * 1000),

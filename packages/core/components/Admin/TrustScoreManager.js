@@ -6,10 +6,10 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Part of Epic 17.5.5 - Verification System
  */
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Textarea } from '../ui/Textarea.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Textarea } from '../ui/Textarea';
 import { User, Shield, Award, Edit3, Save, X, AlertCircle, CheckCircle, Info, Search } from 'lucide-react';
 export const TrustScoreManager = ({ className = '' }) => {
     const [searchTerm, setSearchTerm] = useState('');

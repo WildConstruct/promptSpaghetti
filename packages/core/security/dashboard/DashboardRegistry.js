@@ -18,7 +18,7 @@
  * @version 1.0.0
  * @since 2024-01-22
  */
-import { DashboardType, SecurityRole, DashboardTheme } from './SecurityDashboardFramework.js';
+import { DashboardType, SecurityRole, DashboardTheme } from './SecurityDashboardFramework';
 /**
  * Dashboard Registry Class
  *

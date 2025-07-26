@@ -19,10 +19,7 @@ import { Switch } from '../ui/switch';
 import { Progress } from '../ui/progress';
 import { 
   Shield,
-  CheckCircle,
-  XCircle,
   AlertTriangle,
-  Clock,
   Play,
   Pause,
   RotateCcw,
@@ -36,16 +33,7 @@ import {
   Download,
   Eye,
   Filter,
-  Search,
-  ArrowRight,
-  ArrowLeft,
-  TrendingUp,
-  TrendingDown,
   Activity,
-  Server,
-  HardDrive,
-  Archive,
-  Key,
   Zap,
   Target
 } from 'lucide-react';
@@ -107,7 +95,7 @@ interface BackupVerificationResult {
   message: string;
   timestamp: Date;
   duration: number;
-  details: Record<string, any>;
+  details: Record<string, unknown>;
   warnings?: string[];
   recommendations?: string[];
 }
@@ -141,7 +129,7 @@ interface VerificationConfiguration {
   stepsDisabled: string[];
   timeoutOverrides: Record<string, number>;
   retryOverrides: Record<string, number>;
-  customParameters: Record<string, any>;
+  customParameters: Record<string, unknown>;
   skipOnWarnings: boolean;
   abortOnCriticalFailure: boolean;
 }
@@ -164,10 +152,7 @@ export interface BackupVerificationDashboardProps {
   className?: string;
 }
 
-export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardProps> = ({ className }) => {
-  // State management
-  const [activeTab, setActiveTab] = useState('overview');
-  const [loading, setLoading] = useState(false);
+export   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
   // Data state
@@ -179,7 +164,6 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
   // UI state
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBackup, setSelectedBackup] = useState<string>('');
-  const [___selectedSession, ___setSelectedSession] = useState<string>('');
   const [filterStatus, setFilterStatus] = useState<string>('');
   const [filterRiskLevel, setFilterRiskLevel] = useState<string>('');
   

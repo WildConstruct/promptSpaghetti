@@ -156,159 +156,18 @@ export interface WorkflowExecutionLog {
 // ZOD VALIDATION SCHEMAS
 // =============================================================================
 
-export const WorkflowStateSchema = z.object({
-  id: z.string().uuid(),
-  workspace_id: z.string().uuid(),
-  name: z.string().min(1).max(100),
-  description: z.string().optional(),
-  color: z.string().regex(/^#[0-9A-F]{6}$/i).default('#6B7280'),
-  icon: z.string().max(50).optional(),
-  is_initial: z.boolean().default(false),
-  is_final: z.boolean().default(false),
-  is_locked: z.boolean().default(false),
-  sort_order: z.number().int().min(0).default(0),
-  created_at: z.date(),
-  updated_at: z.date()
-});
-
-export const CreateWorkflowStateSchema = z.object({
-  workspace_id: z.string().uuid(),
-  name: z.string().min(1).max(100),
-  description: z.string().optional(),
-  color: z.string().regex(/^#[0-9A-F]{6}$/i).default('#6B7280'),
-  icon: z.string().max(50).optional(),
-  is_initial: z.boolean().default(false),
-  is_final: z.boolean().default(false),
-  is_locked: z.boolean().default(false),
-  sort_order: z.number().int().min(0).default(0)
-});
-
-export const WorkflowTransitionSchema = z.object({
-  id: z.string().uuid(),
-  workspace_id: z.string().uuid(),
-  from_state_id: z.string().uuid().optional(),
-  to_state_id: z.string().uuid(),
-  name: z.string().min(1).max(100),
-  description: z.string().optional(),
-  requires_approval: z.boolean().default(false),
-  required_permissions: z.bigint().default(0n),
-  conditions: z.record(z.any()).default({}),
-  created_at: z.date()
-});
-
-export const CreateWorkflowTransitionSchema = z.object({
-  workspace_id: z.string().uuid(),
-  from_state_id: z.string().uuid().optional(),
-  to_state_id: z.string().uuid(),
-  name: z.string().min(1).max(100),
-  description: z.string().optional(),
-  requires_approval: z.boolean().default(false),
-  required_permissions: z.bigint().default(0n),
-  conditions: z.record(z.any()).default({})
-});
-
-export const WorkflowApprovalSchema = z.object({
-  id: z.string().uuid(),
-  workspace_id: z.string().uuid(),
-  resource_id: z.string().uuid(),
-  transition_id: z.string().uuid(),
-  requester_id: z.string(),
-  status: z.enum(['pending', 'approved', 'rejected', 'cancelled']),
-  requested_at: z.date(),
-  due_date: z.date().optional(),
-  priority: z.enum(['low', 'medium', 'high', 'urgent']).default('medium'),
-  approved_by: z.string().optional(),
-  approved_at: z.date().optional(),
-  rejection_reason: z.string().optional(),
-  approval_comment: z.string().optional(),
-  auto_approve_after: z.string().optional(),
-  auto_approve_conditions: z.record(z.any()).default({}),
-  created_at: z.date(),
-  updated_at: z.date()
-});
-
-export const CreateWorkflowApprovalSchema = z.object({
-  workspace_id: z.string().uuid(),
-  resource_id: z.string().uuid(),
-  transition_id: z.string().uuid(),
-  requester_id: z.string(),
-  due_date: z.date().optional(),
-  priority: z.enum(['low', 'medium', 'high', 'urgent']).default('medium'),
-  auto_approve_after: z.string().optional(),
-  auto_approve_conditions: z.record(z.any()).default({})
-});
-
-export const ApproveWorkflowSchema = z.object({
-  approved_by: z.string(),
-  approval_comment: z.string().optional()
-});
-
-export const RejectWorkflowSchema = z.object({
-  rejection_reason: z.string().min(1),
-  approved_by: z.string()
-});
-
-export const WorkflowLockSchema = z.object({
-  id: z.string().uuid(),
-  workspace_id: z.string().uuid(),
-  resource_id: z.string().uuid(),
-  locked_by: z.string(),
-  lock_type: z.enum(['edit', 'state_change', 'delete', 'custom']).default('edit'),
-  lock_reason: z.string().optional(),
-  locked_at: z.date(),
-  expires_at: z.date().optional(),
-  auto_release: z.boolean().default(true),
-  metadata: z.record(z.any()).default({})
-});
-
-export const CreateWorkflowLockSchema = z.object({
-  workspace_id: z.string().uuid(),
-  resource_id: z.string().uuid(),
-  locked_by: z.string(),
-  lock_type: z.enum(['edit', 'state_change', 'delete', 'custom']).default('edit'),
-  lock_reason: z.string().optional(),
-  expires_at: z.date().optional(),
-  auto_release: z.boolean().default(true),
-  metadata: z.record(z.any()).default({})
-});
-
-export const WorkflowScheduleSchema = z.object({
-  id: z.string().uuid(),
-  workspace_id: z.string().uuid(),
-  resource_id: z.string().uuid(),
-  schedule_name: z.string().min(1).max(255),
-  schedule_type: z.enum(['cron', 'interval', 'once']),
-  schedule_expression: z.string(),
-  action_type: z.string(),
-  action_config: z.record(z.any()).default({}),
-  enabled: z.boolean().default(true),
-  next_run_at: z.date().optional(),
-  last_run_at: z.date().optional(),
-  run_count: z.number().int().min(0).default(0),
-  max_runs: z.number().int().min(1).optional(),
-  retry_count: z.number().int().min(0).default(0),
-  max_retries: z.number().int().min(0).default(3),
-  retry_delay: z.string().default('5 minutes'),
-  created_by: z.string(),
-  created_at: z.date(),
-  updated_at: z.date()
-});
-
-export const CreateWorkflowScheduleSchema = z.object({
-  workspace_id: z.string().uuid(),
-  resource_id: z.string().uuid(),
-  schedule_name: z.string().min(1).max(255),
-  schedule_type: z.enum(['cron', 'interval', 'once']),
-  schedule_expression: z.string(),
-  action_type: z.string(),
-  action_config: z.record(z.any()).default({}),
-  enabled: z.boolean().default(true),
-  max_runs: z.number().int().min(1).optional(),
-  max_retries: z.number().int().min(0).default(3),
-  retry_delay: z.string().default('5 minutes'),
-  created_by: z.string()
-});
-
+export 
+export 
+export 
+export 
+export 
+export 
+export 
+export 
+export 
+export 
+export 
+export 
 // =============================================================================
 // WORKFLOW OPERATION TYPES
 // =============================================================================

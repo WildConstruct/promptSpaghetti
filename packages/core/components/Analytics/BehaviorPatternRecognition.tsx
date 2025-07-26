@@ -72,7 +72,7 @@ export type AlgorithmType =
   | 'deep_learning';
 
 export interface AlgorithmParameters {
-  [key: string]: any; // Flexible parameter structure
+  [key: string]: unknown; // Flexible parameter structure
   learningRate?: number;
   iterations?: number;
   features?: string[];
@@ -199,7 +199,7 @@ export interface ModelFeature {
 }
 
 export interface ModelHyperparameters {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface ClusteringConfig {
@@ -599,7 +599,7 @@ export interface PatternInstance {
 
 export interface PatternElement {
   elementType: string;
-  value: any;
+  value: Error;
   timestamp: number;
   confidence: number; // 0-1
 }
@@ -670,7 +670,7 @@ export type ImpactLevel = 'low' | 'medium' | 'high' | 'critical';
 
 export interface EvidenceItem {
   type: 'statistical' | 'visual' | 'temporal' | 'comparative';
-  data: any;
+  data: Record<string, unknown>;
   description: string;
   confidence: number; // 0-1
 }
@@ -893,7 +893,7 @@ export type VisualizationType =
   | 'flow_diagram';
 
 export interface VisualizationData {
-  [key: string]: any; // Flexible data structure for different chart types
+  [key: string]: unknown; // Flexible data structure for different chart types
 }
 
 export interface VisualizationConfig {

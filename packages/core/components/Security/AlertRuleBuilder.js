@@ -6,16 +6,16 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Provides drag-and-drop rule building, condition chaining, and action configuration.
  */
 import { useState } from 'react';
-import { SecurityEventType, SecurityEventSeverity } from '../../security/SecurityEventLoggingPolicies.js';
-import { Card } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Alert } from '../ui/Alert.js';
-import { Dialog } from '../ui/Dialog.js';
-import { Input } from '../ui/Input.js';
-import { Select } from '../ui/Select.js';
-import { Checkbox } from '../ui/Checkbox.js';
-import { Textarea } from '../ui/Textarea.js';
+import { SecurityEventType, SecurityEventSeverity } from '../../security/SecurityEventLoggingPolicies';
+import { Card } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Alert } from '../ui/Alert';
+import { Dialog } from '../ui/Dialog';
+import { Input } from '../ui/Input';
+import { Select } from '../ui/Select';
+import { Checkbox } from '../ui/Checkbox';
+import { Textarea } from '../ui/Textarea';
 import './AlertRuleBuilder.css';
 const AVAILABLE_FIELDS = [
     { value: 'event_type', label: 'Event Type', type: 'enum' },

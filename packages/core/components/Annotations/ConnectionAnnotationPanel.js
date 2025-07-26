@@ -3,8 +3,8 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Epic 8.7 Task 4: Connection Label Editing Interface
 import { useState, useCallback } from 'react';
 // import { Edge } from 'reactflow';
-import { ConnectionLabelEditor } from './ConnectionAnnotations.js';
-import { connectionAnnotationPresets, labelTemplates } from '../../hooks/useConnectionAnnotations.js';
+import { ConnectionLabelEditor } from './ConnectionAnnotations';
+import { connectionAnnotationPresets, labelTemplates } from '../../hooks/useConnectionAnnotations';
 export const ConnectionAnnotationPanel = ({ edges, selectedEdgeId, labelEditMode, smartPositioning, showAllLabels, onAddLabel, onUpdateLabel, onRemoveLabel, onToggleLabel, onSelectEdge, onShowAllLabelsToggle, onHideAllLabels, onClearAllLabels, onOptimizePositions, onSetLabelEditMode, onSetSmartPositioning, getVisibleLabelsCount }) => {
     const [showEditor, setShowEditor] = useState(false);
     const [quickLabelInput, setQuickLabelInput] = useState('');

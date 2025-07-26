@@ -118,8 +118,8 @@ export const OAuthConfigurationInterface: React.FC = () => {
   // State management
   const [selectedProvider, setSelectedProvider] = useState<string>('');
   const [configuration, setConfiguration] = useState<Partial<OAuthConfiguration>>({});
-  const [___providers, ___setProviders] = useState<OAuthProvider[]>([]);
-  const [___configurations, setConfigurations] = useState<OAuthConfiguration[]>([]);
+  const [_providers, _setProviders] = useState<OAuthProvider[]>([]);
+  const [_configurations, setConfigurations] = useState<OAuthConfiguration[]>([]);
   const [securityAssessment, setSecurityAssessment] = useState<SecurityAssessment | null>(null);
   const [validation, setValidation] = useState<ValidationResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -457,7 +457,7 @@ export const OAuthConfigurationInterface: React.FC = () => {
               ].map((tab) => (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
+                  onClick={() => setActiveTab(tab.id as typeof activeTab)}
                   className={`py-2 px-1 border-b-2 font-medium text-sm ${
                     activeTab === tab.id
                       ? 'border-blue-500 text-blue-600'
@@ -782,7 +782,7 @@ export const OAuthConfigurationInterface: React.FC = () => {
                       </label>
                       <select
                         value={configuration.complianceSettings?.auditLevel || 'standard'}
-                        onChange={(e) => updateComplianceSettings({ auditLevel: e.target.value as any })}
+                        onChange={(e) => updateComplianceSettings({ auditLevel: e.target.value as 'basic' | 'standard' | 'enhanced' })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       >
                         <option value="basic">Basic</option>

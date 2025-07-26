@@ -21,20 +21,20 @@ export declare enum WSMessageType {
 export declare const WSMessageSchema: z.ZodObject<{
     type: z.ZodNativeEnum<typeof WSMessageType>;
     id: z.ZodOptional<z.ZodString>;
-    payload: z.ZodOptional<z.ZodAny>;
+    payload: z.ZodOptional<z.ZodUnknown>;
     timestamp: z.ZodNumber;
     clientId: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     type: WSMessageType;
     timestamp: number;
     id?: string | undefined;
-    payload?: any;
+    payload?: unknown;
     clientId?: string | undefined;
 }, {
     type: WSMessageType;
     timestamp: number;
     id?: string | undefined;
-    payload?: any;
+    payload?: unknown;
     clientId?: string | undefined;
 }>;
 export type WSMessage = z.infer<typeof WSMessageSchema>;
@@ -48,52 +48,52 @@ export declare const SubscriptionConfigSchema: z.ZodObject<{
         userId: z.ZodOptional<z.ZodString>;
         organizationId: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        userId?: string | undefined;
-        organizationId?: string | undefined;
         types?: string[] | undefined;
         categories?: string[] | undefined;
-        severities?: string[] | undefined;
         sources?: string[] | undefined;
+        severities?: string[] | undefined;
+        userId?: string | undefined;
+        organizationId?: string | undefined;
     }, {
-        userId?: string | undefined;
-        organizationId?: string | undefined;
         types?: string[] | undefined;
         categories?: string[] | undefined;
-        severities?: string[] | undefined;
         sources?: string[] | undefined;
+        severities?: string[] | undefined;
+        userId?: string | undefined;
+        organizationId?: string | undefined;
     }>>;
     batchSize: z.ZodDefault<z.ZodNumber>;
     batchTimeoutMs: z.ZodDefault<z.ZodNumber>;
     includeMetadata: z.ZodDefault<z.ZodBoolean>;
     maxQueueSize: z.ZodDefault<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
-    includeMetadata: boolean;
-    batchSize: number;
-    maxQueueSize: number;
     subscriptionId: string;
+    batchSize: number;
     batchTimeoutMs: number;
+    includeMetadata: boolean;
+    maxQueueSize: number;
     filter?: {
-        userId?: string | undefined;
-        organizationId?: string | undefined;
         types?: string[] | undefined;
         categories?: string[] | undefined;
-        severities?: string[] | undefined;
         sources?: string[] | undefined;
+        severities?: string[] | undefined;
+        userId?: string | undefined;
+        organizationId?: string | undefined;
     } | undefined;
 }, {
     subscriptionId: string;
-    includeMetadata?: boolean | undefined;
     filter?: {
-        userId?: string | undefined;
-        organizationId?: string | undefined;
         types?: string[] | undefined;
         categories?: string[] | undefined;
-        severities?: string[] | undefined;
         sources?: string[] | undefined;
+        severities?: string[] | undefined;
+        userId?: string | undefined;
+        organizationId?: string | undefined;
     } | undefined;
     batchSize?: number | undefined;
-    maxQueueSize?: number | undefined;
     batchTimeoutMs?: number | undefined;
+    includeMetadata?: boolean | undefined;
+    maxQueueSize?: number | undefined;
 }>;
 export type SubscriptionConfig = z.infer<typeof SubscriptionConfigSchema>;
 interface ClientConnection {
@@ -142,7 +142,11 @@ export declare class WebSocketStreamingServer extends EventEmitter {
     private stats;
     private heartbeatTimer;
     private metricsTimer;
-    constructor(eventBus: UnifiedEventBus, authService: AnalyticsAuthorizationService, config?: Partial<WSServerConfig>);
+    constructor(
+      eventBus: UnifiedEventBus,
+      authService: AnalyticsAuthorizationService,
+      config?: Partial<WSServerConfig>
+    );
     /**
      * Start WebSocket server
      */

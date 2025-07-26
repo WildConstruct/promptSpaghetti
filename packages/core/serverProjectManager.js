@@ -11,7 +11,7 @@ export class ServerProjectManager {
     /**
      * Save project to server
      */
-    static async saveProjectToServer(graph, options, settings, userId) {
+    static async saveProjectToServer(graph: unknown, options: unknown, settings: unknown, userId: string) {
         try {
             const now = new Date().toISOString();
             const project = {

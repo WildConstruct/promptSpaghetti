@@ -1,8 +1,8 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select.js';
-import { Button } from '../ui/Button.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
+import { Button } from '../ui/Button';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { TrendingUp, TrendingDown, Activity, AlertTriangle } from 'lucide-react';
 /**

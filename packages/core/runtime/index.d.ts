@@ -28,7 +28,7 @@ export declare class IncludeNode extends RuntimeNode<string> {
 export declare class SetVariableNode extends RuntimeNode<void> {
     private key;
     private value;
-    constructor(id: string, key: string, value: any);
+    constructor(id: string, key: string, value: Error);
     run(ctx: ExecutionContext): void;
 }
 export declare class GetVariableNode extends RuntimeNode<unknown> {

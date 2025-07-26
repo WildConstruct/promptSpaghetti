@@ -1,10 +1,10 @@
 // packages/core/runtime/nodes/Conditional.ts
 // Advanced conditional node with expression-based branching
-import { AdvancedRuntimeNode } from '../advanced.js';
-import { AdvancedIOHandler, IOSpecBuilder } from '../io-system.js';
-import { SafeExpressionEvaluator } from '../expression-evaluator.js';
-import { securityAudit, SecuritySeverity, SecurityEventCategory } from '../security-audit-logger.js';
-import { ErrorFactory } from '../../errors/ErrorFactory.js';
+import { AdvancedRuntimeNode } from '../advanced';
+import { AdvancedIOHandler, IOSpecBuilder } from '../io-system';
+import { SafeExpressionEvaluator } from '../expression-evaluator';
+import { securityAudit, SecuritySeverity, SecurityEventCategory } from '../security-audit-logger';
+import { ErrorFactory } from '../../errors/ErrorFactory';
 /**
  * Advanced conditional node with expression-based branching logic
  * Supports multiple conditions, variable access, and custom functions

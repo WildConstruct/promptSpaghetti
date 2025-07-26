@@ -65,7 +65,7 @@ export class SecurityAuditLogger {
     blockedPatterns = new Map();
     uniqueExpressions = new Set();
     cleanupInterval;
-    constructor(config = {}) {
+    constructor(config: any = {}) {
         this.config = {
             maxEvents: 10000,
             enableConsoleLogging: true,
@@ -80,7 +80,7 @@ export class SecurityAuditLogger {
     /**
      * Get singleton instance
      */
-    static getInstance(config) {
+    static getInstance(config?: any) {
         if (!SecurityAuditLogger.instance) {
             SecurityAuditLogger.instance = new SecurityAuditLogger(config);
         }
@@ -89,7 +89,7 @@ export class SecurityAuditLogger {
     /**
      * Log a security event
      */
-    logEvent(severity, category, message, context = {}, blocked = false) {
+    logEvent(severity: SecuritySeverity, category: SecurityEventCategory, message: string, context: any = {}, blocked: boolean = false) {
         const eventId = this.generateEventId();
         const event = {
             id: eventId,
@@ -124,25 +124,25 @@ export class SecurityAuditLogger {
     /**
      * Log helper methods for common scenarios
      */
-    logExpressionBlocked(expression, reason, context = {}) {
+    logExpressionBlocked(expression: string, reason: string, context: any = {}) {
         this.logEvent(SecuritySeverity.ERROR, SecurityEventCategory.EXPRESSION_VALIDATION, `Expression blocked: ${reason}`, { ...context, expression }, true);
     }
-    logASTNodeBlocked(nodeType, reason, context = {}) {
+    logASTNodeBlocked(nodeType: string, reason: string, context: any = {}) {
         this.logEvent(SecuritySeverity.ERROR, SecurityEventCategory.AST_NODE_BLOCKED, `AST node '${nodeType}' blocked: ${reason}`, { ...context, nodeType }, true);
     }
-    logMathFunctionBlocked(functionName, reason, context = {}) {
+    logMathFunctionBlocked(functionName: string, reason: string, context: any = {}) {
         this.logEvent(SecuritySeverity.WARNING, SecurityEventCategory.MATH_FUNCTION_BLOCKED, `Math.${functionName} blocked: ${reason}`, { ...context, functionName }, true);
     }
-    logPrototypePollutionAttempt(propertyName, context = {}) {
+    logPrototypePollutionAttempt(propertyName: string, context: any = {}) {
         this.logEvent(SecuritySeverity.CRITICAL, SecurityEventCategory.PROTOTYPE_POLLUTION_ATTEMPT, `Prototype pollution attempt via property '${propertyName}'`, { ...context, propertyName }, true);
     }
-    logSecurityPolicyViolation(policy, details, context = {}) {
+    logSecurityPolicyViolation(policy: string, details: string, context: any = {}) {
         this.logEvent(SecuritySeverity.CRITICAL, SecurityEventCategory.SECURITY_POLICY_VIOLATION, `Security policy '${policy}' violated: ${details}`, context, true);
     }
     /**
      * Get all events
      */
-    getEvents(filter) {
+    getEvents(filter?: any) {
         let filtered = [...this.events];
         if (filter) {
             if (filter.severity) {
@@ -205,7 +205,7 @@ export class SecurityAuditLogger {
     /**
      * Export events for analysis
      */
-    exportEvents(format = 'json') {
+    exportEvents(format: string = 'json') {
         if (format === 'json') {
             return JSON.stringify(this.events, null, 2);
         }
@@ -246,13 +246,13 @@ export class SecurityAuditLogger {
     /**
      * Get events for a specific expression
      */
-    getEventsForExpression(expression) {
+    getEventsForExpression(expression: string) {
         return this.events.filter(e => e.context.expression === expression);
     }
     /**
      * Check if an expression has been blocked before
      */
-    hasExpressionBeenBlocked(expression) {
+    hasExpressionBeenBlocked(expression: string): boolean {
         return this.events.some(e => e.context.expression === expression && e.blocked);
     }
     /**
@@ -266,7 +266,7 @@ export class SecurityAuditLogger {
         // Remove internal frames
         return stack.split('\n').slice(3).join('\n');
     }
-    extractPattern(expression) {
+    extractPattern(expression: string): string {
         // Extract a simplified pattern from expression for aggregation
         return expression
             .replace(/["'].*?["']/g, '"..."') // Replace string literals
@@ -274,7 +274,7 @@ export class SecurityAuditLogger {
             .replace(/\s+/g, ' ') // Normalize whitespace
             .trim();
     }
-    logToConsole(event) {
+    logToConsole(event: any) {
         const icon = {
             [SecuritySeverity.INFO]: 'ℹ️',
             [SecuritySeverity.WARNING]: '⚠️',
@@ -316,8 +316,8 @@ export const securityAudit = SecurityAuditLogger.getInstance();
 /**
  * Decorator for automatic security logging
  */
-export function auditSecurityEvent(severity = SecuritySeverity.INFO, category = SecurityEventCategory.EXPRESSION_VALIDATION) {
-    return function (target, propertyName, descriptor) {
+export function auditSecurityEvent(severity: SecuritySeverity = SecuritySeverity.INFO, category: SecurityEventCategory = SecurityEventCategory.EXPRESSION_VALIDATION) {
+    return function (target: any, propertyName: string | symbol, descriptor: PropertyDescriptor) {
         const method = descriptor.value;
         descriptor.value = function (...args) {
             const startTime = Date.now();

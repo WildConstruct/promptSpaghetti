@@ -30,6 +30,8 @@ export { default as ModelManager } from './ModelManager';
 export { default as ConfigurationManager } from './ConfigurationManager';
 // Image processing utilities
 export { default as ImageProcessor } from './utils/ImageProcessor';
+// Import AIModelFactory for local use
+import { AIModelFactory } from './AIModelFactory';
 // Performance optimization exports
 export * from './performance';
 // Utility functions and helpers

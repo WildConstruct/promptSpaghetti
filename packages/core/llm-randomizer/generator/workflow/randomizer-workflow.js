@@ -1,9 +1,9 @@
 // Epic 12 - LLM Agent Randomizer System
 // Story 12.4 - Randomizer Generator Implementation
 // Complete workflow integration for end-to-end graph generation
-import { generateGraph } from '../../agents.js';
-import { parseGraph } from '../../parser.js';
-import { serializeGraph } from '../../serialization.js';
+import { generateGraph } from '../../agents';
+import { parseGraph } from '../../parser';
+import { serializeGraph } from '../../serialization';
 /**
  * Complete randomizer workflow that orchestrates all Epic 12 components
  */

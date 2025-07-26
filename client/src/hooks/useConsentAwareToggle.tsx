@@ -12,7 +12,7 @@ import { useConsent } from './useConsent';
 
 interface ToggleResult {
   enabled: boolean;
-  value: any;
+  value: unknown;
   reason: string;
   variantKey?: string;
   ruleMatched?: string;
@@ -22,7 +22,7 @@ interface ToggleResult {
     consentGranted?: boolean;
     requiredConsents?: string[];
     fallbackBehavior?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
 }
 
@@ -32,7 +32,7 @@ interface UseConsentAwareToggleOptions {
   includeConsentData?: boolean;
   autoRefreshOnConsentChange?: boolean;
   fallbackEnabled?: boolean;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
 }
 
 interface UseConsentAwareToggleReturn {
@@ -79,7 +79,7 @@ export function useConsentAwareToggle(
   const [result, setResult] = useState<ToggleResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [consentInfo, setConsentInfo] = useState<any>(null);
+  const [consentInfo, setConsentInfo] = useState<unknown>(null);
 
   const { preferences, hasConsent } = useConsent();
   const {
@@ -181,7 +181,7 @@ export function useBatchConsentAwareToggle(
   const [results, setResults] = useState<BatchToggleResult>({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [consentInfo, setConsentInfo] = useState<any>(null);
+  const [consentInfo, setConsentInfo] = useState<unknown>(null);
 
   const { preferences } = useConsent();
   const {

@@ -581,49 +581,49 @@ export declare const CreatePromotionSchema: z.ZodObject<{
         operator: z.ZodEnum<["AND", "OR"]>;
     }, "strip", z.ZodTypeAny, {
         type: PromotionTargetType;
-        conditions: any[];
         operator: "AND" | "OR";
+        conditions: any[];
     }, {
         type: PromotionTargetType;
-        conditions: any[];
         operator: "AND" | "OR";
+        conditions: any[];
     }>, "many">;
     priority: z.ZodDefault<z.ZodNumber>;
     stackable: z.ZodDefault<z.ZodBoolean>;
     metadata: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodAny>>;
 }, "strip", z.ZodTypeAny, {
-    priority: number;
-    type: PromotionType;
     name: string;
     description: string;
-    timezone: string;
+    priority: number;
+    type: PromotionType;
     metadata: Record<string, any>;
+    target_type: PromotionTargetType;
     start_date: Date;
     end_date: Date;
+    timezone: string;
     application_type: PromotionApplicationType;
-    target_type: PromotionTargetType;
     targeting_rules: {
         type: PromotionTargetType;
-        conditions: any[];
         operator: "AND" | "OR";
+        conditions: any[];
     }[];
     stackable: boolean;
     promo_code?: string | undefined;
     usage_limit?: number | undefined;
     user_usage_limit?: number | undefined;
 }, {
-    type: PromotionType;
     name: string;
     description: string;
-    timezone: string;
+    type: PromotionType;
+    target_type: PromotionTargetType;
     start_date: Date;
     end_date: Date;
+    timezone: string;
     application_type: PromotionApplicationType;
-    target_type: PromotionTargetType;
     targeting_rules: {
         type: PromotionTargetType;
-        conditions: any[];
         operator: "AND" | "OR";
+        conditions: any[];
     }[];
     priority?: number | undefined;
     metadata?: Record<string, any> | undefined;
@@ -644,23 +644,23 @@ export declare const UpdatePromotionSchema: z.ZodObject<{
     targeting_rules: z.ZodOptional<z.ZodArray<z.ZodAny, "many">>;
     metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
 }, "strip", z.ZodTypeAny, {
-    priority?: number | undefined;
     name?: string | undefined;
     description?: string | undefined;
+    priority?: number | undefined;
     status?: PromotionStatus | undefined;
-    enabled?: boolean | undefined;
     metadata?: Record<string, any> | undefined;
+    enabled?: boolean | undefined;
     start_date?: Date | undefined;
     end_date?: Date | undefined;
     usage_limit?: number | undefined;
     targeting_rules?: any[] | undefined;
 }, {
-    priority?: number | undefined;
     name?: string | undefined;
     description?: string | undefined;
+    priority?: number | undefined;
     status?: PromotionStatus | undefined;
-    enabled?: boolean | undefined;
     metadata?: Record<string, any> | undefined;
+    enabled?: boolean | undefined;
     start_date?: Date | undefined;
     end_date?: Date | undefined;
     usage_limit?: number | undefined;
@@ -673,14 +673,14 @@ export declare const ApplyPromotionSchema: z.ZodObject<{
     promo_code: z.ZodOptional<z.ZodString>;
     force_apply: z.ZodDefault<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    promotion_id: string;
     user_id: string;
+    promotion_id: string;
     force_apply: boolean;
     promo_code?: string | undefined;
     cart_id?: string | undefined;
 }, {
-    promotion_id: string;
     user_id: string;
+    promotion_id: string;
     promo_code?: string | undefined;
     cart_id?: string | undefined;
     force_apply?: boolean | undefined;
@@ -691,13 +691,13 @@ export declare const CheckEligibilitySchema: z.ZodObject<{
     cart_id: z.ZodOptional<z.ZodString>;
     item_ids: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
 }, "strip", z.ZodTypeAny, {
-    promotion_id: string;
     user_id: string;
+    promotion_id: string;
     cart_id?: string | undefined;
     item_ids?: string[] | undefined;
 }, {
-    promotion_id: string;
     user_id: string;
+    promotion_id: string;
     cart_id?: string | undefined;
     item_ids?: string[] | undefined;
 }>;

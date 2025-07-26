@@ -259,7 +259,7 @@ export const ReviewList: React.FC<ReviewListProps> = ({
               <select
                 id="sort-select"
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
+                onChange={(e) => setSortBy(e.target.value as 'newest' | 'oldest' | 'highest' | 'lowest')}
               >
                 <option value="newest">Newest First</option>
                 <option value="oldest">Oldest First</option>

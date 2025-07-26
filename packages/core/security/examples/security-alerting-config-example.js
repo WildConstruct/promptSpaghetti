@@ -20,10 +20,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * @since 2024-01-22
  */
 import { useState, useEffect, useCallback } from 'react';
-import { SecurityAlertingConfigurationUI } from '../components/SecurityAlertingConfigurationUI.js';
-import { useSecurityAlertingConfig } from '../hooks/useSecurityAlertingConfig.js';
-import { SecurityAlertingConfigurationService } from '../SecurityAlertingConfigurationService.js';
-import { ComplianceFramework } from '../SecurityLogger.js';
+import { SecurityAlertingConfigurationUI } from '../components/SecurityAlertingConfigurationUI';
+import { useSecurityAlertingConfig } from '../hooks/useSecurityAlertingConfig';
+import { SecurityAlertingConfigurationService } from '../SecurityAlertingConfigurationService';
+import { ComplianceFramework } from '../SecurityLogger';
 // Initialize the configuration service
 const configService = new SecurityAlertingConfigurationService({
     storageBackend: 'database',

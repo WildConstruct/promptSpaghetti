@@ -8,7 +8,8 @@ import {
   AuditSeverity,
   ComplianceStandard,
   AuditEventQuery,
-  CreateComplianceReportRequest
+  CreateComplianceReportRequest,
+  AuditEvent
 } from '../database/audit-models';
 
 // Request type definitions
@@ -160,10 +161,10 @@ export async function auditRoutes(fastify: FastifyInstance) {
         pagination: result.pagination,
         summary: result.summary
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       reply.code(500).send({
         success: false,
-        error: error.message
+        error: error instanceof Error ? error.message : 'Unknown error occurred'
       });
     }
   });
@@ -193,10 +194,10 @@ export async function auditRoutes(fastify: FastifyInstance) {
         success: true,
         data: statistics
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       reply.code(500).send({
         success: false,
-        error: error.message
+        error: error instanceof Error ? error.message : 'Unknown error occurred'
       });
     }
   });
@@ -271,10 +272,10 @@ export async function auditRoutes(fastify: FastifyInstance) {
           violationCount: report.violations.length
         }
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       reply.code(500).send({
         success: false,
-        error: error.message
+        error: error instanceof Error ? error.message : 'Unknown error occurred'
       });
     }
   });
@@ -365,10 +366,10 @@ export async function auditRoutes(fastify: FastifyInstance) {
           summary: result.summary
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       reply.code(500).send({
         success: false,
-        error: error.message
+        error: error instanceof Error ? error.message : 'Unknown error occurred'
       });
     }
   });
@@ -424,10 +425,10 @@ export async function auditRoutes(fastify: FastifyInstance) {
           }
         }
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       reply.code(500).send({
         success: false,
-        error: error.message
+        error: error instanceof Error ? error.message : 'Unknown error occurred'
       });
     }
   });
@@ -482,7 +483,7 @@ export async function auditRoutes(fastify: FastifyInstance) {
         success: true,
         data: health
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       reply.code(503).send({
         success: false,
         error: 'Audit system unhealthy',
@@ -492,17 +493,17 @@ export async function auditRoutes(fastify: FastifyInstance) {
   });
 
   // Helper methods for export functionality (would be implemented)
-  async function exportAsCSV(events: any[], options: any): Promise<string> {
+  async function exportAsCSV(events: AuditEvent[], options: Record<string, unknown>): Promise<string> {
     // CSV export implementation
     return 'CSV export not yet implemented';
   }
 
-  async function exportAsXML(events: any[], options: any): Promise<string> {
+  async function exportAsXML(events: AuditEvent[], options: Record<string, unknown>): Promise<string> {
     // XML export implementation
     return 'XML export not yet implemented';
   }
 
-  async function exportAsPDF(events: any[], options: any): Promise<Buffer> {
+  async function exportAsPDF(events: AuditEvent[], options: Record<string, unknown>): Promise<Buffer> {
     // PDF export implementation
     return Buffer.from('PDF export not yet implemented');
   }

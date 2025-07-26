@@ -1,11 +1,11 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useCallback } from 'react';
-import { Button } from '../ui/Button.js';
-import { Input } from '../ui/Input.js';
-import { Label } from '../ui/Label.js';
-import { Checkbox } from '../ui/Checkbox.js';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/Dialog.js';
-import { Alert, AlertDescription } from '../ui/Alert.js';
+import { Button } from '../ui/Button';
+import { Input } from '../ui/Input';
+import { Label } from '../ui/Label';
+import { Checkbox } from '../ui/Checkbox';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/Dialog';
+import { Alert, AlertDescription } from '../ui/Alert';
 import { Download, FileText, Table, Image, Settings } from 'lucide-react';
 /**
  * Export options component

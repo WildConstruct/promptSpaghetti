@@ -10,11 +10,11 @@
 // Integration Architecture Service
 // =============================================================================
 export class Epic16HelpIntegrationArchitecture {
-    graphHelpManager;
-    marketplaceHelpContent = new Map();
-    activeHelpSessions = new Map();
-    integrationPoints = [];
-    constructor(graphHelpManager) {
+    graphHelpManager: any;
+    marketplaceHelpContent: Map<string, any> = new Map();
+    activeHelpSessions: Map<string, any> = new Map();
+    integrationPoints: any[] = [];
+    constructor(graphHelpManager: any) {
         this.graphHelpManager = graphHelpManager;
         this.initializeMarketplaceContent();
         this.setupIntegrationPoints();
@@ -25,7 +25,7 @@ export class Epic16HelpIntegrationArchitecture {
     /**
      * Core integration architecture that bridges Epic 8 and Epic 16 help systems
      */
-    async getIntegratedHelpContent(context, userProfile) {
+    async getIntegratedHelpContent(context: any, userProfile: any): Promise<any[]> {
         const helpContent = [];
         // 1. Determine primary context
         const primaryContext = this.determinePrimaryContext(context);

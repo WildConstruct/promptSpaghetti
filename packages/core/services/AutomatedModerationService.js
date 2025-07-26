@@ -7,13 +7,13 @@
  * policy management, trust scoring, and enforcement frameworks.
  */
 export class AutomatedModerationService {
-    policyCheckersService;
-    trustScoreService;
-    enforcementService;
-    moderationRules = [];
-    moderationQueues = [];
-    cache = new Map();
-    constructor(policyCheckersService, trustScoreService, enforcementService) {
+    policyCheckersService: any;
+    trustScoreService: any;
+    enforcementService: any;
+    moderationRules: any[] = [];
+    moderationQueues: any[] = [];
+    cache: Map<string, any> = new Map();
+    constructor(policyCheckersService: any, trustScoreService: any, enforcementService: any) {
         this.policyCheckersService = policyCheckersService;
         this.trustScoreService = trustScoreService;
         this.enforcementService = enforcementService;
@@ -21,7 +21,7 @@ export class AutomatedModerationService {
         this.initializeDefaultQueues();
     }
     // Main Moderation Entry Point
-    async moderateContent(request) {
+    async moderateContent(request: any) {
         const startTime = Date.now();
         // Check cache
         const cacheKey = this.generateCacheKey(request);
@@ -117,7 +117,7 @@ export class AutomatedModerationService {
         }
     }
     // Batch Moderation
-    async moderateBatch(requests) {
+    async moderateBatch(requests: any[]) {
         const results = [];
         const batchSize = 10; // Process in batches to avoid overwhelming the system
         for (let i = 0; i < requests.length; i += batchSize) {
@@ -129,7 +129,7 @@ export class AutomatedModerationService {
         return results;
     }
     // Policy Checks Integration
-    async runPolicyChecks(request) {
+    async runPolicyChecks(request: any) {
         const policyRequest = {
             id: `policy_check_${request.id}`,
             resourceType: 'content',
@@ -149,7 +149,7 @@ export class AutomatedModerationService {
         return await this.policyCheckersService.executeChecks(policyRequest);
     }
     // ML Content Analysis
-    async runMLAnalysis(request) {
+    async runMLAnalysis(request: any) {
         // In a real implementation, this would call actual ML services
         // For now, we'll simulate ML analysis with realistic mock data
         const contentText = [
@@ -173,7 +173,7 @@ export class AutomatedModerationService {
         };
     }
     // Trust Analysis
-    async analyzeTrustFactors(request) {
+    async analyzeTrustFactors(request: any) {
         const trustScore = request.author.trustScore || 50;
         const violations = request.author.previousViolations || 0;
         const accountAge = request.author.accountAge || 1;
@@ -194,7 +194,7 @@ export class AutomatedModerationService {
         };
     }
     // Rule Application
-    async applyModerationRules(request, analysis) {
+    async applyModerationRules(request: any, analysis: any) {
         const { policyResults, mlAnalysis, trustAnalysis } = analysis;
         // Analyze violations and risk factors
         const criticalViolations = policyResults.filter(r => r.status === 'failed' && r.severity === 'critical').length;
@@ -292,7 +292,7 @@ export class AutomatedModerationService {
         };
     }
     // Action Execution
-    async executeActions(request, result) {
+    async executeActions(request: any, result: any) {
         // This would integrate with the AutomatedEnforcementService
         // For now, just log the actions
         console.log(`Executing moderation action: ${result.decision} for content ${request.contentId}`);
@@ -318,7 +318,7 @@ export class AutomatedModerationService {
         }
     }
     // Review Queue Management
-    async queueForReview(request, result) {
+    async queueForReview(request: any, result: any) {
         // Find appropriate queue based on content type and severity
         const queue = this.findAppropriateQueue(request, result);
         console.log(`Queueing content ${request.contentId} for review in queue: ${queue.name}`);
@@ -358,7 +358,7 @@ export class AutomatedModerationService {
         };
     }
     // Helper Methods
-    shouldAutoExecute(result) {
+    shouldAutoExecute(result: any): boolean {
         // Don't auto-execute if requires human review or low confidence
         if (result.requiresHumanReview || result.confidence < 80) {
             return false;
@@ -367,16 +367,16 @@ export class AutomatedModerationService {
         const autoExecutableActions = ['approve', 'auto_fix', 'warn_user'];
         return autoExecutableActions.includes(result.decision);
     }
-    calculateOverallScore(policyResults) {
+    calculateOverallScore(policyResults: any[]): number {
         if (policyResults.length === 0)
             return 0;
         const scores = policyResults.filter(r => r.score !== undefined).map(r => r.score);
         return scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
     }
-    generateCacheKey(request) {
+    generateCacheKey(request: any): string {
         return `mod_${request.contentId}_${request.contentType}_${request.author.userId}`;
     }
-    generateExplanation(decision, reasons, confidence, analysis) {
+    generateExplanation(decision: string, reasons: string[], confidence: number, analysis: any): string {
         let explanation = `Content moderation decision: ${decision} (${confidence}% confidence). `;
         if (reasons.length > 0) {
             explanation += `Reasons: ${reasons.join(', ')}. `;
@@ -393,7 +393,7 @@ export class AutomatedModerationService {
         }
         return explanation.trim();
     }
-    findAppropriateQueue(request, result) {
+    findAppropriateQueue(request: any, result: any): any {
         // Find queue that matches content type and severity
         for (const queue of this.moderationQueues) {
             if (queue.filters.contentTypes?.includes(request.contentType) &&
@@ -405,13 +405,13 @@ export class AutomatedModerationService {
         return this.moderationQueues[0];
     }
     // ML Simulation Methods (replace with actual ML service integration)
-    simulateToxicityAnalysis(text) {
+    simulateToxicityAnalysis(text: string): number {
         // Simulate toxicity detection based on text length and certain keywords
         const toxicWords = ['spam', 'fake', 'scam', 'hate'];
         const hasToxicWords = toxicWords.some(word => text.toLowerCase().includes(word));
         return hasToxicWords ? Math.floor(Math.random() * 30) + 70 : Math.floor(Math.random() * 40);
     }
-    simulateSpamDetection(text, author) {
+    simulateSpamDetection(text: string, author: any): number {
         // Simulate spam detection based on various factors
         let spamScore = 0;
         if (text.length < 10)
@@ -422,16 +422,16 @@ export class AutomatedModerationService {
             spamScore += 20;
         return Math.min(spamScore + Math.floor(Math.random() * 20), 100);
     }
-    simulateSentimentAnalysis(text) {
+    simulateSentimentAnalysis(text: string): number {
         // Simulate sentiment analysis (-100 to 100, negative to positive)
         return Math.floor(Math.random() * 200) - 100;
     }
-    simulateLanguageQuality(text) {
+    simulateLanguageQuality(text: string): number {
         // Simulate language quality based on text length and complexity
         const baseScore = Math.min(text.length / 10, 80);
         return Math.floor(baseScore + Math.random() * 20);
     }
-    async logModerationDecision(request, result) {
+    async logModerationDecision(request: any, result: any) {
         console.log('Moderation Decision Log:', {
             contentId: request.contentId,
             contentType: request.contentType,

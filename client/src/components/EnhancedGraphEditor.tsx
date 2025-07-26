@@ -832,7 +832,7 @@ const InspectorPanel: React.FC<{
                 color: professionalColors.text.secondary,
                 fontSize: '13px',
               }}>
-                No options defined. Click "Add" to create options.
+                No options defined. Click &quot;Add&quot; to create options.
               </div>
             ) : (
               options.map((option, index) => (
@@ -1067,10 +1067,16 @@ const defaultNodes: Node[] = [
       options: [
         { label: "Cockpit Control Surface (Fighter, Shuttle)", value: "Cockpit Control Surface", weight: 1 },
         { label: "Bridge/Command Console (Capital Ship, Ops)", value: "Bridge/Command Center Console", weight: 1 },
-        { label: "Machinery/Engineering Panel (Engine Room, Reactor)", value: "Machinery/Engineering Panel", weight: 1 },
+        { label: "Machinery/Engineering Panel (
+          Engine Room,
+          Reactor
+        )", value: "Machinery/Engineering Panel", weight: 1 },
         { label: "Data Terminal Interface (Info Access, Logs)", value: "Data Terminal Interface", weight: 1 },
         { label: "Handheld Device (Scanner, Commlink, Tricorder-like)", value: "Handheld Device", weight: 1 },
-        { label: "Wall-Mounted Utility Panel (Life Support, Door Control)", value: "Wall-Mounted Utility Panel", weight: 1 },
+        { label: "Wall-Mounted Utility Panel (
+          Life Support,
+          Door Control
+        )", value: "Wall-Mounted Utility Panel", weight: 1 },
         { label: "Mainframe Access Station (Bulky Computer Interface)", value: "Mainframe Access Station", weight: 1 },
         { label: "Laboratory Equipment Interface (Scientific Instruments)", value: "Laboratory Equipment Interface", weight: 1 }
       ]
@@ -1088,7 +1094,10 @@ const defaultNodes: Node[] = [
         { label: "Star Wars Core (Used Future, 70s Analog)", value: "Star Wars Core", weight: 1 },
         { label: "Cassette Futurism (Alien, Blade Runner - 70s/80s CRTs)", value: "Cassette Futurism", weight: 1 },
         { label: "Dieselpunk (Fallout, Sky Captain - Interwar/WWII, Gritty)", value: "Dieselpunk", weight: 1 },
-        { label: "Atompunk/Raygun Gothic (Jetsons, Forbidden Planet - 50s/60s)", value: "Atompunk/Raygun Gothic", weight: 1 },
+        { label: "Atompunk/Raygun Gothic (
+          Jetsons,
+          Forbidden Planet - 50s/60s
+        )", value: "Atompunk/Raygun Gothic", weight: 1 },
         { label: "Decopunk (Bioshock - Art Deco, Luxurious Machines)", value: "Decopunk", weight: 1 },
         { label: "Soviet Retrofuturism (Constructivist, Monumental)", value: "Soviet Retrofuturism", weight: 1 },
         { label: "Valvepunk/Clockpunk (Early Industrial, Brass, Valves)", value: "Valvepunk/Clockpunk", weight: 1 },
@@ -1115,12 +1124,27 @@ const defaultNodes: Node[] = [
       description: "Condition: Pristine, Lightly Used, Battle-Scarred, etc.",
       category: "transform",
       options: [
-        { label: "Pristine (New Old Stock - retro design, mint condition)", value: "Pristine (New Old Stock)", weight: 1 },
+        { label: "Pristine (
+          New Old Stock - retro design,
+          mint condition
+        )", value: "Pristine (New Old Stock)", weight: 1 },
         { label: "Lightly Used (Minor scuffs, dust, fingerprints)", value: "Lightly Used", weight: 2 },
         { label: "Moderately Worn (Visible scratches, grime, faded labels)", value: "Moderately Worn", weight: 3 },
-        { label: "Heavily Used / Jury-Rigged (Damage, patches, makeshift repairs)", value: "Heavily Used / Jury-Rigged", weight: 2 },
-        { label: "Battle-Scarred / Field Repaired (Impact marks, welds)", value: "Battle-Scarred / Field Repaired", weight: 1.5 },
-        { label: "Overgrown / Reclaimed by Nature (Dust, vines, rust, decay)", value: "Overgrown / Reclaimed by Nature", weight: 0.5 }
+        { label: "Heavily Used / Jury-Rigged (
+          Damage,
+          patches,
+          makeshift repairs
+        )", value: "Heavily Used / Jury-Rigged", weight: 2 },
+        { label: "Battle-Scarred / Field Repaired (
+          Impact marks,
+          welds
+        )", value: "Battle-Scarred / Field Repaired", weight: 1.5 },
+        { label: "Overgrown / Reclaimed by Nature (
+          Dust,
+          vines,
+          rust,
+          decay
+        )", value: "Overgrown / Reclaimed by Nature", weight: 0.5 }
       ]
     }
   },
@@ -1275,7 +1299,7 @@ function executeGraph(nodes: Node[], edges: Edge[]): { [key: string]: string } {
         }
         break;
         
-      case 'output':
+      case 'output': {
         // Combine all inputs for the output
         const inputNodes = edges
           .filter(edge => edge.target === node.id)
@@ -1291,6 +1315,7 @@ function executeGraph(nodes: Node[], edges: Edge[]): { [key: string]: string } {
           results[node.id] = 'Final output (no inputs)';
         }
         break;
+      }
         
       default:
         results[node.id] = nodeData.label || 'Unknown';

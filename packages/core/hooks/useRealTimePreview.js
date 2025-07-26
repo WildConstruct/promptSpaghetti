@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { substituteVariables } from '../utils/templateParser.js';
+import { substituteVariables } from '../utils/templateParser';
 const DEFAULT_CONFIG = {
     maxVariants: 3,
     debounceMs: 300,
@@ -7,7 +7,7 @@ const DEFAULT_CONFIG = {
     enablePerformanceTracking: true,
     autoRefresh: true
 };
-export const useRealTimePreview = (graph, seedConfig = {}) => {
+export const useRealTimePreview = (graph: any, seedConfig: any = {}, template: string = '', variables: any = {}, fullConfig: any = DEFAULT_CONFIG) => {
     // State
     const [variants, setVariants] = useState([]);
     const [isGenerating, setIsGenerating] = useState(false);
@@ -23,7 +23,7 @@ export const useRealTimePreview = (graph, seedConfig = {}) => {
     const abortControllerRef = useRef(null);
     const generationCounterRef = useRef(0);
     // Generate preview variants based on current weights and template
-    const generatePreview = useCallback(async (weights, force = false) => {
+    const generatePreview = useCallback(async (weights: any[], force: boolean = false) => {
         if (!template.trim() || (!force && isGenerating)) {
             return;
         }
@@ -101,7 +101,7 @@ export const useRealTimePreview = (graph, seedConfig = {}) => {
         }
     }, [template, variables, fullConfig, isGenerating]);
     // Debounced preview update for weight changes
-    const requestPreview = useCallback((weights) => {
+    const requestPreview = useCallback((weights: any[]) => {
         if (!fullConfig.autoRefresh)
             return;
         // Clear existing debounce timeout
@@ -114,7 +114,7 @@ export const useRealTimePreview = (graph, seedConfig = {}) => {
         }, fullConfig.debounceMs);
     }, [generatePreview, fullConfig]);
     // Force immediate preview generation
-    const forcePreview = useCallback((weights) => {
+    const forcePreview = useCallback((weights: any[]) => {
         // Clear any pending debounced calls
         if (debounceTimeoutRef.current) {
             clearTimeout(debounceTimeoutRef.current);
@@ -123,7 +123,7 @@ export const useRealTimePreview = (graph, seedConfig = {}) => {
         generatePreview(weights, true);
     }, [generatePreview]);
     // Refresh single variant
-    const refreshVariant = useCallback(async (variantId) => {
+    const refreshVariant = useCallback(async (variantId: string) => {
         const variant = variants.find(v => v.id === variantId);
         if (!variant)
             return;
@@ -153,7 +153,7 @@ export const useRealTimePreview = (graph, seedConfig = {}) => {
         }
     }, [variants, template, variables]);
     // Get variant by ID
-    const getVariant = useCallback((variantId) => {
+    const getVariant = useCallback((variantId: string) => {
         return variants.find(v => v.id === variantId);
     }, [variants]);
     // Get performance insights
@@ -234,7 +234,7 @@ export const useRealTimePreview = (graph, seedConfig = {}) => {
     };
 };
 // Helper function for weighted selection
-const performWeightedSelection = (weights, seed) => {
+const performWeightedSelection = (weights: any[], seed: number) => {
     if (weights.length === 0)
         return {};
     // Create deterministic random number generator from seed
@@ -256,7 +256,7 @@ const performWeightedSelection = (weights, seed) => {
     return { weighted_choice: weights[weights.length - 1].text };
 };
 // Simple seeded random number generator
-const createSeededRandom = (seed) => {
+const createSeededRandom = (seed: number) => {
     let x = seed;
     return () => {
         x = (x * 9301 + 49297) % 233280;

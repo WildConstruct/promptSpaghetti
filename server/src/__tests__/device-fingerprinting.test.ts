@@ -33,19 +33,19 @@ describe('DeviceFingerprintingService', () => {
   beforeEach(() => {
     // Mock database
     mockDb = {
-      query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown)
+      query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown as unknown)
     } as any;
 
     // Mock Redis
     mockRedis = {
-      get: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown),
-      setex: jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown),
-      del: jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown)
+      get: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown as unknown),
+      setex: jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown as unknown),
+      del: jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown as unknown)
     } as any;
 
     // Mock audit service
     mockAuditService = {
-      logEvent: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown)
+      logEvent: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown as unknown)
     } as any;
 
     // Test configuration
@@ -699,7 +699,7 @@ describe('DeviceFingerprintingService', () => {
     });
 
     it('should throw error for non-existent device', async () => {
-      (mockDb as any).query.mockResolvedValue({ rows: [] } as unknown);
+      (mockDb as any).query.mockResolvedValue({ rows: [] } as unknown as unknown);
 
       await expect(deviceService.getDeviceHistory('non-existent'))
         .rejects.toThrow('Device not found');
@@ -830,7 +830,7 @@ describe('DeviceFingerprintingService', () => {
     });
 
     it('should support different timeframes', async () => {
-      (mockDb as any).query.mockResolvedValue({ rows: [{}] } as unknown);
+      (mockDb as any).query.mockResolvedValue({ rows: [{}] } as unknown as unknown);
 
       await deviceService.getDeviceStatistics('day');
       await deviceService.getDeviceStatistics('week');
@@ -944,7 +944,7 @@ describe('DeviceFingerprintingService', () => {
     });
 
     it('should handle unknown device in verification', async () => {
-      (mockDb as any).query.mockResolvedValue({ rows: [] } as unknown);
+      (mockDb as any).query.mockResolvedValue({ rows: [] } as unknown as unknown);
 
       const verification = await deviceService.verifyDevice('unknown-fingerprint');
 

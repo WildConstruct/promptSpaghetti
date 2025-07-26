@@ -22,7 +22,7 @@ class MockRedisService {
     del: jest.fn<unknown[], unknown>(),
     expire: jest.fn<unknown[], unknown>(),
     ttl: jest.fn<unknown[], unknown>(),
-    ping: jest.fn<unknown[], unknown>().mockResolvedValue('PONG' as unknown),
+    ping: jest.fn<unknown[], unknown>().mockResolvedValue('PONG' as unknown as unknown),
     quit: jest.fn<unknown[], unknown>()
   };
 

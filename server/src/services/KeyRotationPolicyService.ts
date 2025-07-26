@@ -560,9 +560,9 @@ export class KeyRotationPolicyService extends EventEmitter {
           AND status IN ('scheduled', 'pending_approval')
       `);
       
-      const stats = result.rows[0];
-      const upcoming = upcomingResult.rows[0];
-      const overdue = overdueResult.rows[0];
+      const stats = result.rows[0] as { total_rotations?: string; successful_rotations?: string; failed_rotations?: string };
+      const upcoming = upcomingResult.rows[0] as { upcoming_rotations?: string };
+      const overdue = overdueResult.rows[0] as { overdue_rotations?: string };
       
       return {
         totalRotations: parseInt(stats.total_rotations || '0'),
@@ -688,7 +688,10 @@ export class KeyRotationPolicyService extends EventEmitter {
     };
   }
 
-  private calculateRotationWindow(scheduledDate: Date, _____policy: RotationPolicy): { startTime: Date; endTime: Date } {
+  private calculateRotationWindow(
+    scheduledDate: Date,
+    _____policy: RotationPolicy
+  ): { startTime: Date; endTime: Date } {
     const startTime = new Date(scheduledDate);
     const endTime = new Date(scheduledDate.getTime() + this.config.rotationWindowHours * 60 * 60 * 1000);
     
@@ -707,7 +710,7 @@ export class KeyRotationPolicyService extends EventEmitter {
         )
     `, [rotationWindow.startTime, rotationWindow.endTime]);
     
-    const conflictCount = parseInt(conflicts.rows[0].count);
+    const conflictCount = parseInt((conflicts.rows[0] as { count: string }).count);
     if (conflictCount >= this.config.maxConcurrentRotations) {
       throw new Error('Too many concurrent rotations scheduled for this time window');
     }

@@ -13,9 +13,9 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * - Integration with enhanced preview modal for detailed analysis
  */
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
-import { EnhancedPreviewModal } from '../PreviewModal/EnhancedPreviewModal.js';
-import { useEnhancedPreview } from '../../hooks/useEnhancedPreview.js';
-import { useRealTimePreview } from '../../hooks/useRealTimePreview.js';
+import { EnhancedPreviewModal } from '../PreviewModal/EnhancedPreviewModal';
+import { useEnhancedPreview } from '../../hooks/useEnhancedPreview';
+import { useRealTimePreview } from '../../hooks/useRealTimePreview';
 export const RealTimePreviewIntegration = ({ nodes, edges, enableRealTime = true, previewCount = 3, autoRefresh = true, showVarianceAnalysis = true, onPreviewUpdate, onHighlightPath, onError }) => {
     // State for preview integration
     const [showEnhancedModal, setShowEnhancedModal] = useState(false);

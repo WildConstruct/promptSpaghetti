@@ -1,39 +1,47 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useCallback, useState, useMemo, useRef, useEffect } from 'react';
 import { ReactFlowProvider, addEdge, Background, Controls, MiniMap, ReactFlow, ConnectionLineType, useReactFlow, useViewport } from 'reactflow';
-import { InspectorPanel } from './components/Inspector.js';
-import { NodeRenderer } from './components/NodeRenderer.js';
-import { VariablePortNodeRenderer } from './components/VariablePortNodeRenderer.js';
-import { StatusBar } from './components/StatusBar.js';
-import { RestorePrompt } from './components/RestorePrompt.js';
-import { nodeSchemas } from './nodeSchemas.js';
-import { Palette } from './Palette.js';
-import { useGraphStore } from './graphStore.js';
-import { PreviewModal } from './PreviewModal.js';
-import { usePreviewSeeds } from './usePreviewSeeds.js';
-import { ResponsiveCorrectionsPanel } from './ResponsiveCorrectionsPanel.js';
-import { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboard.js';
-import { ExtensionManagerPanel } from './components/ExtensionManager/ExtensionManagerPanel.js';
-import { useCorrectionsEnabled } from './correctionsStore.js';
-import SaveProjectDialog from './components/ProjectDialogs/SaveProjectDialog.js';
-import LoadProjectDialog from './components/ProjectDialogs/LoadProjectDialog.js';
-import ExportBundleDialog from './components/ProjectDialogs/ExportBundleDialog.js';
-import { SaveTemplateDialog } from './components/TemplateDialogs/SaveTemplateDialog.js';
-import { TemplateBrowser } from './components/TemplateDialogs/TemplateBrowser.js';
-import { GraphAnalysisPanel, PerformanceMonitor, OptimizationControls } from './components/GraphOptimization.js';
-import { StickyNotesManager } from './components/StickyNotes/StickyNotesManager.js';
-import { DirectorPreviewToolbar } from './components/DirectorToolbar/DirectorPreviewToolbar.js';
-import { ContextualHelpSystem, helpContentManager } from './components/ContextualHelp.js';
-import { useValidation } from './hooks/useValidation.js';
-import { useAutosave } from './hooks/useAutosave.js';
-import { useNodeUtils } from './hooks/useNodeUtils.js';
-import { SmoothInspectorPanel } from './components/Inspector/SmoothInspectorPanel.js';
-import { ProfessionalSpinner } from './components/LoadingStates/ProfessionalSpinner.js';
-import { SmoothNodeWrapper } from './components/Nodes/SmoothNodeWrapper.js';
-import { useCanvasOptimization } from './utils/canvasOptimization.js';
-import { globalAnimationManager } from './utils/smoothAnimations.js';
-import { DemoModeManager } from './components/Demo/DemoModeManager.js';
-import { DemoPerformanceTester } from './components/Demo/DemoPerformanceTester.js';
+import { InspectorPanel } from './components/Inspector';
+import { NodeRenderer } from './components/NodeRenderer';
+import { VariablePortNodeRenderer } from './components/VariablePortNodeRenderer';
+import { StatusBar } from './components/StatusBar';
+import { RestorePrompt } from './components/RestorePrompt';
+import { nodeSchemas } from './nodeSchemas';
+import { TabbedPalette } from './palette/TabbedPalette';
+import { useGraphStore } from './graphStore';
+import { PreviewModal } from './PreviewModal';
+import { usePreviewSeeds } from './usePreviewSeeds';
+import { ResponsiveCorrectionsPanel } from './ResponsiveCorrectionsPanel';
+import { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboard';
+import { ExtensionManagerPanel } from './components/ExtensionManager/ExtensionManagerPanel';
+import { useCorrectionsEnabled } from './correctionsStore';
+import SaveProjectDialog from './components/ProjectDialogs/SaveProjectDialog';
+import LoadProjectDialog from './components/ProjectDialogs/LoadProjectDialog';
+import ExportBundleDialog from './components/ProjectDialogs/ExportBundleDialog';
+import { SaveTemplateDialog } from './components/TemplateDialogs/SaveTemplateDialog';
+import { TemplateBrowser } from './components/TemplateDialogs/TemplateBrowser';
+import { GraphAnalysisPanel, PerformanceMonitor, OptimizationControls } from './components/GraphOptimization';
+import { StickyNotesManager } from './components/StickyNotes/StickyNotesManager';
+import { NodeLabelsManager } from './components/NodeLabels/NodeLabelsManager';
+import { RegionGroupsManager } from './components/RegionGroups/RegionGroupsManager';
+import { ConnectionAnnotationsLayer } from './components/Annotations/ConnectionAnnotationsLayer';
+import { RealTimePreviewPanel } from './components/Preview/RealTimePreviewPanel';
+import { IndividualResultManager } from './components/Preview/IndividualResultManager';
+import { DirectorPreviewToolbar } from './components/DirectorToolbar/DirectorPreviewToolbar';
+import { SettingsModal } from './components/Modal/SettingsModal';
+import { ContextualHelpSystem, helpContentManager } from './components/ContextualHelp';
+import { useValidation } from './hooks/useValidation';
+import { useAutosave } from './hooks/useAutosave';
+import { useNodeUtils } from './hooks/useNodeUtils';
+import { SmoothInspectorPanel } from './components/Inspector/SmoothInspectorPanel';
+import { ProfessionalSpinner } from './components/LoadingStates/ProfessionalSpinner';
+import { SmoothNodeWrapper } from './components/Nodes/SmoothNodeWrapper';
+import { useCanvasOptimization } from './utils/canvasOptimization';
+import { globalAnimationManager } from './utils/smoothAnimations';
+import { DemoModeManager } from './components/Demo/DemoModeManager';
+import { DemoPerformanceTester } from './components/Demo/DemoPerformanceTester';
+import { UnsavedChangesDialog } from './components/Dialogs/UnsavedChangesDialog';
+import { useUnsavedChanges } from './hooks/useUnsavedChanges';
 import './styles/smoothAnimations.css';
 // SECURITY FIX: Safe CSS injection using controlled constants
 const ANIMATION_CSS = `
@@ -68,7 +76,7 @@ const injectSafeStyles = () => {
 };
 // Inject styles safely on module load
 injectSafeStyles();
-import { WeightedChoiceIcon, ConcatIcon, OutputIcon, IncludeIcon, SetVariableIcon, GetVariableIcon } from './icons.js';
+import { WeightedChoiceIcon, ConcatIcon, OutputIcon, IncludeIcon, SetVariableIcon, GetVariableIcon } from './icons';
 const NODE_TYPES = [
     // Content Building Blocks
     {
@@ -207,6 +215,11 @@ const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection }) =>
     // Template dialog states
     const [saveTemplateDialogOpen, setSaveTemplateDialogOpen] = useState(false);
     const [templateBrowserOpen, setTemplateBrowserOpen] = useState(false);
+    // Settings modal state
+    const [settingsModalOpen, setSettingsModalOpen] = useState(false);
+    // Epic 8.5 Preview panel states
+    const [realTimePreviewOpen, setRealTimePreviewOpen] = useState(false);
+    const [resultManagerOpen, setResultManagerOpen] = useState(false);
     // Optimization panel states
     const [optimizationControlsOpen, setOptimizationControlsOpen] = useState(false);
     const [performanceMonitorVisible, setPerformanceMonitorVisible] = useState(false);
@@ -235,6 +248,20 @@ const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection }) =>
     // Custom hooks
     const { getNodeMeta, getCategoryColor } = useNodeUtils({ nodeTypes: NODE_TYPES });
     const { showRestorePrompt, restoreDraft, setShowRestorePrompt } = useAutosave({ nodes, edges });
+    // Unsaved changes management (Story 6.1)
+    const { showUnsavedDialog, dialogAction, confirmNavigation, handleSave: handleUnsavedSave, handleDontSave: handleUnsavedDontSave, handleCancel: handleUnsavedCancel } = useUnsavedChanges({
+        hasUnsavedChanges,
+        projectName: currentProject?.name,
+        onSave: async () => {
+            // Trigger save dialog and wait for result
+            return new Promise((resolve) => {
+                setSaveDialogOpen(true);
+                // Note: This is a simplified implementation
+                // In practice, you'd need to wire this up with the actual save dialog result
+                resolve(true);
+            });
+        }
+    });
     // Highlighted nodes & edges from preview result hover
     const [highlightNodeIds, setHighlightNodeIds] = useState(new Set());
     const [highlightEdgeIds, setHighlightEdgeIds] = useState(new Set());
@@ -321,8 +348,61 @@ const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection }) =>
     };
     // Enhanced drop handler with smooth node creation animation
     const { addNode, updateNode } = useGraphStore();
-    const handleDrop = useCallback((event) => {
+    const handleDrop = useCallback(async (event) => {
         event.preventDefault();
+        // Check if files are being dropped (Story 6.1 - drag and drop .psg files)
+        if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
+            const file = event.dataTransfer.files[0];
+            // Check if it's a .psg file
+            if (file.name.toLowerCase().endsWith('.psg')) {
+                // Handle unsaved changes warning
+                if (hasUnsavedChanges) {
+                    const confirmed = confirm('You have unsaved changes. Load the dropped project anyway?');
+                    if (!confirmed)
+                        return;
+                }
+                try {
+                    const content = await file.text();
+                    const { deserializeProject } = await import('./utils/projectSerialization');
+                    const result = deserializeProject(content, {
+                        skipValidation: false,
+                        autoMigrate: true,
+                        preserveIds: true
+                    });
+                    if (result.success && result.data) {
+                        // Load the project data
+                        setNodes(result.data.graph.nodes);
+                        setEdges(result.data.graph.edges);
+                        // Update project state
+                        const { setCurrentProject, updateProjectSettings, markProjectSaved } = useGraphStore.getState();
+                        setCurrentProject(result.data.metadata);
+                        updateProjectSettings(result.data.settings);
+                        markProjectSaved();
+                        setStatusMessage(`Project "${result.data.metadata.name}" loaded successfully!`);
+                        setTimeout(() => setStatusMessage(''), 3000);
+                        if (result.warnings && result.warnings.length > 0) {
+                            console.warn('Project load warnings:', result.warnings);
+                        }
+                    }
+                    else {
+                        setStatusMessage(`Failed to load project: ${result.error}`);
+                        setTimeout(() => setStatusMessage(''), 5000);
+                    }
+                }
+                catch (error) {
+                    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+                    setStatusMessage(`Failed to load project: ${errorMessage}`);
+                    setTimeout(() => setStatusMessage(''), 5000);
+                }
+                return; // Exit early for file drops
+            }
+            else {
+                setStatusMessage('Only .psg files are supported for drag and drop');
+                setTimeout(() => setStatusMessage(''), 3000);
+                return;
+            }
+        }
+        // Handle node type drops from palette (existing functionality)
         const nodeType = event.dataTransfer.getData('application/node-type');
         if (!nodeType || !(nodeType in nodeSchemas))
             return;
@@ -356,7 +436,7 @@ const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection }) =>
                 setNodeCreationAnimation(null);
             }, 600);
         });
-    }, [reactFlowInstance, addNode]);
+    }, [reactFlowInstance, addNode, hasUnsavedChanges, setNodes, setEdges, setStatusMessage]);
     // Allow drop on canvas
     const handleDragOver = useCallback((event) => {
         event.preventDefault();
@@ -454,29 +534,64 @@ const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection }) =>
     }, []);
     // Project management handlers
     const handleNewProject = useCallback(() => {
-        if (hasUnsavedChanges) {
-            if (confirm('You have unsaved changes. Create a new project anyway?')) {
-                newProject();
-                setNodes([]);
-                setEdges([]);
-            }
-        }
-        else {
+        confirmNavigation('creating a new project', () => {
             newProject();
             setNodes([]);
             setEdges([]);
-        }
-    }, [hasUnsavedChanges, newProject]);
+        });
+    }, [confirmNavigation, newProject]);
     const handleSaveProject = useCallback(() => {
         setSaveDialogOpen(true);
     }, []);
     const handleLoadProject = useCallback(() => {
-        setLoadDialogOpen(true);
-    }, []);
+        confirmNavigation('loading a project', () => {
+            setLoadDialogOpen(true);
+        });
+    }, [confirmNavigation]);
+    const handleLoadRecentProject = useCallback(async (entry) => {
+        confirmNavigation('loading a recent project', () => {
+            try {
+                // For now, we'll show a message since we don't have the actual file content
+                // In a full implementation, we would store the file content or use file handles API
+                setStatusMessage(`Loading recent project: ${entry.name}...`);
+                // Note: This is a simplified implementation
+                // A full implementation would need to store file content or use file handles API
+                console.log('Loading recent project:', entry);
+                setStatusMessage(`Recent project "${entry.name}" selected. Please use the Load Project button to select the file.`);
+                setTimeout(() => setStatusMessage(''), 5000);
+            }
+            catch (error) {
+                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+                setStatusMessage(`Failed to load recent project: ${errorMessage}`);
+                setTimeout(() => setStatusMessage(''), 5000);
+            }
+        });
+    }, [confirmNavigation]);
     const handleSaveSuccess = useCallback((result) => {
         if (result.success) {
             setStatusMessage('Project saved successfully!');
             setTimeout(() => setStatusMessage(''), 3000);
+            // Add to recent projects if we have project info
+            if (result.projectName && result.metadata) {
+                try {
+                    const { RecentProjectsManager } = require('./managers/RecentProjectsManager');
+                    const graphData = useGraphStore.getState().getGraphData();
+                    // Generate thumbnail
+                    const thumbnail = RecentProjectsManager.generateThumbnail(graphData.nodes, graphData.edges);
+                    // Calculate approximate file size
+                    const projectData = JSON.stringify({ graph: graphData, metadata: result.metadata });
+                    const fileSize = new Blob([projectData]).size;
+                    RecentProjectsManager.addRecentProject({
+                        name: result.projectName,
+                        metadata: result.metadata,
+                        thumbnail,
+                        fileSize
+                    });
+                }
+                catch (error) {
+                    console.warn('Failed to add project to recent list:', error);
+                }
+            }
         }
         else {
             setStatusMessage(`Save failed: ${result.error}`);
@@ -495,6 +610,26 @@ const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection }) =>
             }
             setStatusMessage(message);
             setTimeout(() => setStatusMessage(''), 3000);
+            // Add to recent projects if we have project info
+            if (result.projectName && result.metadata) {
+                try {
+                    const { RecentProjectsManager } = require('./managers/RecentProjectsManager');
+                    // Generate thumbnail
+                    const thumbnail = RecentProjectsManager.generateThumbnail(graphData.nodes, graphData.edges);
+                    // Calculate approximate file size
+                    const projectData = JSON.stringify({ graph: graphData, metadata: result.metadata });
+                    const fileSize = new Blob([projectData]).size;
+                    RecentProjectsManager.addRecentProject({
+                        name: result.projectName,
+                        metadata: result.metadata,
+                        thumbnail,
+                        fileSize
+                    });
+                }
+                catch (error) {
+                    console.warn('Failed to add project to recent list:', error);
+                }
+            }
         }
         else {
             setStatusMessage(`Load failed: ${result.error}`);
@@ -590,6 +725,31 @@ const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection }) =>
             return () => document.removeEventListener('mousedown', handleClickOutside);
         }
     }, [optimizationMenuOpen]);
+    // Keyboard shortcuts (Epic 7.3 + Story 6.1)
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            // Alt+S opens settings modal
+            if (event.altKey && event.key === 's') {
+                event.preventDefault();
+                setSettingsModalOpen(true);
+                return;
+            }
+            // Ctrl+S/Cmd+S saves project (Story 6.1)
+            if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+                event.preventDefault();
+                handleSaveProject();
+                return;
+            }
+            // Ctrl+O/Cmd+O opens project (Story 6.1)
+            if ((event.ctrlKey || event.metaKey) && event.key === 'o') {
+                event.preventDefault();
+                handleLoadProject();
+                return;
+            }
+        };
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [handleSaveProject, handleLoadProject]);
     return (_jsx(DemoModeManager, { initialConfig: {
             brandingVisible: true,
             debugElementsHidden: false
@@ -604,7 +764,7 @@ const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection }) =>
                     }, onDismiss: () => {
                         setShowRestorePrompt(false);
                         localStorage.removeItem('graphDraft');
-                    } }), _jsxs("div", { style: { display: 'flex', height: '100%' }, children: [_jsx(Palette, { nodes: NODE_TYPES, collapsed: paletteCollapsed, onToggle: () => setPaletteCollapsed((c) => !c), onDragStart: handlePaletteDragStart }), _jsxs("div", { ref: canvasRef, style: { flex: 1, position: 'relative', overflow: 'visible' }, "data-testid": "react-flow-canvas-wrapper", children: [_jsxs(ReactFlow, { nodes: styledNodes, edges: styledEdges, "data-testid": "react-flow-canvas", onNodesChange: (changes) => {
+                    } }), _jsxs("div", { style: { display: 'flex', height: '100%' }, children: [_jsx(TabbedPalette, { nodes: NODE_TYPES, collapsed: paletteCollapsed, onToggle: () => setPaletteCollapsed((c) => !c), onDragStart: handlePaletteDragStart, showSearch: true, showFavorites: true, maxSearchResults: 15, defaultActiveTab: "content" }), _jsxs("div", { ref: canvasRef, style: { flex: 1, position: 'relative', overflow: 'visible' }, "data-testid": "react-flow-canvas-wrapper", children: [_jsxs(ReactFlow, { nodes: styledNodes, edges: styledEdges, "data-testid": "react-flow-canvas", onNodesChange: (changes) => {
                                         lastChangeRef.current = Date.now();
                                         onNodesChange(changes);
                                     }, onEdgesChange: (changes) => {
@@ -667,7 +827,7 @@ const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection }) =>
                                                     border: '1px solid rgba(55, 65, 81, 0.6)',
                                                     color: '#e5e7eb'
                                                 }
-                                            } })] }), _jsx(StickyNotesManager, { disabled: false, readonly: false }), _jsxs("div", { style: {
+                                            } })] }), _jsx(StickyNotesManager, { disabled: false, readonly: false }), _jsx(NodeLabelsManager, { disabled: false, readonly: false, selectedNodeId: selectedNodeId }), _jsx(RegionGroupsManager, { disabled: false, readonly: false }), _jsx(ConnectionAnnotationsLayer, { canEdit: true, showTooltips: true, visible: true }), _jsxs("div", { style: {
                                         position: 'absolute',
                                         bottom: 10,
                                         right: 10,
@@ -840,7 +1000,7 @@ const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection }) =>
                             document.body.removeChild(a);
                             URL.revokeObjectURL(url);
                         }, 0);
-                    }, onExportBundle: handleExportBundle, onSaveProject: handleSaveProject, onLoadProject: handleLoadProject, onNewProject: handleNewProject, hasUnsavedChanges: hasUnsavedChanges, currentProjectName: currentProject?.name, onCorrections: () => setCorrectionsOpen(true), correctionsEnabled: correctionsEnabled, correctionsOpen: correctionsOpen, onStats: () => setStatsOpen(true), statsOpen: statsOpen, onExtensions: () => setExtensionsOpen(true), extensionsOpen: extensionsOpen, encryptionState: encryptionState, onEncrypt: handleEncrypt, onDecrypt: handleDecrypt, onChangeAlgorithm: handleChangeAlgorithm, onOptimization: handleOptimizationOpen, optimizationEnabled: isOptimizationEnabled, onSaveTemplate: handleSaveTemplate, onBrowseTemplates: handleBrowseTemplates }), (previewLoading || isCreatingNode) && (_jsx("div", { style: {
+                    }, onExportBundle: handleExportBundle, onSaveProject: handleSaveProject, onLoadProject: handleLoadProject, onLoadRecentProject: handleLoadRecentProject, onNewProject: handleNewProject, hasUnsavedChanges: hasUnsavedChanges, currentProjectName: currentProject?.name, onCorrections: () => setCorrectionsOpen(true), correctionsEnabled: correctionsEnabled, correctionsOpen: correctionsOpen, onStats: () => setStatsOpen(true), statsOpen: statsOpen, onExtensions: () => setExtensionsOpen(true), extensionsOpen: extensionsOpen, encryptionState: encryptionState, onEncrypt: handleEncrypt, onDecrypt: handleDecrypt, onChangeAlgorithm: handleChangeAlgorithm, onOptimization: handleOptimizationOpen, optimizationEnabled: isOptimizationEnabled, onSaveTemplate: handleSaveTemplate, onBrowseTemplates: handleBrowseTemplates }), (previewLoading || isCreatingNode) && (_jsx("div", { style: {
                         position: 'fixed',
                         top: 0,
                         left: 0,
@@ -882,7 +1042,10 @@ const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection }) =>
                         else {
                             setHighlightNodeIds(new Set());
                         }
-                    } }), _jsx(ResponsiveCorrectionsPanel, { isOpen: correctionsOpen, onClose: () => setCorrectionsOpen(false) }), _jsx(CorrectionsStatsDashboard, { isOpen: statsOpen, onClose: () => setStatsOpen(false) }), extensionsOpen && (_jsx(ExtensionManagerPanel, { onClose: () => setExtensionsOpen(false) })), _jsx(SaveProjectDialog, { isOpen: saveDialogOpen, onClose: () => setSaveDialogOpen(false), onSave: handleSaveSuccess }), _jsx(LoadProjectDialog, { isOpen: loadDialogOpen, onClose: () => setLoadDialogOpen(false), onLoad: handleLoadSuccess }), _jsx(ExportBundleDialog, { isOpen: exportDialogOpen, onClose: () => setExportDialogOpen(false), nodes: nodes, edges: edges, onExport: handleExportSuccess }), _jsx(SaveTemplateDialog, { isOpen: saveTemplateDialogOpen, onClose: () => setSaveTemplateDialogOpen(false), onSave: handleTemplateSave }), _jsx(TemplateBrowser, { isOpen: templateBrowserOpen, onClose: () => setTemplateBrowserOpen(false), onApplyTemplate: handleTemplateApply, currentAuthor: "current-user" }), _jsx(OptimizationControls, { settings: optimizationSettings, onSettingsChange: handleOptimizationSettingsChange, isOpen: optimizationControlsOpen, onClose: () => setOptimizationControlsOpen(false) }), _jsx(GraphAnalysisPanel, { nodes: nodes, edges: edges, isOpen: graphAnalysisOpen, onClose: () => setGraphAnalysisOpen(false) }), _jsx(PerformanceMonitor, { isVisible: performanceMonitorVisible, onToggle: handlePerformanceMonitorToggle }), optimizationMenuOpen && (_jsxs("div", { "data-optimization-menu": true, style: {
+                    } }), _jsx(ResponsiveCorrectionsPanel, { isOpen: correctionsOpen, onClose: () => setCorrectionsOpen(false) }), _jsx(CorrectionsStatsDashboard, { isOpen: statsOpen, onClose: () => setStatsOpen(false) }), extensionsOpen && (_jsx(ExtensionManagerPanel, { onClose: () => setExtensionsOpen(false) })), _jsx(SaveProjectDialog, { isOpen: saveDialogOpen, onClose: () => setSaveDialogOpen(false), onSave: handleSaveSuccess }), _jsx(LoadProjectDialog, { isOpen: loadDialogOpen, onClose: () => setLoadDialogOpen(false), onLoad: handleLoadSuccess }), _jsx(UnsavedChangesDialog, { isOpen: showUnsavedDialog, projectName: currentProject?.name, actionDescription: dialogAction, onSave: handleUnsavedSave, onDontSave: handleUnsavedDontSave, onCancel: handleUnsavedCancel }), _jsx(ExportBundleDialog, { isOpen: exportDialogOpen, onClose: () => setExportDialogOpen(false), nodes: nodes, edges: edges, onExport: handleExportSuccess }), _jsx(SaveTemplateDialog, { isOpen: saveTemplateDialogOpen, onClose: () => setSaveTemplateDialogOpen(false), onSave: handleTemplateSave }), _jsx(TemplateBrowser, { isOpen: templateBrowserOpen, onClose: () => setTemplateBrowserOpen(false), onApplyTemplate: handleTemplateApply, currentAuthor: "current-user" }), _jsx(SettingsModal, { isOpen: settingsModalOpen, onClose: () => setSettingsModalOpen(false), onSettingsChange: (settings) => {
+                        console.log('Settings updated:', settings);
+                        // Settings changes are automatically handled by the SettingsManager
+                    } }), _jsx(RealTimePreviewPanel, { visible: realTimePreviewOpen, onClose: () => setRealTimePreviewOpen(false), enablePerformanceMonitoring: true, maxResults: 5 }), _jsx(IndividualResultManager, { visible: resultManagerOpen, onClose: () => setResultManagerOpen(false), enableComparison: true, enableAnalytics: true, maxDisplayResults: 10 }), _jsx(OptimizationControls, { settings: optimizationSettings, onSettingsChange: handleOptimizationSettingsChange, isOpen: optimizationControlsOpen, onClose: () => setOptimizationControlsOpen(false) }), _jsx(GraphAnalysisPanel, { nodes: nodes, edges: edges, isOpen: graphAnalysisOpen, onClose: () => setGraphAnalysisOpen(false) }), _jsx(PerformanceMonitor, { isVisible: performanceMonitorVisible, onToggle: handlePerformanceMonitorToggle }), optimizationMenuOpen && (_jsxs("div", { "data-optimization-menu": true, style: {
                         position: 'fixed',
                         bottom: '60px',
                         left: '50%',

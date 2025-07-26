@@ -10,9 +10,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   PolicyConflict, 
-  ConflictResolutionStrategy,
-  PolicyAssignment,
-  AssignmentStatus
+  ConflictResolutionStrategy
 } from '../../types/PolicyAssignmentTypes';
 import './AssignmentConflictResolver.css';
 

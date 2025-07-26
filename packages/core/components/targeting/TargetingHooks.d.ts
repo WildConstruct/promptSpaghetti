@@ -5,9 +5,7 @@
  * providing state management, data fetching, and interaction logic.
  */
 import { TargetingCondition, UserSegment, TargetingAudience, TargetingPreview } from './TargetingUIComponents';
-export declare const useTargetingConditions: (initialConditions?: TargetingCondition[]) => {
-    conditions: TargetingCondition[];
-    activeConditions: TargetingCondition[];
+export declare     activeConditions: TargetingCondition[];
     conditionsByType: Record<string, TargetingCondition[]>;
     isDirty: boolean;
     addCondition: (condition: Omit<TargetingCondition, "id">) => void;
@@ -18,9 +16,7 @@ export declare const useTargetingConditions: (initialConditions?: TargetingCondi
     resetToInitial: () => void;
     setConditions: import("react").Dispatch<import("react").SetStateAction<TargetingCondition[]>>;
 };
-export declare const useUserSegments: () => {
-    segments: UserSegment[];
-    activeSegments: UserSegment[];
+export declare     activeSegments: UserSegment[];
     segmentsByTag: Record<string, UserSegment[]>;
     loading: boolean;
     error: string | null;
@@ -30,16 +26,12 @@ export declare const useUserSegments: () => {
     deleteSegment: (id: string) => Promise<void>;
     duplicateSegment: (id: string) => Promise<any>;
 };
-export declare const useTargetingPreview: () => {
-    preview: TargetingPreview | null;
-    loading: boolean;
+export declare     loading: boolean;
     error: string | null;
     generatePreview: (conditions: TargetingCondition[]) => Promise<any>;
     clearPreview: () => void;
 };
-export declare const useAudienceManagement: () => {
-    audiences: TargetingAudience[];
-    activeAudiences: TargetingAudience[];
+export declare     activeAudiences: TargetingAudience[];
     selectedAudience: TargetingAudience | null;
     loading: boolean;
     error: string | null;
@@ -49,9 +41,7 @@ export declare const useAudienceManagement: () => {
     deleteAudience: (id: string) => Promise<void>;
     selectAudience: (audience: TargetingAudience) => void;
 };
-export declare const useGeographicTargeting: () => {
-    selectedCountries: string[];
-    selectedRegions: string[];
+export declare     selectedRegions: string[];
     selectedCities: string[];
     excludeMode: boolean;
     availableLocations: {
@@ -80,13 +70,10 @@ export declare const useGeographicTargeting: () => {
         excludeMode?: boolean;
     }) => void;
 };
-export declare const useTargetingAnalytics: () => {
-    analytics: unknown;
-    timeRange: "24h" | "7d" | "30d" | "90d";
+export declare     timeRange: "30d" | "7d" | "90d" | "24h";
     loading: boolean;
     error: string | null;
-    changeTimeRange: (range: "24h" | "7d" | "30d" | "90d") => void;
-    fetchAnalytics: (range: "24h" | "7d" | "30d" | "90d") => Promise<void>;
+    changeTimeRange: (range: "30d" | "7d" | "90d" | "24h") => void;
+    fetchAnalytics: (range: "30d" | "7d" | "90d" | "24h") => Promise<void>;
 };
-export declare const useDebounce: <T>(value: T, delay: number) => T;
-//# sourceMappingURL=TargetingHooks.d.ts.map
+export declare //# sourceMappingURL=TargetingHooks.d.ts.map

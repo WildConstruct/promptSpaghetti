@@ -18,16 +18,16 @@
  * System Access Management Service
  */
 export class SystemAccessManager {
-    static instance;
-    users = new Map();
-    roles = new Map();
-    accessRequests = new Map();
-    auditLog = [];
+    static instance: SystemAccessManager;
+    users: Map<string, any> = new Map();
+    roles: Map<string, any> = new Map();
+    accessRequests: Map<string, any> = new Map();
+    auditLog: any[] = [];
     constructor() {
         this.initializeSystemRoles();
         this.startMaintenanceTasks();
     }
-    static getInstance() {
+    static getInstance(): SystemAccessManager {
         if (!SystemAccessManager.instance) {
             SystemAccessManager.instance = new SystemAccessManager();
         }
@@ -36,7 +36,7 @@ export class SystemAccessManager {
     /**
      * User Management
      */
-    async createUser(userData, createdBy) {
+    async createUser(userData: any, createdBy: string): Promise<any> {
         const user = {
             ...userData,
             id: this.generateUserId(),

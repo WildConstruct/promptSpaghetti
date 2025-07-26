@@ -13,9 +13,9 @@ export class MultimodalAdapter extends BaseAIModel {
             name: config.model || 'gpt-4-vision-preview',
             version: '1.0',
             description: 'Multimodal AI model for cross-modal understanding and analysis',
-            provider: this._getProviderEnum(config.provider),
+            provider: MultimodalAdapter._getProviderEnumStatic(config.provider),
             type: AIModelType.MULTIMODAL,
-            costPerRequest: this._getProviderCosts(config.provider),
+            costPerRequest: MultimodalAdapter._getProviderCostsStatic(config.provider),
             averageLatency: 8000,
             maxConcurrency: 5,
             rateLimit: {
@@ -239,6 +239,12 @@ export class MultimodalAdapter extends BaseAIModel {
     }
     // Private helper methods
     _getProviderEnum(provider) {
+        return MultimodalAdapter._getProviderEnumStatic(provider);
+    }
+    _getProviderCosts(provider) {
+        return MultimodalAdapter._getProviderCostsStatic(provider);
+    }
+    static _getProviderEnumStatic(provider) {
         const providerMap = {
             'openai': AIModelProvider.OPENAI,
             'anthropic': AIModelProvider.ANTHROPIC,
@@ -247,7 +253,7 @@ export class MultimodalAdapter extends BaseAIModel {
         };
         return providerMap[provider] || AIModelProvider.CUSTOM;
     }
-    _getProviderCosts(provider) {
+    static _getProviderCostsStatic(provider) {
         const costs = {
             'openai': 0.01, // GPT-4V pricing
             'anthropic': 0.015, // Claude 3 pricing
@@ -262,7 +268,6 @@ export class MultimodalAdapter extends BaseAIModel {
             const testInput = MultimodalAdapter.createTextInput('Test connection');
             let endpoint = '/v1/chat/completions';
             const payload = this._buildProviderPayload([testInput], {
-                inputs: [testInput],
                 task: 'understand',
                 max_tokens: 10
             });
@@ -323,11 +328,12 @@ export class MultimodalAdapter extends BaseAIModel {
             return input.filter(item => item && typeof item === 'object' && item.type && item.content);
         }
         if (input && typeof input === 'object') {
-            if (input.inputs && Array.isArray(input.inputs)) {
-                return input.inputs;
+            const inputObj = input;
+            if (inputObj.inputs && Array.isArray(inputObj.inputs)) {
+                return inputObj.inputs;
             }
-            if (input.type && input.content) {
-                return [input];
+            if (inputObj.type && inputObj.content) {
+                return [inputObj];
             }
         }
         if (typeof input === 'string') {

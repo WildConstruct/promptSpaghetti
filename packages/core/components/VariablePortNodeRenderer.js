@@ -3,7 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Enhanced NodeRenderer with dynamic variable ports from template parsing
 import React, { memo, useMemo } from 'react';
 import { Handle, Position } from 'reactflow';
-import { parseTemplate } from '../utils/templateParser.js';
+import { parseTemplate } from '../utils/templateParser';
 export const VariablePortNodeRenderer = memo(({ id, data, selected = false, onSelect, getNodeMeta, getCategoryColor }) => {
     // Parse template to extract variables for dynamic ports
     const templateField = data?.template || data?.text || data?.content || '';
@@ -13,15 +13,17 @@ export const VariablePortNodeRenderer = memo(({ id, data, selected = false, onSe
         }
         return { variables: [], errors: [], isValid: true, processedTemplate: '' };
     }, [templateField]);
-    // Get valid variables for port creation
+    // Get valid variables for port creation with optimized positioning
     const variablePorts = useMemo(() => {
-        return parseResult.variables
-            .filter(variable => variable.isValid)
-            .map((variable, index) => ({
+        const validVariables = parseResult.variables.filter(variable => variable.isValid);
+        return validVariables.map((variable, index) => ({
             id: `variable-${variable.name}`,
             name: variable.name,
             displayName: variable.name.charAt(0).toUpperCase() + variable.name.slice(1),
-            position: index
+            position: index,
+            yOffset: 30 + (index * 25), // Improved spacing for better visual hierarchy
+            inferredType: variable.inferredType || 'string',
+            hasDefault: Boolean(variable.defaultValue)
         }));
     }, [parseResult.variables]);
     try {

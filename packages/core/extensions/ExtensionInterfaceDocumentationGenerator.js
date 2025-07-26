@@ -2,8 +2,8 @@
  * Extension Interface Documentation Generator - Epic 8.4 Story 8.4.2
  * Generates comprehensive documentation for extension interfaces
  */
-import { ExtensionTypeInfo } from './TypeDefinitions.js';
-import { extensionInterfaceValidator } from './ExtensionInterfaceValidator.js';
+import { ExtensionTypeInfo } from './TypeDefinitions';
+import { extensionInterfaceValidator } from './ExtensionInterfaceValidator';
 // Interface Documentation Generator
 export class ExtensionInterfaceDocumentationGenerator {
     static instance;

@@ -21,9 +21,9 @@ interface CreatePolicyRequest {
   policy_type: MarketplacePolicyType;
   title: string;
   description: string;
-  content: any;
-  metadata: any;
-  enforcement: any;
+  content: Record<string, unknown>;
+  metadata: Record<string, unknown>;
+  enforcement: Record<string, unknown>;
 }
 
 interface UpdatePolicyRequest extends Partial<CreatePolicyRequest> {
@@ -41,7 +41,7 @@ interface CreateVersionRequest extends PolicyVersionRequest {
 interface DetectViolationsRequest {
   content_id: string;
   content_type: 'template' | 'listing' | 'user_profile' | 'comment';
-  content_data: any;
+  content_data: Record<string, unknown>;
   owner_id: string;
 }
 
@@ -60,9 +60,9 @@ interface CreateDetectionRuleRequest {
   name: string;
   description: string;
   violation_type: ViolationType;
-  conditions: any[];
-  enforcement_config: any;
-  ai_model_config?: any;
+  conditions: Record<string, unknown>[];
+  enforcement_config: Record<string, unknown>;
+  ai_model_config?: Record<string, unknown>;
 }
 
 // Query interfaces
@@ -100,7 +100,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
     Body: CreatePolicyRequest;
   }>('/marketplace/policies', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
-      const user = request.user as any;
+      const user = request.user as Record<string, unknown>;
       if (!user?.roles?.includes('admin') && !user?.roles?.includes('policy_manager')) {
         reply.code(403).send({ error: 'Admin or policy manager role required' });
         return;
@@ -110,7 +110,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
     Body: CreatePolicyRequest;
   }>, reply: FastifyReply) => {
     try {
-      const userId = (request.user as any)?.id;
+      const userId = (request.user as Record<string, unknown>)?.id;
       const policyData = {
         ...request.body,
         version: '1.0.0',
@@ -170,7 +170,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
     Body: UpdatePolicyRequest;
   }>('/marketplace/policies/:policyId', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
-      const user = request.user as any;
+      const user = request.user as Record<string, unknown>;
       if (!user?.roles?.includes('admin') && !user?.roles?.includes('policy_manager')) {
         reply.code(403).send({ error: 'Admin or policy manager role required' });
         return;
@@ -181,7 +181,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
     Body: UpdatePolicyRequest;
   }>, reply: FastifyReply) => {
     try {
-      const userId = (request.user as any)?.id;
+      const userId = (request.user as Record<string, unknown>)?.id;
       const { policyId } = request.params;
 
       const policy = await publishingService.updatePolicy(policyId, request.body, userId);
@@ -206,7 +206,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
     Body: PublishPolicyRequest;
   }>('/marketplace/policies/:policyId/publish', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
-      const user = request.user as any;
+      const user = request.user as Record<string, unknown>;
       if (!user?.roles?.includes('admin')) {
         reply.code(403).send({ error: 'Admin access required for policy publishing' });
         return;
@@ -217,7 +217,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
     Body: PublishPolicyRequest;
   }>, reply: FastifyReply) => {
     try {
-      const userId = (request.user as any)?.id;
+      const userId = (request.user as Record<string, unknown>)?.id;
       const { policyId } = request.params;
 
       const publishingRequest = {
@@ -254,7 +254,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
     Body: CreateVersionRequest;
   }>, reply: FastifyReply) => {
     try {
-      const userId = (request.user as any)?.id;
+      const userId = (request.user as Record<string, unknown>)?.id;
       const { policyId } = request.params;
 
       // Generate new version number based on increment type
@@ -303,7 +303,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
         policies = await publishingService.getPoliciesByType(policy_type, status);
       } else {
         // Get all active policies - would implement in service
-        const userId = (request.user as any)?.id;
+        const userId = (request.user as Record<string, unknown>)?.id;
         policies = await publishingService.getActivePoliciesForUser(userId || 'anonymous', user_role);
       }
 
@@ -356,16 +356,16 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
   // Record policy acknowledgment
   fastify.post<{
     Params: { policyId: string };
-    Body: { metadata?: Record<string, any> };
+    Body: { metadata?: Record<string, unknown> };
   }>('/marketplace/policies/:policyId/acknowledge', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Params: { policyId: string };
-    Body: { metadata?: Record<string, any> };
+    Body: { metadata?: Record<string, unknown> };
   }>, reply: FastifyReply) => {
     try {
-      const userId = (request.user as any)?.id;
-      const userRole = (request.user as any)?.roles?.[0] || UserRole.BUYER;
+      const userId = (request.user as Record<string, unknown>)?.id;
+      const userRole = (request.user as Record<string, unknown>)?.roles?.[0] || UserRole.BUYER;
       const { policyId } = request.params;
 
       await publishingService.recordPolicyAcknowledgment(
@@ -396,7 +396,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
     Params: { policyId: string };
   }>('/marketplace/policies/:policyId/analytics', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
-      const user = request.user as any;
+      const user = request.user as Record<string, unknown>;
       if (!user?.roles?.includes('admin') && !user?.roles?.includes('policy_manager')) {
         reply.code(403).send({ error: 'Admin or policy manager role required' });
         return;
@@ -426,7 +426,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
     Body: CreateDetectionRuleRequest;
   }>('/marketplace/enforcement/rules', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
-      const user = request.user as any;
+      const user = request.user as Record<string, unknown>;
       if (!user?.roles?.includes('admin')) {
         reply.code(403).send({ error: 'Admin access required' });
         return;
@@ -436,7 +436,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
     Body: CreateDetectionRuleRequest;
   }>, reply: FastifyReply) => {
     try {
-      const userId = (request.user as any)?.id;
+      const userId = (request.user as Record<string, unknown>)?.id;
       
       const ruleData = {
         ...request.body,
@@ -531,7 +531,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
     Body: ExecuteActionRequest;
   }>('/marketplace/enforcement/actions/execute', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
-      const user = request.user as any;
+      const user = request.user as Record<string, unknown>;
       if (!user?.roles?.includes('admin') && !user?.roles?.includes('moderator')) {
         reply.code(403).send({ error: 'Admin or moderator role required' });
         return;
@@ -541,7 +541,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
     Body: ExecuteActionRequest;
   }>, reply: FastifyReply) => {
     try {
-      const userId = (request.user as any)?.id;
+      const userId = (request.user as Record<string, unknown>)?.id;
       
       if (!request.body.confirmation) {
         reply.code(400).send({ error: 'Action confirmation required' });
@@ -571,7 +571,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
   // Get enforcement dashboard
   fastify.get('/marketplace/enforcement/dashboard', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
-      const user = request.user as any;
+      const user = request.user as Record<string, unknown>;
       if (!user?.roles?.includes('admin') && !user?.roles?.includes('moderator')) {
         reply.code(403).send({ error: 'Admin or moderator role required' });
         return;
@@ -579,7 +579,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
     }]
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const userId = (request.user as any)?.id;
+      const userId = (request.user as Record<string, unknown>)?.id;
       const dashboard = await enforcementService.getEnforcementDashboard(userId);
 
       return { dashboard };
@@ -601,7 +601,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
     Querystring: GetViolationsQuery;
   }>, reply: FastifyReply) => {
     try {
-      const user = request.user as any;
+      const user = request.user as Record<string, unknown>;
       const { 
         violator_id, 
         violation_type, 

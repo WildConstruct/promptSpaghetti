@@ -1,25 +1,25 @@
-import { createNodeData } from '../types/NodeTypes.js';
+import { createNodeData } from '../types/NodeTypes';
 // Legacy function - delegates to new factory system
-export const createDefaultNodeData = (type) => {
+export const createDefaultNodeData = (type: string) => {
     const id = `${type}-${Date.now()}`;
     return createNodeData(type, id);
 };
 // Variation management utilities
-export const addVariationToNode = (nodeData, variation) => {
+export const addVariationToNode = (nodeData: unknown, variation: string) => {
     const currentVariations = nodeData.variations || [];
     return {
         ...nodeData,
         variations: [...currentVariations, variation]
     };
 };
-export const removeVariationFromNode = (nodeData, index) => {
+export const removeVariationFromNode = (nodeData: unknown, index: number) => {
     const currentVariations = nodeData.variations || [];
     return {
         ...nodeData,
         variations: currentVariations.filter((_, i) => i !== index)
     };
 };
-export const updateVariationInNode = (nodeData, index, newValue) => {
+export const updateVariationInNode = (nodeData: unknown, index: number, newValue: string) => {
     const currentVariations = nodeData.variations || [];
     const updatedVariations = [...currentVariations];
     updatedVariations[index] = newValue;
@@ -28,7 +28,7 @@ export const updateVariationInNode = (nodeData, index, newValue) => {
         variations: updatedVariations
     };
 };
-export const reorderVariationsInNode = (nodeData, fromIndex, toIndex) => {
+export const reorderVariationsInNode = (nodeData: unknown, fromIndex: number, toIndex: number) => {
     const currentVariations = nodeData.variations || [];
     const updatedVariations = [...currentVariations];
     const [movedItem] = updatedVariations.splice(fromIndex, 1);
@@ -38,7 +38,7 @@ export const reorderVariationsInNode = (nodeData, fromIndex, toIndex) => {
         variations: updatedVariations
     };
 };
-export const getRandomVariation = (nodeData, seed) => {
+export const getRandomVariation = (nodeData: unknown, seed?: number) => {
     const variations = nodeData.variations || [];
     if (variations.length === 0)
         return nodeData.label;
@@ -48,14 +48,14 @@ export const getRandomVariation = (nodeData, seed) => {
         : Math.floor(Math.random() * variations.length);
     return variations[randomIndex];
 };
-export const hasVariations = (nodeData) => {
+export const hasVariations = (nodeData: unknown) => {
     return Boolean(nodeData.variations && nodeData.variations.length > 0);
 };
-export const getVariationCount = (nodeData) => {
+export const getVariationCount = (nodeData: unknown) => {
     return nodeData.variations?.length || 0;
 };
 // Legacy validation function - uses new validation system
-export const validateNodeDataLegacyWrapper = (nodeData) => {
+export const validateNodeDataLegacyWrapper = (nodeData: unknown) => {
     // Import the new validation function to avoid conflicts
     const { validateNodeData: newValidate } = require('../types/NodeTypes');
     const errors = newValidate(nodeData);
@@ -65,7 +65,7 @@ export const validateNodeDataLegacyWrapper = (nodeData) => {
     };
 };
 // Legacy validation with old interface for backward compatibility
-export const validateNodeDataLegacy = (nodeData) => {
+export const validateNodeDataLegacy = (nodeData: unknown) => {
     const errors = [];
     if (!nodeData.label || nodeData.label.trim() === '') {
         errors.push('Node label is required');
@@ -108,17 +108,17 @@ export const validateNodeDataLegacy = (nodeData) => {
         errors
     };
 };
-export const cloneNodeData = (nodeData) => {
+export const cloneNodeData = (nodeData: unknown) => {
     return JSON.parse(JSON.stringify(nodeData));
 };
-export const mergeNodeData = (original, updates) => {
+export const mergeNodeData = (original: unknown, updates: unknown) => {
     return {
         ...original,
         ...updates
     };
 };
 // Migration utilities for upgrading old node data
-export const migrateNodeData = (oldNodeData) => {
+export const migrateNodeData = (oldNodeData: unknown) => {
     try {
         // If it's already in the new format, return as-is
         if (oldNodeData.id && oldNodeData.type && oldNodeData.label) {

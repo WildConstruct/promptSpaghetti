@@ -35,7 +35,7 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ onBack, onSuccess })
     country: 'US'
   });
   const [paymentIntent, setPaymentIntent] = useState<PaymentIntent | null>(null);
-  const [errors, ___setErrors] = useState<Record<string, string>>({});
+  const [errors, _setErrors] = useState<Record<string, string>>({});
   const [processing, setProcessing] = useState(false);
 
   const { cart } = useMarketplace();

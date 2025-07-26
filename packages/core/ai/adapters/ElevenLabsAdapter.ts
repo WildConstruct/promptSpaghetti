@@ -5,7 +5,18 @@
  * Adapter for ElevenLabs AI voice synthesis with custom voice training and cloning
  */
 
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelMetadata, ModelCapabilities, CostEstimate, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
+import { 
+  BaseAIModel,
+  AIModelType,
+  AIModelProvider,
+  AIModelStatus,
+  ModelMetadata,
+  ModelCapabilities,
+  CostEstimate,
+  ModelInitializationError,
+  ModelProcessingError,
+  ModelUnavailableError
+} from '../BaseAIModel';
 
 export interface ElevenLabsConfig {
   apiKey: string;
@@ -549,7 +560,10 @@ export class ElevenLabsAdapter extends BaseAIModel {
     return JSON.stringify(input);
   }
 
-  private _processOptions(options?: ElevenLabsRequestOptions, text?: string): Required<Pick<ElevenLabsRequestOptions, 'voice_id' | 'model_id' | 'output_format'>> & ElevenLabsRequestOptions {
+  private _processOptions(
+    options?: ElevenLabsRequestOptions,
+    text?: string
+  ): Required<Pick<ElevenLabsRequestOptions, 'voice_id' | 'model_id' | 'output_format' | 'text'>> & Omit<ElevenLabsRequestOptions, 'text'> & { text: string } {
     // Use first available voice as default, or Rachel if no voices loaded
     const defaultVoiceId = this.availableVoices.length > 0 
       ? this.availableVoices[0].voice_id 
@@ -568,6 +582,9 @@ export class ElevenLabsAdapter extends BaseAIModel {
     };
 
     const processed = { ...defaults, ...options };
+
+    // Set text if provided, or ensure it exists
+    processed.text = text || processed.text || ''; // Ensure text is always a string
 
     // Validate voice_id exists
     if (this.availableVoices.length > 0) {
@@ -590,13 +607,17 @@ export class ElevenLabsAdapter extends BaseAIModel {
     // Validate voice settings
     if (processed.voice_settings) {
       processed.voice_settings.stability = Math.max(0, Math.min(1, processed.voice_settings.stability || 0.5));
-      processed.voice_settings.similarity_boost = Math.max(0, Math.min(1, processed.voice_settings.similarity_boost || 0.5));
+      processed.voice_settings.similarity_boost = Math.max(
+        0,
+        Math.min(1,
+        processed.voice_settings.similarity_boost || 0.5
+      ));
       if (processed.voice_settings.style !== undefined) {
         processed.voice_settings.style = Math.max(0, Math.min(1, processed.voice_settings.style));
       }
     }
 
-    return processed;
+    return processed as Required<Pick<ElevenLabsRequestOptions, 'voice_id' | 'model_id' | 'output_format' | 'text'>> & Omit<ElevenLabsRequestOptions, 'text'> & { text: string };
   }
 
   private async _generateSpeech(text: string, options: ElevenLabsRequestOptions): Promise<ArrayBuffer> {

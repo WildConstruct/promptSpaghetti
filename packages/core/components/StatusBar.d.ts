@@ -2,6 +2,7 @@ import React from 'react';
 import { ValidationError } from '../validation';
 import { EncryptionState } from './EncryptionStatus';
 import { ConnectionState } from '../websocket/WebSocketClient';
+import { RecentProjectEntry } from '../managers/RecentProjectsManager';
 interface StatusBarProps {
     statusMessage: string;
     errors: ValidationError[];
@@ -10,6 +11,7 @@ interface StatusBarProps {
     onExportBundle?: () => void;
     onSaveProject?: () => void;
     onLoadProject?: () => void;
+    onLoadRecentProject?: (entry: RecentProjectEntry) => void;
     onNewProject?: () => void;
     hasUnsavedChanges?: boolean;
     currentProjectName?: string;

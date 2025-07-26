@@ -171,7 +171,7 @@ export const usePasswordReset = () => {
       throw new Error('Email address is required to retry password reset');
     }
 
-    const emailToUse = email || tokenValidation!.email!;
+    const emailToUse = email ?? tokenValidation?.email ?? '';
     return requestPasswordReset(emailToUse);
   }, [requestPasswordReset, tokenValidation]);
 

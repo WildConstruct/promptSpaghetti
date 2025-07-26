@@ -48,7 +48,7 @@ export interface UserPreferenceData {
 export interface UserPreference {
   category: string;
   subcategory?: string;
-  value: any;
+  value: Error;
   weight: number; // 0-1
   source: PreferenceSource;
   timestamp: number;
@@ -183,7 +183,10 @@ export const UserPreferenceRecommendationAnalytics: React.FC<UserPreferenceRecom
         analysisTimestamp: Date.now(),
         metadata: {
           totalUsers: userPreferences.length,
-          averagePreferenceConfidence: userPreferences.reduce((sum, u) => sum + u.confidence.overall, 0) / userPreferences.length,
+          averagePreferenceConfidence: userPreferences.reduce(
+            (sum,
+            u
+          ) => sum + u.confidence.overall, 0) / userPreferences.length,
           topPerformingAlgorithm: recommendationPerformance.sort((a, b) => {
             const aScore = a.metrics.find(m => m.metric === 'conversion_rate')?.value || 0;
             const bScore = b.metrics.find(m => m.metric === 'conversion_rate')?.value || 0;
@@ -485,14 +488,14 @@ export interface RecommendationMetric {
 
 export interface ImplicitPreference {
   category: string;
-  inferredValue: any;
+  inferredValue: Error;
   confidence: number;
   evidence: string[];
 }
 
 export interface ExplicitPreference {
   category: string;
-  declaredValue: any;
+  declaredValue: Error;
   timestamp: number;
   method: 'survey' | 'settings' | 'feedback';
 }
@@ -506,8 +509,8 @@ export interface PreferenceLearningRecord {
 
 export interface PreferenceChange {
   category: string;
-  oldValue: any;
-  newValue: any;
+  oldValue: Error;
+  newValue: Error;
   reason: string;
 }
 

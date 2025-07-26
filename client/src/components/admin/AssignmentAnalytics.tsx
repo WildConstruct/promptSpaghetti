@@ -7,12 +7,11 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   AssignmentTargetType,
   AssignmentStatus,
-  RiskLevel,
-  PolicyAssignment
+  RiskLevel
 } from '../../types/PolicyAssignmentTypes';
 import './AssignmentAnalytics.css';
 
@@ -74,11 +73,7 @@ export const AssignmentAnalytics: React.FC = () => {
   });
   const [selectedMetric, setSelectedMetric] = useState<'assignments' | 'conflicts' | 'performance' | 'compliance'>('assignments');
 
-  useEffect(() => {
-    loadAnalytics();
-  }, [dateRange]);
-
-  const loadAnalytics = async () => {
+  const loadAnalytics = useCallback(async () => {
     setIsLoading(true);
     try {
       const params = new URLSearchParams({
@@ -99,7 +94,11 @@ export const AssignmentAnalytics: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [dateRange]);
+
+  useEffect(() => {
+    loadAnalytics();
+  }, [dateRange, loadAnalytics]);
 
   const createMockAnalytics = (): AnalyticsData => ({
     totalAssignments: 1247,

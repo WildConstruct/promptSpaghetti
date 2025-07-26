@@ -5,20 +5,20 @@
  * Implements inheritance rules for data classification, allowing child elements
  * to inherit classifications from parent elements based on configurable rules
  */
-import { CLASSIFICATION_LEVELS } from '../types/DataClassification.js';
+import { CLASSIFICATION_LEVELS } from '../types/DataClassification';
 /**
  * Service for managing classification inheritance rules and applying them
  */
 export class ClassificationInheritanceService {
-    rules = new Map();
-    relationships = new Map(); // childId -> relationships[]
+    rules: Map<string, any> = new Map();
+    relationships: Map<string, any[]> = new Map(); // childId -> relationships[]
     constructor() {
         this.initializeDefaultRules();
     }
     /**
      * Initialize default inheritance rules
      */
-    initializeDefaultRules() {
+    initializeDefaultRules(): void {
         const defaultRules = [
             {
                 id: 'direct-containment-rule',

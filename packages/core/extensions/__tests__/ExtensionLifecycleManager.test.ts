@@ -72,9 +72,9 @@ const createMockExtension = (id: string, dependencies: string[] = []): Extension
   version: '1.0.0',
   state: ExtensionState.UNINITIALIZED,
   dependencies,
-  activate: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown),
-  deactivate: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown),
-  dispose: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown)
+  activate: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown),
+  deactivate: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown),
+  dispose: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown)
 });
 
 const createFailingExtension = (id: string): Extension => ({
@@ -84,7 +84,7 @@ const createFailingExtension = (id: string): Extension => ({
   state: ExtensionState.UNINITIALIZED,
   activate: jest.fn<unknown[], unknown>().mockRejectedValue(new Error('Activation failed')),
   deactivate: jest.fn<unknown[], unknown>().mockRejectedValue(new Error('Deactivation failed')),
-  dispose: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown)
+  dispose: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown)
 });
 
 describe('Epic 24.2 - Extension Lifecycle Manager Unit Tests', () => {
@@ -102,7 +102,7 @@ describe('Epic 24.2 - Extension Lifecycle Manager Unit Tests', () => {
       extensions: mockExtensions,
       eventHandlers: mockEventHandlers,
       
-      initialize: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown),
+      initialize: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown),
       registerExtension: jest.fn<unknown[], unknown>().mockImplementation((ext: Extension) => {
         mockExtensions.set(ext.id, ext);
       }),
@@ -260,7 +260,7 @@ describe('Epic 24.2 - Extension Lifecycle Manager Unit Tests', () => {
     it('should transition from ACTIVE to DEACTIVATED', async () => {
       // Setup extension as active
       testExtension.state = ExtensionState.ACTIVE;
-      lifecycleManager.getExtensionState.mockReturnValue(ExtensionState.ACTIVE as unknown as unknown);
+      lifecycleManager.getExtensionState.mockReturnValue(ExtensionState.ACTIVE as unknown as unknown as unknown);
 
       lifecycleManager.deactivateExtension.mockImplementationOnce(async (id: string) => {
         const ext = mockExtensions.get(id);
@@ -325,7 +325,7 @@ describe('Epic 24.2 - Extension Lifecycle Manager Unit Tests', () => {
         api: { call: jest.fn<unknown[], unknown>() }
       };
 
-      lifecycleManager.createExtensionContext.mockReturnValue(mockContext as unknown as unknown);
+      lifecycleManager.createExtensionContext.mockReturnValue(mockContext as unknown as unknown as unknown);
 
       const context1 = lifecycleManager.createExtensionContext('extension-1');
       const context2 = lifecycleManager.createExtensionContext('extension-2');
@@ -374,7 +374,7 @@ describe('Epic 24.2 - Extension Lifecycle Manager Unit Tests', () => {
         logging: { flush: jest.fn<unknown[], unknown>() }
       };
 
-      lifecycleManager.createExtensionContext.mockReturnValue(mockContext as unknown as unknown);
+      lifecycleManager.createExtensionContext.mockReturnValue(mockContext as unknown as unknown as unknown);
       lifecycleManager.disposeExtension.mockImplementationOnce(async (id: string) => {
         const context = lifecycleManager.createExtensionContext(id);
         if (context.cleanup) {
@@ -398,7 +398,7 @@ describe('Epic 24.2 - Extension Lifecycle Manager Unit Tests', () => {
         'extension-a',
         'extension-b', 
         'extension-c'
-      ] as unknown as unknown);
+      ] as unknown as unknown as unknown);
 
       const activationOrder = lifecycleManager.resolveActivationOrder([
         'extension-c',
@@ -478,7 +478,7 @@ describe('Epic 24.2 - Extension Lifecycle Manager Unit Tests', () => {
         lastError: null
       };
 
-      lifecycleManager.getExtensionHealth.mockReturnValue(mockHealth as unknown as unknown);
+      lifecycleManager.getExtensionHealth.mockReturnValue(mockHealth as unknown as unknown as unknown);
 
       const health = lifecycleManager.getExtensionHealth('health-test');
 
@@ -498,7 +498,7 @@ describe('Epic 24.2 - Extension Lifecycle Manager Unit Tests', () => {
         lastError: 'Runtime exception'
       };
 
-      lifecycleManager.getExtensionHealth.mockReturnValue(mockHealth as unknown as unknown);
+      lifecycleManager.getExtensionHealth.mockReturnValue(mockHealth as unknown as unknown as unknown);
 
       const health = lifecycleManager.getExtensionHealth('unhealthy-test');
 
@@ -599,7 +599,7 @@ describe('Epic 24.2 - Extension Lifecycle Manager Unit Tests', () => {
         ext.state = ExtensionState.ACTIVE;
       });
 
-      lifecycleManager.disposeExtension.mockResolvedValue(true as unknown as unknown);
+      lifecycleManager.disposeExtension.mockResolvedValue(true as unknown as unknown as unknown);
 
       // Simulate shutdown - dispose all extensions
       const disposalPromises = extensions.map(ext => 
@@ -619,9 +619,9 @@ describe('Epic 24.2 - Extension Lifecycle Manager Unit Tests', () => {
         const extension = createMockExtension(`memory-test-${i}`);
         lifecycleManager.registerExtension(extension);
         
-        lifecycleManager.activateExtension.mockResolvedValue(true as unknown as unknown);
-        lifecycleManager.deactivateExtension.mockResolvedValue(true as unknown as unknown);
-        lifecycleManager.disposeExtension.mockResolvedValue(true as unknown as unknown);
+        lifecycleManager.activateExtension.mockResolvedValue(true as unknown as unknown as unknown);
+        lifecycleManager.deactivateExtension.mockResolvedValue(true as unknown as unknown as unknown);
+        lifecycleManager.disposeExtension.mockResolvedValue(true as unknown as unknown as unknown);
         
         await lifecycleManager.activateExtension(extension.id);
         await lifecycleManager.deactivateExtension(extension.id);

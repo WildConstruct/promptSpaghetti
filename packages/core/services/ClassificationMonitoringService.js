@@ -7,13 +7,13 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
 export class ClassificationMonitoringService {
-    events = [];
-    alerts = [];
-    thresholds = new Map();
-    userActivities = new Map();
-    classificationStats = new Map();
-    realTimeHandlers = [];
-    alertHandlers = [];
+    events: any[] = [];
+    alerts: any[] = [];
+    thresholds: Map<string, any> = new Map();
+    userActivities: Map<string, any> = new Map();
+    classificationStats: Map<string, any> = new Map();
+    realTimeHandlers: any[] = [];
+    alertHandlers: any[] = [];
     constructor() {
         this.initializeDefaultThresholds();
         this.initializeClassificationStats();
@@ -21,7 +21,7 @@ export class ClassificationMonitoringService {
     /**
      * Initialize default monitoring thresholds
      */
-    initializeDefaultThresholds() {
+    initializeDefaultThresholds(): void {
         const defaultThresholds = [
             {
                 name: 'high-violation-rate',

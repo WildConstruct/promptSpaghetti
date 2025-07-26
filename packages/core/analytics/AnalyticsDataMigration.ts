@@ -210,7 +210,7 @@ export class AnalyticsDataMigrationService {
       {
         id: 'integration-category',
         sourceSystem: 'integration-analytics',
-        sourceField: null,
+        sourceField: '',
         targetField: 'category',
         transformationType: 'computed',
         transformation: { expression: 'EventCategory.INTEGRATION' },
@@ -249,7 +249,7 @@ export class AnalyticsDataMigrationService {
             { condition: 'value.includes("fraud")', value: AnalyticsEventType.FRAUD_DETECTION },
             { condition: 'value.includes("security")', value: AnalyticsEventType.SECURITY_EVENT }
           ],
-          fallback: AnalyticsEventType.SECURITY_EVENT
+          defaultValue: AnalyticsEventType.SECURITY_EVENT
         }
       },
       {
@@ -275,7 +275,7 @@ export class AnalyticsDataMigrationService {
       {
         id: 'performance-event-type',
         sourceSystem: 'performance-monitoring',
-        sourceField: null,
+        sourceField: '',
         targetField: 'type',
         transformationType: 'direct',
         transformation: { defaultValue: AnalyticsEventType.PERFORMANCE_METRIC }
@@ -283,7 +283,7 @@ export class AnalyticsDataMigrationService {
       {
         id: 'performance-category',
         sourceSystem: 'performance-monitoring',
-        sourceField: null,
+        sourceField: '',
         targetField: 'category',
         transformationType: 'direct',
         transformation: { defaultValue: EventCategory.PERFORMANCE }
@@ -313,7 +313,7 @@ export class AnalyticsDataMigrationService {
       {
         id: 'revenue-event-type',
         sourceSystem: 'revenue-analytics',
-        sourceField: null,
+        sourceField: '',
         targetField: 'type',
         transformationType: 'direct',
         transformation: { defaultValue: AnalyticsEventType.REVENUE_EVENT }
@@ -321,7 +321,7 @@ export class AnalyticsDataMigrationService {
       {
         id: 'revenue-category',
         sourceSystem: 'revenue-analytics',
-        sourceField: null,
+        sourceField: '',
         targetField: 'category',
         transformationType: 'direct',
         transformation: { defaultValue: EventCategory.BUSINESS }
@@ -649,11 +649,15 @@ export class AnalyticsDataMigrationService {
         await adapter['publishEvent'](transformedEvent);
       } else {
         // Fallback to direct event bus publishing
+        const { id, timestamp, ...eventWithoutIdAndTimestamp } = transformedEvent;
         await this.eventBus.publishEvent({
           source: systemName,
           category: EventCategory.SYSTEM,
           severity: EventSeverity.INFO,
           type: AnalyticsEventType.INFO_EVENT,
+          version: '1.0',
+          environment: 'production',
+          tags: ['migration', systemName],
           data: transformedEvent.data || record,
           metadata: {
             ...transformedEvent.metadata,
@@ -661,7 +665,7 @@ export class AnalyticsDataMigrationService {
             originalSystem: systemName,
             migrationTime: Date.now()
           },
-          ...transformedEvent
+          ...eventWithoutIdAndTimestamp
         });
       }
 
@@ -765,7 +769,7 @@ export class AnalyticsDataMigrationService {
             }
           }
         }
-        return rule.transformation.fallback || rule.transformation.defaultValue;
+        return rule.transformation.defaultValue;
 
       default:
         return sourceValue;

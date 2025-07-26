@@ -1,17 +1,17 @@
 // Epic 12 - LLM Agent Randomizer System
 // Story 12.2 - LLM Agent Script Development
 // Public API exports for LLM agent system
-import { generateGraphWithOpenAI } from './scripts/openai-agent.js';
-import { generateGraphWithClaude } from './scripts/anthropic-agent.js';
-import { generateGraphWithGemini } from './scripts/gemini-agent.js';
+import { generateGraphWithOpenAI } from './scripts/openai-agent';
+import { generateGraphWithClaude } from './scripts/anthropic-agent';
+import { generateGraphWithGemini } from './scripts/gemini-agent';
 // OpenAI Agent
-export { OpenAIGraphAgent, defaultOpenAIConfig, generateGraphWithOpenAI } from './scripts/openai-agent.js';
+export { OpenAIGraphAgent, defaultOpenAIConfig, generateGraphWithOpenAI } from './scripts/openai-agent';
 // Anthropic Agent
-export { AnthropicGraphAgent, defaultAnthropicConfig, generateGraphWithClaude } from './scripts/anthropic-agent.js';
+export { AnthropicGraphAgent, defaultAnthropicConfig, generateGraphWithClaude } from './scripts/anthropic-agent';
 // Gemini Agent
-export { GeminiGraphAgent, defaultGeminiConfig, generateGraphWithGemini } from './scripts/gemini-agent.js';
+export { GeminiGraphAgent, defaultGeminiConfig, generateGraphWithGemini } from './scripts/gemini-agent';
 // Cross-Model Testing
-export { CrossModelTester, testCases, runCrossModelTests, generateTestReport } from './examples/cross-model-examples.js';
+export { CrossModelTester, testCases, runCrossModelTests, generateTestReport } from './examples/cross-model-examples';
 /**
  * Universal generation function that routes to appropriate agent
  */

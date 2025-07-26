@@ -431,7 +431,7 @@ export class ResourceOptimizer {
                 priority: 'high',
                 category: 'memory',
                 estimatedSavings: { memory: this.currentUsage.memory.used * 0.2 },
-                implementation: async () => this.optimizeMemoryUsage(),
+                implementation: async () => { await this.optimizeMemoryUsage(); },
                 rollback: async () => { }
             });
         }
@@ -443,7 +443,7 @@ export class ResourceOptimizer {
                 priority: 'high',
                 category: 'cpu',
                 estimatedSavings: { cpu: this.currentUsage.cpu.usage * 0.15 },
-                implementation: async () => this.optimizeCPUUsage(),
+                implementation: async () => { await this.optimizeCPUUsage(); },
                 rollback: async () => { }
             });
         }

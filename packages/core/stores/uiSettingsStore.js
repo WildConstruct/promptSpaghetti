@@ -19,15 +19,15 @@ const DEFAULT_SETTINGS = {
 export const useUISettingsStore = create()(persist((set, get) => ({
     ...DEFAULT_SETTINGS,
     // Actions
-    setDebugMode: (enabled) => set({ debugMode: enabled }),
-    setProfessionalUI: (enabled) => set({ professionalUI: enabled }),
-    setShowTechnicalDetails: (enabled) => set({ showTechnicalDetails: enabled }),
-    setComplexityLevel: (level) => set({ complexityLevel: level }),
-    setGlobalDisclosureLevel: (level) => set({ globalDisclosureLevel: level }),
-    setTheme: (theme) => set({ theme }),
-    setDemoMode: (enabled) => set({ demoMode: enabled }),
+    setDebugMode: (enabled: boolean) => set({ debugMode: enabled }),
+    setProfessionalUI: (enabled: boolean) => set({ professionalUI: enabled }),
+    setShowTechnicalDetails: (enabled: boolean) => set({ showTechnicalDetails: enabled }),
+    setComplexityLevel: (level: string) => set({ complexityLevel: level }),
+    setGlobalDisclosureLevel: (level: string) => set({ globalDisclosureLevel: level }),
+    setTheme: (theme: string) => set({ theme }),
+    setDemoMode: (enabled: boolean) => set({ demoMode: enabled }),
     // Per-Node Preference Actions
-    setNodeDisclosureLevel: (nodeId, level) => {
+    setNodeDisclosureLevel: (nodeId: string, level: string) => {
         set((state) => ({
             nodePreferences: {
                 ...state.nodePreferences,
@@ -39,7 +39,7 @@ export const useUISettingsStore = create()(persist((set, get) => ({
             }
         }));
     },
-    setNodeUseGlobalDefault: (nodeId, useGlobal) => {
+    setNodeUseGlobalDefault: (nodeId: string, useGlobal: boolean) => {
         set((state) => ({
             nodePreferences: {
                 ...state.nodePreferences,
@@ -52,7 +52,7 @@ export const useUISettingsStore = create()(persist((set, get) => ({
             }
         }));
     },
-    setNodeTypeDisclosureLevel: (nodeType, level) => {
+    setNodeTypeDisclosureLevel: (nodeType: string, level: string) => {
         set((state) => ({
             nodeTypePreferences: {
                 ...state.nodeTypePreferences,
@@ -64,7 +64,7 @@ export const useUISettingsStore = create()(persist((set, get) => ({
             }
         }));
     },
-    setNodeTypeCollapsedSections: (nodeType, sections) => {
+    setNodeTypeCollapsedSections: (nodeType: string, sections: string[]) => {
         set((state) => ({
             nodeTypePreferences: {
                 ...state.nodeTypePreferences,
@@ -76,10 +76,10 @@ export const useUISettingsStore = create()(persist((set, get) => ({
             }
         }));
     },
-    setPreferenceInheritance: (inheritance) => {
+    setPreferenceInheritance: (inheritance: string) => {
         set({ preferenceInheritance: inheritance });
     },
-    clearNodePreferences: (nodeId) => {
+    clearNodePreferences: (nodeId?: string) => {
         if (nodeId) {
             set((state) => {
                 const { [nodeId]: removed, ...remaining } = state.nodePreferences;
@@ -113,7 +113,7 @@ export const useUISettingsStore = create()(persist((set, get) => ({
         return state.theme;
     },
     // Get effective disclosure level for a specific node
-    getNodeDisclosureLevel: (nodeId, nodeType) => {
+    getNodeDisclosureLevel: (nodeId: string, nodeType?: string) => {
         const state = get();
         // Individual node preference takes highest priority
         if (state.preferenceInheritance === 'individual' || state.preferenceInheritance === 'global') {
@@ -133,7 +133,7 @@ export const useUISettingsStore = create()(persist((set, get) => ({
         return state.globalDisclosureLevel;
     },
     // Get effective node preferences with inheritance resolution
-    getEffectiveNodePreferences: (nodeId, nodeType) => {
+    getEffectiveNodePreferences: (nodeId: string, nodeType?: string) => {
         const state = get();
         const disclosureLevel = get().getNodeDisclosureLevel(nodeId, nodeType);
         return {
@@ -210,7 +210,7 @@ export const useUISettingsStore = create()(persist((set, get) => ({
     }
 }));
 // Helper function to check if field should be shown based on current settings
-export const shouldShowField = (fieldName, fieldType, store) => {
+export const shouldShowField = (fieldName: string, fieldType: string, store: any) => {
     // Always hide technical fields like 'id', 'nodeId', 'internalConfig', etc.
     const technicalFields = ['id', 'nodeId', 'internalId', 'config', '_internal', 'metadata'];
     if (technicalFields.some(tech => fieldName.toLowerCase().includes(tech.toLowerCase()))) {
@@ -224,7 +224,7 @@ export const shouldShowField = (fieldName, fieldType, store) => {
     return true;
 };
 // Field classification helper
-export const classifyField = (fieldName, fieldType) => {
+export const classifyField = (fieldName: string, fieldType: string) => {
     const technicalPatterns = ['debug', 'trace', 'performance', 'meta', 'internal'];
     const advancedPatterns = ['weight', 'seed', 'transform', 'validate', 'optimization'];
     const lowerName = fieldName.toLowerCase();

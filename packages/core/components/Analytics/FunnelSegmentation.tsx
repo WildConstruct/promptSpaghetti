@@ -69,7 +69,7 @@ export interface SegmentCondition {
   id: string;
   field: string;
   operator: SegmentOperator;
-  value: any;
+  value: Error;
   displayName: string;
   dataType: 'string' | 'number' | 'boolean' | 'date' | 'array';
 }
@@ -243,7 +243,7 @@ export interface FieldDefinition {
   dataType: 'string' | 'number' | 'boolean' | 'date' | 'array';
   category: string;
   description: string;
-  possibleValues?: any[];
+  possibleValues?: unknown[];
   validation?: FieldValidation;
 }
 
@@ -984,7 +984,7 @@ const SegmentAnalysisCard: React.FC<SegmentAnalysisCardProps> = ({
 /**
  * Segment Rule Builder Modal Component
  */
-const SegmentRuleBuilderModal: React.FC<any> = () => (
+const SegmentRuleBuilderModal: React.FC<unknown> = () => (
   <div className="segment-rule-builder-modal">
     <p>Segment Rule Builder Modal (TODO: Implement)</p>
   </div>

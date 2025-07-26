@@ -99,9 +99,9 @@ describe('Epic 20.1 - MetricsCollector Unit Tests', () => {
     mockOs.cpus.mockReturnValue([
       { times: { user: 1000, nice: 100, sys: 800, idle: 8000, irq: 50 } },
       { times: { user: 1100, nice: 120, sys: 750, idle: 7900, irq: 45 } }
-    ] as unknown as unknown);
-    mockOs.totalmem.mockReturnValue(8 * 1024 * 1024 * 1024 as unknown as unknown); // 8GB
-    mockOs.freemem.mockReturnValue(6 * 1024 * 1024 * 1024 as unknown as unknown); // 6GB free
+    ] as unknown as unknown as unknown);
+    mockOs.totalmem.mockReturnValue(8 * 1024 * 1024 * 1024 as unknown as unknown as unknown); // 8GB
+    mockOs.freemem.mockReturnValue(6 * 1024 * 1024 * 1024 as unknown as unknown as unknown); // 6GB free
 
     // Initialize MetricsCollector with test configuration
     const testThresholds: PerformanceThresholds = {

@@ -34,7 +34,7 @@ describe('DataAccessControlService', () => {
     jest.clearAllMocks();
     
     mockAuditService = new AuditService({} as any, {} as any) as jest.Mocked<AuditService>;
-    mockAuditService.logSecurityEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
+    mockAuditService.logSecurityEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown);
     
     dataAccessService = new DataAccessControlService(mockDb as any, mockAuditService);
     

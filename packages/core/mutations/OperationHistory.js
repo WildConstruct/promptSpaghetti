@@ -4,7 +4,7 @@
  * Manages operation history for undo/redo functionality with support for
  * snapshots, history limits, and inverse operation generation.
  */
-import { OperationType } from './types.js';
+import { OperationType } from './types';
 /**
  * Operation history manager for undo/redo functionality
  */

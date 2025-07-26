@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Badge } from '../ui/Badge.js';
-import { Progress } from '../ui/Progress.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Badge } from '../ui/Badge';
+import { Progress } from '../ui/Progress';
 import { TrendingUp, TrendingDown, Activity, Users, DollarSign, Clock, CheckCircle, XCircle } from 'lucide-react';
 /**
  * Metric card component

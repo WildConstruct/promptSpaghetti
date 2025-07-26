@@ -81,7 +81,7 @@ export class LoadBalancer {
         }
         catch (error) {
             selectedInstance.metrics.activeConnections = Math.max(0, selectedInstance.metrics.activeConnections - 1);
-            this.updateFailureMetrics(selectedInstance, error);
+            this.updateFailureMetrics(selectedInstance, error instanceof Error ? error : new Error(String(error)));
             // Retry logic
             if ((request.retryCount || 0) < this.config.maxRetries) {
                 request.retryCount = (request.retryCount || 0) + 1;
@@ -311,7 +311,7 @@ export class LoadBalancer {
         const healthCheckPromises = Array.from(this.instances.values()).map(async (instance) => {
             try {
                 // Perform a lightweight health check
-                await instance.model._performHealthCheck?.();
+                await instance.model.health();
                 instance.metrics.lastHealthCheck = Date.now();
                 // If the instance was offline and health check passes, mark as degraded
                 if (instance.healthStatus === 'offline') {

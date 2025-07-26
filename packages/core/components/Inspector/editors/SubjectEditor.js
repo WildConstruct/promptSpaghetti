@@ -1,9 +1,9 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { TextFieldEditor } from '../TextFieldEditor.js';
-import { SelectEditor } from '../SelectEditor.js';
-import { VariationList } from '../VariationList.js';
-import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection.js';
-import { TemplateEditor } from '../TemplateEditor.js';
+import { TextFieldEditor } from '../TextFieldEditor';
+import { SelectEditor } from '../SelectEditor';
+import { VariationList } from '../VariationList';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
+import { TemplateEditor } from '../TemplateEditor';
 const GRAMMATICAL_NUMBERS = [
     { value: 'singular', label: 'Singular' },
     { value: 'plural', label: 'Plural' },
@@ -25,7 +25,7 @@ const SUBJECT_CATEGORIES = [
     { value: 'organization', label: 'Organization', group: 'Abstract' },
     { value: 'other', label: 'Other', group: 'Misc' }
 ];
-export const SubjectEditor = ({ _____nodeId, nodeData, onChange }) => {
+export const SubjectEditor = ({ _____nodeId, nodeData, onChange }: { _____nodeId: string; nodeData: any; onChange: (data: any) => void }) => {
     // Subject specific fields
     const label = nodeData.label || '';
     const template = nodeData.template || '';
@@ -37,20 +37,20 @@ export const SubjectEditor = ({ _____nodeId, nodeData, onChange }) => {
     const pronouns = nodeData.pronouns || [];
     const contextHints = nodeData.contextHints || [];
     // No state needed - ProgressiveDisclosureSection handles collapse state automatically
-    const handleFieldChange = (field, value) => {
+    const handleFieldChange = (field: string, value: any): void => {
         onChange({ [field]: value });
     };
-    const handleVariationsChange = (newVariations) => {
+    const handleVariationsChange = (newVariations: string[]): void => {
         handleFieldChange('variations', newVariations);
     };
-    const handlePronounsChange = (newPronouns) => {
+    const handlePronounsChange = (newPronouns: string[]): void => {
         handleFieldChange('pronouns', newPronouns);
     };
-    const handleContextHintsChange = (newHints) => {
+    const handleContextHintsChange = (newHints: string[]): void => {
         handleFieldChange('contextHints', newHints);
     };
     // Auto-generate pronouns based on category and person
-    const generatePronouns = () => {
+    const generatePronouns = (): void => {
         const generated = [];
         if (grammaticalPerson === 'first' || grammaticalPerson === 'any') {
             generated.push('I', 'me', 'my', 'mine');

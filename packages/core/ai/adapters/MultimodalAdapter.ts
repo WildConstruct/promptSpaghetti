@@ -5,7 +5,18 @@
  * Unified adapter for multimodal AI models that can process and understand multiple content types
  */
 
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelMetadata, ModelCapabilities, CostEstimate, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
+import { 
+  BaseAIModel,
+  AIModelType,
+  AIModelProvider,
+  AIModelStatus,
+  ModelMetadata,
+  ModelCapabilities,
+  CostEstimate,
+  ModelInitializationError,
+  ModelProcessingError,
+  ModelUnavailableError
+} from '../BaseAIModel';
 
 export interface MultimodalConfig {
   provider: 'openai' | 'anthropic' | 'google' | 'custom';
@@ -73,7 +84,7 @@ export interface MultimodalAnalysis {
     relationship: string;
     confidence: number;
   }>;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
 }
 
 export interface MultimodalUnderstandingResult {
@@ -121,9 +132,9 @@ export class MultimodalAdapter extends BaseAIModel {
       name: config.model || 'gpt-4-vision-preview',
       version: '1.0',
       description: 'Multimodal AI model for cross-modal understanding and analysis',
-      provider: this._getProviderEnum(config.provider),
+      provider: MultimodalAdapter._getProviderEnumStatic(config.provider),
       type: AIModelType.MULTIMODAL,
-      costPerRequest: this._getProviderCosts(config.provider),
+      costPerRequest: MultimodalAdapter._getProviderCostsStatic(config.provider),
       averageLatency: 8000,
       maxConcurrency: 5,
       rateLimit: {
@@ -182,7 +193,7 @@ export class MultimodalAdapter extends BaseAIModel {
     }
   }
 
-  async process(input: any, options?: MultimodalRequestOptions): Promise<MultimodalUnderstandingResult> {
+  async process(input: MultimodalInput[], options?: MultimodalRequestOptions): Promise<MultimodalUnderstandingResult> {
     try {
       if (this._status !== AIModelStatus.READY) {
         throw new ModelUnavailableError(this._id);
@@ -225,7 +236,7 @@ export class MultimodalAdapter extends BaseAIModel {
     this._requestQueue = [];
   }
 
-  async estimate(input: any, options?: MultimodalRequestOptions): Promise<CostEstimate> {
+  async estimate(input: MultimodalInput[], options?: MultimodalRequestOptions): Promise<CostEstimate> {
     const inputs = this._extractMultimodalInputs(input);
     const inputTokens = await this._estimateInputTokens(inputs || []);
     const outputTokens = options?.max_tokens || 1000;
@@ -341,7 +352,7 @@ export class MultimodalAdapter extends BaseAIModel {
     inputs: MultimodalInput[],
     extractionTargets: string[] = ['text', 'entities', 'objects', 'emotions'],
     options?: Partial<MultimodalRequestOptions>
-  ): Promise<Record<string, any>> {
+  ): Promise<Record<string, unknown>> {
     const result = await this.analyzeContent(inputs, extractionTargets, options);
     
     return {
@@ -407,6 +418,14 @@ export class MultimodalAdapter extends BaseAIModel {
 
   // Private helper methods
   private _getProviderEnum(provider: string): AIModelProvider {
+    return MultimodalAdapter._getProviderEnumStatic(provider);
+  }
+
+  private _getProviderCosts(provider: string): number {
+    return MultimodalAdapter._getProviderCostsStatic(provider);
+  }
+
+  private static _getProviderEnumStatic(provider: string): AIModelProvider {
     const providerMap: Record<string, AIModelProvider> = {
       'openai': AIModelProvider.OPENAI,
       'anthropic': AIModelProvider.ANTHROPIC,
@@ -416,7 +435,7 @@ export class MultimodalAdapter extends BaseAIModel {
     return providerMap[provider] || AIModelProvider.CUSTOM;
   }
 
-  private _getProviderCosts(provider: string): number {
+  private static _getProviderCostsStatic(provider: string): number {
     const costs: Record<string, number> = {
       'openai': 0.01, // GPT-4V pricing
       'anthropic': 0.015, // Claude 3 pricing
@@ -433,7 +452,6 @@ export class MultimodalAdapter extends BaseAIModel {
       
       let endpoint = '/v1/chat/completions';
       const payload = this._buildProviderPayload([testInput], {
-        inputs: [testInput],
         task: 'understand',
         max_tokens: 10
       });
@@ -496,18 +514,19 @@ export class MultimodalAdapter extends BaseAIModel {
     return headers;
   }
 
-  private _extractMultimodalInputs(input: any): MultimodalInput[] | null {
+  private _extractMultimodalInputs(input: MultimodalInput[] | unknown): MultimodalInput[] | null {
     if (Array.isArray(input)) {
       return input.filter(item => item && typeof item === 'object' && item.type && item.content);
     }
     
     if (input && typeof input === 'object') {
-      if (input.inputs && Array.isArray(input.inputs)) {
-        return input.inputs;
+      const inputObj = input as any;
+      if (inputObj.inputs && Array.isArray(inputObj.inputs)) {
+        return inputObj.inputs;
       }
       
-      if (input.type && input.content) {
-        return [input as MultimodalInput];
+      if (inputObj.type && inputObj.content) {
+        return [inputObj as MultimodalInput];
       }
     }
     
@@ -560,7 +579,7 @@ export class MultimodalAdapter extends BaseAIModel {
     return totalSize;
   }
 
-  private _processOptions(options?: MultimodalRequestOptions): Required<Pick<MultimodalRequestOptions, 'task' | 'max_tokens' | 'cross_reference' | 'context_fusion' | 'vision_detail'>> & MultimodalRequestOptions {
+  private _processOptions(options?: MultimodalRequestOptions): Required<Pick<MultimodalRequestOptions, 'task' | 'max_tokens' | 'cross_reference' | 'context_fusion' | 'vision_detail'>> & Omit<MultimodalRequestOptions, 'inputs'> {
     const defaults = {
       task: 'understand' as const,
       max_tokens: 4096,
@@ -577,7 +596,11 @@ export class MultimodalAdapter extends BaseAIModel {
     return { ...defaults, ...options };
   }
 
-  private async _processMultimodalContent(inputs: MultimodalInput[], options: MultimodalRequestOptions): Promise<MultimodalUnderstandingResult> {
+  private async _processMultimodalContent(
+    inputs: MultimodalInput[],
+    options: Omit<MultimodalRequestOptions,
+    'inputs'>
+  ): Promise<MultimodalUnderstandingResult> {
     const payload = this._buildProviderPayload(inputs, options);
     const endpoint = this._getProviderEndpoint();
     
@@ -586,7 +609,11 @@ export class MultimodalAdapter extends BaseAIModel {
     return this._processProviderResponse(response, inputs, options);
   }
 
-  private _buildProviderPayload(inputs: MultimodalInput[], options: MultimodalRequestOptions): any {
+  private _buildProviderPayload(
+    inputs: MultimodalInput[],
+    options: Omit<MultimodalRequestOptions,
+    'inputs'>
+  ): Record<string, unknown> {
     switch (this.config.provider) {
       case 'openai':
         return this._buildOpenAIPayload(inputs, options);
@@ -599,7 +626,11 @@ export class MultimodalAdapter extends BaseAIModel {
     }
   }
 
-  private _buildOpenAIPayload(inputs: MultimodalInput[], options: MultimodalRequestOptions): any {
+  private _buildOpenAIPayload(
+    inputs: MultimodalInput[],
+    options: Omit<MultimodalRequestOptions,
+    'inputs'>
+  ): Record<string, unknown> {
     const messages = inputs.map(input => {
       const role = input.metadata?.role || 'user';
       
@@ -641,7 +672,11 @@ export class MultimodalAdapter extends BaseAIModel {
     };
   }
 
-  private _buildAnthropicPayload(inputs: MultimodalInput[], options: MultimodalRequestOptions): any {
+  private _buildAnthropicPayload(
+    inputs: MultimodalInput[],
+    options: Omit<MultimodalRequestOptions,
+    'inputs'>
+  ): Record<string, unknown> {
     // Anthropic Claude 3 format
     const content = inputs.map(input => {
       if (input.type === 'text') {
@@ -655,7 +690,11 @@ export class MultimodalAdapter extends BaseAIModel {
           source: {
             type: 'base64',
             media_type: 'image/jpeg',
-            data: typeof input.content === 'string' ? input.content.replace(/^data:image\/[^;]+;base64,/, '') : 'placeholder'
+            data: typeof input.content === 'string' ? input.content.replace(
+              /^data:image\/[^;]+;base64,
+              /,
+              ''
+            ) : 'placeholder'
           }
         };
       } else {
@@ -677,7 +716,11 @@ export class MultimodalAdapter extends BaseAIModel {
     };
   }
 
-  private _buildGooglePayload(inputs: MultimodalInput[], options: MultimodalRequestOptions): any {
+  private _buildGooglePayload(
+    inputs: MultimodalInput[],
+    options: Omit<MultimodalRequestOptions,
+    'inputs'>
+  ): Record<string, unknown> {
     // Google Gemini format
     const parts = inputs.map(input => {
       if (input.type === 'text') {
@@ -686,7 +729,11 @@ export class MultimodalAdapter extends BaseAIModel {
         return {
           inline_data: {
             mime_type: 'image/jpeg',
-            data: typeof input.content === 'string' ? input.content.replace(/^data:image\/[^;]+;base64,/, '') : 'placeholder'
+            data: typeof input.content === 'string' ? input.content.replace(
+              /^data:image\/[^;]+;base64,
+              /,
+              ''
+            ) : 'placeholder'
           }
         };
       } else {
@@ -705,7 +752,11 @@ export class MultimodalAdapter extends BaseAIModel {
     };
   }
 
-  private _buildGenericPayload(inputs: MultimodalInput[], options: MultimodalRequestOptions): any {
+  private _buildGenericPayload(
+    inputs: MultimodalInput[],
+    options: Omit<MultimodalRequestOptions,
+    'inputs'>
+  ): Record<string, unknown> {
     return {
       inputs: inputs.map(input => ({
         type: input.type,
@@ -759,7 +810,12 @@ export class MultimodalAdapter extends BaseAIModel {
     throw lastError || new Error('All retry attempts failed');
   }
 
-  private _processProviderResponse(response: any, inputs: MultimodalInput[], options: MultimodalRequestOptions): MultimodalUnderstandingResult {
+  private _processProviderResponse(
+    response: any,
+    inputs: MultimodalInput[],
+    options: Omit<MultimodalRequestOptions,
+    'inputs'>
+  ): MultimodalUnderstandingResult {
     // Process response based on provider format
     let content = '';
     let totalTokens = 0;

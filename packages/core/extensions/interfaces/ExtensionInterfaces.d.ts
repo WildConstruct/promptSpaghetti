@@ -247,15 +247,15 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
         languages: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     }, "strip", z.ZodTypeAny, {
         nodes?: string[] | undefined;
-        themes?: string[] | undefined;
         commands?: string[] | undefined;
         menus?: string[] | undefined;
+        themes?: string[] | undefined;
         languages?: string[] | undefined;
     }, {
         nodes?: string[] | undefined;
-        themes?: string[] | undefined;
         commands?: string[] | undefined;
         menus?: string[] | undefined;
+        themes?: string[] | undefined;
         languages?: string[] | undefined;
     }>>;
     repository: z.ZodOptional<z.ZodString>;
@@ -273,67 +273,67 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
         properties: Record<string, any>;
     }>>;
 }, "strip", z.ZodTypeAny, {
-    version: string;
     id: string;
-    description: string;
     name: string;
+    description: string;
+    version: string;
     author: string;
     license: string;
     engines: {
         promptSpaghetti: string;
         node?: string | undefined;
     };
+    configuration?: {
+        type: "object";
+        properties: Record<string, any>;
+    } | undefined;
     main?: string | undefined;
     dependencies?: string[] | undefined;
-    permissions?: string[] | undefined;
     optionalDependencies?: string[] | undefined;
+    permissions?: string[] | undefined;
     browser?: string | undefined;
     contributes?: {
         nodes?: string[] | undefined;
-        themes?: string[] | undefined;
         commands?: string[] | undefined;
         menus?: string[] | undefined;
+        themes?: string[] | undefined;
         languages?: string[] | undefined;
     } | undefined;
     repository?: string | undefined;
     homepage?: string | undefined;
     bugs?: string | undefined;
     keywords?: string[] | undefined;
-    configuration?: {
-        type: "object";
-        properties: Record<string, any>;
-    } | undefined;
 }, {
-    version: string;
     id: string;
-    description: string;
     name: string;
+    description: string;
+    version: string;
     author: string;
     license: string;
     engines: {
         promptSpaghetti: string;
         node?: string | undefined;
     };
+    configuration?: {
+        type: "object";
+        properties: Record<string, any>;
+    } | undefined;
     main?: string | undefined;
     dependencies?: string[] | undefined;
-    permissions?: string[] | undefined;
     optionalDependencies?: string[] | undefined;
+    permissions?: string[] | undefined;
     browser?: string | undefined;
     contributes?: {
         nodes?: string[] | undefined;
-        themes?: string[] | undefined;
         commands?: string[] | undefined;
         menus?: string[] | undefined;
+        themes?: string[] | undefined;
         languages?: string[] | undefined;
     } | undefined;
     repository?: string | undefined;
     homepage?: string | undefined;
     bugs?: string | undefined;
     keywords?: string[] | undefined;
-    configuration?: {
-        type: "object";
-        properties: Record<string, any>;
-    } | undefined;
 }>;
 export type ExtensionManifest = z.infer<typeof ExtensionManifestSchema>;
 export { NodeExtension, NodeDefinition as NodeExtensionDefinition, NodeCategory } from './NodeExtension';

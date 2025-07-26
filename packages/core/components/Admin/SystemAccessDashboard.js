@@ -9,14 +9,14 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Epic: 17 - Backstage Admin Controls
  */
 import { useState, useEffect, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
-import { Input } from '../ui/Input.js';
-import { Select } from '../ui/Select.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
+import { Input } from '../ui/Input';
+import { Select } from '../ui/Select';
 import { Users, Shield, Key, Clock, CheckCircle, XCircle, Plus, Search, Download, Settings, Eye, UserPlus, UserMinus, RefreshCw, Lock, Crown, Activity } from 'lucide-react';
-import { systemAccessManager } from '../../services/SystemAccessManager.js';
+import { systemAccessManager } from '../../services/SystemAccessManager';
 const ACCESS_LEVEL_CONFIG = {
     none: { color: 'text-gray-600 bg-gray-100', icon: Lock, priority: 0 },
     basic: { color: 'text-blue-600 bg-blue-100', icon: Users, priority: 1 },

@@ -6,7 +6,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Provides full CRUD operations, filtering, status management, and real-time updates.
  */
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { MarketplaceTicketType, TicketStatus, TicketPriority } from '../../services/Epic16TicketIntegrationService.js';
+import { MarketplaceTicketType, TicketStatus, TicketPriority } from '../../services/Epic16TicketIntegrationService';
 export const TicketManagementDashboard = ({ ticketService, userId, userRole, onTicketSelect }) => {
     // State management
     const [tickets, setTickets] = useState([]);

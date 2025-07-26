@@ -5,11 +5,15 @@ import { AdaptorTestResults } from './AdaptorTestFramework.js';
  */
 export declare class DocumentationGenerator {
     private logger;
-    constructor(logger: any);
+    constructor(logger: unknown);
     /**
      * Generate comprehensive documentation for an adaptor
      */
-    generateAdaptorDocumentation(adaptor: ModelAdaptor, testResults?: AdaptorTestResults, options?: DocumentationOptions): Promise<AdaptorDocumentation>;
+    generateAdaptorDocumentation(
+      adaptor: ModelAdaptor,
+      testResults?: AdaptorTestResults,
+      options?: DocumentationOptions
+    ): Promise<AdaptorDocumentation>;
     /**
      * Generate overview section
      */
@@ -214,9 +218,9 @@ export interface TestDocumentationSection {
         score: number;
         description: string;
     };
-    compliance: any;
-    performance: any;
-    functionality: any;
+    compliance: unknown;
+    performance: unknown;
+    functionality: unknown;
 }
 export interface CustomSection {
     title: string;

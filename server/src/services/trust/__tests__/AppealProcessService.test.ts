@@ -37,7 +37,7 @@ describe('AppealProcessService', () => {
     };
 
     mockDatabase = {
-      getClient: jest.fn<unknown[], unknown>().mockResolvedValue(mockClient as unknown as unknown as unknown as unknown),
+      getClient: jest.fn<unknown[], unknown>().mockResolvedValue(mockClient as unknown as unknown as unknown as unknown as unknown),
       query: jest.fn<unknown[], unknown>()
     } as any;
 
@@ -79,19 +79,19 @@ describe('AppealProcessService', () => {
       jest.spyOn(
         appealService as any,
         'calculateAppealPriority'
-      ).mockResolvedValue('medium' as unknown as unknown as unknown as unknown);
+      ).mockResolvedValue('medium' as unknown as unknown as unknown as unknown as unknown);
       jest.spyOn(
         appealService as any,
         'determineReviewComplexity'
-      ).mockResolvedValue('standard' as unknown as unknown as unknown as unknown);
+      ).mockResolvedValue('standard' as unknown as unknown as unknown as unknown as unknown);
       jest.spyOn(
         appealService as any,
         'autoAssignReviewer'
-      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown);
+      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown as unknown);
       jest.spyOn(
         appealService as any,
         'sendAppealNotifications'
-      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown);
+      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown as unknown);
 
       // Act
       const appealId = await appealService.submitAppeal(appealData);
@@ -134,11 +134,11 @@ describe('AppealProcessService', () => {
       jest.spyOn(
         appealService as any,
         'calculateAppealPriority'
-      ).mockResolvedValue('medium' as unknown as unknown as unknown as unknown);
+      ).mockResolvedValue('medium' as unknown as unknown as unknown as unknown as unknown);
       jest.spyOn(
         appealService as any,
         'determineReviewComplexity'
-      ).mockResolvedValue('standard' as unknown as unknown as unknown as unknown);
+      ).mockResolvedValue('standard' as unknown as unknown as unknown as unknown as unknown);
 
       // Act & Assert
       await expect(appealService.submitAppeal(appealData))
@@ -193,7 +193,7 @@ describe('AppealProcessService', () => {
         max_resubmissions: 3
       };
 
-      mockDatabase.query.mockResolvedValue({ rows: [mockAppealRow] } as unknown as unknown as unknown as unknown);
+      mockDatabase.query.mockResolvedValue({ rows: [mockAppealRow] } as unknown as unknown as unknown as unknown as unknown);
 
       // Act
       const result = await appealService.getAppeal(appealId);
@@ -211,7 +211,7 @@ describe('AppealProcessService', () => {
 
     it('should return null for non-existent appeal', async () => {
       // Arrange
-      mockDatabase.query.mockResolvedValue({ rows: [] } as unknown as unknown as unknown as unknown);
+      mockDatabase.query.mockResolvedValue({ rows: [] } as unknown as unknown as unknown as unknown as unknown);
 
       // Act
       const result = await appealService.getAppeal('non-existent');
@@ -233,17 +233,20 @@ describe('AppealProcessService', () => {
         appellant_id: 'user-12345'
       } as Appeal;
 
-      jest.spyOn(appealService, 'getAppeal').mockResolvedValue(existingAppeal as unknown as unknown as unknown as unknown);
+      jest.spyOn(
+        appealService,
+        'getAppeal'
+      ).mockResolvedValue(existingAppeal as unknown as unknown as unknown as unknown as unknown);
       jest.spyOn(
         appealService as any,
         'addTimelineEvent'
-      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown);
+      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown as unknown);
       jest.spyOn(
         appealService as any,
         'sendAppealNotifications'
-      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown);
+      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown as unknown);
 
-      mockDatabase.query.mockResolvedValue({ rows: [] } as unknown as unknown as unknown as unknown);
+      mockDatabase.query.mockResolvedValue({ rows: [] } as unknown as unknown as unknown as unknown as unknown);
 
       // Act
       await appealService.updateAppealStatus(appealId, newStatus, updatedBy, notes);
@@ -268,11 +271,11 @@ describe('AppealProcessService', () => {
         submitted_by: 'user-12345'
       };
 
-      mockDatabase.query.mockResolvedValue({ rows: [] } as unknown as unknown as unknown as unknown);
+      mockDatabase.query.mockResolvedValue({ rows: [] } as unknown as unknown as unknown as unknown as unknown);
       jest.spyOn(
         appealService as any,
         'addTimelineEvent'
-      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown);
+      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown as unknown);
 
       // Act
       const evidenceId = await appealService.addEvidence(appealId, evidenceData);
@@ -309,14 +312,20 @@ describe('AppealProcessService', () => {
         status: 'submitted' as AppealStatus
       } as Appeal;
 
-      jest.spyOn(appealService, 'getAppeal').mockResolvedValue(existingAppeal as unknown as unknown as unknown as unknown);
-      jest.spyOn(appealService, 'updateAppealStatus').mockResolvedValue(undefined as unknown as unknown as unknown as unknown);
+      jest.spyOn(
+        appealService,
+        'getAppeal'
+      ).mockResolvedValue(existingAppeal as unknown as unknown as unknown as unknown as unknown);
+      jest.spyOn(
+        appealService,
+        'updateAppealStatus'
+      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown as unknown);
       jest.spyOn(
         appealService as any,
         'addTimelineEvent'
-      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown);
+      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown as unknown);
 
-      mockDatabase.query.mockResolvedValue({ rows: [] } as unknown as unknown as unknown as unknown);
+      mockDatabase.query.mockResolvedValue({ rows: [] } as unknown as unknown as unknown as unknown as unknown);
 
       // Act
       await appealService.assignReviewer(appealId, reviewerId, reviewerRole as any);
@@ -359,25 +368,28 @@ describe('AppealProcessService', () => {
         submitted_at: new Date(Date.now() - 2 * 60 * 60 * 1000) // 2 hours ago
       } as Appeal;
 
-      jest.spyOn(appealService, 'getAppeal').mockResolvedValue(existingAppeal as unknown as unknown as unknown as unknown);
+      jest.spyOn(
+        appealService,
+        'getAppeal'
+      ).mockResolvedValue(existingAppeal as unknown as unknown as unknown as unknown as unknown);
       jest.spyOn(
         appealService as any,
         'storeReviewCriteria'
-      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown);
+      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown as unknown);
       jest.spyOn(
         appealService as any,
         'addTimelineEvent'
-      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown);
+      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown as unknown);
       jest.spyOn(
         appealService as any,
         'executeDecisionActions'
-      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown);
+      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown as unknown);
       jest.spyOn(
         appealService as any,
         'sendAppealNotifications'
-      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown);
+      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown as unknown);
 
-      mockDatabase.query.mockResolvedValue({ rows: [] } as unknown as unknown as unknown as unknown);
+      mockDatabase.query.mockResolvedValue({ rows: [] } as unknown as unknown as unknown as unknown as unknown);
 
       // Act
       await appealService.makeDecision(appealId, decision, rationale, reviewerId, reviewCriteria);
@@ -431,21 +443,24 @@ describe('AppealProcessService', () => {
           submitted_at: new Date()
         } as Appeal;
 
-        jest.spyOn(appealService, 'getAppeal').mockResolvedValue(existingAppeal as unknown as unknown as unknown as unknown);
+        jest.spyOn(
+          appealService,
+          'getAppeal'
+        ).mockResolvedValue(existingAppeal as unknown as unknown as unknown as unknown as unknown);
         jest.spyOn(
           appealService as any,
           'addTimelineEvent'
-        ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown);
+        ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown as unknown);
         jest.spyOn(
           appealService as any,
           'executeDecisionActions'
-        ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown);
+        ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown as unknown);
         jest.spyOn(
           appealService as any,
           'sendAppealNotifications'
-        ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown);
+        ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown as unknown);
 
-        mockDatabase.query.mockResolvedValue({ rows: [] } as unknown as unknown as unknown as unknown);
+        mockDatabase.query.mockResolvedValue({ rows: [] } as unknown as unknown as unknown as unknown as unknown);
 
         // Act
         await appealService.makeDecision(appealId, testCase.decision, rationale, reviewerId);
@@ -464,7 +479,7 @@ describe('AppealProcessService', () => {
 
         // Reset mocks for next iteration
         jest.clearAllMocks();
-        mockDatabase.query.mockResolvedValue({ rows: [] } as unknown as unknown as unknown as unknown);
+        mockDatabase.query.mockResolvedValue({ rows: [] } as unknown as unknown as unknown as unknown as unknown);
       }
     });
   });
@@ -497,7 +512,7 @@ describe('AppealProcessService', () => {
         }
       ];
 
-      mockDatabase.query.mockResolvedValue({ rows: mockAppealsData } as unknown as unknown as unknown as unknown);
+      mockDatabase.query.mockResolvedValue({ rows: mockAppealsData } as unknown as unknown as unknown as unknown as unknown);
 
       // Act
       const result = await appealService.listAppeals(filters);
@@ -513,7 +528,7 @@ describe('AppealProcessService', () => {
 
     it('should handle empty results gracefully', async () => {
       // Arrange
-      mockDatabase.query.mockResolvedValue({ rows: [] } as unknown as unknown as unknown as unknown);
+      mockDatabase.query.mockResolvedValue({ rows: [] } as unknown as unknown as unknown as unknown as unknown);
 
       // Act
       const result = await appealService.listAppeals();
@@ -651,7 +666,7 @@ describe('AppealProcessService', () => {
   describe('Error Handling', () => {
     it('should handle appeal not found errors', async () => {
       // Arrange
-      jest.spyOn(appealService, 'getAppeal').mockResolvedValue(null as unknown as unknown as unknown as unknown);
+      jest.spyOn(appealService, 'getAppeal').mockResolvedValue(null as unknown as unknown as unknown as unknown as unknown);
 
       // Act & Assert
       await expect(
@@ -679,11 +694,11 @@ describe('AppealProcessService', () => {
       jest.spyOn(
         appealService as any,
         'calculateAppealPriority'
-      ).mockResolvedValue('medium' as unknown as unknown as unknown as unknown);
+      ).mockResolvedValue('medium' as unknown as unknown as unknown as unknown as unknown);
       jest.spyOn(
         appealService as any,
         'determineReviewComplexity'
-      ).mockResolvedValue('standard' as unknown as unknown as unknown as unknown);
+      ).mockResolvedValue('standard' as unknown as unknown as unknown as unknown as unknown);
 
       // Act & Assert
       await expect(appealService.submitAppeal(appealData))

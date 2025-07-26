@@ -18,7 +18,7 @@ interface AnalyticsMetadata {
   fileSize?: number;
   duration?: number;
   errorMessage?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface UseFileBrowserAnalyticsReturn {
@@ -51,7 +51,7 @@ const BATCH_TIMEOUT = 5000; // 5 seconds
 
 interface QueuedEvent {
   endpoint: string;
-  data: any;
+  data: Record<string, unknown>;
   timestamp: number;
 }
 
@@ -82,7 +82,7 @@ export const useFileBrowserAnalytics = (): UseFileBrowserAnalyticsReturn => {
   }, [user]);
 
   // Send analytics event to server
-  const sendAnalyticsEvent = useCallback(async (endpoint: string, data: any): Promise<void> => {
+  const sendAnalyticsEvent = useCallback(async (endpoint: string, data: Record<string, unknown>): Promise<void> => {
     if (!ANALYTICS_ENABLED || !isAuthenticated) return;
 
     try {
@@ -104,7 +104,7 @@ export const useFileBrowserAnalytics = (): UseFileBrowserAnalyticsReturn => {
   }, [isAuthenticated, user?.token]);
 
   // Queue event for batch processing
-  const queueEvent = useCallback((endpoint: string, data: any): void => {
+  const queueEvent = useCallback((endpoint: string, data: Record<string, unknown>): void => {
     if (!ANALYTICS_ENABLED) return;
 
     const event: QueuedEvent = {
@@ -274,11 +274,13 @@ export const useFileBrowserAnalytics = (): UseFileBrowserAnalyticsReturn => {
 /**
  * Enhanced hook that provides common file operation tracking patterns
  */
-export const useEnhancedFileBrowserAnalytics = (): UseFileBrowserAnalyticsReturn & {
-  trackDownload: (fileName: string, filePath: string, fileSize?: number) => Promise<void>;
-  trackUpload: (fileName: string, filePath: string, fileSize: number) => Promise<void>;
+export   trackUpload: (fileName: string, filePath: string, fileSize: number) => Promise<void>;
   trackDirectoryLoad: (path: string, fileCount: number) => Promise<void>;
-  trackSearchWithResults: (searchTerm: string, results: any[], clickedResultIndex?: number) => Promise<void>;
+  trackSearchWithResults: (
+    searchTerm: string,
+    results: Array<{ id: string; name: string; type: string }>,
+    clickedResultIndex?: number
+  ) => Promise<void>;
   trackBulkOperation: (
     operationType: string,
     fileCount: number,
@@ -342,7 +344,7 @@ export const useEnhancedFileBrowserAnalytics = (): UseFileBrowserAnalyticsReturn
   // Track search with results analysis
   const trackSearchWithResults = useCallback(async (
     searchTerm: string, 
-    results: any[], 
+    results: Array<{ id: string; name: string; type: string }>, 
     clickedResultIndex?: number
   ): Promise<void> => {
     const clickedResults = clickedResultIndex !== undefined ? 1 : 0;

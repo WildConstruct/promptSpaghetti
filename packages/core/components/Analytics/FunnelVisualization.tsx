@@ -81,7 +81,7 @@ export type MetricDisplay =
 
 export interface FunnelFilter {
   type: 'segment' | 'cohort' | 'time_range' | 'device' | 'location' | 'source';
-  value: any;
+  value: string | number;
   operator: 'equals' | 'in' | 'between' | 'greater_than' | 'less_than';
 }
 
@@ -481,7 +481,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleFilterAdd = (type: FunnelFilter['type'], value?: any) => {
+  const handleFilterAdd = (type: FunnelFilter['type'], value?: string | number) => {
     const filter: FunnelFilter = {
       type,
       value: value || '',

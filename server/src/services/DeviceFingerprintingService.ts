@@ -342,7 +342,7 @@ export class DeviceFingerprintingService {
     }
   }
 
-  private async getDeviceByFingerprint(fingerprint: string): Promise<any> {
+  private async getDeviceByFingerprint(fingerprint: string): Promise<unknown> {
     const result = await this.db.query(
       'SELECT * FROM device_fingerprints WHERE fingerprint = $1',
       [fingerprint]
@@ -453,11 +453,11 @@ export class DeviceFingerprintingService {
     }
     
     // User association bonus - multiple verified users
-    const verifiedUsers = associations.filter((a: any) => a.is_trusted).length;
+    const verifiedUsers = associations.filter((a: unknown) => a.is_trusted).length;
     trustScore += verifiedUsers * 5;
     
     // Security event penalties
-    const recentEvents = securityEvents.filter((e: any) => 
+    const recentEvents = securityEvents.filter((e: Error) => 
       !e.resolved && new Date(e.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
     );
     trustScore -= recentEvents.length * this.config.trustScoring.anomalyPenalty;
@@ -488,10 +488,10 @@ export class DeviceFingerprintingService {
       verificationStatus: verificationStatus as any,
       firstSeen: device.first_seen,
       lastSeen: device.last_seen,
-      associatedUsers: associations.map((a: any) => a.user_id),
+      associatedUsers: associations.map((a: unknown) => a.user_id),
       locationHistory: profile?.location_history || [],
       behaviorMetrics: await this.calculateBehaviorMetrics(fingerprint),
-      securityEvents: securityEvents.map((e: any) => ({
+      securityEvents: securityEvents.map((e: Error) => ({
         eventType: e.event_type,
         severity: e.severity,
         timestamp: e.created_at,
@@ -502,7 +502,7 @@ export class DeviceFingerprintingService {
     return trustProfile;
   }
 
-  private async getTrustProfile(fingerprint: string): Promise<any> {
+  private async getTrustProfile(fingerprint: string): Promise<unknown> {
     const result = await this.db.query(
       'SELECT * FROM device_trust_profiles WHERE fingerprint = $1',
       [fingerprint]
@@ -554,7 +554,7 @@ export class DeviceFingerprintingService {
     `, [fingerprint]);
     
     const patterns: Record<string, number> = {};
-    accessPatterns.rows.forEach((row: any) => {
+    accessPatterns.rows.forEach((row: unknown) => {
       patterns[row.hour] = parseInt(row.count);
     });
     
@@ -737,10 +737,10 @@ export class DeviceFingerprintingService {
     fingerprint: string,
     limit = 50
   ): Promise<{
-    device: any;
-    users: any[];
-    locations: any[];
-    securityEvents: any[];
+    device: Error;
+    users: unknown[];
+    locations: unknown[];
+    securityEvents: unknown[];
   }> {
     const device = await this.getDeviceByFingerprint(fingerprint);
     if (!device) {

@@ -7,16 +7,16 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
 export class ClassificationAccessControlService {
-    policies = new Map();
-    auditEvents = [];
-    userProfiles = new Map();
+    policies: Map<string, any> = new Map();
+    auditEvents: any[] = [];
+    userProfiles: Map<string, any> = new Map();
     constructor() {
         this.initializeDefaultPolicies();
     }
     /**
      * Initialize default access control policies for each classification level
      */
-    initializeDefaultPolicies() {
+    initializeDefaultPolicies(): void {
         const policies = {
             PUBLIC: {
                 id: 'policy-public',

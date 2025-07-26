@@ -6,16 +6,15 @@
  * types, and enums used throughout the application.
  */
 // Export all core promotion interfaces
-export * from './PromotionInterfaces.js';
+export * from './PromotionInterfaces';
 // Export all service interfaces
-export * from './PromotionServices.js';
+export * from './PromotionServices';
 // Export all event interfaces
-export * from './PromotionEvents.js';
+export * from './PromotionEvents';
 export { 
 // Core enums
 PromotionType, PromotionStatus, PromotionTargetType, PromotionApplicationType, DiscountApplicationScope, 
 // Event enums
 PromotionEventType, EventPriority, EventDeliveryMethod, 
 // Validation schemas
-CreatePromotionSchema, UpdatePromotionSchema, ApplyPromotionSchema, CheckEligibilitySchema } from './PromotionInterfaces.js';
-//# sourceMappingURL=PromotionTypes.js.map
+CreatePromotionSchema, UpdatePromotionSchema, ApplyPromotionSchema, CheckEligibilitySchema } from './PromotionInterfaces';

@@ -6,11 +6,11 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Part of Epic 17.5.1 - Review Workflow (Backstage Admin Controls)
  */
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
-import { Textarea } from '../ui/Textarea.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
+import { Textarea } from '../ui/Textarea';
 import { Eye, FileText, User, Clock, Star, CheckCircle, XCircle, AlertTriangle, Flag, Download, ZoomIn, ZoomOut, ArrowLeft, Save, Send, Info, Target, BarChart3 } from 'lucide-react';
 const UnifiedReviewInterface = ({ reviewItem, onDecision, onSaveDraft, onBack, reviewerPermissions, className = '' }) => {
     // State management

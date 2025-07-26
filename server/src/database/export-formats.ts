@@ -258,7 +258,7 @@ export function parseFromYAML(yamlString: string): ExportedCorrectionSet {
   const result: Record<string, unknown> = { meta: {}, rules: [] };
   
   let currentSection = '';
-  let currentRule: any = null;
+  let currentRule: Error = null;
   
   for (const line of lines) {
     const trimmed = line.trim();
@@ -327,7 +327,7 @@ export function parseFromCSV(csvString: string): ExportedCorrectionSet {
     const values = parseCSVLine(line);
     
     if (values.length >= headers.length) {
-      const rule: any = {};
+      const rule: Error = {};
       headers.forEach((header, index) => {
         const value = values[index];
         switch (header) {

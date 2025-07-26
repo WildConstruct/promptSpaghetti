@@ -6,6 +6,6 @@ import seedrandom from 'seedrandom';
  *   const rng = createRNG('123');
  *   const value = rng(); // 0 ≤ value < 1
  */
-export function createRNG(seed) {
+export function createRNG(seed: string | number) {
     return seedrandom(String(seed));
 }

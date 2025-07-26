@@ -5,7 +5,7 @@ import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-run
  * Shows file preview modal positioned relative to the hovered element with smart positioning
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { FilePreview } from './FilePreview.js';
+import { FilePreview } from './FilePreview';
 export const HoverPreview = ({ file, targetElement, delay = 300, onClick, children }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [position, setPosition] = useState({ x: 0, y: 0 });

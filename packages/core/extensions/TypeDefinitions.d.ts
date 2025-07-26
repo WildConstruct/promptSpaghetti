@@ -8,33 +8,7 @@ export * from './interfaces/NodeExtension';
 export * from './interfaces/UIExtension';
 export * from './interfaces/TransformExtension';
 export * from './interfaces/StorageExtension';
-export declare const ExtensionTypeSchemas: {
-    BaseExtension: z.ZodObject<{
-        id: z.ZodString;
-        name: z.ZodString;
-        version: z.ZodString;
-        description: z.ZodString;
-        author: z.ZodString;
-        dependencies: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-        permissions: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-        initialize: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
-        activate: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
-        deactivate: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
-        dispose: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
-        getConfiguration: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
-        setConfiguration: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
-        isHealthy: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
-        getHealthStatus: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
-    }, "strip", z.ZodTypeAny, {
-        version: string;
-        id: string;
-        description: string;
-        name: string;
-        author: string;
-        dependencies: string[];
-        permissions: string[];
-        initialize: (...args: unknown[]) => unknown;
-        activate: (...args: unknown[]) => unknown;
+export declare         activate: (...args: unknown[]) => unknown;
         deactivate: (...args: unknown[]) => unknown;
         dispose: (...args: unknown[]) => unknown;
         getConfiguration: (...args: unknown[]) => unknown;
@@ -42,10 +16,10 @@ export declare const ExtensionTypeSchemas: {
         isHealthy: (...args: unknown[]) => unknown;
         getHealthStatus: (...args: unknown[]) => unknown;
     }, {
-        version: string;
         id: string;
-        description: string;
         name: string;
+        description: string;
+        version: string;
         author: string;
         initialize: (...args: unknown[]) => unknown;
         activate: (...args: unknown[]) => unknown;
@@ -70,23 +44,23 @@ export declare const ExtensionTypeSchemas: {
         onNodeDestroyed: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
         createAdvancedNodeInstance: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
+        extensionType: "node";
         getNodeDefinitions: (...args: unknown[]) => unknown;
         createNodeInstance: (...args: unknown[]) => unknown;
         validateNodeConfig: (...args: unknown[]) => unknown;
         getNodeSchema: (...args: unknown[]) => unknown;
         supportsAdvancedNodes: (...args: unknown[]) => unknown;
-        extensionType: "node";
         onNodeCreated?: ((...args: unknown[]) => unknown) | undefined;
         onNodeExecuted?: ((...args: unknown[]) => unknown) | undefined;
         onNodeDestroyed?: ((...args: unknown[]) => unknown) | undefined;
         createAdvancedNodeInstance?: ((...args: unknown[]) => unknown) | undefined;
     }, {
+        extensionType: "node";
         getNodeDefinitions: (...args: unknown[]) => unknown;
         createNodeInstance: (...args: unknown[]) => unknown;
         validateNodeConfig: (...args: unknown[]) => unknown;
         getNodeSchema: (...args: unknown[]) => unknown;
         supportsAdvancedNodes: (...args: unknown[]) => unknown;
-        extensionType: "node";
         onNodeCreated?: ((...args: unknown[]) => unknown) | undefined;
         onNodeExecuted?: ((...args: unknown[]) => unknown) | undefined;
         onNodeDestroyed?: ((...args: unknown[]) => unknown) | undefined;
@@ -104,24 +78,24 @@ export declare const ExtensionTypeSchemas: {
         onUIDestroyed: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
         onThemeChanged: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
+        extensionType: "ui";
         getComponentDefinitions: (...args: unknown[]) => unknown;
         createComponentInstance: (...args: unknown[]) => unknown;
         getThemeContributions: (...args: unknown[]) => unknown;
         getCommandContributions: (...args: unknown[]) => unknown;
         getMenuContributions: (...args: unknown[]) => unknown;
         getKeybindingContributions: (...args: unknown[]) => unknown;
-        extensionType: "ui";
         onUIInitialized?: ((...args: unknown[]) => unknown) | undefined;
         onUIDestroyed?: ((...args: unknown[]) => unknown) | undefined;
         onThemeChanged?: ((...args: unknown[]) => unknown) | undefined;
     }, {
+        extensionType: "ui";
         getComponentDefinitions: (...args: unknown[]) => unknown;
         createComponentInstance: (...args: unknown[]) => unknown;
         getThemeContributions: (...args: unknown[]) => unknown;
         getCommandContributions: (...args: unknown[]) => unknown;
         getMenuContributions: (...args: unknown[]) => unknown;
         getKeybindingContributions: (...args: unknown[]) => unknown;
-        extensionType: "ui";
         onUIInitialized?: ((...args: unknown[]) => unknown) | undefined;
         onUIDestroyed?: ((...args: unknown[]) => unknown) | undefined;
         onThemeChanged?: ((...args: unknown[]) => unknown) | undefined;
@@ -138,23 +112,23 @@ export declare const ExtensionTypeSchemas: {
         onTransformError: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
         createPipeline: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
+        extensionType: "transform";
         getTransformDefinitions: (...args: unknown[]) => unknown;
         createTransformInstance: (...args: unknown[]) => unknown;
         validateTransformConfig: (...args: unknown[]) => unknown;
         getTransformSchema: (...args: unknown[]) => unknown;
         supportsPipeline: (...args: unknown[]) => unknown;
-        extensionType: "transform";
         onTransformCreated?: ((...args: unknown[]) => unknown) | undefined;
         onTransformExecuted?: ((...args: unknown[]) => unknown) | undefined;
         onTransformError?: ((...args: unknown[]) => unknown) | undefined;
         createPipeline?: ((...args: unknown[]) => unknown) | undefined;
     }, {
+        extensionType: "transform";
         getTransformDefinitions: (...args: unknown[]) => unknown;
         createTransformInstance: (...args: unknown[]) => unknown;
         validateTransformConfig: (...args: unknown[]) => unknown;
         getTransformSchema: (...args: unknown[]) => unknown;
         supportsPipeline: (...args: unknown[]) => unknown;
-        extensionType: "transform";
         onTransformCreated?: ((...args: unknown[]) => unknown) | undefined;
         onTransformExecuted?: ((...args: unknown[]) => unknown) | undefined;
         onTransformError?: ((...args: unknown[]) => unknown) | undefined;
@@ -173,24 +147,24 @@ export declare const ExtensionTypeSchemas: {
         onStorageError: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
         createMigration: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
+        extensionType: "storage";
         getStorageProviders: (...args: unknown[]) => unknown;
         createStorageProvider: (...args: unknown[]) => unknown;
         validateStorageConfig: (...args: unknown[]) => unknown;
         getStorageSchema: (...args: unknown[]) => unknown;
         supportsMigration: (...args: unknown[]) => unknown;
-        extensionType: "storage";
         onStorageCreated?: ((...args: unknown[]) => unknown) | undefined;
         onStorageConnected?: ((...args: unknown[]) => unknown) | undefined;
         onStorageDisconnected?: ((...args: unknown[]) => unknown) | undefined;
         onStorageError?: ((...args: unknown[]) => unknown) | undefined;
         createMigration?: ((...args: unknown[]) => unknown) | undefined;
     }, {
+        extensionType: "storage";
         getStorageProviders: (...args: unknown[]) => unknown;
         createStorageProvider: (...args: unknown[]) => unknown;
         validateStorageConfig: (...args: unknown[]) => unknown;
         getStorageSchema: (...args: unknown[]) => unknown;
         supportsMigration: (...args: unknown[]) => unknown;
-        extensionType: "storage";
         onStorageCreated?: ((...args: unknown[]) => unknown) | undefined;
         onStorageConnected?: ((...args: unknown[]) => unknown) | undefined;
         onStorageDisconnected?: ((...args: unknown[]) => unknown) | undefined;
@@ -198,66 +172,7 @@ export declare const ExtensionTypeSchemas: {
         createMigration?: ((...args: unknown[]) => unknown) | undefined;
     }>;
 };
-export declare const ExtensionTypeGuards: {
-    isBaseExtension(obj: any): obj is import("./interfaces/ExtensionInterfaces").BaseExtension;
-    isNodeExtension(obj: any): obj is import("./interfaces/NodeExtension").NodeExtension;
-    isUIExtension(obj: any): obj is import("./interfaces/UIExtension").UIExtension;
-    isTransformExtension(obj: any): obj is import("./interfaces/TransformExtension").TransformExtension;
-    isStorageExtension(obj: any): obj is import("./interfaces/StorageExtension").StorageExtension;
-};
-export declare class ExtensionTypeChecker {
-    private static instance;
-    private constructor();
-    static getInstance(): ExtensionTypeChecker;
-    /**
-     * Validate extension type at runtime
-     */
-    validateExtensionType(extension: any): {
-        valid: boolean;
-        type?: string;
-        errors: string[];
-    };
-    /**
-     * Validate method signature
-     */
-    validateMethodSignature(obj: any, methodName: string, expectedSignature: {
-        parameterCount?: number;
-        parameterTypes?: string[];
-        returnType?: string;
-    }): boolean;
-    /**
-     * Generate TypeScript declaration file
-     */
-    generateTypeDeclaration(extensionId: string): string;
-    /**
-     * Generate JSDoc documentation
-     */
-    generateJSDoc(extensionType: string): string;
-    private getTypeSpecificJSDoc;
-    private toPascalCase;
-}
-export declare class ExtensionInterfaceValidator {
-    private static instance;
-    private constructor();
-    static getInstance(): ExtensionInterfaceValidator;
-    /**
-     * Validate extension interface implementation
-     */
-    validateInterface(extension: any, expectedInterface: string): {
-        valid: boolean;
-        missingMethods: string[];
-        invalidMethods: string[];
-        extraMethods: string[];
-    };
-    private getRequiredMethods;
-    private getActualMethods;
-    private getMethodSignature;
-    private validateMethodSignature;
-}
-export declare const extensionTypeChecker: ExtensionTypeChecker;
-export declare const extensionInterfaceValidator: ExtensionInterfaceValidator;
-export type ExtensionType = 'node' | 'ui' | 'transform' | 'storage';
-export type AnyExtension = import('./interfaces/NodeExtension').NodeExtension | import('./interfaces/UIExtension').UIExtension | import('./interfaces/TransformExtension').TransformExtension | import('./interfaces/StorageExtension').StorageExtension;
+export declare export type AnyExtension = import('./interfaces/NodeExtension').NodeExtension | import('./interfaces/UIExtension').UIExtension | import('./interfaces/TransformExtension').TransformExtension | import('./interfaces/StorageExtension').StorageExtension;
 export declare function isNodeExtension(extension: any): extension is import('./interfaces/NodeExtension').NodeExtension;
 export declare function isUIExtension(extension: any): extension is import('./interfaces/UIExtension').UIExtension;
 export declare function isTransformExtension(extension: any): extension is import('./interfaces/TransformExtension').TransformExtension;

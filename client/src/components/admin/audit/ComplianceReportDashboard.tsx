@@ -1,6 +1,6 @@
 // Epic 17.1.6 - Compliance Reporting Dashboard
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Paper,
@@ -137,9 +137,7 @@ const VIOLATION_SEVERITIES = {
   critical: { color: 'error', icon: SecurityIcon }
 };
 
-export const ComplianceReportDashboard: React.FC = () => {
-  const [reports, setReports] = useState<ComplianceReport[]>([]);
-  const [___templates, setTemplates] = useState<ReportTemplate[]>([]);
+export   const [_templates, setTemplates] = useState<ReportTemplate[]>([]);
   const [metrics, setMetrics] = useState<ComplianceMetrics | null>(null);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
@@ -164,9 +162,9 @@ export const ComplianceReportDashboard: React.FC = () => {
     loadReports();
     loadTemplates();
     loadMetrics();
-  }, []);
+  }, [loadReports, loadTemplates, loadMetrics]);
 
-  const loadReports = async () => {
+  const loadReports = useCallback(async () => {
     setLoading(true);
     try {
       // Mock data - replace with actual API
@@ -240,9 +238,9 @@ export const ComplianceReportDashboard: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const loadTemplates = async () => {
+  const loadTemplates = useCallback(async () => {
     try {
       // Mock templates
       const mockTemplates: ReportTemplate[] = [
@@ -280,9 +278,9 @@ export const ComplianceReportDashboard: React.FC = () => {
     } catch (error) {
       console.error('Failed to load templates:', error);
     }
-  };
+  }, []);
 
-  const loadMetrics = async () => {
+  const loadMetrics = useCallback(async () => {
     try {
       // Mock metrics
       const mockMetrics: ComplianceMetrics = {
@@ -301,14 +299,13 @@ export const ComplianceReportDashboard: React.FC = () => {
     } catch (error) {
       console.error('Failed to load metrics:', error);
     }
-  };
+  }, []);
 
-  const handleGenerateReport = async () => {
+  const handleGenerateReport = useCallback(async () => {
     try {
       setLoading(true);
       
       // Mock report generation
-      console.log('Generating report:', newReport);
       
       // Close dialog and refresh reports
       setGenerateDialogOpen(false);
@@ -318,27 +315,26 @@ export const ComplianceReportDashboard: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [newReport, loadReports]);
 
-  const handleViewReport = (report: ComplianceReport) => {
+  const handleViewReport = useCallback((report: ComplianceReport) => {
     setSelectedReport(report);
     setDetailsDialogOpen(true);
-  };
+  }, []);
 
-  const handleDownloadReport = async (reportId: string, format: string) => {
+  const handleDownloadReport = useCallback(async (reportId: string, format: string) => {
     try {
       // Mock download
-      console.log(`Downloading report ${reportId} as ${format}`);
     } catch (error) {
       console.error('Download failed:', error);
     }
-  };
+  }, []);
 
-  const getComplianceScoreColor = (score: number): string => {
+  const getComplianceScoreColor = useCallback((score: number): string => {
     if (score >= 90) return 'success';
     if (score >= 75) return 'warning';
     return 'error';
-  };
+  }, []);
 
   const renderMetricsCards = () => {
     if (!metrics) return null;
@@ -357,7 +353,7 @@ export const ComplianceReportDashboard: React.FC = () => {
                     {metrics.complianceScore.toFixed(1)}%
                   </Typography>
                 </Box>
-                <VerifiedIcon color={getComplianceScoreColor(metrics.complianceScore) as any} fontSize="large" />
+                <VerifiedIcon color={getComplianceScoreColor(metrics.complianceScore) as 'success' | 'warning' | 'error'} fontSize="large" />
               </Box>
             </CardContent>
           </Card>
@@ -568,7 +564,7 @@ export const ComplianceReportDashboard: React.FC = () => {
               <InputLabel>Report Type</InputLabel>
               <Select
                 value={newReport.reportType}
-                onChange={(e) => setNewReport(prev => ({ ...prev, reportType: e.target.value as any }))}
+                onChange={(e) => setNewReport(prev => ({ ...prev, reportType: e.target.value as 'access_report' | 'change_report' | 'security_report' | 'retention_report' }))}
                 label="Report Type"
               >
                 {REPORT_TYPES.map(type => (
@@ -590,7 +586,7 @@ export const ComplianceReportDashboard: React.FC = () => {
               <InputLabel>Compliance Standard</InputLabel>
               <Select
                 value={newReport.standard}
-                onChange={(e) => setNewReport(prev => ({ ...prev, standard: e.target.value as any }))}
+                onChange={(e) => setNewReport(prev => ({ ...prev, standard: e.target.value as string }))}
                 label="Compliance Standard"
               >
                 {COMPLIANCE_STANDARDS.map(standard => (
@@ -638,7 +634,7 @@ export const ComplianceReportDashboard: React.FC = () => {
               <InputLabel>Format</InputLabel>
               <Select
                 value={newReport.format}
-                onChange={(e) => setNewReport(prev => ({ ...prev, format: e.target.value as any }))}
+                onChange={(e) => setNewReport(prev => ({ ...prev, format: e.target.value as 'pdf' | 'json' | 'csv' | 'xml' }))}
                 label="Format"
               >
                 <MenuItem value="pdf">PDF</MenuItem>
@@ -709,7 +705,7 @@ export const ComplianceReportDashboard: React.FC = () => {
                         <React.Fragment key={index}>
                           <ListItem>
                             <ListItemIcon>
-                              <SeverityIcon color={severityConfig.color as any} />
+                              <SeverityIcon color={severityConfig.color as 'info' | 'warning' | 'error'} />
                             </ListItemIcon>
                             <ListItemText
                               primary={violation.violationType.replace('_', ' ').toUpperCase()}

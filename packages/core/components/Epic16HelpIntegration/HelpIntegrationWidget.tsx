@@ -247,7 +247,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
   const handleContentInteraction = useCallback(async (
     contentId: string, 
     interactionType: 'viewed' | 'completed' | 'skipped' | 'rated',
-    data?: any
+    data?: Record<string, unknown>
   ) => {
     if (!currentSession) return;
 

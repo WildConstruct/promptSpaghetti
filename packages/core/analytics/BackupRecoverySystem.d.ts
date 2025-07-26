@@ -19,24 +19,24 @@ export declare const BackupConfigSchema: z.ZodObject<{
     maxBackupSize: z.ZodDefault<z.ZodNumber>;
     format: z.ZodDefault<z.ZodEnum<["json", "jsonl", "csv", "parquet"]>>;
 }, "strip", z.ZodTypeAny, {
+    batchSize: number;
     includeMetadata: boolean;
     backupLocation: string;
     compressionEnabled: boolean;
     encryptionEnabled: boolean;
     retentionDays: number;
-    batchSize: number;
     verifyBackup: boolean;
     maxBackupSize: number;
     format: "json" | "jsonl" | "csv" | "parquet";
     encryptionKey?: string | undefined;
 }, {
+    batchSize?: number | undefined;
     includeMetadata?: boolean | undefined;
     backupLocation?: string | undefined;
     compressionEnabled?: boolean | undefined;
     encryptionEnabled?: boolean | undefined;
     encryptionKey?: string | undefined;
     retentionDays?: number | undefined;
-    batchSize?: number | undefined;
     verifyBackup?: boolean | undefined;
     maxBackupSize?: number | undefined;
     format?: "json" | "jsonl" | "csv" | "parquet" | undefined;
@@ -128,7 +128,12 @@ export declare class BackupRecoverySystem {
     /**
      * Create backup of analytics data
      */
-    createBackup(backupName: string, filter?: EventFilter, config?: Partial<BackupConfig>, description?: string): Promise<string>;
+    createBackup(
+      backupName: string,
+      filter?: EventFilter,
+      config?: Partial<BackupConfig>,
+      description?: string
+    ): Promise<string>;
     /**
      * Perform the actual backup operation
      */

@@ -492,7 +492,7 @@ export class SecuritySystemHealthTracker extends EventEmitter {
       let responseTime = 0;
       let errorMessage: string | undefined;
       let rawResponse: string | undefined;
-      let metrics: HealthCheckResult['metrics'] = {};
+      const metrics: HealthCheckResult['metrics'] = {};
 
       switch (check.type) {
         case 'ping':
@@ -705,7 +705,10 @@ export class SecuritySystemHealthTracker extends EventEmitter {
     return Math.round((weightedScore / totalWeight) * 100) / 100;
   }
 
-  private determineSystemStatus(healthScore: number, consecutiveFailures: number): SecuritySystemNode['current_state']['status'] {
+  private determineSystemStatus(
+    healthScore: number,
+    consecutiveFailures: number
+  ): SecuritySystemNode['current_state']['status'] {
     if (consecutiveFailures >= 3 || healthScore <= 25) return 'critical';
     if (consecutiveFailures >= 1 || healthScore <= 50) return 'warning';
     if (healthScore >= 90) return 'healthy';
@@ -713,13 +716,15 @@ export class SecuritySystemHealthTracker extends EventEmitter {
   }
 
   // Availability tracking
-  private async updateAvailabilityMetrics(systemId: string, status: SecuritySystemNode['current_state']['status']): Promise<void> {
+  private async updateAvailabilityMetrics(
+    systemId: string,
+    status: SecuritySystemNode['current_state']['status']
+  ): Promise<void> {
     const system = this.systems.get(systemId);
     if (!system) return;
 
     const now = Date.now();
-    const isHealthy = status === 'healthy';
-
+    
     // Calculate availability for different time periods
     const availability24h = await this.calculateAvailability(systemId, now - 24 * 60 * 60 * 1000, now);
     const availability7d = await this.calculateAvailability(systemId, now - 7 * 24 * 60 * 60 * 1000, now);

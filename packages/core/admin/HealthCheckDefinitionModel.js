@@ -172,10 +172,18 @@ export class HealthCheckDefinitionBuilder {
                     runtime: RuntimeEnvironment.LOCAL,
                     resources: { maxMemory: 256, maxCpu: 50, maxDiskSpace: 100 },
                     network: {},
-                    storage: {}
+                    storage: {
+                        cleanupAfterExecution: true
+                    }
                 },
-                isolation: {},
-                cleanup: {}
+                isolation: {
+                    sandboxed: false
+                },
+                cleanup: {
+                    enabled: true,
+                    actions: [],
+                    timeout: 5000
+                }
             };
         }
         this.definition.execution.schedule = {
@@ -345,7 +353,9 @@ export const createExampleHealthChecks = () => {
             expectedFormat: 'json',
             successConditions: [
                 { field: 'health_check', operator: ComparisonOperator.EQUALS, value: 1, description: 'Database returns health check result' }
-            ]
+            ],
+            warningConditions: [],
+            errorConditions: []
         },
         runtime: {
             maxExecutionTime: 4000,
@@ -380,7 +390,9 @@ export const createExampleHealthChecks = () => {
             expectedFormat: 'json',
             successConditions: [
                 { field: 'status', operator: ComparisonOperator.EQUALS, value: 'healthy', description: 'API reports healthy status' }
-            ]
+            ],
+            warningConditions: [],
+            errorConditions: []
         },
         runtime: {
             maxExecutionTime: 8000,

@@ -2,9 +2,9 @@
 // VFX-ready export service for Wild Construct film production pipeline
 import seedrandom from 'seedrandom';
 export class WildConstructVFXExporter {
-    static instance;
-    exportHistory = [];
-    static getInstance() {
+    static instance: WildConstructVFXExporter;
+    exportHistory: any[] = [];
+    static getInstance(): WildConstructVFXExporter {
         if (!WildConstructVFXExporter.instance) {
             WildConstructVFXExporter.instance = new WildConstructVFXExporter();
         }
@@ -13,7 +13,7 @@ export class WildConstructVFXExporter {
     /**
      * Export graph to VFX-ready format
      */
-    async exportGraph(graph, executionResults, options = { quality: 'production' }) {
+    async exportGraph(graph: any, executionResults: any, options: any = { quality: 'production' }): Promise<any> {
         const exportId = this.generateExportId();
         const timestamp = new Date().toISOString();
         // Build export data structure
@@ -35,7 +35,7 @@ export class WildConstructVFXExporter {
         }
         return exportData;
     }
-    buildMetadata(exportId, timestamp, options) {
+    buildMetadata(exportId: string, timestamp: string, options: any): any {
         return {
             exportId,
             version: options.formatVersion || '1.2.0', // Updated for reproducibility features
@@ -111,7 +111,7 @@ export class WildConstructVFXExporter {
             }
         };
     }
-    buildPromptData(graph, executionResults, options) {
+    buildPromptData(graph: any, executionResults: any) {
         const finalPrompt = executionResults?.finalPrompt || 'No prompt generated';
         const variables = executionResults?.variables || {};
         return {
@@ -128,7 +128,7 @@ export class WildConstructVFXExporter {
             }
         };
     }
-    analyzePromptComponents(prompt) {
+    analyzePromptComponents(prompt: string) {
         // AI-powered prompt analysis would go here
         // For now, simple keyword-based categorization
         const words = prompt.toLowerCase().split(/\s+/);
@@ -141,10 +141,10 @@ export class WildConstructVFXExporter {
             style: this.extractByCategory(words, ['realistic', 'cartoon', 'painting', 'digital art', 'photography'])
         };
     }
-    extractByCategory(words, keywords) {
+    extractByCategory(words: string[], keywords: string[]) {
         return words.filter(word => keywords.includes(word));
     }
-    buildVariableData(variables) {
+    buildVariableData(variables: any) {
         const result = {};
         for (const [name, value] of Object.entries(variables)) {
             result[name] = {
@@ -156,7 +156,7 @@ export class WildConstructVFXExporter {
         }
         return result;
     }
-    generateVariableAlternatives(name, value) {
+    generateVariableAlternatives(name: string, value: any) {
         // Generate contextual alternatives based on variable name
         const alternatives = {
             character: ['hero', 'protagonist', 'warrior', 'detective', 'explorer'],
@@ -166,7 +166,7 @@ export class WildConstructVFXExporter {
         };
         return alternatives[name.toLowerCase()] || [];
     }
-    generateNegativePrompt(prompt) {
+    generateNegativePrompt(prompt: string) {
         // Generate appropriate negative prompt based on content
         const baseNegative = 'blurry, low quality, distorted, deformed, ugly';
         // Add context-specific negative prompts
@@ -178,7 +178,7 @@ export class WildConstructVFXExporter {
         }
         return baseNegative;
     }
-    buildGraphStructure(graph, executionResults) {
+    buildGraphStructure(graph: any, executionResults: any) {
         const vfxNodes = graph.nodes.map((node, index) => {
             // Deep copy node configuration to preserve all settings
             const fullConfiguration = this.preserveNodeConfiguration(node);
@@ -230,7 +230,7 @@ export class WildConstructVFXExporter {
             }
         };
     }
-    categorizeNode(type) {
+    categorizeNode(type: string) {
         const categories = {
             'Subject': 'input',
             'WeightedChoice': 'logic',
@@ -242,7 +242,7 @@ export class WildConstructVFXExporter {
         };
         return categories[type] || 'transformation';
     }
-    getNodePurpose(type) {
+    getNodePurpose(type: string) {
         const purposes = {
             'Subject': 'Provides character or subject variations',
             'WeightedChoice': 'Randomly selects from weighted options',
@@ -254,17 +254,17 @@ export class WildConstructVFXExporter {
         };
         return purposes[type] || `Processes data of type: ${type}`;
     }
-    getNodeDependencies(nodeId, edges) {
+    getNodeDependencies(nodeId: string, edges: any[]) {
         return edges
             .filter(edge => edge.target === nodeId)
             .map(edge => edge.source);
     }
-    getNodeTargets(nodeId, edges) {
+    getNodeTargets(nodeId: string, edges: any[]) {
         return edges
             .filter(edge => edge.source === nodeId)
             .map(edge => edge.target);
     }
-    calculateCriticalPath(nodes, connections) {
+    calculateCriticalPath(nodes: any[], connections: any[]) {
         // Simplified critical path calculation - in production would use proper algorithm
         const outputNodes = nodes.filter(n => n.category === 'output');
         if (outputNodes.length === 0)
@@ -282,7 +282,7 @@ export class WildConstructVFXExporter {
         }
         return criticalPath;
     }
-    analyzeComplexity(nodes, connections) {
+    analyzeComplexity(nodes: any[], connections: any[]) {
         const nodeCount = nodes.length;
         const connectionCount = connections.length;
         const logicNodeCount = nodes.filter(n => n.category === 'logic').length;
@@ -292,18 +292,18 @@ export class WildConstructVFXExporter {
             return 'moderate';
         return 'complex';
     }
-    calculateVariabilityScore(nodes) {
+    calculateVariabilityScore(nodes: any[]) {
         // Calculate how much the output can vary based on randomization nodes
         const randomizationNodes = nodes.filter(n => n.type.includes('Weighted') ||
             n.type.includes('Random') ||
             n.type.includes('Conditional'));
         return Math.min(randomizationNodes.length / nodes.length * 2, 1.0);
     }
-    calculateDeterminismScore(nodes) {
+    calculateDeterminismScore(nodes: any[]) {
         // Inverse of variability - how predictable the output is
         return 1.0 - this.calculateVariabilityScore(nodes);
     }
-    calculatePerformanceScore(executionResults) {
+    calculatePerformanceScore(executionResults: any) {
         if (!executionResults?.executionTime)
             return 0.5;
         // Score based on execution time (lower is better)
@@ -318,7 +318,7 @@ export class WildConstructVFXExporter {
             return 0.4;
         return 0.2;
     }
-    buildExecutionData(executionResults, options) {
+    buildExecutionData(executionResults: any, options: any) {
         // Capture complete randomization state for exact reproduction
         const masterSeed = executionResults?.seed || Math.floor(Math.random() * 1000000);
         const nodeSeeds = executionResults?.nodeSeeds || {};
@@ -353,7 +353,7 @@ export class WildConstructVFXExporter {
             }
         };
     }
-    buildNodePerformance(executionResults) {
+    buildNodePerformance(executionResults: any) {
         const performance = {};
         if (executionResults?.nodePerformance) {
             for (const [nodeId, time] of Object.entries(executionResults.nodePerformance)) {
@@ -366,7 +366,7 @@ export class WildConstructVFXExporter {
         }
         return performance;
     }
-    buildExtensions(options) {
+    buildExtensions(options: any) {
         const extensions = {};
         // Add ControlNet structure if enabled
         extensions.controlNet = {
@@ -395,7 +395,7 @@ export class WildConstructVFXExporter {
         };
         return extensions;
     }
-    buildRenderingData(variables) {
+    buildRenderingData(variables: any) {
         // Extract rendering parameters from variables if present
         const width = this.extractNumberFromVariables(variables, ['width', 'resolution_x']) || 1920;
         const height = this.extractNumberFromVariables(variables, ['height', 'resolution_y']) || 1080;
@@ -434,7 +434,7 @@ export class WildConstructVFXExporter {
             }
         };
     }
-    extractNumberFromVariables(variables, keys) {
+    extractNumberFromVariables(variables: any, keys: string[]) {
         if (!variables)
             return undefined;
         for (const key of keys) {
@@ -447,7 +447,7 @@ export class WildConstructVFXExporter {
         }
         return undefined;
     }
-    extractFromVariables(variables, keys) {
+    extractFromVariables(variables: any, keys: string[]) {
         if (!variables)
             return undefined;
         for (const key of keys) {
@@ -457,7 +457,7 @@ export class WildConstructVFXExporter {
         }
         return undefined;
     }
-    calculateAspectRatio(width, height) {
+    calculateAspectRatio(width: number, height: number) {
         const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
         const divisor = gcd(width, height);
         return `${width / divisor}:${height / divisor}`;
@@ -465,7 +465,7 @@ export class WildConstructVFXExporter {
     /**
      * Validate export data with enhanced reproducibility checks
      */
-    validateExport(exportData) {
+    validateExport(exportData: any) {
         const errors = [];
         const warnings = [];
         // Required field validation
@@ -543,7 +543,7 @@ export class WildConstructVFXExporter {
     /**
      * Generate human-readable documentation
      */
-    generateDocumentation(exportData) {
+    generateDocumentation(exportData: any) {
         return `
 # Wild Construct VFX Export Documentation
 

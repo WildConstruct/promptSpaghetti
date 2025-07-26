@@ -3,7 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * ExportBundleDialog - Dialog for exporting graphs as GeneratorBundle files
  */
 import { useState } from 'react';
-import { useGraphStore } from '../../graphStore.js';
+import { useGraphStore } from '../../graphStore';
 export const ExportBundleDialog = ({ isOpen, onClose, nodes, edges, onExport }) => {
     const { currentProject } = useGraphStore();
     const [formData, setFormData] = useState({

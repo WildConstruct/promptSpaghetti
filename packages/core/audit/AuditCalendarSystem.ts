@@ -210,7 +210,7 @@ export type SchedulingQuery = z.infer<typeof SchedulingQuerySchema>;
 export class AuditCalendarSystem {
   private schedules: Map<string, AuditSchedule> = new Map();
   private recurringSchedules: Map<string, AuditSchedule> = new Map();
-  private notificationQueue: Map<string, any[]> = new Map();
+  private notificationQueue: Map<string, unknown[]> = new Map();
 
   constructor() {
     // Initialize system with default configurations
@@ -948,9 +948,7 @@ export class AuditCalendarSystem {
 export const auditCalendarSystem = new AuditCalendarSystem();
 
 // Utility functions
-export 
-export 
-  export const generateCalendarView = (config: CalendarViewConfig) =>
-    auditCalendarSystem.generateCalendarView(config);
+export const generateCalendarView = (config: CalendarViewConfig) =>
+  auditCalendarSystem.generateCalendarView(config);
 
 export default AuditCalendarSystem;

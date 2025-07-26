@@ -15,7 +15,7 @@
  * - Automated threat response recommendations
  */
 import { EventEmitter } from 'events';
-import { SecurityEventType, ComplianceFramework } from './SecurityLogger.js';
+import { SecurityEventType, ComplianceFramework } from './SecurityLogger';
 // Risk Assessment Types
 export var RiskLevel;
 (function (RiskLevel) {

@@ -28,6 +28,9 @@ export {
   UIEventSchema
 } from './EventSystem';
 
+// Import globalEventBus for local use
+import { globalEventBus } from './EventSystem';
+
 // Adapters
 export {
   WebSocketEventAdapter,
@@ -78,14 +81,7 @@ export {
   TestingMiddleware
 } from './middleware/EventMiddleware';
 
-// Re-export types for external use
-export type { 
-  EventFilter,
-  EventHandler,
-  EventSubscription,
-  EventMiddleware,
-  BaseEvent
-} from './EventSystem';
+// Note: Types already exported above in the main export block
 
 export type {
   EventableStore,

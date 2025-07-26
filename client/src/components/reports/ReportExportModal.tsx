@@ -39,8 +39,8 @@ interface ReportData {
     generatedBy: string;
     version: string;
   };
-  summary: Record<string, any>;
-  data: Array<Record<string, any>>;
+  summary: Record<string, unknown>;
+  data: Array<Record<string, unknown>>;
 }
 
 interface ExportConfig {
@@ -276,7 +276,7 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({
                       key={option.value}
                       variant={exportConfig.format === option.value ? 'default' : 'outline'}
                       className="justify-start h-auto p-3"
-                      onClick={() => updateExportConfig({ format: option.value as any })}
+                      onClick={() => updateExportConfig({ format: option.value as 'pdf' | 'excel' | 'csv' | 'json' | 'xml' | 'html' })}
                     >
                       <option.icon className="w-4 h-4 mr-2" />
                       <span className="text-sm">{option.label}</span>
@@ -294,7 +294,7 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({
                       key={option.value}
                       variant={exportConfig.delivery === option.value ? 'default' : 'outline'}
                       className="w-full justify-start h-auto p-3"
-                      onClick={() => updateExportConfig({ delivery: option.value as any })}
+                      onClick={() => updateExportConfig({ delivery: option.value as 'file' | 'email' | 'webhook' | 'api' })}
                     >
                       <option.icon className="w-4 h-4 mr-2" />
                       {option.label}

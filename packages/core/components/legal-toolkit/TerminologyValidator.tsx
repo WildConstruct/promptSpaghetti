@@ -60,15 +60,6 @@ const LEGAL_TERMINOLOGY_DB: LegalTerminology[] = [
   }
 ];
 
-const _____COMMON_LEGAL_ISSUES = [
-  'informal language',
-  'ambiguous terms',
-  'jurisdiction mismatch',
-  'outdated terminology',
-  'incorrect usage',
-  'inconsistent terminology',
-  'colloquial language'
-];
 
 interface ValidationSettings {
   jurisdiction: string;
@@ -218,10 +209,7 @@ export const TerminologyValidator: React.FC<TerminologyValidatorProps> = ({
     // Three-word terms
     for (let i = 0; i < tokens.length - 2; i++) {
       const threeWordTerm = `${tokens[i].token} ${tokens[i + 1].token} ${tokens[i + 2].token}`;
-      const _____isLegalTerm = LEGAL_TERMINOLOGY_DB.some(term => 
-        term.term.toLowerCase() === threeWordTerm.toLowerCase()
-      );
-      
+            
       if (threeWordTerm) {
         legalTerms.push({
           term: threeWordTerm,
@@ -461,6 +449,21 @@ export const TerminologyValidator: React.FC<TerminologyValidatorProps> = ({
             font-weight: 600;
             color: #2d3748;
             margin: 0 0 1rem 0;
+          }
+
+          .validator-info {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #4a5568;
+          }
+
+          .info-item {
+            padding: 0.25rem 0.5rem;
+            background: #edf2f7;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
           }
 
           .validator-controls {
@@ -715,7 +718,18 @@ export const TerminologyValidator: React.FC<TerminologyValidatorProps> = ({
       </style>
 
       <div className="validator-header">
-        <h2 className="validator-title">Legal Terminology Validator</h2>
+        <h2 className="validator-title">Legal Terminology Validation</h2>
+        
+        {(jurisdiction !== 'Universal' || practiceArea !== 'General') && (
+          <div className="validator-info">
+            {jurisdiction !== 'Universal' && (
+              <span className="info-item">Jurisdiction: {jurisdiction}</span>
+            )}
+            {practiceArea !== 'General' && (
+              <span className="info-item">Practice Area: {practiceArea}</span>
+            )}
+          </div>
+        )}
         
         <div className="validator-controls">
           <button
@@ -723,7 +737,7 @@ export const TerminologyValidator: React.FC<TerminologyValidatorProps> = ({
             onClick={validateTerminology}
             disabled={isValidating || !text}
           >
-            {isValidating ? 'Validating...' : 'Validate Text'}
+            {isValidating ? 'Validating...' : 'Validate Terms'}
           </button>
           
           <button
@@ -878,7 +892,7 @@ export const TerminologyValidator: React.FC<TerminologyValidatorProps> = ({
               <div className="no-results-icon">📖</div>
               <div>
                 {text 
-                  ? 'No terminology validation results yet. Click "Validate Text" to check your document.'
+                  ? 'No terminology validation results yet. Click the validation button to check your document.'
                   : 'Enter text to validate legal terminology.'
                 }
               </div>

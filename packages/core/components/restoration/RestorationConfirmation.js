@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { Card, Alert, Typography, Space, Button, Divider, Row, Col, Statistic, Tag, List, Tooltip } from 'antd';
 import { WarningOutlined, InfoCircleOutlined, CheckCircleOutlined, CloseCircleOutlined, SafetyOutlined, ClockCircleOutlined, EditOutlined } from '@ant-design/icons';
-import { CONFLICT_DESCRIPTIONS } from '../../types/restoration.js';
+import { CONFLICT_DESCRIPTIONS } from '../../types/restoration';
 const { Title, Text } = Typography;
 export const RestorationConfirmation = ({ preview, config, onConfirm, onCancel }) => {
     const hasConflicts = preview.summary.totalConflicts > 0;

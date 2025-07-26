@@ -138,7 +138,7 @@ export const CollaborationPanel: React.FC<CollaborationPanelProps> = ({
                     <div className="user-menu">
                       <select
                         value={user.role}
-                        onChange={(e) => onChangeUserRole?.(user.id, e.target.value as any)}
+                        onChange={(e) => onChangeUserRole?.(user.id, e.target.value as 'viewer' | 'editor' | 'owner')}
                         disabled={user.role === 'owner'}
                       >
                         <option value="viewer">Viewer</option>

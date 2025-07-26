@@ -10,7 +10,7 @@ import {
   ExtensionError,
   ExtensionErrorType
 } from './interfaces/ExtensionInterfaces';
-import { extensionTypeChecker, extensionInterfaceValidator } from './TypeDefinitions';
+import { extensionTypeChecker } from './TypeDefinitions';
 
 // Enhanced Interface Validator
 export class ExtensionInterfaceValidator {
@@ -64,7 +64,7 @@ export class ExtensionInterfaceValidator {
     }
 
     // Interface validation
-    const interfaceValidation = extensionInterfaceValidator.validateInterface(
+    const interfaceValidation = this.validateInterface(
       extension,
       requiredInterface
     );
@@ -589,5 +589,4 @@ interface RuntimeTypeInfo {
 }
 
 // Export singletons
-export const extensionInterfaceValidator = ExtensionInterfaceValidator.getInstance();
-export const extensionRuntimeTypeChecker = ExtensionRuntimeTypeChecker.getInstance();
+export export 

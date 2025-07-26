@@ -6,12 +6,12 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * and template performance tracking
  */
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Badge } from '../ui/Badge.js';
-import { Button } from '../ui/Button.js';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
-import { useMarketplaceMetrics } from '../../hooks/useMarketplaceMetrics.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Badge } from '../ui/Badge';
+import { Button } from '../ui/Button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
+import { useMarketplaceMetrics } from '../../hooks/useMarketplaceMetrics';
 import { TrendingUp, DollarSign, Download, Search, Users, Star, Target } from 'lucide-react';
 export const MarketplaceDashboard = ({ userId, userRole = 'director', timeRange = '30d', className = '' }) => {
     const { dashboardData, insights, isLoading, getTopPerformingTemplates, getSearchAnalytics, refreshData } = useMarketplaceMetrics({ userRole });

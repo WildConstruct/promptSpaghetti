@@ -40,7 +40,7 @@ beforeEach(() => {
     }
   });
   
-  (useCorrectionsStore as unknown as jest.Mock).mockReturnValue(mockStore as unknown as unknown as unknown);
+  (useCorrectionsStore as unknown as jest.Mock).mockReturnValue(mockStore as unknown as unknown as unknown as unknown);
 });
 
 describe('CorrectionsPanel', () => {

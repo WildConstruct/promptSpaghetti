@@ -17,24 +17,24 @@ export declare const AuthContextSchema: z.ZodObject<{
     tokenType: z.ZodEnum<["jwt", "api_key", "session"]>;
     expiresAt: z.ZodOptional<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
-    userId: string;
     sessionId: string;
+    userId: string;
+    environment: string;
     roles: string[];
     permissions: string[];
-    environment: string;
     tokenType: "jwt" | "api_key" | "session";
     organizationId?: string | undefined;
     workspaceId?: string | undefined;
     expiresAt?: number | undefined;
 }, {
-    userId: string;
     sessionId: string;
+    userId: string;
     roles: string[];
     permissions: string[];
     tokenType: "jwt" | "api_key" | "session";
     organizationId?: string | undefined;
-    workspaceId?: string | undefined;
     environment?: string | undefined;
+    workspaceId?: string | undefined;
     expiresAt?: number | undefined;
 }>;
 export type AuthContext = z.infer<typeof AuthContextSchema>;
@@ -107,7 +107,10 @@ export declare class AnalyticsAuthorizationService {
     /**
      * Authorize event publication
      */
-    authorizeEventPublication(event: Partial<UnifiedAnalyticsEvent>, authContext: AuthContext): Promise<AuthorizationResult>;
+    authorizeEventPublication(
+      event: Partial<UnifiedAnalyticsEvent>,
+      authContext: AuthContext
+    ): Promise<AuthorizationResult>;
     /**
      * Authorize event access/viewing
      */
@@ -123,7 +126,10 @@ export declare class AnalyticsAuthorizationService {
     /**
      * Authorize dashboard access
      */
-    authorizeDashboardAccess(dashboardType: 'user' | 'organization' | 'admin' | 'system', authContext: AuthContext): Promise<AuthorizationResult>;
+    authorizeDashboardAccess(
+      dashboardType: 'user' | 'organization' | 'admin' | 'system',
+      authContext: AuthContext
+    ): Promise<AuthorizationResult>;
     /**
      * Apply authorization policies to event
      */

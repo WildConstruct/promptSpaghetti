@@ -93,7 +93,7 @@ export const OAuthUserAccountManager: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Auth store for API calls
-  const { authenticatedFetch, ___user } = useAuthStore();
+  const { authenticatedFetch, user: _user } = useAuthStore();
 
   // Load data on mount
   useEffect(() => {

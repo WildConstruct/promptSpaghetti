@@ -7,7 +7,7 @@
  * Task: T-1752989143998-788 - Add report export options
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
@@ -125,12 +125,7 @@ export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({
     getExportStatistics
   } = useReportExport();
 
-  // Load initial data
-  useEffect(() => {
-    loadInitialData();
-  }, []);
-
-  const loadInitialData = async () => {
+  const loadInitialData = useCallback(async () => {
     try {
       await Promise.all([
         loadExportHistory(20),
@@ -141,7 +136,12 @@ export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({
     } catch (error) {
       console.error('Failed to load initial data:', error);
     }
-  };
+  }, [loadExportHistory, loadScheduledExports, loadExportFormats, loadStatistics]);
+
+  // Load initial data
+  useEffect(() => {
+    loadInitialData();
+  }, [loadInitialData]);
 
   const loadStatistics = async () => {
     const stats = await getExportStatistics();
@@ -149,7 +149,7 @@ export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({
   };
 
   // Handle quick export with sample data
-  const handleQuickExport = (___format: 'pdf' | 'excel' | 'csv' | 'json') => {
+  const handleQuickExport = (_format: 'pdf' | 'excel' | 'csv' | 'json') => {
     const reportData = customReportData || generateSampleReportData();
     setCurrentReportData(reportData);
     setExportModalOpen(true);

@@ -135,6 +135,18 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
     }
   };
 
+  const getHeaderTitle = (view: ToolkitView) => {
+    switch (view) {
+    case 'upload': return 'Document Upload & Parsing';
+    case 'analyze': return 'Contract Analysis';
+    case 'compliance': return 'Compliance Review';
+    case 'citations': return 'Citation Management';
+    case 'terminology': return 'Terminology Validation';
+    case 'summary': return 'Results Summary';
+    default: return 'Legal Toolkit';
+    }
+  };
+
   const isViewEnabled = (view: ToolkitView) => {
     switch (view) {
     case 'upload': return true;
@@ -472,9 +484,10 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
             className={`nav-item ${currentView === view ? 'active' : ''} ${!isViewEnabled(view) ? 'disabled' : ''}`}
             onClick={() => isViewEnabled(view) && setCurrentView(view)}
             disabled={!isViewEnabled(view)}
+            data-testid={`nav-${view}-tab`}
           >
             <span className="nav-icon">{getViewIcon(view)}</span>
-            <span>{getViewTitle(view)}</span>
+            <span data-testid={`nav-${view}-title`}>{getViewTitle(view)}</span>
             <div className={`nav-status ${getViewCompletionStatus(view) ? '' : 'incomplete'}`}></div>
           </button>
         ))}
@@ -482,9 +495,9 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
 
       <div className="toolkit-content">
         <div className="view-header">
-          <h2 className="view-title">
+          <h2 className="view-title" data-testid={`header-${currentView}-title`}>
             <span>{getViewIcon(currentView)}</span>
-            {getViewTitle(currentView)}
+            {getHeaderTitle(currentView)}
           </h2>
           <p className="view-description">
             {currentView === 'upload' && 'Upload and parse your legal document to begin analysis'}

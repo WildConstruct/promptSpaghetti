@@ -18,9 +18,9 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  */
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { HelpCircle, X, ChevronLeft, ChevronRight, Play, Pause, SkipForward, ArrowLeft, Info, Lightbulb, BookOpen, Video, FileText, Search, Star, ThumbsUp, ThumbsDown, MessageCircle, ExternalLink, Minimize2, Check, Target, Clock } from 'lucide-react';
-import { Button } from '../ui/Button.js';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Badge } from '../ui/Badge.js';
+import { Button } from '../ui/Button';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Badge } from '../ui/Badge';
 export const HelpTooltip = ({ content, title, position = 'top', trigger = 'hover', delay = 300, maxWidth = 300, showArrow = true, helpLink, helpText, className = '', children, onShow, onHide }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });

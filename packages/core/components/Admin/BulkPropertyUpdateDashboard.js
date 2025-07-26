@@ -9,15 +9,15 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Epic: 17 - Backstage Admin Controls
  */
 import { useState, useEffect, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
-import { Input } from '../ui/Input.js';
-import { Select } from '../ui/Select.js';
-import { Switch } from '../ui/Switch.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
+import { Input } from '../ui/Input';
+import { Select } from '../ui/Select';
+import { Switch } from '../ui/Switch';
 import { Settings, Play, RotateCcw, CheckCircle, XCircle, Clock, FileText, Users, Package, Tag, Archive, Workflow, Globe, Target, Plus, Search, Download, RefreshCw, Eye, Edit, Trash2, Save, Activity, Zap, History } from 'lucide-react';
-import { bulkPropertyUpdateService } from '../../services/BulkPropertyUpdateService.js';
+import { bulkPropertyUpdateService } from '../../services/BulkPropertyUpdateService';
 const TARGET_TYPE_CONFIG = {
     user: { color: 'text-blue-600 bg-blue-100', icon: Users },
     content: { color: 'text-green-600 bg-green-100', icon: FileText },

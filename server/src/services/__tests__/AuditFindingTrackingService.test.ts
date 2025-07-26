@@ -67,7 +67,7 @@ describe('AuditFindingTrackingService', () => {
     mockCollaborationService = new AuditTeamCollaborationService() as jest.Mocked<AuditTeamCollaborationService>;
     mockEventLogger = new DataProtectionEventLogger() as jest.Mocked<DataProtectionEventLogger>;
 
-    mockEventLogger.logDataProtectionEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
+    mockEventLogger.logDataProtectionEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown);
 
     service = new AuditFindingTrackingService(
       mockWorkflowService,

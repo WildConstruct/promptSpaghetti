@@ -81,6 +81,9 @@ export type {
 
 // Image processing utilities
 export { default as ImageProcessor } from './utils/ImageProcessor';
+
+// Import AIModelFactory for local use
+import { AIModelFactory } from './AIModelFactory';
 export type { 
   ImageMetadata, 
   ImageProcessingOptions, 
@@ -107,9 +110,7 @@ export type {
 export * from './performance';
 
 // Utility functions and helpers
-export const createOpenAIModel = async (id: string, apiKey: string, modelName: string = 'gpt-3.5-turbo') => {
-  const factory = new AIModelFactory();
-  return factory.createModel({
+export   return factory.createModel({
     id,
     type: 'text' as any,
     provider: 'openai' as any,
@@ -118,9 +119,7 @@ export const createOpenAIModel = async (id: string, apiKey: string, modelName: s
   });
 };
 
-export const createAnthropicModel = async (id: string, apiKey: string, modelName: string = 'claude-3-sonnet-20240229') => {
-  const factory = new AIModelFactory();
-  return factory.createModel({
+export   return factory.createModel({
     id,
     type: 'text' as any,
     provider: 'anthropic' as any,
@@ -129,9 +128,7 @@ export const createAnthropicModel = async (id: string, apiKey: string, modelName
   });
 };
 
-export const createLocalModel = async (id: string, endpoint: string, modelName: string) => {
-  const factory = new AIModelFactory();
-  return factory.createModel({
+export   return factory.createModel({
     id,
     type: 'text' as any,
     provider: 'local' as any,
@@ -140,14 +137,14 @@ export const createLocalModel = async (id: string, endpoint: string, modelName: 
   });
 };
 
-export const createCustomHTTPModel = async (
-  id: string, 
-  endpoint: string, 
-  requestMapping: HTTPRequestMapping,
-  apiKey?: string
-) => {
-  const factory = new AIModelFactory();
-  const registration = {
+interface HTTPRequestMapping {
+  inputPath: string;
+  outputPath: string;
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  headers?: Record<string, string>;
+}
+
+export   const registration = {
     id,
     provider: 'custom' as any,
     modelName: 'custom-model',

@@ -2,7 +2,7 @@
  * Graph CRDT Adapter - Epic 9.1.2
  * Bridges existing graph schema with CRDT collaborative editing
  */
-import { GraphSyncHandler } from '../../crdt-research/src/graph-sync.js';
+import { GraphSyncHandler } from '../../crdt-research/src/graph-sync';
 /**
  * Adapter that wraps the existing graph model with CRDT capabilities
  */

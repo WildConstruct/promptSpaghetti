@@ -21,7 +21,7 @@
  * @since 2024-01-22
  */
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { SecurityLogger, SecurityEventType, LogLevel } from '../SecurityLogger.js';
+import { SecurityLogger, SecurityEventType, LogLevel } from '../SecurityLogger';
 // Default configuration
 const DEFAULT_CONFIG = {
     enableRealTimeAnalytics: true,

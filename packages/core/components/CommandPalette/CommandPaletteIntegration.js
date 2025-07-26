@@ -7,9 +7,9 @@ import { jsx as _jsx } from "react/jsx-runtime";
  */
 import { useState, useCallback } from 'react';
 import { useReactFlow, useNodes, useEdges } from 'reactflow';
-import { CommandPalette } from './CommandPalette.js';
-import { useCommandPaletteShortcuts } from '../hooks/useKeyboardShortcuts.js';
-import { useGraphStore } from '../graphStore.js';
+import { CommandPalette } from './CommandPalette';
+import { useCommandPaletteShortcuts } from '../hooks/useKeyboardShortcuts';
+import { useGraphStore } from '../graphStore';
 /**
  * Command palette integration component for the graph editor
  */

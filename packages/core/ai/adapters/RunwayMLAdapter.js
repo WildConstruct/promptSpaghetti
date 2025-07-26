@@ -4,7 +4,7 @@
  *
  * Adapter for RunwayML Gen-2 and Gen-3 video generation models
  */
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel.js';
+import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
 export class RunwayMLAdapter extends BaseAIModel {
     config;
     availableModels = ['gen2', 'gen3', 'gen3-turbo'];
@@ -223,6 +223,8 @@ export class RunwayMLAdapter extends BaseAIModel {
             enhance_prompt: true
         };
         const processed = { ...defaults, ...options };
+        // Set text_prompt if provided, or ensure it exists
+        processed.text_prompt = prompt || processed.text_prompt || ''; // Ensure text_prompt is always a string
         // Validate model
         if (!this.availableModels.includes(processed.model)) {
             processed.model = 'gen3';
@@ -290,7 +292,7 @@ export class RunwayMLAdapter extends BaseAIModel {
             throw new Error('No video output received from generation task');
         }
         const videoUrl = task.output[0];
-        const [width, height] = options.resolution.split('x').map(Number);
+        const [width, height] = (options.resolution || '1280x768').split('x').map(Number);
         // Download video data if needed
         let videoData;
         try {
@@ -302,24 +304,24 @@ export class RunwayMLAdapter extends BaseAIModel {
         catch (error) {
             console.warn('Failed to download video data:', error);
         }
-        const credits = this._calculateCredits(options.model, options.duration);
+        const credits = this._calculateCredits(options.model || 'gen3', options.duration || 4);
         return {
             video: {
                 url: videoUrl,
                 data: videoData,
                 format: 'mp4',
-                duration: options.duration,
+                duration: options.duration || 4,
                 resolution: { width, height },
                 fps: 24, // Standard FPS for RunwayML
                 size: videoData?.byteLength || 0
             },
             metadata: {
-                model: options.model,
+                model: options.model || 'gen3',
                 prompt,
                 negative_prompt: options.negative_prompt,
                 generation_id: task.id,
                 seed: options.seed,
-                motion: options.motion,
+                motion: options.motion || 5,
                 camera_motion: options.camera_motion,
                 style_preset: options.style_preset,
                 generation_time: generationTime,

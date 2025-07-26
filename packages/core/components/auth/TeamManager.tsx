@@ -24,7 +24,7 @@ interface Team {
   parentTeamId?: string;
   name: string;
   description?: string;
-  settings: Record<string, any>;
+  settings: Record<string, unknown>;
   createdAt: Date;
   updatedAt: Date;
   level?: number;
@@ -51,16 +51,14 @@ interface CreateTeamData {
   name: string;
   description?: string;
   parentTeamId?: string;
-  settings?: Record<string, any>;
+  settings?: Record<string, unknown>;
 }
 
 interface TeamManagerProps {
   organizationId: string;
 }
 
-export const TeamManager: React.FC<TeamManagerProps> = ({ organizationId }) => {
-  const [teams, setTeams] = useState<Team[]>([]);
-  const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
+export   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [activeTab, setActiveTab] = useState<'overview' | 'members' | 'settings'>('overview');
   const [showCreateForm, setShowCreateForm] = useState(false);

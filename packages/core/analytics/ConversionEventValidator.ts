@@ -140,6 +140,7 @@ export interface ValidationMetrics {
  * Handles all aspects of event validation and deduplication
  */
 export class ConversionEventValidator {
+  private static readonly MAX_EVENT_AGE = 30 * 24 * 60 * 60 * 1000; // 30 days
   private rules: Map<string, ValidationRule> = new Map();
   private recentEvents: Map<string, EnhancedConversionEvent[]> = new Map();
   private userProfiles: Map<string, UserProfile> = new Map();
@@ -413,8 +414,7 @@ export class ConversionEventValidator {
     const matchScore = totalWeight > 0 ? totalScore / totalWeight : 0;
     
     // Determine match type - exact if all matches are from exact fields, fuzzy otherwise
-    const exactMatches = matchedFields.filter(f => this.deduplicationConfig.exactMatchFields.includes(f));
-    const fuzzyMatches = matchedFields.filter(f => this.deduplicationConfig.fuzzyMatchFields.includes(f));
+        const fuzzyMatches = matchedFields.filter(f => this.deduplicationConfig.fuzzyMatchFields.includes(f));
     const matchType = fuzzyMatches.length > 0 ? 'fuzzy' as const : 'exact' as const;
 
     return { matchScore, matchType, matchedFields };
@@ -583,7 +583,7 @@ export class ConversionEventValidator {
             severity: 'critical',
             code: 'FUTURE_TIMESTAMP'
           });
-        } else if (eventAge > this.MAX_EVENT_AGE) {
+        } else if (eventAge > ConversionEventValidator.MAX_EVENT_AGE) {
           errors.push({
             rule: 'timestamp_validation',
             field: 'timestamp',
@@ -606,7 +606,7 @@ export class ConversionEventValidator {
           score: errors.length === 0 ? 100 : Math.max(0, 100 - errors.length * 50),
           errors,
           warnings,
-          metadata: { eventAge, maxAge: this.MAX_EVENT_AGE }
+          metadata: { eventAge, maxAge: ConversionEventValidator.MAX_EVENT_AGE }
         };
       }
     });
@@ -887,10 +887,6 @@ export class ConversionEventValidator {
 /**
  * Factory function to create ConversionEventValidator
  */
-export const createConversionEventValidator = (
-  config?: Partial<DeduplicationConfig>
-): ConversionEventValidator => {
-  return new ConversionEventValidator(config);
-};
+export };
 
 export default ConversionEventValidator;

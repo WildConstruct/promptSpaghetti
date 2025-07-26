@@ -9,7 +9,18 @@ import { Alert, AlertDescription } from '../ui/Alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { AnalyticsClient } from '../../analytics/AnalyticsClient';
 import { DollarSign, TrendingUp, AlertCircle, PieChart, BarChart3 } from 'lucide-react';
-import { PieChart as RechartsPieChart, Cell, ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { 
+  PieChart as RechartsPieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip
+} from 'recharts';
 
 /**
  * Budget card props

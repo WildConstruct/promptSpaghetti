@@ -110,20 +110,20 @@ describe('DeviceVerificationService', () => {
     jest.spyOn(mockEmailTracker, 'sendEmail');
 
     // Set default mock implementations
-    mockFingerprintService.generateFingerprint.mockResolvedValue(testFingerprint as unknown);
+    mockFingerprintService.generateFingerprint.mockResolvedValue(testFingerprint as unknown as unknown);
     mockFingerprintService.assessRisk.mockReturnValue({
       deviceId: testFingerprint.id,
       overallRisk: RiskLevel.LOW,
       riskScore: 15,
       factors: [],
       recommendations: [],
-      timestamp: new Date()
+      timestamp: new Date( as unknown)
     });
 
     mockVerificationCodeManager.generateCode.mockResolvedValue({
       code: '123456',
       codeId: 'code-123'
-    } as unknown);
+    } as unknown as unknown);
 
     mockTrustedDeviceManager.registerTrustedDevice.mockResolvedValue({
       id: 'device-123',
@@ -131,9 +131,9 @@ describe('DeviceVerificationService', () => {
       deviceId: 'device-123',
       fingerprintId: testFingerprint.id,
       verificationToken: 'token-123'
-    } as any as unknown);
+    } as any as unknown as unknown);
 
-    mockEmailTracker.sendEmail.mockResolvedValue('email-123' as unknown);
+    mockEmailTracker.sendEmail.mockResolvedValue('email-123' as unknown as unknown);
 
     service = new DeviceVerificationService(
       mockFingerprintService,
@@ -201,7 +201,7 @@ describe('DeviceVerificationService', () => {
         riskScore: 85,
         factors: [],
         recommendations: [],
-        timestamp: new Date()
+        timestamp: new Date( as unknown)
       });
 
       const request: DeviceVerificationRequestData = {
@@ -563,7 +563,7 @@ describe('DeviceVerificationService', () => {
         }
       };
 
-      mockFingerprintService.generateFingerprint.mockResolvedValue(spoofedFingerprint as unknown);
+      mockFingerprintService.generateFingerprint.mockResolvedValue(spoofedFingerprint as unknown as unknown);
 
       const request: DeviceVerificationRequestData = {
         userId: testUserId,
@@ -587,7 +587,7 @@ describe('DeviceVerificationService', () => {
         riskScore: 98,
         factors: [],
         recommendations: [],
-        timestamp: new Date()
+        timestamp: new Date( as unknown)
       });
 
       const request: DeviceVerificationRequestData = {
@@ -614,7 +614,7 @@ describe('DeviceVerificationService', () => {
         riskScore: 98,
         factors: [],
         recommendations: [],
-        timestamp: new Date()
+        timestamp: new Date( as unknown)
       });
 
       const request: DeviceVerificationRequestData = {
@@ -758,7 +758,7 @@ describe('DeviceVerificationService', () => {
 
   describe('Error Handling', () => {
     test('should handle verification code generation failure', async () => {
-      mockVerificationCodeManager.generateCode.mockResolvedValue(null as unknown);
+      mockVerificationCodeManager.generateCode.mockResolvedValue(null as unknown as unknown);
 
       const request: DeviceVerificationRequestData = {
         userId: testUserId,

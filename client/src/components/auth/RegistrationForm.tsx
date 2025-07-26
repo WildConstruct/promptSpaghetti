@@ -35,14 +35,7 @@ interface RegistrationFormProps {
   className?: string;
 }
 
-export const RegistrationForm: React.FC<RegistrationFormProps> = ({
-  invitationToken,
-  onSuccess,
-  onCancel,
-  className
-}) => {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState<Partial<RegistrationFormData>>({
+export   const [formData, setFormData] = useState<Partial<RegistrationFormData>>({
     marketingConsent: false
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -173,7 +166,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
         password: formData.password!,
         firstName: formData.firstName,
         lastName: formData.lastName,
-        displayName: formData.displayName || `${formData.firstName || ''} ${formData.lastName || ''}`.trim(),
+        displayName: formData.displayName ?? `${formData.firstName ?? ''} ${formData.lastName ?? ''}`.trim(),
         invitationToken
       };
 
@@ -242,7 +235,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
           {errors.email && <ValidationMessage message={errors.email} type="error" />}
           {validationResult?.suggestions?.find(s => s.field === 'email') && (
             <EmailSuggestions 
-              suggestion={validationResult.suggestions.find(s => s.field === 'email')!.suggestion}
+              suggestion={validationResult.suggestions.find(s => s.field === 'email')?.suggestion ?? ''}
               onAccept={(suggestion) => handleFieldChange('email', suggestion)}
             />
           )}

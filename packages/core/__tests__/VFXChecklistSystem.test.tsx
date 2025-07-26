@@ -889,11 +889,11 @@ describe('VFX Checklist System Components', () => {
           <VFXChecklistSystem
             checklist={sampleChecklist}
             currentUser={sampleVFXUser}
-            onChecklistUpdate={jest.fn()}
-            onItemCreate={jest.fn()}
-            onItemUpdate={jest.fn()}
-            onItemDelete={jest.fn()}
-            onCommentCreate={jest.fn()}
+            onChecklistUpdate={jest.fn<unknown[], unknown>()}
+            onItemCreate={jest.fn<unknown[], unknown>()}
+            onItemUpdate={jest.fn<unknown[], unknown>()}
+            onItemDelete={jest.fn<unknown[], unknown>()}
+            onCommentCreate={jest.fn<unknown[], unknown>()}
           />
         );
       }).not.toThrow();
@@ -911,11 +911,11 @@ describe('VFX Checklist System Components', () => {
           <VFXChecklistSystem
             checklist={emptyChecklist}
             currentUser={sampleVFXUser}
-            onChecklistUpdate={jest.fn()}
-            onItemCreate={jest.fn()}
-            onItemUpdate={jest.fn()}
-            onItemDelete={jest.fn()}
-            onCommentCreate={jest.fn()}
+            onChecklistUpdate={jest.fn<unknown[], unknown>()}
+            onItemCreate={jest.fn<unknown[], unknown>()}
+            onItemUpdate={jest.fn<unknown[], unknown>()}
+            onItemDelete={jest.fn<unknown[], unknown>()}
+            onCommentCreate={jest.fn<unknown[], unknown>()}
           />
         );
       }).not.toThrow();

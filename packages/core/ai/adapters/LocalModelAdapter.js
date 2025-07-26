@@ -4,7 +4,7 @@
  *
  * Adapter for locally hosted AI models (Ollama, local inference servers)
  */
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel.js';
+import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
 export class LocalModelAdapter extends BaseAIModel {
     config;
     modelInfo = null;
@@ -347,6 +347,9 @@ export class LocalModelAdapter extends BaseAIModel {
     }
     async _performHealthCheck() {
         await this._testConnection();
+    }
+    updateMetadata(updates) {
+        this._metadata = { ...this._metadata, ...updates };
     }
 }
 export default LocalModelAdapter;

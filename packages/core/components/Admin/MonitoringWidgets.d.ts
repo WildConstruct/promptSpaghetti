@@ -20,7 +20,7 @@ interface MonitoringWidgetProps {
     config: WidgetConfig;
     userRole: string;
     data?: unknown;
-    onAction?: (widgetId: string, action: string, params?: any) => void;
+    onAction?: (widgetId: string, action: string, params?: Record<string, unknown>) => void;
     className?: string;
 }
 export declare const SystemHealthWidget: React.FC<MonitoringWidgetProps>;

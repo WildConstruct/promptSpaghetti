@@ -28,7 +28,7 @@ export interface AdvancedNodeData {
   id: string;
   type: string;
   config: AdvancedNodeConfig;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   metadata?: {
     version: string;
     created: string;
@@ -41,11 +41,11 @@ export interface AdvancedNodeData {
  */
 export interface AdvancedExecutionContext extends ExecutionContext {
   /** State storage for stateful nodes (nodeId -> state) */
-  nodeStates: Map<string, any>;
+  nodeStates: Map<string, unknown>;
   /** Current evaluation depth (for cycle detection) */
   evaluationDepth: number;
   /** Performance cache for expensive operations (key -> result) */
-  cache: Map<string, any>;
+  cache: Map<string, unknown>;
   /** Pseudorandom number generator function for deterministic execution */
   prng: () => number;
   /** Execution metadata and debugging info */
@@ -56,9 +56,9 @@ export interface AdvancedExecutionContext extends ExecutionContext {
     performanceMetrics: Map<string, number>;
   };
   /** Optional inputs for nodes */
-  inputs?: Record<string, any>;
+  inputs?: Record<string, unknown>;
   /** Optional outputs storage */
-  outputs?: Record<string, any>;
+  outputs?: Record<string, unknown>;
 }
 
 /**
@@ -101,7 +101,7 @@ export abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode
   /**
    * Set the current state for this node in the execution context
    */
-  protected setState(ctx: AdvancedExecutionContext, state: any): void {
+  protected setState(ctx: AdvancedExecutionContext, state: unknown): void {
     ctx.nodeStates.set(this.id, state);
   }
 
@@ -182,20 +182,21 @@ export abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode
  * Concrete implementation of AdvancedExecutionContext for tests and direct instantiation
  */
 export class AdvancedExecutionContextImpl implements AdvancedExecutionContext {
-  variables: Record<string, any>;
+  variables: Record<string, unknown>;
   seed: string | number;
   nodeStates: Map<string, any>;
   evaluationDepth: number;
   cache: Map<string, any>;
   executionMeta: {
     startTime: number;
+    executionId: string;
     nodeExecutionOrder: string[];
     performanceMetrics: Map<string, number>;
   };
-  inputs?: Record<string, any>;
-  outputs?: Record<string, any>;
+  inputs?: Record<string, unknown>;
+  outputs?: Record<string, unknown>;
 
-  constructor(seed: string | number, variables: Record<string, any> = {}) {
+  constructor(seed: string | number, variables: Record<string, unknown> = {}) {
     this.variables = { ...variables };
     this.seed = seed;
     this.nodeStates = new Map();
@@ -211,11 +212,8 @@ export class AdvancedExecutionContextImpl implements AdvancedExecutionContext {
   }
 }
 
-// Export as both named and default for backward compatibility
+// Export the implementation class
 export { AdvancedExecutionContextImpl as AdvancedExecutionContext };
-
-// Re-export the interface explicitly to avoid visibility issues
-export type { AdvancedExecutionContext as AdvancedExecutionContextInterface };
 
 /**
  * Utility functions for working with advanced execution contexts
@@ -232,6 +230,7 @@ export class AdvancedExecutionUtils {
       cache: new Map(),
       executionMeta: {
         startTime: performance.now(),
+        executionId: `exec_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
         nodeExecutionOrder: [],
         performanceMetrics: new Map()
       }
@@ -253,7 +252,7 @@ export class AdvancedExecutionUtils {
   /**
    * Check for potential infinite loops in stateful node execution
    */
-  static detectInfiniteLoop(ctx: AdvancedExecutionContext, _______nodeId: string): boolean {
+  static detectInfiniteLoop(ctx: AdvancedExecutionContext, nodeId: string): boolean {
     const MAX_DEPTH = 1000; // Configurable limit
     return ctx.evaluationDepth > MAX_DEPTH;
   }
@@ -293,13 +292,13 @@ export class ValidationHelpers {
     return { valid: false, errors, warnings };
   }
 
-  static validateRequired(value: any, fieldName: string): string[] {
+  static validateRequired(value: unknown, fieldName: string): string[] {
     return value === undefined || value === null || value === '' 
       ? [`${fieldName} is required`] 
       : [];
   }
 
-  static validateArray(value: any, fieldName: string, minLength: number = 0): string[] {
+  static validateArray(value: unknown, fieldName: string, minLength: number = 0): string[] {
     const errors: string[] = [];
     
     if (!Array.isArray(value)) {
@@ -312,7 +311,7 @@ export class ValidationHelpers {
   }
 
   static validateNumericRange(
-    value: any, 
+    value: unknown, 
     fieldName: string, 
     min?: number, 
     max?: number
@@ -340,7 +339,7 @@ export class ValidationHelpers {
 export abstract class AdvancedRuntimeNodeWithIO<TOutput = unknown> extends AdvancedRuntimeNode<TOutput> {
   protected ioHandler: unknown; // Will be imported from io-system
 
-  constructor(id: string, config: AdvancedNodeConfig, ioSpec?: any) {
+  constructor(id: string, config: AdvancedNodeConfig, ioSpec?: unknown) {
     super(id, config);
     if (ioSpec) {
       // Dynamic import to avoid circular dependency
@@ -380,7 +379,7 @@ export class SerializationHelpers {
     id: string,
     type: string,
     config: AdvancedNodeConfig,
-    data: Record<string, any>
+    data: Record<string, unknown>
   ): AdvancedNodeData {
     return {
       id,

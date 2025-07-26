@@ -116,20 +116,33 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         onSuccess={onSuccess}
       />
 
-      <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+      <form 
+        onSubmit={handleSubmit} 
+        style={{ width: '100%' }}
+        role="form"
+        aria-label="Login form"
+        noValidate
+      >
+        <fieldset style={{ border: 'none', padding: 0, margin: 0 }}>
+          <legend className="sr-only">Login credentials</legend>
         {/* Email Field */}
         <div style={{ marginBottom: '20px' }}>
-          <label style={{
-            display: 'block',
-            marginBottom: '8px',
-            fontSize: '14px',
-            fontWeight: '500',
-            color: '#333'
-          }}>
-          Email Address
+          <label 
+            htmlFor="login-email"
+            style={{
+              display: 'block',
+              marginBottom: '8px',
+              fontSize: '14px',
+              fontWeight: '500',
+              color: '#333'
+            }}
+          >
+            Email Address *
           </label>
           <input
+            id="login-email"
             type="email"
+            name="email"
             value={formData.email}
             onChange={(e) => handleInputChange('email', e.target.value)}
             onBlur={() => handleInputBlur('email')}
@@ -144,13 +157,21 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             placeholder="Enter your email"
             disabled={isLoading}
             required
+            aria-required="true"
+            aria-invalid={errors.email ? 'true' : 'false'}
+            aria-describedby={errors.email ? 'email-error' : undefined}
+            autoComplete="email"
           />
           {errors.email && (
-            <div style={{
-              color: '#dc3545',
-              fontSize: '14px',
-              marginTop: '4px'
-            }}>
+            <div 
+              id="email-error"
+              role="alert"
+              style={{
+                color: '#dc3545',
+                fontSize: '14px',
+                marginTop: '4px'
+              }}
+            >
               {errors.email}
             </div>
           )}
@@ -158,18 +179,23 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
         {/* Password Field */}
         <div style={{ marginBottom: '20px' }}>
-          <label style={{
-            display: 'block',
-            marginBottom: '8px',
-            fontSize: '14px',
-            fontWeight: '500',
-            color: '#333'
-          }}>
-          Password
+          <label 
+            htmlFor="login-password"
+            style={{
+              display: 'block',
+              marginBottom: '8px',
+              fontSize: '14px',
+              fontWeight: '500',
+              color: '#333'
+            }}
+          >
+            Password *
           </label>
           <div style={{ position: 'relative' }}>
             <input
+              id="login-password"
               type={showPassword ? 'text' : 'password'}
+              name="password"
               value={formData.password}
               onChange={(e) => handleInputChange('password', e.target.value)}
               onBlur={() => handleInputBlur('password')}
@@ -185,8 +211,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({
               placeholder="Enter your password"
               disabled={isLoading}
               required
+              aria-required="true"
+              aria-invalid={errors.password ? 'true' : 'false'}
+              aria-describedby={errors.password ? 'password-error' : 'password-toggle'}
+              autoComplete="current-password"
             />
             <button
+              id="password-toggle"
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               style={{
@@ -201,16 +232,23 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                 fontSize: '14px'
               }}
               disabled={isLoading}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              aria-controls="login-password"
+              aria-pressed={showPassword}
             >
               {showPassword ? 'Hide' : 'Show'}
             </button>
           </div>
           {errors.password && (
-            <div style={{
-              color: '#dc3545',
-              fontSize: '14px',
-              marginTop: '4px'
-            }}>
+            <div 
+              id="password-error"
+              role="alert"
+              style={{
+                color: '#dc3545',
+                fontSize: '14px',
+                marginTop: '4px'
+              }}
+            >
               {errors.password}
             </div>
           )}
@@ -218,20 +256,31 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
         {/* Remember Me Checkbox */}
         <div style={{ marginBottom: '20px' }}>
-          <label style={{
-            display: 'flex',
-            alignItems: 'center',
-            fontSize: '14px',
-            cursor: 'pointer'
+          <label 
+            htmlFor="remember-me"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              fontSize: '14px',
+              cursor: 'pointer'
           }}>
             <input
+              id="remember-me"
               type="checkbox"
+              name="rememberMe"
               checked={formData.rememberMe}
               onChange={(e) => handleInputChange('rememberMe', e.target.checked)}
               style={{ marginRight: '8px' }}
               disabled={isLoading}
+              aria-describedby="remember-me-description"
             />
-          Remember me
+            Remember me
+            <span 
+              id="remember-me-description" 
+              className="sr-only"
+            >
+              Keep me signed in on this device
+            </span>
           </label>
         </div>
 
@@ -251,10 +300,55 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             cursor: isLoading ? 'not-allowed' : 'pointer',
             transition: 'background-color 0.2s'
           }}
+          aria-describedby={authError ? 'form-error' : undefined}
         >
           {isLoading ? 'Signing in...' : 'Sign In'}
         </button>
+        
+        {/* Loading status for screen readers */}
+        {isLoading && (
+          <div 
+            aria-live="polite" 
+            aria-atomic="true" 
+            className="sr-only"
+          >
+            Signing in, please wait...
+          </div>
+        )}
+        
+        {/* Form-level error */}
+        {authError && (
+          <div 
+            id="form-error"
+            role="alert"
+            style={{
+              color: '#dc3545',
+              fontSize: '14px',
+              marginTop: '12px',
+              textAlign: 'center'
+            }}
+          >
+            {authError}
+          </div>
+        )}
+        
+        </fieldset>
       </form>
+      
+      {/* Add screen reader only styles */}
+      <style>{`
+        .sr-only {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
+        }
+      `}</style>
     </div>
   );
 };

@@ -51,7 +51,7 @@ describe('TemporaryAccessGrantService', () => {
     mockWorkflowService = new AccessRequestWorkflowService() as jest.Mocked<AccessRequestWorkflowService>;
 
     // Mock the audit service methods
-    mockAuditService.logEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
+    mockAuditService.logEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown);
 
     service = new TemporaryAccessGrantService(
       mockAuditService,

@@ -4,7 +4,7 @@ export declare class DatabaseService {
     private pool;
     private config;
     constructor(config: AuthConfig);
-    query(text: string, params?: any[]): Promise<QueryResult<any>>;
+    query(text: string, params?: unknown[]): Promise<QueryResult<unknown>>;
     transaction<T>(callback: (client: PoolClient) => Promise<T>): Promise<T>;
     healthCheck(): Promise<boolean>;
     initializeSchema(): Promise<void>;
@@ -15,7 +15,7 @@ export declare class DatabaseService {
         waitingCount: number;
     };
     getClient(): Promise<PoolClient>;
-    findUserByEmail(email: string): Promise<any | null>;
-    findUserById(id: string): Promise<any | null>;
+    findUserByEmail(email: string): Promise<unknown | null>;
+    findUserById(id: string): Promise<unknown | null>;
 }
 //# sourceMappingURL=DatabaseService.d.ts.map

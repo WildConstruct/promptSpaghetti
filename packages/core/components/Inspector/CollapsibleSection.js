@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-export const CollapsibleSection = ({ title, collapsed, onToggle, children }) => {
+export const CollapsibleSection = ({ title, collapsed, onToggle, children }: { title: string, collapsed: boolean, onToggle: () => void, children: any }) => {
     return (_jsxs("div", { style: { borderBottom: '1px solid #4a5568' }, children: [_jsxs("button", { onClick: onToggle, style: {
                     width: '100%',
                     padding: '12px 16px',

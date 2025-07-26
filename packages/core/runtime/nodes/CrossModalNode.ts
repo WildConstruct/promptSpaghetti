@@ -153,7 +153,7 @@ export class MultimodalUnderstandingNode extends AdvancedRuntimeNode {
     }
   }
 
-  private _createCrossModalAnalysis(result: any, inputs: MultimodalInput[]): CrossModalAnalysis {
+  private _createCrossModalAnalysis(result: Record<string, unknown>, inputs: MultimodalInput[]): CrossModalAnalysis {
     return {
       content_understanding: {
         overall_summary: result.understanding.summary,
@@ -164,7 +164,7 @@ export class MultimodalUnderstandingNode extends AdvancedRuntimeNode {
       modality_insights: inputs.map((input, index) => ({
         modality: input.type,
         confidence: result.understanding.content_analysis[index]?.confidence || 0.8,
-        key_elements: result.understanding.content_analysis[index]?.detected_elements?.map((e: any) => e.value) || [],
+        key_elements: result.understanding.content_analysis[index]?.detected_elements?.map((e: Error) => e.value) || [],
         dominant_features: this._extractDominantFeatures(input.type, result)
       })),
       cross_modal_connections: result.understanding.cross_modal_connections || [],
@@ -177,7 +177,7 @@ export class MultimodalUnderstandingNode extends AdvancedRuntimeNode {
     };
   }
 
-  private _calculateOverallSentiment(emotions: any[]): { score: number; label: string } {
+  private _calculateOverallSentiment(emotions: unknown[]): { score: number; label: string } {
     if (emotions.length === 0) {
       return { score: 0, label: 'neutral' };
     }
@@ -207,7 +207,7 @@ export class MultimodalUnderstandingNode extends AdvancedRuntimeNode {
     return { score: Math.max(-1, Math.min(1, avgScore)), label };
   }
 
-  private _calculateComplexity(inputs: MultimodalInput[], result: any): number {
+  private _calculateComplexity(inputs: MultimodalInput[], result: Record<string, unknown>): number {
     let complexity = 0;
 
     // Factor in number of modalities
@@ -215,7 +215,7 @@ export class MultimodalUnderstandingNode extends AdvancedRuntimeNode {
     complexity += uniqueModalities.size * 0.2;
 
     // Factor in content analysis complexity
-    const analysisElements = result.understanding.content_analysis?.reduce((sum: number, analysis: any) => 
+    const analysisElements = result.understanding.content_analysis?.reduce((sum: number, analysis: unknown) => 
       sum + (analysis.detected_elements?.length || 0), 0) || 0;
     complexity += Math.min(analysisElements / 20, 0.5);
 
@@ -226,7 +226,7 @@ export class MultimodalUnderstandingNode extends AdvancedRuntimeNode {
     return Math.min(1, complexity);
   }
 
-  private _extractDominantFeatures(modality: string, result: any): string[] {
+  private _extractDominantFeatures(modality: string, result: Record<string, unknown>): string[] {
     const features: Record<string, string[]> = {
       'text': ['language', 'sentiment', 'entities', 'topics'],
       'image': ['objects', 'scenes', 'people', 'colors'],
@@ -262,7 +262,7 @@ export class MultimodalUnderstandingNode extends AdvancedRuntimeNode {
     }
 
     if (inputs.inputs && Array.isArray(inputs.inputs)) {
-      inputs.inputs.forEach((input: any, index: number) => {
+      inputs.inputs.forEach((input: unknown, index: number) => {
         if (!input.type || !['text', 'image', 'audio', 'video'].includes(input.type)) {
           errors.push(`Input ${index}: Invalid or missing type`);
         }
@@ -304,8 +304,7 @@ export class ContentComparisonNode extends AdvancedRuntimeNode {
       const contentB = inputs.get('content_b') as MultimodalInput[];
       const comparisonAspects = inputs.get('comparison_aspects') as string[] || ['content', 'style', 'emotion', 'quality'];
       const includeSimilarityScore = inputs.getBoolean('include_similarity_score', true);
-      const detailedAnalysis = inputs.getBoolean('detailed_analysis', true);
-
+      
       if (!contentA || !contentB || contentA.length === 0 || contentB.length === 0) {
         throw new Error('Both content sets are required for comparison');
       }
@@ -365,7 +364,13 @@ export class ContentComparisonNode extends AdvancedRuntimeNode {
     }
   }
 
-  private _analyzeComparison(result: any, contentA: MultimodalInput[], contentB: MultimodalInput[], aspects: string[]): any {
+  private _analyzeComparison(
+    result: Record<string,
+    unknown>,
+    contentA: MultimodalInput[],
+    contentB: MultimodalInput[],
+    aspects: string[]
+  ): unknown {
     const summary = result.understanding.summary;
     
     return {
@@ -380,7 +385,7 @@ export class ContentComparisonNode extends AdvancedRuntimeNode {
     };
   }
 
-  private _extractCharacteristics(content: MultimodalInput[]): any {
+  private _extractCharacteristics(content: MultimodalInput[]): unknown {
     return {
       modalities: [...new Set(content.map(c => c.type))],
       content_count: content.length,
@@ -458,7 +463,7 @@ export class ContentComparisonNode extends AdvancedRuntimeNode {
     }
   }
 
-  private _calculateSimilarityScores(result: any, aspects: string[]): Record<string, number> {
+  private _calculateSimilarityScores(result: Record<string, unknown>, aspects: string[]): Record<string, number> {
     const scores: Record<string, number> = {};
     
     aspects.forEach(aspect => {
@@ -586,12 +591,12 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
 
   private _createAdaptationPlan(
     sourceContent: MultimodalInput[],
-    analysis: any,
+    analysis: unknown,
     targetModality: string,
     style: string,
     audience: string,
     constraints: Record<string, any>
-  ): any {
+  ): unknown {
     const sourceModalities = [...new Set(sourceContent.map(c => c.type))];
     const keyElements = this._extractKeyElements(analysis);
     
@@ -618,7 +623,7 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
     };
   }
 
-  private _extractKeyElements(analysis: any): { preserve: string[]; transform: string[] } {
+  private _extractKeyElements(analysis: unknown): { preserve: string[]; transform: string[] } {
     const preserve: string[] = [];
     const transform: string[] = [];
 
@@ -629,13 +634,13 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
 
     // Extract elements that may need transformation
     if (analysis.extracted_data.entities) {
-      transform.push(...analysis.extracted_data.entities.map((e: any) => e.name));
+      transform.push(...analysis.extracted_data.entities.map((e: Error) => e.name));
     }
 
     return { preserve, transform };
   }
 
-  private _determineEmotionalTone(emotions: any[]): string {
+  private _determineEmotionalTone(emotions: unknown[]): string {
     if (emotions.length === 0) return 'neutral';
 
     const dominantEmotion = emotions.reduce((prev, current) => 
@@ -645,7 +650,7 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
     return dominantEmotion.emotion;
   }
 
-  private _assessComplexity(analysis: any): 'low' | 'medium' | 'high' {
+  private _assessComplexity(analysis: unknown): 'low' | 'medium' | 'high' {
     const analysisCount = analysis.understanding.content_analysis?.length || 0;
     const connectionCount = analysis.understanding.cross_modal_connections?.length || 0;
     
@@ -809,10 +814,10 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
   }
 
   private _generateAdaptedContentSpec(
-    analysis: any,
+    analysis: unknown,
     targetModality: string,
-    plan: any
-  ): any {
+    plan: unknown
+  ): unknown {
     return {
       target_modality: targetModality,
       content_outline: this._generateContentOutline(analysis, targetModality),
@@ -828,7 +833,7 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
     };
   }
 
-  private _generateContentOutline(analysis: any, targetModality: string): any {
+  private _generateContentOutline(analysis: unknown, targetModality: string): unknown {
     const summary = analysis.understanding.summary;
     const keyInsights = analysis.understanding.key_insights || [];
 
@@ -862,7 +867,7 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
     return outlines[targetModality] || outlines['text'];
   }
 
-  private _generateTechnicalSpecs(targetModality: string, constraints: Record<string, any>): any {
+  private _generateTechnicalSpecs(targetModality: string, constraints: Record<string, any>): unknown {
     const specs: Record<string, any> = {
       'text': {
         format: 'markdown',

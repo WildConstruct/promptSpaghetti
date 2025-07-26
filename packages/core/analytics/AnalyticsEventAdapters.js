@@ -4,7 +4,7 @@
  * Adapters to integrate existing 12+ analytics systems with the unified event bus
  * while preserving their original functionality and data schemas.
  */
-import { AnalyticsEventType, EventCategory, EventSeverity } from './UnifiedEventBus.js';
+import { AnalyticsEventType, EventCategory, EventSeverity } from './UnifiedEventBus';
 /**
  * Base Analytics Adapter
  *
@@ -26,17 +26,21 @@ export class BaseAnalyticsAdapter {
             return null;
         try {
             const transformedEvent = this.transformEvent(legacyEvent);
+            const { id, timestamp, ...eventWithoutIdAndTimestamp } = transformedEvent;
             return await this.eventBus.publishEvent({
                 source: this.systemName,
                 category: EventCategory.SYSTEM,
                 severity: EventSeverity.INFO,
                 type: AnalyticsEventType.INFO_EVENT,
+                version: '1.0',
+                environment: 'production',
+                tags: ['adapter', this.systemName],
                 data: {},
                 metadata: {
                     originalSystem: this.systemName,
                     adaptedAt: Date.now()
                 },
-                ...transformedEvent
+                ...eventWithoutIdAndTimestamp
             });
         }
         catch (error) {

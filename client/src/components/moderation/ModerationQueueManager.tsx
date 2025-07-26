@@ -18,7 +18,7 @@ interface ModerationItem {
   riskScore: number;
   automatedFlags: string[];
   source: 'user_report' | 'automated_detection' | 'proactive_review';
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 interface QueueFilters {
@@ -61,7 +61,7 @@ export const ModerationQueueManager: React.FC<ModerationQueueManagerProps> = ({
   const [sortBy, setSortBy] = useState<string>('priority');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [viewMode, setViewMode] = useState<'list' | 'grid' | 'detailed'>('list');
-  const [___showBulkActions, setShowBulkActions] = useState(false);
+  const [_showBulkActions, setShowBulkActions] = useState(false);
 
   const filteredAndSortedItems = useMemo(() => {
     const filtered = items.filter(item => {
@@ -90,10 +90,11 @@ export const ModerationQueueManager: React.FC<ModerationQueueManagerProps> = ({
       let compareValue = 0;
       
       switch (sortBy) {
-      case 'priority':
+      case 'priority': {
         const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
         compareValue = priorityOrder[a.priority] - priorityOrder[b.priority];
         break;
+      }
       case 'date':
         compareValue = a.createdAt.getTime() - b.createdAt.getTime();
         break;
@@ -127,7 +128,7 @@ export const ModerationQueueManager: React.FC<ModerationQueueManagerProps> = ({
     );
   };
 
-  const handleBulkAction = (action: string, data?: any) => {
+  const handleBulkAction = (action: string, data?: unknown) => {
     if (selectedItems.length === 0) return;
     onBulkAction(selectedItems, action, data);
     setSelectedItems([]);

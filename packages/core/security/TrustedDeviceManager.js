@@ -16,7 +16,7 @@
  */
 import { EventEmitter } from 'events';
 import crypto from 'crypto';
-import { RiskLevel, FingerprintType } from './DeviceFingerprintingService.js';
+import { RiskLevel, FingerprintType } from './DeviceFingerprintingService';
 // Trust status for devices
 export var TrustStatus;
 (function (TrustStatus) {

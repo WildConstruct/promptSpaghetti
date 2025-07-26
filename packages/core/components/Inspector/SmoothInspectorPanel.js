@@ -7,10 +7,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  */
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Maximize2, Minimize2 } from 'lucide-react';
-import { PropertiesSection } from './PropertiesSection.js';
-import { PreviewSection } from './PreviewSection.js';
-import { useUISettingsStore } from '../../stores/uiSettingsStore.js';
-import { createSmoothTransition, animationDurations, easingFunctions, useSmoothHover, AnimatedElement } from '../../utils/smoothAnimations.js';
+import { PropertiesSection } from './PropertiesSection';
+import { PreviewSection } from './PreviewSection';
+import { useUISettingsStore } from '../../stores/uiSettingsStore';
+import { createSmoothTransition, animationDurations, easingFunctions, useSmoothHover, AnimatedElement } from '../../utils/smoothAnimations';
 import '../../styles/smoothAnimations.css';
 // Filmmaker-friendly node type names
 const getFilmmakerFriendlyName = (nodeType) => {

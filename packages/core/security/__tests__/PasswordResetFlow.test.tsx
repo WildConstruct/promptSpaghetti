@@ -7,6 +7,7 @@
 
 import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { PasswordResetFlow, ResetStep, PasswordStrength } from '../components/PasswordResetFlow';
 
 // Mock the password reset managers

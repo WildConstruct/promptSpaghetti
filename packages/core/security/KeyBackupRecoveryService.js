@@ -16,7 +16,7 @@
  */
 import { EventEmitter } from 'events';
 import { createHash, randomBytes, createHmac } from 'crypto';
-import { KeyStatus, KeyType, KeyPurpose } from './KeyManagementService.js';
+import { KeyStatus, KeyType, KeyPurpose } from './KeyManagementService';
 // Backup types
 export var BackupType;
 (function (BackupType) {

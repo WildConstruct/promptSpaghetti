@@ -34,7 +34,7 @@ describe('PolicyDataModel', () => {
     };
 
     mockDatabase = {
-      getClient: jest.fn<unknown[], unknown>().mockResolvedValue(mockClient as unknown as unknown as unknown as unknown),
+      getClient: jest.fn<unknown[], unknown>().mockResolvedValue(mockClient as unknown as unknown as unknown as unknown as unknown),
       query: jest.fn<unknown[], unknown>()
     } as any;
 
@@ -183,7 +183,7 @@ describe('PolicyDataModel', () => {
         testing: '{}'
       };
 
-      mockDatabase.query.mockResolvedValue({ rows: [mockRow] } as unknown as unknown as unknown as unknown);
+      mockDatabase.query.mockResolvedValue({ rows: [mockRow] } as unknown as unknown as unknown as unknown as unknown);
 
       // Act
       const result = await policyService.getPolicy(policyId);
@@ -202,7 +202,7 @@ describe('PolicyDataModel', () => {
 
     it('should return null for non-existent policy', async () => {
       // Arrange
-      mockDatabase.query.mockResolvedValue({ rows: [] } as unknown as unknown as unknown as unknown);
+      mockDatabase.query.mockResolvedValue({ rows: [] } as unknown as unknown as unknown as unknown as unknown);
 
       // Act
       const result = await policyService.getPolicy('non-existent');
@@ -250,7 +250,10 @@ describe('PolicyDataModel', () => {
         configuration: { global_settings: { default_severity: 'medium' } }
       } as Policy;
 
-      jest.spyOn(policyService, 'getPolicy').mockResolvedValue(existingPolicy as unknown as unknown as unknown as unknown);
+      jest.spyOn(
+        policyService,
+        'getPolicy'
+      ).mockResolvedValue(existingPolicy as unknown as unknown as unknown as unknown as unknown);
 
       mockClient.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
@@ -273,7 +276,7 @@ describe('PolicyDataModel', () => {
     it('should delete policy successfully', async () => {
       // Arrange
       const policyId = 'test-policy-001';
-      mockDatabase.query.mockResolvedValue({ rows: [{ id: policyId }] } as unknown as unknown as unknown as unknown);
+      mockDatabase.query.mockResolvedValue({ rows: [{ id: policyId }] } as unknown as unknown as unknown as unknown as unknown);
 
       // Act
       await policyService.deletePolicy(policyId);
@@ -324,7 +327,7 @@ describe('PolicyDataModel', () => {
         }
       ];
 
-      mockDatabase.query.mockResolvedValue({ rows: mockRows } as unknown as unknown as unknown as unknown);
+      mockDatabase.query.mockResolvedValue({ rows: mockRows } as unknown as unknown as unknown as unknown as unknown);
 
       // Act
       const result = await policyService.listPolicies(filters);
@@ -429,13 +432,13 @@ describe('PolicyDataModel', () => {
         }
       };
 
-      jest.spyOn(policyService, 'getPolicy').mockResolvedValue(mockPolicy as unknown as unknown as unknown as unknown);
+      jest.spyOn(policyService, 'getPolicy').mockResolvedValue(mockPolicy as unknown as unknown as unknown as unknown as unknown);
       
       // Mock the logPolicyEvaluation method
       const logSpy = jest.spyOn(
         policyService as any,
         'logPolicyEvaluation'
-      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown);
+      ).mockResolvedValue(undefined as unknown as unknown as unknown as unknown as unknown);
 
       // Act
       const result = await policyService.evaluatePolicy(policyId, context);
@@ -468,7 +471,7 @@ describe('PolicyDataModel', () => {
         context_data: {}
       };
 
-      jest.spyOn(policyService, 'getPolicy').mockResolvedValue(null as unknown as unknown as unknown as unknown);
+      jest.spyOn(policyService, 'getPolicy').mockResolvedValue(null as unknown as unknown as unknown as unknown as unknown);
 
       // Act & Assert
       await expect(policyService.evaluatePolicy(policyId, context))
@@ -601,7 +604,7 @@ describe('PolicyDataModel', () => {
         max_execution_time: '100'
       };
 
-      mockDatabase.query.mockResolvedValue({ rows: [mockMetricsData] } as unknown as unknown as unknown as unknown);
+      mockDatabase.query.mockResolvedValue({ rows: [mockMetricsData] } as unknown as unknown as unknown as unknown as unknown);
 
       // Act
       const result = await policyService.getPolicyMetrics(policyId, timeRange);
@@ -637,7 +640,7 @@ describe('PolicyDataModel', () => {
           avg_execution_time: null,
           max_execution_time: null
         }]
-      } as unknown as unknown as unknown as unknown);
+      } as unknown as unknown as unknown as unknown as unknown);
 
       // Act
       const result = await policyService.getPolicyMetrics(policyId, timeRange);

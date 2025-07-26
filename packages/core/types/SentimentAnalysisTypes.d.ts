@@ -118,12 +118,12 @@ export declare const SentimentAnalysisSchema: z.ZodObject<{
         sentiment: z.ZodEnum<["positive", "neutral", "negative"]>;
     }, "strip", z.ZodTypeAny, {
         relevance: number;
-        topic: string;
         sentiment: "positive" | "neutral" | "negative";
+        topic: string;
     }, {
         relevance: number;
-        topic: string;
         sentiment: "positive" | "neutral" | "negative";
+        topic: string;
     }>, "many">>;
     keywords: z.ZodDefault<z.ZodArray<z.ZodObject<{
         keyword: z.ZodString;
@@ -131,15 +131,15 @@ export declare const SentimentAnalysisSchema: z.ZodObject<{
         sentiment: z.ZodEnum<["positive", "neutral", "negative"]>;
         frequency: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
+        frequency: number;
         sentiment: "positive" | "neutral" | "negative";
         keyword: string;
         importance: number;
-        frequency: number;
     }, {
+        frequency: number;
         sentiment: "positive" | "neutral" | "negative";
         keyword: string;
         importance: number;
-        frequency: number;
     }>, "many">>;
     intent: z.ZodOptional<z.ZodObject<{
         category: z.ZodOptional<z.ZodEnum<["question", "complaint", "compliment", "suggestion", "request", "report", "other"]>>;
@@ -150,10 +150,10 @@ export declare const SentimentAnalysisSchema: z.ZodObject<{
         confidence: number;
         urgency: "low" | "medium" | "high" | "critical";
         actionRequired: boolean;
-        category?: "other" | "question" | "suggestion" | "request" | "report" | "complaint" | "compliment" | undefined;
+        category?: "other" | "suggestion" | "request" | "report" | "question" | "complaint" | "compliment" | undefined;
     }, {
         confidence: number;
-        category?: "other" | "question" | "suggestion" | "request" | "report" | "complaint" | "compliment" | undefined;
+        category?: "other" | "suggestion" | "request" | "report" | "question" | "complaint" | "compliment" | undefined;
         urgency?: "low" | "medium" | "high" | "critical" | undefined;
         actionRequired?: boolean | undefined;
     }>>;
@@ -219,20 +219,20 @@ export declare const SentimentAnalysisSchema: z.ZodObject<{
         languageConfidence?: number | undefined;
     };
     keywords: {
+        frequency: number;
         sentiment: "positive" | "neutral" | "negative";
         keyword: string;
         importance: number;
-        frequency: number;
     }[];
+    confidence: number;
     language: string;
     sourceType: "comment" | "email" | "review" | "social_media" | "survey_response" | "support_ticket";
-    confidence: number;
-    analysisId: string;
-    textId: string;
-    originalText: string;
-    analyzedAt: Date;
-    modelUsed: "custom" | "hybrid" | "transformer" | "neural_network" | "lexicon_based";
-    modelVersion: string;
+    emotions: {
+        mixed: boolean;
+        confidence: number;
+        scores: Partial<Record<"fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation", number>>;
+        primary?: "fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation" | undefined;
+    };
     sentiment: {
         type: "positive" | "neutral" | "negative";
         score: number;
@@ -240,12 +240,17 @@ export declare const SentimentAnalysisSchema: z.ZodObject<{
         magnitude: number;
         subjectivity: number;
     };
-    emotions: {
-        mixed: boolean;
-        confidence: number;
-        scores: Partial<Record<"fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation", number>>;
-        primary?: "fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation" | undefined;
-    };
+    topics: {
+        relevance: number;
+        sentiment: "positive" | "neutral" | "negative";
+        topic: string;
+    }[];
+    analysisId: string;
+    textId: string;
+    originalText: string;
+    analyzedAt: Date;
+    modelUsed: "custom" | "hybrid" | "transformer" | "neural_network" | "lexicon_based";
+    modelVersion: string;
     toxicity: {
         level: "low" | "medium" | "high" | "none" | "severe";
         score: number;
@@ -260,11 +265,6 @@ export declare const SentimentAnalysisSchema: z.ZodObject<{
         confidence: number;
         flags: string[];
     };
-    topics: {
-        relevance: number;
-        topic: string;
-        sentiment: "positive" | "neutral" | "negative";
-    }[];
     quality?: {
         score: number;
         readability: number;
@@ -277,7 +277,7 @@ export declare const SentimentAnalysisSchema: z.ZodObject<{
         confidence: number;
         urgency: "low" | "medium" | "high" | "critical";
         actionRequired: boolean;
-        category?: "other" | "question" | "suggestion" | "request" | "report" | "complaint" | "compliment" | undefined;
+        category?: "other" | "suggestion" | "request" | "report" | "question" | "complaint" | "compliment" | undefined;
     } | undefined;
     processedText?: string | undefined;
 }, {
@@ -291,13 +291,14 @@ export declare const SentimentAnalysisSchema: z.ZodObject<{
         preprocessingSteps?: string[] | undefined;
         features?: Record<string, unknown> | undefined;
     };
-    sourceType: "comment" | "email" | "review" | "social_media" | "survey_response" | "support_ticket";
     confidence: number;
-    analysisId: string;
-    textId: string;
-    originalText: string;
-    analyzedAt: Date;
-    modelUsed: "custom" | "hybrid" | "transformer" | "neural_network" | "lexicon_based";
+    sourceType: "comment" | "email" | "review" | "social_media" | "survey_response" | "support_ticket";
+    emotions: {
+        confidence: number;
+        mixed?: boolean | undefined;
+        primary?: "fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation" | undefined;
+        scores?: Partial<Record<"fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation", number>> | undefined;
+    };
     sentiment: {
         type: "positive" | "neutral" | "negative";
         score: number;
@@ -305,12 +306,11 @@ export declare const SentimentAnalysisSchema: z.ZodObject<{
         magnitude: number;
         subjectivity: number;
     };
-    emotions: {
-        confidence: number;
-        mixed?: boolean | undefined;
-        primary?: "fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation" | undefined;
-        scores?: Partial<Record<"fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation", number>> | undefined;
-    };
+    analysisId: string;
+    textId: string;
+    originalText: string;
+    analyzedAt: Date;
+    modelUsed: "custom" | "hybrid" | "transformer" | "neural_network" | "lexicon_based";
     toxicity: {
         level: "low" | "medium" | "high" | "none" | "severe";
         score: number;
@@ -334,25 +334,25 @@ export declare const SentimentAnalysisSchema: z.ZodObject<{
         helpfulness: number;
     } | undefined;
     keywords?: {
+        frequency: number;
         sentiment: "positive" | "neutral" | "negative";
         keyword: string;
         importance: number;
-        frequency: number;
     }[] | undefined;
     language?: string | undefined;
+    topics?: {
+        relevance: number;
+        sentiment: "positive" | "neutral" | "negative";
+        topic: string;
+    }[] | undefined;
     intent?: {
         confidence: number;
-        category?: "other" | "question" | "suggestion" | "request" | "report" | "complaint" | "compliment" | undefined;
+        category?: "other" | "suggestion" | "request" | "report" | "question" | "complaint" | "compliment" | undefined;
         urgency?: "low" | "medium" | "high" | "critical" | undefined;
         actionRequired?: boolean | undefined;
     } | undefined;
     processedText?: string | undefined;
     modelVersion?: string | undefined;
-    topics?: {
-        relevance: number;
-        topic: string;
-        sentiment: "positive" | "neutral" | "negative";
-    }[] | undefined;
 }>;
 export type SentimentAnalysis = z.infer<typeof SentimentAnalysisSchema>;
 export declare const SentimentAnalyticsSchema: z.ZodObject<{
@@ -362,11 +362,11 @@ export declare const SentimentAnalyticsSchema: z.ZodObject<{
         start: z.ZodDate;
         end: z.ZodDate;
     }, "strip", z.ZodTypeAny, {
-        end: Date;
         start: Date;
+        end: Date;
     }, {
-        end: Date;
         start: Date;
+        end: Date;
     }>;
     totalAnalyses: z.ZodDefault<z.ZodNumber>;
     sentimentDistribution: z.ZodObject<{
@@ -616,13 +616,13 @@ export declare const SentimentAnalyticsSchema: z.ZodObject<{
             sentiment: z.ZodEnum<["positive", "neutral", "negative"]>;
             growth: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
-            growth: number;
-            topic: string;
             sentiment: "positive" | "neutral" | "negative";
+            topic: string;
+            growth: number;
         }, {
-            growth: number;
-            topic: string;
             sentiment: "positive" | "neutral" | "negative";
+            topic: string;
+            growth: number;
         }>, "many">>;
         qualityMetrics: z.ZodObject<{
             averageReadability: z.ZodDefault<z.ZodNumber>;
@@ -668,9 +668,9 @@ export declare const SentimentAnalyticsSchema: z.ZodObject<{
         topPositiveKeywords: string[];
         topNegativeKeywords: string[];
         emergingTopics: {
-            growth: number;
-            topic: string;
             sentiment: "positive" | "neutral" | "negative";
+            topic: string;
+            growth: number;
         }[];
     }, {
         qualityMetrics: {
@@ -687,9 +687,9 @@ export declare const SentimentAnalyticsSchema: z.ZodObject<{
         topPositiveKeywords?: string[] | undefined;
         topNegativeKeywords?: string[] | undefined;
         emergingTopics?: {
-            growth: number;
-            topic: string;
             sentiment: "positive" | "neutral" | "negative";
+            topic: string;
+            growth: number;
         }[] | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
@@ -725,16 +725,16 @@ export declare const SentimentAnalyticsSchema: z.ZodObject<{
         topPositiveKeywords: string[];
         topNegativeKeywords: string[];
         emergingTopics: {
-            growth: number;
-            topic: string;
             sentiment: "positive" | "neutral" | "negative";
+            topic: string;
+            growth: number;
         }[];
     };
     resourceId: string;
     resourceType: string;
     timeRange: {
-        end: Date;
         start: Date;
+        end: Date;
     };
     totalAnalyses: number;
     sentimentDistribution: {
@@ -812,16 +812,16 @@ export declare const SentimentAnalyticsSchema: z.ZodObject<{
         topPositiveKeywords?: string[] | undefined;
         topNegativeKeywords?: string[] | undefined;
         emergingTopics?: {
-            growth: number;
-            topic: string;
             sentiment: "positive" | "neutral" | "negative";
+            topic: string;
+            growth: number;
         }[] | undefined;
     };
     resourceId: string;
     resourceType: string;
     timeRange: {
-        end: Date;
         start: Date;
+        end: Date;
     };
     sentimentDistribution: {
         positive: {
@@ -925,15 +925,15 @@ export declare const SentimentAnalysisConfigSchema: z.ZodObject<{
         batchSize: z.ZodDefault<z.ZodNumber>;
         timeoutMs: z.ZodDefault<z.ZodNumber>;
     }, "strip", z.ZodTypeAny, {
-        timeoutMs: number;
         batchSize: number;
+        timeoutMs: number;
         enablePreprocessing: boolean;
         removePersonalInfo: boolean;
         normalizeText: boolean;
         filterSpam: boolean;
     }, {
-        timeoutMs?: number | undefined;
         batchSize?: number | undefined;
+        timeoutMs?: number | undefined;
         enablePreprocessing?: boolean | undefined;
         removePersonalInfo?: boolean | undefined;
         normalizeText?: boolean | undefined;
@@ -1044,6 +1044,14 @@ export declare const SentimentAnalysisConfigSchema: z.ZodObject<{
     name: string;
     description: string;
     enabled: boolean;
+    processing: {
+        batchSize: number;
+        timeoutMs: number;
+        enablePreprocessing: boolean;
+        removePersonalInfo: boolean;
+        normalizeText: boolean;
+        filterSpam: boolean;
+    };
     analysis: {
         enableEmotionDetection: boolean;
         enableToxicityDetection: boolean;
@@ -1053,14 +1061,6 @@ export declare const SentimentAnalysisConfigSchema: z.ZodObject<{
         minTextLength: number;
         maxTextLength: number;
         supportedLanguages: string[];
-    };
-    processing: {
-        timeoutMs: number;
-        batchSize: number;
-        enablePreprocessing: boolean;
-        removePersonalInfo: boolean;
-        normalizeText: boolean;
-        filterSpam: boolean;
     };
     thresholds: {
         quality: {
@@ -1097,6 +1097,14 @@ export declare const SentimentAnalysisConfigSchema: z.ZodObject<{
 }, {
     name: string;
     description: string;
+    processing: {
+        batchSize?: number | undefined;
+        timeoutMs?: number | undefined;
+        enablePreprocessing?: boolean | undefined;
+        removePersonalInfo?: boolean | undefined;
+        normalizeText?: boolean | undefined;
+        filterSpam?: boolean | undefined;
+    };
     analysis: {
         enableEmotionDetection?: boolean | undefined;
         enableToxicityDetection?: boolean | undefined;
@@ -1106,14 +1114,6 @@ export declare const SentimentAnalysisConfigSchema: z.ZodObject<{
         minTextLength?: number | undefined;
         maxTextLength?: number | undefined;
         supportedLanguages?: string[] | undefined;
-    };
-    processing: {
-        timeoutMs?: number | undefined;
-        batchSize?: number | undefined;
-        enablePreprocessing?: boolean | undefined;
-        removePersonalInfo?: boolean | undefined;
-        normalizeText?: boolean | undefined;
-        filterSpam?: boolean | undefined;
     };
     thresholds: {
         quality: {
@@ -1158,8 +1158,8 @@ export declare const AnalyzeSentimentRequestSchema: z.ZodObject<{
         language: z.ZodOptional<z.ZodString>;
         metadata: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
-        metadata: Record<string, unknown>;
         content: string;
+        metadata: Record<string, unknown>;
         sourceType: "comment" | "email" | "review" | "social_media" | "survey_response" | "support_ticket";
         textId: string;
         language?: string | undefined;
@@ -1185,12 +1185,12 @@ export declare const AnalyzeSentimentRequestSchema: z.ZodObject<{
         includeQuality: boolean;
         modelType?: "custom" | "hybrid" | "transformer" | "neural_network" | "lexicon_based" | undefined;
     }, {
+        modelType?: "custom" | "hybrid" | "transformer" | "neural_network" | "lexicon_based" | undefined;
         realTime?: boolean | undefined;
         includeEmotions?: boolean | undefined;
         includeToxicity?: boolean | undefined;
         includeTopics?: boolean | undefined;
         includeQuality?: boolean | undefined;
-        modelType?: "custom" | "hybrid" | "transformer" | "neural_network" | "lexicon_based" | undefined;
     }>>;
 }, "strip", z.ZodTypeAny, {
     options: {
@@ -1202,8 +1202,8 @@ export declare const AnalyzeSentimentRequestSchema: z.ZodObject<{
         modelType?: "custom" | "hybrid" | "transformer" | "neural_network" | "lexicon_based" | undefined;
     };
     texts: {
-        metadata: Record<string, unknown>;
         content: string;
+        metadata: Record<string, unknown>;
         sourceType: "comment" | "email" | "review" | "social_media" | "survey_response" | "support_ticket";
         textId: string;
         language?: string | undefined;
@@ -1217,12 +1217,12 @@ export declare const AnalyzeSentimentRequestSchema: z.ZodObject<{
         language?: string | undefined;
     }[];
     options?: {
+        modelType?: "custom" | "hybrid" | "transformer" | "neural_network" | "lexicon_based" | undefined;
         realTime?: boolean | undefined;
         includeEmotions?: boolean | undefined;
         includeToxicity?: boolean | undefined;
         includeTopics?: boolean | undefined;
         includeQuality?: boolean | undefined;
-        modelType?: "custom" | "hybrid" | "transformer" | "neural_network" | "lexicon_based" | undefined;
     } | undefined;
 }>;
 export declare const SentimentAnalysisResponseSchema: z.ZodObject<{
@@ -1332,12 +1332,12 @@ export declare const SentimentAnalysisResponseSchema: z.ZodObject<{
             sentiment: z.ZodEnum<["positive", "neutral", "negative"]>;
         }, "strip", z.ZodTypeAny, {
             relevance: number;
-            topic: string;
             sentiment: "positive" | "neutral" | "negative";
+            topic: string;
         }, {
             relevance: number;
-            topic: string;
             sentiment: "positive" | "neutral" | "negative";
+            topic: string;
         }>, "many">>;
         keywords: z.ZodDefault<z.ZodArray<z.ZodObject<{
             keyword: z.ZodString;
@@ -1345,15 +1345,15 @@ export declare const SentimentAnalysisResponseSchema: z.ZodObject<{
             sentiment: z.ZodEnum<["positive", "neutral", "negative"]>;
             frequency: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
+            frequency: number;
             sentiment: "positive" | "neutral" | "negative";
             keyword: string;
             importance: number;
-            frequency: number;
         }, {
+            frequency: number;
             sentiment: "positive" | "neutral" | "negative";
             keyword: string;
             importance: number;
-            frequency: number;
         }>, "many">>;
         intent: z.ZodOptional<z.ZodObject<{
             category: z.ZodOptional<z.ZodEnum<["question", "complaint", "compliment", "suggestion", "request", "report", "other"]>>;
@@ -1364,10 +1364,10 @@ export declare const SentimentAnalysisResponseSchema: z.ZodObject<{
             confidence: number;
             urgency: "low" | "medium" | "high" | "critical";
             actionRequired: boolean;
-            category?: "other" | "question" | "suggestion" | "request" | "report" | "complaint" | "compliment" | undefined;
+            category?: "other" | "suggestion" | "request" | "report" | "question" | "complaint" | "compliment" | undefined;
         }, {
             confidence: number;
-            category?: "other" | "question" | "suggestion" | "request" | "report" | "complaint" | "compliment" | undefined;
+            category?: "other" | "suggestion" | "request" | "report" | "question" | "complaint" | "compliment" | undefined;
             urgency?: "low" | "medium" | "high" | "critical" | undefined;
             actionRequired?: boolean | undefined;
         }>>;
@@ -1433,20 +1433,20 @@ export declare const SentimentAnalysisResponseSchema: z.ZodObject<{
             languageConfidence?: number | undefined;
         };
         keywords: {
+            frequency: number;
             sentiment: "positive" | "neutral" | "negative";
             keyword: string;
             importance: number;
-            frequency: number;
         }[];
+        confidence: number;
         language: string;
         sourceType: "comment" | "email" | "review" | "social_media" | "survey_response" | "support_ticket";
-        confidence: number;
-        analysisId: string;
-        textId: string;
-        originalText: string;
-        analyzedAt: Date;
-        modelUsed: "custom" | "hybrid" | "transformer" | "neural_network" | "lexicon_based";
-        modelVersion: string;
+        emotions: {
+            mixed: boolean;
+            confidence: number;
+            scores: Partial<Record<"fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation", number>>;
+            primary?: "fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation" | undefined;
+        };
         sentiment: {
             type: "positive" | "neutral" | "negative";
             score: number;
@@ -1454,12 +1454,17 @@ export declare const SentimentAnalysisResponseSchema: z.ZodObject<{
             magnitude: number;
             subjectivity: number;
         };
-        emotions: {
-            mixed: boolean;
-            confidence: number;
-            scores: Partial<Record<"fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation", number>>;
-            primary?: "fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation" | undefined;
-        };
+        topics: {
+            relevance: number;
+            sentiment: "positive" | "neutral" | "negative";
+            topic: string;
+        }[];
+        analysisId: string;
+        textId: string;
+        originalText: string;
+        analyzedAt: Date;
+        modelUsed: "custom" | "hybrid" | "transformer" | "neural_network" | "lexicon_based";
+        modelVersion: string;
         toxicity: {
             level: "low" | "medium" | "high" | "none" | "severe";
             score: number;
@@ -1474,11 +1479,6 @@ export declare const SentimentAnalysisResponseSchema: z.ZodObject<{
             confidence: number;
             flags: string[];
         };
-        topics: {
-            relevance: number;
-            topic: string;
-            sentiment: "positive" | "neutral" | "negative";
-        }[];
         quality?: {
             score: number;
             readability: number;
@@ -1491,7 +1491,7 @@ export declare const SentimentAnalysisResponseSchema: z.ZodObject<{
             confidence: number;
             urgency: "low" | "medium" | "high" | "critical";
             actionRequired: boolean;
-            category?: "other" | "question" | "suggestion" | "request" | "report" | "complaint" | "compliment" | undefined;
+            category?: "other" | "suggestion" | "request" | "report" | "question" | "complaint" | "compliment" | undefined;
         } | undefined;
         processedText?: string | undefined;
     }, {
@@ -1505,13 +1505,14 @@ export declare const SentimentAnalysisResponseSchema: z.ZodObject<{
             preprocessingSteps?: string[] | undefined;
             features?: Record<string, unknown> | undefined;
         };
-        sourceType: "comment" | "email" | "review" | "social_media" | "survey_response" | "support_ticket";
         confidence: number;
-        analysisId: string;
-        textId: string;
-        originalText: string;
-        analyzedAt: Date;
-        modelUsed: "custom" | "hybrid" | "transformer" | "neural_network" | "lexicon_based";
+        sourceType: "comment" | "email" | "review" | "social_media" | "survey_response" | "support_ticket";
+        emotions: {
+            confidence: number;
+            mixed?: boolean | undefined;
+            primary?: "fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation" | undefined;
+            scores?: Partial<Record<"fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation", number>> | undefined;
+        };
         sentiment: {
             type: "positive" | "neutral" | "negative";
             score: number;
@@ -1519,12 +1520,11 @@ export declare const SentimentAnalysisResponseSchema: z.ZodObject<{
             magnitude: number;
             subjectivity: number;
         };
-        emotions: {
-            confidence: number;
-            mixed?: boolean | undefined;
-            primary?: "fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation" | undefined;
-            scores?: Partial<Record<"fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation", number>> | undefined;
-        };
+        analysisId: string;
+        textId: string;
+        originalText: string;
+        analyzedAt: Date;
+        modelUsed: "custom" | "hybrid" | "transformer" | "neural_network" | "lexicon_based";
         toxicity: {
             level: "low" | "medium" | "high" | "none" | "severe";
             score: number;
@@ -1548,25 +1548,25 @@ export declare const SentimentAnalysisResponseSchema: z.ZodObject<{
             helpfulness: number;
         } | undefined;
         keywords?: {
+            frequency: number;
             sentiment: "positive" | "neutral" | "negative";
             keyword: string;
             importance: number;
-            frequency: number;
         }[] | undefined;
         language?: string | undefined;
+        topics?: {
+            relevance: number;
+            sentiment: "positive" | "neutral" | "negative";
+            topic: string;
+        }[] | undefined;
         intent?: {
             confidence: number;
-            category?: "other" | "question" | "suggestion" | "request" | "report" | "complaint" | "compliment" | undefined;
+            category?: "other" | "suggestion" | "request" | "report" | "question" | "complaint" | "compliment" | undefined;
             urgency?: "low" | "medium" | "high" | "critical" | undefined;
             actionRequired?: boolean | undefined;
         } | undefined;
         processedText?: string | undefined;
         modelVersion?: string | undefined;
-        topics?: {
-            relevance: number;
-            topic: string;
-            sentiment: "positive" | "neutral" | "negative";
-        }[] | undefined;
     }>, "many">;
     summary: z.ZodObject<{
         totalProcessed: z.ZodNumber;
@@ -1629,20 +1629,20 @@ export declare const SentimentAnalysisResponseSchema: z.ZodObject<{
             languageConfidence?: number | undefined;
         };
         keywords: {
+            frequency: number;
             sentiment: "positive" | "neutral" | "negative";
             keyword: string;
             importance: number;
-            frequency: number;
         }[];
+        confidence: number;
         language: string;
         sourceType: "comment" | "email" | "review" | "social_media" | "survey_response" | "support_ticket";
-        confidence: number;
-        analysisId: string;
-        textId: string;
-        originalText: string;
-        analyzedAt: Date;
-        modelUsed: "custom" | "hybrid" | "transformer" | "neural_network" | "lexicon_based";
-        modelVersion: string;
+        emotions: {
+            mixed: boolean;
+            confidence: number;
+            scores: Partial<Record<"fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation", number>>;
+            primary?: "fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation" | undefined;
+        };
         sentiment: {
             type: "positive" | "neutral" | "negative";
             score: number;
@@ -1650,12 +1650,17 @@ export declare const SentimentAnalysisResponseSchema: z.ZodObject<{
             magnitude: number;
             subjectivity: number;
         };
-        emotions: {
-            mixed: boolean;
-            confidence: number;
-            scores: Partial<Record<"fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation", number>>;
-            primary?: "fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation" | undefined;
-        };
+        topics: {
+            relevance: number;
+            sentiment: "positive" | "neutral" | "negative";
+            topic: string;
+        }[];
+        analysisId: string;
+        textId: string;
+        originalText: string;
+        analyzedAt: Date;
+        modelUsed: "custom" | "hybrid" | "transformer" | "neural_network" | "lexicon_based";
+        modelVersion: string;
         toxicity: {
             level: "low" | "medium" | "high" | "none" | "severe";
             score: number;
@@ -1670,11 +1675,6 @@ export declare const SentimentAnalysisResponseSchema: z.ZodObject<{
             confidence: number;
             flags: string[];
         };
-        topics: {
-            relevance: number;
-            topic: string;
-            sentiment: "positive" | "neutral" | "negative";
-        }[];
         quality?: {
             score: number;
             readability: number;
@@ -1687,7 +1687,7 @@ export declare const SentimentAnalysisResponseSchema: z.ZodObject<{
             confidence: number;
             urgency: "low" | "medium" | "high" | "critical";
             actionRequired: boolean;
-            category?: "other" | "question" | "suggestion" | "request" | "report" | "complaint" | "compliment" | undefined;
+            category?: "other" | "suggestion" | "request" | "report" | "question" | "complaint" | "compliment" | undefined;
         } | undefined;
         processedText?: string | undefined;
     }[];
@@ -1716,13 +1716,14 @@ export declare const SentimentAnalysisResponseSchema: z.ZodObject<{
             preprocessingSteps?: string[] | undefined;
             features?: Record<string, unknown> | undefined;
         };
-        sourceType: "comment" | "email" | "review" | "social_media" | "survey_response" | "support_ticket";
         confidence: number;
-        analysisId: string;
-        textId: string;
-        originalText: string;
-        analyzedAt: Date;
-        modelUsed: "custom" | "hybrid" | "transformer" | "neural_network" | "lexicon_based";
+        sourceType: "comment" | "email" | "review" | "social_media" | "survey_response" | "support_ticket";
+        emotions: {
+            confidence: number;
+            mixed?: boolean | undefined;
+            primary?: "fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation" | undefined;
+            scores?: Partial<Record<"fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation", number>> | undefined;
+        };
         sentiment: {
             type: "positive" | "neutral" | "negative";
             score: number;
@@ -1730,12 +1731,11 @@ export declare const SentimentAnalysisResponseSchema: z.ZodObject<{
             magnitude: number;
             subjectivity: number;
         };
-        emotions: {
-            confidence: number;
-            mixed?: boolean | undefined;
-            primary?: "fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation" | undefined;
-            scores?: Partial<Record<"fear" | "joy" | "sadness" | "anger" | "surprise" | "disgust" | "trust" | "anticipation", number>> | undefined;
-        };
+        analysisId: string;
+        textId: string;
+        originalText: string;
+        analyzedAt: Date;
+        modelUsed: "custom" | "hybrid" | "transformer" | "neural_network" | "lexicon_based";
         toxicity: {
             level: "low" | "medium" | "high" | "none" | "severe";
             score: number;
@@ -1759,33 +1759,30 @@ export declare const SentimentAnalysisResponseSchema: z.ZodObject<{
             helpfulness: number;
         } | undefined;
         keywords?: {
+            frequency: number;
             sentiment: "positive" | "neutral" | "negative";
             keyword: string;
             importance: number;
-            frequency: number;
         }[] | undefined;
         language?: string | undefined;
+        topics?: {
+            relevance: number;
+            sentiment: "positive" | "neutral" | "negative";
+            topic: string;
+        }[] | undefined;
         intent?: {
             confidence: number;
-            category?: "other" | "question" | "suggestion" | "request" | "report" | "complaint" | "compliment" | undefined;
+            category?: "other" | "suggestion" | "request" | "report" | "question" | "complaint" | "compliment" | undefined;
             urgency?: "low" | "medium" | "high" | "critical" | undefined;
             actionRequired?: boolean | undefined;
         } | undefined;
         processedText?: string | undefined;
         modelVersion?: string | undefined;
-        topics?: {
-            relevance: number;
-            topic: string;
-            sentiment: "positive" | "neutral" | "negative";
-        }[] | undefined;
     }[];
 }>;
 export type AnalyzeSentimentRequest = z.infer<typeof AnalyzeSentimentRequestSchema>;
 export type SentimentAnalysisResponse = z.infer<typeof SentimentAnalysisResponseSchema>;
-export declare const validateAnalyzeSentimentRequest: (data: unknown) => AnalyzeSentimentRequest;
-export declare const validateSentimentAnalysis: (data: unknown) => SentimentAnalysis;
-export declare const validateSentimentAnalytics: (data: unknown) => SentimentAnalytics;
-export interface SentimentSystemConfig {
+export declare export declare export declare export interface SentimentSystemConfig {
     enabledModels: AnalysisModelType[];
     defaultModel: AnalysisModelType;
     cachingEnabled: boolean;

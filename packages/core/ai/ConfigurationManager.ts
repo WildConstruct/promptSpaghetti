@@ -641,6 +641,12 @@ export class ConfigurationManager {
         },
         [AIModelProvider.MIDJOURNEY]: {
           parameters: {}
+        },
+        [AIModelProvider.PIKA_LABS]: {
+          parameters: {}
+        },
+        [AIModelProvider.SORA]: {
+          parameters: {}
         }
       },
       validationRules: []

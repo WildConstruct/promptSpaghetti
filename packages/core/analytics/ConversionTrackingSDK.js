@@ -12,7 +12,7 @@
  * - Cross-device user identification
  * - Event validation and deduplication
  */
-import { AnalyticsClient } from './AnalyticsClient.js';
+import { AnalyticsClient } from './AnalyticsClient';
 /**
  * Enhanced Conversion Tracking SDK
  * Extends Epic 1 AnalyticsClient with advanced conversion tracking capabilities
@@ -40,19 +40,19 @@ export class ConversionTrackingSDK extends AnalyticsClient {
     constructor(config, conversionArchitecture, sessionManager) {
         super(config);
         this.conversionConfig = {
-            enableRealTimeStreaming: true,
-            streamingEndpoint: '/api/conversion-events/stream',
-            batchSize: 50,
-            flushInterval: 5000,
-            respectDoNotTrack: true,
-            requireExplicitConsent: false,
-            enableCrossDeviceTracking: false,
-            enableOfflineBuffering: true,
-            maxOfflineEvents: 1000,
-            eventValidationRules: [],
-            deduplicationWindow: 60000, // 1 minute
-            enableDebugLogging: false,
-            ...config
+            baseUrl: config.baseUrl || '/api',
+            enableRealTimeStreaming: config.enableRealTimeStreaming ?? true,
+            streamingEndpoint: config.streamingEndpoint || '/api/conversion-events/stream',
+            batchSize: config.batchSize || 50,
+            flushInterval: config.flushInterval || 5000,
+            respectDoNotTrack: config.respectDoNotTrack ?? true,
+            requireExplicitConsent: config.requireExplicitConsent ?? false,
+            enableCrossDeviceTracking: config.enableCrossDeviceTracking ?? false,
+            enableOfflineBuffering: config.enableOfflineBuffering ?? true,
+            maxOfflineEvents: config.maxOfflineEvents || 1000,
+            eventValidationRules: config.eventValidationRules || [],
+            deduplicationWindow: config.deduplicationWindow || 60000, // 1 minute
+            enableDebugLogging: config.enableDebugLogging ?? false
         };
         this.conversionArchitecture = conversionArchitecture;
         this.sessionManager = sessionManager;
@@ -168,8 +168,7 @@ export class ConversionTrackingSDK extends AnalyticsClient {
                 metadata: {
                     userAgent: navigator.userAgent,
                     referrer: document.referrer,
-                    url: window.location.href,
-                    timestamp: Date.now()
+                    campaignSource: context.attribution.source
                 }
             };
             // Create enhanced event with attribution
@@ -237,7 +236,12 @@ export class ConversionTrackingSDK extends AnalyticsClient {
      * Update user consent preferences
      */
     updateConsentPreferences(consent) {
-        this.sessionManager.updateConsentPreferences(consent);
+        this.sessionManager.updateConsentPreferences({
+            trackingConsent: consent.tracking,
+            analyticsConsent: consent.analytics,
+            personalizationConsent: consent.personalization,
+            crossDeviceConsent: consent.crossDevice
+        });
         // If tracking was disabled, flush and clear queues
         if (consent.tracking === false) {
             this.flushQueue();
@@ -427,7 +431,7 @@ export class ConversionTrackingSDK extends AnalyticsClient {
         if (events.length === 0)
             return;
         try {
-            const response = await this.makeRequest('/analytics/conversion-events/batch', {
+            const fetchResponse = await fetch(`${this.conversionConfig.baseUrl}/analytics/conversion-events/batch`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -441,7 +445,8 @@ export class ConversionTrackingSDK extends AnalyticsClient {
                     }
                 })
             });
-            if (response.success) {
+            const response = await fetchResponse.json();
+            if (fetchResponse.ok && response.success) {
                 this.debugLog('Events sent to API successfully', {
                     eventCount: events.length
                 });

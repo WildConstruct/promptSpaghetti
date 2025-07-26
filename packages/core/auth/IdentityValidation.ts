@@ -156,7 +156,7 @@ export interface ValidationEvidence {
   source: string;
   confidence: number;
   timestamp: number;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
 }
 
 export interface ValidationFlag {

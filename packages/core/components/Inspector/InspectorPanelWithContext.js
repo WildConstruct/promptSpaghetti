@@ -1,8 +1,8 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React, { useCallback, useRef, useEffect } from 'react';
-import { PropertiesSection } from './PropertiesSection.js';
-import { PreviewSection } from './PreviewSection.js';
-import { useInspectorContext } from './InspectorContext.js';
+import { PropertiesSection } from './PropertiesSection';
+import { PreviewSection } from './PreviewSection';
+import { useInspectorContext } from './InspectorContext';
 export const InspectorPanelWithContext = ({ onClose, minWidth = 280, maxWidth = 600 }) => {
     const { selectedNode, selectedSchema, panelWidth, panelCollapsed, panelVisible, setPanelWidth, setPanelCollapsed, updateNodeData } = useInspectorContext();
     const [isResizing, setIsResizing] = React.useState(false);

@@ -5,7 +5,18 @@
  * Adapter for RunwayML Gen-2 and Gen-3 video generation models
  */
 
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelMetadata, ModelCapabilities, CostEstimate, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
+import { 
+  BaseAIModel,
+  AIModelType,
+  AIModelProvider,
+  AIModelStatus,
+  ModelMetadata,
+  ModelCapabilities,
+  CostEstimate,
+  ModelInitializationError,
+  ModelProcessingError,
+  ModelUnavailableError
+} from '../BaseAIModel';
 
 export interface RunwayMLConfig {
   apiKey: string;
@@ -347,7 +358,10 @@ export class RunwayMLAdapter extends BaseAIModel {
     return JSON.stringify(input);
   }
 
-  private _processOptions(options?: RunwayMLRequestOptions, prompt?: string): Required<Pick<RunwayMLRequestOptions, 'model' | 'duration' | 'resolution' | 'motion' | 'mode'>> & RunwayMLRequestOptions {
+  private _processOptions(
+    options?: RunwayMLRequestOptions,
+    prompt?: string
+  ): Required<Pick<RunwayMLRequestOptions, 'model' | 'duration' | 'resolution' | 'motion' | 'mode' | 'text_prompt'>> & Omit<RunwayMLRequestOptions, 'text_prompt'> & { text_prompt: string } {
     const defaults = {
       model: 'gen3' as const,
       duration: 4,
@@ -359,6 +373,9 @@ export class RunwayMLAdapter extends BaseAIModel {
     };
 
     const processed = { ...defaults, ...options };
+
+    // Set text_prompt if provided, or ensure it exists
+    processed.text_prompt = prompt || processed.text_prompt || ''; // Ensure text_prompt is always a string
 
     // Validate model
     if (!this.availableModels.includes(processed.model)) {
@@ -380,7 +397,7 @@ export class RunwayMLAdapter extends BaseAIModel {
       processed.resolution = '1280x768';
     }
 
-    return processed;
+    return processed as Required<Pick<RunwayMLRequestOptions, 'model' | 'duration' | 'resolution' | 'motion' | 'mode' | 'text_prompt'>> & Omit<RunwayMLRequestOptions, 'text_prompt'> & { text_prompt: string };
   }
 
   private async _createGenerationTask(prompt: string, options: RunwayMLRequestOptions): Promise<RunwayMLTask> {
@@ -448,7 +465,7 @@ export class RunwayMLAdapter extends BaseAIModel {
     }
 
     const videoUrl = task.output[0];
-    const [width, height] = options.resolution.split('x').map(Number);
+    const [width, height] = (options.resolution || '1280x768').split('x').map(Number);
     
     // Download video data if needed
     let videoData: ArrayBuffer | undefined;
@@ -461,25 +478,25 @@ export class RunwayMLAdapter extends BaseAIModel {
       console.warn('Failed to download video data:', error);
     }
 
-    const credits = this._calculateCredits(options.model, options.duration);
+    const credits = this._calculateCredits(options.model || 'gen3', options.duration || 4);
     
     return {
       video: {
         url: videoUrl,
         data: videoData,
         format: 'mp4',
-        duration: options.duration,
+        duration: options.duration || 4,
         resolution: { width, height },
         fps: 24, // Standard FPS for RunwayML
         size: videoData?.byteLength || 0
       },
       metadata: {
-        model: options.model,
+        model: options.model || 'gen3',
         prompt,
         negative_prompt: options.negative_prompt,
         generation_id: task.id,
         seed: options.seed,
-        motion: options.motion,
+        motion: options.motion || 5,
         camera_motion: options.camera_motion,
         style_preset: options.style_preset,
         generation_time: generationTime,

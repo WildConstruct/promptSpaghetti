@@ -534,8 +534,8 @@ export interface DriftingFeature {
 }
 export interface PredictionHistoryEntry {
     timestamp: number;
-    prediction: any;
-    actual?: any;
+    prediction: unknown;
+    actual?: unknown;
     accuracy: number;
     model: PredictiveModelType;
 }
@@ -584,7 +584,7 @@ export interface EnsembleConfig {
 }
 export interface PredictionUpdate {
     type: 'forecast' | 'behavior' | 'churn' | 'seasonal';
-    update: any;
+    update: Error;
     confidence: number;
     impact: 'high' | 'medium' | 'low';
     timestamp: number;

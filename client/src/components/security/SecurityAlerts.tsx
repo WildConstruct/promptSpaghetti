@@ -33,7 +33,7 @@ interface SecurityAlert {
   source: string;
   status: 'unread' | 'read' | 'acknowledged' | 'dismissed';
   actions?: AlertAction[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   escalation_level: number;
 }
 
@@ -50,9 +50,7 @@ interface SecurityAlertsProps {
   showDismissed?: boolean;
 }
 
-export const SecurityAlerts: React.FC<SecurityAlertsProps> = ({ onAlertAction, maxVisible = 10, showDismissed = false }) => {
-  const [alerts, setAlerts] = useState<SecurityAlert[]>([]);
-  const [filteredAlerts, setFilteredAlerts] = useState<SecurityAlert[]>([]);
+export   const [filteredAlerts, setFilteredAlerts] = useState<SecurityAlert[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<'timestamp' | 'severity'>('timestamp');
@@ -184,7 +182,7 @@ export const SecurityAlerts: React.FC<SecurityAlertsProps> = ({ onAlertAction, m
 
   const playAlertSound = () => {
     // Create audio context and play alert sound
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
     

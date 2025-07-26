@@ -277,8 +277,8 @@ export declare const AnalyticsEventSchema: z.ZodObject<{
         ip_address?: string | undefined;
         user_agent?: string | undefined;
     };
-    event_type: MetricType;
     template_id: string;
+    event_type: MetricType;
     event_data: Record<string, any>;
     user_id?: string | undefined;
 }, {
@@ -294,8 +294,8 @@ export declare const AnalyticsEventSchema: z.ZodObject<{
         ip_address?: string | undefined;
         user_agent?: string | undefined;
     };
-    event_type: MetricType;
     template_id: string;
+    event_type: MetricType;
     event_data: Record<string, any>;
     user_id?: string | undefined;
 }>;
@@ -342,9 +342,9 @@ export declare const AnalyticsQuerySchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     limit: number;
     offset: number;
+    aggregation: AggregationType;
     time_range: TimeRange;
     metric_types: MetricType[];
-    aggregation: AggregationType;
     sort?: {
         field: string;
         direction: "asc" | "desc";
@@ -362,9 +362,9 @@ export declare const AnalyticsQuerySchema: z.ZodObject<{
     template_ids?: string[] | undefined;
     creator_id?: string | undefined;
 }, {
+    aggregation: AggregationType;
     time_range: TimeRange;
     metric_types: MetricType[];
-    aggregation: AggregationType;
     sort?: {
         field: string;
         direction: "asc" | "desc";
@@ -431,9 +431,9 @@ export declare const CustomReportSchema: z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             limit: number;
             offset: number;
+            aggregation: AggregationType;
             time_range: TimeRange;
             metric_types: MetricType[];
-            aggregation: AggregationType;
             sort?: {
                 field: string;
                 direction: "asc" | "desc";
@@ -451,9 +451,9 @@ export declare const CustomReportSchema: z.ZodObject<{
             template_ids?: string[] | undefined;
             creator_id?: string | undefined;
         }, {
+            aggregation: AggregationType;
             time_range: TimeRange;
             metric_types: MetricType[];
-            aggregation: AggregationType;
             sort?: {
                 field: string;
                 direction: "asc" | "desc";
@@ -504,9 +504,9 @@ export declare const CustomReportSchema: z.ZodObject<{
         query: {
             limit: number;
             offset: number;
+            aggregation: AggregationType;
             time_range: TimeRange;
             metric_types: MetricType[];
-            aggregation: AggregationType;
             sort?: {
                 field: string;
                 direction: "asc" | "desc";
@@ -534,9 +534,9 @@ export declare const CustomReportSchema: z.ZodObject<{
             color_scheme?: string | undefined;
         };
         query: {
+            aggregation: AggregationType;
             time_range: TimeRange;
             metric_types: MetricType[];
-            aggregation: AggregationType;
             sort?: {
                 field: string;
                 direction: "asc" | "desc";
@@ -565,12 +565,12 @@ export declare const CustomReportSchema: z.ZodObject<{
         recipients: z.ZodArray<z.ZodString, "many">;
     }, "strip", z.ZodTypeAny, {
         time: string;
-        recipients: string[];
         frequency: "monthly" | "daily" | "weekly";
+        recipients: string[];
     }, {
         time: string;
-        recipients: string[];
         frequency: "monthly" | "daily" | "weekly";
+        recipients: string[];
     }>>;
 }, "strip", z.ZodTypeAny, {
     name: string;
@@ -585,9 +585,9 @@ export declare const CustomReportSchema: z.ZodObject<{
         query: {
             limit: number;
             offset: number;
+            aggregation: AggregationType;
             time_range: TimeRange;
             metric_types: MetricType[];
-            aggregation: AggregationType;
             sort?: {
                 field: string;
                 direction: "asc" | "desc";
@@ -611,8 +611,8 @@ export declare const CustomReportSchema: z.ZodObject<{
     description?: string | undefined;
     schedule?: {
         time: string;
-        recipients: string[];
         frequency: "monthly" | "daily" | "weekly";
+        recipients: string[];
     } | undefined;
 }, {
     name: string;
@@ -625,9 +625,9 @@ export declare const CustomReportSchema: z.ZodObject<{
             color_scheme?: string | undefined;
         };
         query: {
+            aggregation: AggregationType;
             time_range: TimeRange;
             metric_types: MetricType[];
-            aggregation: AggregationType;
             sort?: {
                 field: string;
                 direction: "asc" | "desc";
@@ -652,8 +652,8 @@ export declare const CustomReportSchema: z.ZodObject<{
     description?: string | undefined;
     schedule?: {
         time: string;
-        recipients: string[];
         frequency: "monthly" | "daily" | "weekly";
+        recipients: string[];
     } | undefined;
     is_scheduled?: boolean | undefined;
 }>;

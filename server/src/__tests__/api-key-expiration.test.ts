@@ -6,7 +6,12 @@
  * service functionality, lifecycle management, alerts, and API endpoints.
  */
 
-import { APIKeyExpirationService, APIKeyType, ExpirationPolicy, APIKeyStatus } from '../auth/services/APIKeyExpirationService';
+import { 
+  ApiKeyExpirationService,
+  APIKeyType,
+  ExpirationPolicyEnum as ExpirationPolicy,
+  APIKeyStatus
+} from '../auth/services/APIKeyExpirationService';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
@@ -15,7 +20,7 @@ jest.mock('../auth/database/DatabaseService');
 jest.mock('../auth/services/AuditService');
 
 describe('API Key Expiration System', () => {
-  let expirationService: APIKeyExpirationService;
+  let expirationService: ApiKeyExpirationService;
   let mockDatabaseService: jest.Mocked<DatabaseService>;
   let mockAuditService: jest.Mocked<AuditService>;
 
@@ -24,14 +29,14 @@ describe('API Key Expiration System', () => {
     jest.clearAllMocks();
     
     // Create mock instances
-    mockDatabaseService = new DatabaseService() as jest.Mocked<DatabaseService>;
-    mockAuditService = new AuditService(mockDatabaseService) as jest.Mocked<AuditService>;
+    mockDatabaseService = new DatabaseService({} as any) as jest.Mocked<DatabaseService>;
+    mockAuditService = new AuditService({} as any, mockDatabaseService) as jest.Mocked<AuditService>;
     
     // Setup mock implementations
-    mockAuditService.logAction = jest.fn().mockResolvedValue(undefined);
+    mockAuditService.logAction = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
     
     // Create service instance
-    expirationService = new APIKeyExpirationService(mockDatabaseService);
+    expirationService = new ApiKeyExpirationService(mockDatabaseService, mockAuditService);
   });
 
   afterEach(() => {
@@ -43,7 +48,7 @@ describe('API Key Expiration System', () => {
   describe('Service Initialization', () => {
     test('should initialize successfully', async () => {
       expect(expirationService).toBeDefined();
-      expect(expirationService).toBeInstanceOf(APIKeyExpirationService);
+      expect(expirationService).toBeInstanceOf(ApiKeyExpirationService);
     });
   });
 
@@ -138,7 +143,7 @@ describe('API Key Expiration System', () => {
   });
 
   describe('API Key Usage Recording', () => {
-    let registeredKey: any;
+    let registeredKey: unknown;
 
     beforeEach(async () => {
       registeredKey = await expirationService.registerAPIKey('usage-test-key', 'test-user', APIKeyType.API_ACCESS, {
@@ -278,7 +283,7 @@ describe('API Key Expiration System', () => {
   });
 
   describe('API Key Renewal', () => {
-    let testKey: any;
+    let testKey: unknown;
 
     beforeEach(async () => {
       testKey = await expirationService.registerAPIKey('renewal-test-key', 'test-user', APIKeyType.API_ACCESS, {
@@ -376,7 +381,7 @@ describe('API Key Expiration System', () => {
   });
 
   describe('API Key Revocation', () => {
-    let testKey: any;
+    let testKey: unknown;
 
     beforeEach(async () => {
       testKey = await expirationService.registerAPIKey('revoke-test-key', 'test-user', APIKeyType.API_ACCESS, {
@@ -567,7 +572,7 @@ describe('API Key Expiration System', () => {
   });
 
   describe('Alert Management', () => {
-    let testKey: any;
+    let testKey: unknown;
 
     beforeEach(async () => {
       testKey = await expirationService.registerAPIKey('alert-test-key', 'test-user', APIKeyType.API_ACCESS, {

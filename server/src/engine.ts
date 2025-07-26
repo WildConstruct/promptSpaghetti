@@ -4,6 +4,14 @@
 // PERFORMANCE OPTIMIZATION: Batched analytics to reduce overhead
 
 import { Graph, Node, NodeTypeEnum } from '../../packages/core/graphSchema';
+
+// Interface for Conditional node branches
+interface ConditionalBranch {
+  condition: string;
+  output: string;
+  label?: string;
+}
+
 import {
   ConcatNode,
   ExecutionContext,
@@ -122,7 +130,7 @@ export function initializeAnalytics(): void {
     // Set up event storage handler
     analyticsCollector.on('events_flushed', (events) => {
       if (analyticsDAO) {
-        events.forEach((event: any) => analyticsDAO.storeEvent(event));
+        events.forEach((event: Record<string, unknown>) => analyticsDAO.storeEvent(event));
       }
     });
 
@@ -148,7 +156,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
   const startTime = Date.now();
   
   // PERFORMANCE OPTIMIZATION: Batched analytics collection
-  const analyticsBuffer: any[] = [];
+  const analyticsBuffer: Record<string, unknown>[] = [];
   const flushAnalytics = () => {
     if (analyticsCollector && analyticsBuffer.length > 0) {
       // Batch send all analytics events
@@ -231,7 +239,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
 
       try {
         // Resolve inputs first (depth-first)
-        const resolvedInputs: any[] = [];
+        const resolvedInputs: unknown[] = [];
         const executionInputs: ExecutionInput[] = [];
         if (node.inputs) {
           for (let i = 0; i < node.inputs.length; i++) {
@@ -454,7 +462,11 @@ function isAdvancedNodeType(nodeType: string): boolean {
   return false;
 }
 
-function createRuntimeNode(node: Node, resolvedInputs: any[], executionContext: ExecutionContext): RuntimeNode<any> {
+function createRuntimeNode(
+  node: Node,
+  resolvedInputs: unknown[],
+  executionContext: ExecutionContext
+): RuntimeNode<unknown> {
   switch (node.type) {
   // Basic Epic 3 nodes
   case 'WeightedChoice':
@@ -496,10 +508,10 @@ function createRuntimeNode(node: Node, resolvedInputs: any[], executionContext: 
     
   case 'Conditional': {
     // Convert schema config to runtime config
-    const config: any = { ...node.conditionalConfig };
+    const config: Record<string, unknown> = { ...node.conditionalConfig };
     if (config.customFunctions) {
       // Convert non-function values to constant functions
-      const funcs: Record<string, (...args: any[]) => any> = {};
+      const funcs: Record<string, (...args: unknown[]) => unknown> = {};
       for (const [key, value] of Object.entries(config.customFunctions)) {
         if (typeof value === 'function') {
           funcs[key] = value;
@@ -580,7 +592,7 @@ function isRandomizationNode(nodeType: string): boolean {
 /**
  * Extract random choice information for execution path tracking
  */
-function extractRandomChoiceInfo(node: Node, result: any, resolvedInputs: any[]): RandomChoiceInfo | null {
+function extractRandomChoiceInfo(node: Node, result: unknown, resolvedInputs: unknown[]): RandomChoiceInfo | null {
   try {
     switch (node.type) {
     case 'WeightedChoice': {
@@ -619,7 +631,7 @@ function extractRandomChoiceInfo(node: Node, result: any, resolvedInputs: any[])
     }
       
     case 'Conditional': {
-      const branches = node.branches as any[] || [];
+      const branches = (node.branches as ConditionalBranch[]) || [];
       return {
         choiceType: 'conditional',
         availableOptions: branches.map((b, i) => `Branch ${i + 1}: ${b.condition || 'default'}`),
@@ -660,9 +672,9 @@ function extractRandomChoiceInfo(node: Node, result: any, resolvedInputs: any[])
  */
 function tryCreateExtensionNode(
   node: Node,
-  resolvedInputs: any[],
+  resolvedInputs: unknown[],
   executionContext: ExecutionContext
-): RuntimeNode<any> | null {
+): RuntimeNode<unknown> | null {
   try {
     // Get all active node extensions
     const extensions = ExtensionLifecycleManager.getActiveExtensions();

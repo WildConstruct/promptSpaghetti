@@ -6,12 +6,12 @@
  * Main pipeline class for crowd generation
  */
 export class CrowdGenerationPipeline {
-    historicalDataService;
-    constraintValidator;
-    clothingGenerator;
-    behaviorEngine;
-    vfxExporter;
-    constructor(historicalDataService, constraintValidator, clothingGenerator, behaviorEngine, vfxExporter) {
+    historicalDataService: any;
+    constraintValidator: any;
+    clothingGenerator: any;
+    behaviorEngine: any;
+    vfxExporter: any;
+    constructor(historicalDataService: any, constraintValidator: any, clothingGenerator: any, behaviorEngine: any, vfxExporter: any) {
         this.historicalDataService = historicalDataService;
         this.constraintValidator = constraintValidator;
         this.clothingGenerator = clothingGenerator;
@@ -21,7 +21,7 @@ export class CrowdGenerationPipeline {
     /**
      * Generate a historically accurate crowd
      */
-    async generateCrowd(request) {
+    async generateCrowd(request: any): Promise<any> {
         const startTime = Date.now();
         try {
             // Stage 1: Historical Context Preparation

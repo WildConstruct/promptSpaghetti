@@ -20,7 +20,7 @@ export interface ComplianceContext {
   userId?: string;
   systemComponent: string;
   environment: 'development' | 'staging' | 'production';
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
 }
 
 export interface ComplianceResult {
@@ -307,7 +307,7 @@ export class ComplianceMonitor {
     const defaultContext: ComplianceContext = {
       timestamp: new Date(),
       systemComponent: 'compliance_monitor',
-      environment: (process.env.NODE_ENV as any) || 'development'
+      environment: (process.env.NODE_ENV as 'development' | 'staging' | 'production') || 'development'
     };
 
     const checkContext = { ...defaultContext, ...context };
@@ -471,7 +471,7 @@ export class ComplianceMonitor {
   /**
    * Send critical compliance alert
    */
-  private async sendCriticalComplianceAlert(violation: ComplianceViolation, result: ComplianceResult): Promise<void> {
+  private async sendCriticalComplianceAlert(violation: ComplianceViolation): Promise<void> {
     // In a real implementation, this would send alerts via email, Slack, etc.
     console.error('🚨 CRITICAL COMPLIANCE VIOLATION DETECTED!');
     console.error(`Check: ${violation.checkId}`);
@@ -544,7 +544,7 @@ export class ComplianceMonitor {
   /**
    * Check data encryption compliance (GDPR)
    */
-  private async checkDataEncryption(context: ComplianceContext): Promise<ComplianceResult> {
+  private async checkDataEncryption(): Promise<ComplianceResult> {
     const evidence: ComplianceEvidence[] = [];
     let score = 100;
     const issues: string[] = [];
@@ -563,7 +563,7 @@ export class ComplianceMonitor {
         content: `Database encryption: ${dbEncrypted ? 'enabled' : 'disabled'}`,
         timestamp: new Date()
       });
-    } catch (error) {
+    } catch {
       score -= 50;
       issues.push('Unable to verify database encryption');
     }
@@ -643,7 +643,7 @@ export class ComplianceMonitor {
   /**
    * Check data retention compliance (GDPR)
    */
-  private async checkDataRetention(context: ComplianceContext): Promise<ComplianceResult> {
+  private async checkDataRetention(): Promise<ComplianceResult> {
     let score = 100;
     const issues: string[] = [];
     const remediation: RemediationAction[] = [];
@@ -1420,5 +1420,4 @@ export class EnhancedComplianceMonitor extends ComplianceMonitor {
 }
 
 // Export singleton instance
-export const complianceMonitor = new ComplianceMonitor();
-export const enhancedComplianceMonitor = new EnhancedComplianceMonitor();
+export export const enhancedComplianceMonitor = new EnhancedComplianceMonitor();

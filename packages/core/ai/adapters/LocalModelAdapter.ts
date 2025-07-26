@@ -5,7 +5,18 @@
  * Adapter for locally hosted AI models (Ollama, local inference servers)
  */
 
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelMetadata, ModelCapabilities, CostEstimate, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
+import { 
+  BaseAIModel,
+  AIModelType,
+  AIModelProvider,
+  AIModelStatus,
+  ModelMetadata,
+  ModelCapabilities,
+  CostEstimate,
+  ModelInitializationError,
+  ModelProcessingError,
+  ModelUnavailableError
+} from '../BaseAIModel';
 
 export interface LocalModelConfig {
   endpoint: string;
@@ -158,9 +169,7 @@ export class LocalModelAdapter extends BaseAIModel {
   async estimate(input: any, options?: LocalRequestOptions): Promise<CostEstimate> {
     // Local models have no cost, but we can estimate resource usage
     const messages = this._convertToMessages(input, options?.system_prompt);
-    const inputTokens = this._estimateTokenCount(messages);
-    const outputTokens = options?.max_tokens || 1000;
-    
+            
     return {
       estimatedCost: 0,
       currency: 'USD',
@@ -449,6 +458,10 @@ export class LocalModelAdapter extends BaseAIModel {
 
   protected async _performHealthCheck(): Promise<void> {
     await this._testConnection();
+  }
+
+  private updateMetadata(updates: Partial<ModelMetadata>): void {
+    this._metadata = { ...this._metadata, ...updates };
   }
 }
 

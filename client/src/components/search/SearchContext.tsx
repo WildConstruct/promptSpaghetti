@@ -18,7 +18,7 @@ export type SortDirection = 'asc' | 'desc';
 export interface FilterCondition {
   field: string;
   operator: FilterOperator;
-  value: Error;
+  value: unknown;
   values?: unknown[]; // For 'in' and 'between' operators
 }
 
@@ -34,7 +34,7 @@ export interface SearchQuery {
   facets?: string[];
 }
 
-export interface SearchResult<T = any> {
+export interface SearchResult<T = unknown> {
   items: T[];
   totalCount: number;
   facets?: Record<string, Array<{ value: string; count: number }>>;
@@ -146,7 +146,7 @@ const searchReducer = (state: SearchState, action: SearchAction): SearchState =>
       currentQuery: { ...state.currentQuery, filters: action.payload }
     };
       
-  case 'ADD_SORT':
+  case 'ADD_SORT': {
     // Remove existing sort for same field, then add new one
     const existingSorts = state.currentQuery.sorts.filter(s => s.field !== action.payload.field);
     return {
@@ -156,6 +156,7 @@ const searchReducer = (state: SearchState, action: SearchAction): SearchState =>
         sorts: [...existingSorts, action.payload]
       }
     };
+  }
       
   case 'REMOVE_SORT':
     return {
@@ -193,7 +194,7 @@ const searchReducer = (state: SearchState, action: SearchAction): SearchState =>
       isLoading: false
     };
       
-  case 'ADD_TO_HISTORY':
+  case 'ADD_TO_HISTORY': {
     const newHistory = [action.payload, ...state.searchHistory.filter(
       h => JSON.stringify(h) !== JSON.stringify(action.payload)
     )].slice(0, 10); // Keep last 10 searches
@@ -202,6 +203,7 @@ const searchReducer = (state: SearchState, action: SearchAction): SearchState =>
       ...state,
       searchHistory: newHistory
     };
+  }
       
   case 'SAVE_SEARCH':
     return {
@@ -279,7 +281,7 @@ interface SearchProviderProps {
 }
 
 // Provider Component
-export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
+export const SearchProvider = ({ children }: SearchProviderProps) => {
   const [state, dispatch] = useReducer(searchReducer, initialState);
 
   // Actions

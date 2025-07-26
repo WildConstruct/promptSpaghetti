@@ -233,6 +233,12 @@ export class RateLimitingService extends EventEmitter {
         this.emit('limitsReset', { identifier, endpoint });
     }
     /**
+     * Get recent attempts for integration purposes (public version)
+     */
+    getRecentAttemptsForIntegration(identifier, endpoint) {
+        return this.getRecentAttempts(identifier, endpoint);
+    }
+    /**
      * Get rate limiting statistics
      */
     getStatistics() {

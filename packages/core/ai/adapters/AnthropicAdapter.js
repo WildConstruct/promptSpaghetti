@@ -4,7 +4,7 @@
  *
  * Concrete implementation of BaseAIModel for Anthropic Claude models
  */
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel.js';
+import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
 export class AnthropicAdapter extends BaseAIModel {
     config;
     apiEndpoint;

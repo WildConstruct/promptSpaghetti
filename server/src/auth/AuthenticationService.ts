@@ -541,7 +541,7 @@ export class AuthenticationService {
     sessionData: {
       ipAddress?: string;
       userAgent?: string;
-      deviceInfo?: any;
+      deviceInfo?: unknown;
     }
   ): Promise<string> {
     const sessionId = require('crypto').randomUUID();
@@ -641,7 +641,7 @@ export class AuthenticationService {
   }
 
   // Service registry for accessing individual services
-  getService(serviceName: string): any {
+  getService(serviceName: string): unknown {
     switch (serviceName) {
     case 'user':
       return this.userService;

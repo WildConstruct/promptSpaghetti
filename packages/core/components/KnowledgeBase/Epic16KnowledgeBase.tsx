@@ -317,7 +317,10 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({
                           <svg
                             key={i}
                             className={`w-4 h-4 ${
-                              i < Math.round(article.ratings.reduce((sum, r) => sum + r.rating, 0) / article.ratings.length || 0)
+                              i < Math.round(
+                                article.ratings.reduce((sum,
+                                r
+                              ) => sum + r.rating, 0) / article.ratings.length || 0)
                                 ? 'text-yellow-400'
                                 : 'text-gray-300'
                             }`}
@@ -370,7 +373,10 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({
                             <svg
                               key={i}
                               className={`w-4 h-4 ${
-                                i < Math.round(article.ratings.reduce((sum, r) => sum + r.rating, 0) / article.ratings.length || 0)
+                                i < Math.round(
+                                  article.ratings.reduce((sum,
+                                  r
+                                ) => sum + r.rating, 0) / article.ratings.length || 0)
                                   ? 'text-yellow-400'
                                   : 'text-gray-300'
                               }`}
@@ -458,7 +464,10 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({
                       <svg
                         key={i}
                         className={`w-4 h-4 ${
-                          i < Math.round(article.ratings.reduce((sum, r) => sum + r.rating, 0) / article.ratings.length || 0)
+                          i < Math.round(
+                            article.ratings.reduce((sum,
+                            r
+                          ) => sum + r.rating, 0) / article.ratings.length || 0)
                             ? 'text-yellow-400'
                             : 'text-gray-300'
                         }`}
@@ -498,7 +507,7 @@ async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService
           title: 'Creating Your Account',
           content: 'Start by creating your account with a strong password and verified email address.',
           order: 1,
-          type: 'text' as any,
+          type: 'text',
           anchor: 'creating-account',
           isCollapsible: false,
           metadata: {}
@@ -508,7 +517,7 @@ async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService
           title: 'Browsing Templates',
           content: 'Use our advanced search and filtering tools to find the perfect templates for your needs.',
           order: 2,
-          type: 'text' as any,
+          type: 'text',
           anchor: 'browsing-templates',
           isCollapsible: false,
           metadata: {}
@@ -522,7 +531,7 @@ async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService
       contributors: [],
       version: '1.0.0',
       lastUpdated: new Date(),
-      status: 'published' as any,
+      status: 'published',
       views: 1250,
       ratings: [
         { userId: 'user-1', rating: 5, helpful: true, timestamp: new Date() },
@@ -534,7 +543,7 @@ async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService
       searchableText: 'marketplace getting started guide templates buying selling',
       searchScore: 0,
       accessibilityFeatures: [],
-      readingLevel: 'beginner' as any,
+      readingLevel: 'beginner',
       estimatedReadTime: 5,
       language: 'en',
       translations: {},
@@ -559,7 +568,7 @@ async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService
           title: 'Design Principles',
           content: 'Follow these design principles to create templates that customers will love.',
           order: 1,
-          type: 'text' as any,
+          type: 'text',
           anchor: 'design-principles',
           isCollapsible: false,
           metadata: {}
@@ -569,7 +578,7 @@ async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService
           title: 'File Requirements',
           content: 'Ensure your templates meet our technical requirements for quality and compatibility.',
           order: 2,
-          type: 'text' as any,
+          type: 'text',
           anchor: 'file-requirements',
           isCollapsible: false,
           metadata: {}
@@ -583,7 +592,7 @@ async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService
       contributors: [],
       version: '1.2.0',
       lastUpdated: new Date(),
-      status: 'published' as any,
+      status: 'published',
       views: 890,
       ratings: [
         { userId: 'user-3', rating: 5, helpful: true, timestamp: new Date() },
@@ -596,7 +605,7 @@ async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService
       searchableText: 'template creation design selling marketplace guide',
       searchScore: 0,
       accessibilityFeatures: [],
-      readingLevel: 'intermediate' as any,
+      readingLevel: 'intermediate',
       estimatedReadTime: 8,
       language: 'en',
       translations: {},

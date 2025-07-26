@@ -19,7 +19,7 @@ interface ChallengeData {
     imageUrl?: string;
     audioUrl?: string;
     options?: string[];
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   };
   expiresAt: string;
   maxAttempts: number;

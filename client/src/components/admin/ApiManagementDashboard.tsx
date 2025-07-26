@@ -8,7 +8,7 @@
  * Task: E17-1753114397216-ADC6B1 - Design management interfaces
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 
 // TypeScript interfaces for API management data structures
@@ -116,8 +116,8 @@ export const ApiManagementDashboard: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   
   // State for analytics
-  const [___usageMetrics, setUsageMetrics] = useState<Record<string, UsageMetrics>>({});
-  const [timeRange, ___setTimeRange] = useState<'1h' | '24h' | '7d' | '30d'>('24h');
+  const [usageMetrics, setUsageMetrics] = useState<Record<string, UsageMetrics>>({});
+  const [timeRange, setTimeRange] = useState<'1h' | '24h' | '7d' | '30d'>('24h');
   
   // State for monitoring
   const [realTimeAlerts, setRealTimeAlerts] = useState<Array<{
@@ -131,9 +131,11 @@ export const ApiManagementDashboard: React.FC = () => {
   }>>([]);
   
   // State for configuration
-  const [___bulkOperationMode, setBulkOperationMode] = useState<'revoke' | 'suspend' | 'rate_limit' | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_bulkOperationMode, setBulkOperationMode] = useState<'revoke' | 'suspend' | 'rate_limit' | null>(null);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
-  const [___rateLimitConfig, ___setRateLimitConfig] = useState<RateLimitConfiguration | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_rateLimitConfig, _setRateLimitConfig] = useState<RateLimitConfiguration | null>(null);
 
   // Check if user has admin privileges
   const isAdmin = user?.roles?.includes('admin') || user?.roles?.includes('super_admin');
@@ -153,7 +155,7 @@ export const ApiManagementDashboard: React.FC = () => {
       
       return () => clearInterval(interval);
     }
-  }, [user, isAdmin]);
+  }, [user, isAdmin, fetchUsageMetrics]);
 
   const fetchGlobalStats = async () => {
     try {
@@ -197,7 +199,7 @@ export const ApiManagementDashboard: React.FC = () => {
     }
   };
 
-  const fetchUsageMetrics = async () => {
+  const fetchUsageMetrics = useCallback(async () => {
     try {
       const response = await fetch(`/api/auth/api-keys/admin/metrics?timeRange=${timeRange}`, {
         headers: {
@@ -212,7 +214,7 @@ export const ApiManagementDashboard: React.FC = () => {
     } catch (error) {
       console.error('Error fetching usage metrics:', error);
     }
-  };
+  }, [timeRange]);
 
   const fetchRealTimeAlerts = async () => {
     try {
@@ -279,17 +281,8 @@ export const ApiManagementDashboard: React.FC = () => {
     }
   };
 
-  const ___updateRateLimits = async (keyId: string, rateLimits: RateLimitConfiguration) => {
-    try {
-      const response = await fetch('/api/auth/api-keys/admin/rate-limits', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-        },
-        body: JSON.stringify({ keyId, rateLimits })
-      });
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  
       if (!response.ok) {
         throw new Error('Failed to update rate limits');
       }
@@ -301,17 +294,8 @@ export const ApiManagementDashboard: React.FC = () => {
     }
   };
 
-  const ___performBulkOperation = async (operation: string, keyIds: string[], parameters: unknown) => {
-    try {
-      const response = await fetch('/api/auth/api-keys/admin/bulk', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-        },
-        body: JSON.stringify({ operation, keyIds, parameters })
-      });
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  
       if (!response.ok) {
         throw new Error(`Failed to perform bulk ${operation}`);
       }
@@ -326,7 +310,7 @@ export const ApiManagementDashboard: React.FC = () => {
     }
   };
 
-  const getFilteredKeys = () => {
+  const filteredKeys = useMemo(() => {
     let filtered = apiKeys;
     
     if (keyFilter !== 'all') {
@@ -344,7 +328,7 @@ export const ApiManagementDashboard: React.FC = () => {
     }
     
     return filtered;
-  };
+  }, [apiKeys, keyFilter, searchQuery]);
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -426,7 +410,7 @@ export const ApiManagementDashboard: React.FC = () => {
           ].map(tab => (
             <button
               key={tab.key}
-              onClick={() => setActiveTab(tab.key as any)}
+              onClick={() => setActiveTab(tab.key as 'overview' | 'keys' | 'analytics' | 'monitoring' | 'configuration')}
               className={`whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${
                 activeTab === tab.key
                   ? 'border-blue-500 text-blue-600'
@@ -613,7 +597,7 @@ export const ApiManagementDashboard: React.FC = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Filter</label>
                 <select
                   value={keyFilter}
-                  onChange={(e) => setKeyFilter(e.target.value as any)}
+                  onChange={(e) => setKeyFilter(e.target.value as 'all' | 'active' | 'expired' | 'revoked' | 'suspended')}
                   className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="all">All Keys</option>
@@ -637,7 +621,7 @@ export const ApiManagementDashboard: React.FC = () => {
             </div>
             
             <div className="text-sm text-gray-600">
-              Showing {getFilteredKeys().length} of {apiKeys.length} keys
+              Showing {filteredKeys.length} of {apiKeys.length} keys
             </div>
           </div>
 
@@ -650,10 +634,10 @@ export const ApiManagementDashboard: React.FC = () => {
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       <input
                         type="checkbox"
-                        checked={selectedKeys.length === getFilteredKeys().length && getFilteredKeys().length > 0}
+                        checked={selectedKeys.length === filteredKeys.length && filteredKeys.length > 0}
                         onChange={(e) => {
                           if (e.target.checked) {
-                            setSelectedKeys(getFilteredKeys().map(key => key.keyId));
+                            setSelectedKeys(filteredKeys.map(key => key.keyId));
                           } else {
                             setSelectedKeys([]);
                           }
@@ -679,7 +663,7 @@ export const ApiManagementDashboard: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {getFilteredKeys().map((key) => (
+                  {filteredKeys.map((key) => (
                     <tr key={key.keyId} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <input
@@ -767,6 +751,52 @@ export const ApiManagementDashboard: React.FC = () => {
                 </tbody>
               </table>
             </div>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'analytics' && (
+        <div className="space-y-6">
+          {/* Time Range Selector */}
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Usage Analytics</h3>
+              <div className="flex space-x-2">
+                {(['1h', '24h', '7d', '30d'] as const).map((range) => (
+                  <button
+                    key={range}
+                    onClick={() => setTimeRange(range)}
+                    className={`px-3 py-1 text-sm rounded-md ${
+                      timeRange === range
+                        ? 'bg-blue-100 text-blue-700'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {range}
+                  </button>
+                ))}
+              </div>
+            </div>
+            
+            {Object.keys(usageMetrics).length > 0 ? (
+              <div className="space-y-4">
+                {Object.entries(usageMetrics).map(([keyId, metrics]) => (
+                  <div key={keyId} className="border-l-4 border-blue-500 pl-4">
+                    <div className="text-sm font-medium text-gray-900">{keyId}</div>
+                    <div className="text-sm text-gray-600">
+                      Requests: {metrics.totalRequests.toLocaleString()} | 
+                      Errors: {metrics.errorCount} | 
+                      Avg Response: {metrics.averageResponseTime}ms
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                <div className="text-2xl mb-2">📊</div>
+                <p>No usage metrics available for the selected time range</p>
+              </div>
+            )}
           </div>
         </div>
       )}

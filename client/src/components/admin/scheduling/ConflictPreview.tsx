@@ -85,26 +85,9 @@ const RESOLUTION_CONFIG = {
   }
 };
 
-export const ConflictPreview: React.FC<ConflictPreviewProps> = ({
-  conflicts,
-  resolution
-}) => {
-  if (conflicts.length === 0) {
-    return (
-      <Alert severity="success" icon={<CheckCircleIcon />}>
-        <Typography variant="subtitle2">No Conflicts Detected</Typography>
-        <Typography variant="body2">
-          This schedule does not conflict with any existing schedules.
-        </Typography>
-      </Alert>
-    );
-  }
+export   }
 
   const resolutionConfig = RESOLUTION_CONFIG[resolution];
-  const ___severestConflict = conflicts.reduce((prev, current) => {
-    const severityLevels = { low: 1, medium: 2, high: 3, critical: 4 };
-    return severityLevels[current.severity] > severityLevels[prev.severity] ? current : prev;
-  });
 
   const conflictsByType = conflicts.reduce((acc, conflict) => {
     if (!acc[conflict.severity]) {

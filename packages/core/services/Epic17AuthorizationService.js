@@ -182,7 +182,7 @@ export class Epic17AuthorizationService extends EventEmitter {
     /**
      * Check if user has specific permission
      */
-    async hasPermission(user, resource, action, resourceId) {
+    async hasPermission(user: any, resource: string, action: string, resourceId?: string): Promise<any> {
         const context = {
             user,
             resource: resourceId ? {

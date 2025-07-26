@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { TextFieldEditor } from '../TextFieldEditor.js';
-import { TextAreaEditor } from '../TextAreaEditor.js';
-import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection.js';
+import { TextFieldEditor } from '../TextFieldEditor';
+import { TextAreaEditor } from '../TextAreaEditor';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 /**
  * Epic 8.4 - Conditional Editor with Progressive Disclosure
  *
@@ -10,7 +10,7 @@ import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection.js
  * - Advanced: Branch management and conditional logic controls
  * - Debug: Technical settings, strict mode, variable access controls
  */
-export const ConditionalEditor = (props) => {
+export const ConditionalEditor = (props: { nodeData: any; onChange: (data: any) => void }) => {
     const { nodeData, onChange } = props;
     // Conditional specific fields
     const branches = nodeData.branches || [];
@@ -19,10 +19,10 @@ export const ConditionalEditor = (props) => {
     const allowVariableAccess = nodeData.allowVariableAccess ?? true;
     const strictMode = nodeData.strictMode ?? false;
     // No manual collapse state needed - managed by ProgressiveDisclosureSection
-    const handleBranchesChange = (newBranches) => {
+    const handleBranchesChange = (newBranches: any[]): void => {
         onChange({ branches: newBranches });
     };
-    const handleAddBranch = () => {
+    const handleAddBranch = (): void => {
         const newBranch = {
             condition: '',
             output: '',
@@ -30,25 +30,25 @@ export const ConditionalEditor = (props) => {
         };
         handleBranchesChange([...branches, newBranch]);
     };
-    const handleRemoveBranch = (index) => {
-        const newBranches = branches.filter((_, i) => i !== index);
+    const handleRemoveBranch = (index: number): void => {
+        const newBranches = branches.filter((_: any, i: number) => i !== index);
         handleBranchesChange(newBranches);
     };
-    const handleUpdateBranch = (index, field, value) => {
+    const handleUpdateBranch = (index: number, field: string, value: any): void => {
         const newBranches = [...branches];
         newBranches[index] = { ...newBranches[index], [field]: value };
         handleBranchesChange(newBranches);
     };
-    const handleNameChange = (value) => {
+    const handleNameChange = (value: string): void => {
         onChange({ name: value, label: value });
     };
-    const handleDefaultOutputChange = (value) => {
+    const handleDefaultOutputChange = (value: string): void => {
         onChange({ defaultOutput: value });
     };
-    const handleAllowVariableAccessChange = (value) => {
+    const handleAllowVariableAccessChange = (value: boolean): void => {
         onChange({ allowVariableAccess: Boolean(value) });
     };
-    const handleStrictModeChange = (value) => {
+    const handleStrictModeChange = (value: boolean): void => {
         onChange({ strictMode: Boolean(value) });
     };
     return (_jsxs("div", { className: "conditional-editor", children: [_jsxs(ProgressiveDisclosureSection, { title: "Essential Settings", level: "basic", description: "Core conditional logic for smart storytelling", defaultExpanded: true, priority: "critical", fieldName: "name", children: [_jsx("div", { style: { marginBottom: 16 }, children: _jsx(TextFieldEditor, { label: "Decision Name", value: name, fieldKey: "name", zodType: null, onChange: handleNameChange, placeholder: "e.g., Character Response, Plot Branch, Scene Choice" }) }), _jsxs("div", { style: { marginBottom: 16 }, children: [_jsx(TextAreaEditor, { label: "Default Response", value: defaultOutput, fieldKey: "defaultOutput", zodType: null, onChange: handleDefaultOutputChange, placeholder: "What should happen when no specific conditions are met...", rows: 2 }), _jsx("div", { style: {
@@ -160,7 +160,7 @@ export const ConditionalEditor = (props) => {
                                     color: '#a0aec0',
                                     fontFamily: 'monospace',
                                     lineHeight: 1.4
-                                }, children: ["\u2022 Variable access: variable, hasVariable('name'), getVariable('name', 'default')", _jsx("br", {}), "\u2022 Comparisons: ===, !==, >, <, >=, <=, &&, ||, !", _jsx("br", {}), "\u2022 Strings: startsWith(str, 'prefix'), includes(str, 'substring'), isEmpty(str)", _jsx("br", {}), "\u2022 Arrays: includes(arr, item), length(arr)", _jsx("br", {}), "\u2022 Math: +, -, *, /, %, Math.min, Math.max, Math.abs", _jsx("br", {}), "\u2022 Regex: matches(str, 'pattern')"] })] })] }), _jsxs(ProgressiveDisclosureSection, { title: "Technical Settings & Preview", level: "debug", description: "Advanced expression controls and execution preview", defaultExpanded: false, priority: "supplementary", fieldName: "settings", children: [_jsxs("div", { style: { marginBottom: 16 }, children: [_jsx("div", { style: {
+                                }, children: ["\u2022 Variable access: variable, hasVariable('name'), getVariable('name', 'default')", _jsx("br", {}), "\u2022 Comparisons: ===, !==, ", '>', ", ", '<', ", ", '>=', ", ", '<=', ", &&, ||, !", _jsx("br", {}), "\u2022 Strings: startsWith(str, 'prefix'), includes(str, 'substring'), isEmpty(str)", _jsx("br", {}), "\u2022 Arrays: includes(arr, item), length(arr)", _jsx("br", {}), "\u2022 Math: +, -, *, /, %, Math.min, Math.max, Math.abs", _jsx("br", {}), "\u2022 Regex: matches(str, 'pattern')"] })] })] }), _jsxs(ProgressiveDisclosureSection, { title: "Technical Settings & Preview", level: "debug", description: "Advanced expression controls and execution preview", defaultExpanded: false, priority: "supplementary", fieldName: "settings", children: [_jsxs("div", { style: { marginBottom: 16 }, children: [_jsx("div", { style: {
                                     fontSize: 11,
                                     fontWeight: 500,
                                     color: '#e2e8f0',

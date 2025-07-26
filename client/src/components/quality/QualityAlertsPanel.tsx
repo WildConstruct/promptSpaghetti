@@ -112,11 +112,12 @@ export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({
     case 'timestamp':
       comparison = new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
       break;
-    case 'severity':
+    case 'severity': {
       const severityOrder = { critical: 4, error: 3, warning: 2, info: 1 };
       comparison = (severityOrder[a.severity as keyof typeof severityOrder] || 0) - 
                     (severityOrder[b.severity as keyof typeof severityOrder] || 0);
       break;
+    }
     case 'metric':
       comparison = a.metric.localeCompare(b.metric);
       break;

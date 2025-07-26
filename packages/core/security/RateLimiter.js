@@ -214,7 +214,7 @@ export class RateLimitStrategy {
     }
 }
 export class FixedWindowStrategy extends RateLimitStrategy {
-    async checkLimit(key, context) {
+    async checkLimit(key) {
         try {
             const { hits, resetTime } = await this.store.increment(key, this.config.windowMs);
             const now = new Date();
@@ -351,7 +351,6 @@ export class RateLimiter {
         const data = await this.config.store?.get(key);
         if (!data)
             return null;
-        const now = new Date();
         const resetTime = new Date(data.resetTime);
         const windowStart = new Date(data.windowStart);
         return {
@@ -541,7 +540,7 @@ export class RateLimitUtils {
     /**
      * Calculate optimal window size based on expected traffic
      */
-    static calculateOptimalWindow(expectedRequestsPerHour, maxConcurrentUsers) {
+    static calculateOptimalWindow(expectedRequestsPerHour) {
         // Simple heuristic: window should be long enough to smooth traffic spikes
         // but short enough to be responsive to attacks
         const requestsPerMinute = expectedRequestsPerHour / 60;

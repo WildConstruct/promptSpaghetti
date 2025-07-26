@@ -10,7 +10,7 @@ export class CommentAnalyticsService {
     db;
     config;
     cache;
-    constructor(config = {}) {
+    constructor(config: any = {}) {
         this.config = {
             cacheTTLSeconds: 300, // 5 minutes default
             enableRealTimeUpdates: true,
@@ -25,7 +25,7 @@ export class CommentAnalyticsService {
     /**
      * Get comprehensive comment analytics for a resource
      */
-    async getCommentAnalytics(resourceId, resourceType, options = {}) {
+    async getCommentAnalytics(resourceId: string, resourceType: string, options: any = {}) {
         const cacheKey = `analytics:${resourceId}:${resourceType}:${JSON.stringify(options)}`;
         // Check cache first
         const cached = this.getCachedData(cacheKey);
@@ -134,7 +134,7 @@ export class CommentAnalyticsService {
     /**
      * Record a comment engagement event
      */
-    async recordEngagementEvent(commentId, userId, sessionId, engagementType, metadata = {}) {
+    async recordEngagementEvent(commentId: string, userId: string, sessionId: string, engagementType: string, metadata: any = {}) {
         try {
             await this.db.query(`INSERT INTO comment_engagement_events 
          (comment_id, user_id, session_id, engagement_type, metadata, timestamp)
@@ -150,7 +150,7 @@ export class CommentAnalyticsService {
     /**
      * Update daily analytics for a resource
      */
-    async updateDailyAnalytics(resourceId, resourceType, date = new Date()) {
+    async updateDailyAnalytics(resourceId: string, resourceType: string, date: Date = new Date()) {
         try {
             await this.db.query('SELECT update_comment_analytics_daily($1, $2, $3)', [resourceId, resourceType, date.toISOString().split('T')[0]]);
             // Invalidate analytics cache for this resource
@@ -162,7 +162,7 @@ export class CommentAnalyticsService {
         }
     }
     // Private helper methods
-    async getCoreMetrics(resourceId, resourceType, startDate, endDate) {
+    async getCoreMetrics(resourceId: string, resourceType: string, startDate: Date, endDate: Date) {
         const result = await this.db.query(`SELECT 
          COUNT(*) as total_comments,
          COUNT(*) FILTER (WHERE parent_comment_id IS NOT NULL) as total_replies,
@@ -183,7 +183,7 @@ export class CommentAnalyticsService {
             engagementRate: totalEngagements / Math.max(parseInt(row.total_comments), 1)
         };
     }
-    async getEngagementBreakdowns(resourceId, resourceType, startDate, endDate) {
+    async getEngagementBreakdowns(resourceId: string, resourceType: string, startDate: Date, endDate: Date) {
         const result = await this.db.query(`SELECT 
          engagement_type,
          COUNT(*) as count
@@ -231,7 +231,7 @@ export class CommentAnalyticsService {
         });
         return breakdowns;
     }
-    async getTimeSeriesData(resourceId, resourceType, startDate, endDate) {
+    async getTimeSeriesData(resourceId: string, resourceType: string, startDate: Date, endDate: Date) {
         // Get daily data
         const dailyResult = await this.db.query(`SELECT 
          DATE(created_at) as date,
@@ -260,7 +260,7 @@ export class CommentAnalyticsService {
             monthly: dailyResult.rows.map(row => parseInt(row.count))
         };
     }
-    async getSentimentAnalysis(resourceId, resourceType, startDate, endDate) {
+    async getSentimentAnalysis(resourceId: string, resourceType: string, startDate: Date, endDate: Date) {
         const result = await this.db.query(`SELECT 
          sentiment,
          COUNT(*) as count,
@@ -296,7 +296,7 @@ export class CommentAnalyticsService {
             confidence: totalConfidence / totalCount
         };
     }
-    async getTopicTrends(resourceId, resourceType, startDate, endDate) {
+    async getTopicTrends(resourceId: string, resourceType: string, startDate: Date, endDate: Date) {
         const result = await this.db.query(`SELECT 
          topic,
          SUM(mention_count) as total_mentions,
@@ -315,7 +315,7 @@ export class CommentAnalyticsService {
             growthRate: parseFloat(row.avg_growth_rate)
         }));
     }
-    async getTotalEngagements(resourceId, resourceType, startDate, endDate) {
+    async getTotalEngagements(resourceId: string, resourceType: string, startDate: Date, endDate: Date) {
         const result = await this.db.query(`SELECT COUNT(*) as total
        FROM comment_engagement_events cee
        JOIN feedback f ON cee.comment_id = f.id
@@ -323,7 +323,7 @@ export class CommentAnalyticsService {
          AND cee.timestamp BETWEEN $3 AND $4`, [resourceId, resourceType, startDate, endDate]);
         return parseInt(result.rows[0].total);
     }
-    async calculateGrowthRate(resourceId, resourceType, startDate, endDate) {
+    async calculateGrowthRate(resourceId: string, resourceType: string, startDate: Date, endDate: Date) {
         // Calculate growth rate compared to previous period
         const periodDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
         const previousStart = new Date(startDate.getTime() - periodDays * 24 * 60 * 60 * 1000);
@@ -333,7 +333,7 @@ export class CommentAnalyticsService {
             return 100;
         return ((currentPeriod.totalComments - previousPeriod.totalComments) / previousPeriod.totalComments) * 100;
     }
-    async calculateTrendingScore(resourceId, resourceType) {
+    async calculateTrendingScore(resourceId: string, resourceType: string) {
         // Use the database function to calculate trending score
         const result = await this.db.query(`SELECT AVG(calculate_comment_trending_score(f.id)) as avg_score
        FROM feedback f
@@ -341,7 +341,7 @@ export class CommentAnalyticsService {
          AND f.created_at >= NOW() - INTERVAL '24 hours'`, [resourceId, resourceType]);
         return parseFloat(result.rows[0].avg_score) || 0;
     }
-    async calculateEngagementVelocity(resourceId, resourceType) {
+    async calculateEngagementVelocity(resourceId: string, resourceType: string) {
         const result = await this.db.query(`SELECT COUNT(*)::DECIMAL / 24 as velocity
        FROM comment_engagement_events cee
        JOIN feedback f ON cee.comment_id = f.id
@@ -349,7 +349,7 @@ export class CommentAnalyticsService {
          AND cee.timestamp >= NOW() - INTERVAL '24 hours'`, [resourceId, resourceType]);
         return parseFloat(result.rows[0].velocity) || 0;
     }
-    async getPeakEngagementTime(resourceId, resourceType, startDate, endDate) {
+    async getPeakEngagementTime(resourceId: string, resourceType: string, startDate: Date, endDate: Date) {
         const result = await this.db.query(`SELECT 
          EXTRACT(HOUR FROM cee.timestamp) as hour,
          COUNT(*) as count
@@ -365,14 +365,14 @@ export class CommentAnalyticsService {
         const hour = parseInt(result.rows[0].hour);
         return `${hour.toString().padStart(2, '0')}:00`;
     }
-    async getAverageCommentLength(resourceId, resourceType, startDate, endDate) {
+    async getAverageCommentLength(resourceId: string, resourceType: string, startDate: Date, endDate: Date) {
         const result = await this.db.query(`SELECT AVG(LENGTH(content)) as avg_length
        FROM feedback
        WHERE target_id = $1 AND target_type = $2 AND type = 'comment'
          AND created_at BETWEEN $3 AND $4`, [resourceId, resourceType, startDate, endDate]);
         return parseFloat(result.rows[0].avg_length) || 0;
     }
-    async getAverageResponseTime(resourceId, resourceType, startDate, endDate) {
+    async getAverageResponseTime(resourceId: string, resourceType: string, startDate: Date, endDate: Date) {
         // Calculate average time between thread start and first reply
         const result = await this.db.query(`SELECT AVG(EXTRACT(EPOCH FROM (reply.created_at - thread.created_at)) / 60) as avg_minutes
        FROM feedback thread
@@ -382,7 +382,7 @@ export class CommentAnalyticsService {
          AND thread.created_at BETWEEN $3 AND $4`, [resourceId, resourceType, startDate, endDate]);
         return parseFloat(result.rows[0].avg_minutes) || 0;
     }
-    async getQualityScore(resourceId, resourceType, startDate, endDate) {
+    async getQualityScore(resourceId: string, resourceType: string, startDate: Date, endDate: Date) {
         const result = await this.db.query(`SELECT AVG(
          CASE 
            WHEN csa.sentiment IN ('positive', 'very_positive') AND csa.toxicity_score < 0.3 THEN 85
@@ -397,7 +397,7 @@ export class CommentAnalyticsService {
          AND f.created_at BETWEEN $3 AND $4`, [resourceId, resourceType, startDate, endDate]);
         return parseFloat(result.rows[0].quality_score) || 70;
     }
-    async getLanguageDistribution(resourceId, resourceType, startDate, endDate) {
+    async getLanguageDistribution(resourceId: string, resourceType: string, startDate: Date, endDate: Date) {
         // This would require language detection - placeholder implementation
         return {
             'en': 85,
@@ -406,7 +406,7 @@ export class CommentAnalyticsService {
             'de': 2
         };
     }
-    async getUserTypeBreakdown(resourceId, resourceType, startDate, endDate) {
+    async getUserTypeBreakdown(resourceId: string, resourceType: string, startDate: Date, endDate: Date) {
         // This would require user type classification - placeholder implementation
         return {
             'verified': 25,
@@ -414,7 +414,7 @@ export class CommentAnalyticsService {
             'new': 10
         };
     }
-    async getTopContributors(resourceId, resourceType, startDate, endDate) {
+    async getTopContributors(resourceId: string, resourceType: string, startDate: Date, endDate: Date) {
         const result = await this.db.query(`SELECT 
          f.author_id as user_id,
          COUNT(*) as comments_posted,
@@ -442,7 +442,7 @@ export class CommentAnalyticsService {
             reputationScore: parseFloat(row.influence_score) * 1.2 // Simple calculation
         }));
     }
-    async getPreviousPeriodComparison(resourceId, resourceType, startDate, endDate) {
+    async getPreviousPeriodComparison(resourceId: string, resourceType: string, startDate: Date, endDate: Date) {
         const periodDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
         const previousStart = new Date(startDate.getTime() - periodDays * 24 * 60 * 60 * 1000);
         const currentMetrics = await this.getCoreMetrics(resourceId, resourceType, startDate, endDate);
@@ -453,7 +453,7 @@ export class CommentAnalyticsService {
             qualityChange: 0 // Placeholder
         };
     }
-    async getBenchmarkComparison(resourceType) {
+    async getBenchmarkComparison(resourceType: string) {
         // This would compare against industry/platform benchmarks
         return {
             commentsPercentile: 75,
@@ -461,7 +461,7 @@ export class CommentAnalyticsService {
             qualityPercentile: 82
         };
     }
-    async getSimilarResourcesComparison(resourceId, resourceType) {
+    async getSimilarResourcesComparison(resourceId: string, resourceType: string) {
         // This would find and compare similar resources
         return {
             averageComments: 156,
@@ -470,7 +470,7 @@ export class CommentAnalyticsService {
         };
     }
     // Cache management methods
-    getCachedData(key) {
+    getCachedData(key: string) {
         const cached = this.cache.get(key);
         if (cached && cached.expires > Date.now()) {
             return cached.data;
@@ -478,13 +478,13 @@ export class CommentAnalyticsService {
         this.cache.delete(key);
         return null;
     }
-    setCachedData(key, data) {
+    setCachedData(key: string, data: any) {
         this.cache.set(key, {
             data,
             expires: Date.now() + (this.config.cacheTTLSeconds * 1000)
         });
     }
-    invalidateAnalyticsCache(commentId) {
+    invalidateAnalyticsCache(commentId: string) {
         // Remove all cache entries that might be affected by this comment
         for (const [key] of this.cache) {
             if (key.includes('analytics:')) {
@@ -492,7 +492,7 @@ export class CommentAnalyticsService {
             }
         }
     }
-    invalidateResourceCache(resourceId, resourceType) {
+    invalidateResourceCache(resourceId: string, resourceType: string) {
         // Remove cache entries for this specific resource
         for (const [key] of this.cache) {
             if (key.includes(`analytics:${resourceId}:${resourceType}`)) {

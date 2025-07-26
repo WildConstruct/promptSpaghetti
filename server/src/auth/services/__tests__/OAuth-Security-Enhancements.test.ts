@@ -25,9 +25,9 @@ global.fetch = jest.fn<unknown[], unknown>();
 
 jest.mock('../../../security/tls-config', () => ({
   CertificatePinningManager: jest.fn<unknown[], unknown>().mockImplementation(() => ({
-    createPinnedFetch: jest.fn<unknown[], unknown>().mockReturnValue(global.fetch as unknown as unknown)
+    createPinnedFetch: jest.fn<unknown[], unknown>().mockReturnValue(global.fetch as unknown as unknown as unknown)
   })),
-  loadPinConfigFromEnv: jest.fn<unknown[], unknown>().mockReturnValue({} as unknown as unknown)
+  loadPinConfigFromEnv: jest.fn<unknown[], unknown>().mockReturnValue({} as unknown as unknown as unknown)
 }));
 
 describe('OAuth Security Enhancements', () => {
@@ -84,7 +84,7 @@ describe('OAuth Security Enhancements', () => {
     mockTokenService = new TokenService({} as any, {} as any, {} as any) as jest.Mocked<TokenService>;
     mockDbService = new DatabaseService({} as any) as jest.Mocked<DatabaseService>;
 
-    mockAuditService.logEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown);
+    mockAuditService.logEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown);
 
     // Create OAuth service
     oauthService = new OAuthService(
@@ -248,7 +248,7 @@ describe('OAuth Security Enhancements', () => {
       const clientType = 'public';
 
       // Mock the client PKCE capability check to return true
-      jest.spyOn(oauthService as any, 'checkClientPkceCapability').mockReturnValue(true as unknown as unknown);
+      jest.spyOn(oauthService as any, 'checkClientPkceCapability').mockReturnValue(true as unknown as unknown as unknown);
 
       expect(() => {
         (oauthService as any).validatePkceRequirement(clientId, undefined, clientType);
@@ -279,7 +279,7 @@ describe('OAuth Security Enhancements', () => {
       const clientId = 'test-client';
 
       // Mock PKCE capability check
-      jest.spyOn(oauthService as any, 'checkClientPkceCapability').mockReturnValue(true as unknown as unknown);
+      jest.spyOn(oauthService as any, 'checkClientPkceCapability').mockReturnValue(true as unknown as unknown as unknown);
 
       const result = await (oauthService as any).generateSecureAuthorizationUrl(
         provider,
@@ -311,7 +311,7 @@ describe('OAuth Security Enhancements', () => {
       const clientType = 'confidential';
 
       // Mock redirect URI validation to fail
-      jest.spyOn(oauthService as any, 'validateRedirectUriStrict').mockReturnValue(false as unknown as unknown);
+      jest.spyOn(oauthService as any, 'validateRedirectUriStrict').mockReturnValue(false as unknown as unknown as unknown);
 
       await expect(
         (oauthService as any).generateSecureAuthorizationUrl(provider, state, undefined, clientId)
@@ -404,7 +404,7 @@ describe('OAuth Security Enhancements', () => {
       const publicClientId = 'public-client';
 
       // Mock PKCE capability to simulate OAuth 2.1 compliant client
-      jest.spyOn(oauthService as any, 'checkClientPkceCapability').mockReturnValue(true as unknown as unknown);
+      jest.spyOn(oauthService as any, 'checkClientPkceCapability').mockReturnValue(true as unknown as unknown as unknown);
 
       const authUrl = await (oauthService as any).generateSecureAuthorizationUrl(
         provider,

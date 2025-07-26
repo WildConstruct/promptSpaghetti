@@ -58,6 +58,8 @@ export type EventType =
   | 'error'
   | 'conversion'
   | 'engagement'
+  | 'experiment'
+  | 'privacy'
   | 'custom';
 
 export interface EventData {
@@ -538,7 +540,7 @@ export class EmbedAnalytics extends EventEmitter {
       this.emit('initialized', { embedId: this.config.embedId });
 
     } catch (error) {
-      this.emit('error', { type: 'initialization', error: error.message });
+      this.emit('error', { type: 'initialization', error: error instanceof Error ? error.message : String(error) });
       throw error;
     }
   }
@@ -667,6 +669,9 @@ export class EmbedAnalytics extends EventEmitter {
     }
 
     const userId = this.getUserId();
+    if (!userId) {
+      return null;
+    }
     const variant = this.allocateVariant(experiment, userId);
     
     // Track assignment
@@ -723,7 +728,7 @@ export class EmbedAnalytics extends EventEmitter {
       return report;
 
     } catch (error) {
-      this.emit('reportError', { reportId, error: error.message });
+      this.emit('reportError', { reportId, error: error instanceof Error ? error.message : String(error) });
       throw error;
     }
   }
@@ -1057,7 +1062,10 @@ export class EmbedAnalytics extends EventEmitter {
     } catch (error) {
       // Re-queue failed events
       this.eventQueue.unshift(...events);
-      this.emit('sendError', { error: error.message, eventCount: events.length });
+      this.emit(
+        'sendError',
+        { error: error instanceof Error ? error.message : String(error
+      ), eventCount: events.length });
     }
   }
 
@@ -1207,7 +1215,7 @@ export class EmbedAnalytics extends EventEmitter {
     return false;
   }
 
-  private getTrafficSource(): string {
+  private getTrafficSource(): 'direct' | 'search' | 'social' | 'email' | 'referral' | 'paid' | 'unknown' {
     // Implementation would determine traffic source
     return 'direct';
   }
@@ -1308,7 +1316,12 @@ export class EmbedAnalytics extends EventEmitter {
   private getReportDimensions(type: ReportType): string[] { return []; }
 
   // Query methods (would interface with analytics backend)
-  private async queryAnalyticsData(type: ReportType, timeRange: TimeRange, filters: ReportFilter[], metrics: ReportMetric[]): Promise<any> {
+  private async queryAnalyticsData(
+    type: ReportType,
+    timeRange: TimeRange,
+    filters: ReportFilter[],
+    metrics: ReportMetric[]
+  ): Promise<any> {
     return {
       summary: {
         totalEvents: 1000,

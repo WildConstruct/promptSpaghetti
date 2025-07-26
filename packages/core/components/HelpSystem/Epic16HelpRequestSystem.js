@@ -6,9 +6,9 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * functionality including dashboard, form, and intelligent routing.
  */
 import { useState, useEffect, useMemo } from 'react';
-import { Epic16HelpRequestService } from '../../services/Epic16HelpRequestService.js';
-import HelpRequestDashboard from './HelpRequestDashboard.js';
-import HelpRequestForm from './HelpRequestForm.js';
+import { Epic16HelpRequestService } from '../../services/Epic16HelpRequestService';
+import HelpRequestDashboard from './HelpRequestDashboard';
+import HelpRequestForm from './HelpRequestForm';
 export const Epic16HelpRequestSystem = ({ userId, userRole, userType, userTier, config, onConfigChange }) => {
     // Service instance
     const helpService = useMemo(() => {

@@ -57,7 +57,7 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
   const chartData = useMemo(() => {
     if (!trends) return [];
     
-    const getDataForRange = (trendData: unknown) => {
+    const getDataForRange = (trendData: { daily?: number[]; weekly?: number[]; monthly?: number[] }) => {
       switch (selectedTimeRange) {
       case 'daily':
         return trendData.daily || [];
@@ -82,7 +82,7 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
     );
     
     return Array.from({ length: maxLength }, (_, index) => {
-      const getValueAtIndex = (trendData: unknown, idx: number) => {
+      const getValueAtIndex = (trendData: { daily?: number[]; weekly?: number[]; monthly?: number[] }, idx: number) => {
         const data = getDataForRange(trendData);
         return data[idx] || data[data.length - 1] || 0;
       };
@@ -91,18 +91,21 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
       const getDateLabel = (idx: number) => {
         const now = new Date();
         switch (selectedTimeRange) {
-        case 'daily':
+        case 'daily': {
           const daysAgo = maxLength - idx - 1;
           const date = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000);
           return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        case 'weekly':
+        }
+        case 'weekly': {
           const weeksAgo = maxLength - idx - 1;
           const weekDate = new Date(now.getTime() - weeksAgo * 7 * 24 * 60 * 60 * 1000);
           return `Week of ${weekDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
-        case 'monthly':
+        }
+        case 'monthly': {
           const monthsAgo = maxLength - idx - 1;
           const monthDate = new Date(now.getFullYear(), now.getMonth() - monthsAgo, 1);
           return monthDate.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+        }
         default:
           return `Point ${idx + 1}`;
         }
@@ -172,12 +175,22 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
   };
   
   // Custom tooltip
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  interface TooltipEntry {
+    name?: string;
+    value?: number | string;
+    color?: string;
+  }
+
+  const CustomTooltip = (
+    { active,
+    payload,
+    label }: { active?: boolean; payload?: TooltipEntry[]; label?: string }
+  ) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
           <p className="font-medium text-gray-900 mb-2">{label}</p>
-          {payload.map((entry: unknown, index: number) => (
+          {payload.map((entry: TooltipEntry, index: number) => (
             <div key={index} className="flex items-center justify-between space-x-4">
               <div className="flex items-center space-x-2">
                 <div 

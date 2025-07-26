@@ -10,11 +10,11 @@
  * @since 2025-07-22
  */
 // Main Components
-export { default as SecurityDashboardMain } from './SecurityDashboardMain.js';
-export { default as SecurityDashboardDataService } from './SecurityDashboardDataService.js';
+export { default as SecurityDashboardMain } from './SecurityDashboardMain';
+export { default as SecurityDashboardDataService } from './SecurityDashboardDataService';
 // Core Framework Components (re-exported for convenience)
-export { SecurityDashboardFramework, DashboardType, SecurityRole, DashboardTheme } from '../../security/dashboard/SecurityDashboardFramework.js';
-export { SecurityDashboardWorkflow } from '../../security/dashboard/SecurityDashboardWorkflow.js';
-export { OperationalSecurityDashboard } from '../../security/dashboard/OperationalSecurityDashboard.js';
-export { ExecutiveSecurityDashboard } from '../../security/dashboard/ExecutiveSecurityDashboard.js';
-export { ComplianceSecurityDashboard } from '../../security/dashboard/ComplianceSecurityDashboard.js';
+export { SecurityDashboardFramework, DashboardType, SecurityRole, DashboardTheme } from '../../security/dashboard/SecurityDashboardFramework';
+export { SecurityDashboardWorkflow } from '../../security/dashboard/SecurityDashboardWorkflow';
+export { OperationalSecurityDashboard } from '../../security/dashboard/OperationalSecurityDashboard';
+export { ExecutiveSecurityDashboard } from '../../security/dashboard/ExecutiveSecurityDashboard';
+export { ComplianceSecurityDashboard } from '../../security/dashboard/ComplianceSecurityDashboard';

@@ -5,7 +5,7 @@
  * and monitoring compliance deadlines in PromptScape.
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { 
   Card, 
   Calendar, 
@@ -168,7 +168,7 @@ export const AuditCalendarDashboard: React.FC = () => {
 
   const loadMonitoringData = () => {
     try {
-      const _____monitoring = auditCalendarSystem.processScheduleMonitoring();
+      const _monitoring = auditCalendarSystem.processScheduleMonitoring();
       const upcomingDeadlines = auditCalendarSystem.getUpcomingDeadlines(7);
       const overdueSchedules = auditCalendarSystem.getOverdueSchedules();
       
@@ -219,7 +219,7 @@ export const AuditCalendarDashboard: React.FC = () => {
     );
   };
 
-  const monthCellRender = (_____value: Moment) => {
+  const monthCellRender = (_value: Moment) => {
     // Month view cell rendering if needed
     return null;
   };
@@ -909,7 +909,10 @@ const getViewDateRange = (view: string, selectedDate: Moment) => {
   }
 };
 
-const getEventBadgeStatus = (priority: SchedulePriority, status: ScheduleStatus): any => {
+const getEventBadgeStatus = (
+  priority: SchedulePriority,
+  status: ScheduleStatus
+): 'error' | 'success' | 'processing' | 'warning' | 'default' => {
   if (status === ScheduleStatus.OVERDUE) return 'error';
   if (status === ScheduleStatus.COMPLETED) return 'success';
   if (status === ScheduleStatus.IN_PROGRESS) return 'processing';
@@ -1260,9 +1263,9 @@ const CalendarAnalyticsView: React.FC = () => {
 
   useEffect(() => {
     loadAnalyticsData();
-  }, [dateRange]);
+  }, [dateRange, loadAnalyticsData]);
 
-  const loadAnalyticsData = () => {
+  const loadAnalyticsData = useCallback(() => {
     setLoading(true);
     try {
       const analytics = auditCalendarSystem.generateScheduleAnalytics({
@@ -1275,7 +1278,7 @@ const CalendarAnalyticsView: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [dateRange]);
 
   if (loading) {
     return (

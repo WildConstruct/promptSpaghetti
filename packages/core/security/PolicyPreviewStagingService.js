@@ -9,7 +9,7 @@
  * Task: T-1752989143998-98 - Implement policy preview and staging
  */
 import { EventEmitter } from 'events';
-import { PolicyType, DeploymentType, DeploymentStatus, ValidationType, ValidationStatus, RiskLevel, UpdatePriority, VersionStatus } from '../../../server/src/services/PolicyUpdateWorkflowService.ts.js';
+import { PolicyType, DeploymentType, DeploymentStatus, ValidationType, ValidationStatus, RiskLevel, UpdatePriority, VersionStatus } from '../../../server/src/services/PolicyUpdateWorkflowService.ts';
 // Re-export for tests
 export { PolicyType, DeploymentType, DeploymentStatus, ValidationType, ValidationStatus, RiskLevel, UpdatePriority, VersionStatus };
 export var EnvironmentType;

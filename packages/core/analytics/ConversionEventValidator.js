@@ -16,6 +16,7 @@
  * Handles all aspects of event validation and deduplication
  */
 export class ConversionEventValidator {
+    static MAX_EVENT_AGE = 30 * 24 * 60 * 60 * 1000; // 30 days
     rules = new Map();
     recentEvents = new Map();
     userProfiles = new Map();
@@ -387,7 +388,7 @@ export class ConversionEventValidator {
                         code: 'FUTURE_TIMESTAMP'
                     });
                 }
-                else if (eventAge > this.MAX_EVENT_AGE) {
+                else if (eventAge > ConversionEventValidator.MAX_EVENT_AGE) {
                     errors.push({
                         rule: 'timestamp_validation',
                         field: 'timestamp',
@@ -410,7 +411,7 @@ export class ConversionEventValidator {
                     score: errors.length === 0 ? 100 : Math.max(0, 100 - errors.length * 50),
                     errors,
                     warnings,
-                    metadata: { eventAge, maxAge: this.MAX_EVENT_AGE }
+                    metadata: { eventAge, maxAge: ConversionEventValidator.MAX_EVENT_AGE }
                 };
             }
         });

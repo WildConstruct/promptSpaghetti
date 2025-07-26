@@ -41,8 +41,8 @@ export interface PasswordRuleResult {
   message: string;
   suggestion?: string;
   details?: {
-    expected?: any;
-    actual?: any;
+    expected?: unknown;
+    actual?: unknown;
     examples?: string[];
   };
 }
@@ -932,7 +932,7 @@ export class PasswordComplexityValidator {
     // Check for missing required rules
     const requiredCategories = ['length', 'character'];
     for (const category of requiredCategories) {
-      const categoryRules = this.getRulesByCategory(category as any);
+      const categoryRules = this.getRulesByCategory(category as PasswordComplexityRule['category']);
       if (categoryRules.length === 0) {
         warnings.push(`No rules defined for required category: ${category}`);
       }

@@ -3,6 +3,7 @@ import { Injectable, NotFoundException, BadRequestException, ForbiddenException 
 import { MarketplaceDAO } from './dao';
 import { ElasticsearchService } from './elasticsearch.service';
 import { ClaudePreviewService } from './claude-preview.service';
+import { SearchAnalyticsService } from './search-analytics.service';
 import { 
   MarketplaceTemplate, 
   TemplateVersion, 
@@ -30,11 +31,13 @@ export class MarketplaceService {
   private dao: MarketplaceDAO;
   private elasticsearch: ElasticsearchService;
   private claudePreview: ClaudePreviewService;
+  private searchAnalytics: SearchAnalyticsService;
 
   constructor(private pool: Pool) {
     this.dao = new MarketplaceDAO(pool);
     this.elasticsearch = new ElasticsearchService(pool);
     this.claudePreview = new ClaudePreviewService(pool);
+    this.searchAnalytics = new SearchAnalyticsService(pool);
   }
 
   // Template operations
@@ -138,12 +141,26 @@ export class MarketplaceService {
     await this.dao.updateTemplate(id, { status: TemplateStatus.ARCHIVED });
   }
 
-  async searchTemplates(filters: SearchFilters, userId?: string): Promise<SearchResult> {
+  async searchTemplates(
+    filters: SearchFilters, 
+    userId?: string, 
+    searchContext?: {
+      sessionId?: string;
+      ipAddress?: string;
+      userAgent?: string;
+      searchStartTime?: number;
+    }
+  ): Promise<SearchResult> {
+    const searchStartTime = searchContext?.searchStartTime || Date.now();
+    
     // Use Elasticsearch for advanced search, fallback to PostgreSQL
     let result: SearchResult;
+    let searchDurationMs = 0;
     
     try {
       const esResult = await this.elasticsearch.searchTemplates(filters);
+      searchDurationMs = Date.now() - searchStartTime;
+      
       result = {
         templates: esResult.templates,
         total: esResult.total,
@@ -155,9 +172,33 @@ export class MarketplaceService {
     } catch (error) {
       console.error('Elasticsearch search failed, falling back to PostgreSQL:', error);
       result = await this.dao.searchTemplates(filters);
+      searchDurationMs = Date.now() - searchStartTime;
     }
 
-    // Record search event
+    // Enhanced search analytics tracking
+    if (filters.query || Object.keys(filters).length > 2) { // Only track meaningful searches
+      await this.searchAnalytics.logSearch({
+        query: filters.query || '',
+        user_id: userId,
+        filters: {
+          categories: filters.categories,
+          tags: filters.tags,
+          price_min: filters.price_min,
+          price_max: filters.price_max,
+          rating_min: filters.rating_min,
+          sort_by: filters.sort_by,
+          is_free: filters.is_free,
+          is_featured: filters.is_featured,
+          claude_models: filters.claude_models
+        },
+        results_count: result.total,
+        session_id: searchContext?.sessionId,
+        ip_address: searchContext?.ipAddress,
+        user_agent: searchContext?.userAgent
+      });
+    }
+
+    // Record search event in marketplace events (for broader analytics)
     if (userId) {
       await this.dao.recordEvent({
         event_type: EventType.VIEW,
@@ -166,10 +207,13 @@ export class MarketplaceService {
         metadata: { 
           action: 'search',
           query: filters.query,
+          results_count: result.total,
+          search_duration_ms: searchDurationMs,
           filters: {
             categories: filters.categories,
             price_range: [filters.price_min, filters.price_max],
-            sort_by: filters.sort_by
+            sort_by: filters.sort_by,
+            page: filters.page
           }
         }
       });
@@ -180,11 +224,32 @@ export class MarketplaceService {
 
   async getSearchSuggestions(query: string, limit: number = 10): Promise<string[]> {
     try {
+      // Try enhanced search analytics suggestions first
+      const analyticsSuggestions = await this.searchAnalytics.getSearchSuggestions(query, limit);
+      
+      if (analyticsSuggestions.length > 0) {
+        return analyticsSuggestions.map(s => s.suggestion);
+      }
+      
+      // Fallback to Elasticsearch
       return await this.elasticsearch.getSearchSuggestions(query, limit);
     } catch (error) {
       console.error('Failed to get search suggestions:', error);
       return [];
     }
+  }
+
+  // New analytics methods for Story 16.1
+  async getSearchAnalytics(startDate: Date, endDate: Date, userId?: string) {
+    return this.searchAnalytics.getSearchAnalytics(startDate, endDate, userId);
+  }
+
+  async getPopularSearchTerms(timeframe: 'day' | 'week' | 'month' = 'week', limit: number = 20) {
+    return this.searchAnalytics.getPopularSearchTerms(timeframe, limit);
+  }
+
+  async getSearchInsights() {
+    return this.searchAnalytics.getSearchInsights();
   }
 
   // Version management

@@ -5,7 +5,7 @@
  * Handles policy evaluation, violation monitoring, and compliance tracking.
  */
 import { useEffect, useState, useCallback, useMemo } from 'react';
-import { PolicyManagement, PolicyDomain, PolicyType, PolicyStatus, ComplianceFramework } from '../services/PolicyManagement.js';
+import { PolicyManagement, PolicyDomain, PolicyType, PolicyStatus, ComplianceFramework } from '../services/PolicyManagement';
 export const usePolicyManagement = (config = {}) => {
     const { autoEvaluate = false, cacheTimeout = 300000, // 5 minutes
     enableRealTimeUpdates = true, complianceFrameworks = [] } = config;

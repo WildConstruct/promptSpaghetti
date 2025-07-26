@@ -4,27 +4,49 @@
  */
 
 // Re-export core types from the main package
-export enum MFAMethodType {
-  TOTP = 'totp',
-  EMAIL = 'email',
-  SMS = 'sms'
-}
+export type MFAMethodType = 
+  | 'totp'
+  | 'email'
+  | 'sms';
 
-export enum MFAMethodStatus {
-  PENDING = 'pending',
-  ACTIVE = 'active',
-  DISABLED = 'disabled',
-  REVOKED = 'revoked'
-}
+// Legacy enum values for backwards compatibility
+export const MFAMethodType = {
+  TOTP: 'totp' as const,
+  EMAIL: 'email' as const,
+  SMS: 'sms' as const
+} as const;
 
-export enum MFAVerificationResult {
-  SUCCESS = 'success',
-  INVALID_CODE = 'invalid_code',
-  EXPIRED = 'expired',
-  RATE_LIMITED = 'rate_limited',
-  METHOD_DISABLED = 'method_disabled',
-  USER_LOCKED = 'user_locked'
-}
+export type MFAMethodStatus = 
+  | 'pending'
+  | 'active'
+  | 'disabled'
+  | 'revoked';
+
+// Legacy enum values for backwards compatibility
+export const MFAMethodStatus = {
+  PENDING: 'pending' as const,
+  ACTIVE: 'active' as const,
+  DISABLED: 'disabled' as const,
+  REVOKED: 'revoked' as const
+} as const;
+
+export type MFAVerificationResult = 
+  | 'success'
+  | 'invalid_code'
+  | 'expired'
+  | 'rate_limited'
+  | 'method_disabled'
+  | 'user_locked';
+
+// Legacy enum values for backwards compatibility
+export const MFAVerificationResult = {
+  SUCCESS: 'success' as const,
+  INVALID_CODE: 'invalid_code' as const,
+  EXPIRED: 'expired' as const,
+  RATE_LIMITED: 'rate_limited' as const,
+  METHOD_DISABLED: 'method_disabled' as const,
+  USER_LOCKED: 'user_locked' as const
+} as const;
 
 // Frontend-specific interfaces
 export interface BaseMFAConfiguration {

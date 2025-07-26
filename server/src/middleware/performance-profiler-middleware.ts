@@ -198,10 +198,10 @@ async function registerPerformanceRoutes(fastify: FastifyInstance, profiler: Per
 
   // Add custom metric
   fastify.post<{
-    Body: { key: string; value: any }
+    Body: { key: string; value: unknown }
   }>('/api/performance/metric', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const { key, value } = request.body as { key: string; value: any };
+      const { key, value } = request.body as { key: string; value: unknown };
       
       profiler.addCustomMetric(key, value);
       
@@ -241,7 +241,7 @@ async function registerPerformanceRoutes(fastify: FastifyInstance, profiler: Per
 
   // Client report endpoint
   fastify.post<{
-    Body: any
+    Body: Record<string, unknown>
   }>('/api/performance/client-report', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const report = request.body;

@@ -810,8 +810,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
   ): Promise<{ success: boolean; error?: string }> {
     // Simulate HTTP health check
     const endpoint = healthCheck.parameters.endpoint || `http://${component.configuration.hostname}:${component.configuration.port || 80}/health`;
-    const expectedStatusCode = healthCheck.parameters.expected_status_code || 200;
-    const expectedResponseTime = healthCheck.parameters.expected_response_time_ms || 5000;
+        const expectedResponseTime = healthCheck.parameters.expected_response_time_ms || 5000;
     
     // Simulate random success/failure
     const success = Math.random() > 0.05; // 95% success rate
@@ -1163,7 +1162,11 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
     }
   }
 
-  private async checkCustomMetricThresholds(componentId: string, config: CustomMetricConfig, value: number): Promise<void> {
+  private async checkCustomMetricThresholds(
+    componentId: string,
+    config: CustomMetricConfig,
+    value: number
+  ): Promise<void> {
     if (!config.thresholds.critical_threshold && !config.thresholds.warning_threshold) return;
     
     const component = this.components.get(componentId)!;
@@ -1171,11 +1174,19 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
     let severity: InfrastructureAlert['severity'] = 'info';
     let thresholdValue = 0;
     
-    if (config.thresholds.critical_threshold && this.compareValues(value, config.thresholds.critical_threshold, config.thresholds.comparison_operator)) {
+    if (
+      config.thresholds.critical_threshold && this.compareValues(value,
+      config.thresholds.critical_threshold,
+      config.thresholds.comparison_operator
+    )) {
       shouldAlert = true;
       severity = 'critical';
       thresholdValue = config.thresholds.critical_threshold;
-    } else if (config.thresholds.warning_threshold && this.compareValues(value, config.thresholds.warning_threshold, config.thresholds.comparison_operator)) {
+    } else if (
+      config.thresholds.warning_threshold && this.compareValues(value,
+      config.thresholds.warning_threshold,
+      config.thresholds.comparison_operator
+    )) {
       shouldAlert = true;
       severity = 'warning';
       thresholdValue = config.thresholds.warning_threshold;
@@ -1879,7 +1890,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
       : 100;
 
     // Collect all alerts in the time period
-    let allAlerts: InfrastructureAlert[] = [];
+    const allAlerts: InfrastructureAlert[] = [];
     for (const alerts of this.alerts.values()) {
       const periodAlerts = alerts.filter(a => a.detected_at >= startTime && a.detected_at <= endTime);
       allAlerts.push(...periodAlerts);
@@ -1922,7 +1933,10 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
       : 0;
 
     const avgNetworkThroughput = allMetrics.length > 0 
-      ? allMetrics.reduce((sum, m) => sum + (m.system.network_in_bps + m.system.network_out_bps), 0) / allMetrics.length / (1024 * 1024) // Convert to Mbps
+      ? allMetrics.reduce(
+        (sum,
+        m
+      ) => sum + (m.system.network_in_bps + m.system.network_out_bps), 0) / allMetrics.length / (1024 * 1024) // Convert to Mbps
       : 0;
 
     // Generate top issues
@@ -1993,7 +2007,10 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
         resource_utilization_trend: 'stable'
       },
       recommendations: {
-        immediate_actions: topIssues.slice(0, 3).map(issue => `Address ${issue.issue_type} issues on ${issue.component_name}`),
+        immediate_actions: topIssues.slice(
+          0,
+          3
+        ).map(issue => `Address ${issue.issue_type} issues on ${issue.component_name}`),
         preventive_measures: [
           'Implement predictive monitoring for resource utilization',
           'Review and optimize alert thresholds to reduce false positives',

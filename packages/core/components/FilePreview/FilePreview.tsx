@@ -70,7 +70,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
     const k = 1024;
     const sizes = ['B', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    return (bytes / Math.pow(k, i)).toFixed(2) + ' ' + sizes[i];
   }, []);
 
   // Format relative time
@@ -85,7 +85,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
     if (diffMins < 60) return `${diffMins} min ago`;
     if (diffHours < 24) return `${diffHours}h ago`;
     if (diffDays < 7) return `${diffDays}d ago`;
-    return date.toLocaleDateString();
+    return date.toLocaleString();
   }, []);
 
   // Render thumbnail
@@ -159,7 +159,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
         fontSize: '12px',
         color: '#6c757d'
       }}>
-        📊 {totalNodes} nodes
+{totalNodes} nodes
       </div>
     );
   }, [thumbnail, isLoadingThumbnail, fileStats, file.name, mode]);
@@ -201,7 +201,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
         onClick={handleClick}
         role={onClick ? 'button' : undefined}
         tabIndex={onClick ? 0 : undefined}
-        aria-label={onClick ? `Open ${file.metadata.title || file.name}` : undefined}
+        aria-label={onClick ? `Open ${file.metadata?.title || file.name}` : undefined}
         onKeyDown={onClick ? (e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
@@ -225,7 +225,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap'
           }}>
-            {file.metadata.title || file.name}
+{file.metadata?.title || file.name}
           </div>
           
           <div style={{
@@ -266,7 +266,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
               }}
               title={file.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
             >
-              ★
+              ⭐
             </button>
           )}
         </div>
@@ -302,7 +302,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap'
           }}>
-            {file.metadata.title || file.name}
+            {file.metadata?.title || file.name}
           </h3>
           
           {file.metadata.description && (
@@ -331,7 +331,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
             }}
             title={file.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
           >
-            ★
+            ⭐
           </button>
         )}
       </div>
@@ -357,7 +357,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
           <strong style={{ color: '#333' }}>Modified:</strong> {formatRelativeTime(file.lastModified)}
         </div>
         <div>
-          <strong style={{ color: '#333' }}>Created:</strong> {formatRelativeTime(file.metadata.created)}
+          <strong style={{ color: '#333' }}>Created:</strong> {file.metadata.created?.toLocaleDateString()}
         </div>
         {file.metadata.author && (
           <div style={{ gridColumn: 'span 2' }}>
@@ -366,12 +366,17 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
         )}
         {file.metadata.version && (
           <div style={{ gridColumn: 'span 2' }}>
-            <strong style={{ color: '#333' }}>Version:</strong> {file.metadata.version}
+            <strong style={{ color: '#333' }}>Version:</strong> v{file.metadata.version}
           </div>
         )}
         {file.metadata.tags && file.metadata.tags.length > 0 && (
           <div style={{ gridColumn: 'span 2' }}>
-            <strong style={{ color: '#333' }}>Tags:</strong> {file.metadata.tags.join(', ')}
+            <strong style={{ color: '#333' }}>Tags:</strong> {file.metadata.tags.map((tag, index) => (
+              <span key={tag}>
+                {index > 0 && ', '}
+                {tag}
+              </span>
+            ))}
           </div>
         )}
       </div>

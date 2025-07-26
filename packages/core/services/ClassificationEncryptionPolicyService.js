@@ -7,10 +7,10 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
 export class ClassificationEncryptionPolicyService {
-    encryptionPolicies = new Map();
-    approvedAlgorithms = [];
-    complianceRecords = new Map();
-    auditEvents = [];
+    encryptionPolicies: Map<string, any> = new Map();
+    approvedAlgorithms: any[] = [];
+    complianceRecords: Map<string, any> = new Map();
+    auditEvents: any[] = [];
     constructor() {
         this.initializeApprovedAlgorithms();
         this.initializeDefaultEncryptionPolicies();
@@ -18,7 +18,7 @@ export class ClassificationEncryptionPolicyService {
     /**
      * Initialize approved encryption algorithms
      */
-    initializeApprovedAlgorithms() {
+    initializeApprovedAlgorithms(): void {
         this.approvedAlgorithms = [
             {
                 name: 'AES-128',

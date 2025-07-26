@@ -12,11 +12,11 @@ classifyFieldPriority,
 // UI components
 HierarchyHeader, HierarchyField, ComplexityIndicator, 
 // Accessibility utilities
-AccessibilityUtils } from './HierarchyDesignSystem.js';
+AccessibilityUtils } from './HierarchyDesignSystem';
 // Re-export enhanced progressive disclosure component
-export { ProgressiveDisclosureSection } from '../Inspector/ProgressiveDisclosureSection.js';
+export { ProgressiveDisclosureSection } from '../Inspector/ProgressiveDisclosureSection';
 // Demo component for testing and documentation
-export { VisualHierarchyDemoEditor } from '../Inspector/editors/VisualHierarchyDemoEditor.js';
+export { VisualHierarchyDemoEditor } from '../Inspector/editors/VisualHierarchyDemoEditor';
 export default {
     TypographyScale,
     HierarchyColors,

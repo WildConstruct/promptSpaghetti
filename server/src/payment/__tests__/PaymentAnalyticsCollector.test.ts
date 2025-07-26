@@ -20,10 +20,10 @@ describe('PaymentAnalyticsCollector', () => {
 
   beforeEach(() => {
     mockAnalyticsCollector = new AnalyticsCollector({} as any, {} as any) as jest.Mocked<AnalyticsCollector>;
-    mockAnalyticsCollector.track = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
+    mockAnalyticsCollector.track = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown);
 
     mockDbConnection = {
-      query: jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown)
+      query: jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown as unknown)
     };
 
     collector = new PaymentAnalyticsCollector(
@@ -308,7 +308,7 @@ describe('PaymentAnalyticsCollector', () => {
       it('should handle webhook signature verification failure', async () => {
         // Mock signature verification failure
         jest.spyOn(collector as any, 'verifyWebhookSignature')
-          .mockResolvedValue(false as unknown);
+          .mockResolvedValue(false as unknown as unknown);
 
         const webhookData = { test: 'data' };
 
@@ -352,7 +352,7 @@ describe('PaymentAnalyticsCollector', () => {
           }
         ];
 
-        mockDbConnection.query.mockResolvedValue(mockResults as unknown);
+        mockDbConnection.query.mockResolvedValue(mockResults as unknown as unknown);
 
         const startDate = new Date('2024-01-01');
         const endDate = new Date('2024-01-31');
@@ -392,7 +392,7 @@ describe('PaymentAnalyticsCollector', () => {
           }
         ];
 
-        mockDbConnection.query.mockResolvedValue(mockResults as unknown);
+        mockDbConnection.query.mockResolvedValue(mockResults as unknown as unknown);
 
         const startDate = new Date('2024-01-01');
         const endDate = new Date('2024-01-31');
@@ -419,7 +419,7 @@ describe('PaymentAnalyticsCollector', () => {
           }
         ];
 
-        mockDbConnection.query.mockResolvedValue(mockResults as unknown);
+        mockDbConnection.query.mockResolvedValue(mockResults as unknown as unknown);
 
         const startDate = new Date('2024-01-01');
         const endDate = new Date('2024-01-31');
@@ -460,7 +460,7 @@ describe('PaymentAnalyticsCollector', () => {
           }
         ];
 
-        mockDbConnection.query.mockResolvedValue(mockResults as unknown);
+        mockDbConnection.query.mockResolvedValue(mockResults as unknown as unknown);
 
         const startDate = new Date('2024-01-01');
         const endDate = new Date('2024-01-31');
@@ -580,7 +580,7 @@ describe('PaymentAnalyticsCollector', () => {
   describe('Performance and Caching', () => {
     it('should cache metrics for performance', async () => {
       const mockResults = [{ total_attempts: 1000 }];
-      mockDbConnection.query.mockResolvedValue(mockResults as unknown);
+      mockDbConnection.query.mockResolvedValue(mockResults as unknown as unknown);
 
       const startDate = new Date('2024-01-01');
       const endDate = new Date('2024-01-31');
@@ -682,10 +682,10 @@ describe('PaymentAnalyticsCollector Integration', () => {
 
   beforeEach(() => {
     mockAnalyticsCollector = new AnalyticsCollector({} as any, {} as any) as jest.Mocked<AnalyticsCollector>;
-    mockAnalyticsCollector.track = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
+    mockAnalyticsCollector.track = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown);
 
     mockDbConnection = {
-      query: jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown)
+      query: jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown as unknown)
     };
 
     collector = new PaymentAnalyticsCollector(

@@ -59,7 +59,7 @@ describe('PayloadEncryptionService', () => {
         isPrimary: true
       };
 
-      mockKeyManagementService.listKeys.mockResolvedValue([existingKey] as unknown);
+      mockKeyManagementService.listKeys.mockResolvedValue([existingKey] as unknown as unknown);
 
       await payloadEncryptionService.initialize();
 
@@ -79,8 +79,8 @@ describe('PayloadEncryptionService', () => {
         keyLength: 256
       };
 
-      mockKeyManagementService.listKeys.mockResolvedValue([] as unknown);
-      mockKeyManagementService.generateMasterKey.mockResolvedValue(newKey as unknown);
+      mockKeyManagementService.listKeys.mockResolvedValue([] as unknown as unknown);
+      mockKeyManagementService.generateMasterKey.mockResolvedValue(newKey as unknown as unknown);
 
       await payloadEncryptionService.initialize();
 
@@ -120,11 +120,11 @@ describe('PayloadEncryptionService', () => {
       mockKeyManagementService.listKeys.mockResolvedValue([{
         keyId: 'test-key-123',
         purpose: 'payload_encryption'
-      }] as unknown);
+      }] as unknown as unknown);
       
       // Mock key material
       const keyMaterial = crypto.randomBytes(32);
-      mockKeyManagementService.getKeyMaterial.mockResolvedValue(keyMaterial as unknown);
+      mockKeyManagementService.getKeyMaterial.mockResolvedValue(keyMaterial as unknown as unknown);
       
       await payloadEncryptionService.initialize();
     });
@@ -231,11 +231,11 @@ describe('PayloadEncryptionService', () => {
       mockKeyManagementService.listKeys.mockResolvedValue([{
         keyId: 'test-key-123',
         purpose: 'payload_encryption'
-      }] as unknown);
+      }] as unknown as unknown);
       
       // Mock key material
       const keyMaterial = crypto.randomBytes(32);
-      mockKeyManagementService.getKeyMaterial.mockResolvedValue(keyMaterial as unknown);
+      mockKeyManagementService.getKeyMaterial.mockResolvedValue(keyMaterial as unknown as unknown);
       
       await payloadEncryptionService.initialize();
 
@@ -355,7 +355,7 @@ describe('PayloadEncryptionService', () => {
       mockKeyManagementService.listKeys.mockResolvedValue([{
         keyId: 'current-key-123',
         purpose: 'payload_encryption'
-      }] as unknown);
+      }] as unknown as unknown);
       
       await payloadEncryptionService.initialize();
     });
@@ -366,7 +366,7 @@ describe('PayloadEncryptionService', () => {
         purpose: 'payload_encryption'
       };
 
-      mockKeyManagementService.rotateKey.mockResolvedValue(newKey as unknown);
+      mockKeyManagementService.rotateKey.mockResolvedValue(newKey as unknown as unknown);
 
       await payloadEncryptionService.rotateEncryptionKey();
 
@@ -421,10 +421,10 @@ describe('PayloadEncryptionService', () => {
         mockKeyManagementService.listKeys.mockResolvedValue([{
           keyId: 'test-key-123',
           purpose: 'payload_encryption'
-        }] as unknown);
+        }] as unknown as unknown);
         
         const keyMaterial = crypto.randomBytes(32);
-        mockKeyManagementService.getKeyMaterial.mockResolvedValue(keyMaterial as unknown);
+        mockKeyManagementService.getKeyMaterial.mockResolvedValue(keyMaterial as unknown as unknown);
         
         await algorithmService.initialize();
 
@@ -442,10 +442,10 @@ describe('PayloadEncryptionService', () => {
       mockKeyManagementService.listKeys.mockResolvedValue([{
         keyId: 'test-key-123',
         purpose: 'payload_encryption'
-      }] as unknown);
+      }] as unknown as unknown);
       
       const keyMaterial = crypto.randomBytes(32);
-      mockKeyManagementService.getKeyMaterial.mockResolvedValue(keyMaterial as unknown);
+      mockKeyManagementService.getKeyMaterial.mockResolvedValue(keyMaterial as unknown as unknown);
       
       await payloadEncryptionService.initialize();
     });
@@ -503,10 +503,10 @@ describe('PayloadEncryptionService', () => {
       mockKeyManagementService.listKeys.mockResolvedValue([{
         keyId: 'test-key-123',
         purpose: 'payload_encryption'
-      }] as unknown);
+      }] as unknown as unknown);
       
       const keyMaterial = crypto.randomBytes(32);
-      mockKeyManagementService.getKeyMaterial.mockResolvedValue(keyMaterial as unknown);
+      mockKeyManagementService.getKeyMaterial.mockResolvedValue(keyMaterial as unknown as unknown);
       
       await payloadEncryptionService.initialize();
     });
@@ -566,7 +566,7 @@ describe('PayloadEncryptionService', () => {
     it('should handle null/undefined data', async () => {
       mockKeyManagementService.listKeys.mockResolvedValue([{
         keyId: 'test-key-123'
-      }] as unknown);
+      }] as unknown as unknown);
       
       await payloadEncryptionService.initialize();
 
@@ -582,10 +582,10 @@ describe('PayloadEncryptionService', () => {
     it('should handle empty objects and arrays', async () => {
       mockKeyManagementService.listKeys.mockResolvedValue([{
         keyId: 'test-key-123'
-      }] as unknown);
+      }] as unknown as unknown);
       
       const keyMaterial = crypto.randomBytes(32);
-      mockKeyManagementService.getKeyMaterial.mockResolvedValue(keyMaterial as unknown);
+      mockKeyManagementService.getKeyMaterial.mockResolvedValue(keyMaterial as unknown as unknown);
       
       await payloadEncryptionService.initialize();
 
@@ -603,10 +603,10 @@ describe('PayloadEncryptionService', () => {
     it('should handle complex nested objects', async () => {
       mockKeyManagementService.listKeys.mockResolvedValue([{
         keyId: 'test-key-123'
-      }] as unknown);
+      }] as unknown as unknown);
       
       const keyMaterial = crypto.randomBytes(32);
-      mockKeyManagementService.getKeyMaterial.mockResolvedValue(keyMaterial as unknown);
+      mockKeyManagementService.getKeyMaterial.mockResolvedValue(keyMaterial as unknown as unknown);
       
       await payloadEncryptionService.initialize();
 

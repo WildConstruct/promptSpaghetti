@@ -6,11 +6,11 @@
  * a single, comprehensive dashboard interface. Integrates automated moderation,
  * workflow management, queue processing, and analytics.
  */
-import { ModerationWorkflowService } from './ModerationWorkflowService.js';
-import { AutomatedModerationService } from './AutomatedModerationService.js';
-import { ModerationStatesService } from './ModerationStatesService.js';
-import { RBACService } from './RBACService.js';
-import { CommentAnalyticsService } from './CommentAnalyticsService.js';
+import { ModerationWorkflowService } from './ModerationWorkflowService';
+import { AutomatedModerationService } from './AutomatedModerationService';
+import { ModerationStatesService } from './ModerationStatesService';
+import { RBACService } from './RBACService';
+import { CommentAnalyticsService } from './CommentAnalyticsService';
 /**
  * Unified Moderation Dashboard Service
  *
@@ -18,16 +18,16 @@ import { CommentAnalyticsService } from './CommentAnalyticsService.js';
  * into a single, comprehensive management interface.
  */
 export class UnifiedModerationDashboard {
-    config;
-    workflowService;
-    automatedService;
-    statesService;
-    rbacService;
-    analyticsService;
-    realTimeSubscriptions = new Map();
-    performanceMetrics = new Map();
-    alertQueue = [];
-    constructor(config) {
+    config: any;
+    workflowService: any;
+    automatedService: any;
+    statesService: any;
+    rbacService: any;
+    analyticsService: any;
+    realTimeSubscriptions: Map<string, any> = new Map();
+    performanceMetrics: Map<string, any> = new Map();
+    alertQueue: any[] = [];
+    constructor(config: any) {
         this.config = {
             enableRealTimeUpdates: true,
             autoRefreshInterval: 30000, // 30 seconds
@@ -46,7 +46,7 @@ export class UnifiedModerationDashboard {
     /**
      * Initialize all integrated services
      */
-    initializeServices() {
+    initializeServices(): void {
         this.workflowService = new ModerationWorkflowService();
         this.automatedService = new AutomatedModerationService();
         this.statesService = new ModerationStatesService();

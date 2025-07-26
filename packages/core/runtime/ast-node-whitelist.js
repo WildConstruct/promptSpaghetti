@@ -1,6 +1,6 @@
 // packages/core/runtime/ast-node-whitelist.ts
 // AST node whitelist filter for secure expression evaluation
-import { securityAudit } from './security-audit-logger.js';
+import { securityAudit } from './security-audit-logger';
 /**
  * Safety levels for AST nodes
  */
@@ -17,13 +17,13 @@ export class ASTNodeWhitelistFilter {
     config;
     nodeCount = 0;
     currentDepth = 0;
-    constructor(config) {
+    constructor(config: any) {
         this.config = config;
     }
     /**
      * Filter an AST and return validation result
      */
-    filterAST(ast) {
+    filterAST(ast: any) {
         this.nodeCount = 0;
         this.currentDepth = 0;
         const blockedNodes = [];
@@ -36,7 +36,7 @@ export class ASTNodeWhitelistFilter {
     /**
      * Recursively validate AST nodes
      */
-    validateNode(node, blockedNodes) {
+    validateNode(node: any, blockedNodes: any[]) {
         if (!node || typeof node !== 'object') {
             return;
         }
@@ -104,7 +104,7 @@ export class ASTNodeWhitelistFilter {
     /**
      * Validate specific node types with custom rules
      */
-    validateSpecificNodeType(node, blockedNodes) {
+    validateSpecificNodeType(node: any, blockedNodes: any[]) {
         switch (node.type) {
             case 'Identifier':
                 this.validateIdentifier(node, blockedNodes);
@@ -123,7 +123,7 @@ export class ASTNodeWhitelistFilter {
     /**
      * Validate identifier nodes for dangerous names
      */
-    validateIdentifier(node, blockedNodes) {
+    validateIdentifier(node: any, blockedNodes: any[]) {
         const dangerousIdentifiers = [
             'eval', 'Function', 'constructor', 'prototype', '__proto__',
             '__defineGetter__', '__defineSetter__', '__lookupGetter__', '__lookupSetter__',
@@ -142,7 +142,7 @@ export class ASTNodeWhitelistFilter {
     /**
      * Validate member expression for dangerous property access
      */
-    validateMemberExpression(node, blockedNodes) {
+    validateMemberExpression(node: any, blockedNodes: any[]) {
         // Check for dangerous property names
         if (!node.computed && node.property.type === 'Identifier') {
             const propertyName = node.property.name;
@@ -163,7 +163,7 @@ export class ASTNodeWhitelistFilter {
     /**
      * Validate call expressions
      */
-    validateCallExpression(node, blockedNodes) {
+    validateCallExpression(node: any, blockedNodes: any[]) {
         // Only allow calls to whitelisted functions in the evaluation context
         // The actual function validation happens during evaluation
         // Check for immediately dangerous call patterns
@@ -183,7 +183,7 @@ export class ASTNodeWhitelistFilter {
     /**
      * Validate literal values
      */
-    validateLiteral(node, blockedNodes) {
+    validateLiteral(node: any, blockedNodes: any[]) {
         // Check for dangerous string literals that might be used for code injection
         if (typeof node.value === 'string') {
             const dangerousPatterns = [
@@ -210,7 +210,7 @@ export class ASTNodeWhitelistFilter {
     /**
      * Recursively validate child nodes
      */
-    validateChildNodes(node, blockedNodes) {
+    validateChildNodes(node: any, blockedNodes: any[]) {
         // Walk through all properties that might contain child nodes
         for (const key in node) {
             if (key === 'type' || key === 'start' || key === 'end' || key === 'loc' || key === 'range') {

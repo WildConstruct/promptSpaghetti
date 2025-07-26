@@ -4,7 +4,7 @@
  */
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
-import { GraphCRDTAdapter } from './GraphCRDTAdapter.js';
+import { GraphCRDTAdapter } from './GraphCRDTAdapter';
 export const useCollaborativeGraphStore = create()(subscribeWithSelector((set, get) => ({
     // Initial state
     graph: { nodes: [], edges: [] },

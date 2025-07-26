@@ -152,7 +152,7 @@ export type ConstraintType =
 
 export interface ConstraintParameter {
   parameter: string;
-  value: any;
+  value: Error;
   required: boolean;
 }
 
@@ -441,7 +441,7 @@ export interface TriggeringEvent {
 
 export interface EnvironmentalFactor {
   factor: string;
-  value: any;
+  value: Error;
   impact: 'positive' | 'negative' | 'neutral';
   confidence: number;
 }
@@ -656,8 +656,8 @@ export interface VariantImplementation {
 export interface VariantChange {
   element: string;
   changeType: 'content' | 'design' | 'behavior' | 'configuration';
-  before: any;
-  after: any;
+  before: Error;
+  after: unknown;
 }
 
 export interface TrafficAllocation {
@@ -1155,18 +1155,7 @@ const defaultOptimizationConfig: OptimizationConfiguration = {
   }
 };
 
-export const AutomatedOptimizationSuggestions: React.FC<AutomatedOptimizationSuggestionsProps> = ({
-  funnelDefinition,
-  analyticsInfrastructure,
-  optimizationConfig = defaultOptimizationConfig,
-  userContext,
-  automationLevel = 'semi_automated',
-  onSuggestionGenerated,
-  onAutomatedAction,
-  onExport
-}) => {
-  const [suggestionsData, setSuggestionsData] = useState<OptimizationSuggestionsData | null>(null);
-  const [loading, setLoading] = useState(true);
+export   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'suggestions' | 'actions' | 'experiments' | 'insights'>('suggestions');
   const [filterPriority, setFilterPriority] = useState<SuggestionPriority | 'all'>('all');
@@ -1231,7 +1220,7 @@ export const AutomatedOptimizationSuggestions: React.FC<AutomatedOptimizationSug
 
   // Process optimization data
   const processOptimizationData = async (
-    rawData: any,
+    rawData: unknown,
     config: OptimizationConfiguration,
     context?: UserContext
   ): Promise<OptimizationSuggestionsData> => {

@@ -5,7 +5,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Shows graph thumbnails, node counts, metadata, and last modified information
  */
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
-import { projectManager } from '../../projectManager.js';
+import { projectManager } from '../../projectManager';
 export const FilePreview = ({ file, mode = 'compact', isHover = false, onClick, onToggleFavorite, style, className }) => {
     const [thumbnail, setThumbnail] = useState(file.metadata.thumbnail || null);
     const [isLoadingThumbnail, setIsLoadingThumbnail] = useState(false);
@@ -36,7 +36,7 @@ export const FilePreview = ({ file, mode = 'compact', isHover = false, onClick, 
         const k = 1024;
         const sizes = ['B', 'KB', 'MB', 'GB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        return (bytes / Math.pow(k, i)).toFixed(2) + ' ' + sizes[i];
     }, []);
     // Format relative time
     const formatRelativeTime = useCallback((date) => {
@@ -53,7 +53,7 @@ export const FilePreview = ({ file, mode = 'compact', isHover = false, onClick, 
             return `${diffHours}h ago`;
         if (diffDays < 7)
             return `${diffDays}d ago`;
-        return date.toLocaleDateString();
+        return date.toLocaleString();
     }, []);
     // Render thumbnail
     const renderThumbnail = useCallback(() => {
@@ -106,7 +106,7 @@ export const FilePreview = ({ file, mode = 'compact', isHover = false, onClick, 
                 justifyContent: 'center',
                 fontSize: '12px',
                 color: '#6c757d'
-            }, children: ["\uD83D\uDCCA ", totalNodes, " nodes"] }));
+            }, children: [totalNodes, " nodes"] }));
     }, [thumbnail, isLoadingThumbnail, fileStats, file.name, mode]);
     const handleClick = useCallback(() => {
         onClick?.(file);
@@ -135,7 +135,7 @@ export const FilePreview = ({ file, mode = 'compact', isHover = false, onClick, 
                 gap: '12px',
                 alignItems: 'center',
                 minHeight: '80px'
-            }, onClick: handleClick, role: onClick ? 'button' : undefined, tabIndex: onClick ? 0 : undefined, "aria-label": onClick ? `Open ${file.metadata.title || file.name}` : undefined, onKeyDown: onClick ? (e) => {
+            }, onClick: handleClick, role: onClick ? 'button' : undefined, tabIndex: onClick ? 0 : undefined, "aria-label": onClick ? `Open ${file.metadata?.title || file.name}` : undefined, onKeyDown: onClick ? (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
                     handleClick();
@@ -148,7 +148,7 @@ export const FilePreview = ({ file, mode = 'compact', isHover = false, onClick, 
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
                                 whiteSpace: 'nowrap'
-                            }, children: file.metadata.title || file.name }), _jsx("div", { style: {
+                            }, children: file.metadata?.title || file.name }), _jsx("div", { style: {
                                 fontSize: '12px',
                                 color: '#666',
                                 marginBottom: '4px',
@@ -167,7 +167,7 @@ export const FilePreview = ({ file, mode = 'compact', isHover = false, onClick, 
                             padding: '4px',
                             color: file.isFavorite ? '#ffc107' : '#ccc',
                             fontSize: '16px'
-                        }, title: file.isFavorite ? 'Remove from favorites' : 'Add to favorites', children: "\u2605" })) })] }));
+                        }, title: file.isFavorite ? 'Remove from favorites' : 'Add to favorites', children: "\u2B50" })) })] }));
     }
     // Full mode for detailed previews/modals
     return (_jsxs("div", { className: className, style: {
@@ -187,7 +187,7 @@ export const FilePreview = ({ file, mode = 'compact', isHover = false, onClick, 
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap'
-                                }, children: file.metadata.title || file.name }), file.metadata.description && (_jsx("p", { style: {
+                                }, children: file.metadata?.title || file.name }), file.metadata.description && (_jsx("p", { style: {
                                     margin: '0 0 8px 0',
                                     fontSize: '14px',
                                     color: '#666',
@@ -200,11 +200,11 @@ export const FilePreview = ({ file, mode = 'compact', isHover = false, onClick, 
                             color: file.isFavorite ? '#ffc107' : '#ccc',
                             fontSize: '18px',
                             marginLeft: '12px'
-                        }, title: file.isFavorite ? 'Remove from favorites' : 'Add to favorites', children: "\u2605" }))] }), _jsx("div", { style: {
+                        }, title: file.isFavorite ? 'Remove from favorites' : 'Add to favorites', children: "\u2B50" }))] }), _jsx("div", { style: {
                     width: '100%',
                     height: '120px',
                     marginBottom: '16px'
-                }, children: renderThumbnail() }), _jsxs("div", { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '12px' }, children: [_jsxs("div", { children: [_jsx("strong", { style: { color: '#333' }, children: "Nodes:" }), " ", fileStats.totalNodes] }), _jsxs("div", { children: [_jsx("strong", { style: { color: '#333' }, children: "Size:" }), " ", formatFileSize(file.size)] }), _jsxs("div", { children: [_jsx("strong", { style: { color: '#333' }, children: "Modified:" }), " ", formatRelativeTime(file.lastModified)] }), _jsxs("div", { children: [_jsx("strong", { style: { color: '#333' }, children: "Created:" }), " ", formatRelativeTime(file.metadata.created)] }), file.metadata.author && (_jsxs("div", { style: { gridColumn: 'span 2' }, children: [_jsx("strong", { style: { color: '#333' }, children: "Author:" }), " ", file.metadata.author] })), file.metadata.version && (_jsxs("div", { style: { gridColumn: 'span 2' }, children: [_jsx("strong", { style: { color: '#333' }, children: "Version:" }), " ", file.metadata.version] })), file.metadata.tags && file.metadata.tags.length > 0 && (_jsxs("div", { style: { gridColumn: 'span 2' }, children: [_jsx("strong", { style: { color: '#333' }, children: "Tags:" }), " ", file.metadata.tags.join(', ')] }))] })] }));
+                }, children: renderThumbnail() }), _jsxs("div", { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '12px' }, children: [_jsxs("div", { children: [_jsx("strong", { style: { color: '#333' }, children: "Nodes:" }), " ", fileStats.totalNodes] }), _jsxs("div", { children: [_jsx("strong", { style: { color: '#333' }, children: "Size:" }), " ", formatFileSize(file.size)] }), _jsxs("div", { children: [_jsx("strong", { style: { color: '#333' }, children: "Modified:" }), " ", formatRelativeTime(file.lastModified)] }), _jsxs("div", { children: [_jsx("strong", { style: { color: '#333' }, children: "Created:" }), " ", file.metadata.created?.toLocaleDateString()] }), file.metadata.author && (_jsxs("div", { style: { gridColumn: 'span 2' }, children: [_jsx("strong", { style: { color: '#333' }, children: "Author:" }), " ", file.metadata.author] })), file.metadata.version && (_jsxs("div", { style: { gridColumn: 'span 2' }, children: [_jsx("strong", { style: { color: '#333' }, children: "Version:" }), " v", file.metadata.version] })), file.metadata.tags && file.metadata.tags.length > 0 && (_jsxs("div", { style: { gridColumn: 'span 2' }, children: [_jsx("strong", { style: { color: '#333' }, children: "Tags:" }), " ", file.metadata.tags.map((tag, index) => (_jsxs("span", { children: [index > 0 && ', ', tag] }, tag)))] }))] })] }));
 };
 // Memoized component for performance
 const MemoizedFilePreview = React.memo(FilePreview, (prevProps, nextProps) => {

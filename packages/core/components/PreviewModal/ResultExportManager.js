@@ -6,8 +6,8 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Integrates with existing export infrastructure for VFX-ready outputs.
  */
 import { useState, useCallback, useMemo } from 'react';
-import { useResultManagementStore } from '../../stores/resultManagementStore.js';
-import { ErrorFactory } from '../../errors/ErrorFactory.js';
+import { useResultManagementStore } from '../../stores/resultManagementStore';
+import { ErrorFactory } from '../../errors/ErrorFactory';
 // Professional export formats for film industry
 const EXPORT_FORMATS = [
     // Script Formats

@@ -13,7 +13,7 @@ export interface RetryOptions {
     jitter?: boolean;
     retryableErrors?: Array<string | number | RegExp>;
     onAttempt?: (attempt: number, error: Error) => void;
-    onSuccess?: (attempt: number, result: any) => void;
+    onSuccess?: <T>(attempt: number, result: T) => void;
     onFailure?: (attempts: number, finalError: Error) => void;
 }
 export interface RetryResult<T> {
@@ -51,7 +51,7 @@ export declare class RetryUtils {
     /**
      * Create a retryable version of an async function
      */
-    static retryable<TArgs extends any[], TReturn>(fn: (...args: TArgs) => Promise<TReturn>, options?: RetryOptions): (...args: TArgs) => Promise<TReturn>;
+    static retryable<TArgs extends unknown[], TReturn>(fn: (...args: TArgs) => Promise<TReturn>, options?: RetryOptions): (...args: TArgs) => Promise<TReturn>;
     /**
      * Retry with exponential backoff specifically for database operations
      */
@@ -85,9 +85,9 @@ export declare class RetryUtils {
 /**
  * Retry decorators for class methods
  */
-export declare function retryable(options?: RetryOptions): (target: any, propertyKey: string, descriptor: PropertyDescriptor) => PropertyDescriptor;
-export declare function retryableDatabase(options?: Partial<RetryOptions>): (target: any, propertyKey: string, descriptor: PropertyDescriptor) => PropertyDescriptor;
-export declare function retryableHttp(options?: Partial<RetryOptions>): (target: any, propertyKey: string, descriptor: PropertyDescriptor) => PropertyDescriptor;
+export declare function retryable(options?: RetryOptions): (target: Record<string, unknown>, propertyKey: string, descriptor: PropertyDescriptor) => PropertyDescriptor;
+export declare function retryableDatabase(options?: Partial<RetryOptions>): (target: Record<string, unknown>, propertyKey: string, descriptor: PropertyDescriptor) => PropertyDescriptor;
+export declare function retryableHttp(options?: Partial<RetryOptions>): (target: Record<string, unknown>, propertyKey: string, descriptor: PropertyDescriptor) => PropertyDescriptor;
 /**
  * Utility functions for common patterns
  */

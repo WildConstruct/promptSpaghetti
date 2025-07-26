@@ -16,7 +16,7 @@
 import { AnalyticsClient, AnalyticsClientConfig } from './AnalyticsClient';
 import { ConversionArchitectureManager, EnhancedConversionEvent, TouchPoint } from './ConversionFunnelArchitecture';
 import { SessionTrackingManager } from './SessionTrackingIntegration';
-import { ConversionEvent } from './ConversionTracker';
+import { ConversionEvent, ConversionEventType, ConversionCategory } from './ConversionTracker';
 
 export interface ConversionTrackingConfig extends AnalyticsClientConfig {
   // Real-time streaming configuration
@@ -44,8 +44,8 @@ export interface ConversionTrackingConfig extends AnalyticsClientConfig {
 export interface EventValidationRule {
   field: string;
   type: 'required' | 'pattern' | 'range' | 'custom';
-  value?: any;
-  validator?: (value: any) => boolean;
+  value?: unknown;
+  validator?: (value: unknown) => boolean;
   errorMessage: string;
 }
 
@@ -123,19 +123,19 @@ export class ConversionTrackingSDK extends AnalyticsClient {
     super(config);
     
     this.conversionConfig = {
-      enableRealTimeStreaming: true,
-      streamingEndpoint: '/api/conversion-events/stream',
-      batchSize: 50,
-      flushInterval: 5000,
-      respectDoNotTrack: true,
-      requireExplicitConsent: false,
-      enableCrossDeviceTracking: false,
-      enableOfflineBuffering: true,
-      maxOfflineEvents: 1000,
-      eventValidationRules: [],
-      deduplicationWindow: 60000, // 1 minute
-      enableDebugLogging: false,
-      ...config
+      baseUrl: config.baseUrl || '/api',
+      enableRealTimeStreaming: config.enableRealTimeStreaming ?? true,
+      streamingEndpoint: config.streamingEndpoint || '/api/conversion-events/stream',
+      batchSize: config.batchSize || 50,
+      flushInterval: config.flushInterval || 5000,
+      respectDoNotTrack: config.respectDoNotTrack ?? true,
+      requireExplicitConsent: config.requireExplicitConsent ?? false,
+      enableCrossDeviceTracking: config.enableCrossDeviceTracking ?? false,
+      enableOfflineBuffering: config.enableOfflineBuffering ?? true,
+      maxOfflineEvents: config.maxOfflineEvents || 1000,
+      eventValidationRules: config.eventValidationRules || [],
+      deduplicationWindow: config.deduplicationWindow || 60000, // 1 minute
+      enableDebugLogging: config.enableDebugLogging ?? false
     };
     
     this.conversionArchitecture = conversionArchitecture;
@@ -261,8 +261,8 @@ export class ConversionTrackingSDK extends AnalyticsClient {
         userId: context.userId,
         sessionId: context.sessionId,
         timestamp: Date.now(),
-        type: eventType,
-        category: this.getCategoryForEventType(eventType),
+        type: eventType as ConversionEventType,
+        category: this.getCategoryForEventType(eventType) as ConversionCategory,
         value,
         properties: {
           ...properties,
@@ -274,8 +274,7 @@ export class ConversionTrackingSDK extends AnalyticsClient {
         metadata: {
           userAgent: navigator.userAgent,
           referrer: document.referrer,
-          url: window.location.href,
-          timestamp: Date.now()
+          campaignSource: context.attribution.source
         }
       };
 
@@ -371,7 +370,12 @@ export class ConversionTrackingSDK extends AnalyticsClient {
     personalization?: boolean;
     crossDevice?: boolean;
   }): void {
-    this.sessionManager.updateConsentPreferences(consent);
+    this.sessionManager.updateConsentPreferences({
+      trackingConsent: consent.tracking,
+      analyticsConsent: consent.analytics,
+      personalizationConsent: consent.personalization,
+      crossDeviceConsent: consent.crossDevice
+    });
     
     // If tracking was disabled, flush and clear queues
     if (consent.tracking === false) {
@@ -414,8 +418,7 @@ export class ConversionTrackingSDK extends AnalyticsClient {
   }
 
   private async getCurrentContext(additionalTouchpoints: TouchPoint[] = []): Promise<ConversionContext> {
-    const sessionAnalytics = this.sessionManager.getCurrentSessionAnalytics();
-    
+        
     // Get stored touchpoints and merge with new ones
     const existingTouchpoints = this.getStoredTouchpoints();
     const allTouchpoints = [...existingTouchpoints, ...additionalTouchpoints];
@@ -469,8 +472,9 @@ export class ConversionTrackingSDK extends AnalyticsClient {
           break;
           
         case 'range':
-          if (typeof value === 'number' && rule.value) {
-            const { min, max } = rule.value;
+          if (typeof value === 'number' && rule.value && typeof rule.value === 'object') {
+            const rangeValue = rule.value as { min?: number; max?: number };
+            const { min, max } = rangeValue;
             if ((min != null && value < min) || (max != null && value > max)) {
               errors.push(`${rule.field} out of range: ${rule.errorMessage}`);
             }
@@ -602,7 +606,7 @@ export class ConversionTrackingSDK extends AnalyticsClient {
     if (events.length === 0) return;
     
     try {
-      const response = await this.makeRequest('/analytics/conversion-events/batch', {
+      const fetchResponse = await fetch(`${this.conversionConfig.baseUrl}/analytics/conversion-events/batch`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -617,7 +621,8 @@ export class ConversionTrackingSDK extends AnalyticsClient {
         })
       });
       
-      if (response.success) {
+      const response = await fetchResponse.json();
+      if (fetchResponse.ok && response.success) {
         this.debugLog('Events sent to API successfully', { 
           eventCount: events.length 
         });
@@ -799,17 +804,17 @@ export class ConversionTrackingSDK extends AnalyticsClient {
     return 'engagement';
   }
 
-  private getNestedProperty(obj: any, path: string): any {
-    return path.split('.').reduce((current, key) => current?.[key], obj);
+  private getNestedProperty(obj: unknown, path: string): unknown {
+    return path.split('.').reduce((current: any, key) => current?.[key], obj);
   }
 
-  private debugLog(message: string, data?: any): void {
+  private debugLog(message: string, data?: unknown): void {
     if (this.conversionConfig.enableDebugLogging) {
       console.log(`[ConversionTrackingSDK] ${message}`, data);
     }
   }
 
-  private reportError(context: string, error: any): void {
+  private reportError(context: string, error: unknown): void {
     if (this.conversionConfig.errorReportingEndpoint) {
       // Send error to monitoring service
       fetch(this.conversionConfig.errorReportingEndpoint, {
@@ -817,7 +822,7 @@ export class ConversionTrackingSDK extends AnalyticsClient {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           context,
-          error: error.message || String(error),
+          error: error instanceof Error ? error.message : String(error),
           timestamp: Date.now(),
           userId: this.getCurrentUserId(),
           sessionId: this.getCurrentSessionId()
@@ -847,12 +852,6 @@ export class ConversionTrackingSDK extends AnalyticsClient {
 /**
  * Factory function to create ConversionTrackingSDK instance
  */
-export const createConversionTrackingSDK = (
-  config: ConversionTrackingConfig,
-  conversionArchitecture: ConversionArchitectureManager,
-  sessionManager: SessionTrackingManager
-): ConversionTrackingSDK => {
-  return new ConversionTrackingSDK(config, conversionArchitecture, sessionManager);
-};
+export };
 
 export default ConversionTrackingSDK;

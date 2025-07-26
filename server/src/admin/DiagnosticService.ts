@@ -11,7 +11,6 @@
 
 import os from 'os';
 import fs from 'fs/promises';
-import path from 'path';
 import { performance } from 'perf_hooks';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
@@ -66,7 +65,7 @@ export enum DiagnosticSeverity {
 }
 
 export interface DiagnosticDetails {
-  [key: string]: any;
+  [key: string]: unknown;
   // Common fields
   currentValue?: number | string;
   expectedValue?: number | string;
@@ -75,7 +74,7 @@ export interface DiagnosticDetails {
   affectedComponents?: string[];
   // Metric-specific data
   metrics?: Record<string, number>;
-  configuration?: Record<string, any>;
+  configuration?: Record<string, unknown>;
   dependencies?: string[];
   errorMessages?: string[];
   stackTrace?: string;
@@ -113,7 +112,7 @@ export interface DiagnosticDefinition {
   retryAttempts: number;
   severity: DiagnosticSeverity;
   dependencies?: string[];
-  parameters?: Record<string, any>;
+  parameters?: Record<string, unknown>;
 }
 
 export interface DiagnosticExecution {
@@ -305,7 +304,11 @@ export class DiagnosticService {
   // CATEGORY-SPECIFIC DIAGNOSTIC METHODS
   // ==========================================
 
-  private async runSystemDiagnostic(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata): Promise<DiagnosticResult> {
+  private async runSystemDiagnostic(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata
+  ): Promise<DiagnosticResult> {
     const details: DiagnosticDetails = {
       metrics: {},
       configuration: {},
@@ -328,7 +331,11 @@ export class DiagnosticService {
     }
   }
 
-  private async runDatabaseDiagnostic(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata): Promise<DiagnosticResult> {
+  private async runDatabaseDiagnostic(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata
+  ): Promise<DiagnosticResult> {
     const details: DiagnosticDetails = {
       metrics: {},
       configuration: {},
@@ -354,7 +361,11 @@ export class DiagnosticService {
     }
   }
 
-  private async runNetworkDiagnostic(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata): Promise<DiagnosticResult> {
+  private async runNetworkDiagnostic(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata
+  ): Promise<DiagnosticResult> {
     const details: DiagnosticDetails = {
       metrics: {},
       configuration: {},
@@ -375,7 +386,11 @@ export class DiagnosticService {
     }
   }
 
-  private async runStorageDiagnostic(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata): Promise<DiagnosticResult> {
+  private async runStorageDiagnostic(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata
+  ): Promise<DiagnosticResult> {
     const details: DiagnosticDetails = {
       metrics: {},
       configuration: {},
@@ -396,7 +411,11 @@ export class DiagnosticService {
     }
   }
 
-  private async runMemoryDiagnostic(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata): Promise<DiagnosticResult> {
+  private async runMemoryDiagnostic(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata
+  ): Promise<DiagnosticResult> {
     const details: DiagnosticDetails = {
       metrics: {},
       configuration: {},
@@ -417,7 +436,11 @@ export class DiagnosticService {
     }
   }
 
-  private async runSecurityDiagnostic(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata): Promise<DiagnosticResult> {
+  private async runSecurityDiagnostic(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata
+  ): Promise<DiagnosticResult> {
     const details: DiagnosticDetails = {
       metrics: {},
       configuration: {},
@@ -441,7 +464,11 @@ export class DiagnosticService {
     }
   }
 
-  private async runPerformanceDiagnostic(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata): Promise<DiagnosticResult> {
+  private async runPerformanceDiagnostic(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata
+  ): Promise<DiagnosticResult> {
     const details: DiagnosticDetails = {
       metrics: {},
       configuration: {},
@@ -473,7 +500,12 @@ export class DiagnosticService {
   // SPECIFIC DIAGNOSTIC IMPLEMENTATIONS
   // ==========================================
 
-  private async checkCPUUsage(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkCPUUsage(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     const cpus = os.cpus();
     const loadAvg = os.loadavg();
     const currentLoad = loadAvg[0] / cpus.length * 100;
@@ -531,7 +563,12 @@ export class DiagnosticService {
     };
   }
 
-  private async checkMemoryUsage(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkMemoryUsage(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     const totalMemory = os.totalmem();
     const freeMemory = os.freemem();
     const usedMemory = totalMemory - freeMemory;
@@ -593,13 +630,18 @@ export class DiagnosticService {
     };
   }
 
-  private async checkDiskSpace(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkDiskSpace(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     try {
       const threshold = diagnostic.parameters?.threshold || 85;
       const rootPath = diagnostic.parameters?.path || '/';
       
       // Get disk usage (simplified - in production would use proper disk space detection)
-      const stats = await fs.stat(rootPath);
+      await fs.stat(rootPath);
       
       // Mock disk space data (in production would use proper system calls)
       const mockDiskData = {
@@ -667,7 +709,12 @@ export class DiagnosticService {
     }
   }
 
-  private async checkDatabaseConnection(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkDatabaseConnection(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     try {
       const startTime = performance.now();
       const timeoutMs = diagnostic.parameters?.timeout || 5000;
@@ -835,7 +882,12 @@ export class DiagnosticService {
     return Array.from(recommendations);
   }
 
-  private createErrorResult(diagnostic: DiagnosticDefinition, error: any, executionId: string, duration?: number): DiagnosticResult {
+  private createErrorResult(
+    diagnostic: DiagnosticDefinition,
+    error: Error,
+    executionId: string,
+    duration?: number
+  ): DiagnosticResult {
     return {
       diagnosticId: diagnostic.diagnosticId,
       category: diagnostic.category,
@@ -859,7 +911,11 @@ export class DiagnosticService {
     };
   }
 
-  private createUnknownDiagnosticResult(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata): DiagnosticResult {
+  private createUnknownDiagnosticResult(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata
+  ): DiagnosticResult {
     return {
       diagnosticId: diagnostic.diagnosticId,
       category: diagnostic.category,
@@ -881,11 +937,20 @@ export class DiagnosticService {
   }
 
   // Placeholder implementations for remaining diagnostic methods
-  private async runGenericDiagnostic(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata): Promise<DiagnosticResult> {
+  private async runGenericDiagnostic(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkLoadAverage(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkLoadAverage(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     const loadAvg = os.loadavg();
     const threshold = diagnostic.parameters?.threshold || 2.0;
 
@@ -914,7 +979,12 @@ export class DiagnosticService {
     };
   }
 
-  private async checkSystemUptime(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkSystemUptime(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     const uptimeSeconds = os.uptime();
     const uptimeDays = Math.floor(uptimeSeconds / 86400);
 
@@ -940,99 +1010,217 @@ export class DiagnosticService {
   }
 
   // More placeholder methods - in production these would have full implementations
-  private async checkDatabasePerformance(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkDatabasePerformance(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkDatabaseStorage(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkDatabaseStorage(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkDatabaseLocks(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkDatabaseLocks(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkDatabaseReplication(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkDatabaseReplication(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkNetworkConnectivity(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkNetworkConnectivity(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkNetworkLatency(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkNetworkLatency(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkNetworkBandwidth(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkNetworkBandwidth(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkDNSResolution(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkDNSResolution(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkStorageDiskUsage(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkStorageDiskUsage(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkStorageIOPerformance(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkStorageIOPerformance(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkStorageBackupStatus(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkStorageBackupStatus(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkStoragePermissions(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkStoragePermissions(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkHeapUsage(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkHeapUsage(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkMemoryLeaks(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkMemoryLeaks(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkGarbageCollection(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkGarbageCollection(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkBufferUsage(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkBufferUsage(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkSSLCertificates(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkSSLCertificates(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkAuthenticationSecurity(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkAuthenticationSecurity(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkSecurityPermissions(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkSecurityPermissions(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkSecurityVulnerabilities(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkSecurityVulnerabilities(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkResponseTime(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkResponseTime(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkThroughput(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkThroughput(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkErrorRate(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkErrorRate(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
-  private async checkCacheEfficiency(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkCacheEfficiency(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
   }
 
@@ -1398,7 +1586,11 @@ export class DiagnosticService {
     });
   }
 
-  private async runIntegrationDiagnostic(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata): Promise<DiagnosticResult> {
+  private async runIntegrationDiagnostic(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata
+  ): Promise<DiagnosticResult> {
     const details: DiagnosticDetails = {
       metrics: {},
       configuration: {},
@@ -1413,7 +1605,11 @@ export class DiagnosticService {
     }
   }
 
-  private async runBackupDiagnostic(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata): Promise<DiagnosticResult> {
+  private async runBackupDiagnostic(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata
+  ): Promise<DiagnosticResult> {
     const details: DiagnosticDetails = {
       metrics: {},
       configuration: {},
@@ -1428,7 +1624,11 @@ export class DiagnosticService {
     }
   }
 
-  private async runConfigurationDiagnostic(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata): Promise<DiagnosticResult> {
+  private async runConfigurationDiagnostic(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata
+  ): Promise<DiagnosticResult> {
     const details: DiagnosticDetails = {
       metrics: {},
       configuration: {},
@@ -1444,7 +1644,12 @@ export class DiagnosticService {
   }
 
   // Epic 17 Specific Check Implementations
-  private async checkIntegrationHealth(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkIntegrationHealth(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     const startTime = performance.now();
     const operation = 'integration_health';
     
@@ -1488,7 +1693,12 @@ export class DiagnosticService {
     }
   }
 
-  private async checkBackupVerification(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkBackupVerification(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     const startTime = performance.now();
     const operation = 'backup_verification';
     
@@ -1533,7 +1743,12 @@ export class DiagnosticService {
     }
   }
 
-  private async checkConfigDeployment(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkConfigDeployment(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     const startTime = performance.now();
     const operation = 'config_deployment';
     
@@ -1621,7 +1836,12 @@ export class DiagnosticService {
   // EPIC 17 SPECIFIC CHECK IMPLEMENTATIONS
   // ==========================================
 
-  private async checkEpic17AdminUserLookup(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkEpic17AdminUserLookup(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     const startTime = performance.now();
     const operation = 'admin_user_lookup';
     
@@ -1666,7 +1886,12 @@ export class DiagnosticService {
     }
   }
 
-  private async checkEpic17AdminPermissionCheck(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkEpic17AdminPermissionCheck(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     const startTime = performance.now();
     const operation = 'admin_permission_check';
     
@@ -1711,7 +1936,12 @@ export class DiagnosticService {
     }
   }
 
-  private async checkEpic17HealthCheckResponse(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkEpic17HealthCheckResponse(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     const startTime = performance.now();
     const operation = 'health_check_response';
     
@@ -1758,7 +1988,12 @@ export class DiagnosticService {
     }
   }
 
-  private async checkEpic17DashboardLoadTime(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkEpic17DashboardLoadTime(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     const startTime = performance.now();
     const operation = 'dashboard_load_time';
     
@@ -1804,7 +2039,12 @@ export class DiagnosticService {
     }
   }
 
-  private async checkEpic17DatabaseConnectivity(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+  private async checkEpic17DatabaseConnectivity(
+    diagnostic: DiagnosticDefinition,
+    executionId: string,
+    metadata: DiagnosticMetadata,
+    details: DiagnosticDetails
+  ): Promise<DiagnosticResult> {
     const startTime = performance.now();
     const operation = 'health_database_connectivity';
     

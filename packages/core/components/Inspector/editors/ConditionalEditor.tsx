@@ -18,9 +18,7 @@ export interface ConditionalEditorProps extends Omit<BaseNodeEditorProps, 'child
  * - Debug: Technical settings, strict mode, variable access controls
  */
 
-export const ConditionalEditor: React.FC<ConditionalEditorProps> = (props) => {
-  const { nodeData, onChange } = props;
-  
+export   
   // Conditional specific fields
   const branches = (nodeData.branches as ConditionalBranch[]) || [];
   const defaultOutput = (nodeData.defaultOutput as string) || '';
@@ -303,12 +301,12 @@ export const ConditionalEditor: React.FC<ConditionalEditorProps> = (props) => {
             fontFamily: 'monospace',
             lineHeight: 1.4
           }}>
-            • Variable access: variable, hasVariable(&apos;name&apos;), getVariable(&apos;name&apos;, &apos;default&apos;)<br/>
-            • Comparisons: ===, !==, &gt;, &lt;, &gt;=, &lt;=, &amp;&amp;, ||, !<br/>
-            • Strings: startsWith(str, &apos;prefix&apos;), includes(str, &apos;substring&apos;), isEmpty(str)<br/>
+            • Variable access: variable, hasVariable('name'), getVariable('name', 'default')<br/>
+            • Comparisons: ===, !==, {'>'}, {'<'}, {'>='}, {'<='}, &amp;&amp;, ||, !<br/>
+            • Strings: startsWith(str, 'prefix'), includes(str, 'substring'), isEmpty(str)<br/>
             • Arrays: includes(arr, item), length(arr)<br/>
             • Math: +, -, *, /, %, Math.min, Math.max, Math.abs<br/>
-            • Regex: matches(str, &apos;pattern&apos;)
+            • Regex: matches(str, 'pattern')
           </div>
         </div>
       </ProgressiveDisclosureSection>

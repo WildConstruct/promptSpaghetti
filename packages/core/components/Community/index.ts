@@ -31,6 +31,9 @@ export type {
 
 export { ContentVersionManager } from '../../community/ContentVersionManager';
 
+// Import ContentVersion for local use
+import { ContentVersion } from '../../community/ContentVersionManager';
+
 export type {
   CommunityContentQualityMetrics,
   EditorialQualityMetrics,
@@ -56,139 +59,14 @@ export type QualityAssessmentType = 'automated' | 'editorial' | 'community' | 'c
 export type WorkflowStage = 'automated_analysis' | 'editorial_review' | 'specialist_review' | 'final_approval' | 'published';
 
 // Default configurations
-export const CONTENT_VERSION_DEFAULTS = {
-  showEditorialWorkflow: true,
-  readOnly: false,
-  defaultBranch: 'main',
-  autoSave: true,
-  versioningStrategy: 'semantic'
-} as const;
-
-export const QUALITY_ASSESSMENT_DEFAULTS = {
-  showReviewInterface: false,
-  readOnly: false,
-  assessmentType: 'automated' as QualityAssessmentType,
-  autoRunChecks: true,
-  confidenceThreshold: 80
-} as const;
-
+export 
+export 
 // Workflow presets for common scenarios
-export const CONTENT_WORKFLOWS = {
-  // Simple author workflow
-  author: {
-    stages: ['draft', 'review', 'published'],
-    permissions: ['create', 'edit', 'submit_review'],
-    assessmentType: 'automated' as QualityAssessmentType
-  },
-  
-  // Editorial workflow with quality gates
-  editorial: {
-    stages: ['draft', 'automated_check', 'editorial_review', 'approved', 'published'],
-    permissions: ['create', 'edit', 'review', 'approve', 'publish'],
-    assessmentType: 'comprehensive' as QualityAssessmentType,
-    qualityGates: {
-      minimum_score: 70,
-      required_checks: ['grammar', 'plagiarism', 'factual']
-    }
-  },
-  
-  // Enterprise workflow with specialist review
-  enterprise: {
-    stages: ['draft', 'automated_check', 'editorial_review', 'specialist_review', 'legal_review', 'approved', 'published'],
-    permissions: ['create', 'edit', 'review', 'specialist_review', 'legal_review', 'approve', 'publish'],
-    assessmentType: 'comprehensive' as QualityAssessmentType,
-    qualityGates: {
-      minimum_score: 85,
-      required_checks: ['grammar', 'plagiarism', 'factual', 'legal', 'accessibility']
-    },
-    escalation: {
-      auto_escalate_threshold: 'high',
-      specialist_required_topics: ['technical', 'legal', 'medical', 'financial']
-    }
-  }
-} as const;
-
+export 
 // Quality thresholds by content type
-export const QUALITY_THRESHOLDS_BY_TYPE = {
-  'article': {
-    minimum_publication_score: 75,
-    recommended_score: 85,
-    dimensions: {
-      editorial: 80,
-      technical: 70,
-      engagement: 75,
-      community: 70
-    }
-  },
-  'tutorial': {
-    minimum_publication_score: 80,
-    recommended_score: 90,
-    dimensions: {
-      editorial: 85,
-      technical: 85,
-      engagement: 80,
-      community: 75
-    }
-  },
-  'case-study': {
-    minimum_publication_score: 75,
-    recommended_score: 85,
-    dimensions: {
-      editorial: 80,
-      technical: 70,
-      engagement: 85,
-      community: 80
-    }
-  },
-  'guide': {
-    minimum_publication_score: 85,
-    recommended_score: 90,
-    dimensions: {
-      editorial: 90,
-      technical: 80,
-      engagement: 80,
-      community: 85
-    }
-  },
-  'documentation': {
-    minimum_publication_score: 90,
-    recommended_score: 95,
-    dimensions: {
-      editorial: 95,
-      technical: 95,
-      engagement: 70,
-      community: 80
-    }
-  }
-} as const;
-
+export 
 // Integration helpers for Epic 16 components
-export const COMMUNITY_INTEGRATIONS = {
-  // Integration with Epic 16 marketplace components
-  marketplace: {
-    template_integration: true,
-    case_study_showcase: true,
-    community_ratings: true,
-    creator_profiles: true
-  },
-  
-  // Integration with Epic 17 admin controls
-  admin: {
-    policy_enforcement: true,
-    compliance_monitoring: true,
-    content_moderation: true,
-    analytics_tracking: true
-  },
-  
-  // Integration with core platform features
-  platform: {
-    user_authentication: true,
-    notification_system: true,
-    search_indexing: true,
-    analytics_collection: true
-  }
-} as const;
-
+export 
 // Event types for component communication
 export interface CommunityComponentEvents {
   // Version control events
@@ -208,11 +86,7 @@ export interface CommunityComponentEvents {
 }
 
 // Utility functions for common operations
-export const CommunityUtils = {
-  // Version comparison utilities
-  compareVersions: (a: string, b: string): number => {
-    const aParts = a.split('.').map(Number);
-    const bParts = b.split('.').map(Number);
+export     const bParts = b.split('.').map(Number);
     
     for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
       const aVal = aParts[i] || 0;

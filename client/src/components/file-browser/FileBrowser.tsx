@@ -106,6 +106,11 @@ const mockFiles: TreeNode[] = [
   }
 ];
 
+// Type guard functions
+const isFileNode = (item: FileItem): item is FileNode => {
+  return item.type === 'file';
+};
+
 const initialState: FileBrowserState = {
   rootPath: '/',
   currentPath: '/',
@@ -131,7 +136,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
   height = 400,
   className = ''
 }) => {
-  const { ___user, isAuthenticated } = useAuthStore();
+  const { user: _user, isAuthenticated } = useAuthStore();
   const analytics = useFileOperationTracking();
   const [state, setState] = useState<FileBrowserState>({
     ...initialState,
@@ -244,10 +249,9 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
         label: item.type === 'folder' ? 'Open Folder' : 'Open File',
         icon: '📂',
         onClick: () => {
-          if (item.type === 'file') {
-            const fileNode = item as any; // Type assertion for file node
+          if (isFileNode(item)) {
             analytics.trackFileOperation('open', item.name, item.path, true);
-            onFileDoubleClick?.(fileNode);
+            onFileDoubleClick?.(item);
           }
         }
       },
@@ -372,7 +376,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
   }, [analytics, state.currentPath]);
 
   // File operation handlers
-  const handleRename = async (item: FileItem) => {
+  const handleRename = async (item: FileItem): Promise<void> => {
     const newName = prompt('Enter new name:', item.name);
     if (newName && newName !== item.name) {
       try {
@@ -398,10 +402,10 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
     }
   };
 
-  const handleDuplicate = async (item: FileItem) => {
+  const handleDuplicate = async (item: FileItem): Promise<void> => {
     try {
       // Generate a unique name for the duplicate
-      const fileExtension = item.name.includes('.') ? `.${item.name.split('.').pop()}` : '';
+      const fileExtension = item.name.includes('.') ? `.${item.name.split('.').pop() ?? ''}` : '';
       const baseName = item.name.replace(fileExtension, '');
       const duplicateName = `${baseName} - Copy${fileExtension}`;
       const duplicatePath = `${item.path.split('/').slice(0, -1).join('/')}/${duplicateName}`;
@@ -427,7 +431,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
     }
   };
 
-  const handleDelete = async (item: FileItem) => {
+  const handleDelete = async (item: FileItem): Promise<void> => {
     if (confirm(`Are you sure you want to delete "${item.name}"?`)) {
       try {
         const result = await fileService.deleteFile(item.path);
@@ -485,7 +489,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
     }
   };
 
-  const handleCreateFolder = async () => {
+  const handleCreateFolder = async (): Promise<void> => {
     const name = prompt('Enter folder name:');
     if (name) {
       try {
@@ -511,7 +515,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
     }
   };
 
-  const handleUpload = async () => {
+  const handleUpload = async (): Promise<void> => {
     // Create file input element
     const input = document.createElement('input');
     input.type = 'file';
@@ -645,8 +649,8 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
               matchesTags = node.tags?.some(tag => regex.test(tag)) || false;
               matchesPath = regex.test(node.path);
               matchesMetadata = node.type === 'file' && node.metadata && (
-                regex.test(node.metadata.description || '') ||
-                regex.test(node.metadata.author || '')
+                regex.test(node.metadata.description ?? '') ||
+                regex.test(node.metadata.author ?? '')
               );
             } catch (e) {
               // Fall back to simple string matching on regex error
@@ -654,8 +658,8 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
               matchesTags = node.tags?.some(tag => getValue(tag).includes(searchTerm)) || false;
               matchesPath = getValue(node.path).includes(searchTerm);
               matchesMetadata = node.type === 'file' && node.metadata && (
-                getValue(node.metadata.description || '').includes(searchTerm) ||
-                getValue(node.metadata.author || '').includes(searchTerm)
+                getValue(node.metadata.description ?? '').includes(searchTerm) ||
+                getValue(node.metadata.author ?? '').includes(searchTerm)
               );
             }
           } else {
@@ -663,8 +667,8 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
             matchesTags = node.tags?.some(tag => getValue(tag).includes(searchTerm)) || false;
             matchesPath = getValue(node.path).includes(searchTerm);
             matchesMetadata = node.type === 'file' && node.metadata && (
-              getValue(node.metadata.description || '').includes(searchTerm) ||
-              getValue(node.metadata.author || '').includes(searchTerm)
+              getValue(node.metadata.description ?? '').includes(searchTerm) ||
+              getValue(node.metadata.author ?? '').includes(searchTerm)
             );
           }
 
@@ -738,13 +742,13 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
           comparison = a.lastModified.getTime() - b.lastModified.getTime();
           break;
         case 'size':
-          const sizeA = a.type === 'file' ? a.size || 0 : 0;
-          const sizeB = b.type === 'file' ? b.size || 0 : 0;
+          const sizeA = a.type === 'file' ? a.size ?? 0 : 0;
+          const sizeB = b.type === 'file' ? b.size ?? 0 : 0;
           comparison = sizeA - sizeB;
           break;
         case 'type':
-          const extA = a.type === 'file' ? a.extension || '' : '';
-          const extB = b.type === 'file' ? b.extension || '' : '';
+          const extA = a.type === 'file' ? a.extension ?? '' : '';
+          const extB = b.type === 'file' ? b.extension ?? '' : '';
           comparison = extA.localeCompare(extB);
           break;
         default:
@@ -808,7 +812,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <select
             value={state.sortBy}
-            onChange={(e) => setState(prev => ({ ...prev, sortBy: e.target.value as any }))}
+            onChange={(e) => setState(prev => ({ ...prev, sortBy: e.target.value as 'name' | 'lastModified' | 'size' | 'type' }))}
             style={{
               padding: '4px 8px',
               border: '1px solid #ddd',

@@ -1,22 +1,22 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect, useCallback } from 'react';
-import { Button } from '../ui/Button.js';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select.js';
-import { Badge } from '../ui/Badge.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
-import { Alert, AlertDescription } from '../ui/Alert.js';
-import { conversionTracker } from '../../analytics/ConversionTracker.js';
-import { performanceMonitor } from '../../utils/PerformanceMonitor.js';
-import { MetricsOverview } from './MetricsOverview.js';
-import { PerformanceCharts } from './PerformanceCharts.js';
-import { CostAnalysis } from './CostAnalysis.js';
-import { UsagePatterns } from './UsagePatterns.js';
-import { AlertsPanel } from './AlertsPanel.js';
-import { RecommendationsPanel } from './RecommendationsPanel.js';
-import { ExportOptions } from './ExportOptions.js';
-import { ConversionFunnelDashboard } from './ConversionFunnelDashboard.js';
-import { DirectorAnalyticsView } from './DirectorAnalyticsView.js';
-import { RealTimeMetrics } from './RealTimeMetrics.js';
+import { Button } from '../ui/Button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
+import { Badge } from '../ui/Badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
+import { Alert, AlertDescription } from '../ui/Alert';
+import { conversionTracker } from '../../analytics/ConversionTracker';
+import { performanceMonitor } from '../../utils/PerformanceMonitor';
+import { MetricsOverview } from './MetricsOverview';
+import { PerformanceCharts } from './PerformanceCharts';
+import { CostAnalysis } from './CostAnalysis';
+import { UsagePatterns } from './UsagePatterns';
+import { AlertsPanel } from './AlertsPanel';
+import { RecommendationsPanel } from './RecommendationsPanel';
+import { ExportOptions } from './ExportOptions';
+import { ConversionFunnelDashboard } from './ConversionFunnelDashboard';
+import { DirectorAnalyticsView } from './DirectorAnalyticsView';
+import { RealTimeMetrics } from './RealTimeMetrics';
 /**
  * Time range options
  */

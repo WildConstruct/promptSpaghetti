@@ -1,10 +1,11 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState } from 'react';
-import { TextFieldEditor } from '../TextFieldEditor.js';
-import { EnhancedTextAreaEditor } from '../EnhancedTextAreaEditor.js';
-import { SelectEditor } from '../SelectEditor.js';
-import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection.js';
-import { TemplateEditor } from '../TemplateEditor.js';
+import { TextFieldEditor } from '../TextFieldEditor';
+import { EnhancedTextAreaEditor } from '../EnhancedTextAreaEditor';
+import { SelectEditor } from '../SelectEditor';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
+import { TemplateEditor } from '../TemplateEditor';
+import { useContextualHelp } from '../../Help';
 const SEPARATOR_PRESETS = [
     { value: '', label: 'No separator (direct concatenation)' },
     { value: ' ', label: 'Space' },
@@ -64,7 +65,44 @@ export const ConcatEditor = ({ _____nodeId, nodeData, onChange }) => {
             default: return `"${actualSeparator}"`;
         }
     };
-    return (_jsxs("div", { className: "concat-editor", children: [_jsxs(ProgressiveDisclosureSection, { title: "Essential Settings", level: "basic", description: "Core concatenation configuration", defaultExpanded: true, priority: "critical", fieldName: "template", children: [_jsx(TextFieldEditor, { label: "Concatenation Name", value: label, fieldKey: "label", zodType: null, onChange: (value) => handleFieldChange('label', value), placeholder: "Enter a name for this concatenation..." }), _jsxs("div", { style: { marginBottom: 16 }, children: [_jsx("label", { style: {
+    // Contextual help for the node name field
+    const { wrapWithHelp: wrapNameHelp } = useContextualHelp({
+        id: 'concat-node-name',
+        title: 'Concatenation Name',
+        description: 'Give your concatenation node a descriptive name to identify it in your workflow.',
+        category: 'basic',
+        trigger: 'focus',
+        position: 'right',
+        showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
+        examples: ['Text Combiner', 'Dialogue Merger', 'Content Assembler'],
+        priority: 'high'
+    });
+    // Contextual help for template editor
+    const { wrapWithHelp: wrapTemplateHelp } = useContextualHelp({
+        id: 'concat-template',
+        title: 'Output Template',
+        description: 'Define how concatenated inputs should be formatted. Use {variable} syntax to reference specific inputs.',
+        category: 'basic',
+        trigger: 'hover',
+        position: 'top',
+        showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
+        examples: ['Combining {input1} and {input2}', '{character}: {dialogue}'],
+        relatedFeatures: ['variable-extraction', 'input-ports'],
+        priority: 'medium'
+    });
+    // Contextual help for join mode
+    const { wrapWithHelp: wrapJoinModeHelp } = useContextualHelp({
+        id: 'concat-join-mode',
+        title: 'Join Mode',
+        description: 'Control which inputs are included in the concatenation result.',
+        category: 'advanced',
+        trigger: 'hover',
+        position: 'right',
+        showOnDisclosureLevel: ['advanced', 'debug'],
+        examples: ['Join All: combines everything', 'Non-Empty: skips empty inputs'],
+        priority: 'medium'
+    });
+    return (_jsxs("div", { className: "concat-editor", children: [_jsxs(ProgressiveDisclosureSection, { title: "Essential Settings", level: "basic", description: "Core concatenation configuration", defaultExpanded: true, priority: "critical", fieldName: "template", children: [wrapNameHelp(_jsx(TextFieldEditor, { label: "Concatenation Name", value: label, fieldKey: "label", zodType: null, onChange: (value) => handleFieldChange('label', value), placeholder: "Enter a name for this concatenation..." })), wrapTemplateHelp(_jsxs("div", { style: { marginBottom: 16 }, children: [_jsx("label", { style: {
                                     display: 'block',
                                     fontSize: 12,
                                     fontWeight: 500,
@@ -76,7 +114,7 @@ export const ConcatEditor = ({ _____nodeId, nodeData, onChange }) => {
                                     fontSize: 10,
                                     color: '#a0aec0',
                                     marginTop: 4
-                                }, children: "If specified, uses template instead of simple concatenation. Variables become input ports." })] })] }), _jsxs(ProgressiveDisclosureSection, { title: "Concatenation Settings", level: "advanced", description: "Control how inputs are joined together", defaultExpanded: false, priority: "important", fieldName: "joinMode", children: [_jsx(SelectEditor, { label: "Join Mode", value: joinMode, fieldKey: "joinMode", options: JOIN_MODES, zodType: null, onChange: (value) => handleFieldChange('joinMode', value) }), (joinMode === 'first-n' || joinMode === 'last-n') && (_jsx(TextFieldEditor, { label: "Limit Count", value: limitCount, fieldKey: "limitCount", type: "number", zodType: null, onChange: (value) => handleFieldChange('limitCount', value), placeholder: "Number of inputs to include..." })), _jsx(SelectEditor, { label: "Separator", value: separatorMode, fieldKey: "separatorMode", options: SEPARATOR_PRESETS, zodType: null, onChange: handleSeparatorChange }), separatorMode === 'custom' && (_jsx(TextFieldEditor, { label: "Custom Separator", value: customSeparator, fieldKey: "customSeparator", zodType: null, onChange: handleCustomSeparatorChange, placeholder: "Enter custom separator..." })), _jsxs("div", { style: { marginBottom: 16 }, children: [_jsxs("label", { style: {
+                                }, children: "If specified, uses template instead of simple concatenation. Variables become input ports." })] }))] }), _jsxs(ProgressiveDisclosureSection, { title: "Concatenation Settings", level: "advanced", description: "Control how inputs are joined together", defaultExpanded: false, priority: "important", fieldName: "joinMode", children: [wrapJoinModeHelp(_jsx(SelectEditor, { label: "Join Mode", value: joinMode, fieldKey: "joinMode", options: JOIN_MODES, zodType: null, onChange: (value) => handleFieldChange('joinMode', value) })), (joinMode === 'first-n' || joinMode === 'last-n') && (_jsx(TextFieldEditor, { label: "Limit Count", value: limitCount, fieldKey: "limitCount", type: "number", zodType: null, onChange: (value) => handleFieldChange('limitCount', value), placeholder: "Number of inputs to include..." })), _jsx(SelectEditor, { label: "Separator", value: separatorMode, fieldKey: "separatorMode", options: SEPARATOR_PRESETS, zodType: null, onChange: handleSeparatorChange }), separatorMode === 'custom' && (_jsx(TextFieldEditor, { label: "Custom Separator", value: customSeparator, fieldKey: "customSeparator", zodType: null, onChange: handleCustomSeparatorChange, placeholder: "Enter custom separator..." })), _jsxs("div", { style: { marginBottom: 16 }, children: [_jsxs("label", { style: {
                                     display: 'flex',
                                     alignItems: 'center',
                                     gap: 8,

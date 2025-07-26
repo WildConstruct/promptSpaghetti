@@ -17,7 +17,7 @@ jest.mock('../DataClassifier', () => ({
       confidence: 0.9,
       matchedPatterns: ['ssn'],
       fieldClassifications: { ssn: DataClassificationLevel.RESTRICTED }
-    } as unknown),
+    } as unknown as unknown),
     on: jest.fn<unknown[], unknown>()
   }))
 }));
@@ -30,7 +30,7 @@ jest.mock('../ClassificationEnforcer', () => ({
       appliedControls: ['encryption'],
       missingControls: [],
       reason: 'Access granted'
-    } as unknown),
+    } as unknown as unknown),
     on: jest.fn<unknown[], unknown>()
   }))
 }));
@@ -115,7 +115,7 @@ describe('AuditIntegration', () => {
         appliedControls: [],
         missingControls: ['multi_factor_auth'],
         reason: 'Insufficient authentication'
-      } as unknown);
+      } as unknown as unknown);
       
       const denialIntegration = createAuditIntegration({
         auditLogger,

@@ -5,7 +5,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Provides quick access to recently opened projects with chronological ordering
  */
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
-import { projectManager } from '../../projectManager.js';
+import { projectManager } from '../../projectManager';
 export const RecentFiles = ({ limit = 10, onClick, style, className }) => {
     const [currentView, setCurrentView] = useState('recent');
     const [recentFiles, setRecentFiles] = useState([]);

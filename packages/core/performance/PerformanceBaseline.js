@@ -2,8 +2,8 @@
  * Performance Baseline Measurement System for Epic 18
  * Captures current performance metrics to establish baselines for improvement tracking
  */
-import { corePerformanceKPIs, calculateKPIStatus, calculateKPITrend } from './PerformanceKPIs.js';
-import { measureExecution, PerformanceTracker } from '../utils/performance.js';
+import { corePerformanceKPIs, calculateKPIStatus, calculateKPITrend } from './PerformanceKPIs';
+import { measureExecution, PerformanceTracker } from '../utils/performance';
 import { EventEmitter } from 'events';
 /**
  * Performance Baseline Measurement System

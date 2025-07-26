@@ -1,41 +1,79 @@
 // Analytics types for the frontend
-export enum MetricType {
-  VIEWS = 'views',
-  DOWNLOADS = 'downloads',
-  LIKES = 'likes',
-  RATINGS = 'ratings',
-  REVENUE = 'revenue',
-  USAGE_TIME = 'usage_time',
-  ERROR_RATE = 'error_rate',
-  CONVERSION = 'conversion'
-}
+export type MetricType = 
+  | 'views'
+  | 'downloads'
+  | 'likes'
+  | 'ratings'
+  | 'revenue'
+  | 'usage_time'
+  | 'error_rate'
+  | 'conversion';
 
-export enum TimeRange {
-  LAST_24H = 'last_24h',
-  LAST_7D = 'last_7d',
-  LAST_30D = 'last_30d',
-  LAST_90D = 'last_90d',
-  LAST_YEAR = 'last_year',
-  ALL_TIME = 'all_time',
-  CUSTOM = 'custom'
-}
+// Legacy enum values for backwards compatibility
+export const MetricType = {
+  VIEWS: 'views' as const,
+  DOWNLOADS: 'downloads' as const,
+  LIKES: 'likes' as const,
+  RATINGS: 'ratings' as const,
+  REVENUE: 'revenue' as const,
+  USAGE_TIME: 'usage_time' as const,
+  ERROR_RATE: 'error_rate' as const,
+  CONVERSION: 'conversion' as const
+} as const;
 
-export enum AggregationType {
-  SUM = 'sum',
-  AVERAGE = 'average',
-  COUNT = 'count',
-  UNIQUE = 'unique',
-  MAX = 'max',
-  MIN = 'min',
-  MEDIAN = 'median'
-}
+export type TimeRange = 
+  | 'last_24h'
+  | 'last_7d'
+  | 'last_30d'
+  | 'last_90d'
+  | 'last_year'
+  | 'all_time'
+  | 'custom';
 
-export enum DashboardLayout {
-  GRID = 'grid',
-  LIST = 'list',
-  CHARTS = 'charts',
-  MIXED = 'mixed'
-}
+// Legacy enum values for backwards compatibility
+export const TimeRange = {
+  LAST_24H: 'last_24h' as const,
+  LAST_7D: 'last_7d' as const,
+  LAST_30D: 'last_30d' as const,
+  LAST_90D: 'last_90d' as const,
+  LAST_YEAR: 'last_year' as const,
+  ALL_TIME: 'all_time' as const,
+  CUSTOM: 'custom' as const
+} as const;
+
+export type AggregationType = 
+  | 'sum'
+  | 'average'
+  | 'count'
+  | 'unique'
+  | 'max'
+  | 'min'
+  | 'median';
+
+// Legacy enum values for backwards compatibility
+export const AggregationType = {
+  SUM: 'sum' as const,
+  AVERAGE: 'average' as const,
+  COUNT: 'count' as const,
+  UNIQUE: 'unique' as const,
+  MAX: 'max' as const,
+  MIN: 'min' as const,
+  MEDIAN: 'median' as const
+} as const;
+
+export type DashboardLayout = 
+  | 'grid'
+  | 'list'
+  | 'charts'
+  | 'mixed';
+
+// Legacy enum values for backwards compatibility
+export const DashboardLayout = {
+  GRID: 'grid' as const,
+  LIST: 'list' as const,
+  CHARTS: 'charts' as const,
+  MIXED: 'mixed' as const
+} as const;
 
 export interface AnalyticsEvent {
   id: string;

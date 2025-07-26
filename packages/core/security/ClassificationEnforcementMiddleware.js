@@ -10,8 +10,8 @@
  * - Integration with existing authentication systems
  * - Audit logging and compliance reporting
  */
-import { ClassificationEnforcer, createClassificationEnforcer } from './ClassificationEnforcer.js';
-import { DataClassificationHelpers } from './DataClassificationHelpers.js';
+import { ClassificationEnforcer, createClassificationEnforcer } from './ClassificationEnforcer';
+import { DataClassificationHelpers } from './DataClassificationHelpers';
 /**
  * Default configuration
  */

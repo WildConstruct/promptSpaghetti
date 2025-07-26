@@ -8,7 +8,7 @@ import { UnifiedEventBus, UnifiedAnalyticsEvent, EventFilter } from './UnifiedEv
 import { EventRepository } from './EventPersistenceLayer';
 import { AnalyticsAuthorizationService, AuthContext } from './AnalyticsAuthorization';
 import { WebSocketStreamingServer } from './WebSocketStreaming';
-import { AnalyticsEventAdapters } from './AnalyticsEventAdapters';
+import { AnalyticsAdapterManager } from './AnalyticsEventAdapters';
 interface DashboardIntegrationConfig {
     enableLegacySupport: boolean;
     migrationMode: 'gradual' | 'immediate' | 'parallel';
@@ -59,7 +59,14 @@ export declare class DashboardIntegrationService {
     private legacySystems;
     private performanceMetrics;
     private integrationCache;
-    constructor(eventBus: UnifiedEventBus, eventRepository: EventRepository, authService: AnalyticsAuthorizationService, wsServer: WebSocketStreamingServer, adapters: AnalyticsEventAdapters, config?: Partial<DashboardIntegrationConfig>);
+    constructor(
+      eventBus: UnifiedEventBus,
+      eventRepository: EventRepository,
+      authService: AnalyticsAuthorizationService,
+      wsServer: WebSocketStreamingServer,
+      adapters: AnalyticsAdapterManager,
+      config?: Partial<DashboardIntegrationConfig>
+    );
     /**
      * Initialize legacy analytics systems mapping
      */
@@ -72,9 +79,9 @@ export declare class DashboardIntegrationService {
      * Get consolidated dashboard data from all integrated systems
      */
     getConsolidatedDashboardData(filter: EventFilter, authContext: AuthContext, cacheKey?: string): Promise<{
-        metrics: any;
+        metrics: unknown;
         events: UnifiedAnalyticsEvent[];
-        timeSeriesData: any[];
+        timeSeriesData: unknown[];
         integrationStatus: IntegrationStatus;
     }>;
     /**
@@ -92,7 +99,12 @@ export declare class DashboardIntegrationService {
     /**
      * Get widget-specific performance data
      */
-    getWidgetPerformanceData(widgetId: string, widgetType: string, filter: EventFilter, authContext: AuthContext): Promise<any>;
+    getWidgetPerformanceData(
+      widgetId: string,
+      widgetType: string,
+      filter: EventFilter,
+      authContext: AuthContext
+    ): Promise<any>;
     /**
      * Get performance widget data from performance monitoring system
      */
@@ -149,7 +161,7 @@ export declare class DashboardIntegrationService {
     getIntegrationSummary(): {
         legacySystems: LegacyAnalyticsSystem[];
         performanceMetrics: WidgetPerformanceMetrics[];
-        integrationStatus: any;
+        integrationStatus: unknown;
     };
     /**
      * Force refresh of system health checks

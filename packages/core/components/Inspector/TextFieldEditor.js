@@ -1,13 +1,13 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React from 'react';
-export const TextFieldEditor = ({ label, value, fieldKey, zodType, error, onChange, placeholder, disabled = false, type = 'text', multiline = false, rows = 3, maxLength, minLength, pattern }) => {
+export const TextFieldEditor = ({ label, value, fieldKey, zodType, error, onChange, placeholder, disabled = false, type = 'text', multiline = false, rows = 3, maxLength, minLength, pattern }: { label: string, value: any, fieldKey: string, zodType: any, error?: string, onChange: (value: any) => void, placeholder?: string, disabled?: boolean, type?: string, multiline?: boolean, rows?: number, maxLength?: number, minLength?: number, pattern?: string }) => {
     const [localValue, setLocalValue] = React.useState(String(value ?? ''));
     const [isFocused, setIsFocused] = React.useState(false);
     // Update local value when external value changes
     React.useEffect(() => {
         setLocalValue(String(value ?? ''));
     }, [value]);
-    const handleChange = (newValue) => {
+    const handleChange = (newValue: string) => {
         setLocalValue(newValue);
         // Convert to appropriate type
         let convertedValue = newValue;

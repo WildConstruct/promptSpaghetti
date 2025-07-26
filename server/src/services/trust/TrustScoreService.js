@@ -1356,15 +1356,6 @@ export class TrustScoreService {
             confidence: 70
         };
     }
-    async getUserVerificationStatus(_____userId) {
-        return {
-            isVerified: false,
-            verificationType: [],
-            verificationDate: undefined,
-            verificationExpiry: undefined,
-            verificationProvider: undefined
-        };
-    }
     async getUserTrustBadges(_____userId) {
         return [];
     }
@@ -1523,15 +1514,15 @@ export class TrustScoreService {
     `, [userId]);
         const actions = result.rows;
         const totalActions = actions.length;
-        const activeActions = actions.filter(a => a.status === 'active').length;
+        const activeActions = actions.filter((a) => a.status === 'active').length;
         // Calculate enforcement impact on trust score
         let enforcementImpact = 0;
-        const recentActions = actions.filter(a => {
+        const recentActions = actions.filter((a) => {
             const actionDate = new Date(a.executed_at);
             const daysSince = (Date.now() - actionDate.getTime()) / (1000 * 60 * 60 * 24);
             return daysSince <= 90; // Last 90 days
         });
-        recentActions.forEach(action => {
+        recentActions.forEach((action) => {
             const severityMultiplier = {
                 low: 1,
                 medium: 2,
@@ -1550,10 +1541,10 @@ export class TrustScoreService {
             enforcementImpact += actionImpact * severityMultiplier;
         });
         const recentViolations = actions
-            .filter(a => a.violation_type)
+            .filter((a) => a.violation_type)
             .slice(0, 10)
-            .map(a => ({
-            reportId: `VR-${a.action_id}`,
+            .map((a) => ({
+            reportId: `VR-${a.id}`,
             reportType: 'automated_detection',
             targetType: 'user',
             targetId: userId,
@@ -1571,7 +1562,7 @@ export class TrustScoreService {
             },
             reportedAt: new Date(a.reported_at || a.executed_at),
             detectionMethod: {
-                method: 'trust_score_monitoring',
+                method: 'automated_scan',
                 confidence: 80
             },
             evidence: [],
@@ -1720,7 +1711,7 @@ export class TrustScoreService {
             },
             reportedAt: now,
             detectionMethod: {
-                method: 'trust_score_analysis',
+                method: 'pattern_analysis',
                 algorithm: 'multi_dimensional_scoring',
                 modelVersion: '1.0.0',
                 confidence: details.confidence
@@ -1783,12 +1774,17 @@ export class TrustScoreService {
                 warning: -2,
                 content_flag: -3,
                 content_removal: -8,
+                content_quarantine: -4,
                 account_warning: -5,
                 account_restriction: -10,
                 account_suspension: -20,
                 account_termination: -30,
                 transaction_block: -7,
-                marketplace_ban: -25
+                marketplace_ban: -25,
+                rate_limit: -3,
+                verification_required: -1,
+                manual_review_required: -2,
+                payment_hold: -6
             };
             trustImpact = actionImpacts[action.actionType] || -5;
             // Multiply by severity
@@ -1806,20 +1802,21 @@ export class TrustScoreService {
         }
         // Apply the trust score update
         if (trustImpact !== 0) {
-            await this.recordTrustScoreEvent({
-                eventType: `enforcement_${actionResult}`,
-                entityType,
-                entityId,
-                impact: trustImpact,
-                description: `${action.actionType} ${actionResult}: ${action.reason}`,
-                timestamp: new Date(),
-                metadata: {
-                    actionId: action.actionId,
-                    actionType: action.actionType,
-                    severity: action.severity,
-                    result: actionResult
-                }
-            });
+            // TODO: Implement recordTrustScoreEvent method
+            // await this.recordTrustScoreEvent({
+            //   eventType: `enforcement_${actionResult}`,
+            //   entityType,
+            //   entityId,
+            //   impact: trustImpact,
+            //   description: `${action.actionType} ${actionResult}: ${action.reason}`,
+            //   timestamp: new Date(),
+            //   metadata: {
+            //     actionId: action.actionId,
+            //     actionType: action.actionType,
+            //     severity: action.severity,
+            //     result: actionResult
+            //   }
+            // });
             // Force recalculation on next request
             await this.invalidateTrustScoreCache(entityType, entityId);
         }
@@ -1833,7 +1830,7 @@ export class TrustScoreService {
         }
         // Check last 7 days for rapid decline
         const recentHistory = history
-            .filter(h => {
+            .filter((h) => {
             const daysSince = (Date.now() - new Date(h.date).getTime()) / (1000 * 60 * 60 * 24);
             return daysSince <= 7;
         })

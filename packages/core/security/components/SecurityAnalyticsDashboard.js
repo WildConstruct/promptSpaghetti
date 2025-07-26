@@ -7,7 +7,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * behavioral analysis, and predictive security insights for Wild Construct platform.
  */
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { RiskLevel, ThreatCategory } from '../SecurityEventAnalytics.js';
+import { RiskLevel, ThreatCategory } from '../SecurityEventAnalytics';
 /**
  * Comprehensive security analytics dashboard for executive and operational use
  */

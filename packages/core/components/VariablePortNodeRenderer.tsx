@@ -32,16 +32,19 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
     return { variables: [], errors: [], isValid: true, processedTemplate: '' };
   }, [templateField]);
 
-  // Get valid variables for port creation
+  // Get valid variables for port creation with optimized positioning
   const variablePorts = useMemo(() => {
-    return parseResult.variables
-      .filter(variable => variable.isValid)
-      .map((variable, index) => ({
-        id: `variable-${variable.name}`,
-        name: variable.name,
-        displayName: variable.name.charAt(0).toUpperCase() + variable.name.slice(1),
-        position: index
-      }));
+    const validVariables = parseResult.variables.filter(variable => variable.isValid);
+    
+    return validVariables.map((variable, index) => ({
+      id: `variable-${variable.name}`,
+      name: variable.name,
+      displayName: variable.name.charAt(0).toUpperCase() + variable.name.slice(1),
+      position: index,
+      yOffset: 30 + (index * 25), // Improved spacing for better visual hierarchy
+      inferredType: variable.inferredType || 'string',
+      hasDefault: Boolean(variable.defaultValue)
+    }));
   }, [parseResult.variables]);
 
   try {

@@ -80,7 +80,7 @@ export interface EventSchemaDefinition {
   };
 }
 
-export interface PropertySchemaDefinition extends PropertySchema {
+export interface PropertySchemaDefinition extends Omit<PropertySchema, 'relationships'> {
   id: string;
   name: string;
   description: string;
@@ -175,7 +175,7 @@ export interface ValidationRule {
 
 export interface PropertyRelationshipDefinition {
   id: string;
-  type: 'depends_on' | 'conflicts_with' | 'derives_from' | 'validates_against' | 'correlates_with';
+  type: 'depends_on' | 'conflicts_with' | 'derives_from' | 'validates_against';
   targetProperty: string;
   relationship: RelationshipSpec;
   strength: number; // 0-1
@@ -745,11 +745,17 @@ export class FlexibleEventSchemaManager {
       const constraintResult = await this.validateConstraint(property.value, constraint);
       
       if (!constraintResult.isValid) {
+        const severityMapping: Record<string, 'critical' | 'major' | 'minor'> = {
+          'error': 'critical',
+          'warning': 'major',
+          'info': 'minor'
+        };
+        
         const error: ValidationError = {
           propertyPath: result.fieldName,
           constraint: constraint.type,
           message: constraint.errorMessage,
-          severity: constraint.severity,
+          severity: severityMapping[constraint.severity] || 'major',
           suggestedFix: this.generateConstraintFix(constraint)
         };
 
@@ -897,7 +903,10 @@ export class FlexibleEventSchemaManager {
     return compatibilityMap[expected]?.includes(actual) || false;
   }
 
-  private async validateConstraint(value: any, constraint: PropertyConstraint): Promise<{ isValid: boolean; message?: string }> {
+  private async validateConstraint(
+    value: any,
+    constraint: PropertyConstraint
+  ): Promise<{ isValid: boolean; message?: string }> {
     switch (constraint.type) {
       case 'range':
         if (typeof value === 'number') {
@@ -962,7 +971,10 @@ export class FlexibleEventSchemaManager {
     return { isValid: true };
   }
 
-  private async executeCustomConstraint(value: any, constraintConfig: any): Promise<{ isValid: boolean; message?: string }> {
+  private async executeCustomConstraint(
+    value: any,
+    constraintConfig: any
+  ): Promise<{ isValid: boolean; message?: string }> {
     // Simplified custom constraint execution
     // In production, this would use a secure sandbox
     try {
@@ -1128,7 +1140,9 @@ export class FlexibleEventSchemaManager {
     if (this.validationCache.size >= this.MAX_CACHE_SIZE) {
       // Simple LRU eviction
       const firstKey = this.validationCache.keys().next().value;
-      this.validationCache.delete(firstKey);
+      if (firstKey) {
+        this.validationCache.delete(firstKey);
+      }
     }
     
     this.validationCache.set(key, result);
@@ -1347,8 +1361,6 @@ export interface ValidationOptions {
 /**
  * Factory function to create FlexibleEventSchemaManager
  */
-export const createFlexibleEventSchemaManager = (): FlexibleEventSchemaManager => {
-  return new FlexibleEventSchemaManager();
-};
+export };
 
 export default FlexibleEventSchemaManager;

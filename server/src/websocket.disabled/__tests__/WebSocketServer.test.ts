@@ -2,9 +2,67 @@ import WebSocket from 'ws';
 import { WebSocketServer } from '../WebSocketServer';
 import { WSServerConfig } from '../types';
 
-// Mock WebSocket constructor
+// Mock all dependencies
 jest.mock('ws', () => ({
   Server: jest.fn<unknown[], unknown>()
+}));
+
+// Mock ConnectionManager
+jest.mock('../ConnectionManager', () => ({
+  ConnectionManager: jest.fn<unknown[], unknown>().mockImplementation(() => ({
+    getHealthMetrics: jest.fn(() => ({
+      totalConnections: 0,
+      activeDocuments: 0,
+      messagesPerSecond: 0,
+      uptime: 0,
+      memoryUsage: 0,
+      lastUpdated: Date.now()
+    })),
+    broadcastToDocument: jest.fn<unknown[], unknown>(),
+    cleanup: jest.fn<unknown[], unknown>(),
+    on: jest.fn<unknown[], unknown>()
+  }))
+}));
+
+// Mock PresenceManager
+jest.mock('../PresenceManager', () => ({
+  PresenceManager: jest.fn<unknown[], unknown>().mockImplementation(() => ({
+    cleanup: jest.fn<unknown[], unknown>(),
+    getDocumentUsers: jest.fn(() => []),
+    getPresenceStats: jest.fn(() => ({})),
+    on: jest.fn<unknown[], unknown>()
+  }))
+}));
+
+// Mock ConflictResolver
+jest.mock('../ConflictResolver', () => ({
+  ConflictResolver: jest.fn<unknown[], unknown>().mockImplementation(() => ({
+    cleanup: jest.fn<unknown[], unknown>(),
+    on: jest.fn<unknown[], unknown>()
+  }))
+}));
+
+// Mock SynchronizationManager
+jest.mock('../SynchronizationManager', () => ({
+  SynchronizationManager: jest.fn<unknown[], unknown>().mockImplementation(() => ({
+    cleanup: jest.fn<unknown[], unknown>(),
+    on: jest.fn<unknown[], unknown>()
+  }))
+}));
+
+// Mock Analytics
+jest.mock('../../analytics/AnalyticsCollector', () => ({
+  AnalyticsCollector: jest.fn<unknown[], unknown>().mockImplementation(() => ({
+    on: jest.fn<unknown[], unknown>()
+  }))
+}));
+
+jest.mock('../../database/analytics-dao', () => ({
+  AnalyticsDAO: jest.fn<unknown[], unknown>().mockImplementation(() => ({}))
+}));
+
+jest.mock('../../database/connection', () => ({
+  getDatabase: jest.fn(() => ({}))
 }));
 
 describe('WebSocketServer', () => {
@@ -12,6 +70,7 @@ describe('WebSocketServer', () => {
   let config: WSServerConfig;
 
   beforeEach(() => {
+    jest.clearAllMocks();
     config = {
       port: 8001,
       heartbeatInterval: 1000,
@@ -28,7 +87,7 @@ describe('WebSocketServer', () => {
     if (server) {
       await server.stop();
     }
-  });
+  }, 5000); // 5 second timeout for cleanup
 
   describe('initialization', () => {
     it('should create server with provided config', () => {
@@ -38,7 +97,7 @@ describe('WebSocketServer', () => {
     it('should start server on configured port', async () => {
       const mockWss = {
         on: jest.fn<unknown[], unknown>(),
-        close: jest.fn<unknown[], unknown>()
+        close: jest.fn((callback) => callback && callback())
       };
       
       (WebSocket.Server as jest.Mock).mockImplementation(() => mockWss as any);
@@ -50,7 +109,10 @@ describe('WebSocketServer', () => {
         server: undefined,
         verifyClient: expect.any(Function)
       });
-    });
+      
+      expect(mockWss.on).toHaveBeenCalledWith('connection', expect.any(Function));
+      expect(mockWss.on).toHaveBeenCalledWith('error', expect.any(Function));
+    }, 10000); // 10 second timeout
   });
 
   describe('health metrics', () => {

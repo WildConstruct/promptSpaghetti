@@ -5,7 +5,7 @@
  * Handles validation requests, status tracking, and trust score management.
  */
 import { useEffect, useState, useCallback } from 'react';
-import { identityValidationService } from '../auth/IdentityValidation.js';
+import { identityValidationService } from '../auth/IdentityValidation';
 export const useIdentityValidation = (config = {}) => {
     const { userId, autoLoadUserData = true, enableRealTimeUpdates = false } = config;
     const [userTrustScore, setUserTrustScore] = useState(null);

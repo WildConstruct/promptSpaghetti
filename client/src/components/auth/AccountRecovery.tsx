@@ -179,11 +179,11 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
           </div>
           <h2 className="mt-4 text-2xl font-bold text-gray-900">Request Sent</h2>
           <p className="mt-2 text-gray-600">
-            We've sent account recovery instructions to your email address.
+            We&apos;ve sent account recovery instructions to your email address.
           </p>
           <p className="mt-4 text-sm text-gray-500">
             Check your email and follow the instructions to unlock your account.
-            If you don't see the email, check your spam folder.
+            If you don&apos;t see the email, check your spam folder.
           </p>
           
           {countdown > 0 && (
@@ -298,7 +298,7 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
             onClick={() => setMode('request')}
             className="text-sm text-blue-600 hover:text-blue-500"
           >
-            Don't have an unlock token? Request one
+            Don&apos;t have an unlock token? Request one
           </button>
         </div>
       </div>

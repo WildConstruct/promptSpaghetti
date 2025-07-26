@@ -138,12 +138,12 @@ export var PersonalizationType;
 })(PersonalizationType || (PersonalizationType = {}));
 // Knowledge base service class
 export class Epic16KnowledgeBaseService extends EventEmitter {
-    articles = new Map();
-    searchIndex = new Map();
-    userSessions = new Map();
-    analytics = new Map();
-    config;
-    constructor(config) {
+    articles: Map<string, any> = new Map();
+    searchIndex: Map<string, any> = new Map();
+    userSessions: Map<string, any> = new Map();
+    analytics: Map<string, any> = new Map();
+    config: any;
+    constructor(config: any) {
         super();
         this.config = this.initializeConfig(config);
     }

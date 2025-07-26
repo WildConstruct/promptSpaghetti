@@ -8,7 +8,7 @@ import { jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
  * Task: E16-1753114247020-65B7A3 - Design sharing system
  */
 import { useState } from 'react';
-import { SharingService } from '../../services/SharingService.js';
+import { SharingService } from '../../services/SharingService';
 export const ShareModal = ({ isOpen, onClose, resourceId, resourceType, resourceTitle, resourceDescription, onShareCreated }) => {
     const [shareTarget, setShareTarget] = useState('public');
     const [shareFormat, setShareFormat] = useState('link');

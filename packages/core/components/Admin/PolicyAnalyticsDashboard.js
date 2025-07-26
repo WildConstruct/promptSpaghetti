@@ -6,9 +6,9 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Part of Epic 17.5.4 - Policy Enforcement (Backstage Admin Controls)
  */
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
 import { TrendingUp, TrendingDown, Activity, Shield, AlertTriangle, Clock, CheckCircle, RefreshCw, Download, Target, Zap, Eye } from 'lucide-react';
 export const PolicyAnalyticsDashboard = ({ className = '' }) => {
     const [timeRange, setTimeRange] = useState('7d');

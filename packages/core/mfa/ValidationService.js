@@ -5,7 +5,7 @@
  * validation with database integration, rate limiting, and security monitoring.
  */
 import { EventEmitter } from 'events';
-import { SecureCodeGenerator, CodeUtils } from './CodeGenerator.js';
+import { SecureCodeGenerator, CodeUtils } from './CodeGenerator';
 const DEFAULT_CONFIG = {
     rateLimiting: {
         enabled: true,

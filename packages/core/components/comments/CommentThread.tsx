@@ -14,7 +14,7 @@ interface CommentThreadProps {
   workspaceId: string;
   userId: string;
   onReply: (content: string) => Promise<void>;
-  onUpdate: (commentId: string, content: string, metadata?: any) => Promise<void>;
+  onUpdate: (commentId: string, content: string, metadata?: Record<string, unknown>) => Promise<void>;
   onDelete: (commentId: string) => Promise<void>;
   onResolve: (commentId: string, resolved: boolean) => Promise<void>;
   compact?: boolean;

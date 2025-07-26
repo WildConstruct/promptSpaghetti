@@ -6,7 +6,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * interactive elements, feedback system, and accessibility features.
  */
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { FeedbackType, SectionType } from '../../services/Epic16KnowledgeBaseService.js';
+import { FeedbackType, SectionType } from '../../services/Epic16KnowledgeBaseService';
 export const KnowledgeBaseArticleViewer = ({ article, knowledgeService, userId, onArticleSelect, onClose }) => {
     // State management
     const [viewerState, setViewerState] = useState({

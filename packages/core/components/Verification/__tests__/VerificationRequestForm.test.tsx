@@ -22,7 +22,10 @@ describe('VerificationRequestForm', () => {
   beforeEach(() => {
     mockOnSubmit.mockClear();
     mockOnCancel.mockClear();
-    mockOnSubmit.mockResolvedValue({ requestId: 'req_123', status: 'pending' } as unknown as unknown as unknown as unknown);
+    mockOnSubmit.mockResolvedValue(
+      { requestId: 'req_123',
+      status: 'pending' } as unknown as unknown as unknown as unknown
+     as unknown);
   });
 
   describe('Form Rendering', () => {

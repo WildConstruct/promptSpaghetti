@@ -21,15 +21,15 @@ export declare const CommentEngagementSchema: z.ZodObject<{
     contextData: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
 }, "strip", z.ZodTypeAny, {
     weight: number;
-    userId: string;
     timestamp: Date;
+    userId: string;
     contextData: Record<string, unknown>;
     engagementId: string;
     commentId: string;
     engagementType: "helpful" | "like" | "reply" | "share" | "report" | "dislike";
 }, {
-    userId: string;
     timestamp: Date;
+    userId: string;
     engagementId: string;
     commentId: string;
     engagementType: "helpful" | "like" | "reply" | "share" | "report" | "dislike";
@@ -405,7 +405,7 @@ export declare const TrendingResultsSchema: z.ZodObject<{
         emergingTopics: string[];
         totalEngagements: number;
         uniqueParticipants: number;
-        conversationHealth: "excellent" | "good" | "fair" | "poor";
+        conversationHealth: "excellent" | "good" | "poor" | "fair";
         topHashtags: string[];
         controversyLevel: "low" | "medium" | "high";
         topEngagementType?: "helpful" | "like" | "reply" | "share" | "report" | "dislike" | undefined;
@@ -420,7 +420,7 @@ export declare const TrendingResultsSchema: z.ZodObject<{
         topEngagementType?: "helpful" | "like" | "reply" | "share" | "report" | "dislike" | undefined;
         totalEngagements?: number | undefined;
         uniqueParticipants?: number | undefined;
-        conversationHealth?: "excellent" | "good" | "fair" | "poor" | undefined;
+        conversationHealth?: "excellent" | "good" | "poor" | "fair" | undefined;
         topHashtags?: string[] | undefined;
         controversyLevel?: "low" | "medium" | "high" | undefined;
     }>;
@@ -457,7 +457,7 @@ export declare const TrendingResultsSchema: z.ZodObject<{
         emergingTopics: string[];
         totalEngagements: number;
         uniqueParticipants: number;
-        conversationHealth: "excellent" | "good" | "fair" | "poor";
+        conversationHealth: "excellent" | "good" | "poor" | "fair";
         topHashtags: string[];
         controversyLevel: "low" | "medium" | "high";
         topEngagementType?: "helpful" | "like" | "reply" | "share" | "report" | "dislike" | undefined;
@@ -488,7 +488,7 @@ export declare const TrendingResultsSchema: z.ZodObject<{
         topEngagementType?: "helpful" | "like" | "reply" | "share" | "report" | "dislike" | undefined;
         totalEngagements?: number | undefined;
         uniqueParticipants?: number | undefined;
-        conversationHealth?: "excellent" | "good" | "fair" | "poor" | undefined;
+        conversationHealth?: "excellent" | "good" | "poor" | "fair" | undefined;
         topHashtags?: string[] | undefined;
         controversyLevel?: "low" | "medium" | "high" | undefined;
     };
@@ -508,11 +508,11 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
         start: z.ZodDate;
         end: z.ZodDate;
     }, "strip", z.ZodTypeAny, {
-        end: Date;
         start: Date;
+        end: Date;
     }, {
-        end: Date;
         start: Date;
+        end: Date;
     }>;
     metrics: z.ZodObject<{
         totalComments: z.ZodDefault<z.ZodNumber>;
@@ -592,14 +592,14 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
             period: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             period: string;
+            sentiment: number;
             topic: string;
             mentions: number;
-            sentiment: number;
         }, {
             period: string;
+            sentiment: number;
             topic: string;
             mentions: number;
-            sentiment: number;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
         commentVelocity: {
@@ -620,9 +620,9 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
         }[];
         topicEvolution: {
             period: string;
+            sentiment: number;
             topic: string;
             mentions: number;
-            sentiment: number;
         }[];
     }, {
         commentVelocity?: {
@@ -643,9 +643,9 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
         }[] | undefined;
         topicEvolution?: {
             period: string;
+            sentiment: number;
             topic: string;
             mentions: number;
-            sentiment: number;
         }[] | undefined;
     }>;
     breakdowns: z.ZodObject<{
@@ -764,9 +764,9 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
         }[];
         topicEvolution: {
             period: string;
+            sentiment: number;
             topic: string;
             mentions: number;
-            sentiment: number;
         }[];
     };
     insights: {
@@ -783,8 +783,8 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
     };
     resourceId: string;
     timeRange: {
-        end: Date;
         start: Date;
+        end: Date;
     };
     breakdowns: {
         byTimeOfDay: number[];
@@ -828,9 +828,9 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
         }[] | undefined;
         topicEvolution?: {
             period: string;
+            sentiment: number;
             topic: string;
             mentions: number;
-            sentiment: number;
         }[] | undefined;
     };
     insights: {
@@ -847,8 +847,8 @@ export declare const CommentAnalyticsSchema: z.ZodObject<{
     };
     resourceId: string;
     timeRange: {
-        end: Date;
         start: Date;
+        end: Date;
     };
     breakdowns: {
         bySentiment: {
@@ -940,7 +940,7 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
             emergingTopics: string[];
             totalEngagements: number;
             uniqueParticipants: number;
-            conversationHealth: "excellent" | "good" | "fair" | "poor";
+            conversationHealth: "excellent" | "good" | "poor" | "fair";
             topHashtags: string[];
             controversyLevel: "low" | "medium" | "high";
             topEngagementType?: "helpful" | "like" | "reply" | "share" | "report" | "dislike" | undefined;
@@ -955,7 +955,7 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
             topEngagementType?: "helpful" | "like" | "reply" | "share" | "report" | "dislike" | undefined;
             totalEngagements?: number | undefined;
             uniqueParticipants?: number | undefined;
-            conversationHealth?: "excellent" | "good" | "fair" | "poor" | undefined;
+            conversationHealth?: "excellent" | "good" | "poor" | "fair" | undefined;
             topHashtags?: string[] | undefined;
             controversyLevel?: "low" | "medium" | "high" | undefined;
         }>;
@@ -992,7 +992,7 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
             emergingTopics: string[];
             totalEngagements: number;
             uniqueParticipants: number;
-            conversationHealth: "excellent" | "good" | "fair" | "poor";
+            conversationHealth: "excellent" | "good" | "poor" | "fair";
             topHashtags: string[];
             controversyLevel: "low" | "medium" | "high";
             topEngagementType?: "helpful" | "like" | "reply" | "share" | "report" | "dislike" | undefined;
@@ -1023,7 +1023,7 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
             topEngagementType?: "helpful" | "like" | "reply" | "share" | "report" | "dislike" | undefined;
             totalEngagements?: number | undefined;
             uniqueParticipants?: number | undefined;
-            conversationHealth?: "excellent" | "good" | "fair" | "poor" | undefined;
+            conversationHealth?: "excellent" | "good" | "poor" | "fair" | undefined;
             topHashtags?: string[] | undefined;
             controversyLevel?: "low" | "medium" | "high" | undefined;
         };
@@ -1096,7 +1096,7 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
             emergingTopics: string[];
             totalEngagements: number;
             uniqueParticipants: number;
-            conversationHealth: "excellent" | "good" | "fair" | "poor";
+            conversationHealth: "excellent" | "good" | "poor" | "fair";
             topHashtags: string[];
             controversyLevel: "low" | "medium" | "high";
             topEngagementType?: "helpful" | "like" | "reply" | "share" | "report" | "dislike" | undefined;
@@ -1142,7 +1142,7 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
             topEngagementType?: "helpful" | "like" | "reply" | "share" | "report" | "dislike" | undefined;
             totalEngagements?: number | undefined;
             uniqueParticipants?: number | undefined;
-            conversationHealth?: "excellent" | "good" | "fair" | "poor" | undefined;
+            conversationHealth?: "excellent" | "good" | "poor" | "fair" | undefined;
             topHashtags?: string[] | undefined;
             controversyLevel?: "low" | "medium" | "high" | undefined;
         };
@@ -1164,10 +1164,7 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
 }>;
 export type GetTrendingCommentsRequest = z.infer<typeof GetTrendingCommentsRequestSchema>;
 export type TrendingCommentsResponse = z.infer<typeof TrendingCommentsResponseSchema>;
-export declare const validateGetTrendingCommentsRequest: (data: unknown) => GetTrendingCommentsRequest;
-export declare const validateTrendingComment: (data: unknown) => TrendingComment;
-export declare const validateCommentScore: (data: unknown) => CommentScore;
-export interface TrendingSystemConfig {
+export declare export declare export declare export interface TrendingSystemConfig {
     enabledAlgorithms: string[];
     defaultAlgorithm: string;
     cacheSettings: {

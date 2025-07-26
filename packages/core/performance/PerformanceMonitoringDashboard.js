@@ -3,7 +3,7 @@
  * Real-time performance monitoring and budget enforcement
  */
 import { EventEmitter } from 'events';
-import { PerformanceBudgetManager, defaultPerformanceBudget } from './PerformanceBudget.js';
+import { PerformanceBudgetManager, defaultPerformanceBudget } from './PerformanceBudget';
 /**
  * Performance Monitoring Dashboard
  * Centralized performance monitoring and optimization management

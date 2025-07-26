@@ -25,10 +25,11 @@ const getFilmmakerFriendlyError = (message: string): string => {
     'Schema': 'Format'
   };
   
+  // Performance optimization: use a single pass replacement
   let friendlyMessage = message;
-  for (const [technical, friendly] of Object.entries(errorMappings)) {
-    friendlyMessage = friendlyMessage.replace(new RegExp(technical, 'g'), friendly);
-  }
+  Object.entries(errorMappings).forEach(([technical, friendly]) => {
+    friendlyMessage = friendlyMessage.replace(new RegExp(technical, 'gi'), friendly);
+  });
   
   return friendlyMessage;
 };
@@ -77,12 +78,15 @@ export const BaseNodeEditor: React.FC<BaseNodeEditorProps> = ({
     // Validate single field via schema
     if (schema) {
       try {
-        const fieldSchema: unknown = (schema as any).shape?.[key] ?? (schema as any)._def?.shape?.()[key];
+        const fieldSchema: unknown = (
+          schema as { shape?: Record<string,
+          unknown> }
+        ).shape?.[key] ?? (schema as { _def?: { shape?: () => Record<string, unknown> } })._def?.shape?.()[key];
         if (fieldSchema) {
           const parsed = fieldSchema.safeParse(val);
           setFieldErrors((prev) => ({ 
             ...prev, 
-            [key]: parsed.success ? '' : getFilmmakerFriendlyError(parsed.error.issues[0]?.message || 'Invalid value')
+            [key]: parsed.success ? '' : getFilmmakerFriendlyError(parsed.error.issues[0]?.message ?? 'Invalid value')
           }));
         }
       } catch (error) {
@@ -98,15 +102,15 @@ export const BaseNodeEditor: React.FC<BaseNodeEditorProps> = ({
     if (!schema) return null;
     
     try {
-      const shape: Error = (schema as any).shape;
+      const shape: unknown = (schema as { shape?: Record<string, unknown> }).shape;
       if (typeof shape === 'function') {
-        return shape()[key] || null;
+        return (shape() as Record<string, unknown>)[key] ?? null;
       } else if (shape) {
-        return shape[key] || null;
-      } else if ((schema as any)._def?.shape) {
-        const s = (schema as any)._def.shape;
+        return shape[key] ?? null;
+      } else if ((schema as { _def?: { shape?: unknown } })._def?.shape) {
+        const s = (schema as { _def: { shape: unknown } })._def.shape;
         const shapeObj = typeof s === 'function' ? s() : s;
-        return shapeObj[key] || null;
+        return (shapeObj as Record<string, unknown>)[key] ?? null;
       }
     } catch (error) {
       console.warn('Error getting field schema:', key, error);
@@ -153,10 +157,10 @@ export const BaseNodeEditor: React.FC<BaseNodeEditorProps> = ({
         </label>
         <input
           id={`field-${nodeId}-${key}`}
-          type={(zodType as any)._def?.typeName === 'ZodNumber' ? 'number' : 'text'}
+          type={(zodType as { _def?: { typeName?: string } })._def?.typeName === 'ZodNumber' ? 'number' : 'text'}
           value={String(fieldProps.value ?? '')}
           onChange={(e) => {
-            const isNumber = (zodType as any)._def?.typeName === 'ZodNumber';
+            const isNumber = (zodType as { _def?: { typeName?: string } })._def?.typeName === 'ZodNumber';
             updateField(key, isNumber ? Number(e.target.value) : e.target.value);
           }}
           style={{ 
@@ -190,15 +194,15 @@ export const BaseNodeEditor: React.FC<BaseNodeEditorProps> = ({
     try {
       let shape: Record<string, ZodTypeAny> = {};
       
-      if ((schema as any).shape) {
-        const maybeShape: Error = (schema as any).shape;
+      if ((schema as { shape?: Record<string, unknown> }).shape) {
+        const maybeShape: unknown = (schema as { shape: Record<string, unknown> }).shape;
         if (typeof maybeShape === 'function') {
           shape = maybeShape();
         } else if (maybeShape) {
           shape = maybeShape;
         }
-      } else if ((schema as any)._def?.shape) {
-        const s = (schema as any)._def.shape;
+      } else if ((schema as { _def?: { shape?: unknown } })._def?.shape) {
+        const s = (schema as { _def: { shape: unknown } })._def.shape;
         shape = typeof s === 'function' ? s() : s;
       }
       

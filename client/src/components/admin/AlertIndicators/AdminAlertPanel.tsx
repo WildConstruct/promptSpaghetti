@@ -13,7 +13,7 @@ import { Shield } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { 
   ChevronDown, ChevronUp, AlertTriangle, User, 
-  ExternalLink, RefreshCw, Settings,
+  ExternalLink, RefreshCw, Settings, Shield,
   Zap, CheckCircle
 } from 'lucide-react';
 import AlertIndicatorBadge, { AlertCount, AlertSeverity } from './AlertIndicatorBadge';

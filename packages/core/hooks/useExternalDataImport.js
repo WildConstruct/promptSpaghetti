@@ -1,7 +1,7 @@
 // packages/core/hooks/useExternalDataImport.ts
 // Epic 8.8 Task 1: Data Import Hooks with Caching System
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { dataSourceManager } from '../external-data/DataSourceManager.js';
+import { dataSourceManager } from '../external-data/DataSourceManager';
 export const useExternalDataImport = ({ autoRefresh = false, refreshInterval = 300000, // 5 minutes
 enableRealTimeUpdates = false, cacheStrategy = 'conservative', onError, onSuccess } = {}) => {
     const [state, setState] = useState({

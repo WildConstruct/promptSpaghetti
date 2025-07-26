@@ -3,8 +3,7 @@
 
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { z } from 'zod';
-import { LLMRandomizerSystem } from '../../../packages/core/llm-randomizer';
-import { RandomizerParameters } from '../../../packages/core/llm-randomizer/generator/parameters/parameter-schema';
+import { LLMRandomizerSystem } from '../../packages/core/llm-randomizer';
 
 // Request/Response schemas
 const RandomizerGenerateRequestSchema = z.object({
@@ -27,27 +26,6 @@ const RandomizerGenerateRequestSchema = z.object({
   })
 });
 
-const RandomizerGenerateResponseSchema = z.object({
-  success: z.boolean(),
-  graph: z.any().optional(),
-  metadata: z.object({
-    generationTime: z.number(),
-    provider: z.string(),
-    requestId: z.string(),
-    timestamp: z.string()
-  }).optional(),
-  errors: z.array(z.object({
-    type: z.string(),
-    message: z.string(),
-    details: z.any().optional()
-  })).optional(),
-  warnings: z.array(z.object({
-    type: z.string(),
-    message: z.string(),
-    suggestion: z.string().optional()
-  })).optional()
-});
-
 const RandomizerValidateRequestSchema = z.object({
   parameters: z.object({
     purpose: z.string().optional(),
@@ -68,31 +46,50 @@ const RandomizerValidateRequestSchema = z.object({
   })
 });
 
-const RandomizerValidateResponseSchema = z.object({
-  isValid: z.boolean(),
-  errors: z.array(z.object({
-    field: z.string(),
-    message: z.string(),
-    severity: z.enum(['error', 'warning'])
-  })),
-  warnings: z.array(z.object({
-    field: z.string(),
-    message: z.string(),
-    suggestion: z.string().optional()
-  })),
-  suggestions: z.object({
-    nodeCount: z.number().optional(),
-    temperature: z.number().optional(),
-    focusAreas: z.array(z.string()).optional(),
-    recommendedProvider: z.string().optional()
-  }).optional()
-});
-
 // Type definitions
 type RandomizerGenerateRequest = z.infer<typeof RandomizerGenerateRequestSchema>;
-type RandomizerGenerateResponse = z.infer<typeof RandomizerGenerateResponseSchema>;
 type RandomizerValidateRequest = z.infer<typeof RandomizerValidateRequestSchema>;
-type RandomizerValidateResponse = z.infer<typeof RandomizerValidateResponseSchema>;
+
+interface RandomizerGenerateResponse {
+  success: boolean;
+  graph?: unknown;
+  metadata?: {
+    generationTime: number;
+    provider: string;
+    requestId: string;
+    timestamp: string;
+  };
+  errors?: Array<{
+    type: string;
+    message: string;
+    details?: unknown;
+  }>;
+  warnings?: Array<{
+    type: string;
+    message: string;
+    suggestion?: string;
+  }>;
+}
+
+interface RandomizerValidateResponse {
+  isValid: boolean;
+  errors: Array<{
+    field: string;
+    message: string;
+    severity: 'error' | 'warning';
+  }>;
+  warnings: Array<{
+    field: string;
+    message: string;
+    suggestion?: string;
+  }>;
+  suggestions?: {
+    nodeCount?: number;
+    temperature?: number;
+    focusAreas?: string[];
+    recommendedProvider?: string;
+  };
+}
 
 // Global randomizer system instance
 const randomizerSystem = new LLMRandomizerSystem();
@@ -500,7 +497,7 @@ export async function randomizerRoutes(fastify: FastifyInstance) {
     handler: async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         // Test basic functionality
-        const testResult = await randomizerSystem.fullWorkflow({
+        await randomizerSystem.fullWorkflow({
           purpose: 'test health check',
           complexity: 'simple',
           nodeCount: 3,

@@ -2,9 +2,9 @@
 // Epic 8.7 Task 5: Graph Sharing System with Complete Annotations
 // Graph sharing service
 export class GraphSharingService {
-    static instance;
-    sharedGraphs = new Map();
-    static getInstance() {
+    static instance: GraphSharingService;
+    sharedGraphs: Map<string, any> = new Map();
+    static getInstance(): GraphSharingService {
         if (!GraphSharingService.instance) {
             GraphSharingService.instance = new GraphSharingService();
         }
@@ -13,7 +13,7 @@ export class GraphSharingService {
     /**
      * Export graph with all annotations for sharing
      */
-    async exportForSharing(nodes, edges, annotations = {}, metadata = {}, options) {
+    async exportForSharing(nodes: any[], edges: any[], annotations: any = {}, metadata: any = {}, options: any): Promise<any> {
         const exportId = this.generateExportId();
         const timestamp = new Date().toISOString();
         // Extract connection labels from annotated edges

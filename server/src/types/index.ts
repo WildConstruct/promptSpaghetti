@@ -10,7 +10,7 @@ export interface Graph {
   id: GraphId;
   name: string;
   userId: UserId;
-  data: any; // JSON graph data
+  data: unknown; // JSON graph data
   version: number;
   createdAt: Date;
   updatedAt: Date;

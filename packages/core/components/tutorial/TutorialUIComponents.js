@@ -1,5 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 /**
+import { Plus, FileText, X } from 'lucide-react';
+
 import { Plus } from 'lucide-react';
 
  * Tutorial UI Components (Epic 16)
@@ -21,9 +23,9 @@ import { Plus } from 'lucide-react';
  */
 import { useState, useCallback, useMemo } from 'react';
 import { Play, Pause, Square, ChevronLeft, ChevronRight, Book, BookOpen, Target, CheckCircle, Circle, Clock, Users, Star, Zap, Lightbulb, Info, AlertCircle, Settings, Maximize2, Minimize2, Search } from 'lucide-react';
-import { Button } from '../ui/Button.js';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Badge } from '../ui/Badge.js';
+import { Button } from '../ui/Button';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Badge } from '../ui/Badge';
 export const TutorialPlayer = ({ tutorial, progress, onStepComplete, onTutorialComplete, onProgressSave, onExit, className = '' }) => {
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);

@@ -7,7 +7,7 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   PolicyAssignment, 
   BulkPolicyAssignment,
@@ -60,9 +60,9 @@ export const PolicyAssignmentDashboard: React.FC = () => {
 
   useEffect(() => {
     loadDashboardData();
-  }, [filters]);
+  }, [filters, loadDashboardData]);
 
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     setIsLoading(true);
     try {
       await Promise.all([
@@ -76,9 +76,9 @@ export const PolicyAssignmentDashboard: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [loadAssignments]);
 
-  const loadAssignments = async () => {
+  const loadAssignments = useCallback(async () => {
     try {
       const response = await fetch('/api/policy-assignments/assignments?' + new URLSearchParams({
         ...filters,
@@ -89,7 +89,7 @@ export const PolicyAssignmentDashboard: React.FC = () => {
     } catch (error) {
       console.error('Error loading assignments:', error);
     }
-  };
+  }, [filters, setAssignments]);
 
   const loadBulkAssignments = async () => {
     try {

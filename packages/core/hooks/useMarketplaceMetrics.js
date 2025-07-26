@@ -5,7 +5,7 @@
  * Automatically tracks marketplace events and provides analytics utilities.
  */
 import { useEffect, useCallback, useState } from 'react';
-import { marketplaceMetrics } from '../analytics/MarketplaceMetrics.js';
+import { marketplaceMetrics } from '../analytics/MarketplaceMetrics';
 export const useMarketplaceMetrics = (config = {}) => {
     const { enableAutoTracking = true, trackPageViews = true, trackUserInteractions = true, userId, userRole = 'director' } = config;
     const [dashboardData, setDashboardData] = useState(null);

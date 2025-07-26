@@ -22,7 +22,7 @@ import {
 
 // Mock Database
 jest.mock('../../database/connection', () => ({
-  Database: jest.fn()
+  Database: jest.fn<unknown[], unknown>()
 }));
 
 describe('RevisionRequestService', () => {
@@ -84,7 +84,7 @@ describe('RevisionRequestService', () => {
 
   beforeEach(() => {
     mockDb = {
-      query: jest.fn()
+      query: jest.fn<unknown[], unknown>()
     } as any;
     service = new RevisionRequestService(mockDb);
   });
@@ -138,7 +138,7 @@ describe('RevisionRequestService', () => {
         }]
       };
 
-      mockDb.query.mockResolvedValue(mockResult as unknown);
+      mockDb.query.mockResolvedValue(mockResult as unknown as unknown);
 
       const result = await service.createRevisionRequest(
         mockFormData,
@@ -173,7 +173,7 @@ describe('RevisionRequestService', () => {
         }]
       };
 
-      mockDb.query.mockResolvedValue(mockResult as unknown);
+      mockDb.query.mockResolvedValue(mockResult as unknown as unknown);
 
       const criticalFormData = {
         ...mockFormData,
@@ -242,7 +242,7 @@ describe('RevisionRequestService', () => {
         }]
       };
 
-      mockDb.query.mockResolvedValue(mockResult as unknown);
+      mockDb.query.mockResolvedValue(mockResult as unknown as unknown);
 
       const result = await service.getRevisionRequest('rev_test_123');
 
@@ -258,7 +258,7 @@ describe('RevisionRequestService', () => {
     });
 
     it('should return null for non-existent revision request', async () => {
-      mockDb.query.mockResolvedValue({ rows: [] } as unknown);
+      mockDb.query.mockResolvedValue({ rows: [] } as unknown as unknown);
 
       const result = await service.getRevisionRequest('non_existent');
 
@@ -446,7 +446,7 @@ describe('RevisionRequestService', () => {
         }]
       };
 
-      mockDb.query.mockResolvedValue(mockResult as unknown);
+      mockDb.query.mockResolvedValue(mockResult as unknown as unknown);
 
       const updates = {
         title: 'Updated Title',
@@ -470,7 +470,7 @@ describe('RevisionRequestService', () => {
     });
 
     it('should throw error for non-existent revision request', async () => {
-      mockDb.query.mockResolvedValue({ rows: [] } as unknown);
+      mockDb.query.mockResolvedValue({ rows: [] } as unknown as unknown);
 
       await expect(service.updateRevisionRequest(
         'non_existent',
@@ -703,7 +703,7 @@ describe('RevisionRequestService', () => {
         }]
       };
 
-      mockDb.query.mockResolvedValue(mockResult as unknown);
+      mockDb.query.mockResolvedValue(mockResult as unknown as unknown);
 
       const result = await service.getRevisionEvidence('rev_test_123');
 
@@ -793,7 +793,7 @@ describe('RevisionRequestService', () => {
         ]
       };
 
-      mockDb.query.mockResolvedValue(mockResult as unknown);
+      mockDb.query.mockResolvedValue(mockResult as unknown as unknown);
 
       const result = await service.getComments('rev_test_123', true);
 
@@ -816,7 +816,7 @@ describe('RevisionRequestService', () => {
         }]
       };
 
-      mockDb.query.mockResolvedValue(mockResult as unknown);
+      mockDb.query.mockResolvedValue(mockResult as unknown as unknown);
 
       const result = await service.getComments('rev_test_123', false);
 
@@ -868,7 +868,7 @@ describe('RevisionRequestService', () => {
         }]
       };
 
-      mockDb.query.mockResolvedValue(mockResult as unknown);
+      mockDb.query.mockResolvedValue(mockResult as unknown as unknown);
 
       const result = await service.getReviewerPerformance('reviewer_456');
 
@@ -901,7 +901,7 @@ describe('RevisionRequestService', () => {
         ]
       };
 
-      mockDb.query.mockResolvedValue(mockResult as unknown);
+      mockDb.query.mockResolvedValue(mockResult as unknown as unknown);
 
       const result = await service.getReviewerPerformance();
 
@@ -921,7 +921,7 @@ describe('RevisionRequestService', () => {
         pagination: { page: 1, pageSize: 10000, total: 1, totalPages: 1 },
         aggregations: {} as any,
         filters: { count: 0, filters: [] }
-      } as unknown);
+      } as unknown as unknown);
     });
 
     it('should export revision requests in CSV format', async () => {
@@ -984,7 +984,7 @@ describe('RevisionRequestService', () => {
         }]
       };
 
-      mockDb.query.mockResolvedValue(malformedResult as unknown);
+      mockDb.query.mockResolvedValue(malformedResult as unknown as unknown);
 
       const result = await service.getRevisionRequest('rev_malformed');
 

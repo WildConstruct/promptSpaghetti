@@ -76,7 +76,7 @@ export interface PolicyViolation {
 
 export interface ViolationEvidence {
   type: 'content' | 'behavior' | 'metadata' | 'transaction' | 'user_report';
-  data: any;
+  data: Record<string, unknown>;
   source: string;
   collected_at: Date;
   attachments?: EvidenceAttachment[];
@@ -167,7 +167,7 @@ export interface ViolationDetectionRule {
 export interface DetectionCondition {
   field: string;
   operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'regex' | 'ai_classify';
-  value: any;
+  value: Error;
   weight: number;
   logical_operator?: 'and' | 'or';
 }
@@ -421,7 +421,7 @@ export class MarketplacePolicyEnforcementService {
   async detectViolations(
     contentId: string,
     contentType: 'template' | 'listing' | 'user_profile' | 'comment',
-    contentData: any,
+    contentData: unknown,
     ownerId: string
   ): Promise<PolicyViolation[]> {
     const violations: PolicyViolation[] = [];
@@ -684,9 +684,9 @@ export class MarketplacePolicyEnforcementService {
   // Private helper methods
   private async checkRuleViolation(
     rule: ViolationDetectionRule,
-    contentData: any,
+    contentData: unknown,
     contentId: string
-  ): Promise<{ detected: boolean; confidence: number; evidence: any }> {
+  ): Promise<{ detected: boolean; confidence: number; evidence: Error }> {
     let score = 0;
     let totalWeight = 0;
     const evidence = [];
@@ -721,9 +721,9 @@ export class MarketplacePolicyEnforcementService {
 
   private async evaluateCondition(
     condition: DetectionCondition,
-    contentData: any,
+    contentData: unknown,
     contentId: string
-  ): Promise<{ met: boolean; result: any; confidence: number }> {
+  ): Promise<{ met: boolean; result: Record<string, unknown>; confidence: number }> {
     const fieldValue = this.extractFieldValue(contentData, condition.field);
     
     switch (condition.operator) {
@@ -754,7 +754,7 @@ export class MarketplacePolicyEnforcementService {
     }
   }
 
-  private extractFieldValue(data: any, fieldPath: string): any {
+  private extractFieldValue(data: Record<string, unknown>, fieldPath: string): unknown {
     return fieldPath.split('.').reduce((obj, key) => obj?.[key], data);
   }
 
@@ -763,7 +763,7 @@ export class MarketplacePolicyEnforcementService {
     contentId: string,
     contentType: string,
     ownerId: string,
-    detection: { detected: boolean; confidence: number; evidence: any },
+    detection: { detected: boolean; confidence: number; evidence: Error },
     client: PoolClient
   ): Promise<PolicyViolation> {
     const violationId = await this.generateViolationId();
@@ -816,7 +816,7 @@ export class MarketplacePolicyEnforcementService {
     }
   }
 
-  private async performEnforcementAction(action: any, __executorId: string): Promise<any> {
+  private async performEnforcementAction(action: unknown, __executorId: string): Promise<unknown> {
     // Implementation would perform the actual enforcement action
     // (suspend account, delist content, send warning, etc.)
     console.log(`Executing ${action.action_type} for violation ${action.violation_id}`);
@@ -882,7 +882,7 @@ export class MarketplacePolicyEnforcementService {
     return require('crypto').createHash('sha256').update(content).digest('hex');
   }
 
-  private async getCachedPrediction(contentHash: string): Promise<any> {
+  private async getCachedPrediction(contentHash: string): Promise<unknown> {
     const client = await this.pool.connect();
     try {
       const result = await client.query(
@@ -896,7 +896,7 @@ export class MarketplacePolicyEnforcementService {
     }
   }
 
-  private async cachePrediction(contentHash: string, prediction: any): Promise<void> {
+  private async cachePrediction(contentHash: string, prediction: unknown): Promise<void> {
     const client = await this.pool.connect();
     try {
       await client.query(
@@ -925,7 +925,7 @@ export class MarketplacePolicyEnforcementService {
     return `VIO-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
   }
 
-  private mapToDetectionRule(row: any): ViolationDetectionRule {
+  private mapToDetectionRule(row: unknown): ViolationDetectionRule {
     return {
       id: row.id,
       policy_id: row.policy_id,
@@ -946,7 +946,7 @@ export class MarketplacePolicyEnforcementService {
     };
   }
 
-  private mapToViolation(row: any): PolicyViolation {
+  private mapToViolation(row: unknown): PolicyViolation {
     return {
       id: row.id,
       policy_id: row.policy_id,
@@ -971,7 +971,7 @@ export class MarketplacePolicyEnforcementService {
     };
   }
 
-  private mapToEnforcementAction(row: any): EnforcementAction {
+  private mapToEnforcementAction(row: unknown): EnforcementAction {
     return {
       id: row.id,
       violation_id: row.violation_id,
@@ -989,7 +989,10 @@ export class MarketplacePolicyEnforcementService {
     };
   }
 
-  private async auditLog(client: PoolClient, entry: { action: string; user_id: string; details: any }): Promise<void> {
+  private async auditLog(
+    client: PoolClient,
+    entry: { action: string; user_id: string; details: unknown }
+  ): Promise<void> {
     await client.query(
       `INSERT INTO audit_logs (action, user_id, details, ip_address, user_agent, created_at)
        VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)`,

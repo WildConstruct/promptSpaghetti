@@ -28,7 +28,7 @@ export class DatabaseService {
     });
   }
 
-  async query(text: string, params?: any[]): Promise<QueryResult<any>> {
+  async query(text: string, params?: unknown[]): Promise<QueryResult<unknown>> {
     const start = Date.now();
     try {
       const result = await this.pool.query(text, params);
@@ -42,7 +42,10 @@ export class DatabaseService {
     } catch (error) {
       console.error('Database query error:', {
         query: text,
-        params: params ? params.map(p => typeof p === 'string' && p.length > 100 ? `${p.substring(0, 100)}...` : p) : undefined,
+        params: params ? params.map(
+          p => typeof p === 'string' && p.length > 100 ? `${p.substring(0,
+          100
+        )}...` : p) : undefined,
         error: error instanceof Error ? error.message : String(error)
       });
       throw error;
@@ -115,7 +118,7 @@ export class DatabaseService {
   }
 
   // User database operations for PasswordResetService
-  async findUserByEmail(email: string): Promise<any | null> {
+  async findUserByEmail(email: string): Promise<unknown | null> {
     const result = await this.query(
       'SELECT * FROM users WHERE email = $1 AND status = $2',
       [email.toLowerCase(), 'active']
@@ -123,7 +126,7 @@ export class DatabaseService {
     return result.rows.length > 0 ? result.rows[0] : null;
   }
 
-  async findUserById(id: string): Promise<any | null> {
+  async findUserById(id: string): Promise<unknown | null> {
     const result = await this.query(
       'SELECT * FROM users WHERE id = $1',
       [id]

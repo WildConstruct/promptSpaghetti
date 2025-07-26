@@ -29,8 +29,8 @@
  * @since 2024-01-22
  */
 import { EventEmitter } from 'events';
-import { SecurityLogger, SecurityEventType, LogLevel } from './SecurityLogger.js';
-import { DataClassificationLevel } from './DataClassificationAccessControl.js';
+import { SecurityLogger, SecurityEventType, LogLevel } from './SecurityLogger';
+import { DataClassificationLevel } from './DataClassificationAccessControl';
 /**
  * Service for managing security alerting configurations
  */

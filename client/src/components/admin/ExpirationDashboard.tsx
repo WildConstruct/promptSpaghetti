@@ -93,7 +93,7 @@ const warningLevelColors = {
 export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({
   className = ''
 }) => {
-  const { ___user, isAuthenticated } = useAuthStore();
+  const { _user, isAuthenticated } = useAuthStore();
   const [state, setState] = useState<ExpirationDashboardState>({
     stats: null,
     warnings: [],
@@ -111,7 +111,7 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({
     if (isAuthenticated) {
       loadData();
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, loadData]);
 
   // Auto-refresh
   useEffect(() => {
@@ -119,7 +119,7 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({
       const interval = setInterval(loadData, state.refreshInterval);
       return () => clearInterval(interval);
     }
-  }, [state.autoRefresh, state.refreshInterval]);
+  }, [state.autoRefresh, state.refreshInterval, loadData]);
 
   const loadData = useCallback(async () => {
     try {

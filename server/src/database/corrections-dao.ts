@@ -444,7 +444,7 @@ export class CorrectionsDAO {
     newState: string,
     changedBy: number,
     changeReason: string,
-    metadata?: any
+    metadata?: Record<string, unknown>
   ): void {
     const stmt = this.db.prepare(`
       INSERT INTO workflow_state_history (
@@ -472,7 +472,7 @@ export class CorrectionsDAO {
     title: string,
     message: string,
     actionUrl?: string,
-    metadata?: any
+    metadata?: Record<string, unknown>
   ): void {
     const stmt = this.db.prepare(`
       INSERT INTO workflow_notifications (
@@ -731,7 +731,7 @@ export class CorrectionsDAO {
       WHERE cr.user_id = ? AND cs.date_bucket >= date('now', '-${days} days')
     `);
     
-    const stats = statsStmt.get(userId) as any;
+    const stats = statsStmt.get(userId) as Record<string, unknown>;
     
     // Get most used rules with enhanced metrics
     const mostUsedStmt = this.db.prepare(`
@@ -785,7 +785,7 @@ export class CorrectionsDAO {
       ORDER BY cs.date_bucket ASC
     `);
     
-    const trends = trendsStmt.all(userId) as any[];
+    const trends = trendsStmt.all(userId) as Array<Record<string, unknown>>;
     
     // Get rule effectiveness distribution
     const distributionStmt = this.db.prepare(`
@@ -804,7 +804,7 @@ export class CorrectionsDAO {
       GROUP BY cr.id
     `);
     
-    const distribution = distributionStmt.get(userId) as any;
+    const distribution = distributionStmt.get(userId) as Record<string, unknown>;
     
     return {
       total_rules: totalRules.count,
@@ -843,7 +843,7 @@ export class CorrectionsDAO {
     const transaction = this.db.transaction((rules: unknown[]) => {
       for (const rule of rules) {
         try {
-          const ruleData = rule as any; // Type assertion for localStorage data
+          const ruleData = rule as Record<string, unknown>; // Type assertion for localStorage data
           const input: CreateCorrectionRuleInput = {
             name: ruleData.name,
             description: ruleData.description,
@@ -859,7 +859,7 @@ export class CorrectionsDAO {
           this.createRule(input);
           importedCount++;
         } catch (error) {
-          console.error('Failed to import rule:', (rule as any)?.name, error);
+          console.error('Failed to import rule:', (rule as Record<string, unknown> | undefined)?.name, error);
         }
       }
     });

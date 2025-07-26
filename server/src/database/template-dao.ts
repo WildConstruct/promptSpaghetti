@@ -88,7 +88,7 @@ export class TemplateDAO {
       WHERE id = ? AND archived_at IS NULL
     `);
 
-    const row = stmt.get(id) as any;
+    const row = stmt.get(id) as ProjectTemplate | undefined;
     if (!row) return null;
 
     return this.mapTemplateRow(row);
@@ -118,7 +118,7 @@ export class TemplateDAO {
       GROUP BY t.id
     `);
 
-    const row = stmt.get(userId || '', userId || '', id) as any;
+    const row = stmt.get(userId || '', userId || '', id) as ProjectTemplateWithStats | undefined;
     if (!row) return null;
 
     const template = this.mapTemplateRow(row);
@@ -261,7 +261,7 @@ export class TemplateDAO {
     `);
 
     const { total } = countStmt.get(...params) as { total: number };
-    const rows = dataStmt.all(userId || '', userId || '', ...params, limit, offset) as any[];
+    const rows = dataStmt.all(userId || '', userId || '', ...params, limit, offset) as ProjectTemplateWithStats[];
 
     const data: ProjectTemplateWithStats[] = rows.map(row => {
       const template = this.mapTemplateRow(row);
@@ -440,7 +440,7 @@ export class TemplateDAO {
       WHERE id = ?
     `);
 
-    const row = stmt.get(id) as any;
+    const row = stmt.get(id) as ProjectTemplate | undefined;
     if (!row) return null;
 
     return this.mapUsageRow(row);
@@ -534,7 +534,7 @@ export class TemplateDAO {
       WHERE id = ?
     `);
 
-    const row = stmt.get(id) as any;
+    const row = stmt.get(id) as ProjectTemplate | undefined;
     if (!row) return null;
 
     return this.mapReviewRow(row);
@@ -595,7 +595,7 @@ export class TemplateDAO {
     `);
 
     const { total } = countStmt.get(...params) as { total: number };
-    const rows = dataStmt.all(...params, limit, offset) as any[];
+    const rows = dataStmt.all(...params, limit, offset) as TemplateReviewWithAuthor[];
 
     const data: TemplateReviewWithAuthor[] = rows.map(row => ({
       ...this.mapReviewRow(row),
@@ -680,7 +680,7 @@ export class TemplateDAO {
     `);
 
     const { total } = countStmt.get(userId) as { total: number };
-    const rows = dataStmt.all(userId, limit, offset) as any[];
+    const rows = dataStmt.all(userId, limit, offset) as TemplateUsageWithTemplate[];
 
     const data: ProjectTemplateWithStats[] = rows.map(row => ({
       ...this.mapTemplateRow(row),
@@ -712,7 +712,7 @@ export class TemplateDAO {
       ORDER BY sort_order, name
     `);
 
-    const rows = stmt.all() as any[];
+    const rows = stmt.all() as TemplateCategory[];
     return rows.map(row => ({
       id: row.id,
       name: row.name,
@@ -745,7 +745,7 @@ export class TemplateDAO {
       GROUP BY source, DATE(started_at)
     `);
 
-    const usageRows = usageStmt.all(templateId, since.toISOString()) as any[];
+    const usageRows = usageStmt.all(templateId, since.toISOString()) as Array<{ date: string; count: number }>;
 
     // Rating statistics
     const ratingStmt = this.db.prepare(`
@@ -759,7 +759,7 @@ export class TemplateDAO {
       GROUP BY rating
     `);
 
-    const ratingRows = ratingStmt.all(templateId) as any[];
+    const ratingRows = ratingStmt.all(templateId) as Array<{ rating: number; count: number }>;
 
     // Process usage data
     const totalUsages = usageRows.reduce((sum, row) => sum + row.source_count, 0);

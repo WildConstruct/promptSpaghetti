@@ -20,7 +20,8 @@ import {
   TrustScoreConfig,
   TrustScoreAnalytics,
   TrustFactor,
-  RiskFactor
+  RiskFactor,
+  VerificationStatus
 } from '../../../../packages/core/types/TrustTypes';
 import { 
   EnforcementAction,
@@ -224,6 +225,10 @@ export declare class TrustScoreService {
         confidence: number;
         evidence: string[];
     }): Promise<ViolationReport>;
+    /**
+     * Get user verification status for enforcement exemptions
+     */
+    getUserVerificationStatus(userId: string): Promise<VerificationStatus | null>;
     /**
      * Update trust score based on enforcement action results
      */

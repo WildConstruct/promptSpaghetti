@@ -1,0 +1,1 @@
+{"version":3,"file":"NotificationCenter.d.ts","sourceRoot":"","sources":["NotificationCenter.tsx"],"names":[],"mappings":"AAAA,OAAO,KAA2C,MAAM,OAAO,CAAC;AAOhE,UAAU,uBAAuB;IAC/B,MAAM,EAAE,MAAM,CAAC;IACf,WAAW,CAAC,EAAE,MAAM,CAAC;IACrB,SAAS,CAAC,EAAE,MAAM,CAAC;CACpB;AAED,eAAO,MAAM,kBAAkB,EAAE,KAAK,CAAC,EAAE,CAAC,uBAAuB,CAoNhE,CAAC"}

@@ -12,8 +12,8 @@ const uuidv4 = () => {
  * Local storage implementation
  */
 export class LocalTemplateStorage {
-    storageKey = 'wild-construct-templates';
-    getStoredTemplates() {
+    storageKey: string = 'wild-construct-templates';
+    getStoredTemplates(): any[] {
         try {
             const stored = localStorage.getItem(this.storageKey);
             return stored ? JSON.parse(stored) : [];
@@ -23,7 +23,7 @@ export class LocalTemplateStorage {
             return [];
         }
     }
-    saveStoredTemplates(templates) {
+    saveStoredTemplates(templates: any[]): void {
         try {
             localStorage.setItem(this.storageKey, JSON.stringify(templates));
         }
@@ -32,7 +32,7 @@ export class LocalTemplateStorage {
             throw new Error('Template storage failed: disk full or quota exceeded');
         }
     }
-    async save(template) {
+    async save(template: any): Promise<any> {
         const templates = this.getStoredTemplates();
         // Check for duplicate names
         const existing = templates.find(t => t.name === template.name && t.id !== template.id);
@@ -43,14 +43,14 @@ export class LocalTemplateStorage {
         this.saveStoredTemplates(templates);
         return template;
     }
-    async load(id) {
+    async load(id: string): Promise<any> {
         const templates = this.getStoredTemplates();
         return templates.find(t => t.id === id) || null;
     }
     async loadAll() {
         return this.getStoredTemplates();
     }
-    async update(id, updates) {
+    async update(id: string, updates: unknown) {
         const templates = this.getStoredTemplates();
         const index = templates.findIndex(t => t.id === id);
         if (index === -1) {
@@ -61,7 +61,7 @@ export class LocalTemplateStorage {
         this.saveStoredTemplates(templates);
         return updated;
     }
-    async delete(id) {
+    async delete(id: string) {
         const templates = this.getStoredTemplates();
         const filtered = templates.filter(t => t.id !== id);
         if (filtered.length === templates.length) {
@@ -69,7 +69,7 @@ export class LocalTemplateStorage {
         }
         this.saveStoredTemplates(filtered);
     }
-    async search(filter) {
+    async search(filter: unknown) {
         const templates = this.getStoredTemplates();
         let filtered = templates;
         // Apply filters
@@ -138,13 +138,13 @@ export class LocalTemplateStorage {
  */
 export class TemplateService {
     storage;
-    constructor(storage) {
+    constructor(storage?: any) {
         this.storage = storage || new LocalTemplateStorage();
     }
     /**
      * Create template from current graph data
      */
-    async createFromGraph(nodes, edges, saveData, author) {
+    async createFromGraph(nodes: any[], edges: any[], saveData: any, author: string) {
         // Extract annotations from nodes and edges
         const annotations = this.extractAnnotations(nodes, edges);
         // Create graph data with annotations
@@ -191,25 +191,25 @@ export class TemplateService {
     /**
      * Load template by ID
      */
-    async loadTemplate(id) {
+    async loadTemplate(id: string) {
         return await this.storage.load(id);
     }
     /**
      * Search templates with filters
      */
-    async searchTemplates(filter = {}) {
+    async searchTemplates(filter: any = {}) {
         return await this.storage.search(filter);
     }
     /**
      * Get templates by category
      */
-    async getTemplatesByCategory(category) {
+    async getTemplatesByCategory(category: string) {
         return await this.searchTemplates({ category });
     }
     /**
      * Get popular templates
      */
-    async getPopularTemplates(limit = 10) {
+    async getPopularTemplates(limit: number = 10) {
         const templates = await this.searchTemplates({
             sortBy: 'rating',
             sortOrder: 'desc'
@@ -219,7 +219,7 @@ export class TemplateService {
     /**
      * Get recent templates
      */
-    async getRecentTemplates(limit = 10) {
+    async getRecentTemplates(limit: number = 10) {
         const templates = await this.searchTemplates({
             sortBy: 'created',
             sortOrder: 'desc'
@@ -229,7 +229,7 @@ export class TemplateService {
     /**
      * Instantiate template into current graph
      */
-    async instantiateTemplate(templateId, options) {
+    async instantiateTemplate(templateId: string, options: any) {
         const template = await this.storage.load(templateId);
         if (!template) {
             throw new Error(`Template with id "${templateId}" not found`);
@@ -318,7 +318,7 @@ export class TemplateService {
     /**
      * Add review to template
      */
-    async addReview(templateId, review) {
+    async addReview(templateId: string, review: any) {
         const template = await this.storage.load(templateId);
         if (!template) {
             throw new Error(`Template with id "${templateId}" not found`);
@@ -340,13 +340,13 @@ export class TemplateService {
     /**
      * Delete template
      */
-    async deleteTemplate(id) {
+    async deleteTemplate(id: string) {
         await this.storage.delete(id);
     }
     /**
      * Validate template structure
      */
-    async validateTemplate(template) {
+    async validateTemplate(template: any) {
         const errors = [];
         const warnings = [];
         // Basic validation
@@ -401,7 +401,7 @@ export class TemplateService {
         };
     }
     // Helper methods
-    extractAnnotations(nodes, edges) {
+    extractAnnotations(nodes: any[], edges: any[]) {
         return {
             stickyNotes: [], // Will be populated from actual annotation system
             nodeLabels: Object.fromEntries(nodes.map(node => [node.id, node.data?.label || node.id])),
@@ -415,7 +415,7 @@ export class TemplateService {
             }
         };
     }
-    calculateComplexity(nodes, edges) {
+    calculateComplexity(nodes: any[], edges: any[]) {
         const nodeCount = nodes.length;
         const edgeCount = edges.length;
         const totalElements = nodeCount + edgeCount;
@@ -425,7 +425,7 @@ export class TemplateService {
             return 'medium';
         return 'complex';
     }
-    estimateOutputLength(nodes) {
+    estimateOutputLength(nodes: any[]) {
         // Rough estimation based on node types and content
         let estimate = 0;
         nodes.forEach(node => {
@@ -445,7 +445,7 @@ export class TemplateService {
         });
         return Math.max(estimate, 50); // Minimum estimate
     }
-    calculateAverageRating(reviews) {
+    calculateAverageRating(reviews: any[]) {
         if (reviews.length === 0)
             return 0;
         const sum = reviews.reduce((acc, review) => acc + review.rating, 0);

@@ -22,7 +22,7 @@ interface AdvancedPromptingCollaborationPanelProps {
   currentUser: FilmIndustryUser;
   onMARSRegionCreate?: (region: MARSRegionTemplate) => void;
   onZadaPatternCreate?: (pattern: ZadaPromptPattern) => void;
-  onVFXExport?: (exportData: any) => void;
+  onVFXExport?: (exportData: unknown) => void;
   className?: string;
 }
 
@@ -149,17 +149,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
     return colors[methodology];
   };
 
-  const isMethodologyCompatible = (role: FilmIndustryRole, methodology: PromptingMethodology): boolean => {
-    const compatibility: Record<FilmIndustryRole, PromptingMethodology[]> = {
-      director: ['hybrid', 'zada', 'custom'],
-      vfx_supervisor: ['mars', 'hybrid', 'custom'],
-      pipeline_td: ['mars', 'hybrid'],
-      vfx_artist: ['zada', 'hybrid'],
-      cinematographer: ['zada', 'hybrid'],
-      producer: ['hybrid', 'custom'],
-      script_supervisor: ['zada', 'hybrid']
-    };
-    return compatibility[role]?.includes(methodology) || false;
+      return compatibility[role]?.includes(methodology) || false;
   };
 
   const SessionsTab = () => (

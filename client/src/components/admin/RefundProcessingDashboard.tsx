@@ -8,7 +8,7 @@
  * Task: E17-1753114397360-84B238 - Create refund processing
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
@@ -97,9 +97,7 @@ export interface RefundProcessingDashboardProps {
   className?: string;
 }
 
-export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps> = ({ className }) => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+export   const [error, setError] = useState<string | null>(null);
   
   // Data state
   const [stats, setStats] = useState<RefundStats | null>(null);
@@ -107,10 +105,11 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
   const [pendingApprovals, setPendingApprovals] = useState<RefundRequest[]>([]);
   
   // UI state
+  const [activeTab, setActiveTab] = useState('overview');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
   const [selectedPriority, setSelectedPriority] = useState('');
-  const [___selectedReason, setSelectedReason] = useState('');
+  const [_selectedReason, setSelectedReason] = useState('');
   const [dateRange, setDateRange] = useState('7d');
   
   // Manual refund state
@@ -127,7 +126,7 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
   const [bulkAction, setBulkAction] = useState('');
 
   // Load refund data
-  const loadRefundData = async () => {
+  const loadRefundData = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -151,7 +150,7 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
     } finally {
       setLoading(false);
     }
-  };
+  }, [dateRange, setLoading, setStats, setRefunds, setPendingApprovals, setError]);
 
   // Approve refund
   const approveRefund = async (refundId: string, notes?: string) => {
@@ -266,7 +265,7 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
     // Auto-refresh every 30 seconds
     const interval = setInterval(loadRefundData, 30000);
     return () => clearInterval(interval);
-  }, [dateRange]);
+  }, [loadRefundData]);
 
   // Helper functions
   const formatAmount = (cents: number) => `$${(cents / 100).toFixed(2)}`;

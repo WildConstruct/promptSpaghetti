@@ -292,7 +292,7 @@ export const PaymentAnalyticsDashboard: React.FC<PaymentAnalyticsDashboardProps>
           <button
             key={tab.id}
             className={`tab-button ${selectedTab === tab.id ? 'active' : ''}`}
-            onClick={() => setSelectedTab(tab.id as any)}
+            onClick={() => setSelectedTab(tab.id as 'overview' | 'methods' | 'failures' | 'optimization')}
           >
             {tab.label}
           </button>

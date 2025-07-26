@@ -219,7 +219,7 @@ export class ConsentEnforcementMiddleware {
   /**
    * Check if user has valid consent for a specific type
    */
-  private hasValidConsent(userConsents: any, consentType: string): boolean {
+  private hasValidConsent(userConsents: Record<string, unknown>, consentType: string): boolean {
     const consent = userConsents.consents?.[consentType];
     
     if (!consent || !consent.granted) {
@@ -316,7 +316,7 @@ export class ConsentEnforcementMiddleware {
   /**
    * Check if user has valid database-level consent
    */
-  private hasValidDatabaseConsent(dbConsents: any, consentType: string): boolean {
+  private hasValidDatabaseConsent(dbConsents: Record<string, unknown>, consentType: string): boolean {
     if (!dbConsents || !Array.isArray(dbConsents)) {
       return false;
     }
@@ -475,7 +475,7 @@ export class ConsentEnforcementMiddleware {
   /**
    * Get enforcement statistics
    */
-  public getEnforcementStats(): any {
+  public getEnforcementStats(): Record<string, unknown> {
     const recentViolations = this.violations.filter(
       v => Date.now() - v.timestamp.getTime() < 24 * 60 * 60 * 1000 // Last 24 hours
     );
@@ -533,7 +533,7 @@ export class ConsentEnforcementMiddleware {
     return `viol_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private groupBy(array: any[], key: string): Record<string, number> {
+  private groupBy(array: Array<Record<string, unknown>>, key: string): Record<string, number> {
     return array.reduce((result, item) => {
       const value = key.split('.').reduce((obj, k) => obj?.[k], item) || 'unknown';
       result[value] = (result[value] || 0) + 1;

@@ -375,8 +375,8 @@ export class MarketplaceMetrics {
       value,
       properties,
       metadata: {
-        userAgent: navigator.userAgent,
-        referrer: document.referrer,
+        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'server',
+        referrer: typeof document !== 'undefined' ? document.referrer : '',
         location: properties.location,
         deviceType: this.getDeviceType()
       }
@@ -671,7 +671,7 @@ export class MarketplaceMetrics {
   }
 
   private getDeviceType(): 'desktop' | 'mobile' | 'tablet' {
-    const userAgent = navigator.userAgent;
+    const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : 'server';
     if (/tablet|ipad|playbook|silk/i.test(userAgent)) {
       return 'tablet';
     }

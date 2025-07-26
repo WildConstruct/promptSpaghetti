@@ -4,13 +4,13 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Main UI component for managing extensions
  */
 import { useState, useEffect, useMemo } from 'react';
-import { useExtensionManagerStore } from './ExtensionManagerStore.js';
-import { ExtensionListView } from './ExtensionListView.js';
-import { ExtensionDetailView } from './ExtensionDetailView.js';
-import { ExtensionSearchFilter } from './ExtensionSearchFilter.js';
-import { ExtensionInstallDialog } from './ExtensionInstallDialog.js';
-import { ExtensionConfigurationPanel } from './ExtensionConfigurationPanel.js';
-import { ExtensionMarketplace } from './ExtensionMarketplace.js';
+import { useExtensionManagerStore } from './ExtensionManagerStore';
+import { ExtensionListView } from './ExtensionListView';
+import { ExtensionDetailView } from './ExtensionDetailView';
+import { ExtensionSearchFilter } from './ExtensionSearchFilter';
+import { ExtensionInstallDialog } from './ExtensionInstallDialog';
+import { ExtensionConfigurationPanel } from './ExtensionConfigurationPanel';
+import { ExtensionMarketplace } from './ExtensionMarketplace';
 export const ExtensionManagerPanel = ({ className = '', onClose, initialView = 'installed' }) => {
     const [currentView, setCurrentView] = useState(initialView);
     const [selectedExtension, setSelectedExtension] = useState(null);

@@ -26,7 +26,7 @@ interface ModerationItem {
   createdAt: Date;
   reviewedAt?: Date;
   reviewedBy?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 interface ApprovalRequest {
@@ -43,7 +43,7 @@ interface ApprovalRequest {
   rejectedBy?: string;
   rejectedAt?: Date;
   reason?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   requiredApprovals?: number;
   currentApprovals?: string[];
 }

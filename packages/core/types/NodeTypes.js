@@ -1,12 +1,12 @@
 // Type guards
-export function isRuntimeNodeType(type) {
+export function isRuntimeNodeType(type: string) {
     return ['WeightedChoice', 'Concat', 'Output', 'Include', 'SetVariable', 'GetVariable'].includes(type);
 }
-export function isUINodeType(type) {
+export function isUINodeType(type: string) {
     return ['Subject', 'Connector', 'Attribute', 'Action'].includes(type);
 }
 // Node data factory functions
-export function createBaseNodeData(id, label) {
+export function createBaseNodeData(id: string, label: string) {
     return {
         id,
         label,
@@ -19,7 +19,7 @@ export function createBaseNodeData(id, label) {
         contextHints: []
     };
 }
-export function createWeightedChoiceNodeData(id, label = 'Weighted Choice') {
+export function createWeightedChoiceNodeData(id: string, label = 'Weighted Choice') {
     return {
         ...createBaseNodeData(id, label),
         type: 'WeightedChoice',
@@ -27,7 +27,7 @@ export function createWeightedChoiceNodeData(id, label = 'Weighted Choice') {
         weights: []
     };
 }
-export function createConcatNodeData(id, label = 'Concat') {
+export function createConcatNodeData(id: string, label = 'Concat') {
     return {
         ...createBaseNodeData(id, label),
         type: 'Concat',
@@ -37,7 +37,7 @@ export function createConcatNodeData(id, label = 'Concat') {
         preserveOrder: true
     };
 }
-export function createOutputNodeData(id, label = 'Output') {
+export function createOutputNodeData(id: string, label = 'Output') {
     return {
         ...createBaseNodeData(id, label),
         type: 'Output',
@@ -46,7 +46,7 @@ export function createOutputNodeData(id, label = 'Output') {
         destination: 'stdout'
     };
 }
-export function createIncludeNodeData(id, label = 'Include') {
+export function createIncludeNodeData(id: string, label = 'Include') {
     return {
         ...createBaseNodeData(id, label),
         type: 'Include',
@@ -54,7 +54,7 @@ export function createIncludeNodeData(id, label = 'Include') {
         includeType: 'template'
     };
 }
-export function createSetVariableNodeData(id, label = 'Set Variable') {
+export function createSetVariableNodeData(id: string, label = 'Set Variable') {
     return {
         ...createBaseNodeData(id, label),
         type: 'SetVariable',
@@ -66,7 +66,7 @@ export function createSetVariableNodeData(id, label = 'Set Variable') {
         allowOverwrite: true
     };
 }
-export function createGetVariableNodeData(id, label = 'Get Variable') {
+export function createGetVariableNodeData(id: string, label = 'Get Variable') {
     return {
         ...createBaseNodeData(id, label),
         type: 'GetVariable',
@@ -77,7 +77,7 @@ export function createGetVariableNodeData(id, label = 'Get Variable') {
         required: false
     };
 }
-export function createSubjectNodeData(id, label = 'Subject') {
+export function createSubjectNodeData(id: string, label = 'Subject') {
     return {
         ...createBaseNodeData(id, label),
         type: 'Subject',
@@ -88,7 +88,7 @@ export function createSubjectNodeData(id, label = 'Subject') {
         baseForm: ''
     };
 }
-export function createActionNodeData(id, label = 'Action') {
+export function createActionNodeData(id: string, label = 'Action') {
     return {
         ...createBaseNodeData(id, label),
         type: 'Action',
@@ -101,7 +101,7 @@ export function createActionNodeData(id, label = 'Action') {
     };
 }
 // Factory function dispatcher
-export function createNodeData(type, id, label) {
+export function createNodeData(type: string, id: string, label?: string) {
     switch (type) {
         case 'WeightedChoice':
             return createWeightedChoiceNodeData(id, label);
@@ -130,7 +130,7 @@ export function createNodeData(type, id, label) {
     }
 }
 // Convert UI node data to runtime-compatible format
-export function serializeForRuntime(nodeData) {
+export function serializeForRuntime(nodeData: unknown) {
     if (!isRuntimeNodeType(nodeData.type)) {
         // UI-only nodes cannot be serialized for runtime
         return null;
@@ -173,7 +173,7 @@ export function serializeForRuntime(nodeData) {
     }
 }
 // Convert runtime node data back to UI format
-export function deserializeFromRuntime(runtimeData) {
+export function deserializeFromRuntime(runtimeData: unknown) {
     if (!isRuntimeNodeType(runtimeData.type)) {
         return null;
     }
@@ -213,7 +213,7 @@ export function deserializeFromRuntime(runtimeData) {
     }
 }
 // Validation utilities
-export function validateNodeData(nodeData) {
+export function validateNodeData(nodeData: unknown) {
     const errors = [];
     if (!nodeData.id) {
         errors.push('Node ID is required');

@@ -43,7 +43,7 @@ const browserCrypto = {
         return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
     }
 };
-import { DataClassificationLevel } from '../types/DataClassification.js';
+import { DataClassificationLevel } from '../types/DataClassification';
 /**
  * Types of operations that can be audited
  */

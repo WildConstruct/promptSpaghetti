@@ -19,9 +19,9 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  */
 import { useState, useCallback, useMemo } from 'react';
 import { GitBranch, FileText, BarChart3, Download, Search, Filter, Eye, ArrowLeftRight, ZoomIn, ZoomOut, RotateCcw, Clock, CheckCircle, Layers, Code, Calendar, Plus, X, Info } from 'lucide-react';
-import { Button } from '../ui/Button.js';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Badge } from '../ui/Badge.js';
+import { Button } from '../ui/Button';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Badge } from '../ui/Badge';
 export const ComparisonTools = ({ sessions, activeSessionId, onSessionSelect, onSessionCreate, onSessionUpdate, onSessionDelete, onExportReport, className = '' }) => {
     const [selectedSessions, setSelectedSessions] = useState([]);
     const [viewMode, setViewMode] = useState('grid');

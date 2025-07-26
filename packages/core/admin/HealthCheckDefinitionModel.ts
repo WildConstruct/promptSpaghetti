@@ -96,6 +96,7 @@ export interface EndpointConfig {
   expectedStatusCodes: number[];
   responseValidation?: ResponseValidation;
   authentication?: AuthenticationConfig;
+  timeout?: number;
 }
 
 export interface QueryConfig {
@@ -488,13 +489,21 @@ export class HealthCheckDefinitionBuilder {
           runtime: RuntimeEnvironment.LOCAL,
           resources: { maxMemory: 256, maxCpu: 50, maxDiskSpace: 100 },
           network: {},
-          storage: {}
+          storage: {
+            cleanupAfterExecution: true
+          }
         },
-        isolation: {},
-        cleanup: {}
+        isolation: {
+          sandboxed: false
+        },
+        cleanup: {
+          enabled: true,
+          actions: [],
+          timeout: 5000
+        }
       };
     }
-    this.definition.execution.schedule = {
+    this.definition.execution!.schedule = {
       enabled: true,
       cronExpression,
       timezone,
@@ -779,45 +788,7 @@ export interface ValidationResult {
 // EXAMPLE DEFINITIONS
 // ==========================================
 
-export const createExampleHealthChecks = (): HealthCheckDefinition[] => {
-  // Database connectivity check
-  const dbCheck = new HealthCheckDefinitionBuilder('db_connectivity', 'Database Connectivity Check')
-    .description('Monitors database connection health and response time')
-    .category(HealthCheckCategory.DATABASE)
-    .priority(HealthCheckPriority.CRITICAL)
-    .tags('database', 'connectivity', 'performance')
-    .databaseQuery({
-      database: 'primary',
-      query: 'SELECT 1 as health_check',
-      timeout: 5000,
-      expectedResults: { exactRows: 1, columns: ['health_check'] }
-    })
-    .schedule('*/5 * * * *') // Every 5 minutes
-    .alerting({
-      enabled: true,
-      thresholds: {
-        responseTime: { warning: 2000, critical: 5000, unit: 'ms', evaluationWindow: 300, evaluationMethod: 'average' },
-        errorRate: { warning: 1, critical: 5, unit: '%', evaluationWindow: 300, evaluationMethod: 'average' },
-        availability: { warning: 99, critical: 95, unit: '%', evaluationWindow: 300, evaluationMethod: 'average' },
-        custom: {}
-      }
-    })
-    .validation({
-      output: {
-        expectedFormat: 'json',
-        successConditions: [
-          { field: 'health_check', operator: ComparisonOperator.EQUALS, value: 1, description: 'Database returns health check result' }
-        ]
-      },
-      runtime: {
-        maxExecutionTime: 4000,
-        networkAccessRequired: false,
-        fileSystemAccessRequired: false,
-        privilegedAccessRequired: false
-      }
-    })
-    .build();
-
+export 
   // API endpoint check
   const apiCheck = new HealthCheckDefinitionBuilder('api_health', 'API Health Check')
     .description('Monitors primary API endpoint availability and performance')
@@ -843,7 +814,9 @@ export const createExampleHealthChecks = (): HealthCheckDefinition[] => {
         expectedFormat: 'json',
         successConditions: [
           { field: 'status', operator: ComparisonOperator.EQUALS, value: 'healthy', description: 'API reports healthy status' }
-        ]
+        ],
+        warningConditions: [],
+        errorConditions: []
       },
       runtime: {
         maxExecutionTime: 8000,

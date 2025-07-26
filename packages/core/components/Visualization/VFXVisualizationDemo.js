@@ -6,13 +6,13 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * with realistic sample data and interactive features for director workflow.
  */
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select.js';
-import { Switch } from '../ui/Switch.js';
-import { VFXPipelineVisualizer } from './VFXPipelineVisualizer.js';
-import { sampleScenes, generateRandomScene } from './VFXSceneSamples.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
+import { Switch } from '../ui/Switch';
+import { VFXPipelineVisualizer } from './VFXPipelineVisualizer';
+import { sampleScenes, generateRandomScene } from './VFXSceneSamples';
 import { Play, Pause, RotateCcw, Settings, Eye, Layers, Activity, Zap, Globe, Clock, Film, Palette, Users, Camera } from 'lucide-react';
 export const VFXVisualizationDemo = ({ className = '', title = 'Wild Construct VFX Pipeline Demo', showControlPanel = true, autoRotateScenes = false }) => {
     const [currentSceneIndex, setCurrentSceneIndex] = useState(0);

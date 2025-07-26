@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useUISettingsStore } from '../../stores/uiSettingsStore.js';
+import { useUISettingsStore } from '../../stores/uiSettingsStore';
 const DISCLOSURE_LEVELS = [
     { value: 'basic', label: 'Basic - Essential fields only' },
     { value: 'advanced', label: 'Advanced - Power user options' },

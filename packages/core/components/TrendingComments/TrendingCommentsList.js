@@ -8,8 +8,8 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Task: E16-1753114247017-86B04D - Implement trending comments
  */
 import { useState, useEffect } from 'react';
-import { TrendingCommentsService } from '../../services/TrendingCommentsService.js';
-import { TrendingCommentCard } from './TrendingCommentCard.js';
+import { TrendingCommentsService } from '../../services/TrendingCommentsService';
+import { TrendingCommentCard } from './TrendingCommentCard';
 export const TrendingCommentsList = ({ resourceId, resourceType, initialPeriod = '24h', initialSortOrder = 'trending', limit = 20, showFilters = true, showAnalytics = true, onCommentEngagement }) => {
     const [comments, setComments] = useState([]);
     const [isLoading, setIsLoading] = useState(true);

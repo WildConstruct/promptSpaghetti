@@ -174,11 +174,15 @@ export class TestDataGenerator {
     return {
       seed,
       nodes,
-      edges: edges as any[]
+      edges: edges as GraphEdge[]
     };
   }
 
-  private generateBranchingGraph(nodeCount: number, seed: number, complexity: 'simple' | 'moderate' | 'complex'): Graph {
+  private generateBranchingGraph(
+    nodeCount: number,
+    seed: number,
+    complexity: 'simple' | 'moderate' | 'complex'
+  ): Graph {
     const nodes: Node[] = [];
     const edges: GraphEdge[] = [];
     
@@ -261,7 +265,7 @@ export class TestDataGenerator {
     return {
       seed,
       nodes,
-      edges: edges as any[]
+      edges: edges as GraphEdge[]
     };
   }
 
@@ -298,7 +302,7 @@ export class TestDataGenerator {
     return {
       seed,
       nodes,
-      edges: edges as any[]
+      edges: edges as GraphEdge[]
     };
   }
 
@@ -347,7 +351,7 @@ export class TestDataGenerator {
     return {
       seed,
       nodes,
-      edges: edges as any[]
+      edges: edges as GraphEdge[]
     };
   }
 
@@ -383,7 +387,7 @@ export class TestDataGenerator {
     return {
       seed,
       nodes,
-      edges: edges as any[]
+      edges: edges as GraphEdge[]
     };
   }
 
@@ -402,7 +406,7 @@ export class TestDataGenerator {
       const nodeTypeIndex = this.randomInt(seed + i, 0, nodeTypes.length - 1);
       const nodeType = nodeTypes[nodeTypeIndex];
       
-      let nodeData: any = {};
+      let nodeData: Record<string, unknown> = {};
       
       switch (nodeType) {
       case 'WeightedChoice':
@@ -449,7 +453,7 @@ export class TestDataGenerator {
 
       nodes.push({
         id: nodeId,
-        type: nodeType as any,
+        type: nodeType,
         data: nodeData,
         position: { 
           x: (i % 20) * 120, 
@@ -476,7 +480,7 @@ export class TestDataGenerator {
     return {
       seed,
       nodes,
-      edges: edges as any[]
+      edges: edges as GraphEdge[]
     };
   }
 
@@ -525,12 +529,12 @@ export class TestDataGenerator {
   /**
    * Generate large datasets for performance testing
    */
-  generateLargeDataset(options: PerformanceDataOptions): any[] {
+  generateLargeDataset(options: PerformanceDataOptions): unknown[] {
     const { size, pattern, memoryIntensive, nestedDepth = 3 } = options;
-    const dataset: any[] = [];
+    const dataset: unknown[] = [];
 
     for (let i = 0; i < size; i++) {
-      let item: any;
+      let item: unknown;
 
       switch (pattern) {
       case DataPattern.SEQUENTIAL:
@@ -568,7 +572,7 @@ export class TestDataGenerator {
     return dataset;
   }
 
-  private createNestedObject(id: number, depth: number, memoryIntensive: boolean): any {
+  private createNestedObject(id: number, depth: number, memoryIntensive: boolean): unknown {
     if (depth <= 0) {
       return memoryIntensive 
         ? new Array(100).fill(`Deep data ${id}`).join(' ')
@@ -590,7 +594,7 @@ export class TestDataGenerator {
   /**
    * Generate edge case test scenarios
    */
-  generateEdgeCaseScenarios(): Record<string, any> {
+  generateEdgeCaseScenarios(): Record<string, unknown> {
     return {
       // Empty/null scenarios
       emptyGraph: { seed: 123, nodes: [], edges: [] },
@@ -614,7 +618,7 @@ export class TestDataGenerator {
       
       // Circular references (for JSON serialization testing)
       circularRef: (() => {
-        const obj: any = { id: 'circular' };
+        const obj: Record<string, unknown> = { id: 'circular' };
         obj.self = obj;
         return obj;
       })()

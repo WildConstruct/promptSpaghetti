@@ -35,7 +35,7 @@ describe('Standardized Authentication Framework', () => {
       {} as any
     ) as jest.Mocked<ApiKeyManagementService>;
 
-    mockAuditService.logEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown);
+    mockAuditService.logEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown);
 
     webhookAuthService = new WebhookAuthenticationService(mockAuditService);
     unifiedAuthMiddleware = new UnifiedAuthenticationMiddleware(
@@ -273,7 +273,7 @@ describe('Standardized Authentication Framework', () => {
         roles: ['user']
       };
 
-      mockAuthService.validateToken = jest.fn<unknown[], unknown>().mockResolvedValue(mockUser as unknown as unknown);
+      mockAuthService.validateToken = jest.fn<unknown[], unknown>().mockResolvedValue(mockUser as unknown as unknown as unknown);
       mockRequest.headers = {
         'authorization': 'Bearer valid-jwt-token'
       };
@@ -297,7 +297,7 @@ describe('Standardized Authentication Framework', () => {
         keyId: 'key-123',
         userId: 'user-456',
         scopes: ['read:data', 'write:data']
-      } as unknown as unknown);
+      } as unknown as unknown as unknown);
 
       mockRequest.headers = {
         'x-api-key': 'sk_test_api_key'
@@ -353,7 +353,7 @@ describe('Standardized Authentication Framework', () => {
         keyId: 'key-123',
         userId: 'user-456',
         scopes: ['read:data'] // Missing write:data scope
-      } as unknown as unknown);
+      } as unknown as unknown as unknown);
 
       mockRequest.headers = {
         'x-api-key': 'sk_test_api_key'
@@ -382,7 +382,7 @@ describe('Standardized Authentication Framework', () => {
         roles: ['user'] // Only basic user role
       };
 
-      mockAuthService.validateToken = jest.fn<unknown[], unknown>().mockResolvedValue(mockUser as unknown as unknown);
+      mockAuthService.validateToken = jest.fn<unknown[], unknown>().mockResolvedValue(mockUser as unknown as unknown as unknown);
       mockRequest.headers = {
         'authorization': 'Bearer valid-jwt-token'
       };
@@ -439,7 +439,7 @@ describe('Standardized Authentication Framework', () => {
         keyId: 'key-123',
         userId: 'user-456',
         scopes: ['read:data']
-      } as unknown as unknown);
+      } as unknown as unknown as unknown);
 
       mockRequest.headers = {
         'authorization': 'Bearer invalid-jwt-token',
@@ -494,13 +494,13 @@ describe('Standardized Authentication Framework', () => {
 
       // Mock services
       const mockUser = { id: 'user-123', roles: ['admin'] };
-      mockAuthService.validateToken = jest.fn<unknown[], unknown>().mockResolvedValue(mockUser as unknown as unknown);
+      mockAuthService.validateToken = jest.fn<unknown[], unknown>().mockResolvedValue(mockUser as unknown as unknown as unknown);
       mockApiKeyService.validateApiKey = jest.fn<unknown[], unknown>().mockResolvedValue({
         valid: true,
         keyId: 'key-123',
         userId: 'user-456',
         scopes: ['admin:*']
-      } as unknown as unknown);
+      } as unknown as unknown as unknown);
 
       // Test JWT auth
       const jwtRequest: Partial<FastifyRequest> = {

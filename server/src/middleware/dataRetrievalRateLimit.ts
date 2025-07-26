@@ -31,7 +31,7 @@ interface DataRetrievalRateLimitOptions {
   environment: 'DEVELOPMENT' | 'STAGING' | 'PRODUCTION';
   enableLogging?: boolean;
   enableMetrics?: boolean;
-  customConfig?: any;
+  customConfig?: Record<string, unknown>;
 }
 
 interface AuthenticatedRequest extends FastifyRequest {
@@ -424,8 +424,8 @@ function getBrowserFromUserAgent(userAgent: string): string {
 }
 
 function calculateTrustLevel(
-  device: any,
-  location: any,
+  device: Record<string, unknown>,
+  location: Record<string, unknown>,
   riskScore: number
 ): 'LOW' | 'MEDIUM' | 'HIGH' | 'MAXIMUM' {
   let score = 100;

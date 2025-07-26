@@ -72,7 +72,7 @@ const UserProfileDetail: React.FC = () => {
   
   const [activeTab, setActiveTab] = useState<'profile' | 'permissions' | 'activity' | 'team' | 'settings' | 'security'>('profile');
   const [loading, setLoading] = useState(true);
-  const [___editMode, setEditMode] = useState(false);
+  const [_editMode, setEditMode] = useState(false);
   const [user, setUser] = useState<UserProfile | null>(null);
   const [activityLog, setActivityLog] = useState<ActivityLog[]>([]);
   const [teamMemberships, setTeamMemberships] = useState<TeamMembership[]>([]);
@@ -525,7 +525,7 @@ const UserProfileDetail: React.FC = () => {
           ].map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => setActiveTab(tab.id as 'profile' | 'permissions' | 'activity' | 'team' | 'settings' | 'security')}
               style={{
                 flex: 1,
                 padding: '16px 20px',

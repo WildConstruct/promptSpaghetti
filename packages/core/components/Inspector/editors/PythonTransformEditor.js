@@ -1,9 +1,9 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from 'react';
-import { TextFieldEditor } from '../TextFieldEditor.js';
-import { TextAreaEditor } from '../TextAreaEditor.js';
-import { SelectEditor } from '../SelectEditor.js';
-import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection.js';
+import { TextFieldEditor } from '../TextFieldEditor';
+import { TextAreaEditor } from '../TextAreaEditor';
+import { SelectEditor } from '../SelectEditor';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 /**
  * Epic 8.4 - Python Transform Editor with Progressive Disclosure
  *
@@ -36,7 +36,7 @@ const COMMON_MODULES = [
     'collections', 'functools', 'operator', 'copy', 'uuid', 'hashlib',
     're', 'base64', 'urllib.parse'
 ];
-export const PythonTransformEditor = (props) => {
+export const PythonTransformEditor = (props: { nodeData: any; onChange: (data: any) => void }) => {
     const { nodeData, onChange } = props;
     // Python specific fields
     const code = nodeData.code || 'def transform(input_data):\n    # Your Python code here\n    return input_data';
@@ -54,10 +54,10 @@ export const PythonTransformEditor = (props) => {
     // State for validation
     const [codeValidation, setCodeValidation] = useState(null);
     const [isValidating, setIsValidating] = useState(false);
-    const handleFieldChange = (field, value) => {
+    const handleFieldChange = (field: string, value: any): void => {
         onChange({ [field]: value });
     };
-    const handlePythonConfigChange = (field, value) => {
+    const handlePythonConfigChange = (field: string, value: any): void => {
         onChange({
             pythonConfig: {
                 ...pythonConfig,
@@ -65,20 +65,20 @@ export const PythonTransformEditor = (props) => {
             }
         });
     };
-    const handleModuleToggle = (module) => {
+    const handleModuleToggle = (module: string): void => {
         const newModules = allowedModules.includes(module)
-            ? allowedModules.filter(m => m !== module)
+            ? allowedModules.filter((m: string) => m !== module)
             : [...allowedModules, module];
         onChange({ allowedModules: newModules });
     };
-    const addCustomModule = () => {
+    const addCustomModule = (): void => {
         const moduleName = prompt('Enter module name:');
         if (moduleName && !allowedModules.includes(moduleName)) {
             onChange({ allowedModules: [...allowedModules, moduleName] });
         }
     };
-    const removeModule = (module) => {
-        onChange({ allowedModules: allowedModules.filter(m => m !== module) });
+    const removeModule = (module: string): void => {
+        onChange({ allowedModules: allowedModules.filter((m: string) => m !== module) });
     };
     // Validate code on change (debounced)
     useEffect(() => {
@@ -89,7 +89,7 @@ export const PythonTransformEditor = (props) => {
         }, 1000);
         return () => clearTimeout(timer);
     }, [code]);
-    const validateCode = async () => {
+    const validateCode = async (): Promise<void> => {
         setIsValidating(true);
         try {
             // In a real implementation, this would call the Python executor's validate endpoint
@@ -131,7 +131,7 @@ export const PythonTransformEditor = (props) => {
             setIsValidating(false);
         }
     };
-    const getCodeEditorStyles = () => {
+    const getCodeEditorStyles = (): any => {
         const baseStyles = {
             fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
             fontSize: 12,

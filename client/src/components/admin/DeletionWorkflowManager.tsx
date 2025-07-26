@@ -18,7 +18,6 @@ import {
   Play,
   Pause,
   Square,
-  RotateCcw,
   Trash2,
   AlertTriangle,
   CheckCircle,
@@ -26,22 +25,12 @@ import {
   Clock,
   Activity,
   Eye,
-  Edit,
-  Copy,
-  Download,
-  Upload,
-  Filter,
   Search,
   Calendar,
-  Users,
   Database,
   FileText,
-  Settings,
-  Zap,
   Timer,
   BarChart3,
-  TrendingUp,
-  TrendingDown,
   RefreshCw,
   Plus
 } from 'lucide-react';
@@ -136,7 +125,7 @@ interface WorkflowMetrics {
 
 const DeletionWorkflowManager: React.FC = () => {
   const [workflows, setWorkflows] = useState<DeletionWorkflow[]>([]);
-  const [___templates, setTemplates] = useState<WorkflowTemplate[]>([]);
+  const [, setTemplates] = useState<WorkflowTemplate[]>([]);
   const [metrics, setMetrics] = useState<WorkflowMetrics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -149,15 +138,15 @@ const DeletionWorkflowManager: React.FC = () => {
   const [sortBy, setSortBy] = useState<'name' | 'created' | 'progress' | 'priority'>('created');
   
   // Modal and selection states
-  const [___showCreateModal, setShowCreateModal] = useState(false);
-  const [___showTemplateModal, setShowTemplateModal] = useState(false);
-  const [___selectedWorkflow, setSelectedWorkflow] = useState<DeletionWorkflow | null>(null);
+  const [, setShowCreateModal] = useState(false);
+  const [, setShowTemplateModal] = useState(false);
+  const [, setSelectedWorkflow] = useState<DeletionWorkflow | null>(null);
   const [selectedWorkflows, setSelectedWorkflows] = useState<Set<string>>(new Set());
-  const [___showBulkActions, ___setShowBulkActions] = useState(false);
+  const [,] = useState(false);
 
   // Real-time updates
   const [autoRefresh, setAutoRefresh] = useState(true);
-  const [refreshInterval, ___setRefreshInterval] = useState(5000); // 5 seconds
+  const [refreshInterval] = useState(5000); // 5 seconds
 
   // Load workflow data
   const loadWorkflowData = useCallback(async () => {
@@ -359,9 +348,10 @@ const DeletionWorkflowManager: React.FC = () => {
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       case 'progress':
         return b.progress - a.progress;
-      case 'priority':
+      case 'priority': {
         const priorityOrder = { critical: 4, high: 3, normal: 2, low: 1 };
         return priorityOrder[b.priority] - priorityOrder[a.priority];
+      }
       default:
         return 0;
       }
@@ -493,14 +483,21 @@ const DeletionWorkflowManager: React.FC = () => {
         <div className="border-b border-gray-200">
           <nav className="flex space-x-8 px-6" aria-label="Workflow Views">
             {[
-              { key: 'active', label: 'Active', count: workflows.filter(w => ['running', 'scheduled'].includes(w.status)).length },
+              { key: 'active', label: 'Active', count: workflows.filter(
+                w => ['running',
+                'scheduled'].includes(w.status
+              )).length },
               { key: 'scheduled', label: 'Scheduled', count: workflows.filter(w => w.status === 'scheduled').length },
-              { key: 'completed', label: 'Completed', count: workflows.filter(w => ['completed', 'failed', 'cancelled'].includes(w.status)).length },
+              { key: 'completed', label: 'Completed', count: workflows.filter(
+                w => ['completed',
+                'failed',
+                'cancelled'].includes(w.status
+              )).length },
               { key: 'all', label: 'All', count: workflows.length }
             ].map(({ key, label, count }) => (
               <button
                 key={key}
-                onClick={() => setView(key as any)}
+                onClick={() => setView(key as 'active' | 'scheduled' | 'completed' | 'all')}
                 className={`${
                   view === key
                     ? 'border-blue-500 text-blue-600 bg-blue-50'
@@ -563,7 +560,7 @@ const DeletionWorkflowManager: React.FC = () => {
               <span className="text-sm text-gray-600">Sort by:</span>
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
+                onChange={(e) => setSortBy(e.target.value as 'name' | 'created' | 'progress' | 'priority')}
                 className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="created">Created Date</option>

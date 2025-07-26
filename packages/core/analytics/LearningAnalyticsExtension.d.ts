@@ -369,10 +369,16 @@ export interface LearningAnalyticsService {
     trackTutorialEvent(event: TutorialAnalyticsEvent): Promise<void>;
     trackKnowledgeBaseEvent(event: KnowledgeBaseAnalyticsEvent): Promise<void>;
     trackCommunityEvent(event: CommunityAnalyticsEvent): Promise<void>;
-    generateLearningEffectivenessMetrics(contentId: string, timeRange: TimeRange): Promise<LearningEffectivenessMetrics>;
+    generateLearningEffectivenessMetrics(
+      contentId: string,
+      timeRange: TimeRange
+    ): Promise<LearningEffectivenessMetrics>;
     generateUserLearningAnalytics(userId: string, timeRange: TimeRange): Promise<UserLearningAnalytics>;
     generateCommunityKnowledgeMetrics(communityId: string, timeRange: TimeRange): Promise<CommunityKnowledgeMetrics>;
-    generateKnowledgeBaseUsageMetrics(knowledgeBaseId: string, timeRange: TimeRange): Promise<KnowledgeBaseUsageMetrics>;
+    generateKnowledgeBaseUsageMetrics(
+      knowledgeBaseId: string,
+      timeRange: TimeRange
+    ): Promise<KnowledgeBaseUsageMetrics>;
     identifyLearningTrends(timeRange: TimeRange): Promise<LearningTrend[]>;
     detectContentPerformanceAnomalies(contentType: ContentType, threshold: number): Promise<PerformanceAnomaly[]>;
     generatePersonalizedLearningInsights(userId: string): Promise<PersonalizedInsight[]>;
@@ -680,17 +686,17 @@ export declare const LearningAnalyticsEventSchema: z.ZodObject<{
     }>;
     user_context: z.ZodObject<{
         user_role: z.ZodString;
-        skill_profile_snapshot: z.ZodOptional<z.ZodAny>;
+        skill_profile_snapshot: z.ZodOptional<z.ZodUnknown>;
         learning_goals: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         current_learning_path: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         user_role: string;
-        skill_profile_snapshot?: any;
+        skill_profile_snapshot?: unknown;
         learning_goals?: string[] | undefined;
         current_learning_path?: string | undefined;
     }, {
         user_role: string;
-        skill_profile_snapshot?: any;
+        skill_profile_snapshot?: unknown;
         learning_goals?: string[] | undefined;
         current_learning_path?: string | undefined;
     }>;
@@ -728,7 +734,7 @@ export declare const LearningAnalyticsEventSchema: z.ZodObject<{
     };
     user_context: {
         user_role: string;
-        skill_profile_snapshot?: any;
+        skill_profile_snapshot?: unknown;
         learning_goals?: string[] | undefined;
         current_learning_path?: string | undefined;
     };
@@ -752,7 +758,7 @@ export declare const LearningAnalyticsEventSchema: z.ZodObject<{
     };
     user_context: {
         user_role: string;
-        skill_profile_snapshot?: any;
+        skill_profile_snapshot?: unknown;
         learning_goals?: string[] | undefined;
         current_learning_path?: string | undefined;
     };

@@ -46,7 +46,7 @@ export interface SecurityEvent {
   userId?: string;
   userEmail?: string;
   description: string;
-  details: Record<string, any>;
+  details: Record<string, unknown>;
   ipAddress?: string;
   userAgent?: string;
   timestamp: string;
@@ -85,8 +85,8 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   const [securityEvents, setSecurityEvents] = useState<SecurityEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [___selectedPolicy, setSelectedPolicy] = useState<PasswordPolicy | null>(null);
-  const [___showPolicyModal, setShowPolicyModal] = useState(false);
+  const [_selectedPolicy, setSelectedPolicy] = useState<PasswordPolicy | null>(null);
+  const [_showPolicyModal, setShowPolicyModal] = useState(false);
 
   // Permission checks
   const canManagePolicies = ['super_admin', 'admin'].includes(userRole);
@@ -99,7 +99,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
 
     try {
       // Simulate API calls - replace with actual endpoints
-      const [___statsResponse, ___policiesResponse, ___eventsResponse] = await Promise.all([
+      const [_statsResponse, _policiesResponse, _eventsResponse] = await Promise.all([
         fetch('/api/admin/password-management/stats'),
         fetch('/api/admin/password-management/policies'),
         fetch('/api/admin/password-management/security-events?limit=20')
@@ -264,7 +264,11 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
     return (
       <div>
         {/* Key Metrics */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(
+          auto-fit,
+          minmax(250px,
+          1fr
+        ))', gap: '20px', marginBottom: '24px' }}>
           <StatCard
             title="Password Compliance"
             value={`${stats.passwordPolicyCompliance.toFixed(1)}%`}
@@ -301,7 +305,11 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
         </div>
 
         {/* Additional Metrics */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(
+          auto-fit,
+          minmax(250px,
+          1fr
+        ))', gap: '20px', marginBottom: '24px' }}>
           <StatCard
             title="MFA Adoption"
             value={`${stats.mfaAdoptionRate.toFixed(1)}%`}
@@ -506,7 +514,11 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
               {policy.description}
             </p>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', fontSize: '13px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(
+              auto-fit,
+              minmax(200px,
+              1fr
+            ))', gap: '16px', fontSize: '13px' }}>
               <div>
                 <strong>Length:</strong> {policy.minLength}-{policy.maxLength} characters
               </div>
@@ -729,7 +741,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
         ].filter(tab => tab.permission).map(tab => (
           <button
             key={tab.key}
-            onClick={() => setActiveTab(tab.key as any)}
+            onClick={() => setActiveTab(tab.key as 'overview' | 'policies' | 'security' | 'users')}
             style={{
               padding: '12px 16px',
               border: 'none',

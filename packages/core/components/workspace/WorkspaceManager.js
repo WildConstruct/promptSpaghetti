@@ -4,11 +4,11 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Main workspace management interface
  */
 import { useState } from 'react';
-import { WorkspaceList } from './WorkspaceList.js';
-import { CreateWorkspaceModal } from './CreateWorkspaceModal.js';
-import { InviteUserModal } from './InviteUserModal.js';
-import { WorkspaceSettings } from './WorkspaceSettings.js';
-import { useWorkspaces } from '../../hooks/useWorkspaces.js';
+import { WorkspaceList } from './WorkspaceList';
+import { CreateWorkspaceModal } from './CreateWorkspaceModal';
+import { InviteUserModal } from './InviteUserModal';
+import { WorkspaceSettings } from './WorkspaceSettings';
+import { useWorkspaces } from '../../hooks/useWorkspaces';
 export const WorkspaceManager = ({ userId, onWorkspaceSelect }) => {
     const [selectedWorkspace, setSelectedWorkspace] = useState(null);
     const [showCreateModal, setShowCreateModal] = useState(false);

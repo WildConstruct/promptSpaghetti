@@ -22,12 +22,13 @@ describe('ChallengeTelemetryService', () => {
 
   beforeEach(() => {
     mockDate = new Date('2025-01-15T10:00:00Z');
-    jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
+    const OriginalDate = Date;
+    jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
     
     // Mock the Date constructor
-    const mockDateConstructor = jest.fn().mockImplementation((value?: any) => {
+    const mockDateConstructor = jest.fn<unknown[], unknown>().mockImplementation((value?: unknown) => {
       if (value !== undefined) {
-        return new Date(value);
+        return new OriginalDate(value);
       }
       return mockDate;
     });
@@ -218,7 +219,7 @@ describe('ChallengeTelemetryService', () => {
         const eventTime = new Date(baseTime + i * 60 * 1000); // Events 1 minute apart
         const isSuccess = i < 7; // 70% success rate
         
-        jest.spyOn(Date, 'now').mockReturnValue(eventTime.getTime());
+        jest.spyOn(Date, 'now').mockReturnValue(eventTime.getTime( as unknown));
         
         service.recordChallengeEvent({
           sessionId: `session-${i}`,
@@ -262,7 +263,7 @@ describe('ChallengeTelemetryService', () => {
       }
       
       // Reset to original mock date
-      jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
+      jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
     });
 
     test('should calculate challenge statistics correctly', () => {

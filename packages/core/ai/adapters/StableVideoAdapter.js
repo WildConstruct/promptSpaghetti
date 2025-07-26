@@ -4,7 +4,7 @@
  *
  * Adapter for Stable Video Diffusion models (SVD and SVD-XT)
  */
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel.js';
+import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
 export class StableVideoAdapter extends BaseAIModel {
     config;
     availableModels = [];
@@ -394,40 +394,40 @@ export class StableVideoAdapter extends BaseAIModel {
         return {
             init_images: [imageData],
             prompt: 'video generation',
-            steps: options.steps,
-            cfg_scale: options.cfg_scale,
-            width: options.width,
-            height: options.height,
+            steps: options.steps || 20,
+            cfg_scale: options.cfg_scale || 2.5,
+            width: options.width || 576,
+            height: options.height || 1024,
             seed: options.seed || -1,
             sampler_name: options.scheduler || 'euler',
             // SVD-specific parameters
-            motion_bucket_id: options.motion_bucket_id,
-            cond_aug: options.cond_aug,
-            num_frames: options.num_frames,
-            fps: options.fps
+            motion_bucket_id: options.motion_bucket_id || 127,
+            cond_aug: options.cond_aug || 0.02,
+            num_frames: options.num_frames || 14,
+            fps: options.fps || 6
         };
     }
     _buildStabilityAIPayload(imageData, options) {
         return {
             image: imageData,
-            cfg_scale: options.cfg_scale,
-            motion_bucket_id: options.motion_bucket_id,
-            seed: options.seed
+            cfg_scale: options.cfg_scale || 2.5,
+            motion_bucket_id: options.motion_bucket_id || 127,
+            seed: options.seed || -1
         };
     }
     _buildGenericPayload(imageData, options) {
         return {
             image: imageData,
-            model: options.model,
-            motion_bucket_id: options.motion_bucket_id,
-            cond_aug: options.cond_aug,
-            num_frames: options.num_frames,
-            fps: options.fps,
-            steps: options.steps,
-            cfg_scale: options.cfg_scale,
-            seed: options.seed,
-            width: options.width,
-            height: options.height
+            model: options.model || 'svd-xt',
+            motion_bucket_id: options.motion_bucket_id || 127,
+            cond_aug: options.cond_aug || 0.02,
+            num_frames: options.num_frames || 14,
+            fps: options.fps || 6,
+            steps: options.steps || 20,
+            cfg_scale: options.cfg_scale || 2.5,
+            seed: options.seed || -1,
+            width: options.width || 576,
+            height: options.height || 1024
         };
     }
     _processVideoResult(response, imageData, options, generationTime) {
@@ -442,29 +442,29 @@ export class StableVideoAdapter extends BaseAIModel {
         else if (response.output) {
             frames = Array.isArray(response.output) ? response.output : [response.output];
         }
-        const computeUnits = this._calculateComputeUnits(options.model, options.num_frames, options.steps);
+        const computeUnits = this._calculateComputeUnits(options.model || 'svd-xt', options.num_frames || 14, options.steps || 20);
         const estimatedCost = computeUnits * (this._metadata.costPerRequest || 0.02);
         return {
             video: {
                 frames,
                 format: 'frames', // Individual frames
-                duration: options.num_frames / options.fps,
+                duration: (options.num_frames || 14) / (options.fps || 6),
                 resolution: {
                     width: options.width || 576,
                     height: options.height || 1024
                 },
-                fps: options.fps,
+                fps: options.fps || 6,
                 frame_count: frames.length,
                 size: this._estimateVideoSize(frames)
             },
             metadata: {
-                model: options.model,
+                model: options.model || 'svd-xt',
                 input_image: imageData,
-                motion_bucket_id: options.motion_bucket_id,
-                cond_aug: options.cond_aug,
+                motion_bucket_id: options.motion_bucket_id || 127,
+                cond_aug: options.cond_aug || 0.02,
                 seed: options.seed || -1,
-                steps: options.steps,
-                cfg_scale: options.cfg_scale,
+                steps: options.steps || 20,
+                cfg_scale: options.cfg_scale || 2.5,
                 generation_time: generationTime
             },
             usage: {

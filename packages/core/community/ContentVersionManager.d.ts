@@ -217,8 +217,8 @@ export interface ContentVersionDiff {
     }>;
     metadata_changes: Array<{
         field: string;
-        old_value: any;
-        new_value: any;
+        old_value: unknown;
+        new_value: unknown;
         change_type: 'added' | 'removed' | 'modified';
     }>;
     media_changes: Array<{
@@ -251,7 +251,7 @@ export declare class ContentVersionManager {
     private userId;
     private versions;
     private apiClient;
-    constructor(apiClient: any, contentId: string, userId: string);
+    constructor(apiClient: unknown, contentId: string, userId: string);
     createVersion(content: CommunityContent, options?: {
         version_number?: string;
         version_tag?: string;
@@ -274,7 +274,11 @@ export declare class ContentVersionManager {
         publish_date?: string;
         notify_subscribers?: boolean;
     }): Promise<ContentVersion>;
-    addReviewFeedback(versionId: string, feedback: Omit<ReviewFeedback, 'id' | 'reviewer_id' | 'reviewer_name' | 'review_date'>): Promise<ReviewFeedback>;
+    addReviewFeedback(
+      versionId: string,
+      feedback: Omit<ReviewFeedback,
+      'id' | 'reviewer_id' | 'reviewer_name' | 'review_date'>
+    ): Promise<ReviewFeedback>;
     resolveFeedback(versionId: string, feedbackId: string, resolution: string): Promise<void>;
     getReviewHistory(versionId: string): Promise<ReviewFeedback[]>;
     addContributor(versionId: string, contributor: Omit<ContentContributor, 'contribution_date'>): Promise<void>;

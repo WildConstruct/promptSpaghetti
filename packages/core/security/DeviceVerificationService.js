@@ -16,9 +16,9 @@
  */
 import { EventEmitter } from 'events';
 import crypto from 'crypto';
-import { RiskLevel } from './DeviceFingerprintingService.js';
-import { VerificationCodeType, DeliveryChannel } from './VerificationCodeManager.js';
-import { EmailType } from './services/EmailDeliveryTracker.js';
+import { RiskLevel } from './DeviceFingerprintingService';
+import { VerificationCodeType, DeliveryChannel } from './VerificationCodeManager';
+import { EmailType } from './services/EmailDeliveryTracker';
 // Verification steps
 export var VerificationStep;
 (function (VerificationStep) {

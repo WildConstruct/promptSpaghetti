@@ -17,8 +17,8 @@ export declare const ProjectMetadataSchema: z.ZodObject<{
     fileFormatVersion: z.ZodDefault<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     name: string;
-    fileFormatVersion: string;
     version: string;
+    fileFormatVersion: string;
     description?: string | undefined;
     tags?: string[] | undefined;
     author?: string | undefined;
@@ -28,9 +28,9 @@ export declare const ProjectMetadataSchema: z.ZodObject<{
     name: string;
     description?: string | undefined;
     tags?: string[] | undefined;
-    fileFormatVersion?: string | undefined;
     version?: string | undefined;
     author?: string | undefined;
+    fileFormatVersion?: string | undefined;
     created?: string | undefined;
     modified?: string | undefined;
 }>;
@@ -80,20 +80,20 @@ export declare const EditorSettingsSchema: z.ZodObject<{
     showNodeIcons: z.ZodDefault<z.ZodBoolean>;
     showConnectionLabels: z.ZodDefault<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    theme: "light" | "dark";
-    showNodeIcons: boolean;
     autoSave: boolean;
-    autoSaveInterval: number;
+    theme: "light" | "dark";
     snapToGrid: boolean;
+    showNodeIcons: boolean;
+    autoSaveInterval: number;
     gridVisible: boolean;
     miniMapVisible: boolean;
     showConnectionLabels: boolean;
 }, {
-    theme?: "light" | "dark" | undefined;
-    showNodeIcons?: boolean | undefined;
     autoSave?: boolean | undefined;
-    autoSaveInterval?: number | undefined;
+    theme?: "light" | "dark" | undefined;
     snapToGrid?: boolean | undefined;
+    showNodeIcons?: boolean | undefined;
+    autoSaveInterval?: number | undefined;
     gridVisible?: boolean | undefined;
     miniMapVisible?: boolean | undefined;
     showConnectionLabels?: boolean | undefined;
@@ -144,8 +144,8 @@ export declare const PSGFileSchema: z.ZodObject<{
         fileFormatVersion: z.ZodDefault<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         name: string;
-        fileFormatVersion: string;
         version: string;
+        fileFormatVersion: string;
         description?: string | undefined;
         tags?: string[] | undefined;
         author?: string | undefined;
@@ -155,9 +155,9 @@ export declare const PSGFileSchema: z.ZodObject<{
         name: string;
         description?: string | undefined;
         tags?: string[] | undefined;
-        fileFormatVersion?: string | undefined;
         version?: string | undefined;
         author?: string | undefined;
+        fileFormatVersion?: string | undefined;
         created?: string | undefined;
         modified?: string | undefined;
     }>;
@@ -207,20 +207,20 @@ export declare const PSGFileSchema: z.ZodObject<{
         showNodeIcons: z.ZodDefault<z.ZodBoolean>;
         showConnectionLabels: z.ZodDefault<z.ZodBoolean>;
     }, "strip", z.ZodTypeAny, {
-        theme: "light" | "dark";
-        showNodeIcons: boolean;
         autoSave: boolean;
-        autoSaveInterval: number;
+        theme: "light" | "dark";
         snapToGrid: boolean;
+        showNodeIcons: boolean;
+        autoSaveInterval: number;
         gridVisible: boolean;
         miniMapVisible: boolean;
         showConnectionLabels: boolean;
     }, {
-        theme?: "light" | "dark" | undefined;
-        showNodeIcons?: boolean | undefined;
         autoSave?: boolean | undefined;
-        autoSaveInterval?: number | undefined;
+        theme?: "light" | "dark" | undefined;
         snapToGrid?: boolean | undefined;
+        showNodeIcons?: boolean | undefined;
+        autoSaveInterval?: number | undefined;
         gridVisible?: boolean | undefined;
         miniMapVisible?: boolean | undefined;
         showConnectionLabels?: boolean | undefined;
@@ -260,6 +260,26 @@ export declare const PSGFileSchema: z.ZodObject<{
         exportVersion?: string | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
+    metadata: {
+        name: string;
+        version: string;
+        fileFormatVersion: string;
+        description?: string | undefined;
+        tags?: string[] | undefined;
+        author?: string | undefined;
+        created?: string | undefined;
+        modified?: string | undefined;
+    };
+    settings: {
+        autoSave: boolean;
+        theme: "light" | "dark";
+        snapToGrid: boolean;
+        showNodeIcons: boolean;
+        autoSaveInterval: number;
+        gridVisible: boolean;
+        miniMapVisible: boolean;
+        showConnectionLabels: boolean;
+    };
     graph: {
         nodes: any[];
         edges: any[];
@@ -269,26 +289,6 @@ export declare const PSGFileSchema: z.ZodObject<{
             y: number;
             zoom: number;
         } | undefined;
-    };
-    settings: {
-        theme: "light" | "dark";
-        showNodeIcons: boolean;
-        autoSave: boolean;
-        autoSaveInterval: number;
-        snapToGrid: boolean;
-        gridVisible: boolean;
-        miniMapVisible: boolean;
-        showConnectionLabels: boolean;
-    };
-    metadata: {
-        name: string;
-        fileFormatVersion: string;
-        version: string;
-        description?: string | undefined;
-        tags?: string[] | undefined;
-        author?: string | undefined;
-        created?: string | undefined;
-        modified?: string | undefined;
     };
     exportMetadata: {
         format: "psg";
@@ -301,6 +301,16 @@ export declare const PSGFileSchema: z.ZodObject<{
         } | undefined;
     };
 }, {
+    metadata: {
+        name: string;
+        description?: string | undefined;
+        tags?: string[] | undefined;
+        version?: string | undefined;
+        author?: string | undefined;
+        fileFormatVersion?: string | undefined;
+        created?: string | undefined;
+        modified?: string | undefined;
+    };
     graph: {
         nodes: any[];
         edges: any[];
@@ -310,16 +320,6 @@ export declare const PSGFileSchema: z.ZodObject<{
             y: number;
             zoom: number;
         } | undefined;
-    };
-    metadata: {
-        name: string;
-        description?: string | undefined;
-        tags?: string[] | undefined;
-        fileFormatVersion?: string | undefined;
-        version?: string | undefined;
-        author?: string | undefined;
-        created?: string | undefined;
-        modified?: string | undefined;
     };
     exportMetadata: {
         format: "psg";
@@ -332,11 +332,11 @@ export declare const PSGFileSchema: z.ZodObject<{
         exportVersion?: string | undefined;
     };
     settings?: {
-        theme?: "light" | "dark" | undefined;
-        showNodeIcons?: boolean | undefined;
         autoSave?: boolean | undefined;
-        autoSaveInterval?: number | undefined;
+        theme?: "light" | "dark" | undefined;
         snapToGrid?: boolean | undefined;
+        showNodeIcons?: boolean | undefined;
+        autoSaveInterval?: number | undefined;
         gridVisible?: boolean | undefined;
         miniMapVisible?: boolean | undefined;
         showConnectionLabels?: boolean | undefined;
@@ -416,10 +416,7 @@ export declare function extractPSGFileSummary(psgFile: PSGFile): {
 /**
  * File extension and MIME type constants
  */
-export declare const PSG_FILE_EXTENSION = ".psg";
-export declare const PSG_MIME_TYPE = "application/json";
-export declare const PSG_FILE_DESCRIPTION = "PromptScape Graph Project";
-/**
+export declare export declare export declare /**
  * Version compatibility checker
  */
 export declare function checkPSGCompatibility(psgFile: PSGFile, currentVersion?: string): {

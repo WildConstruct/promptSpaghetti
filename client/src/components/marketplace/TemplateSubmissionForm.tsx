@@ -12,7 +12,7 @@ interface SubmissionData {
   is_ai_generated: boolean;
   claude_compat: string[];
   claude_model: string;
-  graph_json: Record<string, any>;
+  graph_json: Record<string, unknown>;
   prompt_yaml?: string;
   changelog_md?: string;
   token_per_run_estimate: number;
@@ -30,7 +30,7 @@ interface ValidationResult {
   rule_id: string;
   severity: 'error' | 'warning' | 'info';
   message: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
   suggested_fix?: string;
   auto_fixable: boolean;
   location?: {
@@ -87,7 +87,7 @@ export const TemplateSubmissionForm: React.FC<TemplateSubmissionFormProps> = ({
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
-  const [___isDraft, setIsDraft] = useState(true);
+  const [_isDraft, setIsDraft] = useState(true);
   const [submissionId, setSubmissionId] = useState<string | null>(null);
   const [graphJsonString, setGraphJsonString] = useState('{}');
   const [tagInput, setTagInput] = useState('');

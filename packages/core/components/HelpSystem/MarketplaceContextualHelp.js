@@ -15,7 +15,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * - Community-driven help suggestions
  */
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
-import { MarketplaceHelpOverlay } from './MarketplaceHelpOverlay.js';
+import { MarketplaceHelpOverlay } from './MarketplaceHelpOverlay';
 export const MarketplaceContextualHelp = ({ userId = 'anonymous', userRole = 'new-user', userLevel = 'beginner', currentPage, pageContext = {}, behaviorContext = {}, enabled = true, intelligenceLevel = 'smart', triggerSensitivity = 'medium', helpContentManager, onContextualHelpTriggered, onUserStruggleDetected, onHelpEffectiveness }) => {
     // State management
     const [activeHelp, setActiveHelp] = useState(null);

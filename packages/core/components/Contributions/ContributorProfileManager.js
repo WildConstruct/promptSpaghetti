@@ -7,7 +7,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * and notification preferences.
  */
 import { useState, useEffect } from 'react';
-import { validateContributorProfile } from '../../types/contributions.js';
+import { validateContributorProfile } from '../../types/contributions';
 export const ContributorProfileManager = ({ profile, onProfileUpdate, readOnly = false, className = '' }) => {
     const [editMode, setEditMode] = useState(false);
     const [formData, setFormData] = useState(profile);

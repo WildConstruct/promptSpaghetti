@@ -67,11 +67,11 @@ export declare class GraphCRDT {
     /**
      * Subscribe to changes
      */
-    onChange(callback: (event: Y.YEvent<any>[]) => void): () => void;
+    onChange(callback: (event: Y.YEvent<unknown>[]) => void): () => void;
     /**
      * Get operation history
      */
-    getHistory(): any[];
+    getHistory(): unknown[];
     /**
      * Clear operation history (keep only recent entries)
      */

@@ -12,7 +12,7 @@ interface ModerationItem {
   createdAt: Date;
   reviewedAt?: Date;
   reviewedBy?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 interface ModerationAction {

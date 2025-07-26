@@ -98,7 +98,7 @@ export interface TrustBadge {
   icon_url: string;
   requirements: {
     min_verification_level: VerificationLevel;
-    additional_criteria: Record<string, any>;
+    additional_criteria: Record<string, unknown>;
   };
   is_active: boolean;
   created_at: string;

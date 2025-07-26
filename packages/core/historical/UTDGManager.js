@@ -4,10 +4,10 @@
  *
  * Central management system for UTDG data and historical content generation
  */
-import { HISTORICAL_ERAS } from '../types/UTDG.js';
-import ConstraintValidator from './ConstraintValidator.js';
-import ExternalDataService from './ExternalDataService.js';
-import MedievalDemoDatabase, { MEDIEVAL_DEMO_CONSTRAINTS } from './MedievalDemo.js';
+import { HISTORICAL_ERAS } from '../types/UTDG';
+import ConstraintValidator from './ConstraintValidator';
+import ExternalDataService from './ExternalDataService';
+import MedievalDemoDatabase, { MEDIEVAL_DEMO_CONSTRAINTS } from './MedievalDemo';
 /**
  * UTDG Manager - Central orchestrator for historical data integration
  */

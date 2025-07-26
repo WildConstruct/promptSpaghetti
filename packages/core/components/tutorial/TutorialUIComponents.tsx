@@ -1,4 +1,6 @@
 /**
+import { Plus, FileText, X } from 'lucide-react';
+
 import { Plus } from 'lucide-react';
 
  * Tutorial UI Components (Epic 16)
@@ -331,9 +333,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === tutorial.steps.length - 1;
 
-  const _____tutorialProgress = useMemo(() => {
-    const completed = progress?.completedSteps.length || 0;
-    const total = tutorial.steps.length;
+      const total = tutorial.steps.length;
     return {
       completed,
       total,

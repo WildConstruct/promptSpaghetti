@@ -80,7 +80,7 @@ export class PayloadEncryptionService {
     }
   }
 
-  async encryptPayload(data: any, endpoint?: string): Promise<EncryptedPayload> {
+  async encryptPayload(data: unknown, endpoint?: string): Promise<EncryptedPayload> {
     const startTime = Date.now();
     
     try {
@@ -492,7 +492,7 @@ export function responseEncryptionMiddleware(
         // Hook into the response to encrypt it
         const originalSend = reply.send.bind(reply);
         
-        reply.send = function(payload: any) {
+        reply.send = function(payload: unknown) {
           // Only encrypt non-error responses
           if (reply.statusCode >= 200 && reply.statusCode < 300 && payload) {
             payloadEncryptionService.encryptPayload(payload, endpoint)

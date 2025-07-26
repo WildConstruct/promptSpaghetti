@@ -73,12 +73,7 @@ const TIME_RANGES = [
   { value: '90d', label: '90 Days', hours: 24 * 90 }
 ];
 
-export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({
-  schedules,
-  onScheduleClick
-}) => {
-  const [timeRange, setTimeRange] = useState<TimeRange>('7d');
-  const [zoomLevel, setZoomLevel] = useState(1);
+export   const [zoomLevel, setZoomLevel] = useState(1);
 
   const timeRangeConfig = TIME_RANGES.find(tr => tr.value === timeRange)!;
   const now = new Date();
@@ -98,8 +93,7 @@ export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({
   }, [schedules, startTime, endTime]);
 
   // Group schedules by time slots for better visualization
-  const ___timeSlots = useMemo(() => {
-    const slotDuration = timeRangeConfig.hours * 60 * 60 * 1000 / 24; // 24 slots
+      const slotDuration = timeRangeConfig.hours * 60 * 60 * 1000 / 24; // 24 slots
     const slots: Array<{ start: Date; end: Date; schedules: Schedule[] }> = [];
 
     for (let i = 0; i < 24; i++) {
@@ -208,7 +202,7 @@ export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({
     return markers;
   };
 
-  const renderScheduleBar = (schedule: Schedule, ___index: number) => {
+  const renderScheduleBar = (schedule: Schedule, _index: number) => {
     const scheduleTime = schedule.nextExecution || schedule.startTime;
     const position = getTimelinePosition(scheduleTime);
     const width = getScheduleWidth(schedule);

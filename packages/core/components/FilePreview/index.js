@@ -3,6 +3,6 @@
  *
  * All components use PSGFile interface from projectManager for consistent file handling
  */
-export { FilePreview } from './FilePreview.js';
-export { RecentFiles } from './RecentFiles.js';
-export { HoverPreview } from './HoverPreview.js';
+export { FilePreview } from './FilePreview';
+export { RecentFiles } from './RecentFiles';
+export { HoverPreview } from './HoverPreview';

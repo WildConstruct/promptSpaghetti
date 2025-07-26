@@ -147,7 +147,12 @@ export class AuditService extends EventEmitter {
     }, context);
   }
 
-  async logToggleUpdated(toggleId: string, beforeData: unknown, afterData: unknown, context: AuditContext): Promise<void> {
+  async logToggleUpdated(
+    toggleId: string,
+    beforeData: unknown,
+    afterData: unknown,
+    context: AuditContext
+  ): Promise<void> {
     await this.logEvent({
       eventType: AuditEventType.TOGGLE_UPDATED,
       category: AuditCategory.DATA_MODIFICATION,
@@ -224,7 +229,12 @@ export class AuditService extends EventEmitter {
     }, context);
   }
 
-  async logScheduleExecuted(scheduleId: string, scheduleName: string, execution: unknown, context: AuditContext): Promise<void> {
+  async logScheduleExecuted(
+    scheduleId: string,
+    scheduleName: string,
+    execution: unknown,
+    context: AuditContext
+  ): Promise<void> {
     const severity = execution.status === 'success' ? AuditSeverity.MEDIUM : AuditSeverity.HIGH;
     
     await this.logEvent({
@@ -253,7 +263,13 @@ export class AuditService extends EventEmitter {
   /**
    * Log authentication events
    */
-  async logUserLogin(userId: string, userEmail: string, success: boolean, context: AuditContext, error?: any): Promise<void> {
+  async logUserLogin(
+    userId: string,
+    userEmail: string,
+    success: boolean,
+    context: AuditContext,
+    error?: Error
+  ): Promise<void> {
     const eventType = success ? AuditEventType.USER_LOGIN : AuditEventType.LOGIN_FAILED;
     const severity = success ? AuditSeverity.LOW : AuditSeverity.HIGH;
     const category = AuditCategory.AUTHENTICATION;
@@ -319,7 +335,13 @@ export class AuditService extends EventEmitter {
     }, context);
   }
 
-  async logAccessDenied(userId: string, resource: string, permission: string, context: AuditContext, reason?: string): Promise<void> {
+  async logAccessDenied(
+    userId: string,
+    resource: string,
+    permission: string,
+    context: AuditContext,
+    reason?: string
+  ): Promise<void> {
     await this.logEvent({
       eventType: AuditEventType.ACCESS_DENIED,
       category: AuditCategory.AUTHORIZATION,
@@ -342,7 +364,12 @@ export class AuditService extends EventEmitter {
   /**
    * Log security events
    */
-  async logSuspiciousActivity(description: string, context: AuditContext, metadata?: any): Promise<void> {
+  async logSuspiciousActivity(
+    description: string,
+    context: AuditContext,
+    metadata?: Record<string,
+    unknown>
+  ): Promise<void> {
     await this.logEvent({
       eventType: AuditEventType.SUSPICIOUS_ACTIVITY,
       category: AuditCategory.SECURITY,
@@ -360,7 +387,12 @@ export class AuditService extends EventEmitter {
     }, context);
   }
 
-  async logSecurityBreach(description: string, context: AuditContext, metadata?: any): Promise<void> {
+  async logSecurityBreach(
+    description: string,
+    context: AuditContext,
+    metadata?: Record<string,
+    unknown>
+  ): Promise<void> {
     await this.logEvent({
       eventType: AuditEventType.SECURITY_BREACH_DETECTED,
       category: AuditCategory.SECURITY,
@@ -385,7 +417,13 @@ export class AuditService extends EventEmitter {
   /**
    * Log API events
    */
-  async logAPIRequest(endpoint: string, method: string, statusCode: number, context: AuditContext, duration?: number): Promise<void> {
+  async logAPIRequest(
+    endpoint: string,
+    method: string,
+    statusCode: number,
+    context: AuditContext,
+    duration?: number
+  ): Promise<void> {
     const severity = statusCode >= 400 ? AuditSeverity.MEDIUM : AuditSeverity.LOW;
     const outcome = statusCode < 400 ? 'success' : 'failure';
 
@@ -426,7 +464,10 @@ export class AuditService extends EventEmitter {
   /**
    * Generate compliance report
    */
-  async generateComplianceReport(request: CreateComplianceReportRequest, generatedBy: string): Promise<ComplianceReport> {
+  async generateComplianceReport(
+    request: CreateComplianceReportRequest,
+    generatedBy: string
+  ): Promise<ComplianceReport> {
     return this.auditDAO.createComplianceReport(request, generatedBy);
   }
 
@@ -541,10 +582,24 @@ export class AuditService extends EventEmitter {
       req.auditContext = context;
       req.audit = {
         log: (eventRequest: CreateAuditEventRequest) => this.logEvent(eventRequest, context),
-        logToggleCreated: (toggleId: string, toggleData: unknown) => this.logToggleCreated(toggleId, toggleData, context),
-        logToggleUpdated: (toggleId: string, before: Error, after: unknown) => this.logToggleUpdated(toggleId, before, after, context),
-        logAccessGranted: (resource: string, permission: string) => this.logAccessGranted(context.actorId || 'unknown', resource, permission, context),
-        logAccessDenied: (resource: string, permission: string, reason?: string) => this.logAccessDenied(context.actorId || 'unknown', resource, permission, context, reason)
+        logToggleCreated: (
+          toggleId: string,
+          toggleData: unknown
+        ) => this.logToggleCreated(toggleId, toggleData, context),
+        logToggleUpdated: (
+          toggleId: string,
+          before: Error,
+          after: unknown
+        ) => this.logToggleUpdated(toggleId, before, after, context),
+        logAccessGranted: (
+          resource: string,
+          permission: string
+        ) => this.logAccessGranted(context.actorId || 'unknown', resource, permission, context),
+        logAccessDenied: (
+          resource: string,
+          permission: string,
+          reason?: string
+        ) => this.logAccessDenied(context.actorId || 'unknown', resource, permission, context, reason)
       };
 
       next();

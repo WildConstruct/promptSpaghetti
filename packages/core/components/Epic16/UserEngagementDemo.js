@@ -6,12 +6,12 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * for the template marketplace user onboarding and engagement features.
  */
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
-import { ProgressTracker } from './ProgressTracker.js';
-import { TutorialPlayer, TutorialBrowser } from './TutorialPlayer.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
+import { ProgressTracker } from './ProgressTracker';
+import { TutorialPlayer, TutorialBrowser } from './TutorialPlayer';
 import { BookOpen, Trophy, Play, Target, TrendingUp, Award, Zap, CheckCircle, ArrowRight } from 'lucide-react';
 export const UserEngagementDemo = ({ userId = 'demo-user-001', showFullFeatures = true, enableInteractiveTutorials = true, className = '' }) => {
     const [selectedTutorial, setSelectedTutorial] = useState(null);

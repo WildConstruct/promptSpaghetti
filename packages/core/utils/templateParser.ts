@@ -479,7 +479,6 @@ class TemplateParser {
   private performParse(template: string): TemplateParseResult {
     const variables: ExtractedVariable[] = [];
     const errors: TemplateError[] = [];
-    const processedTemplate = template;
     
     // Find all potential variable patterns
     const braceRegex = /{([^{}]*)}/g;
@@ -605,7 +604,7 @@ class TemplateParser {
     }
   }
 
-  private highlightVariables(template: string, variables: ExtractedVariable[]): string {
+  private highlightVariables(template: string): string {
     // This would be used by the UI to highlight variables
     // For now, return template as-is since highlighting is done in React
     return template;
@@ -829,7 +828,7 @@ class TemplateParser {
   /**
    * Find related variables based on co-occurrence patterns
    */
-  private findRelatedVariables(variableName: string): string[] {
+  private findRelatedVariables(): string[] {
     // This could be enhanced to track actual co-occurrence patterns
     // For now, return empty array but structure is in place
     return [];
@@ -998,16 +997,12 @@ export const getPreviewWithSamples = (template: string) =>
   templateParser.getPreviewWithSamples(template);
 
 // Context management functions
-export const setVariableContext = (nodeType?: string, existingVariables: string[] = []): void =>
-  templateParser.setContext(nodeType, existingVariables);
-
+export 
 export const trackVariableUsage = (variableName: string): void =>
   templateParser.trackVariableUsage(variableName);
 
 // Clear cache utility
-export const clearTemplateCache = (): void => 
-  templateParser.clearCache();
-// Variable categories for UI filtering
+export // Variable categories for UI filtering
 export const VARIABLE_CATEGORIES = [
   'character', 'setting', 'action', 'mood', 'object', 
   'cinematic', 'temporal', 'descriptive', 'narrative', 'custom'
@@ -1018,9 +1013,7 @@ export type VariableCategory = typeof VARIABLE_CATEGORIES[number];
 /**
  * Generate smart default values for a template based on its variables
  */
-export const generateSmartDefaults = (parseResult: TemplateParseResult): Record<string, string> => {
-  const defaults: Record<string, string> = {};
-  
+export   
   parseResult.variables
     .filter(v => v.isValid)
     .forEach(variable => {
@@ -1039,11 +1032,7 @@ export const generateSmartDefaults = (parseResult: TemplateParseResult): Record<
 /**
  * Get contextual default values based on node type and template content
  */
-export const getContextualDefault = (name: string, nodeType: string, template?: string): string => {
-  // Node-type specific defaults
-  if (nodeType === 'output') {
-    if (name.includes('title') || name.includes('headline')) return 'Epic Adventure Begins';
-    if (name.includes('description') || name.includes('summary')) return 'A thrilling tale of discovery and courage';
+export     if (name.includes('description') || name.includes('summary')) return 'A thrilling tale of discovery and courage';
   }
   
   if (nodeType === 'subject' || nodeType === 'character') {

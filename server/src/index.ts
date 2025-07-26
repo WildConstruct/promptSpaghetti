@@ -17,10 +17,8 @@ import { projectRoutes } from './routes/projects';
 // import { approvalRoutes } from './routes/approval';
 // TEMPORARILY DISABLED - compilation issues
 // import lockingRoutes from './routes/locking';
-// TEMPORARILY DISABLED - llm-randomizer module not found
-// import { randomizerRoutes } from './routes/randomizer';
-// TEMPORARILY DISABLED - compilation issues
-// import { analyticsRoutes } from './routes/analytics';
+import { randomizerRoutes } from './routes/randomizer';
+import { analyticsRoutes } from './routes/analytics';
 // TEMPORARILY DISABLED - FastifyRequest missing session/user properties
 // import { registerFileBrowserAnalyticsRoutes } from './routes/file-browser-analytics';
 // TEMPORARILY DISABLED - compilation issues
@@ -48,7 +46,12 @@ import { ExtensionLifecycleManager } from '../../packages/core/extensions/Extens
 import { authRoutes, jwtAuthMiddleware } from './auth/routes';
 import { enhancedSecurityRoutes } from './auth/routes/enhanced-security';
 import { buildAuthConfig, CORS_CONFIG } from './auth/config';
+import securityAnalyticsPerformanceRoutes from './routes/security-analytics-performance';
+import securityAnalyticsOptimizationRoutes from './routes/security-analytics-optimization';
+import securityAnalyticsReliabilityRoutes from './routes/security-analytics-reliability';
 import { marketplaceRoutes } from './marketplace/routes';
+import { communityRoutes } from './community/community.routes';
+import { knowledgeBaseRoutes } from './knowledge/knowledge-base.routes';
 import { featureToggleRoutes } from './routes/feature-toggles';
 import toggleStateRoutes from './routes/toggle-state';
 import toggleParametersRoutes from './routes/toggle-parameters';
@@ -157,8 +160,8 @@ const ENABLE_PREVIEW_API = process.env.ENABLE_PREVIEW_API !== 'false';
 // Define request schema
 const PreviewRequestSchema = z.object({
   graph: z.object({
-    nodes: z.array(z.any()),
-    edges: z.array(z.any()).optional(),
+    nodes: z.array(z.unknown()),
+    edges: z.array(z.unknown()).optional(),
     seed: z.number().optional()
   }),
   runs: z.number().int().min(1).max(50).default(5),
@@ -187,7 +190,7 @@ type PreviewRequest = z.infer<typeof PreviewRequestSchema>;
 type PreviewResponse = z.infer<typeof PreviewResponseSchema>;
 
 // Epic 8.5 Performance optimization caches
-const graphValidationCache = new Map<string, { valid: boolean, errors?: any[] }>();
+const graphValidationCache = new Map<string, { valid: boolean, errors?: unknown[] }>();
 
 /**
  * Generate multiple outputs from a graph using different seeds
@@ -210,11 +213,11 @@ export async function generatePreviewOutputs(
   seed: number, 
   output: string, 
   executionTimeMs?: number,
-  executionPath?: any,
+  executionPath?: Record<string, unknown>,
   weightChoices?: Array<{
     nodeId: string,
-    selectedOption: any,
-    availableOptions: any[],
+    selectedOption: unknown,
+    availableOptions: unknown[],
     weights?: number[],
     selectionProbability?: number
   }>
@@ -334,8 +337,8 @@ try {
   // Make database available to fastify routes
   server.decorate('db', db);
   // DEPLOYMENT BLOCKER FIX: Add database property as expected by type definitions
-  (server as any).decorate('database', db);
-  (server as any).decorate('databaseService', db);
+  (server as Record<string, unknown>).decorate('database', db);
+  (server as Record<string, unknown>).decorate('databaseService', db);
   
   console.log('Database initialized successfully');
 } catch (error) {
@@ -352,8 +355,8 @@ try {
 }
 
 // Initialize timeout manager and monitoring
-let timeoutManager: any;
-let timeoutMonitoringService: any;
+let timeoutManager: Record<string, unknown> | null = null;
+let timeoutMonitoringService: Record<string, unknown> | null = null;
 try {
   timeoutManager = initializeTimeoutManager();
   timeoutMonitoringService = createTimeoutMonitoringService(timeoutManager);
@@ -478,7 +481,7 @@ let anomalyDetectionService: AnomalyDetectionService | undefined;
 try {
   const db = getDatabase();
   const authConfig = createAuthConfig();
-  const auditService = new AuditService(authConfig, db as any);
+  const auditService = new AuditService(authConfig, db as Record<string, unknown>);
   
   // Anomaly detection configuration
   const anomalyConfig: AnomalyDetectionConfig = {
@@ -499,8 +502,8 @@ try {
   };
 
   anomalyDetectionService = new AnomalyDetectionService(
-    db as any,
-    undefined as any, // Redis will be set up later
+    db as Record<string, unknown>,
+    undefined as Record<string, unknown>, // Redis will be set up later
     auditService,
     anomalyConfig
   );
@@ -516,11 +519,11 @@ let verificationThresholdService: VerificationThresholdService | undefined;
 try {
   const db = getDatabase();
   const authConfig = createAuthConfig();
-  const auditService = new AuditService(authConfig, db as any);
+  const auditService = new AuditService(authConfig, db as Record<string, unknown>);
   
   verificationThresholdService = new VerificationThresholdService(
-    db as any,
-    undefined as any, // Redis will be set up later
+    db as Record<string, unknown>,
+    undefined as Record<string, unknown>, // Redis will be set up later
     auditService,
     {
       // Environment-based configuration overrides
@@ -544,13 +547,13 @@ let locationDetectionService: LocationDetectionService | undefined;
 try {
   const db = getDatabase();
   const authConfig = createAuthConfig();
-  const auditService = new AuditService(authConfig, db as any);
+  const auditService = new AuditService(authConfig, db as Record<string, unknown>);
   
   // Location detection configuration
   const locationConfig: LocationDetectionConfig = {
     enabled: process.env.LOCATION_DETECTION_ENABLED !== 'false',
     providers: {
-      primary: (process.env.LOCATION_PROVIDER as any) || 'ipapi',
+      primary: (process.env.LOCATION_PROVIDER as string) || 'ipapi',
       fallback: process.env.LOCATION_FALLBACK_PROVIDERS?.split(',') || ['ipgeolocation'],
       apiKeys: {
         ipgeolocation: process.env.IPGEOLOCATION_API_KEY || '',
@@ -592,8 +595,8 @@ try {
   };
 
   locationDetectionService = new LocationDetectionService(
-    db as any,
-    undefined as any, // Redis will be set up later
+    db as Record<string, unknown>,
+    undefined as Record<string, unknown>, // Redis will be set up later
     auditService,
     locationConfig
   );
@@ -609,7 +612,7 @@ let locationHistoryAnalysisService: LocationHistoryAnalysisService | undefined;
 try {
   const db = getDatabase();
   const authConfig = createAuthConfig();
-  const auditService = new AuditService(authConfig, db as any);
+  const auditService = new AuditService(authConfig, db as Record<string, unknown>);
   
   // Location history analysis configuration
   const historyAnalysisConfig: LocationHistoryAnalysisConfig = {
@@ -646,8 +649,8 @@ try {
   };
 
   locationHistoryAnalysisService = new LocationHistoryAnalysisService(
-    db as any,
-    undefined as any, // Redis will be set up later
+    db as Record<string, unknown>,
+    undefined as Record<string, unknown>, // Redis will be set up later
     auditService,
     historyAnalysisConfig
   );
@@ -663,7 +666,7 @@ let deviceFingerprintingService: DeviceFingerprintingService | undefined;
 try {
   const db = getDatabase();
   const authConfig = createAuthConfig();
-  const auditService = new AuditService(authConfig, db as any);
+  const auditService = new AuditService(authConfig, db as Record<string, unknown>);
   
   // Device fingerprinting configuration
   const deviceFingerprintConfig: DeviceFingerprintConfig = {
@@ -703,8 +706,8 @@ try {
   };
 
   deviceFingerprintingService = new DeviceFingerprintingService(
-    db as any,
-    undefined as any, // Redis will be set up later
+    db as Record<string, unknown>,
+    undefined as Record<string, unknown>, // Redis will be set up later
     auditService,
     deviceFingerprintConfig
   );
@@ -720,7 +723,7 @@ let behaviorAnalyticsService: BehaviorAnalyticsService | undefined;
 try {
   const db = getDatabase();
   const authConfig = createAuthConfig();
-  const auditService = new AuditService(authConfig, db as any);
+  const auditService = new AuditService(authConfig, db as Record<string, unknown>);
   
   // Behavior analytics configuration
   const behaviorAnalyticsConfig: BehaviorAnalyticsConfig = {
@@ -747,8 +750,8 @@ try {
   };
 
   behaviorAnalyticsService = new BehaviorAnalyticsService(
-    db as any,
-    undefined as any, // Redis will be set up later
+    db as Record<string, unknown>,
+    undefined as Record<string, unknown>, // Redis will be set up later
     auditService,
     behaviorAnalyticsConfig
   );
@@ -767,7 +770,7 @@ let auditTeamCollaborationService: AuditTeamCollaborationService | undefined;
 try {
   const db = getDatabase();
   const authConfig = createAuthConfig();
-  const auditService = new AuditService(authConfig, db as any);
+  const auditService = new AuditService(authConfig, db as Record<string, unknown>);
   
   // Key management configuration for payload encryption
   const keyManagementConfig: KeyManagementConfig = {
@@ -791,15 +794,15 @@ try {
 
   // Initialize access control manager for key management
   const accessControlManager = new AccessControlManager(
-    db as any,
-    undefined as any, // Redis will be set up later
+    db as Record<string, unknown>,
+    undefined as Record<string, unknown>, // Redis will be set up later
     auditService
   );
 
   // Initialize key management service
   keyManagementService = new KeyManagementService(
-    db as any,
-    undefined as any, // Redis will be set up later
+    db as Record<string, unknown>,
+    undefined as Record<string, unknown>, // Redis will be set up later
     auditService,
     accessControlManager,
     keyManagementConfig
@@ -821,17 +824,17 @@ try {
 try {
   const db = getDatabase();
   const authConfig = createAuthConfig();
-  const auditService = new AuditService(authConfig, db as any);
+  const auditService = new AuditService(authConfig, db as Record<string, unknown>);
 
   dataClassificationService = new DataClassificationService(
-    db as any,
-    undefined as any, // Redis will be set up later
+    db as Record<string, unknown>,
+    undefined as Record<string, unknown>, // Redis will be set up later
     auditService
   );
 
   // Initialize audit team collaboration service
   auditTeamCollaborationService = new AuditTeamCollaborationService(
-    db as any,
+    db as Record<string, unknown>,
     auditService
   );
 
@@ -985,6 +988,16 @@ try {
   console.error('Failed to register expiration management routes:', error);
 }
 
+// Register security analytics performance monitoring routes (Epic 31.4.3.1)
+try {
+  server.register(securityAnalyticsPerformanceRoutes);
+  server.register(securityAnalyticsOptimizationRoutes);
+  server.register(securityAnalyticsReliabilityRoutes);
+  console.log('Security analytics performance monitoring routes registered successfully');
+} catch (error) {
+  console.error('Failed to register security analytics performance monitoring routes:', error);
+}
+
 // Register JWT authentication middleware
 server.register(jwtAuthMiddleware);
 
@@ -1023,7 +1036,7 @@ try {
 
   // Set up analytics event storage
   serverAnalyticsCollector.on('events_flushed', (events) => {
-    events.forEach((event: any) => analyticsDAO.storeEvent(event));
+    events.forEach((event: Record<string, unknown>) => analyticsDAO.storeEvent(event));
   });
 
   // Start analytics dashboard
@@ -1073,8 +1086,7 @@ try {
 // server.register(lockingRoutes, { prefix: '/api/locking' });
 
 // Register randomizer routes
-// TEMPORARILY DISABLED - llm-randomizer module not found
-// server.register(randomizerRoutes, { prefix: '/api/randomizer' });
+server.register(randomizerRoutes, { prefix: '/api/randomizer' });
 
 // Register ticket routes
 // TEMPORARILY DISABLED - ticket-dao compilation issues
@@ -1106,8 +1118,7 @@ registerVerificationRoutes(server);
 // Register analytics routes
 if (analyticsDashboard && costTracker) {
   server.register(async (fastify) => {
-    // TEMPORARILY DISABLED - compilation issues
-    // await analyticsRoutes(fastify, analyticsDashboard, costTracker);
+    await analyticsRoutes(fastify, analyticsDashboard, costTracker);
   }, { prefix: '/api' });
 }
 
@@ -1115,7 +1126,9 @@ if (analyticsDashboard && costTracker) {
 try {
   const db = getDatabase();
   server.register(async (fastify) => {
-    await marketplaceRoutes(fastify, db as any);
+    await marketplaceRoutes(fastify, db as Record<string, unknown>);
+    await communityRoutes(fastify, db as Record<string, unknown>);
+    await knowledgeBaseRoutes(fastify, db as Record<string, unknown>);
   }, { prefix: '/api/marketplace' });
   console.log('Marketplace routes registered successfully');
 } catch (error) {
@@ -1133,7 +1146,7 @@ try {
 // Register toggle state routes (Epic 17 - Server Integration)
 try {
   const db = getDatabase();
-  const featureToggleDAO = new FeatureToggleDAO(db as any);
+  const featureToggleDAO = new FeatureToggleDAO(db as Record<string, unknown>);
   
   server.register(async (fastify) => {
     await toggleStateRoutes(fastify, { dao: featureToggleDAO });
@@ -1171,7 +1184,7 @@ if (securityAuditService) {
 try {
   const db = getDatabase();
   const authConfig = createAuthConfig();
-  const auditService = new AuditService(authConfig, db as any);
+  const auditService = new AuditService(authConfig, db as Record<string, unknown>);
   const totpService = new TOTPService(db, undefined, auditService); // Redis will be initialized separately
   
   server.register(async (fastify) => {
@@ -1315,58 +1328,69 @@ try {
   const db = getDatabase();
   const authConfig = createAuthConfig();
   
-  const auditService = new AuditService(authConfig, db as any);
+  const auditService = new AuditService(authConfig, db as Record<string, unknown>);
   
   // Initialize services with proper error handling for constructors
-  let dataClassificationService: any = null;
-  let keyManagementService: any = null;
-  let dataAccessControlService: any = null;
-  let auditWorkflowService: any = null;
-  let accessRequestWorkflowService: any = null;
-  let policyUpdateWorkflowService: any = null;
-  let policyAcceptanceTrackingService: any = null;
-  let oauthGuidanceService: any = null;
-  let policyAuthoringService: any = null;
-  let policyNotificationService: any = null;
-  let complianceReportingService: any = null;
-  let consentCollectionService: any = null;
+  let dataClassificationService: Record<string, unknown> | null = null;
+  let keyManagementService: Record<string, unknown> | null = null;
+  let dataAccessControlService: Record<string, unknown> | null = null;
+  let auditWorkflowService: Record<string, unknown> | null = null;
+  let accessRequestWorkflowService: Record<string, unknown> | null = null;
+  let policyUpdateWorkflowService: Record<string, unknown> | null = null;
+  let policyAcceptanceTrackingService: Record<string, unknown> | null = null;
+  let oauthGuidanceService: Record<string, unknown> | null = null;
+  let policyAuthoringService: Record<string, unknown> | null = null;
+  let policyNotificationService: Record<string, unknown> | null = null;
+  let complianceReportingService: Record<string, unknown> | null = null;
+  let consentCollectionService: Record<string, unknown> | null = null;
   
   try {
-    dataClassificationService = new DataClassificationService(db as any, undefined as any, auditService);
+    dataClassificationService = new DataClassificationService(
+      db as Record<string,
+      unknown>,
+      undefined as Record<string,
+      unknown>,
+      auditService
+    );
   } catch (e) { console.log('DataClassificationService init failed:', e); }
   
   try {
     keyManagementService = new KeyManagementService(
       {} as any,
-      undefined as any,
-      undefined as any,
-      undefined as any,
-      undefined as any
+      undefined as Record<string, unknown>,
+      undefined as Record<string, unknown>,
+      undefined as Record<string, unknown>,
+      undefined as Record<string, unknown>
     );
   } catch (e) { console.log('KeyManagementService init failed:', e); }
   
   try {
-    dataAccessControlService = new DataAccessControlService(db as any, auditService);
+    dataAccessControlService = new DataAccessControlService(db as Record<string, unknown>, auditService);
   } catch (e) { console.log('DataAccessControlService init failed:', e); }
   
   try {
-    auditWorkflowService = new AuditWorkflowService(db as any, auditService, dataAccessControlService);
+    auditWorkflowService = new AuditWorkflowService(
+      db as Record<string,
+      unknown>,
+      auditService,
+      dataAccessControlService
+    );
   } catch (e) { console.log('AuditWorkflowService init failed:', e); }
   
   try {
     accessRequestWorkflowService = new AccessRequestWorkflowService(
-      db as any,
+      db as Record<string, unknown>,
       auditService,
       dataAccessControlService
     );
   } catch (e) { console.log('AccessRequestWorkflowService init failed:', e); }
   
   try {
-    policyUpdateWorkflowService = new PolicyUpdateWorkflowService(db as any, auditService);
+    policyUpdateWorkflowService = new PolicyUpdateWorkflowService(db as Record<string, unknown>, auditService);
   } catch (e) { console.log('PolicyUpdateWorkflowService init failed:', e); }
   
   try {
-    policyAcceptanceTrackingService = new PolicyAcceptanceTrackingService(db as any, auditService);
+    policyAcceptanceTrackingService = new PolicyAcceptanceTrackingService(db as Record<string, unknown>, auditService);
   } catch (e) { console.log('PolicyAcceptanceTrackingService init failed:', e); }
   
   try {
@@ -1401,14 +1425,14 @@ try {
   
   // Initialize Financial Data Lifecycle Service for Epic 19.2.6
   const dataLifecycleAutomationService = new DataLifecycleAutomationService(
-    db as any,
+    db as Record<string, unknown>,
     auditService,
-    undefined as any,
-    undefined as any
+    undefined as Record<string, unknown>,
+    undefined as Record<string, unknown>
   );
-  const dataRetentionFrameworkService = new DataRetentionFrameworkService(db as any, auditService);
+  const dataRetentionFrameworkService = new DataRetentionFrameworkService(db as Record<string, unknown>, auditService);
   const financialDataLifecycleService = new FinancialDataLifecycleService(
-    db as any,
+    db as Record<string, unknown>,
     auditService,
     dataLifecycleAutomationService,
     dataRetentionFrameworkService,
@@ -1451,7 +1475,7 @@ try {
   
   // Register Epic 23 collaboration routes - conflict resolution
   try {
-    const epic23WorkspaceDAO = new Epic23WorkspaceDAO(db as any);
+    const epic23WorkspaceDAO = new Epic23WorkspaceDAO(db as Record<string, unknown>);
     server.register(async (fastify) => {
       await conflictResolutionRoutes(fastify, epic23WorkspaceDAO);
     }, { prefix: '/api/collaboration' });
@@ -1475,7 +1499,7 @@ try {
 
   // Register Model Interpretation & Token Analysis routes
   try {
-    const analyticsCollector = new AnalyticsCollector(db as any);
+    const analyticsCollector = new AnalyticsCollector(db as Record<string, unknown>);
     const tokenInfluenceAnalyzer = TokenInfluenceAnalyzer.getInstance(analyticsCollector);
     const promptAnalyzer = PromptAnalyzer.getInstance(analyticsCollector);
     

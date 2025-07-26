@@ -6,7 +6,7 @@
  */
 
 import { z } from 'zod';
-import { UnifiedAnalyticsEvent, EventFilter } from './UnifiedEventBus';
+import { UnifiedAnalyticsEvent, EventFilter, AnalyticsEventType } from './UnifiedEventBus';
 
 // Event Storage Schema
 export const StoredEventSchema = z.object({
@@ -92,7 +92,11 @@ export interface EventRepository {
   // Analytics queries
   getStatistics(filter?: EventFilter): Promise<EventStatistics>;
   getAggregations(groupBy: string, filter?: EventFilter): Promise<EventAggregation[]>;
-  getTimeSeriesData(metric: string, granularity: string, filter?: EventFilter): Promise<Array<{ timestamp: number; value: number }>>;
+  getTimeSeriesData(
+    metric: string,
+    granularity: string,
+    filter?: EventFilter
+  ): Promise<Array<{ timestamp: number; value: number }>>;
   
   // Maintenance operations
   cleanup(retentionDays: number): Promise<number>;
@@ -792,7 +796,11 @@ class InMemoryEventRepository implements EventRepository {
     }));
   }
 
-  async getTimeSeriesData(metric: string, granularity: string, filter?: EventFilter): Promise<Array<{ timestamp: number; value: number }>> {
+  async getTimeSeriesData(
+    metric: string,
+    granularity: string,
+    filter?: EventFilter
+  ): Promise<Array<{ timestamp: number; value: number }>> {
     // Simplified implementation for in-memory repository
     return [];
   }

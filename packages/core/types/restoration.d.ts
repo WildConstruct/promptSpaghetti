@@ -161,9 +161,9 @@ export declare const RestorationPreviewSessionSchema: z.ZodObject<{
     id: string;
     createdAt: Date;
     projectId: string;
-    expiresAt: Date;
     previewData: Record<string, unknown>;
     createdBy: string;
+    expiresAt: Date;
     sourceSnapshotId: string;
     conflictSummary: Record<string, unknown>;
     targetSnapshotId?: string | undefined;
@@ -171,9 +171,9 @@ export declare const RestorationPreviewSessionSchema: z.ZodObject<{
     id: string;
     createdAt: Date;
     projectId: string;
-    expiresAt: Date;
     previewData: Record<string, unknown>;
     createdBy: string;
+    expiresAt: Date;
     sourceSnapshotId: string;
     targetSnapshotId?: string | undefined;
     conflictSummary?: Record<string, unknown> | undefined;
@@ -812,19 +812,16 @@ export declare const RestorationFilterSchema: z.ZodObject<{
     restorationType?: "full" | "partial" | "selective" | undefined;
 }, {
     status?: "pending" | "completed" | "failed" | "cancelled" | "in_progress" | undefined;
+    projectId?: string | undefined;
     limit?: number | undefined;
     offset?: number | undefined;
-    projectId?: string | undefined;
     dateFrom?: Date | undefined;
     dateTo?: Date | undefined;
     initiatedBy?: string | undefined;
     restorationType?: "full" | "partial" | "selective" | undefined;
 }>;
 export type RestorationFilter = z.infer<typeof RestorationFilterSchema>;
-export declare const validateRestorationConfig: (config: unknown) => RestorationConfig;
-export declare const validateRestorationAttempt: (attempt: unknown) => RestorationAttempt;
-export declare const validateConflictResolution: (resolution: unknown) => ConflictResolutionRequest;
-export declare const RESTORATION_DEFAULTS: {
+export declare export declare export declare export declare const RESTORATION_DEFAULTS: {
     readonly PREVIEW_EXPIRY_MINUTES: 30;
     readonly MAX_OPERATIONS_PER_BATCH: 100;
     readonly MAX_CONFLICTS_PER_SESSION: 1000;

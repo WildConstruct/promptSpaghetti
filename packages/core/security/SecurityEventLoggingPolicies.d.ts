@@ -115,13 +115,13 @@ export declare const SecurityEventSchema: z.ZodObject<{
         performed_by: z.ZodString;
         signature: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        action: string;
         timestamp: Date;
+        action: string;
         performed_by: string;
         signature?: string | undefined;
     }, {
-        action: string;
         timestamp: Date;
+        action: string;
         performed_by: string;
         signature?: string | undefined;
     }>, "many">>;
@@ -157,8 +157,8 @@ export declare const SecurityEventSchema: z.ZodObject<{
     evidence_preserved: boolean;
     forensic_artifacts: string[];
     chain_of_custody: {
-        action: string;
         timestamp: Date;
+        action: string;
         performed_by: string;
         signature?: string | undefined;
     }[];
@@ -173,11 +173,11 @@ export declare const SecurityEventSchema: z.ZodObject<{
     subcategory?: string | undefined;
     user_agent?: string | undefined;
     source_ip?: string | undefined;
+    assigned_to?: string | undefined;
     service_name?: string | undefined;
     status_code?: number | undefined;
     attack_vector?: string | undefined;
     notification_timeline?: string | undefined;
-    assigned_to?: string | undefined;
     custom_fields?: Record<string, unknown> | undefined;
 }, {
     description: string;
@@ -193,8 +193,8 @@ export declare const SecurityEventSchema: z.ZodObject<{
     confidence_score: number;
     event_id: string;
     threat_level: number;
-    tags?: string[] | undefined;
     method?: string | undefined;
+    tags?: string[] | undefined;
     endpoint?: string | undefined;
     request_id?: string | undefined;
     user_id?: string | undefined;
@@ -207,6 +207,7 @@ export declare const SecurityEventSchema: z.ZodObject<{
     regulatory_impact?: boolean | undefined;
     indicators?: string[] | undefined;
     source_ip?: string | undefined;
+    assigned_to?: string | undefined;
     service_name?: string | undefined;
     status_code?: number | undefined;
     attack_vector?: string | undefined;
@@ -215,12 +216,11 @@ export declare const SecurityEventSchema: z.ZodObject<{
     automated_response?: boolean | undefined;
     response_actions?: string[] | undefined;
     escalation_required?: boolean | undefined;
-    assigned_to?: string | undefined;
     evidence_preserved?: boolean | undefined;
     forensic_artifacts?: string[] | undefined;
     chain_of_custody?: {
-        action: string;
         timestamp: Date;
+        action: string;
         performed_by: string;
         signature?: string | undefined;
     }[] | undefined;
@@ -347,10 +347,7 @@ export declare class SecurityEventLoggingPolicyEngine {
      */
     private generateRecommendations;
 }
-export declare const securityEventPolicyEngine: SecurityEventLoggingPolicyEngine;
-export declare const processSecurityEvent: (event: SecurityEvent) => {
-    matched_policies: string[];
-    actions_triggered: string[];
+export declare     actions_triggered: string[];
     notifications_sent: string[];
     compliance_requirements: ComplianceFramework[];
     escalation_required: boolean;

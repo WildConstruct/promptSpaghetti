@@ -7,12 +7,12 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * asset relationships, and creative workflow metrics.
  */
 import { useState, useMemo, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select.js';
-import { Slider } from '../ui/Slider.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
+import { Slider } from '../ui/Slider';
 import { Film, Palette, Clock, Globe, Layers, Eye, Settings, TrendingUp, AlertTriangle, CheckCircle, Play, Pause, SkipForward, Rewind, Camera, Users, Map, Brush, Zap } from 'lucide-react';
 export const VFXPipelineVisualizer = ({ scene, scenes = [], realTimeUpdate = true, showControls = true, onSceneUpdate, className = '' }) => {
     const [activeView, setActiveView] = useState('scene');

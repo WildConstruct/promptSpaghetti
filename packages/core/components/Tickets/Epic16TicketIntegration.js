@@ -6,9 +6,9 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * management functionality including dashboard, details view, and service integration.
  */
 import { useState, useEffect, useMemo } from 'react';
-import { Epic16TicketIntegrationService } from '../../services/Epic16TicketIntegrationService.js';
-import TicketManagementDashboard from './TicketManagementDashboard.js';
-import TicketDetailsView from './TicketDetailsView.js';
+import { Epic16TicketIntegrationService } from '../../services/Epic16TicketIntegrationService';
+import TicketManagementDashboard from './TicketManagementDashboard';
+import TicketDetailsView from './TicketDetailsView';
 export const Epic16TicketIntegration = ({ userId, userRole, config, onConfigChange }) => {
     // Service instance
     const ticketService = useMemo(() => {

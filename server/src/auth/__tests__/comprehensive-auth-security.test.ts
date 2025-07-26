@@ -88,10 +88,18 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
     // Setup default mock behaviors
     mockDb.connect.mockResolvedValue();
     mockRedis.connect.mockResolvedValue();
-    authService.authenticate.mockResolvedValue({ success: true, user: mockUser } as unknown as unknown);
-    tokenService.validateToken.mockResolvedValue({ valid: true, payload: { userId: 1, roles: ['user'] } } as unknown as unknown);
-    sessionService.getSession.mockResolvedValue({ userId: 1, sessionId: 'test-session', valid: true } as unknown as unknown);
-    rbacService.hasPermission.mockResolvedValue(true as unknown as unknown);
+    authService.authenticate.mockResolvedValue({ success: true, user: mockUser } as unknown as unknown as unknown);
+    tokenService.validateToken.mockResolvedValue(
+      { valid: true,
+      payload: { userId: 1,
+      roles: ['user'] } } as unknown as unknown
+     as unknown);
+    sessionService.getSession.mockResolvedValue(
+      { userId: 1,
+      sessionId: 'test-session',
+      valid: true } as unknown as unknown
+     as unknown);
+    rbacService.hasPermission.mockResolvedValue(true as unknown as unknown as unknown);
 
     // Register basic routes for testing
     fastify.get('/protected', async (request, reply) => {
@@ -115,7 +123,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
         
         tokenService.validateToken.mockResolvedValue({
           valid: true,
-          payload: { userId: 1, roles: ['user'], exp: Date.now() + 3600000 }
+          payload: { userId: 1, roles: ['user'], exp: Date.now( as unknown) + 3600000 }
         });
 
         fastify.get('/protected', async (request, reply) => {
@@ -141,7 +149,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
         tokenService.validateToken.mockResolvedValue({
           valid: false,
           error: 'Invalid token signature'
-        } as unknown as unknown);
+        } as unknown as unknown as unknown);
 
         fastify.get('/protected', async (request, reply) => {
           return { message: 'Success' };
@@ -166,7 +174,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           valid: false,
           error: 'Token expired',
           expired: true
-        } as unknown as unknown);
+        } as unknown as unknown as unknown);
 
         fastify.get('/protected', async (request, reply) => {
           return { message: 'Success' };
@@ -195,7 +203,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           accessToken: newAccessToken,
           refreshToken: 'new.refresh.token',
           expiresIn: 3600
-        } as unknown as unknown);
+        } as unknown as unknown as unknown);
 
         fastify.post('/auth/refresh', async (request, reply) => {
           const { refreshToken } = request.body as { refreshToken: string };
@@ -234,7 +242,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           valid: true,
           apiKey: mockApiKey,
           user: mockUser
-        } as unknown as unknown);
+        } as unknown as unknown as unknown);
 
         fastify.get('/api/protected', async (request, reply) => {
           return { message: 'API Success', user: request.user };
@@ -257,7 +265,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
         apiKeyService.validateApiKey.mockResolvedValue({
           valid: false,
           error: 'Invalid API key'
-        } as unknown as unknown);
+        } as unknown as unknown as unknown);
 
         fastify.get('/api/protected', async (request, reply) => {
           return { message: 'API Success' };
@@ -279,7 +287,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           valid: true,
           apiKey: { ...mockApiKey, scopes: ['read:users'] }, // Only read scope
           user: mockUser
-        } as unknown as unknown);
+        } as unknown as unknown as unknown);
 
         // Mock RBAC to check scopes
         rbacService.hasPermission.mockImplementation(async (userId, permission) => {
@@ -325,13 +333,13 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           valid: true,
           apiKey: mockApiKey,
           user: mockUser
-        } as unknown as unknown);
+        } as unknown as unknown as unknown);
 
         apiKeyService.recordUsage.mockResolvedValue();
         apiKeyService.checkRateLimit.mockResolvedValue(
           { allowed: true,
             remaining: 99,
-            resetTime: Date.now() + 3600000 });
+            resetTime: Date.now( as unknown) + 3600000 });
 
         fastify.get('/api/tracked', async (request, reply) => {
           await apiKeyService.recordUsage('ak_test_123');
@@ -355,12 +363,12 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           initiateFlow: jest.fn<unknown[], unknown>().mockResolvedValue({
             authorizationUrl: 'https://provider.com/oauth/authorize?client_id=123&redirect_uri=callback',
             state: 'random_state'
-          } as unknown as unknown),
+          } as unknown as unknown as unknown),
           exchangeCodeForToken: jest.fn<unknown[], unknown>().mockResolvedValue({
             accessToken: 'oauth_access_token',
             refreshToken: 'oauth_refresh_token',
             userInfo: { id: 'oauth_123', email: 'oauth@example.com' }
-          } as unknown as unknown)
+          } as unknown as unknown as unknown)
         };
 
         fastify.get('/auth/oauth/google', async (request, reply) => {
@@ -414,7 +422,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
         });
 
         // Test admin access
-        authService.authenticate.mockResolvedValue({ success: true, user: adminUser } as unknown as unknown);
+        authService.authenticate.mockResolvedValue({ success: true, user: adminUser } as unknown as unknown as unknown);
         const adminResponse = await fastify.inject({
           method: 'GET',
           url: '/admin/dashboard',
@@ -423,8 +431,8 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
         expect(adminResponse.statusCode).toBe(200);
 
         // Test regular user access (should be denied)
-        authService.authenticate.mockResolvedValue({ success: true, user: regularUser } as unknown as unknown);
-        rbacService.hasPermission.mockResolvedValue(false as unknown as unknown);
+        authService.authenticate.mockResolvedValue({ success: true, user: regularUser } as unknown as unknown as unknown);
+        rbacService.hasPermission.mockResolvedValue(false as unknown as unknown as unknown);
         
         const userResponse = await fastify.inject({
           method: 'GET',
@@ -458,7 +466,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           return { system: 'super-admin-only-data' };
         });
 
-        authService.authenticate.mockResolvedValue({ success: true, user: superAdminUser } as unknown as unknown);
+        authService.authenticate.mockResolvedValue({ success: true, user: superAdminUser } as unknown as unknown as unknown);
         
         const response = await fastify.inject({
           method: 'GET',
@@ -501,7 +509,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
         expect(ownProfileResponse.statusCode).toBe(200);
 
         // Test accessing other user's profile (should fail)
-        rbacService.hasResourcePermission.mockResolvedValue(false as unknown as unknown);
+        rbacService.hasResourcePermission.mockResolvedValue(false as unknown as unknown as unknown);
         const otherProfileResponse = await fastify.inject({
           method: 'GET',
           url: '/users/2/profile',
@@ -744,7 +752,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           isValid: true
         };
 
-        sessionService.getSession.mockResolvedValue(sessionData as unknown as unknown);
+        sessionService.getSession.mockResolvedValue(sessionData as unknown as unknown as unknown);
         sessionService.validateSession.mockResolvedValue({
           valid: true,
           session: sessionData,
@@ -754,7 +762,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
             notExpired: true,
             notConcurrentlyUsed: true
           }
-        } as unknown as unknown);
+        } as unknown as unknown as unknown);
 
         fastify.get('/secure/profile', async (request, reply) => {
           const sessionId = request.headers['x-session-id'] as string;
@@ -801,7 +809,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
             notConcurrentlyUsed: true
           },
           suspiciousActivity: true
-        } as unknown as unknown);
+        } as unknown as unknown as unknown);
 
         auditService.logSecurityEvent.mockResolvedValue();
 
@@ -864,10 +872,10 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           success: true, 
           user: mfaUser, 
           requiresMfa: true 
-        } as unknown as unknown);
+        } as unknown as unknown as unknown);
 
         const mockTotpService = {
-          verifyToken: jest.fn<unknown[], unknown>().mockResolvedValue({ valid: true } as unknown as unknown)
+          verifyToken: jest.fn<unknown[], unknown>().mockResolvedValue({ valid: true } as unknown as unknown as unknown)
         };
 
         fastify.post('/auth/verify-mfa', async (request, reply) => {
@@ -894,7 +902,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
         authService.authenticate.mockResolvedValue({ 
           success: true, 
           user: { ...mfaUser, mfaVerified: false }
-        } as unknown as unknown);
+        } as unknown as unknown as unknown);
 
         const mfaResponse = await fastify.inject({
           method: 'GET',
@@ -934,7 +942,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
         authService.authenticate.mockResolvedValue({ 
           success: true, 
           user: { ...mockUser, mfaEnabled: true, mfaVerified: false }
-        } as unknown as unknown);
+        } as unknown as unknown as unknown);
 
         const response = await fastify.inject({
           method: 'POST',
@@ -955,8 +963,8 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
     describe('Device Trust & Recognition', () => {
       it('should implement device fingerprinting and trust scoring', async () => {
         const mockDeviceService = {
-          generateFingerprint: jest.fn<unknown[], unknown>().mockReturnValue('device-fingerprint-123' as unknown as unknown),
-          getTrustScore: jest.fn<unknown[], unknown>().mockResolvedValue({ score: 85, factors: ['known_device', 'consistent_behavior'] } as unknown as unknown),
+          generateFingerprint: jest.fn<unknown[], unknown>().mockReturnValue('device-fingerprint-123' as unknown as unknown as unknown),
+          getTrustScore: jest.fn<unknown[], unknown>().mockResolvedValue({ score: 85, factors: ['known_device', 'consistent_behavior'] } as unknown as unknown as unknown),
           updateDeviceInfo: jest.fn<unknown[], unknown>().mockResolvedValue()
         };
 
@@ -990,7 +998,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           return { operation: 'completed', trustScore: trust.score };
         });
 
-        authService.authenticate.mockResolvedValue({ success: true, user: mockUser } as unknown as unknown);
+        authService.authenticate.mockResolvedValue({ success: true, user: mockUser } as unknown as unknown as unknown);
 
         const response = await fastify.inject({
           method: 'GET',
@@ -1061,8 +1069,8 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           checksum: 'sha256-checksum-here'
         };
 
-        auditService.getAuditLog.mockResolvedValue([auditLog] as unknown as unknown);
-        auditService.verifyAuditLogIntegrity.mockResolvedValue({ valid: true, tampered: false } as unknown as unknown);
+        auditService.getAuditLog.mockResolvedValue([auditLog] as unknown as unknown as unknown);
+        auditService.verifyAuditLogIntegrity.mockResolvedValue({ valid: true, tampered: false } as unknown as unknown as unknown);
 
         fastify.get('/admin/audit-logs', async (request, reply) => {
           const logs = await auditService.getAuditLog({ limit: 100 });
@@ -1074,7 +1082,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
         authService.authenticate.mockResolvedValue({ 
           success: true, 
           user: { ...mockUser, roles: ['admin'] }
-        } as unknown as unknown);
+        } as unknown as unknown as unknown);
 
         const response = await fastify.inject({
           method: 'GET',
@@ -1095,9 +1103,9 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           exportUserData: jest.fn<unknown[], unknown>().mockResolvedValue({
             personalData: { email: 'test@example.com', name: 'Test User' },
             activityLog: [{ action: 'login', timestamp: '2023-01-01T00:00:00Z' }],
-            exportedAt: new Date().toISOString()
+            exportedAt: new Date( as unknown).toISOString()
           }),
-          deleteUserData: jest.fn<unknown[], unknown>().mockResolvedValue({ deleted: true, retainedForLegal: ['audit_logs'] } as unknown as unknown)
+          deleteUserData: jest.fn<unknown[], unknown>().mockResolvedValue({ deleted: true, retainedForLegal: ['audit_logs'] } as unknown as unknown as unknown)
         };
 
         fastify.post('/privacy/export-data', async (request, reply) => {
@@ -1127,7 +1135,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           return deleteResult;
         });
 
-        authService.authenticate.mockResolvedValue({ success: true, user: mockUser } as unknown as unknown);
+        authService.authenticate.mockResolvedValue({ success: true, user: mockUser } as unknown as unknown as unknown);
 
         // Test data export
         const exportResponse = await fastify.inject({
@@ -1170,12 +1178,12 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
             success: true,
             userId: 2,
             verificationToken: 'verify-123'
-          } as unknown as unknown),
-          verifyEmail: jest.fn<unknown[], unknown>().mockResolvedValue({ success: true } as unknown as unknown),
+          } as unknown as unknown as unknown),
+          verifyEmail: jest.fn<unknown[], unknown>().mockResolvedValue({ success: true } as unknown as unknown as unknown),
           setupMfa: jest.fn<unknown[], unknown>().mockResolvedValue({ 
             qrCode: 'data:image/png;base64,...',
             backupCodes: ['backup1', 'backup2']
-          } as unknown as unknown)
+          } as unknown as unknown as unknown)
         };
 
         // Registration endpoint
@@ -1221,7 +1229,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           user: { ...mockUser, id: 2, email: registrationData.email, emailVerified: true },
           token: 'auth-token-123',
           requiresMfa: false
-        } as unknown as unknown);
+        } as unknown as unknown as unknown);
 
         fastify.post('/auth/login', async (request, reply) => {
           const { email, password } = request.body as { email: string; password: string };
@@ -1240,7 +1248,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
         authService.authenticate.mockResolvedValue({ 
           success: true, 
           user: { ...mockUser, id: 2, email: registrationData.email, emailVerified: true }
-        } as unknown as unknown);
+        } as unknown as unknown as unknown);
 
         fastify.get('/protected/welcome', async (request, reply) => {
           return { message: `Welcome ${request.user.email}!`, userId: request.user.id };
@@ -1275,12 +1283,12 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
             incidentId: 'INC-12345',
             autoActions: ['account_locked', 'admin_notified', 'ip_blocked'],
             requiresManualReview: true
-          } as unknown as unknown),
+          } as unknown as unknown as unknown),
           getIncidentStatus: jest.fn<unknown[], unknown>().mockResolvedValue({
             status: 'investigating',
             assignedTo: 'security-team',
             actions: ['account_locked', 'user_notified']
-          } as unknown as unknown)
+          } as unknown as unknown as unknown)
         };
 
         fastify.post('/security/report-incident', async (request, reply) => {

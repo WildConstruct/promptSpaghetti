@@ -5,11 +5,17 @@
  * analytics routes and consolidating dashboard functionality.
  */
 
-import { UnifiedEventBus, UnifiedAnalyticsEvent, EventFilter } from './UnifiedEventBus';
+import { 
+  UnifiedEventBus,
+  UnifiedAnalyticsEvent,
+  EventFilter,
+  AnalyticsEventType,
+  EventCategory
+} from './UnifiedEventBus';
 import { EventRepository } from './EventPersistenceLayer';
 import { AnalyticsAuthorizationService, AuthContext } from './AnalyticsAuthorization';
 import { WebSocketStreamingServer } from './WebSocketStreaming';
-import { AnalyticsEventAdapters } from './AnalyticsEventAdapters';
+import { AnalyticsAdapterManager } from './AnalyticsEventAdapters';
 
 // Dashboard Integration Configuration
 interface DashboardIntegrationConfig {
@@ -54,6 +60,14 @@ interface IntegrationStatus {
   lastHealthCheck: number;
 }
 
+// Statistics Interface
+interface EventStatistics {
+  totalEvents: number;
+  eventsBySource?: Record<string, number>;
+  eventsByCategory?: Record<string, number>;
+  eventsByType?: Record<string, number>;
+}
+
 /**
  * Dashboard Integration Service
  * 
@@ -64,19 +78,19 @@ export class DashboardIntegrationService {
   private eventRepository: EventRepository;
   private authService: AnalyticsAuthorizationService;
   private wsServer: WebSocketStreamingServer;
-  private adapters: AnalyticsEventAdapters;
+  private adapters: AnalyticsAdapterManager;
   private config: DashboardIntegrationConfig;
   
   private legacySystems: Map<string, LegacyAnalyticsSystem> = new Map();
   private performanceMetrics: Map<string, WidgetPerformanceMetrics> = new Map();
-  private integrationCache: Map<string, { data: any; timestamp: number }> = new Map();
+  private integrationCache: Map<string, { data: unknown; timestamp: number }> = new Map();
 
   constructor(
     eventBus: UnifiedEventBus,
     eventRepository: EventRepository,
     authService: AnalyticsAuthorizationService,
     wsServer: WebSocketStreamingServer,
-    adapters: AnalyticsEventAdapters,
+    adapters: AnalyticsAdapterManager,
     config: Partial<DashboardIntegrationConfig> = {}
   ) {
     this.eventBus = eventBus;
@@ -155,9 +169,9 @@ export class DashboardIntegrationService {
     authContext: AuthContext,
     cacheKey?: string
   ): Promise<{
-    metrics: any;
+    metrics: unknown;
     events: UnifiedAnalyticsEvent[];
-    timeSeriesData: any[];
+    timeSeriesData: unknown[];
     integrationStatus: IntegrationStatus;
   }> {
     const startTime = Date.now();
@@ -168,7 +182,12 @@ export class DashboardIntegrationService {
         const cached = this.getCachedData(cacheKey);
         if (cached) {
           console.log(`Dashboard data served from cache for key: ${cacheKey}`);
-          return cached;
+          return cached as {
+            metrics: unknown;
+            events: UnifiedAnalyticsEvent[];
+            timeSeriesData: unknown[];
+            integrationStatus: IntegrationStatus;
+          };
         }
       }
 
@@ -238,7 +257,7 @@ export class DashboardIntegrationService {
    */
   private async calculateConsolidatedMetrics(
     events: UnifiedAnalyticsEvent[],
-    statistics: any,
+    statistics: EventStatistics,
     filter: EventFilter
   ): Promise<any> {
     const timeRange = (filter.endTime || Date.now()) - (filter.startTime || Date.now() - 86400000);
@@ -253,12 +272,12 @@ export class DashboardIntegrationService {
 
     // Top sources from all integrated systems
     const sourceCounts = statistics.eventsBySource || {};
-    const totalSourceEvents = Object.values(sourceCounts).reduce((sum: number, count: any) => sum + count, 0);
+    const totalSourceEvents = Object.values(sourceCounts).reduce((sum: number, count: unknown) => sum + (typeof count === 'number' ? count : 0), 0);
     const topSources = Object.entries(sourceCounts)
       .map(([source, count]) => ({
         source,
-        count: count as number,
-        percentage: totalSourceEvents > 0 ? ((count as number) / totalSourceEvents) * 100 : 0
+        count: typeof count === 'number' ? count : 0,
+        percentage: totalSourceEvents > 0 ? ((typeof count === 'number' ? count : 0) / totalSourceEvents) * 100 : 0
       }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
@@ -294,24 +313,26 @@ export class DashboardIntegrationService {
    * Calculate business metrics from consolidated data
    */
   private async calculateBusinessMetrics(events: UnifiedAnalyticsEvent[], filter: EventFilter): Promise<any> {
-    const businessEvents = events.filter(e => e.category === 'business' || e.category === 'user');
+    const businessEvents = events.filter(e => e.category === EventCategory.BUSINESS || e.category === EventCategory.USER);
     
     // Graph creation metrics
-    const graphEvents = events.filter(e => e.type === 'GRAPH_EXECUTION' || e.type === 'GRAPH_CREATED');
-    const graphsCreated = graphEvents.filter(e => e.type === 'GRAPH_CREATED').length;
-    const graphsExecuted = graphEvents.filter(e => e.type === 'GRAPH_EXECUTION').length;
+    const graphEvents = events.filter(e => e.type === AnalyticsEventType.GRAPH_EXECUTION || e.type === AnalyticsEventType.GRAPH_CREATED);
+    const graphsCreated = graphEvents.filter(e => e.type === AnalyticsEventType.GRAPH_CREATED).length;
+    const graphsExecuted = graphEvents.filter(e => e.type === AnalyticsEventType.GRAPH_EXECUTION).length;
     
     // Revenue metrics (from revenue analytics system)
     const revenueEvents = events.filter(e => e.source === 'RevenueAnalytics');
     const totalRevenue = revenueEvents.reduce((sum, event) => {
-      return sum + (event.data.amount || 0);
+      const amount = typeof event.data.amount === 'number' ? event.data.amount : 0;
+      return sum + amount;
     }, 0);
 
     // Feature usage metrics
     const featureUsage: { [feature: string]: number } = {};
     events.forEach(event => {
-      if (event.data.feature) {
-        featureUsage[event.data.feature] = (featureUsage[event.data.feature] || 0) + 1;
+      const feature = typeof event.data.feature === 'string' ? event.data.feature : null;
+      if (feature) {
+        featureUsage[feature] = (featureUsage[feature] || 0) + 1;
       }
     });
 
@@ -392,7 +413,7 @@ export class DashboardIntegrationService {
       }
 
       // Get widget-specific data using appropriate adapter
-      let widgetData: any = {};
+      let widgetData: Record<string, unknown> = {};
       
       switch (widgetType) {
         case 'performance_metrics':
@@ -431,7 +452,7 @@ export class DashboardIntegrationService {
    */
   private async getPerformanceWidgetData(filter: EventFilter, authContext: AuthContext): Promise<any> {
     const performanceEvents = await this.eventRepository.findMany({
-      filter: { ...filter, categories: ['performance'] },
+      filter: { ...filter, categories: [EventCategory.PERFORMANCE] },
       limit: 1000,
       sortBy: 'timestamp',
       sortOrder: 'desc'
@@ -440,21 +461,21 @@ export class DashboardIntegrationService {
     const timeSeriesData = await this.eventRepository.getTimeSeriesData(
       'avg',
       'minute',
-      { ...filter, categories: ['performance'] }
+      { ...filter, categories: [EventCategory.PERFORMANCE] }
     );
 
     // Calculate performance metrics
     const executionTimes = performanceEvents
-      .filter(e => e.data.executionTime)
-      .map(e => e.data.executionTime);
+      .filter(e => typeof e.data.executionTime === 'number')
+      .map(e => e.data.executionTime as number);
 
     const avgExecutionTime = executionTimes.length > 0 
       ? executionTimes.reduce((sum, time) => sum + time, 0) / executionTimes.length 
       : 0;
 
     const memoryUsage = performanceEvents
-      .filter(e => e.data.memoryUsage)
-      .map(e => e.data.memoryUsage);
+      .filter(e => typeof e.data.memoryUsage === 'number')
+      .map(e => e.data.memoryUsage as number);
 
     const avgMemoryUsage = memoryUsage.length > 0
       ? memoryUsage.reduce((sum, usage) => sum + usage, 0) / memoryUsage.length
@@ -477,11 +498,11 @@ export class DashboardIntegrationService {
    */
   private async getIntegrationWidgetData(filter: EventFilter, authContext: AuthContext): Promise<any> {
     const integrationEvents = await this.eventRepository.findMany({
-      filter: { ...filter, categories: ['integration'] },
+      filter: { ...filter, categories: [EventCategory.INTEGRATION] },
       limit: 1000
     });
 
-    const integrationStatus: { [key: string]: any } = {};
+    const integrationStatus: Record<string, unknown> = {};
     
     for (const [name, system] of this.legacySystems) {
       const systemEvents = integrationEvents.filter(e => e.source === name);
@@ -510,7 +531,7 @@ export class DashboardIntegrationService {
    */
   private async getBusinessWidgetData(filter: EventFilter, authContext: AuthContext): Promise<any> {
     const businessEvents = await this.eventRepository.findMany({
-      filter: { ...filter, categories: ['business', 'user'] },
+      filter: { ...filter, categories: [EventCategory.BUSINESS, EventCategory.USER] },
       limit: 1000
     });
 
@@ -519,7 +540,7 @@ export class DashboardIntegrationService {
     const timeSeriesData = await this.eventRepository.getTimeSeriesData(
       'count',
       'hour',
-      { ...filter, categories: ['business'] }
+      { ...filter, categories: [EventCategory.BUSINESS] }
     );
 
     return {
@@ -539,8 +560,8 @@ export class DashboardIntegrationService {
     const securityEvents = await this.eventRepository.findMany({
       filter: { 
         ...filter, 
-        categories: ['security'],
-        types: ['SECURITY_EVENT', 'FRAUD_DETECTION', 'AUTH_EVENT']
+        categories: [EventCategory.SECURITY],
+        types: [AnalyticsEventType.SECURITY_EVENT, AnalyticsEventType.FRAUD_DETECTION, AnalyticsEventType.AUTH_EVENT]
       },
       limit: 100,
       sortBy: 'timestamp',
@@ -549,8 +570,8 @@ export class DashboardIntegrationService {
 
     const riskLevels = { high: 0, medium: 0, low: 0 };
     securityEvents.forEach(event => {
-      const riskLevel = event.data.riskLevel || 'low';
-      if (riskLevels.hasOwnProperty(riskLevel)) {
+      const riskLevel = typeof event.data.riskLevel === 'string' ? event.data.riskLevel : 'low';
+      if (riskLevel in riskLevels) {
         riskLevels[riskLevel as keyof typeof riskLevels]++;
       }
     });
@@ -712,7 +733,7 @@ export class DashboardIntegrationService {
    * Helper Methods
    */
 
-  private getCachedData(key: string): any {
+  private getCachedData(key: string): unknown {
     const cached = this.integrationCache.get(key);
     if (cached && Date.now() - cached.timestamp < this.config.cacheTTL) {
       return cached.data;
@@ -720,7 +741,7 @@ export class DashboardIntegrationService {
     return null;
   }
 
-  private setCachedData(key: string, data: any): void {
+  private setCachedData(key: string, data: unknown): void {
     this.integrationCache.set(key, {
       data,
       timestamp: Date.now()
@@ -786,8 +807,8 @@ export class DashboardIntegrationService {
     return (degradedSystems * 5) + (failingSystems * 15); // Penalty points
   }
 
-  private getLegacySystemsStatus(): { [key: string]: any } {
-    const status: { [key: string]: any } = {};
+  private getLegacySystemsStatus(): Record<string, unknown> {
+    const status: Record<string, unknown> = {};
     
     for (const [name, system] of this.legacySystems) {
       status[name] = {
@@ -801,7 +822,7 @@ export class DashboardIntegrationService {
     return status;
   }
 
-  private getAggregatedPerformanceMetrics(): any {
+  private getAggregatedPerformanceMetrics(): unknown {
     const metrics = Array.from(this.performanceMetrics.values());
     
     if (metrics.length === 0) {
@@ -836,7 +857,7 @@ export class DashboardIntegrationService {
   getIntegrationSummary(): {
     legacySystems: LegacyAnalyticsSystem[];
     performanceMetrics: WidgetPerformanceMetrics[];
-    integrationStatus: any;
+    integrationStatus: unknown;
   } {
     return {
       legacySystems: Array.from(this.legacySystems.values()),

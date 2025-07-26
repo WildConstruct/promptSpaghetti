@@ -163,7 +163,7 @@ export interface KeyPermission {
 export interface PermissionCondition {
   field: string;
   operator: 'eq' | 'ne' | 'in' | 'nin' | 'gt' | 'gte' | 'lt' | 'lte' | 'regex' | 'exists';
-  value: any;
+  value: unknown;
   logicalOperator?: 'AND' | 'OR';
 }
 
@@ -235,7 +235,7 @@ export interface KeyOperationContext {
   operationType: KeyOperationType;
   requestedResource?: string;
   securityContext?: SecurityContext;
-  auditMetadata?: Record<string, any>;
+  auditMetadata?: Record<string, unknown>;
 }
 
 export interface SecurityContext {
@@ -365,7 +365,7 @@ export interface ComplianceRequirement {
 export interface ValidationRule {
   field: string;
   rule: 'required' | 'min_length' | 'max_length' | 'pattern' | 'enum';
-  value?: any;
+  value?: unknown;
   errorMessage: string;
 }
 
@@ -419,8 +419,8 @@ export interface KeyEvent {
   // Event Details
   operationSuccess: boolean;
   errorMessage?: string;
-  oldValue?: any;
-  newValue?: any;
+  oldValue?: unknown;
+  newValue?: unknown;
   
   // Security
   riskScore: number;
@@ -431,7 +431,7 @@ export interface KeyEvent {
   complianceContext: ComplianceContext;
   
   // Metadata
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
 }
 
 export interface ComplianceContext {

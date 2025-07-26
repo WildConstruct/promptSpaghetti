@@ -5,13 +5,13 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Comprehensive badge and achievement display system for Wild Construct creators
  */
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Progress } from '../ui/Progress.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select.js';
-import { useBadgeSystem } from '../../hooks/useBadgeSystem.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Progress } from '../ui/Progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
+import { useBadgeSystem } from '../../hooks/useBadgeSystem';
 import { Trophy, Star, Award, Target, TrendingUp, Users, Crown, Shield, Zap, Gift, Bell, X } from 'lucide-react';
 export const BadgeShowcase = ({ userId, variant = 'full', showProgressBars = true, enableNotifications = true, className = '' }) => {
     const { userBadges, availableBadges, recentUnlocks, getBadgesByCategory, getBadgesByTier, getNextBadges, getBadgeProgress, getStatistics, getLeaderboardPosition, markNotificationRead, clearAllNotifications, hasUnreadNotifications, isLoading } = useBadgeSystem({

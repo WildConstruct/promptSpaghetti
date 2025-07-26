@@ -4,14 +4,21 @@
 
 import { Graph, Node } from '../../graphSchema';
 // Use Node.js crypto in Node environment, or web crypto API in browser
-let createHash: any;
+interface HashFunction {
+  update: (data: string) => {
+    digest: (format: string) => string;
+  };
+}
+
+let createHash: (algorithm: string) => HashFunction;
 try {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   createHash = require('crypto').createHash;
 } catch {
   // Browser environment - use a simple hash alternative
-  createHash = (algorithm: string) => ({
+  createHash = () => ({
     update: (data: string) => ({
-      digest: (format: string) => {
+      digest: () => {
         // Simple hash fallback for browser testing
         let hash = 0;
         for (let i = 0; i < data.length; i++) {
@@ -148,8 +155,8 @@ export class GraphSerializer {
   /**
    * Extract properties from a node based on its type
    */
-  private static extractNodeProperties(node: Node): Record<string, any> {
-    const props: Record<string, any> = {};
+  private static extractNodeProperties(node: Node): Record<string, unknown> {
+    const props: Record<string, unknown> = {};
 
     switch (node.type) {
     case 'WeightedChoice':
@@ -207,7 +214,7 @@ export class GraphSerializer {
   /**
    * Serialize a value to YAML format
    */
-  private static serializeValue(value: any): string {
+  private static serializeValue(value: unknown): string {
     if (typeof value === 'string') {
       // Quote strings that might be ambiguous
       if (value.includes('\n') || value.includes(':') || value.includes('"')) {

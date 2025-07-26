@@ -7,10 +7,10 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
 export class ClassificationHandlingRulesService {
-    handlingRequirements = new Map();
-    handlingRules = new Map();
-    violations = [];
-    complianceChecks = [];
+    handlingRequirements: Map<string, any> = new Map();
+    handlingRules: Map<string, any> = new Map();
+    violations: any[] = [];
+    complianceChecks: any[] = [];
     constructor() {
         this.initializeDefaultHandlingRequirements();
         this.initializeDefaultHandlingRules();
@@ -18,7 +18,7 @@ export class ClassificationHandlingRulesService {
     /**
      * Initialize default handling requirements for each classification level
      */
-    initializeDefaultHandlingRequirements() {
+    initializeDefaultHandlingRequirements(): void {
         const requirements = {
             PUBLIC: {
                 storage: {

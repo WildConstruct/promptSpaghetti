@@ -197,6 +197,37 @@ export const DirectorPreviewToolbar: React.FC<DirectorPreviewToolbarProps> = ({
                 />
                 <span>Variance Analysis</span>
               </label>
+              
+              {/* Epic 7.3 - Advanced Settings Button */}
+              <button
+                onClick={() => {
+                  // Trigger Alt+S keyboard shortcut to open settings modal
+                  const event = new KeyboardEvent('keydown', {
+                    key: 's',
+                    altKey: true,
+                    bubbles: true
+                  });
+                  document.dispatchEvent(event);
+                }}
+                className="setting-control"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '6px 10px',
+                  backgroundColor: 'transparent',
+                  border: '1px solid #666',
+                  borderRadius: '4px',
+                  color: '#fff',
+                  fontSize: '12px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                title="Open Advanced Settings (Alt+S)"
+              >
+                <span>⚙️</span>
+                <span>Advanced</span>
+              </button>
             </div>
           </div>
         )}

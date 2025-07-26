@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from 'react';
-import { ConnectionState, ConnectionQuality } from '../../network-resilience/ConnectionStateManager.js';
-import { ReconnectionState } from '../../network-resilience/ReconnectionHandler.js';
+import { ConnectionState, ConnectionQuality } from '../../network-resilience/ConnectionStateManager';
+import { ReconnectionState } from '../../network-resilience/ReconnectionHandler';
 export const ConnectionStatusIndicator = ({ status, showDetails = false, compact = false, className = '', onClick }) => {
     const [isAnimating, setIsAnimating] = useState(false);
     useEffect(() => {

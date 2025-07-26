@@ -16,8 +16,8 @@
  */
 import { EventEmitter } from 'events';
 import { createHash, createHmac, randomBytes } from 'crypto';
-import { ComplianceFramework } from './DataClassifier.js';
-import { AlertSeverity } from './ClassificationMonitor.js';
+import { ComplianceFramework } from './DataClassifier';
+import { AlertSeverity } from './ClassificationMonitor';
 // Audit Event Types
 export var AuditEventType;
 (function (AuditEventType) {

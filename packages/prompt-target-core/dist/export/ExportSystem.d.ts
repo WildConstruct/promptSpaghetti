@@ -23,7 +23,7 @@ export interface ExportOptions {
     customFields?: string[];
     templateId?: string;
     batchSize?: number;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
 }
 /**
  * Export request
@@ -55,7 +55,7 @@ export interface ExportResult {
     downloadCount: number;
     error?: string;
     progress?: number;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
 }
 /**
  * Export template for reusable configurations
@@ -113,7 +113,13 @@ export declare class ExportSystem {
     /**
      * Create export request
      */
-    createExportRequest(name: string, itemIds: string[], options: ExportOptions, description?: string, onProgress?: ExportProgressCallback): Promise<string>;
+    createExportRequest(
+      name: string,
+      itemIds: string[],
+      options: ExportOptions,
+      description?: string,
+      onProgress?: ExportProgressCallback
+    ): Promise<string>;
     /**
      * Get export result
      */
@@ -129,7 +135,13 @@ export declare class ExportSystem {
     /**
      * Create export template
      */
-    createTemplate(name: string, options: ExportOptions, description?: string, isPublic?: boolean, tags?: string[]): string;
+    createTemplate(
+      name: string,
+      options: ExportOptions,
+      description?: string,
+      isPublic?: boolean,
+      tags?: string[]
+    ): string;
     /**
      * Get export template
      */

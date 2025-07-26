@@ -2,7 +2,7 @@
 // Hook for managing orphaned edge cleanup when variable ports change
 import { useCallback, useRef, useEffect } from 'react';
 import { useReactFlow } from 'reactflow';
-import { parseTemplate } from '../utils/templateParser.js';
+import { parseTemplate } from '../utils/templateParser';
 /**
  * Hook for managing orphaned edge cleanup when variable ports change dynamically
  */

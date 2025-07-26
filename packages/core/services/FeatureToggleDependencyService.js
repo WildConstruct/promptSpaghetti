@@ -107,7 +107,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
     /**
      * Add or update a dependency between toggles
      */
-    async addDependency(dependency) {
+    async addDependency(dependency: any): Promise<any> {
         const id = this.generateDependencyId(dependency.sourceToggleId, dependency.targetToggleId);
         const fullDependency = {
             ...dependency,
@@ -128,7 +128,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
     /**
      * Remove a dependency
      */
-    async removeDependency(dependencyId) {
+    async removeDependency(dependencyId: string): Promise<boolean> {
         const dependency = this.dependencies.get(dependencyId);
         if (!dependency) {
             return false;
@@ -141,7 +141,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
     /**
      * Validate toggle activation against dependencies
      */
-    async validateToggleActivation(toggleId) {
+    async validateToggleActivation(toggleId: string): Promise<any> {
         const blockers = [];
         const warnings = [];
         const requirements = [];

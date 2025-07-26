@@ -104,8 +104,8 @@ export const PolicyManagementDashboard: React.FC = () => {
   const [selectedViolation, setSelectedViolation] = useState<Violation | null>(null);
   const [policyModalVisible, setPolicyModalVisible] = useState(false);
   const [violationDrawerVisible, setViolationDrawerVisible] = useState(false);
-  const [___filters, setFilters] = useState({
-    dateRange: null as any,
+  const [_filters, setFilters] = useState({
+    dateRange: null as { start: Date; end: Date } | null,
     policyType: null as string | null,
     violationStatus: null as string | null
   });

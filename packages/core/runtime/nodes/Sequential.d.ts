@@ -33,14 +33,14 @@ export interface SequenceState {
  */
 export declare class LinearPattern implements SequencePattern {
     type: 'linear';
-    getNext(sequence: string[], state: SequenceState, ______ctx: AdvancedExecutionContext): string;
+    getNext(sequence: string[], state: SequenceState, _ctx: AdvancedExecutionContext): string;
 }
 /**
  * Cyclical sequence pattern - cycles through items infinitely
  */
 export declare class CyclicalPattern implements SequencePattern {
     type: 'cyclical';
-    getNext(sequence: string[], state: SequenceState, ______ctx: AdvancedExecutionContext): string;
+    getNext(sequence: string[], state: SequenceState, _ctx: AdvancedExecutionContext): string;
 }
 /**
  * Random sequence pattern - selects items randomly
@@ -63,7 +63,10 @@ export declare class WeightedPattern implements SequencePattern {
 /**
  * Factory function to create sequence patterns
  */
-export declare function createSequencePattern(type: SequencePattern['type'], config?: SequencePatternConfig): SequencePattern;
+export declare function createSequencePattern(
+  type: SequencePattern['type'],
+  config?: SequencePatternConfig
+): SequencePattern;
 /**
  * Advanced sequential node with stateful sequence processing
  * Supports multiple traversal patterns: linear, cyclical, random, weighted
@@ -101,15 +104,17 @@ export declare class SequentialNode extends AdvancedRuntimeNode<string> {
 /**
  * Factory function for creating Sequential nodes
  */
-export declare function createSequentialNode(id: string, sequence: string[], patternType?: SequencePattern['type'], patternConfig?: SequencePatternConfig): SequentialNode;
+export declare function createSequentialNode(
+  id: string,
+  sequence: string[],
+  patternType?: SequencePattern['type'],
+  patternConfig?: SequencePatternConfig
+): SequentialNode;
 /**
  * Utility functions for common sequential patterns
  */
-export declare const SequentialPresets: {
-    /** Simple linear sequence */
-    readonly linear: (______sequence: string[]) => SequencePattern;
-    /** Infinite cycling sequence */
-    readonly cycle: (______sequence: string[]) => SequencePattern;
+export declare     /** Infinite cycling sequence */
+    readonly cycle: (_sequence: string[]) => SequencePattern;
     /** Random selection with repeats */
     readonly random: (allowRepeats?: boolean) => SequencePattern;
     /** Random selection without repeats until exhausted */

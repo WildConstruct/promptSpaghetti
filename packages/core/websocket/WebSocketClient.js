@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { WSMessageSchema } from '../../../server/src/websocket/types.js';
+import { WSMessageSchema } from '../../../server/src/websocket/types';
 export class WebSocketClient extends EventEmitter {
     ws = null;
     config;
@@ -10,7 +10,7 @@ export class WebSocketClient extends EventEmitter {
     connectionTimeout = null;
     documentId = null;
     userId = null;
-    constructor(config) {
+    constructor(config: any) {
         super();
         this.config = config;
         this.state = {
@@ -21,7 +21,7 @@ export class WebSocketClient extends EventEmitter {
     /**
      * Connect to WebSocket server
      */
-    async connect(documentId, userId) {
+    async connect(documentId: string, userId?: string): Promise<void> {
         if (this.state.status === 'connecting' || this.state.status === 'connected') {
             return;
         }
@@ -40,7 +40,7 @@ export class WebSocketClient extends EventEmitter {
     /**
      * Disconnect from WebSocket server
      */
-    disconnect() {
+    disconnect(): void {
         this.clearTimeouts();
         if (this.ws) {
             this.ws.close();
@@ -52,7 +52,7 @@ export class WebSocketClient extends EventEmitter {
     /**
      * Send graph update
      */
-    sendGraphUpdate(update) {
+    sendGraphUpdate(update: any): boolean {
         return this.sendMessage({
             type: 'graph_update',
             payload: update,
@@ -64,7 +64,7 @@ export class WebSocketClient extends EventEmitter {
     /**
      * Send presence update
      */
-    sendPresenceUpdate(presence) {
+    sendPresenceUpdate(presence: any): boolean {
         return this.sendMessage({
             type: 'presence_update',
             payload: presence,
@@ -76,7 +76,7 @@ export class WebSocketClient extends EventEmitter {
     /**
      * Send cursor position update
      */
-    sendCursorUpdate(x, y, nodeId, viewportBounds) {
+    sendCursorUpdate(x: number, y: number, nodeId?: string, viewportBounds?: any): boolean {
         return this.sendMessage({
             type: 'cursor_update',
             payload: { x, y, nodeId, viewportBounds },
@@ -88,7 +88,7 @@ export class WebSocketClient extends EventEmitter {
     /**
      * Send selection update
      */
-    sendSelectionUpdate(nodeIds, edgeIds, selectionBox) {
+    sendSelectionUpdate(nodeIds: string[], edgeIds: string[], selectionBox?: any): boolean {
         return this.sendMessage({
             type: 'selection_update',
             payload: { nodeIds, edgeIds, selectionBox },
@@ -100,7 +100,7 @@ export class WebSocketClient extends EventEmitter {
     /**
      * Send activity update
      */
-    sendActivityUpdate(currentTool, isTyping, focusedNodeId) {
+    sendActivityUpdate(currentTool: string, isTyping: boolean, focusedNodeId?: string): boolean {
         return this.sendMessage({
             type: 'activity_update',
             payload: { currentTool, isTyping, focusedNodeId },
@@ -112,7 +112,7 @@ export class WebSocketClient extends EventEmitter {
     /**
      * Request presence data
      */
-    requestPresenceData() {
+    requestPresenceData(): boolean {
         return this.sendMessage({
             type: 'presence_request',
             payload: {},
@@ -124,7 +124,7 @@ export class WebSocketClient extends EventEmitter {
     /**
      * Send authentication request
      */
-    sendAuthRequest(token) {
+    sendAuthRequest(token: string): boolean {
         return this.sendMessage({
             type: 'auth_request',
             payload: {
@@ -138,47 +138,47 @@ export class WebSocketClient extends EventEmitter {
     /**
      * Get current connection state
      */
-    getConnectionState() {
+    getConnectionState(): any {
         return { ...this.state };
     }
     /**
      * Check if connected and authenticated
      */
-    isConnected() {
+    isConnected(): boolean {
         return this.state.status === 'authenticated' || this.state.status === 'connected';
     }
     /**
      * Check if currently connecting
      */
-    isConnecting() {
+    isConnecting(): boolean {
         return this.state.status === 'connecting' || this.state.status === 'authenticating';
     }
     /**
      * Get queued messages count
      */
-    getQueuedMessagesCount() {
+    getQueuedMessagesCount(): number {
         return this.messageQueue.length;
     }
     /**
      * Clear message queue
      */
-    clearMessageQueue() {
+    clearMessageQueue(): void {
         this.messageQueue = [];
     }
     /**
      * Establish WebSocket connection
      */
-    async establishConnection() {
-        return new Promise((resolve, reject) => {
+    async establishConnection(): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
             try {
                 this.ws = new WebSocket(this.config.url);
                 // Set connection timeout
-                this.connectionTimeout = window.setTimeout(() => {
+                this.connectionTimeout = window.setTimeout((): void => {
                     if (this.state.status === 'connecting') {
                         reject(new Error('Connection timeout'));
                     }
                 }, this.config.connectionTimeout);
-                this.ws.onopen = () => {
+                this.ws.onopen = (): void => {
                     this.clearTimeouts();
                     this.state.status = 'connected';
                     this.state.lastConnected = Date.now();
@@ -188,13 +188,13 @@ export class WebSocketClient extends EventEmitter {
                     this.emit('connected');
                     resolve();
                 };
-                this.ws.onmessage = (event) => {
+                this.ws.onmessage = (event: MessageEvent): void => {
                     this.handleMessage(event.data);
                 };
-                this.ws.onclose = (event) => {
+                this.ws.onclose = (event: CloseEvent): void => {
                     this.handleDisconnection(event);
                 };
-                this.ws.onerror = (error) => {
+                this.ws.onerror = (error: Event): void => {
                     this.handleConnectionError(error);
                     reject(error);
                 };
@@ -207,7 +207,7 @@ export class WebSocketClient extends EventEmitter {
     /**
      * Handle incoming message
      */
-    handleMessage(data) {
+    handleMessage(data: string): void {
         try {
             const message = WSMessageSchema.parse(JSON.parse(data));
             switch (message.type) {
@@ -261,7 +261,7 @@ export class WebSocketClient extends EventEmitter {
     /**
      * Handle connection confirmation message
      */
-    handleConnectMessage(message) {
+    handleConnectMessage(message: any): void {
         const { requiresAuthentication } = message.payload;
         if (requiresAuthentication && this.config.authToken) {
             // Send authentication request
@@ -277,7 +277,7 @@ export class WebSocketClient extends EventEmitter {
     /**
      * Handle authentication response
      */
-    handleAuthResponse(message) {
+    handleAuthResponse(message: any): void {
         const { success, message: authMessage } = message.payload;
         if (success) {
             this.state.status = 'authenticated';
@@ -292,7 +292,7 @@ export class WebSocketClient extends EventEmitter {
     /**
      * Handle disconnection
      */
-    handleDisconnection(event) {
+    handleDisconnection(event: CloseEvent): void {
         this.clearTimeouts();
         this.state.status = 'disconnected';
         this.emit('disconnected', {
@@ -308,7 +308,7 @@ export class WebSocketClient extends EventEmitter {
     /**
      * Handle connection error
      */
-    handleConnectionError(error) {
+    handleConnectionError(error: any): void {
         this.clearTimeouts();
         this.state.status = 'error';
         this.state.error = error.message || 'Connection error';
@@ -317,7 +317,7 @@ export class WebSocketClient extends EventEmitter {
     /**
      * Schedule reconnection attempt
      */
-    scheduleReconnect() {
+    scheduleReconnect(): void {
         this.state.reconnectAttempts++;
         const delay = Math.min(this.config.reconnectInterval * Math.pow(2, this.state.reconnectAttempts - 1), 30000 // Max 30 seconds
         );
@@ -326,10 +326,10 @@ export class WebSocketClient extends EventEmitter {
             maxAttempts: this.config.maxReconnectAttempts,
             delay
         });
-        this.reconnectTimeout = window.setTimeout(() => {
+        this.reconnectTimeout = window.setTimeout((): void => {
             if (this.documentId) {
                 this.connect(this.documentId, this.userId || undefined)
-                    .catch(error => {
+                    .catch((error: any) => {
                     console.error('Reconnection failed:', error);
                     if (this.state.reconnectAttempts < this.config.maxReconnectAttempts) {
                         this.scheduleReconnect();
@@ -344,7 +344,7 @@ export class WebSocketClient extends EventEmitter {
     /**
      * Send message to server
      */
-    sendMessage(message) {
+    sendMessage(message: any): boolean {
         if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
             if (this.config.enableOfflineQueue) {
                 this.messageQueue.push(message);
@@ -364,7 +364,7 @@ export class WebSocketClient extends EventEmitter {
     /**
      * Process queued messages
      */
-    processMessageQueue() {
+    processMessageQueue(): void {
         if (this.messageQueue.length === 0) {
             return;
         }
@@ -381,11 +381,11 @@ export class WebSocketClient extends EventEmitter {
     /**
      * Start heartbeat ping
      */
-    startHeartbeat() {
+    startHeartbeat(): void {
         if (this.heartbeatInterval) {
             clearInterval(this.heartbeatInterval);
         }
-        this.heartbeatInterval = window.setInterval(() => {
+        this.heartbeatInterval = window.setInterval((): void => {
             this.sendMessage({
                 type: 'ping',
                 payload: { timestamp: Date.now() },
@@ -396,7 +396,7 @@ export class WebSocketClient extends EventEmitter {
     /**
      * Clear all timeouts and intervals
      */
-    clearTimeouts() {
+    clearTimeouts(): void {
         if (this.connectionTimeout) {
             clearTimeout(this.connectionTimeout);
             this.connectionTimeout = null;

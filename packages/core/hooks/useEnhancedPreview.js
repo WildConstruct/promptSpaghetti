@@ -5,8 +5,8 @@
  * designed for film industry workflows.
  */
 import { useCallback, useRef, useMemo } from 'react';
-import { useResultManagementStore } from '../stores/resultManagementStore.js';
-import { ErrorFactory } from '../errors/ErrorFactory.js';
+import { useResultManagementStore } from '../stores/resultManagementStore';
+import { ErrorFactory } from '../errors/ErrorFactory';
 export const useEnhancedPreviewResultManagement = () => {
     const abortRef = useRef(null);
     const resultManagement = useResultManagementStore();

@@ -7,7 +7,12 @@
  */
 
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { APIKeyExpirationService, APIKeyType, ExpirationPolicy, APIKeyStatus } from '../auth/services/APIKeyExpirationService';
+import { 
+  APIKeyExpirationService,
+  APIKeyType,
+  ExpirationPolicy,
+  APIKeyStatus
+} from '../auth/services/APIKeyExpirationService';
 
 // Request/Response Types
 interface RegisterKeyRequest {
@@ -460,7 +465,7 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
         end: new Date(endDate)
       };
 
-      const filters: any = {};
+      const filters: Record<string, unknown> = {};
       if (keyTypes) {
         filters.keyTypes = keyTypes.split(',') as APIKeyType[];
       }

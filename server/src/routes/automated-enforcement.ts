@@ -60,7 +60,7 @@ interface EnforcementRoutes {
         name: string;
         description?: string;
         enabled: boolean;
-        policy_config: any;
+        policy_config: Record<string, unknown>;
       };
     };
   };
@@ -71,7 +71,7 @@ interface EnforcementRoutes {
         name?: string;
         description?: string;
         enabled?: boolean;
-        policy_config?: any;
+        policy_config?: Record<string, unknown>;
       };
     };
     DELETE: {
@@ -84,7 +84,7 @@ interface EnforcementRoutes {
       Body: {
         action: 'approve' | 'reject' | 'modify';
         admin_notes?: string;
-        modifications?: any;
+        modifications?: Record<string, unknown>;
       };
     };
   };
@@ -200,7 +200,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
 
         // Build query conditions
         let whereClause = '';
-        const params: any[] = [];
+        const params: unknown[] = [];
         const conditions: string[] = [];
 
         if (entity_type) {
@@ -555,7 +555,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
 
         // Build update query
         const updateFields: string[] = [];
-        const params: any[] = [];
+        const params: unknown[] = [];
         
         Object.entries(updates).forEach(([key, value]) => {
           if (value !== undefined) {

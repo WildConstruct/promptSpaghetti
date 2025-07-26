@@ -49,7 +49,7 @@ export const EmailVerificationPage: React.FC = () => {
       setTimeout(() => {
         navigate('/login');
       }, 3000);
-    } catch (error) {
+    } catch (error: unknown) {
       setVerificationStatus('error');
       setVerificationMessage(error instanceof Error ? error.message : 'Email verification failed');
     }
@@ -65,7 +65,7 @@ export const EmailVerificationPage: React.FC = () => {
     }
   }, [token, email, verifyEmailToken]);
 
-  const handleResendVerification = async () => {
+  const handleResendVerification = async (): Promise<void> => {
     if (!resendEmail && !email) {
       setVerificationMessage('Please enter your email address to resend verification.');
       return;
@@ -89,7 +89,7 @@ export const EmailVerificationPage: React.FC = () => {
 
       setVerificationStatus('resent');
       setVerificationMessage('Verification email sent! Please check your inbox and spam folder.');
-    } catch (error) {
+    } catch (error: unknown) {
       setVerificationStatus('error');
       setVerificationMessage(error instanceof Error ? error.message : 'Failed to resend verification email');
     }
@@ -249,7 +249,7 @@ export const EmailVerificationPage: React.FC = () => {
                 type="email"
                 placeholder="Enter your email address"
                 value={resendEmail || email || ''}
-                onChange={(e) => setResendEmail(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setResendEmail(e.target.value)}
                 style={{
                   width: '100%',
                   padding: '12px',

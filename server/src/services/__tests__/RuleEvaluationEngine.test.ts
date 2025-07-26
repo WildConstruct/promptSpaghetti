@@ -143,7 +143,7 @@ describe('RuleEvaluationEngine', () => {
   beforeEach(() => {
     // Create mock audit service
     mockAuditService = new AuditService({} as any) as jest.Mocked<AuditService>;
-    mockAuditService.logEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
+    mockAuditService.logEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown);
 
     // Create engine instance
     engine = new RuleEvaluationEngine(mockEngineConfig, mockAuditService);
@@ -369,9 +369,9 @@ describe('RuleEvaluationEngine', () => {
           passed: true,
           confidence: 1.0,
           metadata: {}
-        } as unknown),
-        validate: jest.fn<unknown[], unknown>().mockReturnValue({ isValid: true } as unknown),
-        optimize: jest.fn<unknown[], unknown>().mockReturnValue({} as unknown)
+        } as unknown as unknown),
+        validate: jest.fn<unknown[], unknown>().mockReturnValue({ isValid: true } as unknown as unknown),
+        optimize: jest.fn<unknown[], unknown>().mockReturnValue({} as unknown as unknown)
       } as any;
 
       engine.registerConditionEvaluator(customEvaluator);

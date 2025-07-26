@@ -6,13 +6,13 @@
  *
  * Task: E16-1753114247020-65B7A3 - Design sharing system
  */
-import { validateCreateShareRequest, validateShareAnalyticsEvent } from '../types/sharingTypes.js';
+import { validateCreateShareRequest, validateShareAnalyticsEvent } from '../types/sharingTypes';
 import { v4 as uuidv4 } from 'uuid';
 export class SharingService {
-    baseUrl;
-    analyticsEnabled;
-    socialIntegrations;
-    constructor(config) {
+    baseUrl: string;
+    analyticsEnabled: boolean;
+    socialIntegrations: Map<string, any>;
+    constructor(config: any) {
         this.baseUrl = config.baseUrl;
         this.analyticsEnabled = config.analyticsEnabled ?? true;
         this.socialIntegrations = new Map();
@@ -23,7 +23,7 @@ export class SharingService {
     /**
      * Create a new share configuration and link
      */
-    async createShare(request) {
+    async createShare(request: any): Promise<any> {
         const validatedRequest = validateCreateShareRequest(request);
         // Generate share configuration
         const shareConfig = {
@@ -62,7 +62,7 @@ export class SharingService {
     /**
      * Generate a shareable link with short code
      */
-    async generateShareLink(config) {
+    async generateShareLink(config: any) {
         const shortCode = this.generateShortCode();
         const fullUrl = `${this.baseUrl}/share/${config.resourceType}/${config.resourceId}`;
         const shortUrl = `${this.baseUrl}/s/${shortCode}`;
@@ -114,7 +114,7 @@ export class SharingService {
     /**
      * Generate social platform specific sharing links
      */
-    async generateSocialLinks(config, shareLink, platforms) {
+    async generateSocialLinks(config: any, shareLink: any, platforms: string[]) {
         const socialLinks = {};
         for (const platform of platforms) {
             const integration = this.socialIntegrations.get(platform);
@@ -147,7 +147,7 @@ export class SharingService {
     /**
      * Generate embed codes for different formats
      */
-    generateEmbedCodes(shareLink, config) {
+    generateEmbedCodes(shareLink: any, config: any) {
         const width = config.customization?.layout?.width || 800;
         const height = config.customization?.layout?.height || 600;
         const embedUrl = `${shareLink.fullUrl}?embed=true`;
@@ -174,7 +174,7 @@ export class SharingService {
     /**
      * Track sharing analytics event
      */
-    async trackAnalyticsEvent(shareLinkId, eventType, contextData = {}) {
+    async trackAnalyticsEvent(shareLinkId: string, eventType: string, contextData: any = {}) {
         if (!this.analyticsEnabled)
             return;
         const event = {
@@ -199,7 +199,7 @@ export class SharingService {
     /**
      * Get sharing metrics for a resource
      */
-    async getShareMetrics(shareLinkId, timeRange) {
+    async getShareMetrics(shareLinkId: string, timeRange: any) {
         // TODO: Implement actual metrics aggregation from analytics data
         const mockMetrics = {
             shareLinkId,
@@ -247,7 +247,7 @@ export class SharingService {
     /**
      * Create a collection of shareable resources
      */
-    async createShareCollection(name, description, resourceIds, shareConfig) {
+    async createShareCollection(name: string, description: string, resourceIds: string[], shareConfig: any) {
         const collection = {
             id: uuidv4(),
             name,
@@ -286,21 +286,21 @@ export class SharingService {
     /**
      * Update share permissions
      */
-    async updateSharePermissions(shareConfigId, permissions) {
+    async updateSharePermissions(shareConfigId: string, permissions: any) {
         // TODO: Implement actual database update
         throw new Error('Not implemented');
     }
     /**
      * Revoke or disable a share
      */
-    async revokeShare(shareConfigId) {
+    async revokeShare(shareConfigId: string) {
         // TODO: Implement share revocation
         throw new Error('Not implemented');
     }
     /**
      * Get share analytics dashboard data
      */
-    async getShareDashboard(userId) {
+    async getShareDashboard(userId: string) {
         // TODO: Implement dashboard data aggregation
         return {
             totalShares: 156,
@@ -318,7 +318,7 @@ export class SharingService {
         }
         return result;
     }
-    async generateQRCode(url) {
+    async generateQRCode(url: string) {
         // TODO: Implement QR code generation
         return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==';
     }
@@ -334,19 +334,19 @@ export class SharingService {
             requiresAuth: false
         };
     }
-    buildTwitterShareUrl(title, url, hashtags) {
+    buildTwitterShareUrl(title: string, url: string, hashtags?: string[]) {
         const text = encodeURIComponent(`Check out: ${title}`);
         const hashtagStr = hashtags?.length ? `&hashtags=${hashtags.join(',')}` : '';
         return `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(url)}${hashtagStr}`;
     }
-    buildLinkedInShareUrl(title, url, description) {
+    buildLinkedInShareUrl(title: string, url: string, description?: string) {
         const summary = description ? `&summary=${encodeURIComponent(description)}` : '';
         return `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}${summary}`;
     }
-    buildSlackShareUrl(message, url) {
+    buildSlackShareUrl(message: string, url: string) {
         return `slack://channel?team=&id=&message=${encodeURIComponent(`${message} ${url}`)}`;
     }
-    buildEmailShareUrl(title, url, description) {
+    buildEmailShareUrl(title: string, url: string, description?: string) {
         const subject = encodeURIComponent(`Check out: ${title}`);
         const body = encodeURIComponent(`I thought you might be interested in this:\n\n${title}\n${description || ''}\n\n${url}`);
         return `mailto:?subject=${subject}&body=${body}`;

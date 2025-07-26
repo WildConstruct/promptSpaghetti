@@ -8,8 +8,8 @@
  * - A/B testing integration and multivariate conditions
  * - Security-hardened expression evaluation
  */
-import { SafeExpressionEvaluator } from '../runtime/expression-evaluator.js';
-import { securityAudit, SecuritySeverity, SecurityEventCategory } from '../runtime/security-audit-logger.js';
+import { SafeExpressionEvaluator } from '../runtime/expression-evaluator';
+import { securityAudit, SecuritySeverity, SecurityEventCategory } from '../runtime/security-audit-logger';
 export var ConditionType;
 (function (ConditionType) {
     ConditionType["USER_ATTRIBUTE"] = "user_attribute";
@@ -48,12 +48,12 @@ export var ComparisonOperator;
  * Provides secure, performant, and flexible condition evaluation.
  */
 export class ToggleConditionsService {
-    conditions = new Map();
-    toggleConditions = new Map(); // toggleId -> conditionIds
-    evaluationCache = new Map();
-    config;
-    expressionEvaluator;
-    constructor(config = {}) {
+    conditions: Map<string, any> = new Map();
+    toggleConditions: Map<string, any> = new Map(); // toggleId -> conditionIds
+    evaluationCache: Map<string, any> = new Map();
+    config: any;
+    expressionEvaluator: any;
+    constructor(config: any = {}) {
         this.config = {
             evaluation: {
                 enableCaching: true,

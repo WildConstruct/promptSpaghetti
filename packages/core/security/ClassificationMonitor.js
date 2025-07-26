@@ -16,7 +16,7 @@
  * - Historical data analysis
  */
 import { EventEmitter } from 'events';
-import { ClassificationLevel, DataCategory, ComplianceFramework } from './DataClassifier.js';
+import { ClassificationLevel, DataCategory, ComplianceFramework } from './DataClassifier';
 // Monitoring Event Types
 export var MonitoringEventType;
 (function (MonitoringEventType) {

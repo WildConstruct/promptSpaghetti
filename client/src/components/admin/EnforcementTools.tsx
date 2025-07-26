@@ -23,29 +23,21 @@ import {
   AlertTriangle, 
   Ban, 
   Eye, 
-  EyeOff,
   Flag,
-  UserX,
-  Clock,
   CheckCircle,
   XCircle,
-  Search,
   Filter,
   Plus,
   Edit,
-  Trash2,
   RotateCcw,
-  Download,
-  Upload,
   Settings,
   Activity,
   BarChart3,
-  Users,
-  FileText,
-  Zap,
   Scale,
   AlertCircle,
-  Info
+  Info,
+  Zap,
+  Download
 } from 'lucide-react';
 
 interface EnforcementAction {
@@ -159,9 +151,7 @@ export interface EnforcementToolsProps {
   className?: string;
 }
 
-export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className }) => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+export   const [error, setError] = useState<string | null>(null);
   
   // Data state
   const [stats, setStats] = useState<EnforcementStats | null>(null);

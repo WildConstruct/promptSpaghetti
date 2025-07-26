@@ -4,7 +4,14 @@ import { TextFieldEditor } from '../TextFieldEditor';
 import { SelectEditor, SelectOption } from '../SelectEditor';
 import { TemplateEditor } from '../TemplateEditor';
 import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
-import { useUISettingsStore } from '../../stores/uiSettingsStore';
+import { useUISettingsStore } from '../../../stores/uiSettingsStore';
+import { 
+  ContextualTooltip, 
+  HelpfulInput, 
+  HelpfulButton,
+  HelpfulSection,
+  useContextualHelp 
+} from '../../help';
 
 export interface VariableEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   nodeType: 'SetVariable' | 'GetVariable';
@@ -49,6 +56,37 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
   const isSetVariable = nodeType === 'SetVariable';
   const isGetVariable = nodeType === 'GetVariable';
 
+  // Contextual help for variable name field
+  const { wrapWithHelp: wrapVariableNameHelp } = useContextualHelp({
+    id: 'variable-name-field',
+    title: isSetVariable ? 'Store As' : 'Retrieve Variable',
+    description: isSetVariable 
+      ? 'Choose a name for storing this value so you can reference it later in your workflow.'
+      : 'Enter the name of the variable you want to retrieve from storage.',
+    category: 'basic',
+    trigger: 'focus',
+    position: 'right',
+    showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
+    examples: isSetVariable 
+      ? ['character_name', 'scene_location', 'dialogue_style']
+      : ['stored_character', 'current_mood', 'plot_point'],
+    priority: 'high'
+  });
+
+  // Contextual help for template editor
+  const { wrapWithHelp: wrapTemplateHelp } = useContextualHelp({
+    id: 'variable-template-field',
+    title: 'Value Template',
+    description: 'Define what value to store using templates. Use {variable} syntax to reference other stored values.',
+    category: 'basic',
+    trigger: 'hover',
+    position: 'top',
+    showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
+    examples: ['Character: {character_name}', '{mood} character in {location}'],
+    relatedFeatures: ['variable-system', 'template-engine'],
+    priority: 'medium'
+  });
+
   return (
     <div className="variable-editor">
       {/* BASIC LEVEL: Simplified variable workflow */}
@@ -60,16 +98,18 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
         priority="critical"
         fieldName={isSetVariable ? 'value' : 'variableName'}
       >
-        <TextFieldEditor
-          label={isSetVariable ? 'Store As' : 'Retrieve Variable'}
-          value={variableName || label}
-          fieldKey={isSetVariable ? 'label' : 'variableName'}
-          zodType={null as any}
-          onChange={(value) => handleFieldChange(isSetVariable ? 'label' : 'variableName', value)}
-          placeholder={isSetVariable ? 'Name for this stored value...' : 'Variable name to retrieve...'}
-        />
+        {wrapVariableNameHelp(
+          <TextFieldEditor
+            label={isSetVariable ? 'Store As' : 'Retrieve Variable'}
+            value={variableName || label}
+            fieldKey={isSetVariable ? 'label' : 'variableName'}
+            zodType={null}
+            onChange={(value) => handleFieldChange(isSetVariable ? 'label' : 'variableName', value)}
+            placeholder={isSetVariable ? 'Name for this stored value...' : 'Variable name to retrieve...'}
+          />
+        )}
 
-        {isSetVariable && (
+        {isSetVariable && wrapTemplateHelp(
           <div style={{ marginBottom: 16 }}>
             <label style={{
               display: 'block',
@@ -113,7 +153,7 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
             </div>
             
             {/* Show type inference information (backward compatible) */}
-            {(nodeData.extractedVariables as any)?.length > 0 && (
+            {(nodeData.extractedVariables as string[])?.length > 0 && (
               <div style={{
                 fontSize: 10,
                 color: '#4299e1',
@@ -124,11 +164,11 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
                 border: '1px solid rgba(66, 153, 225, 0.3)'
               }}>
                 <strong>🤖 Auto-detected:</strong> {' '}
-                {(nodeData.extractedVariables as any)?.map((v: unknown, idx: number) => (
+                {(nodeData.extractedVariables as string[])?.map((v: unknown, idx: number) => (
                   <span key={v.name || `var_${idx}`}>
                     {v.name || 'variable'} ({v.inferredType || 'auto'})
                     {v.defaultValue && ` = "${v.defaultValue}"`}
-                    {idx < (nodeData.extractedVariables as any).length - 1 ? ', ' : ''}
+                    {idx < (nodeData.extractedVariables as string[]).length - 1 ? ', ' : ''}
                   </span>
                 )) || 'No variables detected'}
               </div>
@@ -165,7 +205,7 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
             label="Technical Variable Name"
             value={variableName}
             fieldKey="variableName"
-            zodType={null as any}
+            zodType={null}
             onChange={(value) => handleFieldChange('variableName', value)}
             placeholder="Internal variable identifier..."
           />
@@ -175,7 +215,7 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
             value={variableType}
             fieldKey="variableType"
             options={VARIABLE_TYPES}
-            zodType={null as any}
+            zodType={null}
             onChange={(value) => handleFieldChange('variableType', value)}
           />
 
@@ -209,7 +249,7 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
                 value={scope}
                 fieldKey="scope"
                 options={SCOPE_OPTIONS}
-                zodType={null as any}
+                zodType={null}
                 onChange={(value) => handleFieldChange('scope', value)}
               />
             </>
@@ -244,7 +284,7 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
                 label="Default Value"
                 value={defaultValue}
                 fieldKey="defaultValue"
-                zodType={null as any}
+                zodType={null}
                 onChange={(value) => handleFieldChange('defaultValue', value)}
                 placeholder="Fallback value if variable not found..."
               />

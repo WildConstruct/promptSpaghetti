@@ -21,15 +21,27 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({
   className = ''
 }) => {
   const [template, setTemplate] = useState<unknown>(null);
-  const [similarTemplates, setSimilarTemplates] = useState<any[]>([]);
-  const [reviews, setReviews] = useState<any[]>([]);
+  const [similarTemplates, setSimilarTemplates] = useState<Array<{
+    id: string;
+    name: string;
+    description: string;
+    rating: number;
+    price: number;
+  }>>([]);
+  const [reviews, setReviews] = useState<Array<{
+    id: string;
+    rating: number;
+    comment: string;
+    author: string;
+    date: string;
+  }>>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
   const [showPurchase, setShowPurchase] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'reviews' | 'versions'>('overview');
 
-  const { getTemplate, ___previewTemplate, ___purchaseTemplate } = useMarketplace();
+  const { getTemplate, _previewTemplate, _purchaseTemplate } = useMarketplace();
 
   useEffect(() => {
     loadTemplateData();

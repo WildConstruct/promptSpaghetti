@@ -2,10 +2,10 @@
  * Validate current graph connections.
  * Returns an array of errors – empty means valid.
  */
-export function validateConnection(edges, nodes) {
+export function validateConnection(edges: any[], nodes: any[]): any[] {
     const errors = [];
     const seenPairs = new Set();
-    edges.forEach((e) => {
+    edges.forEach((e: any) => {
         // Self-loop
         if (e.source === e.target) {
             errors.push({ edgeId: e.id, message: 'Edge is a self-loop' });

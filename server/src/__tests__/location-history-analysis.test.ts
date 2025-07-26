@@ -18,19 +18,19 @@ describe('LocationHistoryAnalysisService', () => {
   beforeEach(() => {
     // Mock database
     mockDb = {
-      query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown)
+      query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown as unknown)
     };
 
     // Mock Redis
     mockRedis = {
-      get: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown),
-      setex: jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown),
-      del: jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown)
+      get: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown as unknown),
+      setex: jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown as unknown),
+      del: jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown as unknown)
     };
 
     // Mock audit service
     mockAuditService = {
-      logEvent: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown)
+      logEvent: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown as unknown)
     };
 
     // Test configuration
@@ -698,7 +698,7 @@ describe('LocationHistoryAnalysisService', () => {
     });
 
     it('should support different timeframes', async () => {
-      mockDb.query.mockResolvedValue({ rows: [{}] } as unknown);
+      mockDb.query.mockResolvedValue({ rows: [{}] } as unknown as unknown);
 
       await analysisService.getLocationStatistics('day');
       await analysisService.getLocationStatistics('week');

@@ -86,8 +86,7 @@ const formatTimezone = (timezone: string): { label: string; offset: string; city
   });
   
   const parts = formatter.formatToParts(now);
-  const ___timeZoneName = parts.find(part => part.type === '___timeZoneName')?.value || '';
-  
+    
   // Get offset
   const offset = new Intl.DateTimeFormat('en', {
     timeZone: timezone,
@@ -104,16 +103,7 @@ const formatTimezone = (timezone: string): { label: string; offset: string; city
   };
 };
 
-export const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
-  value,
-  onChange,
-  label = 'Timezone',
-  error = false,
-  helperText = '',
-  fullWidth = true
-}) => {
-  const [searchTerm, ___setSearchTerm] = useState('');
-
+export 
   // Create timezone options
   const timezoneOptions = useMemo(() => {
     const options: Array<{
@@ -171,9 +161,7 @@ export const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
   }, [timezoneOptions, searchTerm]);
 
   // Group filtered options
-  const ___groupedOptions = useMemo(() => {
-    const groups: Record<string, typeof filteredOptions> = {};
-    
+      
     filteredOptions.forEach(option => {
       if (!groups[option.group]) {
         groups[option.group] = [];

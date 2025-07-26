@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import { useState, useEffect } from 'react';
-import { useCorrectionsStore } from '../correctionsStore.js';
-export const NotificationSystem = ({ position = 'top-right', maxVisible = 5, autoHideDuration = 5000 }) => {
+import { useCorrectionsStore } from '../correctionsStore';
+export const NotificationSystem = ({ position = 'top-right', maxVisible = 5, autoHideDuration = 5000 }: any) => {
     const { notifications, dismissNotification, clearNotifications } = useCorrectionsStore();
     const [visibleNotifications, setVisibleNotifications] = useState([]);
     useEffect(() => {
@@ -44,7 +44,7 @@ export const NotificationSystem = ({ position = 'top-right', maxVisible = 5, aut
                 return { ...baseStyles, top: '20px', right: '20px' };
         }
     };
-    const getNotificationStyles = (type) => {
+    const getNotificationStyles = (type: string) => {
         const baseStyles = {
             padding: '12px 16px',
             borderRadius: '6px',
@@ -90,7 +90,7 @@ export const NotificationSystem = ({ position = 'top-right', maxVisible = 5, aut
                 };
         }
     };
-    const getIcon = (type) => {
+    const getIcon = (type: string) => {
         switch (type) {
             case 'success':
                 return '✓';
@@ -103,7 +103,7 @@ export const NotificationSystem = ({ position = 'top-right', maxVisible = 5, aut
                 return 'ℹ';
         }
     };
-    const formatTimestamp = (timestamp) => {
+    const formatTimestamp = (timestamp: Date) => {
         const now = new Date();
         const diff = now.getTime() - timestamp.getTime();
         const minutes = Math.floor(diff / (1000 * 60));

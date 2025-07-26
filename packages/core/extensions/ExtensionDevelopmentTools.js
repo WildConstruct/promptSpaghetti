@@ -2,7 +2,7 @@
  * Extension Development Tools - Epic 8.4 Story 8.4.2
  * Tools and utilities for extension development and testing
  */
-import { extensionTypeChecker, extensionInterfaceValidator } from './TypeDefinitions.js';
+import { extensionTypeChecker, extensionInterfaceValidator } from './TypeDefinitions';
 // Extension Development Kit
 export class ExtensionDevelopmentKit {
     static instance;
@@ -523,7 +523,7 @@ ${this.getTypeSpecificAPIDocs(type)}
         return `
 ### Basic Usage
 \`\`\`typescript
-import { extension } from './${extension.id}.js';
+import { extension } from './${extension.id}';
 
 // Initialize and activate
 await extension.initialize();

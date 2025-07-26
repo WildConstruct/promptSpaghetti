@@ -80,7 +80,7 @@ export class TestEnvironmentManager {
     return environment;
   }
 
-  static getEnvironment(name: string): any {
+  static getEnvironment(name: string): unknown {
     return this.environments.get(name);
   }
 
@@ -280,7 +280,7 @@ export class TestAssertionHelpers {
     }
   }
 
-  static expectDeepEqual(actual: any, expected: any): void {
+  static expectDeepEqual(actual: unknown, expected: unknown): void {
     expect(JSON.stringify(actual)).toBe(JSON.stringify(expected));
   }
 
@@ -293,7 +293,7 @@ export class TestAssertionHelpers {
  * Mock Factory for creating test mocks
  */
 export class MockFactory {
-  static createMockUser(overrides: Record<string, any> = {}): any {
+  static createMockUser(overrides: Record<string, unknown> = {}): unknown {
     return {
       id: 'mock-user-id',
       email: 'mock@example.com',
@@ -305,7 +305,7 @@ export class MockFactory {
     };
   }
 
-  static createMockGraph(overrides: Record<string, any> = {}): any {
+  static createMockGraph(overrides: Record<string, unknown> = {}): unknown {
     return {
       id: 'mock-graph-id',
       nodes: [],
@@ -317,7 +317,7 @@ export class MockFactory {
     };
   }
 
-  static createMockNode(type: string = 'test', overrides: Record<string, any> = {}): any {
+  static createMockNode(type: string = 'test', overrides: Record<string, unknown> = {}): unknown {
     return {
       id: `mock-node-${Date.now()}`,
       type,
@@ -327,7 +327,7 @@ export class MockFactory {
     };
   }
 
-  static createMockEdge(source: string = 'node1', target: string = 'node2'): any {
+  static createMockEdge(source: string = 'node1', target: string = 'node2'): unknown {
     return {
       id: `edge-${source}-${target}`,
       source,
@@ -336,7 +336,7 @@ export class MockFactory {
     };
   }
 
-  static createMockAPIResponse(data: any = {}, status: number = 200): any {
+  static createMockAPIResponse(data: unknown = {}, status: number = 200): unknown {
     return {
       status,
       ok: status >= 200 && status < 300,
@@ -354,7 +354,7 @@ export class PerformanceTestUtils {
   static async measureExecution<T>(
     fn: () => Promise<T> | T,
     name: string = 'function'
-  ): Promise<{ result: T; executionTime: number; memoryUsage: any }> {
+  ): Promise<{ result: T; executionTime: number; memoryUsage: unknown }> {
     const startTime = process.hrtime.bigint();
     const startMemory = process.memoryUsage();
     

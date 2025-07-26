@@ -27,20 +27,18 @@ import type {
   MFAVerificationResult
 } from '../../types/MFATypes';
 
-export enum MFASecurityLevel {
-  NONE = 'none',
-  BASIC = 'basic', 
-  STANDARD = 'standard',
-  HIGH = 'high',
-  MAXIMUM = 'maximum'
-}
+export type MFASecurityLevel = 
+  | 'none'
+  | 'basic'
+  | 'standard'
+  | 'high'
+  | 'maximum';
 
-export enum MFAIndicatorVariant {
-  COMPACT = 'compact',
-  DETAILED = 'detailed',
-  BADGE_ONLY = 'badge',
-  HEADER = 'header'
-}
+export type MFAIndicatorVariant = 
+  | 'compact'
+  | 'detailed'
+  | 'badge'
+  | 'header';
 
 interface MFAStatusIndicatorProps {
   userId: string;
@@ -65,7 +63,7 @@ interface SecurityStatus {
 }
 
 const SECURITY_LEVEL_CONFIG = {
-  [MFASecurityLevel.NONE]: {
+  ['none']: {
     icon: ShieldX,
     color: 'red',
     label: 'No Protection',
@@ -74,7 +72,7 @@ const SECURITY_LEVEL_CONFIG = {
     borderColor: 'border-red-200',
     textColor: 'text-red-700'
   },
-  [MFASecurityLevel.BASIC]: {
+  ['basic']: {
     icon: ShieldAlert,
     color: 'yellow', 
     label: 'Basic Protection',
@@ -83,7 +81,7 @@ const SECURITY_LEVEL_CONFIG = {
     borderColor: 'border-yellow-200',
     textColor: 'text-yellow-700'
   },
-  [MFASecurityLevel.STANDARD]: {
+  ['standard']: {
     icon: Shield,
     color: 'blue',
     label: 'Standard Protection', 
@@ -92,7 +90,7 @@ const SECURITY_LEVEL_CONFIG = {
     borderColor: 'border-blue-200',
     textColor: 'text-blue-700'
   },
-  [MFASecurityLevel.HIGH]: {
+  ['high']: {
     icon: ShieldCheck,
     color: 'green',
     label: 'High Protection',
@@ -101,7 +99,7 @@ const SECURITY_LEVEL_CONFIG = {
     borderColor: 'border-green-200',
     textColor: 'text-green-700'
   },
-  [MFASecurityLevel.MAXIMUM]: {
+  ['maximum']: {
     icon: ShieldCheck,
     color: 'purple',
     label: 'Maximum Protection',
@@ -114,13 +112,13 @@ const SECURITY_LEVEL_CONFIG = {
 
 export function MFAStatusIndicator({ 
   userId, 
-  variant = MFAIndicatorVariant.COMPACT,
+  variant = 'compact',
   showActions = false,
   onSecurityAction,
   className = ''
 }: MFAStatusIndicatorProps) {
   const [status, setStatus] = useState<SecurityStatus>({
-    level: MFASecurityLevel.NONE,
+    level: 'none',
     profile: null,
     isLoading: true,
     lastCheck: null,
@@ -179,23 +177,23 @@ export function MFAStatusIndicator({
   };
 
   const calculateSecurityLevel = (profile: UserMFAProfile): MFASecurityLevel => {
-    if (!profile.isEnabled) return MFASecurityLevel.NONE;
+    if (!profile.isEnabled) return 'none';
     
     const methodCount = profile.configuredMethods.length;
     const hasTOTP = profile.configuredMethods.includes(MFAMethodType.TOTP);
     const hasBackup = profile.preferences.backupMethodEnabled;
 
     if (methodCount >= 3 && hasTOTP && hasBackup) {
-      return MFASecurityLevel.MAXIMUM;
+      return 'maximum';
     } else if (methodCount >= 2 && hasTOTP && hasBackup) {
-      return MFASecurityLevel.HIGH;
+      return 'high';
     } else if (methodCount >= 2 || hasBackup) {
-      return MFASecurityLevel.STANDARD;
+      return 'standard';
     } else if (methodCount >= 1) {
-      return MFASecurityLevel.BASIC;
+      return 'basic';
     }
     
-    return MFASecurityLevel.NONE;
+    return 'none';
   };
 
   const generateRecommendations = (profile: UserMFAProfile, activity: unknown): string[] => {
@@ -229,7 +227,7 @@ export function MFAStatusIndicator({
   const Icon = config.icon;
 
   // Badge-only variant
-  if (variant === MFAIndicatorVariant.BADGE_ONLY) {
+  if (variant === 'badge') {
     return (
       <TooltipProvider>
         <Tooltip>
@@ -256,7 +254,7 @@ export function MFAStatusIndicator({
   }
 
   // Compact variant
-  if (variant === MFAIndicatorVariant.COMPACT) {
+  if (variant === 'compact') {
     return (
       <div className={`flex items-center gap-2 ${className}`}>
         <div className={`flex items-center gap-2 px-2 py-1 rounded-md ${config.bgColor} ${config.borderColor} border`}>
@@ -286,7 +284,7 @@ export function MFAStatusIndicator({
   }
 
   // Header variant
-  if (variant === MFAIndicatorVariant.HEADER) {
+  if (variant === 'header') {
     return (
       <div className={`flex items-center justify-between p-3 rounded-lg ${config.bgColor} ${config.borderColor} border ${className}`}>
         <div className="flex items-center gap-3">
@@ -416,13 +414,13 @@ export function MFAStatusIndicator({
 
 // Export additional components for specific use cases
 export function MFAHeaderIndicator(props: Omit<MFAStatusIndicatorProps, 'variant'>) {
-  return <MFAStatusIndicator {...props} variant={MFAIndicatorVariant.HEADER} />;
+  return <MFAStatusIndicator {...props} variant={'header'} />;
 }
 
 export function MFABadgeIndicator(props: Omit<MFAStatusIndicatorProps, 'variant'>) {
-  return <MFAStatusIndicator {...props} variant={MFAIndicatorVariant.BADGE_ONLY} />;
+  return <MFAStatusIndicator {...props} variant={'badge'} />;
 }
 
 export function MFACompactIndicator(props: Omit<MFAStatusIndicatorProps, 'variant'>) {
-  return <MFAStatusIndicator {...props} variant={MFAIndicatorVariant.COMPACT} />;
+  return <MFAStatusIndicator {...props} variant={'compact'} />;
 }

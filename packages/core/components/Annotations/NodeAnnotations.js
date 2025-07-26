@@ -6,12 +6,12 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Supports performance notes, creative direction, technical specs, and director approvals.
  */
 import { useState, useCallback, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
-// import { Switch } from '../ui/Switch.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
+// import { Switch } from '../ui/Switch';
 import { MessageCircle, CheckCircle, Clock, User, Camera, Zap, Settings, FileText, Link, Image as ImageIcon, Pause, X, Eye, EyeOff, Edit3, Save, MoreHorizontal } from 'lucide-react';
 // Annotation type configurations
 const ANNOTATION_TYPES = {

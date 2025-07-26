@@ -8,7 +8,7 @@
  * Part of Epic 19.5 - OAuth Implementation & Framework
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 
 // Types and interfaces
@@ -35,7 +35,7 @@ interface SecurityEvent {
   providerName: string;
   severity: SecurityEventSeverity;
   description: string;
-  details: Record<string, any>;
+  details: Record<string, unknown>;
   resolved: boolean;
   resolvedAt?: Date;
   resolvedBy?: string;
@@ -83,7 +83,7 @@ interface AuditLogEntry {
   userName: string;
   action: string;
   resource: string;
-  details: Record<string, any>;
+  details: Record<string, unknown>;
   result: 'success' | 'failure' | 'partial';
   ipAddress: string;
   userAgent: string;
@@ -149,10 +149,10 @@ export const OAuthSecurityDashboard: React.FC = () => {
   // Load data on mount and time range change
   useEffect(() => {
     loadDashboardData();
-  }, [timeRange]);
+  }, [timeRange, loadDashboardData]);
 
   // API functions
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     if (!loading) setLoading(true);
     setError(null);
     
@@ -170,7 +170,7 @@ export const OAuthSecurityDashboard: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [loading, timeRange]);
 
   const loadSecurityMetrics = async () => {
     const response = await authenticatedFetch(`/api/oauth-security/metrics?timeRange=${timeRange}`);
@@ -299,7 +299,7 @@ export const OAuthSecurityDashboard: React.FC = () => {
             {/* Time range selector */}
             <select
               value={timeRange}
-              onChange={(e) => setTimeRange(e.target.value as any)}
+              onChange={(e) => setTimeRange(e.target.value as '1h' | '24h' | '7d' | '30d')}
               className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="1h">Last Hour</option>
@@ -381,7 +381,7 @@ export const OAuthSecurityDashboard: React.FC = () => {
           ].map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => setActiveTab(tab.id as 'overview' | 'events' | 'compliance' | 'threats' | 'audit')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === tab.id
                   ? 'border-blue-500 text-blue-600'

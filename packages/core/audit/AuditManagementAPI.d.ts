@@ -101,8 +101,8 @@ export declare const AuditQueryRequest: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     limit: number;
     page: number;
-    sort_order: "asc" | "desc";
     sort_field: string;
+    sort_order: "asc" | "desc";
     search?: string | undefined;
     start_date?: string | undefined;
     end_date?: string | undefined;
@@ -124,7 +124,6 @@ export declare const AuditQueryRequest: z.ZodObject<{
     start_date?: string | undefined;
     end_date?: string | undefined;
     user_id?: string | undefined;
-    sort_order?: "asc" | "desc" | undefined;
     severities?: AuditSeverity[] | undefined;
     compliance_frameworks?: ComplianceFramework[] | undefined;
     statuses?: AuditStatus[] | undefined;
@@ -133,6 +132,7 @@ export declare const AuditQueryRequest: z.ZodObject<{
     min_risk_score?: number | undefined;
     max_risk_score?: number | undefined;
     sort_field?: string | undefined;
+    sort_order?: "asc" | "desc" | undefined;
     has_metadata?: boolean | undefined;
     sensitive_data_only?: boolean | undefined;
     regulatory_impact_only?: boolean | undefined;
@@ -184,8 +184,8 @@ export declare const AuditAnalyticsRequest: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         limit: number;
         page: number;
-        sort_order: "asc" | "desc";
         sort_field: string;
+        sort_order: "asc" | "desc";
         search?: string | undefined;
         start_date?: string | undefined;
         end_date?: string | undefined;
@@ -207,7 +207,6 @@ export declare const AuditAnalyticsRequest: z.ZodObject<{
         start_date?: string | undefined;
         end_date?: string | undefined;
         user_id?: string | undefined;
-        sort_order?: "asc" | "desc" | undefined;
         severities?: AuditSeverity[] | undefined;
         compliance_frameworks?: ComplianceFramework[] | undefined;
         statuses?: AuditStatus[] | undefined;
@@ -216,6 +215,7 @@ export declare const AuditAnalyticsRequest: z.ZodObject<{
         min_risk_score?: number | undefined;
         max_risk_score?: number | undefined;
         sort_field?: string | undefined;
+        sort_order?: "asc" | "desc" | undefined;
         has_metadata?: boolean | undefined;
         sensitive_data_only?: boolean | undefined;
         regulatory_impact_only?: boolean | undefined;
@@ -226,8 +226,8 @@ export declare const AuditAnalyticsRequest: z.ZodObject<{
     filters?: {
         limit: number;
         page: number;
-        sort_order: "asc" | "desc";
         sort_field: string;
+        sort_order: "asc" | "desc";
         search?: string | undefined;
         start_date?: string | undefined;
         end_date?: string | undefined;
@@ -256,7 +256,6 @@ export declare const AuditAnalyticsRequest: z.ZodObject<{
         start_date?: string | undefined;
         end_date?: string | undefined;
         user_id?: string | undefined;
-        sort_order?: "asc" | "desc" | undefined;
         severities?: AuditSeverity[] | undefined;
         compliance_frameworks?: ComplianceFramework[] | undefined;
         statuses?: AuditStatus[] | undefined;
@@ -265,6 +264,7 @@ export declare const AuditAnalyticsRequest: z.ZodObject<{
         min_risk_score?: number | undefined;
         max_risk_score?: number | undefined;
         sort_field?: string | undefined;
+        sort_order?: "asc" | "desc" | undefined;
         has_metadata?: boolean | undefined;
         sensitive_data_only?: boolean | undefined;
         regulatory_impact_only?: boolean | undefined;
@@ -316,7 +316,7 @@ export declare class AuditManagementAPI {
      */
     queryAuditEvents(request: AuditQueryRequestType): Promise<{
         success: boolean;
-        data?: any;
+        data?: unknown;
         error?: string;
     }>;
     /**
@@ -394,15 +394,12 @@ export declare class AuditManagementAPI {
     private summarizeReport;
     private generateTrendAnalysis;
 }
-export declare const auditManagementAPI: AuditManagementAPI;
-export declare const createAuditEvent: (request: CreateAuditEventRequestType) => Promise<{
-    success: boolean;
-    event?: AuditEvent;
+export declare     event?: AuditEvent;
     error?: string;
 }>;
 export declare const queryAuditEvents: (request: AuditQueryRequestType) => Promise<{
     success: boolean;
-    data?: any;
+    data?: unknown;
     error?: string;
 }>;
 export declare const generateComplianceReport: (request: ComplianceReportRequestType) => Promise<{

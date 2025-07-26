@@ -35,7 +35,10 @@ interface AuthContextType {
   isLoading: boolean;
   isAuthenticated: boolean;
   error: string | null;
-  login: (credentials: LoginRequest, context?: { geoLocation?: any }) => Promise<any>;
+  login: (
+    credentials: LoginRequest,
+    context?: { geoLocation?: { lat: number; lng: number } }
+  ) => Promise<{ success: boolean; token?: string; error?: string }>;
   logout: () => Promise<void>;
   refreshToken: () => Promise<boolean>;
   clearError: () => void;
@@ -133,8 +136,8 @@ const useStandaloneAuth = () => {
 
   const login = useCallback(async (
     credentials: LoginRequest,
-    context?: { geoLocation?: any }
-  ): Promise<any> => {
+    context?: { geoLocation?: { lat: number; lng: number } }
+  ): Promise<{ success: boolean; token?: string; error?: string }> => {
     setIsLoading(true);
     setError(null);
 
@@ -178,7 +181,7 @@ const useStandaloneAuth = () => {
       }
 
       return data;
-    } catch (err: any) {
+    } catch (err: unknown) {
       const errorMessage = err.message || 'Login failed';
       setError(errorMessage);
       throw err;
@@ -259,9 +262,7 @@ const useStandaloneAuth = () => {
 };
 
 // Helper hook for checking permissions
-export const usePermissions = () => {
-  const { user } = useAuth();
-
+export 
   const hasPermission = useCallback((permission: string): boolean => {
     if (!user) return false;
     return user.permissions.includes(permission);
@@ -291,9 +292,7 @@ export const usePermissions = () => {
 };
 
 // Helper hook for managing authentication redirects
-export const useAuthRedirect = () => {
-  const { isAuthenticated, isLoading } = useAuth();
-
+export 
   const redirectToLogin = useCallback((returnUrl?: string) => {
     const loginUrl = '/auth/login';
     const url = returnUrl ? `${loginUrl}?returnUrl=${encodeURIComponent(returnUrl)}` : loginUrl;
@@ -325,11 +324,7 @@ export const useAuthRedirect = () => {
 };
 
 // Hook for authentication form validation
-export const useAuthValidation = () => {
-  const validateEmail = useCallback((email: string): string | null => {
-    try {
-      z.string().email().parse(email);
-      return null;
+export       return null;
     } catch {
       return 'Please enter a valid email address';
     }

@@ -172,12 +172,7 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
   };
 
   // Check specific resource access
-  const ___checkResourceAccess = async (resourceId: string): Promise<AccessPermissions | null> => {
-    try {
-      const response = await fetch(`${apiBaseUrl}/access/resource/${resourceId}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (!response.ok) throw new Error('Failed to check access');
+        if (!response.ok) throw new Error('Failed to check access');
       const data = await response.json();
       return data as AccessPermissions;
     } catch (err) {

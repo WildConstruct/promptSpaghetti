@@ -6,7 +6,7 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Manages presentation modes, screenshot mode, and demo optimizations
  */
 import { useState, useEffect, useCallback } from 'react';
-import { ProfessionalSpinner } from '../LoadingStates/ProfessionalSpinner.js';
+import { ProfessionalSpinner } from '../LoadingStates/ProfessionalSpinner';
 const DEFAULT_CONFIG = {
     screenshotMode: false,
     presentationFocus: false,
@@ -46,7 +46,7 @@ export const DemoModeManager = ({ children, onModeChange, initialConfig = {} }) 
         window.addEventListener('resize', detectScreenMode);
         return () => window.removeEventListener('resize', detectScreenMode);
     }, []);
-    // Apply CSS classes based on config
+    // Apply CSS classes based on config - memoized for performance
     useEffect(() => {
         const classes = [];
         if (config.screenshotMode)
@@ -61,12 +61,10 @@ export const DemoModeManager = ({ children, onModeChange, initialConfig = {} }) 
             classes.push('hide-debug-elements');
         // Always add demo mode class
         classes.push('demo-mode', 'presentation-typography');
-        // Apply classes to document body
-        document.body.className = document.body.className
-            .split(' ')
-            .filter(cls => !cls.startsWith('demo-') && !cls.startsWith('presentation-'))
-            .concat(classes)
-            .join(' ');
+        // Apply classes to document body more efficiently
+        const currentClasses = document.body.className.split(' ');
+        const filteredClasses = currentClasses.filter(cls => !cls.startsWith('demo-') && !cls.startsWith('presentation-'));
+        document.body.className = [...filteredClasses, ...classes].join(' ');
         onModeChange?.(config);
     }, [config, onModeChange]);
     const updateConfig = useCallback((updates) => {

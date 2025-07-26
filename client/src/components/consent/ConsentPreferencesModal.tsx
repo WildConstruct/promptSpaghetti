@@ -33,7 +33,10 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
   config
 }) => {
   const { hasConsent, grantConsent, withdrawConsent } = useConsent();
-  const [localPreferences, setLocalPreferences] = useState<Record<ConsentType, boolean>>({} as any);
+  const [localPreferences, setLocalPreferences] = useState<Record<ConsentType, boolean>>(
+    {} as Record<ConsentType,
+    boolean>
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'consents' | 'privacy' | 'communication'>('consents');
@@ -41,7 +44,7 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
   useEffect(() => {
     if (isOpen && config && preferences) {
       // Initialize local state from current preferences
-      const initialState: Record<ConsentType, boolean> = {} as any;
+      const initialState: Record<ConsentType, boolean> = {} as Record<ConsentType, boolean>;
       
       config.consentTypes.forEach(typeConfig => {
         initialState[typeConfig.type] = hasConsent(typeConfig.type);
@@ -91,7 +94,7 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
   const handleCancel = () => {
     // Reset local state
     if (config && preferences) {
-      const resetState: Record<ConsentType, boolean> = {} as any;
+      const resetState: Record<ConsentType, boolean> = {} as Record<ConsentType, boolean>;
       config.consentTypes.forEach(typeConfig => {
         resetState[typeConfig.type] = hasConsent(typeConfig.type);
       });

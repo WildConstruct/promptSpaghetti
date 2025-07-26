@@ -3,9 +3,7 @@
 // Also includes import functionality to convert from GeneratorBundle back to Graph
 // Epic 8.6 Task 7: Enhanced with Hybrid Prompting Export Structure
 import { z } from 'zod';
-import { Graph, Node, NodeTypeEnum } from '../../packages/core/graphSchema';
-import { HybridPromptExportService, HybridExportFormat } from '../../packages/core/services/HybridExportService.js';
-import { GraphSharingService, SharedGraphFormat } from '../../packages/core/services/GraphSharingService.js';
+import { Graph, Node } from '../../packages/core/graphSchema';
 
 /**
  * Epic 8.6: Enhanced VFX/ControlNet parameter structures
@@ -426,7 +424,7 @@ function extractSceneData(graph: Graph): Partial<SceneData> {
           if (stringValue.includes(keyword)) {
             if (keyword === 'golden') sceneData.lighting!.timeOfDay = 'golden-hour';
             else if (keyword === 'blue') sceneData.lighting!.timeOfDay = 'blue-hour';
-            else sceneData.lighting!.timeOfDay = keyword as any;
+            else sceneData.lighting!.timeOfDay = keyword as 'golden-hour' | 'blue-hour' | 'dawn' | 'dusk' | 'noon' | 'midnight';
             break;
           }
         }
@@ -438,7 +436,7 @@ function extractSceneData(graph: Graph): Partial<SceneData> {
         const stringValue = String(value).toLowerCase();
         for (const keyword of weatherKeywords) {
           if (stringValue.includes(keyword)) {
-            sceneData.lighting!.weather = keyword as any;
+            sceneData.lighting!.weather = keyword as 'clear' | 'cloudy' | 'overcast' | 'foggy' | 'rainy' | 'stormy' | 'snowy';
             break;
           }
         }
@@ -450,7 +448,7 @@ function extractSceneData(graph: Graph): Partial<SceneData> {
         const stringValue = String(value).toLowerCase();
         for (const keyword of moodKeywords) {
           if (stringValue.includes(keyword)) {
-            sceneData.lighting!.mood = keyword as any;
+            sceneData.lighting!.mood = keyword as 'dramatic' | 'peaceful' | 'romantic' | 'mysterious' | 'energetic' | 'melancholic';
             break;
           }
         }

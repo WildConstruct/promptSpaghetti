@@ -85,7 +85,7 @@ export const LearningAnalyticsEventSchema = z.object({
     }),
     user_context: z.object({
         user_role: z.string(),
-        skill_profile_snapshot: z.any().optional(),
+        skill_profile_snapshot: z.unknown().optional(),
         learning_goals: z.array(z.string()).optional(),
         current_learning_path: z.string().optional()
     }),

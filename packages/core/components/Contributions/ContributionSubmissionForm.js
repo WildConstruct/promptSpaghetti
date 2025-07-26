@@ -7,7 +7,7 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * fields, validation, and preview capabilities.
  */
 import { useState } from 'react';
-import { validateCreateContributionRequest, CONTRIBUTION_TYPE_DESCRIPTIONS } from '../../types/contributions.js';
+import { validateCreateContributionRequest, CONTRIBUTION_TYPE_DESCRIPTIONS } from '../../types/contributions';
 const FORM_STEPS = [
     {
         id: 'type',

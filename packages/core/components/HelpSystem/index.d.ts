@@ -13,10 +13,9 @@ export type { MarketplaceContextualHelpProps, ContextualTriggerType, UserBehavio
 export { ContextualHelpSystem } from '../ContextualHelp/ContextualHelpSystem';
 export type { HelpContent, HelpContentType, ContextualHelpProps } from '../ContextualHelp/ContextualHelpSystem';
 export { HelpContentManager } from '../ContextualHelp/HelpContentManager';
+import { Epic16HelpSystem } from './Epic16HelpSystem';
 export type { UserProfile, LearningPath } from '../ContextualHelp/HelpContentManager';
-export declare const createMarketplaceHelpContext: (page: string, userRole: string, templateData?: any, userBehavior?: any) => {
-    currentPage: string;
-    userRole: string;
+export declare     userRole: string;
     pageContext: {
         template: any;
         cartItems: any;
@@ -24,9 +23,7 @@ export declare const createMarketplaceHelpContext: (page: string, userRole: stri
         forumContext: any;
     };
 };
-export declare const initializeHelpAnalytics: () => {
-    trackEvent: (event: string, data: Record<string, any>) => void;
-    getAnalytics: () => {
+export declare     getAnalytics: () => {
         helpInteractions: any[];
         userStruggles: any[];
         effectiveness: Record<string, {

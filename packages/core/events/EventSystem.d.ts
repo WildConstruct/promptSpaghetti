@@ -35,124 +35,7 @@ export declare enum EventCategory {
     UI = "ui",
     PERFORMANCE = "performance"
 }
-export declare const WorkflowEventSchema: z.ZodObject<{
-    type: z.ZodEnum<["task_created", "task_assigned", "task_started", "task_completed", "task_cancelled", "project_created", "project_updated", "project_deleted", "template_created", "template_updated", "template_used"]>;
-    taskId: z.ZodOptional<z.ZodString>;
-    projectId: z.ZodOptional<z.ZodString>;
-    templateId: z.ZodOptional<z.ZodString>;
-    assigneeId: z.ZodOptional<z.ZodString>;
-    data: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
-}, "strip", z.ZodTypeAny, {
-    type: "task_created" | "task_assigned" | "task_started" | "task_completed" | "task_cancelled" | "project_created" | "project_updated" | "project_deleted" | "template_created" | "template_updated" | "template_used";
-    data?: Record<string, unknown> | undefined;
-    projectId?: string | undefined;
-    taskId?: string | undefined;
-    templateId?: string | undefined;
-    assigneeId?: string | undefined;
-}, {
-    type: "task_created" | "task_assigned" | "task_started" | "task_completed" | "task_cancelled" | "project_created" | "project_updated" | "project_deleted" | "template_created" | "template_updated" | "template_used";
-    data?: Record<string, unknown> | undefined;
-    projectId?: string | undefined;
-    taskId?: string | undefined;
-    templateId?: string | undefined;
-    assigneeId?: string | undefined;
-}>;
-export declare const AnalyticsEventSchema: z.ZodObject<{
-    type: z.ZodEnum<["user_action", "page_view", "feature_used", "performance_metric", "conversion_event", "error_tracked", "engagement_metric"]>;
-    action: z.ZodOptional<z.ZodString>;
-    feature: z.ZodOptional<z.ZodString>;
-    value: z.ZodOptional<z.ZodNumber>;
-    duration: z.ZodOptional<z.ZodNumber>;
-    data: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
-}, "strip", z.ZodTypeAny, {
-    type: "user_action" | "page_view" | "feature_used" | "performance_metric" | "conversion_event" | "error_tracked" | "engagement_metric";
-    value?: number | undefined;
-    action?: string | undefined;
-    data?: Record<string, unknown> | undefined;
-    duration?: number | undefined;
-    feature?: string | undefined;
-}, {
-    type: "user_action" | "page_view" | "feature_used" | "performance_metric" | "conversion_event" | "error_tracked" | "engagement_metric";
-    value?: number | undefined;
-    action?: string | undefined;
-    data?: Record<string, unknown> | undefined;
-    duration?: number | undefined;
-    feature?: string | undefined;
-}>;
-export declare const SecurityEventSchema: z.ZodObject<{
-    type: z.ZodEnum<["auth_attempt", "auth_success", "auth_failure", "permission_denied", "suspicious_activity", "security_violation", "audit_log"]>;
-    severity: z.ZodEnum<["low", "medium", "high", "critical"]>;
-    ipAddress: z.ZodOptional<z.ZodString>;
-    userAgent: z.ZodOptional<z.ZodString>;
-    resource: z.ZodOptional<z.ZodString>;
-    data: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
-}, "strip", z.ZodTypeAny, {
-    type: "suspicious_activity" | "auth_attempt" | "auth_success" | "auth_failure" | "permission_denied" | "security_violation" | "audit_log";
-    severity: "low" | "medium" | "high" | "critical";
-    data?: Record<string, unknown> | undefined;
-    resource?: string | undefined;
-    ipAddress?: string | undefined;
-    userAgent?: string | undefined;
-}, {
-    type: "suspicious_activity" | "auth_attempt" | "auth_success" | "auth_failure" | "permission_denied" | "security_violation" | "audit_log";
-    severity: "low" | "medium" | "high" | "critical";
-    data?: Record<string, unknown> | undefined;
-    resource?: string | undefined;
-    ipAddress?: string | undefined;
-    userAgent?: string | undefined;
-}>;
-export declare const SystemEventSchema: z.ZodObject<{
-    type: z.ZodEnum<["service_started", "service_stopped", "health_check", "resource_alert", "backup_completed", "deployment_started", "deployment_completed"]>;
-    service: z.ZodOptional<z.ZodString>;
-    status: z.ZodOptional<z.ZodEnum<["healthy", "degraded", "unhealthy", "unknown"]>>;
-    metrics: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodNumber>>;
-    data: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
-}, "strip", z.ZodTypeAny, {
-    type: "service_started" | "service_stopped" | "health_check" | "resource_alert" | "backup_completed" | "deployment_started" | "deployment_completed";
-    status?: "unknown" | "healthy" | "degraded" | "unhealthy" | undefined;
-    data?: Record<string, unknown> | undefined;
-    metrics?: Record<string, number> | undefined;
-    service?: string | undefined;
-}, {
-    type: "service_started" | "service_stopped" | "health_check" | "resource_alert" | "backup_completed" | "deployment_started" | "deployment_completed";
-    status?: "unknown" | "healthy" | "degraded" | "unhealthy" | undefined;
-    data?: Record<string, unknown> | undefined;
-    metrics?: Record<string, number> | undefined;
-    service?: string | undefined;
-}>;
-export declare const UIEventSchema: z.ZodObject<{
-    type: z.ZodEnum<["component_mounted", "component_unmounted", "user_interaction", "state_change", "navigation", "modal_opened", "modal_closed"]>;
-    component: z.ZodOptional<z.ZodString>;
-    action: z.ZodOptional<z.ZodString>;
-    path: z.ZodOptional<z.ZodString>;
-    data: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
-}, "strip", z.ZodTypeAny, {
-    type: "navigation" | "state_change" | "component_mounted" | "component_unmounted" | "user_interaction" | "modal_opened" | "modal_closed";
-    path?: string | undefined;
-    component?: string | undefined;
-    action?: string | undefined;
-    data?: Record<string, unknown> | undefined;
-}, {
-    type: "navigation" | "state_change" | "component_mounted" | "component_unmounted" | "user_interaction" | "modal_opened" | "modal_closed";
-    path?: string | undefined;
-    component?: string | undefined;
-    action?: string | undefined;
-    data?: Record<string, unknown> | undefined;
-}>;
-export interface EventFilter {
-    types?: string[];
-    categories?: EventCategory[];
-    priorities?: EventPriority[];
-    sources?: string[];
-    userIds?: string[];
-    sessionIds?: string[];
-    timeWindow?: {
-        start?: Date;
-        end?: Date;
-    };
-}
-export type EventHandler<T extends BaseEvent = BaseEvent> = (event: T) => void | Promise<void>;
-export interface EventSubscription {
+export declare export interface EventSubscription {
     id: string;
     filter: EventFilter;
     handler: EventHandler;
@@ -211,16 +94,10 @@ export declare class EventBus extends EventEmitter {
     private addToHistory;
     private enableEventHistory;
 }
-export declare const globalEventBus: EventBus;
-export declare const createNodeEvent: (nodeId: string, eventType: string, data?: any) => {
-    id: string;
-    type: string;
+export declare     type: string;
     nodeId: string;
     data: any;
     timestamp: number;
 };
-export declare const createLoggingMiddleware: () => (event: any, next: () => void) => void;
-export declare const createValidationMiddleware: () => (event: any, next: () => void) => void;
-export declare const createRateLimitMiddleware: (maxEvents?: number, timeWindow?: number) => (event: any, next: any) => void;
-export type { BaseEvent, EventFilter, EventHandler, EventSubscription, EventMiddleware };
+export declare export declare export declare export type { BaseEvent, EventFilter, EventHandler, EventSubscription, EventMiddleware };
 //# sourceMappingURL=EventSystem.d.ts.map

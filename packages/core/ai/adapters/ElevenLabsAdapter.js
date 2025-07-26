@@ -4,7 +4,7 @@
  *
  * Adapter for ElevenLabs AI voice synthesis with custom voice training and cloning
  */
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel.js';
+import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
 export class ElevenLabsAdapter extends BaseAIModel {
     config;
     availableVoices = [];
@@ -336,6 +336,8 @@ export class ElevenLabsAdapter extends BaseAIModel {
             voice_settings: ElevenLabsAdapter.getDefaultVoiceSettings()
         };
         const processed = { ...defaults, ...options };
+        // Set text if provided, or ensure it exists
+        processed.text = text || processed.text || ''; // Ensure text is always a string
         // Validate voice_id exists
         if (this.availableVoices.length > 0) {
             const voiceExists = this.availableVoices.some(v => v.voice_id === processed.voice_id);

@@ -22,12 +22,12 @@ declare module 'fastify' {
     databaseService: DatabaseService;
     
     // Auth service plugin
-    authService: any;
+    authService: unknown;
     auditService: AuditService;
     
     // Other plugin services
-    redis?: any;
-    websocket?: any;
+    redis?: unknown;
+    websocket?: unknown;
   }
 
   interface FastifyRequest {

@@ -6,9 +6,9 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * focusing on creative workflow optimization and director-specific metrics
  */
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Badge } from '../ui/Badge.js';
-import { Button } from '../ui/Button.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Badge } from '../ui/Badge';
+import { Button } from '../ui/Button';
 export const DirectorAnalyticsView = ({ conversionData, performanceData, timeRange, userId, loading }) => {
     const [directorMetrics, setDirectorMetrics] = useState({
         projectsCreated: 0,

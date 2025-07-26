@@ -4,7 +4,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Provides comprehensive compliance monitoring with baseline tracking for directors
  */
 import { useState, useEffect } from 'react';
-import { enhancedComplianceMonitor } from '../services/ComplianceMonitor.js';
+import { enhancedComplianceMonitor } from '../services/ComplianceMonitor';
 const ComplianceDashboard = ({ className = '', autoRefresh = true, refreshInterval = 300000 // 5 minutes
  }) => {
     const [dashboardData, setDashboardData] = useState(null);

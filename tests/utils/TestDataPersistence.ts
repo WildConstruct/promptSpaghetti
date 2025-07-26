@@ -108,7 +108,7 @@ export class TestDataPersistence {
   /**
    * Retrieve test data by key
    */
-  async retrieve(key: string): Promise<any | null> {
+  async retrieve(key: string): Promise<unknown | null> {
     let storedData: StoredTestData | null = null;
 
     switch (this.config.storage) {

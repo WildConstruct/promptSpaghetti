@@ -403,7 +403,7 @@ class TemplateParser {
     /**
      * Parse template and extract variables
      */
-    parseTemplate(template) {
+    parseTemplate(template: string) {
         // Check cache first
         if (this.parseCache.has(template)) {
             return this.parseCache.get(template);
@@ -417,10 +417,9 @@ class TemplateParser {
         this.parseCache.set(template, result);
         return result;
     }
-    performParse(template) {
+    performParse(template: string) {
         const variables = [];
         const errors = [];
-        const processedTemplate = template;
         // Find all potential variable patterns
         const braceRegex = /{([^{}]*)}/g;
         let match;
@@ -469,7 +468,7 @@ class TemplateParser {
             processedTemplate: this.highlightVariables(template, variables)
         };
     }
-    validateVariableName(name) {
+    validateVariableName(name: string) {
         const trimmed = name.trim();
         if (trimmed === '') {
             return {
@@ -489,7 +488,7 @@ class TemplateParser {
         }
         return { isValid: true };
     }
-    findUnclosedBraces(template, errors) {
+    findUnclosedBraces(template: string, errors: any[]) {
         let braceCount = 0;
         let lastOpenBrace = -1;
         for (let i = 0; i < template.length; i++) {
@@ -512,7 +511,7 @@ class TemplateParser {
             });
         }
     }
-    findNestedBraces(template, errors) {
+    findNestedBraces(template: string, errors: any[]) {
         let braceDepth = 0;
         for (let i = 0; i < template.length; i++) {
             if (template[i] === '{') {
@@ -531,7 +530,7 @@ class TemplateParser {
             }
         }
     }
-    highlightVariables(template, variables) {
+    highlightVariables(template: string) {
         // This would be used by the UI to highlight variables
         // For now, return template as-is since highlighting is done in React
         return template;
@@ -539,7 +538,7 @@ class TemplateParser {
     /**
      * Infer variable type from name patterns and context
      */
-    inferVariableType(variableName, template, context) {
+    inferVariableType(variableName: string, template: string, context?: string) {
         const name = variableName.toLowerCase();
         // Number patterns
         if (name.includes('count') || name.includes('number') || name.includes('qty') ||
@@ -666,7 +665,7 @@ class TemplateParser {
     /**
      * Extract surrounding context for better type inference
      */
-    extractSurroundingContext(variableName, template) {
+    extractSurroundingContext(variableName: string, template: string) {
         const placeholder = `{${variableName}}`;
         const index = template.indexOf(placeholder);
         if (index === -1)
@@ -682,14 +681,14 @@ class TemplateParser {
     /**
      * Set context for contextual suggestions
      */
-    setContext(nodeType, existingVariables = []) {
+    setContext(nodeType?: string, existingVariables: string[] = []) {
         this.currentNodeType = nodeType;
         this.currentVariables = existingVariables;
     }
     /**
      * Track variable usage for user history
      */
-    trackVariableUsage(variableName) {
+    trackVariableUsage(variableName: string) {
         const current = this.userHistory.get(variableName) || { count: 0, lastUsed: new Date() };
         this.userHistory.set(variableName, {
             count: current.count + 1,
@@ -724,7 +723,7 @@ class TemplateParser {
     /**
      * Find related variables based on co-occurrence patterns
      */
-    findRelatedVariables(variableName) {
+    findRelatedVariables() {
         // This could be enhanced to track actual co-occurrence patterns
         // For now, return empty array but structure is in place
         return [];
@@ -750,7 +749,7 @@ class TemplateParser {
     /**
      * Get variable suggestions for auto-completion with enhanced contextual support
      */
-    getVariableSuggestions(partialName = '', context, includeHistory = true) {
+    getVariableSuggestions(partialName: string = '', context?: string, includeHistory: boolean = true) {
         const allSuggestions = [];
         // Start with contextual suggestions (highest priority)
         const contextualSuggestions = this.getContextualSuggestions();
@@ -802,7 +801,7 @@ class TemplateParser {
     /**
      * Substitute variables in template with actual values
      */
-    substituteVariables(template, values) {
+    substituteVariables(template: string, values: Record<string, string>) {
         let result = template;
         for (const [varName, value] of Object.entries(values)) {
             const regex = new RegExp(`{${varName}}`, 'g');
@@ -813,7 +812,7 @@ class TemplateParser {
     /**
      * Get preview with sample values
      */
-    getPreviewWithSamples(template) {
+    getPreviewWithSamples(template: string) {
         const parseResult = this.parseTemplate(template);
         const sampleValues = {};
         for (const variable of parseResult.variables) {
@@ -840,13 +839,13 @@ class TemplateParser {
 // Export singleton instance
 export const templateParser = TemplateParser.getInstance();
 // Export utility functions
-export const parseTemplate = (template) => templateParser.parseTemplate(template);
-export const getVariableSuggestions = (partialName, context, includeHistory = true) => templateParser.getVariableSuggestions(partialName, context, includeHistory);
-export const substituteVariables = (template, values) => templateParser.substituteVariables(template, values);
-export const getPreviewWithSamples = (template) => templateParser.getPreviewWithSamples(template);
+export const parseTemplate = (template: string) => templateParser.parseTemplate(template);
+export const getVariableSuggestions = (partialName?: string, context?: string, includeHistory: boolean = true) => templateParser.getVariableSuggestions(partialName, context, includeHistory);
+export const substituteVariables = (template: string, values: Record<string, string>) => templateParser.substituteVariables(template, values);
+export const getPreviewWithSamples = (template: string) => templateParser.getPreviewWithSamples(template);
 // Context management functions
-export const setVariableContext = (nodeType, existingVariables = []) => templateParser.setContext(nodeType, existingVariables);
-export const trackVariableUsage = (variableName) => templateParser.trackVariableUsage(variableName);
+export const setVariableContext = (nodeType?: string, existingVariables: string[] = []) => templateParser.setContext(nodeType, existingVariables);
+export const trackVariableUsage = (variableName: string) => templateParser.trackVariableUsage(variableName);
 // Clear cache utility
 export const clearTemplateCache = () => templateParser.clearCache();
 // Variable categories for UI filtering
@@ -857,7 +856,7 @@ export const VARIABLE_CATEGORIES = [
 /**
  * Generate smart default values for a template based on its variables
  */
-export const generateSmartDefaults = (parseResult) => {
+export const generateSmartDefaults = (parseResult: any) => {
     const defaults = {};
     parseResult.variables
         .filter(v => v.isValid)
@@ -876,7 +875,7 @@ export const generateSmartDefaults = (parseResult) => {
 /**
  * Get contextual default values based on node type and template content
  */
-export const getContextualDefault = (name, nodeType, template) => {
+export const getContextualDefault = (name: string, nodeType?: string, template?: string) => {
     // Node-type specific defaults
     if (nodeType === 'output') {
         if (name.includes('title') || name.includes('headline'))

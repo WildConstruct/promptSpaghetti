@@ -285,7 +285,7 @@ export class ConflictResolutionService extends EventEmitter {
   async resolveConflictsManually(
     resourceId: string,
     strategy: ResolutionStrategy,
-    userResolution?: any,
+    userResolution?: unknown,
     userId?: string
   ): Promise<ResolutionResult> {
     try {
@@ -431,7 +431,7 @@ export class ConflictResolutionService extends EventEmitter {
   /**
    * Get available rollback points for a resource
    */
-  getRollbackPoints(resourceId: string): any[] {
+  getRollbackPoints(resourceId: string): unknown[] {
     return this.conflictEngine.getRollbackPoints(resourceId);
   }
 
@@ -684,7 +684,7 @@ export class ConflictResolutionService extends EventEmitter {
   /**
    * Update resource content
    */
-  private async updateResourceContent(resourceId: string, content: any): Promise<void> {
+  private async updateResourceContent(resourceId: string, content: unknown): Promise<void> {
     // This would update the actual resource content in the database
     console.log(`Updating resource ${resourceId} with new content`);
   }

@@ -1,6 +1,6 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React from 'react';
-import { shouldShowField, classifyField } from '../../stores/uiSettingsStore.js';
+import { shouldShowField, classifyField } from '../../stores/uiSettingsStore';
 // Convert technical error messages to filmmaker-friendly language
 const getFilmmakerFriendlyError = (message) => {
     const errorMappings = {
@@ -23,10 +23,11 @@ const getFilmmakerFriendlyError = (message) => {
         'schema': 'format',
         'Schema': 'Format'
     };
+    // Performance optimization: use a single pass replacement
     let friendlyMessage = message;
-    for (const [technical, friendly] of Object.entries(errorMappings)) {
-        friendlyMessage = friendlyMessage.replace(new RegExp(technical, 'g'), friendly);
-    }
+    Object.entries(errorMappings).forEach(([technical, friendly]) => {
+        friendlyMessage = friendlyMessage.replace(new RegExp(technical, 'gi'), friendly);
+    });
     return friendlyMessage;
 };
 export const BaseNodeEditor = ({ nodeId, nodeData, schema, onChange, className = '', children }) => {
@@ -48,7 +49,7 @@ export const BaseNodeEditor = ({ nodeId, nodeData, schema, onChange, className =
                     const parsed = fieldSchema.safeParse(val);
                     setFieldErrors((prev) => ({
                         ...prev,
-                        [key]: parsed.success ? '' : getFilmmakerFriendlyError(parsed.error.issues[0]?.message || 'Invalid value')
+                        [key]: parsed.success ? '' : getFilmmakerFriendlyError(parsed.error.issues[0]?.message ?? 'Invalid value')
                     }));
                 }
             }
@@ -65,15 +66,15 @@ export const BaseNodeEditor = ({ nodeId, nodeData, schema, onChange, className =
         try {
             const shape = schema.shape;
             if (typeof shape === 'function') {
-                return shape()[key] || null;
+                return shape()[key] ?? null;
             }
             else if (shape) {
-                return shape[key] || null;
+                return shape[key] ?? null;
             }
             else if (schema._def?.shape) {
                 const s = schema._def.shape;
                 const shapeObj = typeof s === 'function' ? s() : s;
-                return shapeObj[key] || null;
+                return shapeObj[key] ?? null;
             }
         }
         catch (error) {

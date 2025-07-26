@@ -1,6 +1,6 @@
 // Epic 17.1.3 - Toggle Details Modal Component
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   X, 
   Clock, 
@@ -75,27 +75,14 @@ interface ToggleDetails {
   };
 }
 
-export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({
-  isOpen,
-  onClose,
-  toggleId,
-  onEdit
-}) => {
-  const [toggle, setToggle] = useState<ToggleDetails | null>(null);
-  const [loading, setLoading] = useState(false);
+export   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<
     'overview' | 'config' | 'audit' | 'dependencies' | 'targeting'
   >('overview');
   const [showUserPreview, setShowUserPreview] = useState(false);
 
-  useEffect(() => {
-    if (isOpen && toggleId) {
-      fetchToggleDetails();
-    }
-  }, [isOpen, toggleId]);
-
-  const fetchToggleDetails = async () => {
+  const fetchToggleDetails = useCallback(async () => {
     setLoading(true);
     setError(null);
     
@@ -117,7 +104,13 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [toggleId]);
+
+  useEffect(() => {
+    if (isOpen && toggleId) {
+      fetchToggleDetails();
+    }
+  }, [isOpen, toggleId, fetchToggleDetails]);
 
   const getClaudeImpactDisplay = (impact: string) => {
     switch (impact) {

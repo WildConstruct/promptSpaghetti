@@ -1,15 +1,13 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useRef, useEffect, useMemo } from 'react';
-import { parseTemplate, getVariableSuggestions, getPreviewWithSamples, setTemplateContext, trackVariableUsage, VARIABLE_CATEGORIES } from '../../utils/templateParser.js';
-import { useTemplatePreview } from '../../hooks/useTemplatePreview.js';
+import { parseTemplate, getVariableSuggestions, getPreviewWithSamples, setTemplateContext, trackVariableUsage, VARIABLE_CATEGORIES } from '../../utils/templateParser';
+import { useTemplatePreview } from '../../hooks/useTemplatePreview';
 export const TemplateEditor = ({ value, onChange, onVariablesChange, variableValues = {}, nodeType, existingVariables = [], placeholder = 'Enter your template...', disabled = false, showPreview = false, showRealTimePreview = false, autoComplete = true, showCategoryFilters = false, maxSuggestions = 10, className = '' }) => {
     const [isFocused, setIsFocused] = useState(false);
     const [showSuggestions, setShowSuggestions] = useState(false);
-    const [_____currentSuggestion, _____setCurrentSuggestion] = useState('');
     const [suggestionIndex, setSuggestionIndex] = useState(-1);
     const [cursorPosition, setCursorPosition] = useState(0);
     const [selectedCategory, setSelectedCategory] = useState('all');
-    const [_____suggestionScrollIndex, _____setSuggestionScrollIndex] = useState(0);
     const inputRef = useRef(null);
     const suggestionsRef = useRef(null);
     const suggestionItemRefs = useRef([]);

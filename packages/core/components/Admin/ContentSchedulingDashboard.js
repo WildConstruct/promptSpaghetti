@@ -9,14 +9,14 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Epic: 17 - Backstage Admin Controls
  */
 import { useState, useEffect, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
-import { Input } from '../ui/Input.js';
-import { Select } from '../ui/Select.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
+import { Input } from '../ui/Input';
+import { Select } from '../ui/Select';
 import { Calendar, Clock, PlayCircle, PauseCircle, Edit, Eye, TrendingUp, Users, FileText, Image, Video, Megaphone, Archive, Trash2, Plus, Search, Download, RefreshCw, Settings, CheckCircle, XCircle, Globe, Target, Share2, Bell } from 'lucide-react';
-import { contentSchedulingService } from '../../services/ContentSchedulingService.js';
+import { contentSchedulingService } from '../../services/ContentSchedulingService';
 const CONTENT_TYPE_CONFIG = {
     article: { color: 'text-blue-600 bg-blue-100', icon: FileText },
     blog_post: { color: 'text-green-600 bg-green-100', icon: Edit },

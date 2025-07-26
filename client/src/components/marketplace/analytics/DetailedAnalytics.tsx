@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { TemplateMetrics, TimeRange } from '../../../types/analytics';
 import { TemplateMetricsCard } from './TemplateMetricsCard';
 import { DemographicsChart } from './DemographicsChart';
@@ -37,7 +37,7 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
   const [viewMode, setViewMode] = useState<'overview' | 'demographics' | 'trends'>('overview');
 
   // Load creator's templates
-  const loadTemplates = async () => {
+  const loadTemplates = useCallback(async () => {
     try {
       // This would be replaced with actual API call to get creator's templates
       const response = await fetch(`/api/templates?creator_id=${creatorId}`);
@@ -52,10 +52,10 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
     } catch (err) {
       console.error('Failed to load templates:', err);
     }
-  };
+  }, [creatorId, selectedTemplateId]);
 
   // Load template metrics
-  const loadTemplateMetrics = async (templateId: string) => {
+  const loadTemplateMetrics = useCallback(async (templateId: string) => {
     if (!templateId) return;
 
     try {
@@ -76,18 +76,18 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [timeRange, startDate, endDate]);
 
   // Load data on mount and when dependencies change
   useEffect(() => {
     loadTemplates();
-  }, [creatorId]);
+  }, [loadTemplates]);
 
   useEffect(() => {
     if (selectedTemplateId) {
       loadTemplateMetrics(selectedTemplateId);
     }
-  }, [selectedTemplateId, timeRange, startDate, endDate]);
+  }, [selectedTemplateId, loadTemplateMetrics]);
 
   // Handle template selection
   const handleTemplateChange = (templateId: string) => {
@@ -151,8 +151,6 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
       </div>
     );
   }
-
-  const ___selectedTemplate = templates.find(t => t.id === selectedTemplateId);
 
   return (
     <div className="detailed-analytics">

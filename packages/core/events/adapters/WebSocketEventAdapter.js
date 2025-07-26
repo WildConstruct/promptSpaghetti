@@ -4,8 +4,8 @@
  * Bridges the existing WebSocket collaboration system with the new centralized event bus.
  * Converts WebSocket messages to standard events and vice versa.
  */
-import { globalEventBus, EventFactory, EventCategory, EventPriority } from '../EventSystem.js';
-import { CollaborationEventType } from '../../collaboration/EnhancedCollaborationService.js';
+import { globalEventBus, EventFactory, EventCategory, EventPriority } from '../EventSystem';
+import { CollaborationEventType } from '../../collaboration/EnhancedCollaborationService';
 /**
  * Maps WebSocket message types to event system types
  */

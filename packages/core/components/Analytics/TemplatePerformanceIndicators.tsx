@@ -724,21 +724,7 @@ export interface ExportConfig {
   metrics: string[];
 }
 
-export const TemplatePerformanceIndicators: React.FC<TemplatePerformanceIndicatorsProps> = ({
-  templateId,
-  templateMetadata,
-  funnelDefinition,
-  analyticsInfrastructure,
-  timeRange = { start: Date.now() - 30 * 24 * 60 * 60 * 1000, end: Date.now() },
-  displayMode = 'standard',
-  comparisonEnabled = true,
-  alertsEnabled = true,
-  onIndicatorClick,
-  onOptimizationAction,
-  onExport
-}) => {
-  const [performanceData, setPerformanceData] = useState<TemplatePerformanceData | null>(null);
-  const [loading, setLoading] = useState(true);
+export   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedIndicator, setSelectedIndicator] = useState<string | null>(null);
   const [showAlerts, setShowAlerts] = useState(true);
@@ -786,7 +772,7 @@ export const TemplatePerformanceIndicators: React.FC<TemplatePerformanceIndicato
 
   // Process template performance data
   const processTemplatePerformanceData = async (
-    rawData: any,
+    rawData: unknown,
     metadata: TemplateMetadata,
     funnel: ConversionFunnelDefinition
   ): Promise<TemplatePerformanceData> => {
@@ -1420,7 +1406,12 @@ export const TemplatePerformanceIndicators: React.FC<TemplatePerformanceIndicato
   }, [onIndicatorClick]);
 
   // Handle optimization action
-  const handleOptimizationAction = useCallback((actionType: string, targetId: string, details: Record<string, any> = {}) => {
+  const handleOptimizationAction = useCallback(
+    (actionType: string,
+    targetId: string,
+    details: Record<string,
+    any> = {}
+  ) => {
     const action: OptimizationAction = {
       actionType: actionType as any,
       targetId,
@@ -1721,7 +1712,11 @@ export const TemplatePerformanceIndicators: React.FC<TemplatePerformanceIndicato
                           key={action.actionId}
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleOptimizationAction(action.actionType, indicator.indicatorId, { actionId: action.actionId });
+                            handleOptimizationAction(
+                              action.actionType,
+                              indicator.indicatorId,
+                              { actionId: action.actionId }
+                            );
                           }}
                           className={`indicator-action-button ${action.priority}`}
                         >

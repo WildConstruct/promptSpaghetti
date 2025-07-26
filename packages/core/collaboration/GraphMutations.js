@@ -5,7 +5,7 @@
  * Integrates with existing WebSocket collaboration infrastructure
  */
 import { z } from 'zod';
-import { NodeTypeEnum } from '../graphSchema.js';
+import { NodeTypeEnum } from '../graphSchema';
 /**
  * Operation priority for conflict resolution
  */
@@ -73,7 +73,7 @@ export const NodeAddOperationSchema = z.object({
     nodeId: z.string().min(1),
     nodeType: NodeTypeEnum,
     position: PositionSchema,
-    initialData: z.record(z.any()).optional(),
+    initialData: z.record(z.unknown()).optional(),
     parentId: z.string().optional(),
     timestamp: z.number().positive(),
     userId: z.string().min(1),
@@ -91,8 +91,8 @@ export const NodeUpdateOperationSchema = z.object({
     documentId: z.string().min(1),
     nodeId: z.string().min(1),
     propertyPath: z.array(z.string()),
-    oldValue: z.any(),
-    newValue: z.any(),
+    oldValue: z.unknown(),
+    newValue: z.unknown(),
     partialUpdate: z.boolean(),
     validationSchema: z.string().optional(),
     timestamp: z.number().positive(),
@@ -115,7 +115,7 @@ export const EdgeAddOperationSchema = z.object({
     sourcePort: z.string().optional(),
     targetPort: z.string().optional(),
     edgeType: z.enum(['data', 'control', 'conditional']),
-    metadata: z.record(z.any()).optional(),
+    metadata: z.record(z.unknown()).optional(),
     timestamp: z.number().positive(),
     userId: z.string().min(1),
     clientId: z.string().optional(),
@@ -137,7 +137,7 @@ export const MutationOperationSchema = z.discriminatedUnion('type', [
 /**
  * Generate a unique operation ID
  */
-export function generateOperationId(userId, timestamp) {
+export function generateOperationId(userId: string, timestamp?: number): string {
     const ts = timestamp || Date.now();
     const random = Math.random().toString(36).substring(2, 8);
     return `op_${userId}_${ts}_${random}`;
@@ -145,7 +145,7 @@ export function generateOperationId(userId, timestamp) {
 /**
  * Generate a unique node ID
  */
-export function generateNodeId(prefix = 'node') {
+export function generateNodeId(prefix: string = 'node'): string {
     const timestamp = Date.now();
     const random = Math.random().toString(36).substring(2, 8);
     return `${prefix}_${timestamp}_${random}`;
@@ -153,7 +153,7 @@ export function generateNodeId(prefix = 'node') {
 /**
  * Generate a unique edge ID
  */
-export function generateEdgeId(sourceId, targetId) {
+export function generateEdgeId(sourceId: string, targetId: string): string {
     const timestamp = Date.now();
     const random = Math.random().toString(36).substring(2, 6);
     return `edge_${sourceId}_${targetId}_${timestamp}_${random}`;
@@ -161,7 +161,7 @@ export function generateEdgeId(sourceId, targetId) {
 /**
  * Check if an operation affects a specific node
  */
-export function operationAffectsNode(operation, nodeId) {
+export function operationAffectsNode(operation: any, nodeId: string): boolean {
     switch (operation.type) {
         case 'NODE_ADD':
         case 'NODE_UPDATE':
@@ -173,7 +173,7 @@ export function operationAffectsNode(operation, nodeId) {
         case 'EDGE_REMOVE':
             return operation.sourceNodeId === nodeId || operation.targetNodeId === nodeId;
         case 'BATCH_MUTATION':
-            return operation.operations.some(op => operationAffectsNode(op, nodeId));
+            return operation.operations.some((op: any) => operationAffectsNode(op, nodeId));
         default:
             return false;
     }
@@ -181,14 +181,14 @@ export function operationAffectsNode(operation, nodeId) {
 /**
  * Check if an operation affects a specific edge
  */
-export function operationAffectsEdge(operation, edgeId) {
+export function operationAffectsEdge(operation: any, edgeId: string): boolean {
     switch (operation.type) {
         case 'EDGE_ADD':
         case 'EDGE_UPDATE':
         case 'EDGE_REMOVE':
             return operation.edgeId === edgeId;
         case 'BATCH_MUTATION':
-            return operation.operations.some(op => operationAffectsEdge(op, edgeId));
+            return operation.operations.some((op: any) => operationAffectsEdge(op, edgeId));
         default:
             return false;
     }
@@ -196,7 +196,7 @@ export function operationAffectsEdge(operation, edgeId) {
 /**
  * Compare operation timestamps for ordering
  */
-export function compareOperations(op1, op2) {
+export function compareOperations(op1: any, op2: any): number {
     if (op1.timestamp !== op2.timestamp) {
         return op1.timestamp - op2.timestamp;
     }
@@ -206,7 +206,7 @@ export function compareOperations(op1, op2) {
 /**
  * Check if two operations conflict
  */
-export function operationsConflict(op1, op2) {
+export function operationsConflict(op1: any, op2: any): boolean {
     // Same operation - no conflict
     if (op1.operationId === op2.operationId) {
         return false;
@@ -229,7 +229,7 @@ export function operationsConflict(op1, op2) {
 /**
  * Extract all node IDs affected by an operation
  */
-export function getAffectedNodeIds(operation) {
+export function getAffectedNodeIds(operation: any): string[] {
     const nodeIds = [];
     switch (operation.type) {
         case 'NODE_ADD':
@@ -244,7 +244,7 @@ export function getAffectedNodeIds(operation) {
             nodeIds.push(operation.sourceNodeId, operation.targetNodeId);
             break;
         case 'BATCH_MUTATION':
-            operation.operations.forEach(op => {
+            operation.operations.forEach((op: any) => {
                 nodeIds.push(...getAffectedNodeIds(op));
             });
             break;
@@ -254,7 +254,7 @@ export function getAffectedNodeIds(operation) {
 /**
  * Extract all edge IDs affected by an operation
  */
-export function getAffectedEdgeIds(operation) {
+export function getAffectedEdgeIds(operation: any): string[] {
     const edgeIds = [];
     switch (operation.type) {
         case 'EDGE_ADD':
@@ -263,7 +263,7 @@ export function getAffectedEdgeIds(operation) {
             edgeIds.push(operation.edgeId);
             break;
         case 'BATCH_MUTATION':
-            operation.operations.forEach(op => {
+            operation.operations.forEach((op: any) => {
                 edgeIds.push(...getAffectedEdgeIds(op));
             });
             break;

@@ -10,10 +10,10 @@ import { EventEmitter } from 'events';
 // Epic 16 Prerequisite System
 // =============================================================================
 export class Epic16PrerequisiteSystem extends EventEmitter {
-    config;
-    checks = new Map();
-    lastReport = null;
-    constructor(config = {}) {
+    config: any;
+    checks: Map<string, any> = new Map();
+    lastReport: any = null;
+    constructor(config: any = {}) {
         super();
         this.config = {
             enabledCategories: ['epic_dependency', 'infrastructure', 'service', 'configuration', 'security'],
@@ -33,7 +33,7 @@ export class Epic16PrerequisiteSystem extends EventEmitter {
     /**
      * Initialize all prerequisite checks
      */
-    initializeChecks() {
+    initializeChecks(): void {
         // Epic 11 (Auth/RBAC) Dependencies
         this.addCheck({
             id: 'epic11_auth_service',

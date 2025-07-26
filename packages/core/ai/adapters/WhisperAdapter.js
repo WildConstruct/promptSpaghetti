@@ -4,7 +4,7 @@
  *
  * Adapter for OpenAI Whisper models for audio transcription and translation
  */
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel.js';
+import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
 export class WhisperAdapter extends BaseAIModel {
     config;
     supportedFormats = [

@@ -17,7 +17,7 @@ const mockDb = {
         metadata: '{}'
       }
     ] 
-  } as unknown)
+  } as unknown as unknown)
 };
 
 describe('DataAccessControlService - Basic Tests', () => {
@@ -28,7 +28,7 @@ describe('DataAccessControlService - Basic Tests', () => {
     jest.clearAllMocks();
     
     mockAuditService = {
-      logSecurityEvent: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown)
+      logSecurityEvent: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown)
     } as any;
     
     dataAccessService = new DataAccessControlService(mockDb as any, mockAuditService);

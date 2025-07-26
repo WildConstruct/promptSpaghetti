@@ -7,17 +7,17 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * UI patterns and integrates with the security event policy engine.
  */
 import { useState, useEffect, useCallback } from 'react';
-import { SecurityEventType, ComplianceFramework, securityEventPolicyEngine } from '../../security/SecurityEventLoggingPolicies.js';
-import { Card } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Alert } from '../ui/Alert.js';
-import { Tabs } from '../ui/Tabs.js';
-import { Dialog } from '../ui/Dialog.js';
-import { Input } from '../ui/Input.js';
-import { Select } from '../ui/Select.js';
-import { Checkbox } from '../ui/Checkbox.js';
-import { AlertRuleBuilder } from './AlertRuleBuilder.js';
+import { SecurityEventType, ComplianceFramework, securityEventPolicyEngine } from '../../security/SecurityEventLoggingPolicies';
+import { Card } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Alert } from '../ui/Alert';
+import { Tabs } from '../ui/Tabs';
+import { Dialog } from '../ui/Dialog';
+import { Input } from '../ui/Input';
+import { Select } from '../ui/Select';
+import { Checkbox } from '../ui/Checkbox';
+import { AlertRuleBuilder } from './AlertRuleBuilder';
 import './SecurityEventLoggingConfigPanel.css';
 /**
  * Main Security Event Logging Configuration Panel

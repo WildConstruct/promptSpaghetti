@@ -10,7 +10,7 @@ export declare class ConfigurationManager {
     private presets;
     private schemas;
     private changeListeners;
-    constructor(logger: any, cache: any);
+    constructor(logger: unknown, cache: unknown);
     /**
      * Register configuration schema for an adaptor
      */
@@ -18,7 +18,12 @@ export declare class ConfigurationManager {
     /**
      * Set configuration for an adaptor with validation
      */
-    setConfiguration(adaptorId: string, config: Record<string, any>, options?: SetConfigurationOptions): Promise<void>;
+    setConfiguration(
+      adaptorId: string,
+      config: Record<string,
+      unknown>,
+      options?: SetConfigurationOptions
+    ): Promise<void>;
     /**
      * Get configuration for an adaptor
      */
@@ -26,11 +31,16 @@ export declare class ConfigurationManager {
     /**
      * Get configuration value with type safety
      */
-    getConfigurationValue<T = any>(adaptorId: string, path: string, defaultValue?: T): T | undefined;
+    getConfigurationValue<T = unknown>(adaptorId: string, path: string, defaultValue?: T): T | undefined;
     /**
      * Update specific configuration values
      */
-    updateConfiguration(adaptorId: string, updates: Record<string, any>, options?: UpdateConfigurationOptions): Promise<void>;
+    updateConfiguration(
+      adaptorId: string,
+      updates: Record<string,
+      unknown>,
+      options?: UpdateConfigurationOptions
+    ): Promise<void>;
     /**
      * Create configuration preset
      */
@@ -38,11 +48,15 @@ export declare class ConfigurationManager {
     /**
      * Apply configuration preset to an adaptor
      */
-    applyPreset(adaptorId: string, presetId: string, overrides?: Record<string, any>): Promise<void>;
+    applyPreset(adaptorId: string, presetId: string, overrides?: Record<string, unknown>): Promise<void>;
     /**
      * Import configuration from various formats
      */
-    importConfiguration(data: string | object, format: ConfigurationFormat, options?: ImportOptions): Promise<ImportResult>;
+    importConfiguration(
+      data: string | object,
+      format: ConfigurationFormat,
+      options?: ImportOptions
+    ): Promise<ImportResult>;
     /**
      * Export configurations in various formats
      */
@@ -50,7 +64,7 @@ export declare class ConfigurationManager {
     /**
      * Validate configuration against schema
      */
-    validateConfiguration(adaptorId: string, config: Record<string, any>): ValidationResult;
+    validateConfiguration(adaptorId: string, config: Record<string, unknown>): ValidationResult;
     /**
      * Get configuration differences between environments
      */
@@ -89,7 +103,7 @@ export declare class ConfigurationManager {
 }
 export interface AdaptorConfiguration {
     adaptorId: string;
-    config: Record<string, any>;
+    config: Record<string, unknown>;
     metadata: ConfigurationMetadata;
     inheritance?: InheritanceInfo;
 }
@@ -102,14 +116,14 @@ export interface ConfigurationMetadata {
 }
 export interface InheritanceInfo {
     parentId: string;
-    overrides: Record<string, any>;
+    overrides: Record<string, unknown>;
 }
 export interface ConfigurationPreset {
     id: string;
     name: string;
     description: string;
     platforms: Platform[];
-    configuration: Record<string, any>;
+    configuration: Record<string, unknown>;
     version?: string;
     environment?: string;
     tags?: string[];
@@ -120,7 +134,7 @@ export interface SetConfigurationOptions {
     source?: string;
     inherit?: {
         parentId: string;
-        overrides?: Record<string, any>;
+        overrides?: Record<string, unknown>;
     };
 }
 export interface UpdateConfigurationOptions {
@@ -165,8 +179,8 @@ export interface ConfigurationDiff {
     toEnvironment: string;
     differences: Array<{
         path: string;
-        fromValue: any;
-        toValue: any;
+        fromValue: unknown;
+        toValue: unknown;
         type: 'added' | 'removed' | 'changed';
     }>;
     summary: string;
@@ -187,6 +201,6 @@ export interface ConfigurationChangeEvent {
 export type ConfigurationChangeListener = (event: ConfigurationChangeEvent) => Promise<void>;
 export declare class ConfigurationError extends Error {
     code: string;
-    details?: Record<string, any> | undefined;
-    constructor(message: string, code: string, details?: Record<string, any> | undefined);
+    details?: Record<string, unknown> | undefined;
+    constructor(message: string, code: string, details?: Record<string, unknown> | undefined);
 }

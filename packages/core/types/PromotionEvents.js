@@ -77,4 +77,3 @@ export var EventDeliveryMethod;
     EventDeliveryMethod["INTERNAL_QUEUE"] = "internal_queue";
     EventDeliveryMethod["DATABASE"] = "database";
 })(EventDeliveryMethod || (EventDeliveryMethod = {}));
-//# sourceMappingURL=PromotionEvents.js.map

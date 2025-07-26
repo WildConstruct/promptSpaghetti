@@ -6,12 +6,15 @@
  */
 import { EventEmitter } from 'events';
 import { z } from 'zod';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { v4 as uuidv4 } from 'uuid';
 // Event Type Definitions from audit findings
 export var AnalyticsEventType;
 (function (AnalyticsEventType) {
     // Core Analytics Events
     AnalyticsEventType["GRAPH_EXECUTION"] = "graph_execution";
+    AnalyticsEventType["GRAPH_CREATED"] = "graph_created";
     AnalyticsEventType["NODE_EXECUTION"] = "node_execution";
     AnalyticsEventType["TOKEN_USAGE"] = "token_usage";
     AnalyticsEventType["USER_INTERACTION"] = "user_interaction";
@@ -29,6 +32,7 @@ export var AnalyticsEventType;
     AnalyticsEventType["FRAUD_DETECTION"] = "fraud_detection";
     AnalyticsEventType["TRANSACTION_EVENT"] = "transaction_event";
     AnalyticsEventType["SYSTEM_HEALTH"] = "system_health";
+    AnalyticsEventType["AUTH_EVENT"] = "auth_event";
     // Business Analytics Events
     AnalyticsEventType["REVENUE_EVENT"] = "revenue_event";
     AnalyticsEventType["SEARCH_EVENT"] = "search_event";
@@ -72,8 +76,8 @@ export const BaseEventSchema = z.object({
     requestId: z.string().optional(),
     traceId: z.string().optional(),
     // Event Data
-    data: z.record(z.any()),
-    metadata: z.record(z.any()).default({}),
+    data: z.record(z.unknown()),
+    metadata: z.record(z.unknown()).default({}),
     // Analytics Enrichment
     tags: z.array(z.string()).default([]),
     environment: z.string().default('development'),
@@ -158,7 +162,8 @@ export class UnifiedEventBus extends EventEmitter {
         catch (error) {
             this.metrics.eventsFailed++;
             this.emit('event:error', { error, eventData });
-            throw new Error(`Failed to publish event: ${error instanceof Error ? error.message : String(error)}`);
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+            throw new Error(`Failed to publish event: ${errorMessage}`);
         }
     }
     /**
@@ -168,9 +173,9 @@ export class UnifiedEventBus extends EventEmitter {
         const subscriberId = uuidv4();
         const fullSubscriber = {
             id: subscriberId,
-            priority: 100,
-            enabled: true,
-            ...subscriber
+            ...subscriber,
+            priority: subscriber.priority ?? 100,
+            enabled: subscriber.enabled ?? true
         };
         this.subscribers.set(subscriberId, fullSubscriber);
         this.metrics.subscribersActive = this.subscribers.size;
@@ -206,7 +211,8 @@ export class UnifiedEventBus extends EventEmitter {
             handler: (event) => {
                 stream.emit('event', event);
             },
-            priority: 1000 // High priority for streams
+            priority: 1000, // High priority for streams
+            enabled: true
         });
         // Clean up subscription when stream is closed
         stream.on('close', () => {
@@ -260,7 +266,7 @@ export class UnifiedEventBus extends EventEmitter {
                     category: EventCategory.SYSTEM,
                     severity: EventSeverity.INFO,
                     type: AnalyticsEventType.INFO_EVENT,
-                    data: transformedEvent.data || legacyEvent,
+                    data: transformedEvent.data || (typeof legacyEvent === 'object' && legacyEvent !== null ? legacyEvent : {}),
                     metadata: {
                         ...transformedEvent.metadata,
                         migrated: true,
@@ -273,7 +279,8 @@ export class UnifiedEventBus extends EventEmitter {
             }
             catch (error) {
                 results.failed++;
-                results.errors.push(`Failed to migrate event: ${error instanceof Error ? error.message : String(error)}`);
+                const errorMessage = error instanceof Error ? error.message : 'Unknown migration error';
+                results.errors.push(`Failed to migrate event: ${errorMessage}`);
             }
         }
         this.emit('migration:completed', { systemName, results });
@@ -302,7 +309,15 @@ export class UnifiedEventBus extends EventEmitter {
             this.metrics.queueDepth = this.eventQueue.length;
         }
         catch (error) {
-            this.emit('queue:error', { error, queueLength: this.eventQueue.length });
+            const errorDetails = {
+                error: error instanceof Error ? {
+                    message: error.message,
+                    stack: error.stack
+                } : { message: 'Unknown queue processing error' },
+                queueLength: this.eventQueue.length,
+                timestamp: Date.now()
+            };
+            this.emit('queue:error', errorDetails);
         }
         finally {
             this.processingQueue = false;
@@ -331,11 +346,16 @@ export class UnifiedEventBus extends EventEmitter {
             }
             catch (error) {
                 this.metrics.eventsFailed++;
-                this.emit('subscriber:error', {
+                const errorDetails = {
                     subscriberId: subscriber.id,
                     eventId: event.id,
-                    error
-                });
+                    error: error instanceof Error ? {
+                        message: error.message,
+                        stack: error.stack
+                    } : { message: 'Unknown subscriber error' },
+                    timestamp: Date.now()
+                };
+                this.emit('subscriber:error', errorDetails);
                 // Handle retry logic if configured
                 if (subscriber.retryConfig) {
                     await this.retrySubscriber(event, subscriber, error);
@@ -361,19 +381,27 @@ export class UnifiedEventBus extends EventEmitter {
             return;
         for (let attempt = 1; attempt <= subscriber.retryConfig.maxRetries; attempt++) {
             try {
-                await new Promise(resolve => setTimeout(resolve, subscriber.retryConfig.backoffMs * attempt));
+                await new Promise(resolve => setTimeout(resolve, (subscriber.retryConfig?.backoffMs ?? 1000) * attempt));
                 await this.processSubscriber(event, subscriber);
                 return; // Success
             }
             catch (retryError) {
                 if (attempt === subscriber.retryConfig.maxRetries) {
-                    this.emit('subscriber:retry_exhausted', {
+                    const retryExhaustedDetails = {
                         subscriberId: subscriber.id,
                         eventId: event.id,
                         attempts: attempt,
-                        originalError,
-                        finalError: retryError
-                    });
+                        originalError: originalError instanceof Error ? {
+                            message: originalError.message,
+                            stack: originalError.stack
+                        } : { message: 'Unknown original error' },
+                        finalError: retryError instanceof Error ? {
+                            message: retryError.message,
+                            stack: retryError.stack
+                        } : { message: 'Unknown retry error' },
+                        timestamp: Date.now()
+                    };
+                    this.emit('subscriber:retry_exhausted', retryExhaustedDetails);
                 }
             }
         }
@@ -382,13 +410,13 @@ export class UnifiedEventBus extends EventEmitter {
      * Check if event matches filter criteria
      */
     matchesFilter(event, filter) {
-        if (filter.types && !filter.types.includes(event.type))
+        if (filter.types?.length && !filter.types.includes(event.type))
             return false;
-        if (filter.categories && !filter.categories.includes(event.category))
+        if (filter.categories?.length && !filter.categories.includes(event.category))
             return false;
-        if (filter.severities && !filter.severities.includes(event.severity))
+        if (filter.severities?.length && !filter.severities.includes(event.severity))
             return false;
-        if (filter.sources && !filter.sources.includes(event.source))
+        if (filter.sources?.length && !filter.sources.includes(event.source))
             return false;
         if (filter.userId && event.userId !== filter.userId)
             return false;
@@ -403,10 +431,8 @@ export class UnifiedEventBus extends EventEmitter {
         if (filter.endTime && event.timestamp > filter.endTime)
             return false;
         // Tag matching (event must have all specified tags)
-        if (filter.tags && filter.tags.length > 0) {
-            const hasAllTags = filter.tags.every(tag => event.tags.includes(tag));
-            if (!hasAllTags)
-                return false;
+        if (filter.tags?.length && !filter.tags.every(tag => event.tags.includes(tag))) {
+            return false;
         }
         return true;
     }

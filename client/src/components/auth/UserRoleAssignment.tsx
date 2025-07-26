@@ -30,14 +30,14 @@ interface UserRole {
   grantedBy: string;
   grantedAt: string;
   expiresAt?: string;
-  scopeContext?: Record<string, any>;
+  scopeContext?: Record<string, unknown>;
 }
 
 interface AssignRoleData {
   userId: string;
   roleId: string;
   expiresAt?: string;
-  scopeContext?: Record<string, any>;
+  scopeContext?: Record<string, unknown>;
 }
 
 export const UserRoleAssignment: React.FC = () => {
@@ -47,7 +47,7 @@ export const UserRoleAssignment: React.FC = () => {
   const [userRoles, setUserRoles] = useState<UserRole[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [roleFilter, ___setRoleFilter] = useState('');
+  const [roleFilter, _setRoleFilter] = useState('');
   const [showAssignModal, setShowAssignModal] = useState(false);
   
   // Assignment form state

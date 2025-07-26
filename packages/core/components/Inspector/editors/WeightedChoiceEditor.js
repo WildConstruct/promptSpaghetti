@@ -1,13 +1,13 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useCallback } from 'react';
-import { TextFieldEditor } from '../TextFieldEditor.js';
-import { VariationList } from '../VariationList.js';
-import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection.js';
-import { WeightControlSlider, useWeightControlIntegration } from '../WeightControlSlider.js';
-import { WeightVisualizationPanel } from '../../WeightVisualization.js';
-import { useRealTimePreview } from '../../../hooks/useRealTimePreview.js';
-import { useUISettingsStore } from '../../../stores/uiSettingsStore.js';
-import { useGraphStore } from '../../../graphStore.js';
+import { TextFieldEditor } from '../TextFieldEditor';
+import { VariationList } from '../VariationList';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
+import { WeightControlSlider, useWeightControlIntegration } from '../WeightControlSlider';
+import { useRealTimePreview } from '../../../hooks/useRealTimePreview';
+import { useUISettingsStore } from '../../../stores/uiSettingsStore';
+import { useGraphStore } from '../../../graphStore';
+import { useContextualHelp } from '../../Help';
 export const WeightedChoiceEditor = ({ nodeData, onChange, errors, onGlobalPreviewRequest }) => {
     // WeightedChoice specific fields
     const choices = nodeData.choices || [];
@@ -46,8 +46,8 @@ export const WeightedChoiceEditor = ({ nodeData, onChange, errors, onGlobalPrevi
         // Keep local preview for immediate feedback
         requestPreview(weightOptions);
     }, [onChange, onGlobalPreviewRequest, requestPreview]);
-    // Weight control integration
-    const { handleOptionsChange } = useWeightControlIntegration(weightOptions, handleGlobalPreviewRequest);
+    // Weight control integration with Epic 8.5 Task 6 enhancements
+    const { handleOptionsChange, lastUpdateTime } = useWeightControlIntegration(weightOptions, handleGlobalPreviewRequest);
     const handleChoicesChange = (newChoices) => {
         onChange({
             choices: newChoices,
@@ -63,7 +63,45 @@ export const WeightedChoiceEditor = ({ nodeData, onChange, errors, onGlobalPrevi
     const handleNameChange = (value) => {
         onChange({ name: value, label: value });
     };
-    return (_jsxs("div", { className: "weighted-choice-editor", children: [_jsx(ProgressiveDisclosureSection, { title: "Essential Settings", level: "basic", description: "Core node configuration for weighted choices", defaultExpanded: true, priority: "critical", fieldName: "name", children: _jsx(TextFieldEditor, { label: "Choice Name", value: name, fieldKey: "name", zodType: null, onChange: handleNameChange, placeholder: "Enter a name for this weighted choice node..." }) }), _jsx(ProgressiveDisclosureSection, { title: "Choice Options", level: "basic", description: "Add and manage the available choices for random selection", defaultExpanded: true, priority: "critical", fieldName: "choices", children: _jsxs("div", { style: { marginBottom: 12 }, children: [_jsx("label", { style: {
+    // Contextual help for the node name field
+    const { wrapWithHelp: wrapNameHelp } = useContextualHelp({
+        id: 'weighted-choice-name',
+        title: 'Node Name',
+        description: 'Give your weighted choice node a descriptive name to identify it in your graph workflow.',
+        category: 'basic',
+        trigger: 'focus',
+        position: 'right',
+        showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
+        examples: ['Character Selection', 'Action Randomizer', 'Spell Generator'],
+        priority: 'high'
+    });
+    // Contextual help for choice options
+    const { wrapWithHelp: wrapChoicesHelp } = useContextualHelp({
+        id: 'weighted-choice-options',
+        title: 'Choice Options',
+        description: 'Add the different options that this node can randomly select from. Each option can have its own probability weight.',
+        category: 'basic',
+        trigger: 'hover',
+        position: 'left',
+        showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
+        examples: ['Fire Spell', 'Ice Spell', 'Lightning Spell'],
+        relatedFeatures: ['weight-controls', 'drag-reorder'],
+        priority: 'high'
+    });
+    // Contextual help for weight controls
+    const { wrapWithHelp: wrapWeightsHelp } = useContextualHelp({
+        id: 'weighted-choice-weights',
+        title: 'Weight Controls',
+        description: 'Adjust the probability of each option being selected. Higher weights make options more likely to appear in results.',
+        category: 'advanced',
+        trigger: 'hover',
+        position: 'top',
+        showOnDisclosureLevel: ['advanced', 'debug'],
+        examples: ['70% Fire, 20% Ice, 10% Lightning'],
+        relatedFeatures: ['weight-presets', 'distribution-charts'],
+        priority: 'medium'
+    });
+    return (_jsxs("div", { className: "weighted-choice-editor", children: [_jsx(ProgressiveDisclosureSection, { title: "Essential Settings", level: "basic", description: "Core node configuration for weighted choices", defaultExpanded: true, priority: "critical", fieldName: "name", children: wrapNameHelp(_jsx(TextFieldEditor, { label: "Choice Name", value: name, fieldKey: "name", zodType: null, onChange: handleNameChange, placeholder: "Enter a name for this weighted choice node..." })) }), _jsx(ProgressiveDisclosureSection, { title: "Choice Options", level: "basic", description: "Add and manage the available choices for random selection", defaultExpanded: true, priority: "critical", fieldName: "choices", children: wrapChoicesHelp(_jsxs("div", { style: { marginBottom: 12 }, children: [_jsx("label", { style: {
                                 display: 'block',
                                 fontWeight: 500,
                                 marginBottom: 8,
@@ -81,7 +119,7 @@ export const WeightedChoiceEditor = ({ nodeData, onChange, errors, onGlobalPrevi
                                 const [movedItem] = newChoices.splice(fromIndex, 1);
                                 newChoices.splice(toIndex, 0, movedItem);
                                 handleChoicesChange(newChoices);
-                            }, placeholder: "Enter choice option...", maxVariations: 20, allowQuickEntry: true })] }) }), choices.length > 0 && (_jsxs(ProgressiveDisclosureSection, { title: "Weight Controls", level: "advanced", description: "Fine-tune the probability of each choice being selected", defaultExpanded: false, priority: "important", fieldName: "weights", children: [_jsx(WeightControlSlider, { options: weightOptions, onOptionsChange: handleOptionsChange, onPreviewRequest: handleGlobalPreviewRequest, showPreview: true, previewDebounceMs: 300, showPresets: true, allowCustomPresets: complexityLevel !== 'basic' }), complexityLevel !== 'basic' && (_jsxs("div", { style: {
+                            }, placeholder: "Enter choice option...", maxVariations: 20, allowQuickEntry: true })] })) }), choices.length > 0 && (_jsxs(ProgressiveDisclosureSection, { title: "Weight Controls", level: "advanced", description: "Fine-tune the probability of each choice being selected", defaultExpanded: false, priority: "important", fieldName: "weights", children: [wrapWeightsHelp(_jsx(WeightControlSlider, { options: weightOptions, onOptionsChange: handleOptionsChange, onPreviewRequest: handleGlobalPreviewRequest, visualization: complexityLevel === 'basic' ? 'slider-only' : 'pie', showLegend: true, enableDragReorder: complexityLevel !== 'basic', showPresets: true, compactPresets: complexityLevel === 'basic' })), complexityLevel !== 'basic' && (_jsxs("div", { style: {
                             marginTop: 12,
                             padding: 8,
                             background: 'rgba(77, 124, 255, 0.1)',
@@ -89,13 +127,31 @@ export const WeightedChoiceEditor = ({ nodeData, onChange, errors, onGlobalPrevi
                             borderRadius: 4,
                             fontSize: 11,
                             color: '#4d7cff'
-                        }, children: ["\uD83C\uDFAC ", _jsx("strong", { children: "Epic 8.5 Real-Time Integration:" }), " Weight changes automatically trigger 5-seed preview generation for film industry demo quality."] }))] })), choices.length > 0 && weightOptions.length > 0 && (_jsx(ProgressiveDisclosureSection, { title: "Weight Distribution Visualization", level: "advanced", description: "Visual representation of choice probabilities and statistics", defaultExpanded: false, priority: "standard", fieldName: "visualization", children: _jsx(WeightVisualizationPanel, { options: weightOptions, title: "Weight Distribution", defaultChartType: "pie", showChartControls: true, showStatistics: true, collapsed: false, onCollapseChange: () => { }, onOptionHover: (option) => {
-                        // Optional: Could highlight the option in the weight controls
-                        console.log('Hovered option:', option?.text);
-                    }, onOptionClick: (option) => {
-                        // Optional: Could focus the weight slider for this option
-                        console.log('Clicked option:', option.text);
-                    }, style: { marginBottom: 16 } }) })), variants.length > 0 && (_jsx(ProgressiveDisclosureSection, { title: "Real-Time Preview", level: "advanced", description: "Live preview of weighted choice results with performance metrics", defaultExpanded: false, priority: "standard", fieldName: "preview", children: _jsxs("div", { style: { marginBottom: 12 }, children: [_jsxs("div", { style: {
+                        }, children: [_jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }, children: ["\uD83C\uDFAC ", _jsx("strong", { children: "Epic 8.5 Real-Time Integration" }), _jsx("span", { style: {
+                                            fontSize: 8,
+                                            background: 'rgba(77, 124, 255, 0.3)',
+                                            padding: '1px 4px',
+                                            borderRadius: 6,
+                                            fontWeight: 600
+                                        }, children: "TASK 6" })] }), _jsx("div", { style: { fontSize: 10, opacity: 0.9 }, children: "Weight changes automatically trigger debounced 5-seed preview generation" }), _jsxs("div", { style: {
+                                    fontSize: 9,
+                                    opacity: 0.7,
+                                    marginTop: 4,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 4
+                                }, children: [_jsx("span", { children: "Last update:" }), _jsx("span", { style: {
+                                            fontFamily: 'monospace',
+                                            background: 'rgba(255, 255, 255, 0.2)',
+                                            padding: '1px 4px',
+                                            borderRadius: 2
+                                        }, children: new Date(lastUpdateTime).toLocaleTimeString() }), _jsx("div", { style: {
+                                            width: 6,
+                                            height: 6,
+                                            borderRadius: '50%',
+                                            background: Date.now() - lastUpdateTime < 2000 ? '#10b981' : '#6b7280',
+                                            animation: Date.now() - lastUpdateTime < 2000 ? 'pulse 1.5s infinite' : 'none'
+                                        } })] })] }))] })), variants.length > 0 && (_jsx(ProgressiveDisclosureSection, { title: "Real-Time Preview", level: "advanced", description: "Live preview of weighted choice results with performance metrics", defaultExpanded: false, priority: "standard", fieldName: "preview", children: _jsxs("div", { style: { marginBottom: 12 }, children: [_jsxs("div", { style: {
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 alignItems: 'center',

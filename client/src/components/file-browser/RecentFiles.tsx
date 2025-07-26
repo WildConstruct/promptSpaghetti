@@ -13,6 +13,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { FileItem, FileNode } from './types';
 import { useAuthStore } from '../../stores/authStore';
 
+// Type guard function
+const isFileEntry = (entry: RecentFileEntry): entry is FileNode => {
+  return entry.type === 'file';
+};
+
 interface RecentFilesProps {
   maxItems?: number;
   onFileSelect?: (file: FileNode) => void;
@@ -57,7 +62,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({
   showFavorites = true,
   className = ''
 }) => {
-  const { ___user, isAuthenticated } = useAuthStore();
+  const { _user, isAuthenticated } = useAuthStore();
   const [recentFiles, setRecentFiles] = useState<RecentFileEntry[]>([]);
   const [favoriteFiles, setFavoriteFiles] = useState<FileItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -85,8 +90,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({
 
       // TODO: Replace with actual API call
       // const response = await fetch('/api/files/recent');
-      // const recentData = await response.json();
-      
+      //       
       // Mock recent files for development
       const mockRecentFiles: RecentFileEntry[] = [
         {
@@ -177,8 +181,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({
       
       // TODO: Replace with API call to get favorite file details
       // const response = await fetch(`/api/files/favorites?ids=${favoriteIds.join(',')}`);
-      // const favoritesData = await response.json();
-      
+      //       
       // For now, filter from recent files that are marked as favorites
       const favorites = recentFiles.filter(file => favoriteIds.includes(file.id));
       setFavoriteFiles(favorites);
@@ -224,12 +227,16 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({
   // Handle file selection
   const handleFileClick = useCallback((file: RecentFileEntry) => {
     addToRecent(file);
-    onFileSelect?.(file as FileNode);
+    if (isFileEntry(file)) {
+      onFileSelect?.(file);
+    }
   }, [addToRecent, onFileSelect]);
 
   const handleFileDoubleClick = useCallback((file: RecentFileEntry) => {
     addToRecent(file);
-    onFileDoubleClick?.(file as FileNode);
+    if (isFileEntry(file)) {
+      onFileDoubleClick?.(file);
+    }
   }, [addToRecent, onFileDoubleClick]);
 
   // Filter files based on current filter and search term
@@ -511,14 +518,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({
 };
 
 // Export utility function for adding files to recent list
-export const addFileToRecent = (file: FileItem): void => {
-  try {
-    const recentEntry = {
-      ...file,
-      lastAccessed: new Date(),
-      accessCount: 1
-    };
-
+export 
     const existing = localStorage.getItem('fileBrowserRecent');
     const recentFiles = existing ? JSON.parse(existing) : [];
     

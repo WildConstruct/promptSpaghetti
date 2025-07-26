@@ -1,6 +1,6 @@
 // Epic 17.1.5 - Schedule Dashboard Component
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Paper,
@@ -108,12 +108,7 @@ const VIEW_MODES = [
   { value: 'timeline', label: 'Timeline', icon: TimelineIcon }
 ];
 
-export const ScheduleDashboard: React.FC<ScheduleDashboardProps> = ({
-  toggleId,
-  onScheduleChange
-}) => {
-  const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const [filteredSchedules, setFilteredSchedules] = useState<Schedule[]>([]);
+export   const [filteredSchedules, setFilteredSchedules] = useState<Schedule[]>([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'table' | 'calendar' | 'timeline'>('table');
   
@@ -149,7 +144,7 @@ export const ScheduleDashboard: React.FC<ScheduleDashboardProps> = ({
   // Apply filters
   useEffect(() => {
     applyFilters();
-  }, [schedules, statusFilter, typeFilter, searchTerm, dateRangeStart, dateRangeEnd]);
+  }, [schedules, statusFilter, typeFilter, searchTerm, dateRangeStart, dateRangeEnd, applyFilters]);
 
   const loadSchedules = async () => {
     setLoading(true);
@@ -206,7 +201,7 @@ export const ScheduleDashboard: React.FC<ScheduleDashboardProps> = ({
     }
   };
 
-  const applyFilters = () => {
+  const applyFilters = useCallback(() => {
     let filtered = [...schedules];
 
     // Status filter
@@ -245,7 +240,7 @@ export const ScheduleDashboard: React.FC<ScheduleDashboardProps> = ({
 
     setFilteredSchedules(filtered);
     setPage(0); // Reset to first page when filters change
-  };
+  }, [schedules, statusFilter, typeFilter, searchTerm, dateRangeStart, dateRangeEnd, toggleId]);
 
   const handleCreateSchedule = () => {
     setEditingSchedule(null);
@@ -262,15 +257,18 @@ export const ScheduleDashboard: React.FC<ScheduleDashboardProps> = ({
     try {
       if (editingSchedule) {
         // Update existing schedule
-        console.log('Updating schedule:', formData);
+        // TODO: Replace with actual API call
+        // await updateSchedule(editingSchedule.id, formData);
       } else {
         // Create new schedule
-        console.log('Creating schedule:', formData);
+        // TODO: Replace with actual API call
+        // await createSchedule(formData);
       }
       
       await loadSchedules();
       onScheduleChange?.();
     } catch (error) {
+      // TODO: Add proper error notification system
       console.error('Failed to save schedule:', error);
       throw error;
     }
@@ -286,10 +284,12 @@ export const ScheduleDashboard: React.FC<ScheduleDashboardProps> = ({
     if (!scheduleToDelete) return;
     
     try {
-      console.log('Deleting schedule:', scheduleToDelete.id);
+      // TODO: Replace with actual API call
+      // await deleteSchedule(scheduleToDelete.id);
       await loadSchedules();
       onScheduleChange?.();
     } catch (error) {
+      // TODO: Add proper error notification system
       console.error('Failed to delete schedule:', error);
     } finally {
       setDeleteDialogOpen(false);
@@ -301,21 +301,25 @@ export const ScheduleDashboard: React.FC<ScheduleDashboardProps> = ({
     if (selectedSchedules.length === 0) return;
     
     try {
-      console.log(`Performing bulk action ${action} on:`, selectedSchedules);
+      // TODO: Replace with actual API call
+      // await performBulkAction(action, selectedSchedules);
       await loadSchedules();
       setSelectedSchedules([]);
       onScheduleChange?.();
     } catch (error) {
+      // TODO: Add proper error notification system
       console.error('Failed to perform bulk action:', error);
     }
   };
 
   const handleManualExecution = async (schedule: Schedule) => {
     try {
-      console.log('Manually executing schedule:', schedule.id);
+      // TODO: Replace with actual API call
+      // await executeSchedule(schedule.id);
       await loadSchedules();
       onScheduleChange?.();
     } catch (error) {
+      // TODO: Add proper error notification system
       console.error('Failed to execute schedule:', error);
     }
     setAnchorEl(null);
@@ -631,7 +635,7 @@ export const ScheduleDashboard: React.FC<ScheduleDashboardProps> = ({
                     </TableCell>
                     <TableCell>
                       <Box display="flex" alignItems="center" gap={1}>
-                        <StatusIcon color={statusConfig.color as any} fontSize="small" />
+                        <StatusIcon color={statusConfig.color as 'warning' | 'success' | 'info' | 'default' | 'error'} fontSize="small" />
                         <Typography variant="body2">
                           {statusConfig.label}
                         </Typography>
@@ -709,7 +713,7 @@ export const ScheduleDashboard: React.FC<ScheduleDashboardProps> = ({
                 key={mode.value}
                 variant={viewMode === mode.value ? 'contained' : 'outlined'}
                 startIcon={<mode.icon />}
-                onClick={() => setViewMode(mode.value as any)}
+                onClick={() => setViewMode(mode.value as 'table' | 'calendar' | 'timeline')}
                 size="small"
               >
                 {mode.label}
@@ -751,7 +755,7 @@ export const ScheduleDashboard: React.FC<ScheduleDashboardProps> = ({
             name: editingSchedule.name,
             description: editingSchedule.description,
             type: editingSchedule.type,
-            action: editingSchedule.action as any,
+            action: editingSchedule.action as string,
             startTime: editingSchedule.startTime,
             endTime: editingSchedule.endTime,
             timezone: editingSchedule.timezone,

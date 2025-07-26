@@ -8,7 +8,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Task: E16-1753114247016-0B348A - Create sentiment analysis
  */
 import { useState, useEffect } from 'react';
-import { SentimentAnalysisService } from '../../services/SentimentAnalysisService.js';
+import { SentimentAnalysisService } from '../../services/SentimentAnalysisService';
 export const SentimentDashboard = ({ resourceId, resourceType, timeRange, refreshInterval }) => {
     const [analytics, setAnalytics] = useState(null);
     const [isLoading, setIsLoading] = useState(true);

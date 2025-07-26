@@ -1,7 +1,7 @@
 // packages/core/runtime/nodes/WeightedAdvanced.ts
 // Advanced weighted choice node with complex distribution support
-import { AdvancedRuntimeNode, ValidationHelpers } from '../advanced.js';
-import { AdvancedIOHandler, IOSpecBuilder } from '../io-system.js';
+import { AdvancedRuntimeNode, ValidationHelpers } from '../advanced';
+import { AdvancedIOHandler, IOSpecBuilder } from '../io-system';
 /**
  * Advanced weighted choice node with support for complex weight distributions
  * Extends basic WeightedChoice with:

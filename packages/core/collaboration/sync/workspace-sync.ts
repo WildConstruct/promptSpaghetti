@@ -4,7 +4,7 @@ import { WorkspaceId, ProjectId, UserId, ResourceId } from '../types/workspace';
 import { WorkspaceDAO } from '../dao/workspace-dao';
 
 // Extended Yjs types for workspace collaboration
-export interface YGraph extends Y.Map<any> {
+export interface YGraph extends Y.Map<unknown> {
   // Graph-specific methods and properties
 }
 
@@ -22,7 +22,7 @@ export interface SyncEvent {
   type: 'state_change' | 'participant_join' | 'participant_leave' | 'conflict_detected' | 'sync_complete';
   workspaceId: WorkspaceId;
   userId?: UserId;
-  data?: any;
+  data?: unknown;
   timestamp: number;
 }
 
@@ -182,7 +182,7 @@ export class WorkspaceStateSync extends EventEmitter {
     projectId?: ProjectId
   ): void {
     // Handle document updates
-    ydoc.on('update', (update: Uint8Array, origin: any) => {
+    ydoc.on('update', (update: Uint8Array, origin: unknown) => {
       this.handleDocumentUpdate(workspaceId, projectId, update, origin);
     });
 
@@ -196,7 +196,7 @@ export class WorkspaceStateSync extends EventEmitter {
     workspaceId: WorkspaceId,
     projectId: ProjectId | undefined,
     update: Uint8Array,
-    origin: any
+    origin: unknown
   ): Promise<void> {
     const key = this.getSyncKey(workspaceId, projectId);
     const syncState = this.syncStates.get(key);
@@ -453,7 +453,7 @@ export class WorkspaceStateSync extends EventEmitter {
     if (resource && resource.content) {
       // Load graph content into YGraph
       if (resource.content.nodes) {
-        const ynodes = ygraph.get('nodes') as Y.Map<any> || new Y.Map();
+        const ynodes = ygraph.get('nodes') as Y.Map<unknown> || new Y.Map();
         for (const [nodeId, nodeData] of Object.entries(resource.content.nodes)) {
           ynodes.set(nodeId, nodeData);
         }
@@ -461,7 +461,7 @@ export class WorkspaceStateSync extends EventEmitter {
       }
       
       if (resource.content.edges) {
-        const yedges = ygraph.get('edges') as Y.Array<any> || new Y.Array();
+        const yedges = ygraph.get('edges') as Y.Array<unknown> || new Y.Array();
         yedges.insert(0, resource.content.edges);
         ygraph.set('edges', yedges);
       }

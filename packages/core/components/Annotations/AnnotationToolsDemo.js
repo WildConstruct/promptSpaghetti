@@ -6,16 +6,16 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * for professional VFX director workflows.
  */
 import { useState, useMemo, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select.js';
-import { Switch } from '../ui/Switch.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
+import { Switch } from '../ui/Switch';
 // Import annotation components
-import NodeAnnotationSystem from './NodeAnnotations.js';
-import DrawingAnnotationsCanvas from './DrawingAnnotations.js';
-import RegionAnnotationSystem from './RegionAnnotations.js';
+import NodeAnnotationSystem from './NodeAnnotations';
+import DrawingAnnotationsCanvas from './DrawingAnnotations';
+import RegionAnnotationSystem from './RegionAnnotations';
 // Import existing components for integration
 import { MessageCircle, Pen, Square, Link as LinkIcon, Eye, Download, Users, Film, Zap } from 'lucide-react';
 // Sample VFX workflow data

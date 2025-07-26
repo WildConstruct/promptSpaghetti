@@ -1,9 +1,9 @@
 // packages/core/runtime/expression-evaluator.ts
 // Safe expression evaluator using acorn AST parsing with enhanced security filtering
 import * as acorn from 'acorn';
-import { createConditionalNodeFilter } from './ast-node-whitelist.js';
-import { createAuditedSafeMathContext, MathFunctionAuditor } from './safe-math-context.js';
-import { securityAudit } from './security-audit-logger.js';
+import { createConditionalNodeFilter } from './ast-node-whitelist';
+import { createAuditedSafeMathContext, MathFunctionAuditor } from './safe-math-context';
+import { securityAudit } from './security-audit-logger';
 /**
  * Token types for expression parsing
  */
@@ -28,7 +28,7 @@ var TokenType;
 class Tokenizer {
     expression;
     position = 0;
-    constructor(expression) {
+    constructor(expression: string) {
         this.expression = expression;
     }
     tokenize() {
@@ -189,7 +189,7 @@ class Tokenizer {
 class Parser {
     tokens;
     position = 0;
-    constructor(tokens) {
+    constructor(tokens: any[]) {
         this.tokens = tokens;
     }
     parse() {
@@ -202,7 +202,7 @@ class Parser {
     currentToken() {
         return this.tokens[this.position] || { type: TokenType.EOF, value: '', position: -1 };
     }
-    consumeToken(type) {
+    consumeToken(type?: string) {
         const token = this.currentToken();
         if (type && token.type !== type) {
             throw new Error(`Expected ${type} but got ${token.type} at position ${token.position}`);
@@ -368,7 +368,7 @@ export class SafeExpressionEvaluator {
     /**
      * Evaluate an expression safely with a given context and enhanced security filtering
      */
-    static evaluate(expression, context) {
+    static evaluate(expression: string, context: Record<string, any>): any {
         // Parse using acorn
         const ast = this.parseExpressionWithAcorn(expression);
         // Apply AST node security filtering
@@ -379,7 +379,7 @@ export class SafeExpressionEvaluator {
     /**
      * Parse expression using acorn with security validation
      */
-    static parseExpressionWithAcorn(expression) {
+    static parseExpressionWithAcorn(expression: string): any {
         try {
             // Wrap expression to make it a valid JavaScript program
             const wrappedExpression = `(${expression})`;
@@ -403,7 +403,7 @@ export class SafeExpressionEvaluator {
     /**
      * Validate AST nodes against security whitelist
      */
-    static validateASTSecurity(ast) {
+    static validateASTSecurity(ast: any): void {
         // Apply the whitelist filter directly to acorn AST
         const filterResult = this.astFilter.filterAST(ast);
         if (!filterResult.allowed) {
@@ -411,7 +411,7 @@ export class SafeExpressionEvaluator {
             throw new Error(`Unsafe AST node detected: ${blockedNode.nodeType} (${blockedNode.safetyLevel}) - ${blockedNode.reason}`);
         }
     }
-    static evaluateAST(node, context) {
+    static evaluateAST(node: any, context: Record<string, any>): any {
         switch (node.type) {
             case 'Literal':
                 return node.value;
@@ -501,7 +501,7 @@ export class SafeExpressionEvaluator {
                 throw new Error(`Unknown AST node type: ${node.type}`);
         }
     }
-    static isSafeFunction(func, context) {
+    static isSafeFunction(func: Function, context: Record<string, any>): boolean {
         // Check if the function is one of our safe context functions
         const safeFunctions = new Set(Object.values(context).filter(v => typeof v === 'function'));
         // Also check if it's from our safe Math context
@@ -518,15 +518,15 @@ export class SafeExpressionEvaluator {
     /**
      * Create a safe evaluation context with restricted Math functions
      */
-    static createSafeContext(variables = {}) {
+    static createSafeContext(variables: Record<string, any> = {}): Record<string, any> {
         const context = { ...variables };
         // Add safe Math context with auditing
         context.Math = createAuditedSafeMathContext('expression-evaluator');
         // Add safe utility functions
-        context.getType = (value) => typeof value;
-        context.length = (value) => value?.length ?? 0;
-        context.isEmpty = (value) => !value || value.length === 0;
-        context.includes = (value, item) => {
+        context.getType = (value: unknown) => typeof value;
+        context.length = (value: any) => value?.length ?? 0;
+        context.isEmpty = (value: any) => !value || value.length === 0;
+        context.includes = (value: any, item: any) => {
             if (typeof value === 'string') {
                 return String(value).includes(String(item));
             }
@@ -535,8 +535,8 @@ export class SafeExpressionEvaluator {
             }
             return false;
         };
-        context.startsWith = (str, prefix) => String(str).startsWith(String(prefix));
-        context.endsWith = (str, suffix) => String(str).endsWith(String(suffix));
+        context.startsWith = (str: any, prefix: any) => String(str).startsWith(String(prefix));
+        context.endsWith = (str: any, suffix: any) => String(str).endsWith(String(suffix));
         return context;
     }
     /**

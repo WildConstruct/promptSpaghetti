@@ -112,7 +112,7 @@ describe('RevenueCollectionService', () => {
       jest.spyOn(revenueService as any, 'getTemplateInfo').mockResolvedValue({
         creator_id: 'creator-123',
         commission_rate: 0.7
-      } as unknown);
+      } as unknown as unknown);
 
       // Act
       const result = await revenueService.recordTransactionRevenue(

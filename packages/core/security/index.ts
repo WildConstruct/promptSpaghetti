@@ -233,6 +233,156 @@ export type {
   MonitoringReport
 } from './SecurityInfrastructureMonitor';
 
+// Epic 31 - ML Security Analytics Components (NEW)
+export { 
+  PredictiveSecurityAnalytics,
+  PredictiveAnalyticsFactory,
+  SecurityEvent as PredictiveSecurityEvent,
+  ThreatPrediction,
+  SecurityEventType as PredictiveEventType,
+  ThreatType,
+  ActionType
+} from './PredictiveSecurityAnalytics';
+
+export {
+  UserBehaviorAnalytics,
+  UserBehaviorAnalyticsFactory,
+  UserBehaviorEvent,
+  BehaviorAnomaly,
+  UserActionType,
+  AnomalyType
+} from './UserBehaviorAnalytics';
+
+export {
+  MLSecurityAnalyticsFramework,
+  SecurityIntelligence,
+  SecurityAnalyticsConfig,
+  SecurityMetrics as MLSecurityMetrics,
+  Epic31SecurityAnalytics
+} from './MLSecurityAnalyticsFramework';
+
+// Epic 31.4.1 & 31.4.2 - Advanced Security Analytics Components (NEW)
+export {
+  SecurityAnomalyDetector,
+  SecurityAnomaly,
+  SecurityAlert,
+  AnomalyDetectionConfig,
+  AnomalyType,
+  AnomalySeverity,
+  AlertType,
+  NotificationChannel,
+  EscalationRule,
+  MetricBaseline,
+  SecurityMetric,
+  AnomalyDetectionModel,
+  DetectionModelType
+} from './SecurityAnomalyDetector';
+
+export {
+  SecurityThreatForecasting,
+  ThreatForecast,
+  ForecastType,
+  SeasonalFactor,
+  TrendComponent,
+  ForecastRiskMetrics,
+  ForecastRecommendation,
+  RecommendationType,
+  ForecastingConfig,
+  ThreatScenario,
+  TimeSeriesData,
+  ForecastAlgorithm,
+  SeasonalPeriod,
+  TrendType
+} from './SecurityThreatForecasting';
+
+// Epic 31.4.1 - Security Intelligence Dashboard and Data Analysis Components (NEW)
+export {
+  SecurityIntelligenceDashboard,
+  SecurityDashboardConfig,
+  SecurityPosture,
+  ThreatLevel,
+  PostureTrend,
+  RiskFactor,
+  RiskCategory,
+  SecurityRecommendation,
+  DashboardWidget,
+  WidgetType,
+  DashboardMetrics,
+  ExecutiveReport,
+  ReportType,
+  ReportFrequency,
+  DashboardAlertThresholds,
+  ReportingSchedule
+} from './SecurityIntelligenceDashboard';
+
+export {
+  SecurityDataQualityMonitor,
+  DataQualityConfig,
+  QualityThresholds,
+  ValidationRule,
+  ValidationRuleType,
+  ValidationSeverity,
+  DataQualityReport,
+  QualityDimensionScore,
+  QualityDimension,
+  DataQualityViolation,
+  QualityProfile,
+  QualityTrend,
+  QualityRecommendation
+} from './SecurityDataQualityMonitor';
+
+// Epic 31.4.1 - Security Event Correlation and Data Pipeline Components (NEW)
+export {
+  SecurityEventCorrelationEngine,
+  SecurityEventCorrelationFactory,
+  CorrelatedEventGroup,
+  CorrelationRule,
+  CorrelationRuleType,
+  CorrelationCondition,
+  CorrelationOperator,
+  CorrelationAction,
+  CorrelationActionType,
+  EventGroupType,
+  CorrelationEvidence,
+  EvidenceType,
+  ThreatIndicator,
+  IndicatorType,
+  GroupRecommendation,
+  RecommendationType,
+  GroupStatus,
+  CorrelationAnalytics,
+  CorrelationReport
+} from './SecurityEventCorrelationEngine';
+
+export {
+  SecurityIntelligenceDataPipeline,
+  SecurityIntelligenceDataPipelineFactory,
+  DataPipelineConfig,
+  PipelineStage,
+  StageType,
+  DataSchema,
+  SchemaField,
+  FieldType,
+  DataTransformation,
+  TransformationType,
+  ValidationRule,
+  ValidationRuleType,
+  ValidationSeverity,
+  PipelineExecution,
+  ExecutionStatus,
+  StageExecution,
+  ExecutionError,
+  ErrorType,
+  DataSource,
+  SourceType,
+  DataDestination,
+  DestinationType,
+  PipelineAlert,
+  PipelineAlertType,
+  PipelineMetrics,
+  OutputFormat
+} from './SecurityIntelligenceDataPipeline';
+
 // Re-export existing security components for convenience
 export { default as RateLimiter } from './RateLimiter';
 export { default as ComplianceMonitor } from '../services/ComplianceMonitor';
@@ -241,210 +391,21 @@ export { default as ComplianceSecurityDashboard } from './dashboard/ComplianceSe
 export { default as SecurityDashboardWorkflow } from './dashboard/SecurityDashboardWorkflow';
 
 // Utility functions for security integration
-export const createDefaultAlertingConfig = (): AlertingConfig => ({
-  enabled: true,
-  default_severity_threshold: 'medium',
-  notification_settings: {
-    batch_notifications: false,
-    batch_interval: 300000, // 5 minutes
-    quiet_hours: {
-      start: '22:00',
-      end: '08:00',
-      timezone: 'UTC'
-    }
-  },
-  escalation_settings: {
-    auto_escalation_enabled: true,
-    escalation_timeout: 1800000, // 30 minutes
-    max_escalation_levels: 3
-  },
-  retention: {
-    events_retention_days: 90,
-    resolved_events_retention_days: 30,
-    archive_after_days: 365
-  },
-  integrations: {
-    siem_integration: {
-      enabled: false,
-      endpoint: '',
-      api_key: ''
-    },
-    ticketing_integration: {
-      enabled: false,
-      system: 'jira',
-      endpoint: '',
-      credentials: {}
-    }
-  }
-});
-
-export const createSecurityEvent = (
-  type: SecurityEvent['type'],
-  severity: SecurityEvent['severity'],
-  title: string,
-  description: string,
-  source: string,
-  details: Partial<SecurityEvent['details']> = {}
-): SecurityEvent => ({
-  id: `event_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-  type,
-  severity,
-  source,
-  timestamp: Date.now(),
-  title,
-  description,
-  details: {
-    affected_systems: [],
-    affected_users: [],
-    ip_addresses: [],
-    user_agents: [],
-    request_patterns: [],
-    data_accessed: [],
-    ...details
-  },
-  metadata: {
-    threat_level: 0,
-    confidence_score: 0.8,
-    auto_detected: true,
-    related_events: []
-  },
-  status: 'active'
-});
-
-export const createEmailNotificationAction = (
-  email: string,
-  priority: NotificationAction['priority'] = 'normal'
-): NotificationAction => ({
-  type: 'email',
-  target: email,
-  priority,
-  rate_limit: {
-    max_per_hour: 10,
-    max_per_day: 50
-  }
-});
-
-export const createSlackNotificationAction = (
-  channel: string,
-  priority: NotificationAction['priority'] = 'normal'
-): NotificationAction => ({
-  type: 'slack',
-  target: channel,
-  priority,
-  rate_limit: {
-    max_per_hour: 20,
-    max_per_day: 100
-  }
-});
-
-export const createWebhookNotificationAction = (
-  url: string,
-  priority: NotificationAction['priority'] = 'normal'
-): NotificationAction => ({
-  type: 'webhook',
-  target: url,
-  priority,
-  rate_limit: {
-    max_per_hour: 100,
-    max_per_day: 1000
-  }
-});
-
-export const createBasicAlertRule = (
-  name: string,
-  eventTypes: SecurityEvent['type'][],
-  severityThreshold: SecurityEvent['severity'],
-  notifications: NotificationAction[]
-): Omit<AlertRule, 'id' | 'created_at' | 'last_modified'> => ({
-  name,
-  description: `Alert rule for ${eventTypes.join(', ')} events`,
-  enabled: true,
-  conditions: {
-    event_types: eventTypes,
-    severity_threshold: severityThreshold,
-    source_systems: []
-  },
-  actions: {
-    notifications
-  },
-  created_by: 'system'
-});
-
-export const createCriticalSecurityAlertRule = (
-  notifications: NotificationAction[]
-): Omit<AlertRule, 'id' | 'created_at' | 'last_modified'> => ({
-  name: 'Critical Security Events',
-  description: 'Alert for all critical security events',
-  enabled: true,
-  conditions: {
-    event_types: ['security_breach', 'data_leak', 'unauthorized_access'],
-    severity_threshold: 'critical',
-    source_systems: []
-  },
-  actions: {
-    notifications,
-    escalation: {
-      trigger_after: 300000, // 5 minutes
-      escalate_to: ['security-team@company.com', 'incident-commander@company.com'],
-      escalation_message: 'Critical security event requires immediate attention',
-      auto_assign: true
-    },
-    automation: [
-      {
-        type: 'block_ip',
-        parameters: { duration: 3600000 }, // 1 hour
-        confirmation_required: false,
-        timeout: 3600000
-      }
-    ]
-  },
-  created_by: 'system'
-});
-
-export const createPerformanceAlertRule = (
-  notifications: NotificationAction[]
-): Omit<AlertRule, 'id' | 'created_at' | 'last_modified'> => ({
-  name: 'Performance Degradation',
-  description: 'Alert for performance-related issues',
-  enabled: true,
-  conditions: {
-    event_types: ['system_failure', 'anomaly_detected'],
-    severity_threshold: 'medium',
-    source_systems: ['api-gateway', 'database', 'cache-layer'],
-    frequency_threshold: {
-      count: 3,
-      time_window: 300000 // 5 minutes
-    }
-  },
-  actions: {
-    notifications,
-    escalation: {
-      trigger_after: 900000, // 15 minutes
-      escalate_to: ['devops-team@company.com'],
-      auto_assign: false
-    }
-  },
-  suppression: {
-    duplicate_window: 600000, // 10 minutes
-    similar_event_threshold: 0.8
-  },
-  created_by: 'system'
-});
-
+export 
+export 
+export 
+export 
+export 
+export 
+export 
+export 
 // Security event severity mapping utilities
-export const mapThreatLevelToSeverity = (threatLevel: number): SecurityEvent['severity'] => {
-  if (threatLevel >= 8) return 'critical';
-  if (threatLevel >= 6) return 'high';
+export   if (threatLevel >= 6) return 'high';
   if (threatLevel >= 3) return 'medium';
   return 'low';
 };
 
-export const calculateRiskScore = (
-  event: SecurityEvent,
-  historicalData?: SecurityEvent[]
-): number => {
-  let score = 0;
-  
+export   
   // Base severity score
   const severityScores = { low: 1, medium: 3, high: 6, critical: 10 };
   score += severityScores[event.severity];
@@ -474,9 +435,7 @@ export const calculateRiskScore = (
   return Math.min(score, 100); // Cap at 100
 };
 
-export const generateSecurityReport = (
-  events: SecurityEvent[],
-  timeRange: { start: number; end: number }
+export   timeRange: { start: number; end: number }
 ): {
   summary: {
     total_events: number;

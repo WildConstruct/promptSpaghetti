@@ -84,7 +84,7 @@ export const OAuthProviderManager: React.FC = () => {
   // State management
   const [providers, setProviders] = useState<OAuthProvider[]>([]);
   const [selectedProvider, setSelectedProvider] = useState<OAuthProvider | null>(null);
-  const [___showAddProvider, setShowAddProvider] = useState(false);
+  const [_showAddProvider, setShowAddProvider] = useState(false);
   const [showTestResults, setShowTestResults] = useState(false);
   const [testResults, setTestResults] = useState<Record<string, ProviderTestResult>>({});
   const [loading, setLoading] = useState(false);

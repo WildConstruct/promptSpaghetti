@@ -4,9 +4,6 @@
  * Central export file for all policy-related TypeScript interfaces
  * and types used throughout the application.
  */
-export * from './PolicyInterfaces';
-export * from './PolicyServices';
-export * from './PolicyEvents';
 export * from './PromotionTypes';
 export * from './TrustTypes';
 export * from './EnforcementTypes';

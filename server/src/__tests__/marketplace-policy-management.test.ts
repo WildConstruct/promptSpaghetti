@@ -30,7 +30,7 @@ describe('Marketplace Policy Management System', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    (mockPool.connect as jest.Mock).mockResolvedValue(mockClient as unknown as unknown as unknown as unknown);
+    (mockPool.connect as jest.Mock).mockResolvedValue(mockClient as unknown as unknown as unknown as unknown as unknown);
     
     publishingService = new MarketplacePolicyPublishingService(mockPool);
     enforcementService = new MarketplacePolicyEnforcementService(mockPool);

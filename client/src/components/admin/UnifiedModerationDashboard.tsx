@@ -34,7 +34,7 @@ export const UnifiedModerationDashboardComponent: React.FC<UnifiedModerationDash
   const [overview, setOverview] = useState<DashboardOverview | null>(null);
   const [workloads, setWorkloads] = useState<ModerationWorkload[]>([]);
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
-  const [___searchResults, setSearchResults] = useState<any[]>([]);
+  const [_searchResults, setSearchResults] = useState<unknown[]>([]);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   
   // UI state
@@ -45,35 +45,10 @@ export const UnifiedModerationDashboardComponent: React.FC<UnifiedModerationDash
   const [autoRefresh, setAutoRefresh] = useState(true);
 
   // Search and filter state
-  const [___searchQuery, setSearchQuery] = useState<AdvancedSearchQuery>({});
-  const [___showAdvancedSearch, ___setShowAdvancedSearch] = useState(false);
+  const [_searchQuery, setSearchQuery] = useState<AdvancedSearchQuery>({});
+  const [_showAdvancedSearch, _setShowAdvancedSearch] = useState(false);
 
-  // Initialize dashboard service
-  useEffect(() => {
-    const dashboardService = new UnifiedModerationDashboard({
-      enableRealTimeUpdates: autoRefresh,
-      autoRefreshInterval: 30000,
-      enableAdvancedFiltering: true,
-      enablePerformanceTracking: true,
-      defaultModerationMode: 'assisted'
-    });
-    
-    setDashboard(dashboardService);
-    loadInitialData(dashboardService);
-  }, [moderatorId, autoRefresh]);
-
-  // Auto-refresh data
-  useEffect(() => {
-    if (!dashboard || !autoRefresh) return;
-
-    const interval = setInterval(() => {
-      refreshData();
-    }, 30000); // 30 seconds
-
-    return () => clearInterval(interval);
-  }, [dashboard, autoRefresh]);
-
-  const loadInitialData = async (dashboardService: UnifiedModerationDashboard) => {
+  const loadInitialData = useCallback(async (dashboardService: UnifiedModerationDashboard) => {
     setLoading(true);
     setError(null);
 
@@ -88,12 +63,26 @@ export const UnifiedModerationDashboardComponent: React.FC<UnifiedModerationDash
       setWorkloads(workloadData);
       setMetrics(metricsData);
     } catch (err) {
-      setError(`Failed to load dashboard data: ${err.message}`);
+      setError(`Failed to load dashboard data: ${err instanceof Error ? err.message : 'Unknown error'}`);
       console.error('Dashboard initialization failed:', err);
     } finally {
       setLoading(false);
     }
-  };
+  }, [moderatorId]);
+
+  // Initialize dashboard service
+  useEffect(() => {
+    const dashboardService = new UnifiedModerationDashboard({
+      enableRealTimeUpdates: autoRefresh,
+      autoRefreshInterval: 30000,
+      enableAdvancedFiltering: true,
+      enablePerformanceTracking: true,
+      defaultModerationMode: 'assisted'
+    });
+    
+    setDashboard(dashboardService);
+    loadInitialData(dashboardService);
+  }, [moderatorId, autoRefresh, loadInitialData]);
 
   const refreshData = useCallback(async () => {
     if (!dashboard) return;
@@ -106,9 +95,18 @@ export const UnifiedModerationDashboardComponent: React.FC<UnifiedModerationDash
     }
   }, [dashboard, moderatorId]);
 
-  const ___handleAdvancedSearch = async (query: AdvancedSearchQuery) => {
-    if (!dashboard) return;
-    
+  // Auto-refresh data
+  useEffect(() => {
+    if (!dashboard || !autoRefresh) return;
+
+    const interval = setInterval(() => {
+      refreshData();
+    }, 30000); // 30 seconds
+
+    return () => clearInterval(interval);
+  }, [dashboard, autoRefresh, refreshData]);
+
+      
     setLoading(true);
     try {
       const results = await dashboard.advancedSearch(query, moderatorId);
@@ -121,9 +119,7 @@ export const UnifiedModerationDashboardComponent: React.FC<UnifiedModerationDash
     }
   };
 
-  const ___handleBulkAction = async (action: Omit<BulkModerationAction, 'itemIds'>) => {
-    if (!dashboard || selectedItems.length === 0) return;
-    
+      
     setLoading(true);
     try {
       const bulkAction: BulkModerationAction = {
@@ -358,7 +354,7 @@ export const UnifiedModerationDashboardComponent: React.FC<UnifiedModerationDash
           hasPermission(tab.permission) && (
             <button
               key={tab.key}
-              onClick={() => setActiveTab(tab.key as any)}
+              onClick={() => setActiveTab(tab.key as 'overview' | 'queue' | 'analytics' | 'workload' | 'search')}
               style={{
                 padding: '12px 20px',
                 backgroundColor: activeTab === tab.key ? '#f3f4f6' : 'transparent',

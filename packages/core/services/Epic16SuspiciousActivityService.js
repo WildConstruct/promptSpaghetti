@@ -261,22 +261,22 @@ export class Epic16SuspiciousActivityService extends EventEmitter {
         }
         return detectedActivities;
     }
-    async getActivity(activityId) {
+    async getActivity(activityId: string): Promise<any> {
         return this.activities.get(activityId) || null;
     }
-    async getActivitiesByUser(userId, limit = 50) {
+    async getActivitiesByUser(userId: string, limit: number = 50): Promise<any[]> {
         return Array.from(this.activities.values())
             .filter(activity => activity.userId === userId)
             .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
             .slice(0, limit);
     }
-    async getActivitiesByType(type, limit = 100) {
+    async getActivitiesByType(type: string, limit: number = 100): Promise<any[]> {
         return Array.from(this.activities.values())
             .filter(activity => activity.type === type)
             .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
             .slice(0, limit);
     }
-    async getRecentActivities(hours = 24, minSeverity) {
+    async getRecentActivities(hours: number = 24, minSeverity?: string): Promise<any[]> {
         const cutoff = new Date(Date.now() - hours * 60 * 60 * 1000);
         return Array.from(this.activities.values())
             .filter(activity => {
@@ -289,7 +289,7 @@ export class Epic16SuspiciousActivityService extends EventEmitter {
             .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
     }
     // Investigation and resolution
-    async investigateActivity(activityId, investigatorId) {
+    async investigateActivity(activityId: string, investigatorId: string): Promise<any> {
         const activity = this.activities.get(activityId);
         if (!activity)
             throw new Error('Activity not found');

@@ -6,10 +6,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Part of Epic 17.5.2 - Featured Content Tools (Backstage Admin Controls)
  */
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Settings, Brain, Target, TrendingUp, BarChart3, Zap, Users, Star, Eye, RefreshCw, Save, Activity, Database, Cpu, Network } from 'lucide-react';
 export const RecommendationEngineAdmin = ({ className = '' }) => {
     const [activeTab, setActiveTab] = useState('algorithms');

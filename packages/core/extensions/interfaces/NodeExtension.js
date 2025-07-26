@@ -3,7 +3,7 @@
  * Defines interfaces for extending the runtime node system
  */
 import { z } from 'zod';
-import { RuntimeNode } from '../../runtime/index.js';
+import { RuntimeNode } from '../../runtime';
 // Node Categories
 export var NodeCategory;
 (function (NodeCategory) {

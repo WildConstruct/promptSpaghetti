@@ -278,7 +278,7 @@ export async function deviceFingerprintingRoutes(
       `, [userId]);
       
       return {
-        devices: devices.rows.map((d: any) => ({
+        devices: (devices.rows as Array<Record<string, unknown>>).map((d: Record<string, unknown>) => ({
           fingerprint: d.fingerprint,
           deviceInfo: {
             userAgent: d.components?.userAgent,
@@ -296,8 +296,14 @@ export async function deviceFingerprintingRoutes(
           recentLocations: (d.location_history || []).slice(-5)
         })),
         totalDevices: devices.rows.length,
-        trustedDevices: devices.rows.filter((d: any) => d.is_trusted).length,
-        blockedDevices: devices.rows.filter((d: any) => d.is_blocked).length,
+        trustedDevices: (
+          devices.rows as Array<Record<string,
+          unknown>>
+        ).filter((d: Record<string, unknown>) => d.is_trusted).length,
+        blockedDevices: (
+          devices.rows as Array<Record<string,
+          unknown>>
+        ).filter((d: Record<string, unknown>) => d.is_blocked).length,
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -431,7 +437,7 @@ export async function deviceFingerprintingRoutes(
         WHERE 1=1
       `;
       
-      const params: any[] = [];
+      const params: unknown[] = [];
       let paramIndex = 1;
       
       if (fingerprint) {
@@ -469,7 +475,7 @@ export async function deviceFingerprintingRoutes(
       const results = await (deviceService as any).db.query(query, params);
       
       return {
-        devices: results.rows.map((d: any) => ({
+        devices: (results.rows as Array<Record<string, unknown>>).map((d: Record<string, unknown>) => ({
           fingerprint: d.fingerprint,
           firstSeen: d.first_seen,
           lastSeen: d.last_seen,

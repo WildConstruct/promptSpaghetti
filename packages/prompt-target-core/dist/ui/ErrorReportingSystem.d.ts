@@ -69,7 +69,7 @@ export interface ErrorContext {
     userId?: string;
     sessionId?: string;
     operation?: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
 }
 export interface ErrorNotification {
     id: string;
@@ -79,7 +79,7 @@ export interface ErrorNotification {
     message: string;
     timestamp: Date;
     context: ErrorContext;
-    error: any;
+    error: unknown;
     autoFixable: boolean;
     suggestions: Array<{
         type: 'fix' | 'alternative' | 'workaround';
@@ -87,7 +87,7 @@ export interface ErrorNotification {
     }>;
     acknowledged: boolean;
     acknowledgedAt?: Date;
-    metadata: Record<string, any>;
+    metadata: Record<string, unknown>;
 }
 export interface ErrorReport {
     id: string;
@@ -114,11 +114,11 @@ export interface PlatformErrorDetails {
     adaptorId: string;
     adaptorVersion: string;
     compatible: boolean;
-    quality: any;
+    quality: unknown;
     errors: ValidationResult[];
     warnings: ValidationResult[];
     infos: ValidationResult[];
-    capabilities: any;
+    capabilities: unknown;
     performance: {
         validationDuration: number;
         supportedFeatures: number;
@@ -132,4 +132,4 @@ export interface NotificationFilter {
     acknowledged?: boolean;
     limit?: number;
 }
-export type ErrorReportingListener = (event: string, data: any) => void;
+export type ErrorReportingListener = (event: string, data: unknown) => void;

@@ -222,14 +222,6 @@ export declare const EscalationLevelSchema: z.ZodObject<{
     responseTimeLimit: number;
     resolutionTimeLimit: number;
     requiredActions?: string[] | undefined;
-    notificationTemplate?: string | undefined;
-    automaticActions?: {
-        type: EscalationActionType;
-        configuration: Record<string, any>;
-        actionId: string;
-        executeImmediately: boolean;
-        rollbackable: boolean;
-    }[] | undefined;
     escalationCriteria?: {
         value: string | number | boolean;
         type: "value" | "custom" | "time" | "count" | "percentage";
@@ -237,6 +229,14 @@ export declare const EscalationLevelSchema: z.ZodObject<{
         field: string;
         conditionId: string;
         logicalOperator?: "AND" | "OR" | undefined;
+    }[] | undefined;
+    notificationTemplate?: string | undefined;
+    automaticActions?: {
+        type: EscalationActionType;
+        configuration: Record<string, any>;
+        actionId: string;
+        executeImmediately: boolean;
+        rollbackable: boolean;
     }[] | undefined;
 }, {
     name: string;
@@ -256,14 +256,6 @@ export declare const EscalationLevelSchema: z.ZodObject<{
     responseTimeLimit: number;
     resolutionTimeLimit: number;
     requiredActions?: string[] | undefined;
-    notificationTemplate?: string | undefined;
-    automaticActions?: {
-        type: EscalationActionType;
-        configuration: Record<string, any>;
-        actionId: string;
-        executeImmediately: boolean;
-        rollbackable: boolean;
-    }[] | undefined;
     escalationCriteria?: {
         value: string | number | boolean;
         type: "value" | "custom" | "time" | "count" | "percentage";
@@ -271,6 +263,14 @@ export declare const EscalationLevelSchema: z.ZodObject<{
         field: string;
         conditionId: string;
         logicalOperator?: "AND" | "OR" | undefined;
+    }[] | undefined;
+    notificationTemplate?: string | undefined;
+    automaticActions?: {
+        type: EscalationActionType;
+        configuration: Record<string, any>;
+        actionId: string;
+        executeImmediately: boolean;
+        rollbackable: boolean;
     }[] | undefined;
 }>;
 export declare const EscalationRuleSchema: z.ZodObject<{
@@ -394,14 +394,6 @@ export declare const EscalationRuleSchema: z.ZodObject<{
         responseTimeLimit: number;
         resolutionTimeLimit: number;
         requiredActions?: string[] | undefined;
-        notificationTemplate?: string | undefined;
-        automaticActions?: {
-            type: EscalationActionType;
-            configuration: Record<string, any>;
-            actionId: string;
-            executeImmediately: boolean;
-            rollbackable: boolean;
-        }[] | undefined;
         escalationCriteria?: {
             value: string | number | boolean;
             type: "value" | "custom" | "time" | "count" | "percentage";
@@ -409,6 +401,14 @@ export declare const EscalationRuleSchema: z.ZodObject<{
             field: string;
             conditionId: string;
             logicalOperator?: "AND" | "OR" | undefined;
+        }[] | undefined;
+        notificationTemplate?: string | undefined;
+        automaticActions?: {
+            type: EscalationActionType;
+            configuration: Record<string, any>;
+            actionId: string;
+            executeImmediately: boolean;
+            rollbackable: boolean;
         }[] | undefined;
     }, {
         name: string;
@@ -428,14 +428,6 @@ export declare const EscalationRuleSchema: z.ZodObject<{
         responseTimeLimit: number;
         resolutionTimeLimit: number;
         requiredActions?: string[] | undefined;
-        notificationTemplate?: string | undefined;
-        automaticActions?: {
-            type: EscalationActionType;
-            configuration: Record<string, any>;
-            actionId: string;
-            executeImmediately: boolean;
-            rollbackable: boolean;
-        }[] | undefined;
         escalationCriteria?: {
             value: string | number | boolean;
             type: "value" | "custom" | "time" | "count" | "percentage";
@@ -443,6 +435,14 @@ export declare const EscalationRuleSchema: z.ZodObject<{
             field: string;
             conditionId: string;
             logicalOperator?: "AND" | "OR" | undefined;
+        }[] | undefined;
+        notificationTemplate?: string | undefined;
+        automaticActions?: {
+            type: EscalationActionType;
+            configuration: Record<string, any>;
+            actionId: string;
+            executeImmediately: boolean;
+            rollbackable: boolean;
         }[] | undefined;
     }>, "many">;
     initialDelay: z.ZodOptional<z.ZodNumber>;
@@ -460,8 +460,8 @@ export declare const EscalationRuleSchema: z.ZodObject<{
     name: string;
     description: string;
     category: EscalationCategory;
-    lastModified: Date;
     version: number;
+    lastModified: Date;
     enabled: boolean;
     conditions: {
         value: string | number | boolean;
@@ -471,8 +471,8 @@ export declare const EscalationRuleSchema: z.ZodObject<{
         conditionId: string;
         logicalOperator?: "AND" | "OR" | undefined;
     }[];
-    createdBy: string;
     ruleId: string;
+    createdBy: string;
     triggerType: EscalationTriggerType;
     escalationPath: {
         name: string;
@@ -492,14 +492,6 @@ export declare const EscalationRuleSchema: z.ZodObject<{
         responseTimeLimit: number;
         resolutionTimeLimit: number;
         requiredActions?: string[] | undefined;
-        notificationTemplate?: string | undefined;
-        automaticActions?: {
-            type: EscalationActionType;
-            configuration: Record<string, any>;
-            actionId: string;
-            executeImmediately: boolean;
-            rollbackable: boolean;
-        }[] | undefined;
         escalationCriteria?: {
             value: string | number | boolean;
             type: "value" | "custom" | "time" | "count" | "percentage";
@@ -508,11 +500,19 @@ export declare const EscalationRuleSchema: z.ZodObject<{
             conditionId: string;
             logicalOperator?: "AND" | "OR" | undefined;
         }[] | undefined;
+        notificationTemplate?: string | undefined;
+        automaticActions?: {
+            type: EscalationActionType;
+            configuration: Record<string, any>;
+            actionId: string;
+            executeImmediately: boolean;
+            rollbackable: boolean;
+        }[] | undefined;
     }[];
     initialDelay?: number | undefined;
-    businessHoursOnly?: boolean | undefined;
     escalationInterval?: number | undefined;
     maxEscalationTime?: number | undefined;
+    businessHoursOnly?: boolean | undefined;
     allowWeekends?: boolean | undefined;
     timeZone?: string | undefined;
 }, {
@@ -520,8 +520,8 @@ export declare const EscalationRuleSchema: z.ZodObject<{
     name: string;
     description: string;
     category: EscalationCategory;
-    lastModified: Date;
     version: number;
+    lastModified: Date;
     enabled: boolean;
     conditions: {
         value: string | number | boolean;
@@ -531,8 +531,8 @@ export declare const EscalationRuleSchema: z.ZodObject<{
         conditionId: string;
         logicalOperator?: "AND" | "OR" | undefined;
     }[];
-    createdBy: string;
     ruleId: string;
+    createdBy: string;
     triggerType: EscalationTriggerType;
     escalationPath: {
         name: string;
@@ -552,14 +552,6 @@ export declare const EscalationRuleSchema: z.ZodObject<{
         responseTimeLimit: number;
         resolutionTimeLimit: number;
         requiredActions?: string[] | undefined;
-        notificationTemplate?: string | undefined;
-        automaticActions?: {
-            type: EscalationActionType;
-            configuration: Record<string, any>;
-            actionId: string;
-            executeImmediately: boolean;
-            rollbackable: boolean;
-        }[] | undefined;
         escalationCriteria?: {
             value: string | number | boolean;
             type: "value" | "custom" | "time" | "count" | "percentage";
@@ -568,11 +560,19 @@ export declare const EscalationRuleSchema: z.ZodObject<{
             conditionId: string;
             logicalOperator?: "AND" | "OR" | undefined;
         }[] | undefined;
+        notificationTemplate?: string | undefined;
+        automaticActions?: {
+            type: EscalationActionType;
+            configuration: Record<string, any>;
+            actionId: string;
+            executeImmediately: boolean;
+            rollbackable: boolean;
+        }[] | undefined;
     }[];
     initialDelay?: number | undefined;
-    businessHoursOnly?: boolean | undefined;
     escalationInterval?: number | undefined;
     maxEscalationTime?: number | undefined;
+    businessHoursOnly?: boolean | undefined;
     allowWeekends?: boolean | undefined;
     timeZone?: string | undefined;
 }>;
@@ -1141,14 +1141,6 @@ declare const _default: {
         responseTimeLimit: number;
         resolutionTimeLimit: number;
         requiredActions?: string[] | undefined;
-        notificationTemplate?: string | undefined;
-        automaticActions?: {
-            type: EscalationActionType;
-            configuration: Record<string, any>;
-            actionId: string;
-            executeImmediately: boolean;
-            rollbackable: boolean;
-        }[] | undefined;
         escalationCriteria?: {
             value: string | number | boolean;
             type: "value" | "custom" | "time" | "count" | "percentage";
@@ -1156,6 +1148,14 @@ declare const _default: {
             field: string;
             conditionId: string;
             logicalOperator?: "AND" | "OR" | undefined;
+        }[] | undefined;
+        notificationTemplate?: string | undefined;
+        automaticActions?: {
+            type: EscalationActionType;
+            configuration: Record<string, any>;
+            actionId: string;
+            executeImmediately: boolean;
+            rollbackable: boolean;
         }[] | undefined;
     }, {
         name: string;
@@ -1175,14 +1175,6 @@ declare const _default: {
         responseTimeLimit: number;
         resolutionTimeLimit: number;
         requiredActions?: string[] | undefined;
-        notificationTemplate?: string | undefined;
-        automaticActions?: {
-            type: EscalationActionType;
-            configuration: Record<string, any>;
-            actionId: string;
-            executeImmediately: boolean;
-            rollbackable: boolean;
-        }[] | undefined;
         escalationCriteria?: {
             value: string | number | boolean;
             type: "value" | "custom" | "time" | "count" | "percentage";
@@ -1190,6 +1182,14 @@ declare const _default: {
             field: string;
             conditionId: string;
             logicalOperator?: "AND" | "OR" | undefined;
+        }[] | undefined;
+        notificationTemplate?: string | undefined;
+        automaticActions?: {
+            type: EscalationActionType;
+            configuration: Record<string, any>;
+            actionId: string;
+            executeImmediately: boolean;
+            rollbackable: boolean;
         }[] | undefined;
     }>;
     EscalationRuleSchema: z.ZodObject<{
@@ -1313,14 +1313,6 @@ declare const _default: {
             responseTimeLimit: number;
             resolutionTimeLimit: number;
             requiredActions?: string[] | undefined;
-            notificationTemplate?: string | undefined;
-            automaticActions?: {
-                type: EscalationActionType;
-                configuration: Record<string, any>;
-                actionId: string;
-                executeImmediately: boolean;
-                rollbackable: boolean;
-            }[] | undefined;
             escalationCriteria?: {
                 value: string | number | boolean;
                 type: "value" | "custom" | "time" | "count" | "percentage";
@@ -1328,6 +1320,14 @@ declare const _default: {
                 field: string;
                 conditionId: string;
                 logicalOperator?: "AND" | "OR" | undefined;
+            }[] | undefined;
+            notificationTemplate?: string | undefined;
+            automaticActions?: {
+                type: EscalationActionType;
+                configuration: Record<string, any>;
+                actionId: string;
+                executeImmediately: boolean;
+                rollbackable: boolean;
             }[] | undefined;
         }, {
             name: string;
@@ -1347,14 +1347,6 @@ declare const _default: {
             responseTimeLimit: number;
             resolutionTimeLimit: number;
             requiredActions?: string[] | undefined;
-            notificationTemplate?: string | undefined;
-            automaticActions?: {
-                type: EscalationActionType;
-                configuration: Record<string, any>;
-                actionId: string;
-                executeImmediately: boolean;
-                rollbackable: boolean;
-            }[] | undefined;
             escalationCriteria?: {
                 value: string | number | boolean;
                 type: "value" | "custom" | "time" | "count" | "percentage";
@@ -1362,6 +1354,14 @@ declare const _default: {
                 field: string;
                 conditionId: string;
                 logicalOperator?: "AND" | "OR" | undefined;
+            }[] | undefined;
+            notificationTemplate?: string | undefined;
+            automaticActions?: {
+                type: EscalationActionType;
+                configuration: Record<string, any>;
+                actionId: string;
+                executeImmediately: boolean;
+                rollbackable: boolean;
             }[] | undefined;
         }>, "many">;
         initialDelay: z.ZodOptional<z.ZodNumber>;
@@ -1379,8 +1379,8 @@ declare const _default: {
         name: string;
         description: string;
         category: EscalationCategory;
-        lastModified: Date;
         version: number;
+        lastModified: Date;
         enabled: boolean;
         conditions: {
             value: string | number | boolean;
@@ -1390,8 +1390,8 @@ declare const _default: {
             conditionId: string;
             logicalOperator?: "AND" | "OR" | undefined;
         }[];
-        createdBy: string;
         ruleId: string;
+        createdBy: string;
         triggerType: EscalationTriggerType;
         escalationPath: {
             name: string;
@@ -1411,14 +1411,6 @@ declare const _default: {
             responseTimeLimit: number;
             resolutionTimeLimit: number;
             requiredActions?: string[] | undefined;
-            notificationTemplate?: string | undefined;
-            automaticActions?: {
-                type: EscalationActionType;
-                configuration: Record<string, any>;
-                actionId: string;
-                executeImmediately: boolean;
-                rollbackable: boolean;
-            }[] | undefined;
             escalationCriteria?: {
                 value: string | number | boolean;
                 type: "value" | "custom" | "time" | "count" | "percentage";
@@ -1427,11 +1419,19 @@ declare const _default: {
                 conditionId: string;
                 logicalOperator?: "AND" | "OR" | undefined;
             }[] | undefined;
+            notificationTemplate?: string | undefined;
+            automaticActions?: {
+                type: EscalationActionType;
+                configuration: Record<string, any>;
+                actionId: string;
+                executeImmediately: boolean;
+                rollbackable: boolean;
+            }[] | undefined;
         }[];
         initialDelay?: number | undefined;
-        businessHoursOnly?: boolean | undefined;
         escalationInterval?: number | undefined;
         maxEscalationTime?: number | undefined;
+        businessHoursOnly?: boolean | undefined;
         allowWeekends?: boolean | undefined;
         timeZone?: string | undefined;
     }, {
@@ -1439,8 +1439,8 @@ declare const _default: {
         name: string;
         description: string;
         category: EscalationCategory;
-        lastModified: Date;
         version: number;
+        lastModified: Date;
         enabled: boolean;
         conditions: {
             value: string | number | boolean;
@@ -1450,8 +1450,8 @@ declare const _default: {
             conditionId: string;
             logicalOperator?: "AND" | "OR" | undefined;
         }[];
-        createdBy: string;
         ruleId: string;
+        createdBy: string;
         triggerType: EscalationTriggerType;
         escalationPath: {
             name: string;
@@ -1471,14 +1471,6 @@ declare const _default: {
             responseTimeLimit: number;
             resolutionTimeLimit: number;
             requiredActions?: string[] | undefined;
-            notificationTemplate?: string | undefined;
-            automaticActions?: {
-                type: EscalationActionType;
-                configuration: Record<string, any>;
-                actionId: string;
-                executeImmediately: boolean;
-                rollbackable: boolean;
-            }[] | undefined;
             escalationCriteria?: {
                 value: string | number | boolean;
                 type: "value" | "custom" | "time" | "count" | "percentage";
@@ -1487,11 +1479,19 @@ declare const _default: {
                 conditionId: string;
                 logicalOperator?: "AND" | "OR" | undefined;
             }[] | undefined;
+            notificationTemplate?: string | undefined;
+            automaticActions?: {
+                type: EscalationActionType;
+                configuration: Record<string, any>;
+                actionId: string;
+                executeImmediately: boolean;
+                rollbackable: boolean;
+            }[] | undefined;
         }[];
         initialDelay?: number | undefined;
-        businessHoursOnly?: boolean | undefined;
         escalationInterval?: number | undefined;
         maxEscalationTime?: number | undefined;
+        businessHoursOnly?: boolean | undefined;
         allowWeekends?: boolean | undefined;
         timeZone?: string | undefined;
     }>;

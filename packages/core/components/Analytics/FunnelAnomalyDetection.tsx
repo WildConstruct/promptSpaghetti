@@ -494,21 +494,7 @@ const defaultAlertConfig: AlertConfiguration = {
   recipients: []
 };
 
-export const FunnelAnomalyDetection: React.FC<FunnelAnomalyDetectionProps> = ({
-  funnelDefinition,
-  analyticsInfrastructure,
-  timeRange,
-  detectionConfig = defaultDetectionConfig,
-  alertConfig = defaultAlertConfig,
-  segments = [],
-  cohorts = [],
-  realTimeMonitoring = false,
-  onAnomalyDetected,
-  onAlertTriggered,
-  onExport
-}) => {
-  const [detectionData, setDetectionData] = useState<AnomalyDetectionData | null>(null);
-  const [loading, setLoading] = useState(true);
+export   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedAnomaly, setSelectedAnomaly] = useState<DetectedAnomaly | null>(null);
   const [activeTab, setActiveTab] = useState<'current' | 'historical' | 'predicted' | 'alerts'>('current');
@@ -564,7 +550,7 @@ export const FunnelAnomalyDetection: React.FC<FunnelAnomalyDetectionProps> = ({
 
   // Process anomaly detection data
   const processAnomalyDetectionData = async (
-    rawData: any,
+    rawData: unknown,
     config: AnomalyDetectionConfig,
     alertCfg: AlertConfiguration
   ): Promise<AnomalyDetectionData> => {

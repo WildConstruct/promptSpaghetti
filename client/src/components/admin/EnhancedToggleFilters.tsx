@@ -80,7 +80,7 @@ export interface ToggleFilters {
   
   // Tags and metadata
   tags?: string[];
-  customFields?: Record<string, any>;
+  customFields?: Record<string, unknown>;
 }
 
 export interface SortConfig {
@@ -145,8 +145,8 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({
   availableOrganizations,
   availableUsers,
   availableToggles,
-  loading = false,
-  filtersLoading = false,
+  _loading = false,
+  _filtersLoading = false,
   totalResults = 0,
   filteredResults = 0,
   showAdvanced = true,
@@ -221,12 +221,14 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({
   };
 
   // Handle filter changes with debouncing
-  const debouncedFilterChange = useCallback(
-    debounce((newFilters: Partial<ToggleFilters>) => {
+  const debouncedFilterChange = useCallback((newFilters: Partial<ToggleFilters>) => {
+    // Use setTimeout for simple debouncing to avoid external dependencies
+    const timeoutId = setTimeout(() => {
       onFiltersChange({ ...filters, ...newFilters });
-    }, 300),
-    [filters, onFiltersChange]
-  );
+    }, 300);
+    
+    return () => clearTimeout(timeoutId);
+  }, [filters, onFiltersChange]);
 
   const handleFilterChange = (newFilters: Partial<ToggleFilters>) => {
     debouncedFilterChange(newFilters);

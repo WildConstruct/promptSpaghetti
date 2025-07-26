@@ -80,7 +80,7 @@ export class IncludeNode extends RuntimeNode<string> {
 }
 
 export class SetVariableNode extends RuntimeNode<void> {
-  constructor(id: string, private key: string, private value: any) {
+  constructor(id: string, private key: string, private value: Error) {
     super(id);
   }
 

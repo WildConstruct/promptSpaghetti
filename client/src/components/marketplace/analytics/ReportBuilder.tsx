@@ -58,7 +58,7 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
       recipients: []
     }
   });
-  const [previewData, setPreviewData] = useState<any[]>([]);
+  const [previewData, setPreviewData] = useState<unknown[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);

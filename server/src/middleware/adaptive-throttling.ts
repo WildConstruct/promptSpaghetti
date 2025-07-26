@@ -221,7 +221,7 @@ export class AdaptiveThrottlingMiddleware {
   /**
    * Add a custom throttling rule
    */
-  addThrottlingRule(rule: any): void {
+  addThrottlingRule(rule: Record<string, unknown>): void {
     this.engine.addRule(rule);
   }
 

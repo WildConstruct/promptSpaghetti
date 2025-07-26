@@ -19,7 +19,7 @@ export interface ConflictData {
 }
 export interface ConflictPanelProps {
     conflicts: ConflictData[];
-    onResolveConflict: (conflictId: string, strategy: string, userSelection?: any) => void;
+    onResolveConflict: (conflictId: string, strategy: string, userSelection?: Record<string, unknown>) => void;
     onViewConflict: (conflictId: string) => void;
     currentUserId: string;
     className?: string;

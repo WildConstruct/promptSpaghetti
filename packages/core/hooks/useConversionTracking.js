@@ -5,7 +5,7 @@
  * Automatically tracks common user actions and provides tracking utilities.
  */
 import { useEffect, useCallback, useRef } from 'react';
-import { conversionTracker } from '../analytics/ConversionTracker.js';
+import { conversionTracker } from '../analytics/ConversionTracker';
 export const useConversionTracking = (config = {}) => {
     const { enableAutoTracking = true, trackPageViews = true, trackUserInteractions = true, experimentId, variantId } = config;
     const hasTrackedPageView = useRef(false);

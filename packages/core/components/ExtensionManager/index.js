@@ -2,14 +2,14 @@
  * Extension Manager Components - Epic 8.4 Story 8.4.5
  * Central export point for all extension manager UI components
  */
-export { ExtensionManagerPanel } from './ExtensionManagerPanel.js';
-export { ExtensionListView } from './ExtensionListView.js';
-export { ExtensionDetailView } from './ExtensionDetailView.js';
-export { ExtensionSearchFilter } from './ExtensionSearchFilter.js';
-export { ExtensionInstallDialog } from './ExtensionInstallDialog.js';
-export { ExtensionConfigurationPanel } from './ExtensionConfigurationPanel.js';
-export { ExtensionMarketplace } from './ExtensionMarketplace.js';
-export { useExtensionManagerStore } from './ExtensionManagerStore.js';
+export { ExtensionManagerPanel } from './ExtensionManagerPanel';
+export { ExtensionListView } from './ExtensionListView';
+export { ExtensionDetailView } from './ExtensionDetailView';
+export { ExtensionSearchFilter } from './ExtensionSearchFilter';
+export { ExtensionInstallDialog } from './ExtensionInstallDialog';
+export { ExtensionConfigurationPanel } from './ExtensionConfigurationPanel';
+export { ExtensionMarketplace } from './ExtensionMarketplace';
+export { useExtensionManagerStore } from './ExtensionManagerStore';
 // Component utilities and constants
 export const ExtensionManagerConstants = {
     // View modes

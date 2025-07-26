@@ -4,7 +4,7 @@
  *
  * Provides constraint validation for historically accurate content generation
  */
-import { HISTORICAL_ERAS } from '../types/UTDG.js';
+import { HISTORICAL_ERAS } from '../types/UTDG';
 export class ConstraintValidator {
     constraints = [];
     enabledEnforcement = ['strict', 'warning', 'suggestion'];

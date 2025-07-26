@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useMemo } from 'react';
-import { useCorrectionsStore } from '../correctionsStore.js';
-export const WorkflowManager = ({ isOpen, onClose }) => {
+import { useCorrectionsStore } from '../correctionsStore';
+export const WorkflowManager = ({ isOpen, onClose }: any) => {
     const { rules, getDraftRules, getPublishedRules, approveRule, deprecateRule, suggestRule, updateRule, deleteRule } = useCorrectionsStore();
     const [activeTab, setActiveTab] = useState('pending');
     const [selectedRules, setSelectedRules] = useState(new Set());
@@ -19,7 +19,7 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
         const suggestions = rules.filter(rule => rule.suggestedBy && rule.status === 'draft');
         return { pending, published, deprecated, suggestions };
     }, [rules]);
-    const handleApprove = (ruleId) => {
+    const handleApprove = (ruleId: string) => {
         approveRule(ruleId, 'system'); // In real app, would use actual user ID
         setShowApprovalDialog(false);
         setCurrentRule(null);
@@ -31,7 +31,7 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
         });
         setSelectedRules(new Set());
     };
-    const handleDeprecate = (ruleId, reason) => {
+    const handleDeprecate = (ruleId: string, reason: string) => {
         deprecateRule(ruleId, reason);
         setShowDeprecationDialog(false);
         setCurrentRule(null);
@@ -46,7 +46,7 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
             setSelectedRules(new Set());
         }
     };
-    const toggleRuleSelection = (ruleId) => {
+    const toggleRuleSelection = (ruleId: string) => {
         const newSelected = new Set(selectedRules);
         if (newSelected.has(ruleId)) {
             newSelected.delete(ruleId);
@@ -56,14 +56,14 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
         }
         setSelectedRules(newSelected);
     };
-    const selectAllRules = (ruleList) => {
+    const selectAllRules = (ruleList: any[]) => {
         const allIds = new Set(ruleList.map(rule => rule.id));
         setSelectedRules(allIds);
     };
     const clearSelection = () => {
         setSelectedRules(new Set());
     };
-    const getStatusColor = (status) => {
+    const getStatusColor = (status: string) => {
         switch (status) {
             case 'draft':
                 return '#fbb040';
@@ -75,7 +75,7 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
                 return '#a0aec0';
         }
     };
-    const getStatusBadge = (rule) => (_jsx("span", { style: {
+    const getStatusBadge = (rule: any) => (_jsx("span", { style: {
             padding: '2px 6px',
             borderRadius: '3px',
             fontSize: '10px',
@@ -83,7 +83,7 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
             background: getStatusColor(rule.status),
             color: '#1a202c'
         }, children: rule.status.toUpperCase() }));
-    const renderRuleCard = (rule) => (_jsx("div", { style: {
+    const renderRuleCard = (rule: any) => (_jsx("div", { style: {
             background: '#2a2e37',
             border: '1px solid #4a5568',
             borderRadius: '6px',

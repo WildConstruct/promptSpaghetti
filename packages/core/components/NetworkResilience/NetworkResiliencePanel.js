@@ -1,8 +1,8 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import { useState } from 'react';
-import { ConnectionStatusIndicator } from './ConnectionStatusIndicator.js';
-import { ReconnectionState } from '../../network-resilience/ReconnectionHandler.js';
-import { ConnectionQuality } from '../../network-resilience/ConnectionStateManager.js';
+import { ConnectionStatusIndicator } from './ConnectionStatusIndicator';
+import { ReconnectionState } from '../../network-resilience/ReconnectionHandler';
+import { ConnectionQuality } from '../../network-resilience/ConnectionStateManager';
 export const NetworkResiliencePanel = ({ status, queuedOperations, onRetryConnection, onForceSync, onClearQueue, onRetryOperation, isOpen, onClose }) => {
     const [activeTab, setActiveTab] = useState('status');
     const formatDuration = (ms) => {

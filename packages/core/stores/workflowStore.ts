@@ -29,7 +29,7 @@ export interface WorkflowTransition {
   description?: string;
   requires_approval: boolean;
   required_permissions: bigint;
-  conditions: Record<string, any>;
+  conditions: Record<string, unknown>;
   created_at: Date;
 }
 
@@ -61,7 +61,7 @@ export interface WorkflowLock {
   locked_at: Date;
   expires_at?: Date;
   auto_release: boolean;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
 }
 
 export interface WorkflowHistoryEntry {
@@ -76,7 +76,7 @@ export interface WorkflowHistoryEntry {
   approval_id?: string;
   transition_id?: string;
   comment?: string;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
 }
 
 export interface WorkflowStatistics {
@@ -145,20 +145,20 @@ interface WorkflowStore {
     actorId: string,
     options?: {
       comment?: string;
-      metadata?: Record<string, any>;
+      metadata?: Record<string, unknown>;
       force?: boolean;
       lockDuration?: number;
     }
   ) => Promise<StateTransitionResult>;
 
   // Actions - Approval Management
-  fetchApprovals: (workspaceId: string, filters?: any) => Promise<void>;
+  fetchApprovals: (workspaceId: string, filters?: Record<string, string>) => Promise<void>;
   createApproval: (data: Partial<WorkflowApproval>) => Promise<WorkflowApproval>;
   approveWorkflow: (approvalId: string, approverId: string, comment?: string) => Promise<StateTransitionResult>;
   rejectWorkflow: (approvalId: string, rejectorId: string, reason: string) => Promise<boolean>;
 
   // Actions - Lock Management
-  fetchLocks: (workspaceId: string, filters?: any) => Promise<void>;
+  fetchLocks: (workspaceId: string, filters?: Record<string, string>) => Promise<void>;
   acquireLock: (
     resourceId: string,
     userId: string,
@@ -166,14 +166,14 @@ interface WorkflowStore {
     options?: {
       reason?: string;
       duration?: number;
-      metadata?: Record<string, any>;
+      metadata?: Record<string, unknown>;
     }
   ) => Promise<WorkflowLock>;
   releaseLock: (lockId: string, userId: string) => Promise<boolean>;
   releaseLocksByResource: (resourceId: string, userId: string, lockType?: string) => Promise<number>;
 
   // Actions - History and Statistics
-  fetchHistory: (workspaceId: string, filters?: any) => Promise<void>;
+  fetchHistory: (workspaceId: string, filters?: Record<string, string>) => Promise<void>;
   fetchStatistics: (workspaceId: string) => Promise<void>;
 
   // Actions - Utilities
@@ -184,7 +184,7 @@ interface WorkflowStore {
   }>;
   canUserTransitionState: (userId: string, resourceId: string, toStateId: string) => Promise<boolean>;
   isResourceLocked: (resourceId: string, lockType?: string) => Promise<boolean>;
-  performMaintenance: () => Promise<any>;
+  performMaintenance: () => Promise<unknown>;
 
   // Internal actions
   setLoading: (loading: boolean) => void;
@@ -215,24 +215,7 @@ async function apiCall(endpoint: string, options: RequestInit = {}) {
 }
 
 // Create the store
-export const useWorkflowStore = create<WorkflowStore>()(
-  devtools(
-    (set, get) => ({
-      // Initial state
-      states: [],
-      transitions: [],
-      approvals: [],
-      locks: [],
-      history: [],
-      statistics: null,
-      loading: false,
-      error: null,
-
-      // State management actions
-      fetchStates: async (workspaceId: string) => {
-        try {
-          set({ loading: true, error: null });
-          const states = await apiCall(`/states/${workspaceId}`);
+export           const states = await apiCall(`/states/${workspaceId}`);
           set({ states, loading: false });
         } catch (error) {
           set({ error: error instanceof Error ? error.message : 'Failed to fetch states', loading: false });

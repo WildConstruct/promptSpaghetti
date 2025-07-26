@@ -7,7 +7,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * to data elements with validation, approval workflow, and audit trail
  */
 import { useState, useEffect } from 'react';
-import { CLASSIFICATION_LEVELS, DEFAULT_HANDLING_REQUIREMENTS } from '../../types/DataClassification.js';
+import { CLASSIFICATION_LEVELS, DEFAULT_HANDLING_REQUIREMENTS } from '../../types/DataClassification';
 export const ClassificationTaggingUI = ({ dataElement, dataId, existingClassification, context, onClassificationChange, onValidationChange, readonly = false, showHandlingRequirements = true }) => {
     const [formData, setFormData] = useState({
         classification: existingClassification?.classification || '',

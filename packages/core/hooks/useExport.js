@@ -476,6 +476,165 @@ export const useExport = (projectId) => {
             setState(prev => ({ ...prev, statistics }));
         });
     }, [projectId, handleApiCall]);
+    // Collaboration and Sharing Actions
+    const getTemplates = useCallback(async (options = {}) => {
+        return handleApiCall(async () => {
+            const params = new URLSearchParams();
+            Object.keys(options).forEach(key => {
+                if (options[key] !== undefined) {
+                    params.append(key, options[key].toString());
+                }
+            });
+            const response = await fetch(`/api/projects/${projectId}/export/templates?${params}`);
+            const data = await response.json();
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to fetch templates');
+            }
+            return data.data;
+        });
+    }, [projectId, handleApiCall]);
+    const getTemplateStats = useCallback(async (id) => {
+        return handleApiCall(async () => {
+            const response = await fetch(`/api/export/templates/${id}/stats`);
+            const data = await response.json();
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to get template stats');
+            }
+            return data.data;
+        });
+    }, [handleApiCall]);
+    const shareTemplate = useCallback(async (id, options) => {
+        await handleApiCall(async () => {
+            const response = await fetch(`/api/export/templates/${id}/share`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(options)
+            });
+            const data = await response.json();
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to share template');
+            }
+        });
+    }, [handleApiCall]);
+    const previewTemplate = useCallback(async (template) => {
+        return handleApiCall(async () => {
+            const response = await fetch('/api/export/templates/preview', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(template)
+            });
+            const data = await response.json();
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to preview template');
+            }
+            return data.data;
+        });
+    }, [handleApiCall]);
+    const getTemplateCollaborators = useCallback(async (id) => {
+        return handleApiCall(async () => {
+            const response = await fetch(`/api/export/templates/${id}/collaborators`);
+            const data = await response.json();
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to get template collaborators');
+            }
+            return data.data;
+        });
+    }, [handleApiCall]);
+    const getTemplateActivity = useCallback(async (id) => {
+        return handleApiCall(async () => {
+            const response = await fetch(`/api/export/templates/${id}/activity`);
+            const data = await response.json();
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to get template activity');
+            }
+            return data.data;
+        });
+    }, [handleApiCall]);
+    const getTemplateAnalytics = useCallback(async (id) => {
+        return handleApiCall(async () => {
+            const response = await fetch(`/api/export/templates/${id}/analytics`);
+            const data = await response.json();
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to get template analytics');
+            }
+            return data.data;
+        });
+    }, [handleApiCall]);
+    const inviteCollaborator = useCallback(async (id, invite) => {
+        return handleApiCall(async () => {
+            const response = await fetch(`/api/export/templates/${id}/collaborators`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(invite)
+            });
+            const data = await response.json();
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to invite collaborator');
+            }
+            return data.data;
+        });
+    }, [handleApiCall]);
+    const updateCollaboratorRole = useCallback(async (templateId, userId, role) => {
+        await handleApiCall(async () => {
+            const response = await fetch(`/api/export/templates/${templateId}/collaborators/${userId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ role })
+            });
+            const data = await response.json();
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to update collaborator role');
+            }
+        });
+    }, [handleApiCall]);
+    const removeCollaborator = useCallback(async (templateId, userId) => {
+        await handleApiCall(async () => {
+            const response = await fetch(`/api/export/templates/${templateId}/collaborators/${userId}`, {
+                method: 'DELETE'
+            });
+            const data = await response.json();
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to remove collaborator');
+            }
+        });
+    }, [handleApiCall]);
+    const updateShareSettings = useCallback(async (id, settings) => {
+        await handleApiCall(async () => {
+            const response = await fetch(`/api/export/templates/${id}/share-settings`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(settings)
+            });
+            const data = await response.json();
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to update share settings');
+            }
+        });
+    }, [handleApiCall]);
+    const generateShareLink = useCallback(async (id) => {
+        return handleApiCall(async () => {
+            const response = await fetch(`/api/export/templates/${id}/share-link`, {
+                method: 'POST'
+            });
+            const data = await response.json();
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to generate share link');
+            }
+            return data.data.shareLink;
+        });
+    }, [handleApiCall]);
+    const forkTemplate = useCallback(async (id) => {
+        return handleApiCall(async () => {
+            const response = await fetch(`/api/export/templates/${id}/fork`, {
+                method: 'POST'
+            });
+            const data = await response.json();
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to fork template');
+            }
+            return data.data;
+        });
+    }, [handleApiCall]);
     // Utility Actions
     const refetch = useCallback(async () => {
         await Promise.all([
@@ -533,6 +692,20 @@ export const useExport = (projectId) => {
         validateFormatOptions,
         // Statistics Actions
         fetchStatistics,
+        // Collaboration and Sharing Actions
+        getTemplates,
+        getTemplateStats,
+        shareTemplate,
+        previewTemplate,
+        getTemplateCollaborators,
+        getTemplateActivity,
+        getTemplateAnalytics,
+        inviteCollaborator,
+        updateCollaboratorRole,
+        removeCollaborator,
+        updateShareSettings,
+        generateShareLink,
+        forkTemplate,
         // Utility Actions
         refetch,
         clearError,

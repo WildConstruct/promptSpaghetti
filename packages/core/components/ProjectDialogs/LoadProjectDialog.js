@@ -3,7 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * LoadProjectDialog - Dialog for loading projects from .psg files
  */
 import { useState } from 'react';
-import { useGraphStore } from '../../graphStore.js';
+import { useGraphStore } from '../../graphStore';
 export const LoadProjectDialog = ({ isOpen, onClose, onLoad }) => {
     const { loadProject, hasUnsavedChanges } = useGraphStore();
     const [isLoading, setIsLoading] = useState(false);

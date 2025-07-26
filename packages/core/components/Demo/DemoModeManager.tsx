@@ -70,7 +70,7 @@ export const DemoModeManager: React.FC<DemoModeManagerProps> = ({
     return () => window.removeEventListener('resize', detectScreenMode);
   }, []);
 
-  // Apply CSS classes based on config
+  // Apply CSS classes based on config - memoized for performance
   useEffect(() => {
     const classes = [];
     
@@ -83,12 +83,13 @@ export const DemoModeManager: React.FC<DemoModeManagerProps> = ({
     // Always add demo mode class
     classes.push('demo-mode', 'presentation-typography');
     
-    // Apply classes to document body
-    document.body.className = document.body.className
-      .split(' ')
-      .filter(cls => !cls.startsWith('demo-') && !cls.startsWith('presentation-'))
-      .concat(classes)
-      .join(' ');
+    // Apply classes to document body more efficiently
+    const currentClasses = document.body.className.split(' ');
+    const filteredClasses = currentClasses.filter(cls => 
+      !cls.startsWith('demo-') && !cls.startsWith('presentation-')
+    );
+    
+    document.body.className = [...filteredClasses, ...classes].join(' ');
       
     onModeChange?.(config);
   }, [config, onModeChange]);

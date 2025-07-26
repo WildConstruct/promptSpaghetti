@@ -158,7 +158,7 @@ export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = ''
                   name="price"
                   value="all"
                   checked={priceFilter === 'all'}
-                  onChange={(e) => setPriceFilter(e.target.value as any)}
+                  onChange={(e) => setPriceFilter(e.target.value as 'all' | 'free' | 'paid')}
                 />
                 All Templates
               </label>
@@ -168,7 +168,7 @@ export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = ''
                   name="price"
                   value="free"
                   checked={priceFilter === 'free'}
-                  onChange={(e) => setPriceFilter(e.target.value as any)}
+                  onChange={(e) => setPriceFilter(e.target.value as 'all' | 'free' | 'paid')}
                 />
                 Free
               </label>
@@ -178,7 +178,7 @@ export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = ''
                   name="price"
                   value="paid"
                   checked={priceFilter === 'paid'}
-                  onChange={(e) => setPriceFilter(e.target.value as any)}
+                  onChange={(e) => setPriceFilter(e.target.value as 'all' | 'free' | 'paid')}
                 />
                 Premium
               </label>
@@ -189,7 +189,7 @@ export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = ''
             <h3>Sort By</h3>
             <select 
               value={sortBy} 
-              onChange={(e) => setSortBy(e.target.value as any)}
+              onChange={(e) => setSortBy(e.target.value as 'relevance' | 'popularity' | 'newest' | 'price_asc' | 'price_desc' | 'rating')}
               className="sort-select"
             >
               <option value="relevance">Relevance</option>

@@ -6,11 +6,11 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Tracks discovery, usage, contributions, achievements, and learning milestones.
  */
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Progress } from '../ui/Progress.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Progress } from '../ui/Progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Trophy, Star, Award, Target, Users, Download, Eye, Heart, BookOpen, CheckCircle, Calendar, PlusCircle, Zap, Crown, Flame } from 'lucide-react';
 export const ProgressTracker = ({ userId, variant = 'full', showDetailedMetrics = true, enableAnimations = true, onMilestoneComplete, onLevelUp, className = '' }) => {
     const [userProgress, setUserProgress] = useState(null);

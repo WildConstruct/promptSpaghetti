@@ -1,9 +1,10 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
-import { TextFieldEditor } from '../TextFieldEditor.js';
-import { SelectEditor } from '../SelectEditor.js';
-import { TemplateEditor } from '../TemplateEditor.js';
-import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection.js';
-import { useUISettingsStore } from '../../stores/uiSettingsStore.js';
+import { TextFieldEditor } from '../TextFieldEditor';
+import { SelectEditor } from '../SelectEditor';
+import { TemplateEditor } from '../TemplateEditor';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
+import { useUISettingsStore } from '../../../stores/uiSettingsStore';
+import { useContextualHelp } from '../../help';
 const VARIABLE_TYPES = [
     { value: 'string', label: 'Text (String)' },
     { value: 'number', label: 'Number' },
@@ -36,7 +37,36 @@ export const VariableEditor = ({ _____nodeId, nodeData, onChange }) => {
     };
     const isSetVariable = nodeType === 'SetVariable';
     const isGetVariable = nodeType === 'GetVariable';
-    return (_jsxs("div", { className: "variable-editor", children: [_jsxs(ProgressiveDisclosureSection, { title: "Variable Settings", level: "basic", description: isSetVariable ? 'Define what value to store' : 'Retrieve stored values', defaultExpanded: true, priority: "critical", fieldName: isSetVariable ? 'value' : 'variableName', children: [_jsx(TextFieldEditor, { label: isSetVariable ? 'Store As' : 'Retrieve Variable', value: variableName || label, fieldKey: isSetVariable ? 'label' : 'variableName', zodType: null, onChange: (value) => handleFieldChange(isSetVariable ? 'label' : 'variableName', value), placeholder: isSetVariable ? 'Name for this stored value...' : 'Variable name to retrieve...' }), isSetVariable && (_jsxs("div", { style: { marginBottom: 16 }, children: [_jsx("label", { style: {
+    // Contextual help for variable name field
+    const { wrapWithHelp: wrapVariableNameHelp } = useContextualHelp({
+        id: 'variable-name-field',
+        title: isSetVariable ? 'Store As' : 'Retrieve Variable',
+        description: isSetVariable
+            ? 'Choose a name for storing this value so you can reference it later in your workflow.'
+            : 'Enter the name of the variable you want to retrieve from storage.',
+        category: 'basic',
+        trigger: 'focus',
+        position: 'right',
+        showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
+        examples: isSetVariable
+            ? ['character_name', 'scene_location', 'dialogue_style']
+            : ['stored_character', 'current_mood', 'plot_point'],
+        priority: 'high'
+    });
+    // Contextual help for template editor
+    const { wrapWithHelp: wrapTemplateHelp } = useContextualHelp({
+        id: 'variable-template-field',
+        title: 'Value Template',
+        description: 'Define what value to store using templates. Use {variable} syntax to reference other stored values.',
+        category: 'basic',
+        trigger: 'hover',
+        position: 'top',
+        showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
+        examples: ['Character: {character_name}', '{mood} character in {location}'],
+        relatedFeatures: ['variable-system', 'template-engine'],
+        priority: 'medium'
+    });
+    return (_jsxs("div", { className: "variable-editor", children: [_jsxs(ProgressiveDisclosureSection, { title: "Variable Settings", level: "basic", description: isSetVariable ? 'Define what value to store' : 'Retrieve stored values', defaultExpanded: true, priority: "critical", fieldName: isSetVariable ? 'value' : 'variableName', children: [wrapVariableNameHelp(_jsx(TextFieldEditor, { label: isSetVariable ? 'Store As' : 'Retrieve Variable', value: variableName || label, fieldKey: isSetVariable ? 'label' : 'variableName', zodType: null, onChange: (value) => handleFieldChange(isSetVariable ? 'label' : 'variableName', value), placeholder: isSetVariable ? 'Name for this stored value...' : 'Variable name to retrieve...' })), isSetVariable && wrapTemplateHelp(_jsxs("div", { style: { marginBottom: 16 }, children: [_jsx("label", { style: {
                                     display: 'block',
                                     fontSize: 12,
                                     fontWeight: 500,

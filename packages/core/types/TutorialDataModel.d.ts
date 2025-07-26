@@ -20,8 +20,8 @@ export declare const tutorialContentSchema: z.ZodObject<{
     description: string;
     category: string;
     tags: string[];
-    title: string;
     content: string;
+    title: string;
     difficulty: "expert" | "advanced" | "intermediate" | "beginner";
     estimatedDuration: number;
     objectives: string[];
@@ -30,8 +30,8 @@ export declare const tutorialContentSchema: z.ZodObject<{
     description: string;
     category: string;
     tags: string[];
-    title: string;
     content: string;
+    title: string;
     difficulty: "expert" | "advanced" | "intermediate" | "beginner";
     estimatedDuration: number;
     objectives: string[];
@@ -70,8 +70,8 @@ export declare const tutorialStepSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     id: string;
     type: "code" | "text" | "video" | "image" | "interactive" | "quiz";
-    title: string;
     content: string;
+    title: string;
     order: number;
     estimatedTime: number;
     validation?: {
@@ -86,8 +86,8 @@ export declare const tutorialStepSchema: z.ZodObject<{
 }, {
     id: string;
     type: "code" | "text" | "video" | "image" | "interactive" | "quiz";
-    title: string;
     content: string;
+    title: string;
     order: number;
     estimatedTime: number;
     validation?: {
@@ -195,28 +195,28 @@ export declare const tutorialCompletionSchema: z.ZodObject<{
     rating: z.ZodOptional<z.ZodNumber>;
     feedback: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    userId: string;
     progress: number;
-    timeSpent: number;
+    userId: string;
     currentStep: number;
+    timeSpent: number;
     tutorialId: string;
     startedAt: Date;
     rating?: number | undefined;
     score?: number | undefined;
-    feedback?: string | undefined;
     notes?: string | undefined;
+    feedback?: string | undefined;
     completedAt?: Date | undefined;
 }, {
-    userId: string;
     progress: number;
-    timeSpent: number;
+    userId: string;
     currentStep: number;
+    timeSpent: number;
     tutorialId: string;
     startedAt: Date;
     rating?: number | undefined;
     score?: number | undefined;
-    feedback?: string | undefined;
     notes?: string | undefined;
+    feedback?: string | undefined;
     completedAt?: Date | undefined;
 }>;
 export declare const tutorialSchema: z.ZodObject<{
@@ -235,8 +235,8 @@ export declare const tutorialSchema: z.ZodObject<{
         description: string;
         category: string;
         tags: string[];
-        title: string;
         content: string;
+        title: string;
         difficulty: "expert" | "advanced" | "intermediate" | "beginner";
         estimatedDuration: number;
         objectives: string[];
@@ -245,8 +245,8 @@ export declare const tutorialSchema: z.ZodObject<{
         description: string;
         category: string;
         tags: string[];
-        title: string;
         content: string;
+        title: string;
         difficulty: "expert" | "advanced" | "intermediate" | "beginner";
         estimatedDuration: number;
         objectives: string[];
@@ -285,8 +285,8 @@ export declare const tutorialSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         id: string;
         type: "code" | "text" | "video" | "image" | "interactive" | "quiz";
-        title: string;
         content: string;
+        title: string;
         order: number;
         estimatedTime: number;
         validation?: {
@@ -301,8 +301,8 @@ export declare const tutorialSchema: z.ZodObject<{
     }, {
         id: string;
         type: "code" | "text" | "video" | "image" | "interactive" | "quiz";
-        title: string;
         content: string;
+        title: string;
         order: number;
         estimatedTime: number;
         validation?: {
@@ -439,12 +439,16 @@ export declare const tutorialSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     id: string;
     status: "draft" | "published" | "review" | "archived" | "suspended";
-    settings: {
-        isPublic: boolean;
-        maxAttempts: number;
-        requiresApproval: boolean;
-        allowComments: boolean;
-        certificateEnabled: boolean;
+    content: {
+        description: string;
+        category: string;
+        tags: string[];
+        content: string;
+        title: string;
+        difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+        estimatedDuration: number;
+        objectives: string[];
+        prerequisites?: string[] | undefined;
     };
     metadata: {
         version: string;
@@ -466,22 +470,18 @@ export declare const tutorialSchema: z.ZodObject<{
             transcriptAvailable: boolean;
         } | undefined;
     };
-    content: {
-        description: string;
-        category: string;
-        tags: string[];
-        title: string;
-        content: string;
-        difficulty: "expert" | "advanced" | "intermediate" | "beginner";
-        estimatedDuration: number;
-        objectives: string[];
-        prerequisites?: string[] | undefined;
+    settings: {
+        isPublic: boolean;
+        maxAttempts: number;
+        requiresApproval: boolean;
+        allowComments: boolean;
+        certificateEnabled: boolean;
     };
     steps: {
         id: string;
         type: "code" | "text" | "video" | "image" | "interactive" | "quiz";
-        title: string;
         content: string;
+        title: string;
         order: number;
         estimatedTime: number;
         validation?: {
@@ -503,12 +503,16 @@ export declare const tutorialSchema: z.ZodObject<{
     } | undefined;
 }, {
     id: string;
-    settings: {
-        isPublic?: boolean | undefined;
-        maxAttempts?: number | undefined;
-        requiresApproval?: boolean | undefined;
-        allowComments?: boolean | undefined;
-        certificateEnabled?: boolean | undefined;
+    content: {
+        description: string;
+        category: string;
+        tags: string[];
+        content: string;
+        title: string;
+        difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+        estimatedDuration: number;
+        objectives: string[];
+        prerequisites?: string[] | undefined;
     };
     metadata: {
         version: string;
@@ -530,22 +534,18 @@ export declare const tutorialSchema: z.ZodObject<{
             transcriptAvailable?: boolean | undefined;
         } | undefined;
     };
-    content: {
-        description: string;
-        category: string;
-        tags: string[];
-        title: string;
-        content: string;
-        difficulty: "expert" | "advanced" | "intermediate" | "beginner";
-        estimatedDuration: number;
-        objectives: string[];
-        prerequisites?: string[] | undefined;
+    settings: {
+        isPublic?: boolean | undefined;
+        maxAttempts?: number | undefined;
+        requiresApproval?: boolean | undefined;
+        allowComments?: boolean | undefined;
+        certificateEnabled?: boolean | undefined;
     };
     steps: {
         id: string;
         type: "code" | "text" | "video" | "image" | "interactive" | "quiz";
-        title: string;
         content: string;
+        title: string;
         order: number;
         estimatedTime: number;
         validation?: {
@@ -605,8 +605,8 @@ export declare const learningPathSchema: z.ZodObject<{
         name: string;
     };
     title: string;
-    isPublic: boolean;
     difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+    isPublic: boolean;
     estimatedDuration: number;
     tutorialIds: string[];
     prerequisites?: string[] | undefined;
@@ -688,8 +688,8 @@ export declare const schemas: {
             description: string;
             category: string;
             tags: string[];
-            title: string;
             content: string;
+            title: string;
             difficulty: "expert" | "advanced" | "intermediate" | "beginner";
             estimatedDuration: number;
             objectives: string[];
@@ -698,8 +698,8 @@ export declare const schemas: {
             description: string;
             category: string;
             tags: string[];
-            title: string;
             content: string;
+            title: string;
             difficulty: "expert" | "advanced" | "intermediate" | "beginner";
             estimatedDuration: number;
             objectives: string[];
@@ -738,8 +738,8 @@ export declare const schemas: {
         }, "strip", z.ZodTypeAny, {
             id: string;
             type: "code" | "text" | "video" | "image" | "interactive" | "quiz";
-            title: string;
             content: string;
+            title: string;
             order: number;
             estimatedTime: number;
             validation?: {
@@ -754,8 +754,8 @@ export declare const schemas: {
         }, {
             id: string;
             type: "code" | "text" | "video" | "image" | "interactive" | "quiz";
-            title: string;
             content: string;
+            title: string;
             order: number;
             estimatedTime: number;
             validation?: {
@@ -892,12 +892,16 @@ export declare const schemas: {
     }, "strip", z.ZodTypeAny, {
         id: string;
         status: "draft" | "published" | "review" | "archived" | "suspended";
-        settings: {
-            isPublic: boolean;
-            maxAttempts: number;
-            requiresApproval: boolean;
-            allowComments: boolean;
-            certificateEnabled: boolean;
+        content: {
+            description: string;
+            category: string;
+            tags: string[];
+            content: string;
+            title: string;
+            difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+            estimatedDuration: number;
+            objectives: string[];
+            prerequisites?: string[] | undefined;
         };
         metadata: {
             version: string;
@@ -919,22 +923,18 @@ export declare const schemas: {
                 transcriptAvailable: boolean;
             } | undefined;
         };
-        content: {
-            description: string;
-            category: string;
-            tags: string[];
-            title: string;
-            content: string;
-            difficulty: "expert" | "advanced" | "intermediate" | "beginner";
-            estimatedDuration: number;
-            objectives: string[];
-            prerequisites?: string[] | undefined;
+        settings: {
+            isPublic: boolean;
+            maxAttempts: number;
+            requiresApproval: boolean;
+            allowComments: boolean;
+            certificateEnabled: boolean;
         };
         steps: {
             id: string;
             type: "code" | "text" | "video" | "image" | "interactive" | "quiz";
-            title: string;
             content: string;
+            title: string;
             order: number;
             estimatedTime: number;
             validation?: {
@@ -956,12 +956,16 @@ export declare const schemas: {
         } | undefined;
     }, {
         id: string;
-        settings: {
-            isPublic?: boolean | undefined;
-            maxAttempts?: number | undefined;
-            requiresApproval?: boolean | undefined;
-            allowComments?: boolean | undefined;
-            certificateEnabled?: boolean | undefined;
+        content: {
+            description: string;
+            category: string;
+            tags: string[];
+            content: string;
+            title: string;
+            difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+            estimatedDuration: number;
+            objectives: string[];
+            prerequisites?: string[] | undefined;
         };
         metadata: {
             version: string;
@@ -983,22 +987,18 @@ export declare const schemas: {
                 transcriptAvailable?: boolean | undefined;
             } | undefined;
         };
-        content: {
-            description: string;
-            category: string;
-            tags: string[];
-            title: string;
-            content: string;
-            difficulty: "expert" | "advanced" | "intermediate" | "beginner";
-            estimatedDuration: number;
-            objectives: string[];
-            prerequisites?: string[] | undefined;
+        settings: {
+            isPublic?: boolean | undefined;
+            maxAttempts?: number | undefined;
+            requiresApproval?: boolean | undefined;
+            allowComments?: boolean | undefined;
+            certificateEnabled?: boolean | undefined;
         };
         steps: {
             id: string;
             type: "code" | "text" | "video" | "image" | "interactive" | "quiz";
-            title: string;
             content: string;
+            title: string;
             order: number;
             estimatedTime: number;
             validation?: {
@@ -1034,8 +1034,8 @@ export declare const schemas: {
         description: string;
         category: string;
         tags: string[];
-        title: string;
         content: string;
+        title: string;
         difficulty: "expert" | "advanced" | "intermediate" | "beginner";
         estimatedDuration: number;
         objectives: string[];
@@ -1044,8 +1044,8 @@ export declare const schemas: {
         description: string;
         category: string;
         tags: string[];
-        title: string;
         content: string;
+        title: string;
         difficulty: "expert" | "advanced" | "intermediate" | "beginner";
         estimatedDuration: number;
         objectives: string[];
@@ -1084,8 +1084,8 @@ export declare const schemas: {
     }, "strip", z.ZodTypeAny, {
         id: string;
         type: "code" | "text" | "video" | "image" | "interactive" | "quiz";
-        title: string;
         content: string;
+        title: string;
         order: number;
         estimatedTime: number;
         validation?: {
@@ -1100,8 +1100,8 @@ export declare const schemas: {
     }, {
         id: string;
         type: "code" | "text" | "video" | "image" | "interactive" | "quiz";
-        title: string;
         content: string;
+        title: string;
         order: number;
         estimatedTime: number;
         validation?: {
@@ -1209,28 +1209,28 @@ export declare const schemas: {
         rating: z.ZodOptional<z.ZodNumber>;
         feedback: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        userId: string;
         progress: number;
-        timeSpent: number;
+        userId: string;
         currentStep: number;
+        timeSpent: number;
         tutorialId: string;
         startedAt: Date;
         rating?: number | undefined;
         score?: number | undefined;
-        feedback?: string | undefined;
         notes?: string | undefined;
+        feedback?: string | undefined;
         completedAt?: Date | undefined;
     }, {
-        userId: string;
         progress: number;
-        timeSpent: number;
+        userId: string;
         currentStep: number;
+        timeSpent: number;
         tutorialId: string;
         startedAt: Date;
         rating?: number | undefined;
         score?: number | undefined;
-        feedback?: string | undefined;
         notes?: string | undefined;
+        feedback?: string | undefined;
         completedAt?: Date | undefined;
     }>;
     learningPath: z.ZodObject<{
@@ -1266,8 +1266,8 @@ export declare const schemas: {
             name: string;
         };
         title: string;
-        isPublic: boolean;
         difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+        isPublic: boolean;
         estimatedDuration: number;
         tutorialIds: string[];
         prerequisites?: string[] | undefined;

@@ -1,7 +1,7 @@
 // Epic 12 - LLM Agent Randomizer System
 // Story 12.2 - LLM Agent Script Development
 // Anthropic Claude agent script with XML formatting and error correction
-import { validateFormat } from '../../serialization/validator.js';
+import { validateFormat } from '../../serialization/validator';
 export class AnthropicGraphAgent {
     config;
     baseSystemPrompt;

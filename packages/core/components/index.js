@@ -1,3 +1,3 @@
-export { NodeRenderer } from './NodeRenderer.js';
-export { StatusBar } from './StatusBar.js';
-export { RestorePrompt } from './RestorePrompt.js';
+export { NodeRenderer } from './NodeRenderer';
+export { StatusBar } from './StatusBar';
+export { RestorePrompt } from './RestorePrompt';

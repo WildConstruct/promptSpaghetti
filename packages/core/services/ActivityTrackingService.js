@@ -7,11 +7,11 @@
  * Provides comprehensive activity monitoring with real-time streaming and analytics.
  */
 export class ActivityTrackingService {
-    config;
-    pendingActivities = [];
-    flushTimer;
-    subscribers = new Map();
-    constructor(config) {
+    config: any;
+    pendingActivities: any[] = [];
+    flushTimer: any;
+    subscribers: Map<string, any> = new Map();
+    constructor(config: any) {
         this.config = {
             enableRealTime: true,
             enableAnalytics: true,
@@ -25,7 +25,7 @@ export class ActivityTrackingService {
         this.startFlushTimer();
     }
     // Core Activity Tracking
-    async trackActivity(activity) {
+    async trackActivity(activity: any): Promise<void> {
         const fullActivity = {
             id: this.generateActivityId(),
             timestamp: new Date().toISOString(),

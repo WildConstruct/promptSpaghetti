@@ -3,7 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Main UI component for managing workflow states and transitions
 import { useState, useEffect, useCallback } from 'react';
 import { CheckCircleIcon, ClockIcon, XCircleIcon, DocumentTextIcon, EyeIcon, GlobeAltIcon, ArchiveBoxIcon, PlusIcon, PencilIcon, ChevronDownIcon, ChevronRightIcon, LockClosedIcon, ClipboardDocumentListIcon } from '@heroicons/react/24/outline';
-import { useWorkflowStore } from '../stores/workflowStore.js';
+import { useWorkflowStore } from '../stores/workflowStore';
 export const WorkflowStateManager = ({ workspaceId, resourceId, currentUserId, onStateChange, onLockAcquired, onLockReleased }) => {
     const { states, transitions, approvals, locks, statistics, loading, error, fetchStates, fetchTransitions, fetchApprovals, fetchLocks, fetchStatistics, transitionResourceState, approveWorkflow, rejectWorkflow, acquireLock, releaseLock, createState, updateState, deleteState, createTransition, deleteTransition } = useWorkflowStore();
     const [activeTab, setActiveTab] = useState('states');

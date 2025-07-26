@@ -8,7 +8,7 @@ interface VersionData {
   status: 'draft' | 'published' | 'deprecated' | 'archived';
   visibility: 'public' | 'private' | 'beta';
   claude_model: string;
-  graph_json: Record<string, any>;
+  graph_json: Record<string, unknown>;
   prompt_yaml?: string;
   release_notes: string;
   compatibility_level: 'breaking' | 'major' | 'minor' | 'patch';
@@ -282,8 +282,7 @@ export const VersionEditor: React.FC = () => {
         throw new Error(errorData.error || 'Failed to save version');
       }
 
-      const ___result = await response.json();
-      navigate(`/marketplace/templates/${templateId}/versions`);
+            navigate(`/marketplace/templates/${templateId}/versions`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save version');
     } finally {

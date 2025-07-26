@@ -71,7 +71,7 @@ export type ScoringModelType =
   | 'hybrid';
 
 export interface ModelParameters {
-  [key: string]: any;
+  [key: string]: unknown;
   learningRate?: number;
   regularization?: number;
   hiddenLayers?: number[];
@@ -120,7 +120,7 @@ export type ComputationMethod =
   | 'custom_function';
 
 export interface ComputationParameters {
-  [key: string]: any;
+  [key: string]: unknown;
   decayRate?: number;
   window?: number;
   threshold?: number;
@@ -204,7 +204,7 @@ export type NormalizationMethod =
   | 'custom';
 
 export interface NormalizationParameters {
-  [key: string]: any;
+  [key: string]: unknown;
   scale?: number;
   shift?: number;
   power?: number;
@@ -348,7 +348,7 @@ export interface SegmentRule {
   ruleId: string;
   field: string;
   operator: RuleOperator;
-  value: any;
+  value: Error;
   weight: number; // 0-1
 }
 
@@ -507,7 +507,7 @@ export interface SegmentMigrationRule {
 export interface MigrationCondition {
   field: string;
   operator: RuleOperator;
-  value: any;
+  value: Error;
   duration: number; // days condition must be met
 }
 
@@ -1004,14 +1004,14 @@ export interface InsightSupportingData {
 export interface ChartData {
   type: string;
   title: string;
-  data: any[];
+  data: Record<string, unknown>[];
   config: Record<string, any>;
 }
 
 export interface TableData {
   title: string;
   headers: string[];
-  rows: any[][];
+  rows: unknown[][];
   sortable: boolean;
 }
 

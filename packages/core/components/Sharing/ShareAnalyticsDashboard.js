@@ -8,7 +8,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Task: E16-1753114247020-65B7A3 - Design sharing system
  */
 import { useState, useEffect } from 'react';
-import { SharingService } from '../../services/SharingService.js';
+import { SharingService } from '../../services/SharingService';
 export const ShareAnalyticsDashboard = ({ shareLinkId, timeRange }) => {
     const [metrics, setMetrics] = useState(null);
     const [isLoading, setIsLoading] = useState(true);

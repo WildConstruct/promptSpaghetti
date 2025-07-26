@@ -28,6 +28,9 @@ export {
   type SecurityDashboardFrameworkOptions
 } from './SecurityDashboardFramework';
 
+// Import SecurityRole and DashboardType for local use
+import { SecurityRole, DashboardType } from './SecurityDashboardFramework';
+
 // Dashboard Registry
 export {
   DashboardRegistry,
@@ -223,22 +226,7 @@ export class SecurityDashboardFactory {
 /**
  * Default factory instance for convenience
  */
-export const defaultSecurityDashboardFactory = new SecurityDashboardFactory({
-  frameworkOptions: {
-    enableAuditLogging: true,
-    enablePerformanceMonitoring: true,
-    enableCaching: true,
-    defaultTheme: DashboardTheme.CINEMA,
-    complianceMode: true
-  },
-  registryOptions: {
-    enableCache: true,
-    validateConfigs: true,
-    allowCustomDashboards: true,
-    enableAuditLogging: true
-  }
-});
-
+export 
 /**
  * Utility function to create a dashboard factory with custom options
  */

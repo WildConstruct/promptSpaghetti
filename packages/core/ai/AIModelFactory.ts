@@ -5,7 +5,15 @@
  * Factory for creating and managing AI model adapters
  */
 
-import { BaseAIModel, AIModelType, AIModelProvider, ModelConfiguration, AIModelFactory as IAIModelFactory, ModelCapabilities, ModelMetadata } from './BaseAIModel';
+import { 
+  BaseAIModel,
+  AIModelType,
+  AIModelProvider,
+  ModelConfiguration,
+  AIModelFactory as IAIModelFactory,
+  ModelCapabilities,
+  ModelMetadata
+} from './BaseAIModel';
 import OpenAIAdapter, { OpenAIConfig } from './adapters/OpenAIAdapter';
 import AnthropicAdapter, { AnthropicConfig } from './adapters/AnthropicAdapter';
 import GenericHTTPAdapter, { HTTPConfig, HTTPRequestMapping } from './adapters/GenericHTTPAdapter';
@@ -375,7 +383,7 @@ export class AIModelFactory implements IAIModelFactory {
 
     if (messageLevelIndex >= currentLevelIndex) {
       const timestamp = new Date().toISOString();
-      console[level as keyof Console](`[${timestamp}] [AIModelFactory] ${message}`, ...args);
+      (console as any)[level](`[${timestamp}] [AIModelFactory] ${message}`, ...args);
     }
   }
 }

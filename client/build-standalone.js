@@ -5,13 +5,13 @@
  * Creates a standalone client build by copying core files locally
  */
 
-import fs from 'fs';
-import path from 'path';
+// import fs from 'fs'; // Currently unused
+// import path from 'path'; // Currently unused
 import { execSync } from 'child_process';
-import { fileURLToPath } from 'url';
+// import { fileURLToPath } from 'url'; // Currently unused
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url); // Currently unused
+// const dirname = path.dirname(__filename); // Currently unused
 
 console.log('Creating standalone build for deployment...');
 console.log('Environment:', process.env.NODE_ENV);
@@ -25,7 +25,7 @@ console.log('Running production build...');
 // Try safe config first, fall back to regular if it fails
 try {
   execSync('vite build --config vite.config.production-safe.ts', { stdio: 'inherit' });
-} catch (e) {
+} catch (_err) {
   console.log('Safe config failed, trying regular config...');
   execSync('vite build --config vite.config.production.ts', { stdio: 'inherit' });
 }

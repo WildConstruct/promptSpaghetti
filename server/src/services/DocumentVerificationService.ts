@@ -20,7 +20,7 @@ export interface DocumentValidation {
   };
   extracted_data?: {
     text_content?: string;
-    metadata?: any;
+    metadata?: unknown;
     image_metrics?: {
       width: number;
       height: number;
@@ -418,7 +418,7 @@ export class DocumentVerificationService {
     }
   }
 
-  private detectImageTampering(stats: any): boolean {
+  private detectImageTampering(stats: unknown): boolean {
     // Simplified tampering detection based on statistical analysis
     // In production, use more sophisticated algorithms
     const channels = stats.channels;

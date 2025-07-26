@@ -4,8 +4,8 @@
  *
  * Advanced model lifecycle management with lazy loading, caching, and resource optimization
  */
-import { AIModelStatus } from './BaseAIModel.js';
-import AIModelFactory from './AIModelFactory.js';
+import { AIModelStatus } from './BaseAIModel';
+import AIModelFactory from './AIModelFactory';
 export class ModelCache {
     cache;
     config;

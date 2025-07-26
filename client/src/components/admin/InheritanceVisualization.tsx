@@ -62,7 +62,7 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
 
   useEffect(() => {
     buildInheritanceTree();
-  }, [assignments, options, buildInheritanceTree]);
+  }, [buildInheritanceTree]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -151,7 +151,7 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
     // Calculate positions
     calculateLayout(finalTree);
     setInheritanceTree(finalTree);
-  }, [assignments, options]);
+  }, [assignments, options, calculateLayout]);
 
   const isChildOf = (child: InheritanceNode, parent: InheritanceNode): boolean => {
     // Simplified inheritance logic - in reality this would be more complex
@@ -187,7 +187,7 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
     return Math.max(0, targetIndex - nodeIndex);
   };
 
-  const calculateLayout = (nodes: InheritanceNode[]) => {
+  const calculateLayout = useCallback((nodes: InheritanceNode[]) => {
     if (options.layout === 'tree') {
       calculateTreeLayout(nodes);
     } else if (options.layout === 'radial') {
@@ -195,9 +195,9 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
     } else {
       calculateForceLayout(nodes);
     }
-  };
+  }, [options.layout, calculateTreeLayout, calculateRadialLayout, calculateForceLayout]);
 
-  const calculateTreeLayout = (nodes: InheritanceNode[]) => {
+  const calculateTreeLayout = useCallback((nodes: InheritanceNode[]) => {
     const levelHeight = dimensions.height / (options.maxDepth + 2);
     
     const positionLevel = (levelNodes: InheritanceNode[], level: number) => {
@@ -222,9 +222,9 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
     nodesByLevel.forEach((levelNodes, level) => {
       positionLevel(levelNodes, level);
     });
-  };
+  }, [dimensions.height, dimensions.width, options.maxDepth]);
 
-  const calculateRadialLayout = (nodes: InheritanceNode[]) => {
+  const calculateRadialLayout = useCallback((nodes: InheritanceNode[]) => {
     const centerX = dimensions.width / 2;
     const centerY = dimensions.height / 2;
     const maxRadius = Math.min(centerX, centerY) - 50;
@@ -247,9 +247,9 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
       const angle = index * rootAngleStep;
       positionRadially(root, angle, 100);
     });
-  };
+  }, [dimensions.width, dimensions.height]);
 
-  const calculateForceLayout = (nodes: InheritanceNode[]) => {
+  const calculateForceLayout = useCallback((nodes: InheritanceNode[]) => {
     // Simplified force-directed layout
     const allNodes: InheritanceNode[] = [];
     const collectNodes = (nodeList: InheritanceNode[]) => {
@@ -302,7 +302,7 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
         node.y = Math.max(50, Math.min(dimensions.height - 50, node.y));
       });
     }
-  };
+  }, [dimensions.width, dimensions.height]);
 
   const renderConnections = () => {
     const connections: JSX.Element[] = [];

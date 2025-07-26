@@ -4,9 +4,9 @@
  *
  * Workflow nodes for image generation and processing
  */
-import { AdvancedRuntimeNode } from '../advanced.js';
-import { IOSpecBuilder } from '../io-system.js';
-import { AIModelFactory, DALLEAdapter, MidjourneyAdapter, StableDiffusionAdapter } from '../../ai.js';
+import { AdvancedRuntimeNode } from '../advanced';
+import { IOSpecBuilder } from '../io-system';
+import { AIModelFactory, DALLEAdapter, MidjourneyAdapter, StableDiffusionAdapter } from '../../ai';
 export class ImageGenerationNode extends AdvancedRuntimeNode {
     modelFactory;
     adapters = new Map();

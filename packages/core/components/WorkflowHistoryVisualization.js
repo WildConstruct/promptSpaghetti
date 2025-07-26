@@ -3,7 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Component for displaying workflow history and audit trail
 import { useState, useEffect } from 'react';
 import { ClockIcon, UserIcon, ArrowRightIcon, CheckCircleIcon, XCircleIcon, ChatBubbleLeftIcon, LockClosedIcon, LockOpenIcon, DocumentTextIcon, CalendarIcon, FunnelIcon } from '@heroicons/react/24/outline';
-import { useWorkflowStore } from '../stores/workflowStore.js';
+import { useWorkflowStore } from '../stores/workflowStore';
 export const WorkflowHistoryVisualization = ({ workspaceId, resourceId, maxEntries = 20, showFilters = true, compact = false }) => {
     const { states, history, loading, error, fetchStates, fetchHistory } = useWorkflowStore();
     const [filters, setFilters] = useState({

@@ -4,7 +4,7 @@
  *
  * Adapter for OpenAI's TTS models with voice selection and SSML support
  */
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel.js';
+import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
 export class OpenAITTSAdapter extends BaseAIModel {
     config;
     availableVoices = [];
@@ -298,6 +298,8 @@ export class OpenAITTSAdapter extends BaseAIModel {
             speed: 1.0
         };
         const processed = { ...defaults, ...options };
+        // Set text if provided, or ensure it exists
+        processed.text = text || processed.text || ''; // Ensure text is always a string
         // Validate voice
         const validVoices = ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer'];
         if (!validVoices.includes(processed.voice)) {

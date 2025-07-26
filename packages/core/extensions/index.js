@@ -3,34 +3,34 @@
  * Central export point for all extension system components
  */
 // Core Extension Interfaces
-export * from './interfaces/ExtensionInterfaces.js';
-export * from './interfaces/NodeExtension.js';
-export * from './interfaces/UIExtension.js';
-export * from './interfaces/TransformExtension.js';
-export * from './interfaces/StorageExtension.js';
+export * from './interfaces/ExtensionInterfaces';
+export * from './interfaces/NodeExtension';
+export * from './interfaces/UIExtension';
+export * from './interfaces/TransformExtension';
+export * from './interfaces/StorageExtension';
 // Extension Registry and Point System
-export * from './ExtensionPointRegistry.js';
-export * from './ExtensionPointDocumentationGenerator.js';
-export * from './ExtensionPointVisualizer.js';
+export * from './ExtensionPointRegistry';
+export * from './ExtensionPointDocumentationGenerator';
+export * from './ExtensionPointVisualizer';
 // Type Definitions and Validation
-export * from './TypeDefinitions.js';
-export * from './ExtensionInterfaceValidator.js';
+export * from './TypeDefinitions';
+export * from './ExtensionInterfaceValidator';
 // Development Tools
-export * from './ExtensionDevelopmentTools.js';
-export * from './ExtensionInterfaceTestUtils.js';
-export * from './ExtensionInterfaceDocumentationGenerator.js';
+export * from './ExtensionDevelopmentTools';
+export * from './ExtensionInterfaceTestUtils';
+export * from './ExtensionInterfaceDocumentationGenerator';
 // Lifecycle Management
-export * from './ExtensionLifecycleManager.js';
+export * from './ExtensionLifecycleManager';
 // Manifest System
-export * from './ExtensionManifest.js';
-export * from './ExtensionManifestManager.js';
-export * from './ExtensionManifestUtils.js';
+export * from './ExtensionManifest';
+export * from './ExtensionManifestManager';
+export * from './ExtensionManifestUtils';
 // Versioning and Compatibility
-export * from './ExtensionVersionManager.js';
-export * from './ExtensionCompatibilityChecker.js';
-export * from './ExtensionUpgradeAdvisor.js';
+export * from './ExtensionVersionManager';
+export * from './ExtensionCompatibilityChecker';
+export * from './ExtensionUpgradeAdvisor';
 // Extension Type Information
-export { ExtensionTypeInfo } from './TypeDefinitions.js';
+export { ExtensionTypeInfo } from './TypeDefinitions';
 // Utility Functions
 export const ExtensionSystemUtils = {
     /**

@@ -8,7 +8,7 @@
  * Epic: 17 - Backstage Admin Controls, Substory: 17.1.6 (Audit Logging)
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
@@ -127,13 +127,13 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({
   
   // Filter state
   const [currentFilter, setCurrentFilter] = useState<AdvancedSearchFilter>({});
-  const [_____savedFilters, setSavedFilters] = useState<SavedFilter[]>([]);
-  const [_____filterPresets, _____setFilterPresets] = useState<Record<string, FilterPreset[]>>({});
+  const [_savedFilters, setSavedFilters] = useState<SavedFilter[]>([]);
+  const [_filterPresets, _setFilterPresets] = useState<Record<string, FilterPreset[]>>({});
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   
   // Search state
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchSuggestions, _____setSearchSuggestions] = useState<string[]>([]);
+  const [searchSuggestions, _setSearchSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   
   // UI state
@@ -143,12 +143,12 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({
   const [filterName, setFilterName] = useState('');
   
   // Analytics state
-  const [_____analytics, _____setAnalytics] = useState<SearchAnalytics | null>(null);
+  const [_analytics, _setAnalytics] = useState<SearchAnalytics | null>(null);
 
   // Load initial data
   useEffect(() => {
     loadInitialData();
-  }, []);
+  }, [loadInitialData]);
 
   // Auto-search when filter changes
   useEffect(() => {
@@ -161,7 +161,7 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({
     }
   }, [currentFilter, searchQuery]);
 
-  const loadInitialData = async () => {
+  const loadInitialData = useCallback(async () => {
     try {
       setLoading(true);
       // Load filter presets, saved filters, and perform initial search
@@ -175,7 +175,7 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const performSearch = async () => {
     try {

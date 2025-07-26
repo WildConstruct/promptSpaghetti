@@ -26,7 +26,7 @@ export enum WSMessageType {
 export const WSMessageSchema = z.object({
   type: z.nativeEnum(WSMessageType),
   id: z.string().optional(),
-  payload: z.any().optional(),
+  payload: z.unknown().optional(),
   timestamp: z.number(),
   clientId: z.string().optional()
 });
@@ -55,7 +55,7 @@ export type SubscriptionConfig = z.infer<typeof SubscriptionConfigSchema>;
 // Client Connection
 interface ClientConnection {
   id: string;
-  ws: WebSocket | any; // WebSocket interface
+  ws: WebSocket; // WebSocket interface
   authContext?: AuthContext;
   subscriptions: Map<string, SubscriptionConfig>;
   isAuthenticated: boolean;
@@ -98,7 +98,7 @@ interface WSServerConfig {
 export class WebSocketStreamingServer extends EventEmitter {
   private eventBus: UnifiedEventBus;
   private authService: AnalyticsAuthorizationService;
-  private server: any; // WebSocket server instance
+  private server: unknown; // WebSocket server instance
   private clients: Map<string, ClientConnection> = new Map();
   private config: WSServerConfig;
   private stats: ConnectionStats;
@@ -208,7 +208,7 @@ export class WebSocketStreamingServer extends EventEmitter {
   /**
    * Handle new client connection
    */
-  async handleConnection(ws: any, request: any): Promise<void> {
+  async handleConnection(ws: WebSocket, request: { url?: string; headers: Record<string, string> }): Promise<void> {
     const clientId = this.generateClientId();
     const ipAddress = request.connection?.remoteAddress || request.socket?.remoteAddress;
     const userAgent = request.headers?.['user-agent'];
@@ -239,7 +239,7 @@ export class WebSocketStreamingServer extends EventEmitter {
     console.log(`Client ${clientId} connected from ${ipAddress}`);
 
     // Setup WebSocket event handlers
-    ws.on('message', (data: any) => {
+    ws.on('message', (data: string | Buffer) => {
       this.handleMessage(clientId, data);
     });
 
@@ -269,7 +269,7 @@ export class WebSocketStreamingServer extends EventEmitter {
   /**
    * Handle client message
    */
-  private async handleMessage(clientId: string, data: any): Promise<void> {
+  private async handleMessage(clientId: string, data: string | Buffer): Promise<void> {
     const client = this.clients.get(clientId);
     if (!client) return;
 
@@ -314,7 +314,7 @@ export class WebSocketStreamingServer extends EventEmitter {
   /**
    * Handle client authentication
    */
-  private async handleAuthentication(client: ClientConnection, payload: any): Promise<void> {
+  private async handleAuthentication(client: ClientConnection, payload: Record<string, unknown>): Promise<void> {
     try {
       const { token } = payload;
       
@@ -364,7 +364,7 @@ export class WebSocketStreamingServer extends EventEmitter {
   /**
    * Handle subscription request
    */
-  private async handleSubscription(client: ClientConnection, payload: any): Promise<void> {
+  private async handleSubscription(client: ClientConnection, payload: Record<string, unknown>): Promise<void> {
     try {
       // Check authentication if required
       if (this.config.requireAuthentication && !client.isAuthenticated) {
@@ -431,7 +431,7 @@ export class WebSocketStreamingServer extends EventEmitter {
   /**
    * Handle unsubscription request
    */
-  private async handleUnsubscription(client: ClientConnection, payload: any): Promise<void> {
+  private async handleUnsubscription(client: ClientConnection, payload: Record<string, unknown>): Promise<void> {
     try {
       const { subscriptionId } = payload;
       
@@ -691,7 +691,7 @@ export class WebSocketStreamingServer extends EventEmitter {
   /**
    * Send error message to client
    */
-  private async sendError(client: ClientConnection, message: string, details?: any): Promise<void> {
+  private async sendError(client: ClientConnection, message: string, details?: Record<string, unknown>): Promise<void> {
     await this.sendMessage(client, {
       type: WSMessageType.ERROR,
       payload: { message, details },

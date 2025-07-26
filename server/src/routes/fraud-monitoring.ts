@@ -22,10 +22,10 @@ interface DetectFraudRequest {
     userId?: string;
     sessionId?: string;
     transactionId?: string;
-    paymentData?: any;
-    deviceData?: any;
-    locationData?: any;
-    behaviorData?: any;
+    paymentData?: Record<string, unknown>;
+    deviceData?: Record<string, unknown>;
+    locationData?: Record<string, unknown>;
+    behaviorData?: Record<string, unknown>;
     context: {
       ipAddress: string;
       userAgent: string;
@@ -44,7 +44,7 @@ interface PaymentFraudRequest {
       paymentMethod: string;
       cardLast4?: string;
       cardBin?: string;
-      billing?: any;
+      billing?: Record<string, unknown>;
     };
     context: {
       ipAddress: string;
@@ -74,7 +74,7 @@ interface CreateReviewCaseRequest {
     type?: 'payment' | 'account' | 'network' | 'manual';
     reason: string;
     priority?: 'low' | 'medium' | 'high' | 'urgent';
-    evidence?: any[];
+    evidence?: Array<Record<string, unknown>>;
   };
 }
 
@@ -110,9 +110,9 @@ interface FraudRuleRequest {
     category: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
     enabled: boolean;
-    conditions: any[];
-    actions: any[];
-    thresholds: any[];
+    conditions: Array<Record<string, unknown>>;
+    actions: Array<Record<string, unknown>>;
+    thresholds: Array<Record<string, unknown>>;
     tags?: string[];
   };
 }

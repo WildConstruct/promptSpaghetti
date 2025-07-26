@@ -2,7 +2,7 @@
  * Extension Point Visualizer - Epic 8.4 Story 8.4.1
  * Creates visual representations of extension points and their relationships
  */
-import { ExtensionPointCategory, extensionPointRegistry } from './ExtensionPointRegistry.js';
+import { ExtensionPointCategory, extensionPointRegistry } from './ExtensionPointRegistry';
 export class ExtensionPointVisualizer {
     static instance;
     constructor() { }

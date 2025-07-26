@@ -683,10 +683,10 @@ export class ReviewerAssignmentService {
       WHERE availability_status IN ('available', 'busy')
       AND current_assignments < max_concurrent_reviews
       AND $1 = ANY(review_types)
-      ${excludeReviewers.length > 0 ? 'AND reviewer_id NOT IN (
-        ' + excludeReviewers.map((_,
+      ${excludeReviewers.length > 0 ? `AND reviewer_id NOT IN (
+        ${excludeReviewers.map((_,
         i
-      ) => `$${i + 2}`).join(',') + ')' : ''}
+      ) => `$${i + 2}`).join(',')})` : ''}
       ORDER BY availability_status, capacity_utilization
     `;
 

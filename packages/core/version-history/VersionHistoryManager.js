@@ -10,14 +10,14 @@ export class VersionHistoryManager {
     branches = new Map();
     changeEvents = [];
     currentSessionId;
-    constructor(apiClient, projectId, userId) {
+    constructor(apiClient: any, projectId: string, userId: string) {
         this.apiClient = apiClient;
         this.projectId = projectId;
         this.userId = userId;
         this.currentSessionId = crypto.randomUUID();
     }
     // Snapshot Management
-    async createSnapshot(graphData, options = {}) {
+    async createSnapshot(graphData: any, options: any = {}): Promise<any> {
         try {
             // Prepare snapshot data
             const snapshotData = {
@@ -55,11 +55,11 @@ export class VersionHistoryManager {
             throw error;
         }
     }
-    async getSnapshots(filter = {}) {
+    async getSnapshots(filter: any = {}): Promise<any> {
         try {
             const params = new URLSearchParams();
             params.append('project_id', this.projectId);
-            Object.entries(filter).forEach(([key, value]) => {
+            Object.entries(filter).forEach(([key, value]: [string, any]) => {
                 if (value !== undefined) {
                     params.append(key, String(value));
                 }
@@ -67,7 +67,7 @@ export class VersionHistoryManager {
             const response = await this.apiClient.get(`/api/version-snapshots?${params}`);
             const result = response.data;
             // Update local cache
-            result.snapshots.forEach((snapshot) => {
+            result.snapshots.forEach((snapshot: any) => {
                 this.snapshots.set(snapshot.id, snapshot);
             });
             return result;
@@ -77,7 +77,7 @@ export class VersionHistoryManager {
             throw error;
         }
     }
-    async getSnapshot(snapshotId) {
+    async getSnapshot(snapshotId: string): Promise<any> {
         try {
             // Check cache first
             if (this.snapshots.has(snapshotId)) {
@@ -93,7 +93,7 @@ export class VersionHistoryManager {
             throw error;
         }
     }
-    async getSnapshotData(snapshotId) {
+    async getSnapshotData(snapshotId: string): Promise<any> {
         try {
             const response = await this.apiClient.get(`/api/version-snapshots/${snapshotId}/data`);
             return response.data;
@@ -103,7 +103,7 @@ export class VersionHistoryManager {
             throw error;
         }
     }
-    async deleteSnapshot(snapshotId) {
+    async deleteSnapshot(snapshotId: string): Promise<void> {
         try {
             await this.apiClient.delete(`/api/version-snapshots/${snapshotId}`);
             this.snapshots.delete(snapshotId);
@@ -121,7 +121,7 @@ export class VersionHistoryManager {
         }
     }
     // Diff Management
-    async compareFreshSnapshots(fromSnapshotId, toSnapshotId) {
+    async compareFreshSnapshots(fromSnapshotId: string, toSnapshotId: string): Promise<any> {
         try {
             const response = await this.apiClient.get(`/api/version-diffs/${fromSnapshotId}/${toSnapshotId}`);
             return response.data;
@@ -131,7 +131,7 @@ export class VersionHistoryManager {
             throw error;
         }
     }
-    async getSnapshotDiff(fromSnapshotId, toSnapshotId) {
+    async getSnapshotDiff(fromSnapshotId: string, toSnapshotId: string): Promise<any> {
         try {
             // Try to get cached diff first
             const response = await this.apiClient.get(`/api/version-diffs/${fromSnapshotId}/${toSnapshotId}`);
@@ -142,7 +142,7 @@ export class VersionHistoryManager {
             return await this.computeDiff(fromSnapshotId, toSnapshotId);
         }
     }
-    async computeDiff(fromSnapshotId, toSnapshotId) {
+    async computeDiff(fromSnapshotId: string, toSnapshotId: string): Promise<any> {
         try {
             const response = await this.apiClient.post('/api/version-diffs/compute', {
                 from_snapshot_id: fromSnapshotId,
@@ -156,7 +156,7 @@ export class VersionHistoryManager {
         }
     }
     // Branch Management
-    async createBranch(name, options = {}) {
+    async createBranch(name: string, options: any = {}): Promise<any> {
         try {
             const branchData = {
                 project_id: this.projectId,
@@ -189,11 +189,11 @@ export class VersionHistoryManager {
             throw error;
         }
     }
-    async getBranches() {
+    async getBranches(): Promise<any[]> {
         try {
             const response = await this.apiClient.get(`/api/branches?project_id=${this.projectId}`);
             const branches = response.data;
-            branches.forEach((branch) => {
+            branches.forEach((branch: any) => {
                 this.branches.set(branch.id, branch);
             });
             return branches;
@@ -203,7 +203,7 @@ export class VersionHistoryManager {
             throw error;
         }
     }
-    async switchBranch(branchName) {
+    async switchBranch(branchName: string): Promise<any> {
         try {
             const response = await this.apiClient.post('/api/branches/switch', {
                 project_id: this.projectId,
@@ -228,7 +228,7 @@ export class VersionHistoryManager {
             throw error;
         }
     }
-    async mergeBranch(sourceBranchId, targetBranchId, options = {}) {
+    async mergeBranch(sourceBranchId: string, targetBranchId: string, options: any = {}): Promise<any> {
         try {
             const response = await this.apiClient.post('/api/branches/merge', {
                 source_branch_id: sourceBranchId,
@@ -259,7 +259,7 @@ export class VersionHistoryManager {
         }
     }
     // Change Event Tracking
-    async recordChangeEvent(event) {
+    async recordChangeEvent(event: any): Promise<any> {
         try {
             const eventData = {
                 project_id: this.projectId,
@@ -284,14 +284,14 @@ export class VersionHistoryManager {
             throw error;
         }
     }
-    async getChangeEvents(filter = {}) {
+    async getChangeEvents(filter: any = {}): Promise<any> {
         try {
             const params = new URLSearchParams();
             params.append('project_id', this.projectId);
-            Object.entries(filter).forEach(([key, value]) => {
+            Object.entries(filter).forEach(([key, value]: [string, any]) => {
                 if (value !== undefined) {
                     if (Array.isArray(value)) {
-                        value.forEach(v => params.append(key, String(v)));
+                        value.forEach((v: any) => params.append(key, String(v)));
                     }
                     else {
                         params.append(key, String(value));
@@ -307,7 +307,7 @@ export class VersionHistoryManager {
         }
     }
     // Annotation Management
-    async addAnnotation(snapshotId, annotation) {
+    async addAnnotation(snapshotId: string, annotation: any): Promise<any> {
         try {
             const annotationData = {
                 snapshot_id: snapshotId,
@@ -327,7 +327,7 @@ export class VersionHistoryManager {
             throw error;
         }
     }
-    async getAnnotations(snapshotId) {
+    async getAnnotations(snapshotId: string): Promise<any[]> {
         try {
             const response = await this.apiClient.get(`/api/version-annotations?snapshot_id=${snapshotId}`);
             return response.data;
@@ -337,7 +337,7 @@ export class VersionHistoryManager {
             throw error;
         }
     }
-    async resolveAnnotation(annotationId, resolutionNote) {
+    async resolveAnnotation(annotationId: string, resolutionNote: string): Promise<any> {
         try {
             const response = await this.apiClient.put(`/api/version-annotations/${annotationId}/resolve`, {
                 resolved_by: this.userId,
@@ -351,10 +351,10 @@ export class VersionHistoryManager {
         }
     }
     // Utility Methods
-    extractNodeIds(graphData) {
+    extractNodeIds(graphData: any): string[] {
         return graphData?.nodes?.map((node) => node.id) || [];
     }
-    extractAffectedProperties(eventData) {
+    extractAffectedProperties(eventData: any): string[] {
         // Extract property names from event data
         const properties = [];
         if (eventData.property_changes) {
@@ -365,7 +365,7 @@ export class VersionHistoryManager {
         }
         return properties;
     }
-    calculateChangeMagnitude(graphData) {
+    calculateChangeMagnitude(graphData: any): number {
         // Simple heuristic for change magnitude
         const nodeCount = graphData?.nodes?.length || 0;
         const edgeCount = graphData?.edges?.length || 0;
@@ -373,7 +373,7 @@ export class VersionHistoryManager {
         return Math.min(10, Math.log10(nodeCount + edgeCount + 1) * 2);
     }
     // Statistics and Analytics
-    async getVersionStatistics() {
+    async getVersionStatistics(): Promise<any> {
         try {
             const response = await this.apiClient.get(`/api/version-statistics?project_id=${this.projectId}`);
             return response.data;
@@ -384,10 +384,10 @@ export class VersionHistoryManager {
         }
     }
     // Cleanup and Maintenance
-    startNewSession() {
+    startNewSession(): void {
         this.currentSessionId = crypto.randomUUID();
     }
-    async cleanupOldData(options = {}) {
+    async cleanupOldData(options: any = {}): Promise<any> {
         try {
             const response = await this.apiClient.post('/api/version-cleanup', {
                 project_id: this.projectId,

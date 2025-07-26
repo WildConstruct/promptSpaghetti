@@ -2,7 +2,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState } from 'react';
 import { Card, Tabs, Table, Tag, Typography, Collapse, Badge, Select, Tooltip, Alert, Space, Statistic, Row, Col } from 'antd';
 import { PlusOutlined, MinusOutlined, EditOutlined, WarningOutlined, InfoCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { CONFLICT_DESCRIPTIONS, RESOLUTION_STRATEGY_DESCRIPTIONS } from '../../types/restoration.js';
+import { CONFLICT_DESCRIPTIONS, RESOLUTION_STRATEGY_DESCRIPTIONS } from '../../types/restoration';
 const { TabPane } = Tabs;
 const { Title, Text } = Typography;
 const { Panel } = Collapse;

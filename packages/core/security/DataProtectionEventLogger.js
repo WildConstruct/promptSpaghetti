@@ -3,8 +3,8 @@
  * Specialized logging for GDPR, CCPA, and data protection compliance events
  * Part of Epic 19 - Security & Compliance Framework
  */
-import { SecurityLogger, SecurityEventLevel } from './SecurityLogger.js';
-import { AuditLogger } from './AuditLogger.js';
+import { SecurityLogger, SecurityEventLevel } from './SecurityLogger';
+import { AuditLogger } from './AuditLogger';
 export var DataProtectionEventType;
 (function (DataProtectionEventType) {
     // Data Lifecycle Events

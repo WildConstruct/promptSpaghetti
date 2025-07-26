@@ -6,10 +6,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Part of Epic 17.5.5 - Verification System
  */
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { CheckCircle, XCircle, Clock, AlertCircle, Users, FileText, TrendingUp, TrendingDown, Search, Download, Eye, RefreshCw } from 'lucide-react';
 const VerificationDashboard = ({ className = '', onRequestSelect }) => {
     const [activeTab, setActiveTab] = useState('overview');

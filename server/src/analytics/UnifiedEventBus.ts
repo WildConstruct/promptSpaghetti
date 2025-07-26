@@ -81,8 +81,8 @@ export const BaseEventSchema = z.object({
   traceId: z.string().optional(),
   
   // Event Data
-  data: z.record(z.any()),
-  metadata: z.record(z.any()).default({}),
+  data: z.record(z.unknown()),
+  metadata: z.record(z.unknown()).default({}),
   
   // Analytics Enrichment
   tags: z.array(z.string()).default([]),
@@ -336,8 +336,8 @@ export class UnifiedEventBus extends EventEmitter {
    */
   async migrateFromLegacySystem(
     systemName: string, 
-    events: any[], 
-    transformer: (legacyEvent: any) => Partial<UnifiedAnalyticsEvent>
+    events: Record<string, unknown>[], 
+    transformer: (legacyEvent: Record<string, unknown>) => Partial<UnifiedAnalyticsEvent>
   ): Promise<{ migrated: number; failed: number; errors: string[] }> {
     const results = { migrated: 0, failed: 0, errors: [] as string[] };
 
@@ -458,7 +458,7 @@ export class UnifiedEventBus extends EventEmitter {
   private async retrySubscriber(
     event: UnifiedAnalyticsEvent, 
     subscriber: EventSubscriber, 
-    originalError: any
+    originalError: Error
   ): Promise<void> {
     if (!subscriber.retryConfig) return;
 

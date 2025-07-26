@@ -235,7 +235,7 @@ export const PermissionEditor: React.FC<PermissionEditorProps> = ({
   onCancel,
   className = ''
 }) => {
-  const { user: ___currentUser } = useAuthStore();
+  const { user: _currentUser } = useAuthStore();
   const [state, setState] = useState<PermissionEditorState>({
     availablePermissions: mockPermissions,
     availableRoles: mockRoles,
@@ -253,9 +253,9 @@ export const PermissionEditor: React.FC<PermissionEditorProps> = ({
   // Load initial data
   useEffect(() => {
     loadData();
-  }, [userId, roleId, mode]);
+  }, [loadData]);
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     setState(prev => ({ ...prev, isLoading: true, error: null }));
     
     try {
@@ -291,7 +291,7 @@ export const PermissionEditor: React.FC<PermissionEditorProps> = ({
         error: error instanceof Error ? error.message : 'Failed to load data'
       }));
     }
-  };
+  }, [userId, roleId, mode, setState]);
 
   const handlePermissionToggle = useCallback((permissionId: string) => {
     setState(prev => {

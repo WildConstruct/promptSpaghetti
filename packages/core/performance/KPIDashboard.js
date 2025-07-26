@@ -3,7 +3,7 @@
  * Real-time visualization and reporting system for performance KPIs
  */
 import { EventEmitter } from 'events';
-import { corePerformanceKPIs, getKPIsByCategory } from './PerformanceKPIs.js';
+import { corePerformanceKPIs, getKPIsByCategory } from './PerformanceKPIs';
 /**
  * KPI Dashboard Service
  * Provides comprehensive dashboard functionality for performance monitoring

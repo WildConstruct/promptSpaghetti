@@ -5,6 +5,13 @@ import { EnhancedTextAreaEditor } from '../EnhancedTextAreaEditor';
 import { SelectEditor, SelectOption } from '../SelectEditor';
 import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 import { TemplateEditor } from '../TemplateEditor';
+import { 
+  ContextualTooltip, 
+  HelpfulInput, 
+  HelpfulButton,
+  HelpfulSection,
+  useContextualHelp 
+} from '../../Help';
 
 export interface ConcatEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   // Concat specific props can be added here
@@ -79,6 +86,46 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = ({ _____nodeId, nodeDat
     }
   };
 
+  // Contextual help for the node name field
+  const { wrapWithHelp: wrapNameHelp } = useContextualHelp({
+    id: 'concat-node-name',
+    title: 'Concatenation Name',
+    description: 'Give your concatenation node a descriptive name to identify it in your workflow.',
+    category: 'basic',
+    trigger: 'focus',
+    position: 'right',
+    showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
+    examples: ['Text Combiner', 'Dialogue Merger', 'Content Assembler'],
+    priority: 'high'
+  });
+
+  // Contextual help for template editor
+  const { wrapWithHelp: wrapTemplateHelp } = useContextualHelp({
+    id: 'concat-template',
+    title: 'Output Template',
+    description: 'Define how concatenated inputs should be formatted. Use {variable} syntax to reference specific inputs.',
+    category: 'basic',
+    trigger: 'hover',
+    position: 'top',
+    showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
+    examples: ['Combining {input1} and {input2}', '{character}: {dialogue}'],
+    relatedFeatures: ['variable-extraction', 'input-ports'],
+    priority: 'medium'
+  });
+
+  // Contextual help for join mode
+  const { wrapWithHelp: wrapJoinModeHelp } = useContextualHelp({
+    id: 'concat-join-mode',
+    title: 'Join Mode',
+    description: 'Control which inputs are included in the concatenation result.',
+    category: 'advanced',
+    trigger: 'hover',
+    position: 'right',
+    showOnDisclosureLevel: ['advanced', 'debug'],
+    examples: ['Join All: combines everything', 'Non-Empty: skips empty inputs'],
+    priority: 'medium'
+  });
+
   return (
     <div className="concat-editor">
       {/* BASIC LEVEL: Essential concatenation settings */}
@@ -90,45 +137,49 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = ({ _____nodeId, nodeDat
         priority="critical"
         fieldName="template"
       >
-        <TextFieldEditor
-          label="Concatenation Name"
-          value={label}
-          fieldKey="label"
-          zodType={null as any}
-          onChange={(value) => handleFieldChange('label', value)}
-          placeholder="Enter a name for this concatenation..."
-        />
-
-        <div style={{ marginBottom: 16 }}>
-          <label style={{
-            display: 'block',
-            fontSize: 12,
-            fontWeight: 500,
-            color: '#e2e8f0',
-            marginBottom: 6
-          }}>
-            Output Template (Optional)
-          </label>
-          <TemplateEditor
-            value={template}
-            onChange={(value) => handleFieldChange('template', value)}
-            onVariablesChange={(variables, extractedVariables) => {
-              handleFieldChange('extractedVariables', extractedVariables || []);
-            }}
-            placeholder="Use a template like 'Combining {input1} and {input2}' for more control..."
-            showPreview={true}
-            showRealTimePreview={true}
-            autoComplete={true}
-            nodeType="concat"
+        {wrapNameHelp(
+          <TextFieldEditor
+            label="Concatenation Name"
+            value={label}
+            fieldKey="label"
+            zodType={null}
+            onChange={(value) => handleFieldChange('label', value)}
+            placeholder="Enter a name for this concatenation..."
           />
-          <div style={{
-            fontSize: 10,
-            color: '#a0aec0',
-            marginTop: 4
-          }}>
-            If specified, uses template instead of simple concatenation. Variables become input ports.
+        )}
+
+        {wrapTemplateHelp(
+          <div style={{ marginBottom: 16 }}>
+            <label style={{
+              display: 'block',
+              fontSize: 12,
+              fontWeight: 500,
+              color: '#e2e8f0',
+              marginBottom: 6
+            }}>
+              Output Template (Optional)
+            </label>
+            <TemplateEditor
+              value={template}
+              onChange={(value) => handleFieldChange('template', value)}
+              onVariablesChange={(variables, extractedVariables) => {
+                handleFieldChange('extractedVariables', extractedVariables || []);
+              }}
+              placeholder="Use a template like 'Combining {input1} and {input2}' for more control..."
+              showPreview={true}
+              showRealTimePreview={true}
+              autoComplete={true}
+              nodeType="concat"
+            />
+            <div style={{
+              fontSize: 10,
+              color: '#a0aec0',
+              marginTop: 4
+            }}>
+              If specified, uses template instead of simple concatenation. Variables become input ports.
+            </div>
           </div>
-        </div>
+        )}
       </ProgressiveDisclosureSection>
 
       {/* ADVANCED LEVEL: Concatenation behavior settings */}
@@ -140,14 +191,16 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = ({ _____nodeId, nodeDat
         priority="important"
         fieldName="joinMode"
       >
-        <SelectEditor
-          label="Join Mode"
-          value={joinMode}
-          fieldKey="joinMode"
-          options={JOIN_MODES}
-          zodType={null as any}
-          onChange={(value) => handleFieldChange('joinMode', value)}
-        />
+        {wrapJoinModeHelp(
+          <SelectEditor
+            label="Join Mode"
+            value={joinMode}
+            fieldKey="joinMode"
+            options={JOIN_MODES}
+            zodType={null}
+            onChange={(value) => handleFieldChange('joinMode', value)}
+          />
+        )}
 
         {(joinMode === 'first-n' || joinMode === 'last-n') && (
           <TextFieldEditor
@@ -155,7 +208,7 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = ({ _____nodeId, nodeDat
             value={limitCount}
             fieldKey="limitCount"
             type="number"
-            zodType={null as any}
+            zodType={null}
             onChange={(value) => handleFieldChange('limitCount', value)}
             placeholder="Number of inputs to include..."
           />
@@ -175,7 +228,7 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = ({ _____nodeId, nodeDat
             label="Custom Separator"
             value={customSeparator}
             fieldKey="customSeparator"
-            zodType={null as any}
+            zodType={null}
             onChange={handleCustomSeparatorChange}
             placeholder="Enter custom separator..."
           />

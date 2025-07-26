@@ -760,19 +760,7 @@ export interface CreatorOptimizationExportData {
   exportTimestamp: number;
 }
 
-export const CreatorOptimizationDashboard: React.FC<CreatorOptimizationDashboardProps> = ({
-  creatorId,
-  creatorProfile,
-  funnelDefinition,
-  analyticsInfrastructure,
-  timeRange = { start: Date.now() - 30 * 24 * 60 * 60 * 1000, end: Date.now() },
-  dashboardMode = 'overview',
-  onActionTaken,
-  onGoalSet,
-  onExport
-}) => {
-  const [optimizationData, setOptimizationData] = useState<CreatorOptimizationData | null>(null);
-  const [loading, setLoading] = useState(true);
+export   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [activeMode, setActiveMode] = useState<CreatorDashboardMode>(dashboardMode);
@@ -812,7 +800,7 @@ export const CreatorOptimizationDashboard: React.FC<CreatorOptimizationDashboard
 
   // Process creator data
   const processCreatorData = async (
-    rawData: any,
+    rawData: unknown,
     profile: CreatorProfile
   ): Promise<CreatorOptimizationData> => {
     // Simulate comprehensive creator optimization processing
@@ -1453,39 +1441,7 @@ export const CreatorOptimizationDashboard: React.FC<CreatorOptimizationDashboard
   }, [onActionTaken]);
 
   // Handle goal setting
-  const handleGoalSet = useCallback((goalData: Partial<CreatorGoal>) => {
-    const goal: CreatorGoal = {
-      goalId: `goal-${Date.now()}`,
-      title: goalData.title || 'New Goal',
-      description: goalData.description || '',
-      category: goalData.category || 'revenue',
-      target: goalData.target || {
-        metric: 'revenue',
-        currentValue: 0,
-        targetValue: 1000,
-        improvementPercentage: 0,
-        measurementFrequency: 'monthly'
-      },
-      timeline: goalData.timeline || {
-        startDate: Date.now(),
-        targetDate: Date.now() + 90 * 24 * 60 * 60 * 1000,
-        duration: 90,
-        milestones: [],
-        checkpoints: []
-      },
-      priority: goalData.priority || 'medium',
-      status: 'draft',
-      progress: {
-        currentProgress: 0,
-        progressTrend: 'on_track',
-        lastUpdated: Date.now(),
-        nextMilestone: 'Start tracking',
-        daysToGoal: 90,
-        likelihoodOfSuccess: 0.7
-      },
-      relatedRecommendations: []
-    };
-
+  
     if (onGoalSet) {
       onGoalSet(goal);
     }

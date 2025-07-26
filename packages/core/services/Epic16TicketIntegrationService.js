@@ -163,7 +163,7 @@ export class Epic16TicketIntegrationService extends EventEmitter {
     /**
      * Add comment to ticket
      */
-    async addComment(ticketId, commentData) {
+    async addComment(ticketId: string, commentData: any): Promise<any> {
         const ticket = this.tickets.get(ticketId);
         if (!ticket)
             return null;
@@ -189,7 +189,7 @@ export class Epic16TicketIntegrationService extends EventEmitter {
     /**
      * Assign ticket to user or team
      */
-    async assignTicket(ticketId, assigneeId, assignerId) {
+    async assignTicket(ticketId: string, assigneeId: string, assignerId: string): Promise<any> {
         const ticket = this.tickets.get(ticketId);
         if (!ticket)
             return null;

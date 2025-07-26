@@ -4,7 +4,7 @@
  * Centralized error creation with consistent patterns, context injection,
  * and recovery suggestions. Replaces scattered throw new Error() calls.
  */
-import { BaseError, GraphValidationError, GraphExecutionError, NodeExecutionError, DatabaseConnectionError, ConnectionFactoryError, AuthenticationError, MFAError, ProjectLockedError, WorkflowStateError, APIError, ValidationError, ConfigurationError } from './index.js';
+import { BaseError, GraphValidationError, GraphExecutionError, NodeExecutionError, DatabaseConnectionError, ConnectionFactoryError, AuthenticationError, MFAError, ProjectLockedError, WorkflowStateError, APIError, ValidationError, ConfigurationError } from './index';
 /**
  * Factory class for creating structured errors with consistent context
  */
@@ -13,13 +13,13 @@ export class ErrorFactory {
     /**
      * Set default context that will be included in all created errors
      */
-    static setDefaultContext(context) {
+    static setDefaultContext(context: unknown) {
         ErrorFactory.defaultContext = context;
     }
     /**
      * Create enhanced context by merging provided context with defaults
      */
-    static createContext(operation, options = {}, additional = {}) {
+    static createContext(operation: string, options: any = {}, additional: any = {}) {
         return {
             ...ErrorFactory.defaultContext,
             operation,
@@ -33,14 +33,14 @@ export class ErrorFactory {
     /**
      * Create a graph validation error with detailed validation context
      */
-    static createGraphValidationError(validationErrors, options = {}) {
+    static createGraphValidationError(validationErrors: unknown[], options: any = {}) {
         const context = ErrorFactory.createContext('graph_validation', options);
         return new GraphValidationError(`Graph validation failed: ${validationErrors.length} errors found`, validationErrors, context);
     }
     /**
      * Create a graph execution error with node context
      */
-    static createGraphExecutionError(message, cause, options = {}) {
+    static createGraphExecutionError(message: string, cause?: Error, options: any = {}) {
         const context = ErrorFactory.createContext('graph_execution', options, {
             originalError: cause
         });
@@ -49,7 +49,7 @@ export class ErrorFactory {
     /**
      * Create a node execution error with specific node context
      */
-    static createNodeExecutionError(nodeId, operation, message, cause, options = {}) {
+    static createNodeExecutionError(nodeId: string, operation: string, message: string, cause?: Error, options: any = {}) {
         const context = ErrorFactory.createContext(`node_execution_${operation}`, options, {
             nodeId,
             originalError: cause
@@ -60,14 +60,14 @@ export class ErrorFactory {
     /**
      * Create a database connection error with retry logic
      */
-    static createDatabaseConnectionError(message, cause, options = {}) {
+    static createDatabaseConnectionError(message: string, cause?: Error, options: any = {}) {
         const context = ErrorFactory.createContext('database_connection', options);
         return new DatabaseConnectionError(message, context, cause);
     }
     /**
      * Create a connection factory error
      */
-    static createConnectionFactoryError(message = 'No connection factory set', options = {}) {
+    static createConnectionFactoryError(message: string = 'No connection factory set', options: any = {}) {
         const context = ErrorFactory.createContext('connection_factory', options);
         return new ConnectionFactoryError(message, context);
     }
@@ -75,21 +75,21 @@ export class ErrorFactory {
     /**
      * Create an authentication error with user context
      */
-    static createAuthenticationError(message, options = {}) {
+    static createAuthenticationError(message: string, options: any = {}) {
         const context = ErrorFactory.createContext('authentication', options);
         return new AuthenticationError(message, context);
     }
     /**
      * Create MFA-specific errors with recovery guidance
      */
-    static createMFAError(message, mfaType, options = {}) {
+    static createMFAError(message: string, mfaType: string, options: any = {}) {
         const context = ErrorFactory.createContext('mfa_validation', options);
         return new MFAError(message, mfaType, context);
     }
     /**
      * Create MFA configuration errors
      */
-    static createMFAConfigurationError(type, details, options = {}) {
+    static createMFAConfigurationError(type: string, details?: string, options: any = {}) {
         const messages = {
             already_configured: 'Email MFA already configured for this user',
             invalid_email: 'Invalid email address',
@@ -102,7 +102,7 @@ export class ErrorFactory {
     /**
      * Create MFA verification errors
      */
-    static createMFAVerificationError(type, options = {}) {
+    static createMFAVerificationError(type: string, options: any = {}) {
         const messages = {
             expired: 'Verification expired',
             invalid_code: 'Invalid verification code',
@@ -116,7 +116,7 @@ export class ErrorFactory {
     /**
      * Create project locked error with lock context
      */
-    static createProjectLockedError(projectId, lockedBy, options = {}) {
+    static createProjectLockedError(projectId: string, lockedBy: string, options: any = {}) {
         const context = ErrorFactory.createContext('project_access', options, {
             metadata: { projectId, lockedBy }
         });
@@ -125,7 +125,7 @@ export class ErrorFactory {
     /**
      * Create permission denied errors
      */
-    static createPermissionDeniedError(resource, action, options = {}) {
+    static createPermissionDeniedError(resource: string, action: string, options: any = {}) {
         const context = ErrorFactory.createContext('permission_check', options, {
             metadata: { resource, action }
         });
@@ -135,7 +135,7 @@ export class ErrorFactory {
     /**
      * Create workflow state transition errors
      */
-    static createWorkflowStateError(message = 'Invalid workflow state transition', fromState, toState, options = {}) {
+    static createWorkflowStateError(message: string = 'Invalid workflow state transition', fromState?: string, toState?: string, options: any = {}) {
         const context = ErrorFactory.createContext('workflow_transition', options, {
             metadata: { fromState, toState }
         });
@@ -145,7 +145,7 @@ export class ErrorFactory {
     /**
      * Create API errors from HTTP responses
      */
-    static createAPIError(statusCode, message, endpoint, responseBody, options = {}) {
+    static createAPIError(statusCode: number, message: string, endpoint: string, responseBody?: unknown, options: any = {}) {
         const context = ErrorFactory.createContext('api_request', options, {
             metadata: { endpoint, responseBody }
         });
@@ -154,7 +154,7 @@ export class ErrorFactory {
     /**
      * Create network/fetch errors
      */
-    static createNetworkError(message, endpoint, cause, options = {}) {
+    static createNetworkError(message: string, endpoint: string, cause?: Error, options: any = {}) {
         const context = ErrorFactory.createContext('network_request', options, {
             originalError: cause
         });
@@ -164,14 +164,14 @@ export class ErrorFactory {
     /**
      * Create validation errors for fields
      */
-    static createValidationError(field, value, expected, options = {}) {
+    static createValidationError(field: string, value: unknown, expected: string, options: any = {}) {
         const context = ErrorFactory.createContext('field_validation', options);
         return new ValidationError(field, value, expected, context);
     }
     /**
      * Create entropy validation errors
      */
-    static createEntropyError(codeType, options = {}) {
+    static createEntropyError(codeType: string, options: any = {}) {
         const context = ErrorFactory.createContext('entropy_validation', options);
         return new ValidationError('code', 'generated', `sufficient entropy for ${codeType}`, context);
     }
@@ -179,7 +179,7 @@ export class ErrorFactory {
     /**
      * Create configuration errors
      */
-    static createConfigurationError(message, configKey, options = {}) {
+    static createConfigurationError(message: string, configKey: string, options: any = {}) {
         const context = ErrorFactory.createContext('configuration', options);
         return new ConfigurationError(message, configKey, context);
     }
@@ -187,7 +187,7 @@ export class ErrorFactory {
     /**
      * Wrap unknown errors in structured format
      */
-    static wrapUnknownError(error, operation, options = {}) {
+    static wrapUnknownError(error: unknown, operation: string, options: any = {}) {
         if (error instanceof BaseError) {
             return error;
         }
@@ -199,7 +199,7 @@ export class ErrorFactory {
     /**
      * Create errors with recovery actions
      */
-    static createRecoverableError(message, operation, recoveryFn, options = {}) {
+    static createRecoverableError(message: string, operation: string, recoveryFn?: Function, options: any = {}) {
         const error = ErrorFactory.createGraphExecutionError(message, undefined, options);
         if (recoveryFn) {
             error.recoveryActions.push({

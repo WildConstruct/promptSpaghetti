@@ -429,7 +429,7 @@ export class BackupRecoverySystem {
                 backups = backups.filter(b => b.status === filter.status);
             }
             if (filter.systemSource) {
-                backups = backups.filter(b => b.systemSources.includes(filter.systemSource));
+                backups = backups.filter(b => filter.systemSource && b.systemSources.includes(filter.systemSource));
             }
         }
         return backups.sort((a, b) => b.createdAt - a.createdAt);

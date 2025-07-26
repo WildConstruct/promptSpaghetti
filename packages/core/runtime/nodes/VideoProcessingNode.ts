@@ -169,7 +169,7 @@ export class VideoGenerationNode extends AdvancedRuntimeNode {
 
   private async _initializeAdapter(config: VideoConfig): Promise<void> {
     try {
-      let adapter: any;
+      let adapter: unknown;
 
       switch (config.provider) {
         case 'runwayml':
@@ -210,7 +210,7 @@ export class VideoGenerationNode extends AdvancedRuntimeNode {
     return Array.from(this.adapters.keys())[0] || 'runwayml';
   }
 
-  private _buildGenerationOptions(provider: string, params: any): any {
+  private _buildGenerationOptions(provider: string, params: unknown): unknown {
     const { prompt, image, duration, resolution, fps, motion, style, cameraMotion, seed } = params;
 
     switch (provider) {
@@ -411,7 +411,7 @@ export class VideoAnalysisNode extends AdvancedRuntimeNode {
     }
   }
 
-  private async _analyzeVideo(videoFile: any, analysisType: string): Promise<VideoMetadata> {
+  private async _analyzeVideo(videoFile: Error, analysisType: string): Promise<VideoMetadata> {
     // Basic video file analysis
     const size = videoFile instanceof ArrayBuffer ? videoFile.byteLength : (videoFile.size || 0);
     
@@ -580,7 +580,7 @@ export class VideoEnhancementNode extends AdvancedRuntimeNode {
     }
   }
 
-  private async _enhanceVideo(videoFile: any, options: any): Promise<ArrayBuffer> {
+  private async _enhanceVideo(videoFile: Error, options: unknown): Promise<ArrayBuffer> {
     // Placeholder implementation - in reality, this would use actual video enhancement
     // Libraries like FFmpeg, OpenCV, or AI upscaling models
     
@@ -683,7 +683,7 @@ export class VideoCompositionNode extends AdvancedRuntimeNode {
     }
   }
 
-  private async _composeVideos(clips: any[], options: any): Promise<ArrayBuffer> {
+  private async _composeVideos(clips: unknown[], options: unknown): Promise<ArrayBuffer> {
     // Placeholder implementation - in reality, this would use video composition libraries
     // Such as FFmpeg for concatenation, overlays, and transitions
     

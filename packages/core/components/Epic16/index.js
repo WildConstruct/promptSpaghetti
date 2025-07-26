@@ -5,37 +5,37 @@
  * following consistent design patterns for the ecosystem.
  */
 // Core marketplace components
-export { MarketplaceCard } from './MarketplaceCard.js';
-export { TemplatePreviewModal } from './TemplatePreviewModal.js';
+export { MarketplaceCard } from './MarketplaceCard';
+export { TemplatePreviewModal } from './TemplatePreviewModal';
 // Business calculation components for Case Study Showcase (Story 16.4.4)
-export { ROICalculator } from './ROICalculator.js';
-export { SavingsEstimation } from './SavingsEstimation.js';
-export { BusinessValueDemo } from './BusinessValueDemo.js';
-export { MarketplaceSearch } from './MarketplaceSearch.js';
+export { ROICalculator } from './ROICalculator';
+export { SavingsEstimation } from './SavingsEstimation';
+export { BusinessValueDemo } from './BusinessValueDemo';
+export { MarketplaceSearch } from './MarketplaceSearch';
 // Community forum components
-export { CommunityForumCard } from './CommunityForumCard.js';
+export { CommunityForumCard } from './CommunityForumCard';
 // User engagement and onboarding components
-export { ProgressTracker } from './ProgressTracker.js';
-export { TutorialPlayer, TutorialBrowser } from './TutorialPlayer.js';
-export { UserEngagementDemo } from './UserEngagementDemo.js';
+export { ProgressTracker } from './ProgressTracker';
+export { TutorialPlayer, TutorialBrowser } from './TutorialPlayer';
+export { UserEngagementDemo } from './UserEngagementDemo';
 // Tutorial System (Task: E16-1753114247090-BB71B5)
-export { MarketplaceTutorialSystemService } from '../../community/MarketplaceTutorialSystem.js';
+export { MarketplaceTutorialSystemService } from '../../community/MarketplaceTutorialSystem';
 // Usage Analytics (Task: E16-1753114247088-3E0D09)
-export { LearningAnalyticsServiceImpl } from '../../analytics/LearningAnalyticsService.js';
+export { LearningAnalyticsServiceImpl } from '../../analytics/LearningAnalyticsService';
 // Content Filtering System (Task: E16-1753114247062-9DDA29)
-export { MarketplaceContentFilteringServiceImpl } from '../../community/MarketplaceContentFilteringSystem.js';
+export { MarketplaceContentFilteringServiceImpl } from '../../community/MarketplaceContentFilteringSystem';
 // Enhanced Automated Moderation (Task: E16-1753114247061-797978)
-export { EnhancedModerationServiceImpl } from '../../community/EnhancedAutomatedModerationSystem.js';
+export { EnhancedModerationServiceImpl } from '../../community/EnhancedAutomatedModerationSystem';
 // Unified Integration
-export { Epic16IntegratedService } from '../../community/Epic16Integration.js';
+export { Epic16IntegratedService } from '../../community/Epic16Integration';
 // Re-export ticket integration components for convenience
-export { Epic16TicketIntegration } from '../Tickets/Epic16TicketIntegration.js';
+export { Epic16TicketIntegration } from '../Tickets/Epic16TicketIntegration';
 // Article Management System (Task: E16-1753114247073-332A94)
-export { ArticleManagement, ArticleList, ArticleEditor, default as ArticleManagementDefault } from './ArticleManagement.js';
+export { ArticleManagement, ArticleList, ArticleEditor, default as ArticleManagementDefault } from './ArticleManagement';
 // Knowledge Base UI Layouts (Task: E16-1753114247069-7900C5)
-export { KnowledgeBaseLayout, KnowledgeBaseHero, ArticleCard, CategoryBrowser, LearningPathCard, default as KnowledgeBaseLayoutDefault } from './KnowledgeBaseLayouts.js';
+export { KnowledgeBaseLayout, KnowledgeBaseHero, ArticleCard, CategoryBrowser, LearningPathCard, default as KnowledgeBaseLayoutDefault } from './KnowledgeBaseLayouts';
 // Knowledge Base Demo Integration (Shows both systems working together)
-export { KnowledgeBaseDemo, default as KnowledgeBaseDemoDefault } from './KnowledgeBaseDemo.js';
+export { KnowledgeBaseDemo, default as KnowledgeBaseDemoDefault } from './KnowledgeBaseDemo';
 export const defaultEpic16Theme = {
     primary: '#2563eb', // blue-600
     secondary: '#64748b', // slate-500

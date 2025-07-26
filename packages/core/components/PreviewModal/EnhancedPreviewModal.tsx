@@ -57,7 +57,7 @@ interface EnhancedPreviewModalProps {
   
   // Enhanced functionality
   onResultSelect?: (resultId: string, selected: boolean) => void;
-  onResultSave?: (resultId: string, metadata?: any) => Promise<void>;
+  onResultSave?: (resultId: string, metadata?: Record<string, unknown>) => Promise<void>;
   onResultExport?: (resultIds: string[]) => Promise<void>;
   onResultRate?: (resultId: string, rating: number) => void;
   onResultTag?: (resultId: string, tags: string[]) => void;
@@ -71,29 +71,7 @@ interface EnhancedPreviewModalProps {
   maxResults?: number;
 }
 
-export const EnhancedPreviewModal: React.FC<EnhancedPreviewModalProps> = ({
-  open,
-  loading,
-  error,
-  results,
-  varianceAnalysis,
-  onClose,
-  onCancel,
-  onResultHover,
-  onResultSelect,
-  onResultSave,
-  onResultExport,
-  onResultRate,
-  onResultTag,
-  onResultNote,
-  enableSelection = true,
-  enableRating = true,
-  enableNotes = true,
-  enableExport = true,
-  maxResults = 50
-}) => {
-  const [selectedResults, setSelectedResults] = useState<Set<string>>(new Set());
-  const [activeTab, setActiveTab] = useState<'results' | 'analysis' | 'visualization'>('results');
+export   const [activeTab, setActiveTab] = useState<'results' | 'analysis' | 'visualization'>('results');
   const [expandedResult, setExpandedResult] = useState<string | null>(null);
   const [ratingInProgress, setRatingInProgress] = useState<string | null>(null);
   const [noteEditing, setNoteEditing] = useState<string | null>(null);

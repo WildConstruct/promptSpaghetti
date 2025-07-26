@@ -1,9 +1,11 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from 'react';
-import { validateExportOptions } from '../../types/export.js';
-import { useExport } from '../../hooks/useExport.js';
+import { VFXExportPreview } from './VFXExportPreview';
+import { validateExportOptions } from '../../types/export';
+import { useExport } from '../../hooks/useExport';
 import { FiChevronLeft, FiChevronRight, FiX, FiFile, FiSettings, FiFilter, FiCheck, FiDownload, FiInfo } from 'react-icons/fi';
 const EXPORT_FORMATS = [
+    { value: 'vfx', label: 'VFX Pipeline', description: 'Wild Construct VFX export for film production', icon: '🎬' },
     { value: 'json', label: 'JSON', description: 'JavaScript Object Notation - structured data', icon: '{}' },
     { value: 'yaml', label: 'YAML', description: 'Human-readable data serialization', icon: '📄' },
     { value: 'xml', label: 'XML', description: 'Extensible Markup Language', icon: '</>' },
@@ -168,7 +170,46 @@ export const ExportWizard = ({ projectId, template, onComplete, onCancel }) => {
                                                             ...prev.export_options,
                                                             include_images: e.target.checked
                                                         }
-                                                    })), className: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" }), _jsx("span", { className: "text-gray-900 dark:text-white", children: "Include Images" })] })] }))] })] })] }));
+                                                    })), className: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" }), _jsx("span", { className: "text-gray-900 dark:text-white", children: "Include Images" })] })] })), exportData.export_format === 'vfx' && (_jsxs("div", { className: "space-y-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1", children: "Export Quality" }), _jsxs("select", { value: exportData.export_options?.quality || 'production', onChange: (e) => setExportData(prev => ({
+                                                        ...prev,
+                                                        export_options: {
+                                                            ...prev.export_options,
+                                                            quality: e.target.value
+                                                        }
+                                                    })), className: "w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500", children: [_jsx("option", { value: "production", children: "Production" }), _jsx("option", { value: "preview", children: "Preview" }), _jsx("option", { value: "debug", children: "Debug" })] })] }), _jsxs("div", { className: "space-y-3", children: [_jsx("h5", { className: "font-medium text-gray-900 dark:text-white", children: "VFX Features" }), [
+                                                    { key: 'include_debug_info', label: 'Include Debug Info', description: 'Add debugging information for troubleshooting' },
+                                                    { key: 'include_performance_data', label: 'Include Performance Data', description: 'Export execution timing and metrics' },
+                                                    { key: 'include_variant_data', label: 'Include Variant Data', description: 'Export multiple prompt variations' },
+                                                    { key: 'enable_controlnet_support', label: 'Enable ControlNet Support', description: 'Include ControlNet-compatible parameters' },
+                                                    { key: 'enable_animation_framework', label: 'Enable Animation Framework', description: 'Include animation sequence support' }
+                                                ].map((option) => (_jsxs("label", { className: "flex items-start space-x-3", children: [_jsx("input", { type: "checkbox", checked: exportData.export_options?.[option.key] ?? true, onChange: (e) => setExportData(prev => ({
+                                                                ...prev,
+                                                                export_options: {
+                                                                    ...prev.export_options,
+                                                                    [option.key]: e.target.checked
+                                                                }
+                                                            })), className: "mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500" }), _jsxs("div", { children: [_jsx("p", { className: "font-medium text-gray-900 dark:text-white", children: option.label }), _jsx("p", { className: "text-sm text-gray-600 dark:text-gray-300", children: option.description })] })] }, option.key)))] }), _jsxs("div", { className: "space-y-3", children: [_jsx("h5", { className: "font-medium text-gray-900 dark:text-white", children: "Rendering Data" }), [
+                                                    { key: 'include_rendering_data', label: 'Include Rendering Data', description: 'Export render quality and style settings' },
+                                                    { key: 'include_camera_data', label: 'Include Camera Data', description: 'Export camera parameters and positioning' },
+                                                    { key: 'include_lighting_data', label: 'Include Lighting Data', description: 'Export lighting conditions and setup' }
+                                                ].map((option) => (_jsxs("label", { className: "flex items-start space-x-3", children: [_jsx("input", { type: "checkbox", checked: exportData.export_options?.[option.key] ?? true, onChange: (e) => setExportData(prev => ({
+                                                                ...prev,
+                                                                export_options: {
+                                                                    ...prev.export_options,
+                                                                    [option.key]: e.target.checked
+                                                                }
+                                                            })), className: "mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500" }), _jsxs("div", { children: [_jsx("p", { className: "font-medium text-gray-900 dark:text-white", children: option.label }), _jsx("p", { className: "text-sm text-gray-600 dark:text-gray-300", children: option.description })] })] }, option.key)))] }), _jsxs("div", { className: "space-y-3", children: [_jsx("h5", { className: "font-medium text-gray-900 dark:text-white", children: "Reproducibility" }), [
+                                                    { key: 'include_reproducibility_data', label: 'Include Reproducibility Data', description: 'Export data needed for exact reproduction' },
+                                                    { key: 'exact_reproduction', label: 'Exact Reproduction', description: 'Enable bit-perfect result reproduction' },
+                                                    { key: 'preserve_node_configuration', label: 'Preserve Node Configuration', description: 'Save complete node settings' },
+                                                    { key: 'include_rng_states', label: 'Include RNG States', description: 'Export random number generator states' }
+                                                ].map((option) => (_jsxs("label", { className: "flex items-start space-x-3", children: [_jsx("input", { type: "checkbox", checked: exportData.export_options?.[option.key] ?? true, onChange: (e) => setExportData(prev => ({
+                                                                ...prev,
+                                                                export_options: {
+                                                                    ...prev.export_options,
+                                                                    [option.key]: e.target.checked
+                                                                }
+                                                            })), className: "mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500" }), _jsxs("div", { children: [_jsx("p", { className: "font-medium text-gray-900 dark:text-white", children: option.label }), _jsx("p", { className: "text-sm text-gray-600 dark:text-gray-300", children: option.description })] })] }, option.key)))] })] }))] })] })] }));
     };
     const renderFiltersStep = () => (_jsxs("div", { className: "space-y-6", children: [_jsxs("div", { children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900 dark:text-white mb-4", children: "Content Filters" }), _jsx("p", { className: "text-sm text-gray-600 dark:text-gray-300 mb-6", children: "Apply filters to customize what data is included in your export" })] }), _jsxs("div", { className: "space-y-6", children: [_jsxs("div", { children: [_jsx("h4", { className: "font-medium text-gray-900 dark:text-white mb-3", children: "Date Range" }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1", children: "Start Date" }), _jsx("input", { type: "date", value: exportData.custom_filters?.date_range?.start || '', onChange: (e) => setExportData(prev => ({
                                                     ...prev,
@@ -201,7 +242,20 @@ export const ExportWizard = ({ projectId, template, onComplete, onCancel }) => {
                                                         encrypt_output: e.target.checked
                                                     }
                                                 })), className: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" }), _jsx("span", { className: "text-gray-900 dark:text-white", children: "Encrypt Output" })] })] })] })] })] }));
-    const renderReviewStep = () => (_jsxs("div", { className: "space-y-6", children: [_jsxs("div", { children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900 dark:text-white mb-4", children: "Review Export Configuration" }), _jsx("p", { className: "text-sm text-gray-600 dark:text-gray-300 mb-6", children: "Review your export settings before starting the export process" })] }), _jsxs("div", { className: "bg-gray-50 dark:bg-gray-800 rounded-lg p-6", children: [_jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-6", children: [_jsxs("div", { children: [_jsx("h4", { className: "font-medium text-gray-900 dark:text-white mb-3", children: "Export Format" }), _jsxs("p", { className: "text-sm text-gray-600 dark:text-gray-300", children: [EXPORT_FORMATS.find(f => f.value === exportData.export_format)?.label, " - ", EXPORT_FORMATS.find(f => f.value === exportData.export_format)?.description] })] }), _jsxs("div", { children: [_jsx("h4", { className: "font-medium text-gray-900 dark:text-white mb-3", children: "Export Type" }), _jsxs("p", { className: "text-sm text-gray-600 dark:text-gray-300", children: [EXPORT_TYPES.find(t => t.value === exportData.export_type)?.label, " - ", EXPORT_TYPES.find(t => t.value === exportData.export_type)?.description] })] })] }), _jsxs("div", { className: "mt-6", children: [_jsx("h4", { className: "font-medium text-gray-900 dark:text-white mb-3", children: "Content Options" }), _jsx("div", { className: "grid grid-cols-2 md:grid-cols-3 gap-2", children: Object.entries(exportData.export_options || {}).map(([key, value]) => (value && (_jsxs("div", { className: "flex items-center space-x-2", children: [_jsx(FiCheck, { className: "w-4 h-4 text-green-600" }), _jsx("span", { className: "text-sm text-gray-600 dark:text-gray-300", children: key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) })] }, key)))) })] }), exportData.custom_filters?.date_range && (_jsxs("div", { className: "mt-6", children: [_jsx("h4", { className: "font-medium text-gray-900 dark:text-white mb-3", children: "Date Range" }), _jsxs("p", { className: "text-sm text-gray-600 dark:text-gray-300", children: [exportData.custom_filters.date_range.start || 'No start date', " to ", exportData.custom_filters.date_range.end || 'No end date'] })] }))] })] }));
+    const renderReviewStep = () => {
+        if (exportData.export_format === 'vfx') {
+            return (_jsxs("div", { className: "space-y-6", children: [_jsxs("div", { children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900 dark:text-white mb-4", children: "VFX Export Review & Validation" }), _jsx("p", { className: "text-sm text-gray-600 dark:text-gray-300 mb-6", children: "Review your VFX export configuration and validate compatibility" })] }), _jsx(VFXExportPreview, { exportData: exportData, onValidationComplete: (isValid, results) => {
+                            // Update validation errors based on VFX validation
+                            if (!isValid && results) {
+                                setValidationErrors(results.errors);
+                            }
+                            else {
+                                setValidationErrors([]);
+                            }
+                        } })] }));
+        }
+        return (_jsxs("div", { className: "space-y-6", children: [_jsxs("div", { children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900 dark:text-white mb-4", children: "Review Export Configuration" }), _jsx("p", { className: "text-sm text-gray-600 dark:text-gray-300 mb-6", children: "Review your export settings before starting the export process" })] }), _jsxs("div", { className: "bg-gray-50 dark:bg-gray-800 rounded-lg p-6", children: [_jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-6", children: [_jsxs("div", { children: [_jsx("h4", { className: "font-medium text-gray-900 dark:text-white mb-3", children: "Export Format" }), _jsxs("p", { className: "text-sm text-gray-600 dark:text-gray-300", children: [EXPORT_FORMATS.find(f => f.value === exportData.export_format)?.label, " - ", EXPORT_FORMATS.find(f => f.value === exportData.export_format)?.description] })] }), _jsxs("div", { children: [_jsx("h4", { className: "font-medium text-gray-900 dark:text-white mb-3", children: "Export Type" }), _jsxs("p", { className: "text-sm text-gray-600 dark:text-gray-300", children: [EXPORT_TYPES.find(t => t.value === exportData.export_type)?.label, " - ", EXPORT_TYPES.find(t => t.value === exportData.export_type)?.description] })] })] }), _jsxs("div", { className: "mt-6", children: [_jsx("h4", { className: "font-medium text-gray-900 dark:text-white mb-3", children: "Content Options" }), _jsx("div", { className: "grid grid-cols-2 md:grid-cols-3 gap-2", children: Object.entries(exportData.export_options || {}).map(([key, value]) => (value && (_jsxs("div", { className: "flex items-center space-x-2", children: [_jsx(FiCheck, { className: "w-4 h-4 text-green-600" }), _jsx("span", { className: "text-sm text-gray-600 dark:text-gray-300", children: key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) })] }, key)))) })] }), exportData.custom_filters?.date_range && (_jsxs("div", { className: "mt-6", children: [_jsx("h4", { className: "font-medium text-gray-900 dark:text-white mb-3", children: "Date Range" }), _jsxs("p", { className: "text-sm text-gray-600 dark:text-gray-300", children: [exportData.custom_filters.date_range.start || 'No start date', " to ", exportData.custom_filters.date_range.end || 'No end date'] })] }))] })] }));
+    };
     const renderStepContent = () => {
         switch (currentStep) {
             case 'format':

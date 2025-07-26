@@ -13,7 +13,7 @@
  *
  * Addresses P0 security requirements for Epic 18 - Conditional Node Security (DEBT-002)
  */
-import { securityAudit, SecuritySeverity, SecurityEventCategory } from './security-audit-logger.js';
+import { securityAudit, SecuritySeverity, SecurityEventCategory } from './security-audit-logger';
 /**
  * Safe Math functions whitelist
  * Only deterministic, side-effect-free functions are allowed
@@ -72,7 +72,7 @@ export const NUMERIC_LIMITS = {
 /**
  * Validates numeric input for safety
  */
-function validateNumericInput(value, functionName) {
+function validateNumericInput(value: unknown, functionName: string): number {
     // Type check
     if (typeof value !== 'number') {
         const error = `Math.${functionName} expects a number, got ${typeof value}`;
@@ -102,7 +102,7 @@ function validateNumericInput(value, functionName) {
 /**
  * Validates array of numeric inputs
  */
-function validateNumericArray(values, functionName) {
+function validateNumericArray(values: unknown, functionName: string): number[] {
     if (!Array.isArray(values)) {
         throw new TypeError(`Math.${functionName} expects arguments, got ${typeof values}`);
     }
@@ -117,56 +117,56 @@ function validateNumericArray(values, functionName) {
 /**
  * Safe implementation of Math.min
  */
-function safeMin(...values) {
+function safeMin(...values: number[]): number {
     const validated = validateNumericArray(values, 'min');
     return Math.min(...validated);
 }
 /**
  * Safe implementation of Math.max
  */
-function safeMax(...values) {
+function safeMax(...values: number[]): number {
     const validated = validateNumericArray(values, 'max');
     return Math.max(...validated);
 }
 /**
  * Safe implementation of Math.floor
  */
-function safeFloor(value) {
+function safeFloor(value: number): number {
     const validated = validateNumericInput(value, 'floor');
     return Math.floor(validated);
 }
 /**
  * Safe implementation of Math.ceil
  */
-function safeCeil(value) {
+function safeCeil(value: number): number {
     const validated = validateNumericInput(value, 'ceil');
     return Math.ceil(validated);
 }
 /**
  * Safe implementation of Math.round
  */
-function safeRound(value) {
+function safeRound(value: number): number {
     const validated = validateNumericInput(value, 'round');
     return Math.round(validated);
 }
 /**
  * Safe implementation of Math.abs
  */
-function safeAbs(value) {
+function safeAbs(value: number): number {
     const validated = validateNumericInput(value, 'abs');
     return Math.abs(validated);
 }
 /**
  * Safe implementation of Math.sign
  */
-function safeSign(value) {
+function safeSign(value: number): number {
     const validated = validateNumericInput(value, 'sign');
     return Math.sign(validated);
 }
 /**
  * Safe implementation of Math.trunc
  */
-function safeTrunc(value) {
+function safeTrunc(value: number): number {
     const validated = validateNumericInput(value, 'trunc');
     return Math.trunc(validated);
 }
@@ -205,7 +205,7 @@ export function createSafeMathContext() {
 /**
  * Validates that a Math function call is safe
  */
-export function validateMathFunctionCall(functionName) {
+export function validateMathFunctionCall(functionName: string): boolean {
     // Check if it's explicitly allowed
     if (SAFE_MATH_FUNCTIONS.includes(functionName)) {
         return true;
@@ -223,7 +223,7 @@ export function validateMathFunctionCall(functionName) {
 export class MathFunctionAuditor {
     static auditLog = [];
     static MAX_AUDIT_ENTRIES = 1000;
-    static logAttempt(functionName, allowed, reason, context) {
+    static logAttempt(functionName: string, allowed: boolean, reason: string, context?: string) {
         const audit = {
             functionName,
             allowed,
@@ -267,7 +267,7 @@ export class MathFunctionAuditor {
 /**
  * Enhanced safe Math context with auditing
  */
-export function createAuditedSafeMathContext(contextName = 'default') {
+export function createAuditedSafeMathContext(contextName: string = 'default') {
     const safeMath = createSafeMathContext();
     // Create a proxy to intercept all property access
     return new Proxy(safeMath, {
@@ -302,7 +302,7 @@ export function createAuditedSafeMathContext(contextName = 'default') {
 /**
  * Utility to check if a value is within safe numeric range
  */
-export function isInSafeRange(value) {
+export function isInSafeRange(value: unknown): boolean {
     return (typeof value === 'number' &&
         !isNaN(value) &&
         isFinite(value) &&
@@ -312,7 +312,7 @@ export function isInSafeRange(value) {
 /**
  * Utility to safely coerce a value to number
  */
-export function safeNumberCoercion(value) {
+export function safeNumberCoercion(value: unknown): number {
     // Strict number check
     if (typeof value === 'number') {
         return validateNumericInput(value, 'coercion');

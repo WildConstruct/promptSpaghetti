@@ -51,7 +51,7 @@ export interface ComparisonFilter {
     type: 'segment' | 'cohort' | 'timeRange' | 'geography' | 'device' | 'custom';
     field: string;
     operator: string;
-    value: any;
+    value: Error;
     description?: string;
 }
 export interface ComparisonResult {
@@ -184,8 +184,8 @@ export interface ComparisonExportData {
 export interface ComparisonVisualization {
     type: 'funnel_chart' | 'delta_chart' | 'significance_heatmap' | 'timeline_chart';
     title: string;
-    data: any;
-    configuration: any;
+    data: Record<string, unknown>;
+    configuration: unknown;
 }
 export interface ABTestIntegration {
     experimentId: string;

@@ -345,7 +345,7 @@ export const MonitoringDashboard: React.FC<MonitoringDashboardProps> = ({
   }, [currentLayout, fetchWidgetData]);
 
   // Handle widget actions
-  const handleWidgetAction = useCallback((widgetId: string, action: string, params?: any) => {
+  const handleWidgetAction = useCallback((widgetId: string, action: string, params?: Record<string, unknown>) => {
     console.log('Widget action:', { widgetId, action, params });
     
     switch (action) {

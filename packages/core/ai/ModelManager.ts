@@ -112,7 +112,7 @@ export class ModelCache {
       size: this.cache.size,
       maxSize: this.config.maxSize,
       hitRate: 0,
-      models: []
+      models: [] as Array<{ id: string; lastUsed: Date; accessCount: number; status: any }>
     };
 
     for (const [modelId, entry] of this.cache) {

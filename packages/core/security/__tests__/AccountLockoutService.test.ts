@@ -22,12 +22,13 @@ describe('AccountLockoutService', () => {
 
   beforeEach(() => {
     mockDate = new Date('2025-01-15T10:00:00Z');
-    jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
+    const OriginalDate = Date;
+    jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
     
     // Mock the Date constructor
-    const mockDateConstructor = jest.fn().mockImplementation((value?: any) => {
+    const mockDateConstructor = jest.fn<unknown[], unknown>().mockImplementation((value?: unknown) => {
       if (value !== undefined) {
-        return new Date(value);
+        return new OriginalDate(value);
       }
       return mockDate;
     });
@@ -233,7 +234,11 @@ describe('AccountLockoutService', () => {
       expect(firstResult.success).toBe(true);
 
       // Create another lockout for second test
-      const secondLockoutId = await service.createLockout('user456', 'test2@example.com', LockoutReason.SUSPICIOUS_ACTIVITY);
+      const secondLockoutId = await service.createLockout(
+        'user456',
+        'test2@example.com',
+        LockoutReason.SUSPICIOUS_ACTIVITY
+      );
 
       // Second use should fail
       const secondResult = await service.emergencyUnlock(secondLockoutId, adminId, emergencyCode, 'Test');
@@ -265,7 +270,13 @@ describe('AccountLockoutService', () => {
     });
 
     test('should approve unlock request', async () => {
-      const result = await service.approveUnlock(lockoutId, adminActionId, 'approver-admin', true, 'Approved after review');
+      const result = await service.approveUnlock(
+        lockoutId,
+        adminActionId,
+        'approver-admin',
+        true,
+        'Approved after review'
+      );
 
       expect(result.success).toBe(true);
       expect(result.message).toBe('Account successfully unlocked');
@@ -276,7 +287,13 @@ describe('AccountLockoutService', () => {
     });
 
     test('should deny unlock request', async () => {
-      const result = await service.approveUnlock(lockoutId, adminActionId, 'approver-admin', false, 'Insufficient evidence');
+      const result = await service.approveUnlock(
+        lockoutId,
+        adminActionId,
+        'approver-admin',
+        false,
+        'Insufficient evidence'
+      );
 
       expect(result.success).toBe(true);
       expect(result.message).toBe('Unlock request denied');
@@ -290,7 +307,11 @@ describe('AccountLockoutService', () => {
   describe('User and Admin Queries', () => {
     test('should retrieve user lockouts', async () => {
       const userId = 'user123';
-      const lockoutId1 = await service.createLockout(userId, 'test@example.com', LockoutReason.EXCESSIVE_FAILED_ATTEMPTS);
+      const lockoutId1 = await service.createLockout(
+        userId,
+        'test@example.com',
+        LockoutReason.EXCESSIVE_FAILED_ATTEMPTS
+      );
       const lockoutId2 = await service.createLockout(userId, 'test@example.com', LockoutReason.SUSPICIOUS_ACTIVITY);
 
       const userLockouts = service.getUserLockouts(userId);
@@ -311,8 +332,16 @@ describe('AccountLockoutService', () => {
     });
 
     test('should retrieve pending lockouts', async () => {
-      const lockoutId1 = await service.createLockout('user1', 'test1@example.com', LockoutReason.EXCESSIVE_FAILED_ATTEMPTS);
-      const lockoutId2 = await service.createLockout('user2', 'test2@example.com', LockoutReason.SECURITY_POLICY_VIOLATION);
+      const lockoutId1 = await service.createLockout(
+        'user1',
+        'test1@example.com',
+        LockoutReason.EXCESSIVE_FAILED_ATTEMPTS
+      );
+      const lockoutId2 = await service.createLockout(
+        'user2',
+        'test2@example.com',
+        LockoutReason.SECURITY_POLICY_VIOLATION
+      );
 
       // Create pending review for first lockout
       const unlockRequest: UnlockRequest = {
@@ -445,13 +474,25 @@ describe('AccountLockoutService', () => {
         approvalRequired: false
       };
 
-      await expect(service.adminUnlock('non-existent', unlockRequest)).rejects.toThrow('Lockout not found: non-existent');
+      await expect(
+        service.adminUnlock('non-existent',
+        unlockRequest
+      )).rejects.toThrow('Lockout not found: non-existent');
     });
 
     test('should throw error for non-existent admin action', async () => {
-      const lockoutId = await service.createLockout('user', 'test@example.com', LockoutReason.EXCESSIVE_FAILED_ATTEMPTS);
+      const lockoutId = await service.createLockout(
+        'user',
+        'test@example.com',
+        LockoutReason.EXCESSIVE_FAILED_ATTEMPTS
+      );
 
-      await expect(service.approveUnlock(lockoutId, 'non-existent-action', 'approver', true)).rejects.toThrow('Admin action not found: non-existent-action');
+      await expect(
+        service.approveUnlock(lockoutId,
+        'non-existent-action',
+        'approver',
+        true
+      )).rejects.toThrow('Admin action not found: non-existent-action');
     });
   });
 });

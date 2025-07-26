@@ -10,7 +10,7 @@
 import React, { useState, useMemo } from 'react';
 import { useSearch, SearchResult } from './SearchContext';
 
-interface SearchResultsProps<T = any> {
+interface SearchResultsProps<T = unknown> {
   renderItem?: (item: T, index: number) => React.ReactNode;
   renderEmptyState?: () => React.ReactNode;
   viewMode?: 'list' | 'grid' | 'table';
@@ -22,7 +22,7 @@ interface SearchResultsProps<T = any> {
   className?: string;
 }
 
-export const SearchResults = <T = any,>({
+export const SearchResults = <T = unknown,>({
   renderItem,
   renderEmptyState,
   viewMode: initialViewMode = 'list',

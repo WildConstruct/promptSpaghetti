@@ -1,8 +1,9 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { TextFieldEditor } from '../TextFieldEditor.js';
-import { SelectEditor } from '../SelectEditor.js';
-import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection.js';
-import { TemplateEditor } from '../TemplateEditor.js';
+import { TextFieldEditor } from '../TextFieldEditor';
+import { SelectEditor } from '../SelectEditor';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
+import { TemplateEditor } from '../TemplateEditor';
+import { useContextualHelp } from '../../Help';
 const OUTPUT_FORMATS = [
     { value: 'text', label: 'Plain Text' },
     { value: 'markdown', label: 'Markdown' },
@@ -40,7 +41,44 @@ export const OutputEditor = ({ _____nodeId, nodeData, onChange }) => {
         const newTransformations = transformations.filter((_, i) => i !== index);
         onChange({ transformations: newTransformations });
     };
-    return (_jsxs("div", { className: "output-editor", children: [_jsxs(ProgressiveDisclosureSection, { title: "Essential Settings", level: "basic", description: "Core output configuration for prompt generation", defaultExpanded: true, priority: "critical", fieldName: "template", children: [_jsx(TextFieldEditor, { label: "Output Name", value: label, fieldKey: "label", zodType: null, onChange: (value) => handleFieldChange('label', value), placeholder: "Enter a name for this output..." }), _jsxs("div", { style: { marginBottom: 16 }, children: [_jsx("label", { style: {
+    // Contextual help for the output name field
+    const { wrapWithHelp: wrapNameHelp } = useContextualHelp({
+        id: 'output-node-name',
+        title: 'Output Name',
+        description: 'Give your output node a descriptive name to identify its purpose in your workflow.',
+        category: 'basic',
+        trigger: 'focus',
+        position: 'right',
+        showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
+        examples: ['Final Script', 'Character Description', 'Scene Summary'],
+        priority: 'high'
+    });
+    // Contextual help for template editor
+    const { wrapWithHelp: wrapTemplateHelp } = useContextualHelp({
+        id: 'output-template',
+        title: 'Output Template',
+        description: 'Define the final format of your generated content. Use {variable} syntax to insert dynamic content from connected nodes.',
+        category: 'basic',
+        trigger: 'hover',
+        position: 'top',
+        showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
+        examples: ['Final result: {content}', '{character} says: "{dialogue}"'],
+        relatedFeatures: ['variable-system', 'node-connections'],
+        priority: 'high'
+    });
+    // Contextual help for format selection
+    const { wrapWithHelp: wrapFormatHelp } = useContextualHelp({
+        id: 'output-format',
+        title: 'Output Format',
+        description: 'Choose how the final output should be formatted for export or display.',
+        category: 'advanced',
+        trigger: 'hover',
+        position: 'right',
+        showOnDisclosureLevel: ['advanced', 'debug'],
+        examples: ['Plain Text: simple text', 'Markdown: formatted text', 'JSON: structured data'],
+        priority: 'medium'
+    });
+    return (_jsxs("div", { className: "output-editor", children: [_jsxs(ProgressiveDisclosureSection, { title: "Essential Settings", level: "basic", description: "Core output configuration for prompt generation", defaultExpanded: true, priority: "critical", fieldName: "template", children: [wrapNameHelp(_jsx(TextFieldEditor, { label: "Output Name", value: label, fieldKey: "label", zodType: null, onChange: (value) => handleFieldChange('label', value), placeholder: "Enter a name for this output..." })), wrapTemplateHelp(_jsxs("div", { style: { marginBottom: 16 }, children: [_jsx("label", { style: {
                                     display: 'block',
                                     fontSize: 12,
                                     fontWeight: 500,
@@ -52,7 +90,7 @@ export const OutputEditor = ({ _____nodeId, nodeData, onChange }) => {
                                     fontSize: 10,
                                     color: '#a0aec0',
                                     marginTop: 4
-                                }, children: ["Use ", '{variable}', " syntax to create dynamic content. Variables will appear as connection ports."] })] })] }), _jsxs(ProgressiveDisclosureSection, { title: "Output Format & Metadata", level: "advanced", description: "Control output format, destination, and metadata inclusion", defaultExpanded: false, priority: "important", fieldName: "format", children: [_jsx(SelectEditor, { label: "Output Format", value: format, fieldKey: "format", options: OUTPUT_FORMATS, zodType: null, onChange: (value) => handleFieldChange('format', value) }), _jsx(SelectEditor, { label: "Destination", value: destination, fieldKey: "destination", options: OUTPUT_DESTINATIONS, zodType: null, onChange: (value) => handleFieldChange('destination', value) }), _jsxs("div", { style: { marginBottom: 16 }, children: [_jsxs("label", { style: {
+                                }, children: ["Use ", '{variable}', " syntax to create dynamic content. Variables will appear as connection ports."] })] }))] }), _jsxs(ProgressiveDisclosureSection, { title: "Output Format & Metadata", level: "advanced", description: "Control output format, destination, and metadata inclusion", defaultExpanded: false, priority: "important", fieldName: "format", children: [wrapFormatHelp(_jsx(SelectEditor, { label: "Output Format", value: format, fieldKey: "format", options: OUTPUT_FORMATS, zodType: null, onChange: (value) => handleFieldChange('format', value) })), _jsx(SelectEditor, { label: "Destination", value: destination, fieldKey: "destination", options: OUTPUT_DESTINATIONS, zodType: null, onChange: (value) => handleFieldChange('destination', value) }), _jsxs("div", { style: { marginBottom: 16 }, children: [_jsxs("label", { style: {
                                     display: 'flex',
                                     alignItems: 'center',
                                     gap: 8,

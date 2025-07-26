@@ -6,11 +6,11 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * creation workflows, and advanced platform capabilities.
  */
 import { useState, useEffect, useRef } from 'react';
-import { Card, CardContent } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Progress } from '../ui/Progress.js';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/Dialog.js';
+import { Card, CardContent } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Progress } from '../ui/Progress';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/Dialog';
 import { Play, Pause, X, CheckCircle, Circle, BookOpen, Video, MousePointer, Lightbulb, Target, ArrowRight, ArrowLeft, RotateCcw, Volume2, VolumeX, Settings, Maximize, Minimize, Download, BookmarkPlus, Star, Timer, Users, Award, Zap } from 'lucide-react';
 export const TutorialPlayer = ({ tutorial, isOpen, onClose, onComplete, onStepComplete, autoPlay = false, showTranscript = false, enableInteractions = true, className = '' }) => {
     const [currentStepIndex, setCurrentStepIndex] = useState(0);

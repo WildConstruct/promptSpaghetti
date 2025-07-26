@@ -39,14 +39,14 @@ export interface EventDefinition {
     description: string;
     category: string;
     properties: PropertyDefinition[];
-    examples: any[];
+    examples: unknown[];
 }
 export interface PropertyDefinition {
     path: string;
     name: string;
     type: 'string' | 'number' | 'boolean' | 'date' | 'array' | 'object';
     description: string;
-    possibleValues?: any[];
+    possibleValues?: unknown[];
     validation?: PropertyValidation;
 }
 export interface PropertyValidation {
@@ -67,7 +67,7 @@ export interface ValidationError {
 export interface DragItem {
     type: 'step' | 'condition' | 'path';
     id: string;
-    data: any;
+    data: Record<string, unknown>;
 }
 /**
  * Main Funnel Configuration Component

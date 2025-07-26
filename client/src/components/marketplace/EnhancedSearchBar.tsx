@@ -11,15 +11,7 @@ interface EnhancedSearchBarProps {
   className?: string;
 }
 
-export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
-  value,
-  onChange,
-  onSubmit,
-  placeholder = 'Search templates, categories, or tags...',
-  className = ''
-}) => {
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
+export   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -261,7 +253,7 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
 };
 
 // Debounce utility function
-function debounce<T extends (...args: unknown[]) => any>(
+function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {

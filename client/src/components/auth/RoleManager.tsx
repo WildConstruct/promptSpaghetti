@@ -1,7 +1,7 @@
 // Epic 11.3 Role Manager Component
 // Administrative interface for creating, editing, and managing roles and permissions
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronDown, ChevronRight, Edit, Trash2, Plus, Users, Shield, Settings, Filter, Search } from 'lucide-react';
 
 interface Permission {
@@ -10,7 +10,7 @@ interface Permission {
   resource: string;
   action: string;
   scope: 'global' | 'organization' | 'team' | 'own';
-  conditions?: Record<string, any>;
+  conditions?: Record<string, unknown>;
   createdAt: string;
 }
 
@@ -38,7 +38,7 @@ interface CreateRoleData {
     resource: string;
     action: string;
     scope: 'global' | 'organization' | 'team' | 'own';
-    conditions?: Record<string, any>;
+    conditions?: Record<string, unknown>;
   }[];
 }
 
@@ -93,9 +93,9 @@ export const RoleManager: React.FC = () => {
 
   useEffect(() => {
     loadData();
-  }, [scopeFilter, searchQuery, organizationFilter]);
+  }, [scopeFilter, searchQuery, organizationFilter, loadData]);
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       const [rolesResponse, statsResponse] = await Promise.all([
         fetch('/api/auth/rbac/roles?' + new URLSearchParams({
@@ -124,7 +124,7 @@ export const RoleManager: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [scopeFilter, searchQuery, organizationFilter]);
 
   const loadRoleDetails = async (roleId: string) => {
     try {
@@ -521,7 +521,7 @@ export const RoleManager: React.FC = () => {
                 </label>
                 <select
                   value={formData.scope}
-                  onChange={(e) => setFormData({ ...formData, scope: e.target.value as any })}
+                  onChange={(e) => setFormData({ ...formData, scope: e.target.value as 'global' | 'organization' | 'team' | 'own' })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value="global">Global</option>

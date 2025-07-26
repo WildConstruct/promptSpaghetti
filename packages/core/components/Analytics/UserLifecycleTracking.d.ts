@@ -63,7 +63,7 @@ export interface StageCondition {
     type: ConditionType;
     field: string;
     operator: ConditionOperator;
-    value: any;
+    value: Error;
     weight: number;
     required: boolean;
 }
@@ -209,7 +209,7 @@ export type TriggerType = 'behavioral_milestone' | 'engagement_threshold' | 'tim
 export interface TriggerCondition {
     field: string;
     operator: ConditionOperator;
-    value: any;
+    value: Error;
     persistence: number;
 }
 export interface TransitionBlocker {
@@ -264,7 +264,7 @@ export interface InputTransformation {
 }
 export type TransformationMethod = 'none' | 'logarithmic' | 'exponential' | 'polynomial' | 'threshold' | 'binning';
 export interface TransformationParameters {
-    [key: string]: any;
+    [key: string]: unknown;
 }
 export type WeightingScheme = 'equal' | 'performance_based' | 'dynamic' | 'user_defined';
 export interface HealthBenchmark {
@@ -358,7 +358,7 @@ export interface DeliveryChannel {
 export type ChannelType = 'email' | 'push_notification' | 'in_app' | 'sms' | 'web_notification' | 'phone_call' | 'chatbot' | 'human_outreach';
 export interface ChannelConstraint {
     constraint: string;
-    value: any;
+    value: Error;
     impact: number;
 }
 export interface DeliveryFrequency {
@@ -473,7 +473,7 @@ export interface DynamicSource {
 }
 export type SourceType = 'api' | 'database' | 'file' | 'real_time_feed';
 export interface SourceParameters {
-    [key: string]: any;
+    [key: string]: unknown;
 }
 export interface CachingStrategy {
     enabled: boolean;
@@ -515,7 +515,7 @@ export interface TimingLearning {
 }
 export interface TimingConstraint {
     constraint: string;
-    value: any;
+    value: Error;
     flexibility: number;
 }
 export interface InterventionPersonalization {
@@ -667,7 +667,7 @@ export interface CohortRule {
     ruleId: string;
     field: string;
     operator: ConditionOperator;
-    value: any;
+    value: Error;
     weight: number;
 }
 export interface CohortTimeframe {
@@ -700,7 +700,7 @@ export interface CohortCharacteristics {
     performance: PerformanceProfile;
 }
 export interface DemographicProfile {
-    [key: string]: any;
+    [key: string]: unknown;
 }
 export interface BehaviorProfile {
     primaryBehaviors: string[];
@@ -1134,7 +1134,7 @@ export interface ExportDestination {
 }
 export type DestinationType = 'file_system' | 's3' | 'gcs' | 'azure_blob' | 'ftp' | 'sftp' | 'database';
 export interface DestinationConfiguration {
-    [key: string]: any;
+    [key: string]: unknown;
 }
 export interface DestinationCredentials {
     [key: string]: string;
@@ -1148,7 +1148,7 @@ export interface ExportContentSettings {
 export interface ExportFilter {
     field: string;
     operator: ConditionOperator;
-    value: any;
+    value: Error;
 }
 export interface ExportAggregation {
     field: string;
@@ -1175,7 +1175,7 @@ export interface ImportSource {
     authentication: SourceAuthentication;
 }
 export interface SourceConfiguration {
-    [key: string]: any;
+    [key: string]: unknown;
 }
 export interface SourceAuthentication {
     type: AuthenticationType;
@@ -1202,12 +1202,12 @@ export interface ValidationRule {
     severity: ValidationSeverity;
 }
 export interface ValidationParameters {
-    [key: string]: any;
+    [key: string]: unknown;
 }
 export type ValidationSeverity = 'warning' | 'error' | 'critical';
 export interface ValidationErrorHandling {
     strategy: ErrorHandlingStrategy;
-    fallbackValue?: any;
+    fallbackValue?: unknown;
     skipRecord: boolean;
 }
 export type ErrorHandlingStrategy = 'fail' | 'skip' | 'default' | 'transform';
@@ -1224,7 +1224,7 @@ export interface TransformationFunction {
 export type TransformationLanguage = 'javascript' | 'python' | 'sql' | 'regex';
 export interface DefaultValue {
     field: string;
-    value: any;
+    value: Error;
     condition?: string;
 }
 export interface ImportValidation {
@@ -1313,7 +1313,7 @@ export interface ContextEvent {
 }
 export interface ContextCondition {
     condition: string;
-    value: any;
+    value: Error;
     met: boolean;
     confidence: number;
 }
@@ -1873,10 +1873,10 @@ export interface LifecycleInsight {
         successMetrics: string[];
     }>;
     data: {
-        charts: any[];
-        tables: any[];
-        statistics: any[];
-        comparisons: any[];
+        charts: unknown[];
+        tables: unknown[];
+        statistics: unknown[];
+        comparisons: unknown[];
     };
 }
 export interface LifecycleExportMetadata {

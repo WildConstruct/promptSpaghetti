@@ -6,7 +6,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * knowledge base integration, and real-time analytics.
  */
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { HelpCategory, HelpPriority, HelpRequestStatus } from '../../services/Epic16HelpRequestService.js';
+import { HelpCategory, HelpPriority, HelpRequestStatus } from '../../services/Epic16HelpRequestService';
 export const HelpRequestDashboard = ({ helpService, userId, userRole, onRequestSelect }) => {
     // State management
     const [requests, setRequests] = useState([]);

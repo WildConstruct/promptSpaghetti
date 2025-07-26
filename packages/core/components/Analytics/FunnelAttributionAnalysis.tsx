@@ -489,20 +489,7 @@ const defaultAttributionConfig: AttributionConfiguration = {
   customAttribution: []
 };
 
-export const FunnelAttributionAnalysis: React.FC<FunnelAttributionAnalysisProps> = ({
-  funnelDefinition,
-  analyticsInfrastructure,
-  timeRange,
-  attributionConfig = defaultAttributionConfig,
-  channels = [],
-  segments = [],
-  cohorts = [],
-  comparisonMode = 'channel_comparison',
-  onInsightGenerated,
-  onExport
-}) => {
-  const [attributionData, setAttributionData] = useState<AttributionAnalysisData | null>(null);
-  const [loading, setLoading] = useState(true);
+export   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedModel, setSelectedModel] = useState<AttributionModel>('linear');
   const [activeTab, setActiveTab] = useState<'channels' | 'journeys' | 'models' | 'insights'>('channels');
@@ -558,7 +545,7 @@ export const FunnelAttributionAnalysis: React.FC<FunnelAttributionAnalysisProps>
 
   // Process attribution data
   const processAttributionData = async (
-    rawData: any,
+    rawData: unknown,
     config: AttributionConfiguration,
     channelList: MarketingChannel[]
   ): Promise<AttributionAnalysisData> => {
@@ -626,7 +613,12 @@ export const FunnelAttributionAnalysis: React.FC<FunnelAttributionAnalysisProps>
         conversionValue: Math.floor(Math.random() * 5000 + 1000)
       },
       journeyRole: {
-        primaryRole: (['discovery', 'consideration', 'conversion', 'retention'] as const)[Math.floor(Math.random() * 4)],
+        primaryRole: (
+          ['discovery',
+          'consideration',
+          'conversion',
+          'retention'] as const
+        )[Math.floor(Math.random() * 4)],
         roleDistribution: {
           discovery: Math.random() * 0.4,
           consideration: Math.random() * 0.3,

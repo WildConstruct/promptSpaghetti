@@ -90,7 +90,7 @@ export interface RestoreRequest {
     include_audit_logs: boolean;
     include_marketplace_data: boolean;
     specific_tables?: string[];
-    where_conditions?: Record<string, any>;
+    where_conditions?: Record<string, unknown>;
   };
   
   restore_options: {
@@ -180,9 +180,6 @@ export interface RestorePreview {
   blockers: string[];
 }
 
-const ___RestoreInterface: React.FC = () => {
-  // State management
-  const [recoveryPoints, setRecoveryPoints] = useState<AdminRestorePoint[]>([]);
   const [selectedPoint, setSelectedPoint] = useState<AdminRestorePoint | null>(null);
   const [restorePreview, setRestorePreview] = useState<RestorePreview | null>(null);
   const [restoreRequest, setRestoreRequest] = useState<Partial<RestoreRequest>>({
@@ -210,7 +207,7 @@ const ___RestoreInterface: React.FC = () => {
     }
   });
   const [activeExecutions, setActiveExecutions] = useState<RestoreExecution[]>([]);
-  const [___loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('select');
 
   // Load recovery points
@@ -326,9 +323,7 @@ const ___RestoreInterface: React.FC = () => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
-  const ___formatDuration = (totalSeconds: number) => {
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
     
     if (hours > 0) return `${hours}h ${minutes}m`;
@@ -500,7 +495,7 @@ const ___RestoreInterface: React.FC = () => {
                         checked={restoreRequest.restore_type === option.value}
                         onChange={(e) => setRestoreRequest(prev => ({ 
                           ...prev, 
-                          restore_type: e.target.value as any 
+                          restore_type: e.target.value as 'full_system' | 'admin_configs' | 'user_data' | 'selective' 
                         }))}
                       />
                       <div className="radio-content">

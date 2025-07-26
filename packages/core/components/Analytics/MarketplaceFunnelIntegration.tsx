@@ -606,19 +606,7 @@ const defaultWidgetConfig: WidgetConfiguration = {
   customizations: []
 };
 
-export const MarketplaceFunnelIntegration: React.FC<MarketplaceFunnelIntegrationProps> = ({
-  funnelDefinition,
-  analyticsInfrastructure,
-  marketplaceContext,
-  integrationMode = 'embedded_widget',
-  widgetConfig = defaultWidgetConfig,
-  userRole = 'viewer',
-  onOptimizationAction,
-  onInsightInteraction,
-  onExport
-}) => {
-  const [integrationData, setIntegrationData] = useState<MarketplaceIntegrationData | null>(null);
-  const [loading, setLoading] = useState(true);
+export   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeWidget, setActiveWidget] = useState<WidgetType>(widgetConfig.widgets[0]);
   const [refreshing, setRefreshing] = useState(false);
@@ -645,11 +633,19 @@ export const MarketplaceFunnelIntegration: React.FC<MarketplaceFunnelIntegration
       };
 
       if (marketplaceContext.templateContext) {
-        query.filters?.push({ field: 'template_id', operator: 'eq', value: marketplaceContext.templateContext.templateId });
+        query.filters?.push(
+          { field: 'template_id',
+          operator: 'eq',
+          value: marketplaceContext.templateContext.templateId }
+        );
       }
 
       if (marketplaceContext.creatorContext) {
-        query.filters?.push({ field: 'creator_id', operator: 'eq', value: marketplaceContext.creatorContext.creatorId });
+        query.filters?.push(
+          { field: 'creator_id',
+          operator: 'eq',
+          value: marketplaceContext.creatorContext.creatorId }
+        );
       }
 
       const result = await analyticsInfrastructure.executeQuery(query);
@@ -674,7 +670,7 @@ export const MarketplaceFunnelIntegration: React.FC<MarketplaceFunnelIntegration
 
   // Process integration data
   const processIntegrationData = async (
-    rawData: any,
+    rawData: unknown,
     context: MarketplaceContext,
     role: UserRole
   ): Promise<MarketplaceIntegrationData> => {
@@ -1207,7 +1203,12 @@ export const MarketplaceFunnelIntegration: React.FC<MarketplaceFunnelIntegration
   }, [marketplaceContext, onOptimizationAction]);
 
   // Handle insight interaction
-  const handleInsightInteraction = useCallback((interactionType: string, insightId: string, context: Record<string, any> = {}) => {
+  const handleInsightInteraction = useCallback(
+    (interactionType: string,
+    insightId: string,
+    context: Record<string,
+    any> = {}
+  ) => {
     const interaction: InsightInteraction = {
       interactionType: interactionType as any,
       insightId,

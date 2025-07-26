@@ -187,14 +187,14 @@ describe('TrustedDeviceManager', () => {
     jest.spyOn(mockFingerprintService, 'removeAllListeners');
 
     // Set default mock implementations
-    mockFingerprintService.generateFingerprint.mockResolvedValue(testFingerprint as unknown as unknown as unknown);
+    mockFingerprintService.generateFingerprint.mockResolvedValue(testFingerprint as unknown as unknown as unknown as unknown);
     mockFingerprintService.assessRisk.mockReturnValue({
       deviceId: testFingerprint.id,
       overallRisk: RiskLevel.LOW,
       riskScore: 10,
       factors: [],
       recommendations: [],
-      timestamp: new Date()
+      timestamp: new Date( as unknown)
     });
 
     manager = new TrustedDeviceManager(mockFingerprintService, {
@@ -464,7 +464,7 @@ describe('TrustedDeviceManager', () => {
         riskScore: 85,
         factors: [],
         recommendations: [],
-        timestamp: new Date()
+        timestamp: new Date( as unknown)
       });
 
       // Register and verify a device
@@ -672,7 +672,7 @@ describe('TrustedDeviceManager', () => {
         }
       };
 
-      mockFingerprintService.generateFingerprint.mockResolvedValue(mobileFingerprint as unknown as unknown as unknown);
+      mockFingerprintService.generateFingerprint.mockResolvedValue(mobileFingerprint as unknown as unknown as unknown as unknown);
 
       const request: DeviceVerificationRequest = {
         userId: testUserId,
@@ -701,7 +701,7 @@ describe('TrustedDeviceManager', () => {
         }
       };
 
-      mockFingerprintService.generateFingerprint.mockResolvedValue(tabletFingerprint as unknown as unknown as unknown);
+      mockFingerprintService.generateFingerprint.mockResolvedValue(tabletFingerprint as unknown as unknown as unknown as unknown);
 
       const request: DeviceVerificationRequest = {
         userId: testUserId,

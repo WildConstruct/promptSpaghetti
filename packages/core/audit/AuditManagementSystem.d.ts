@@ -187,8 +187,8 @@ export declare const AuditQuerySchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     limit: number;
     page: number;
-    sort_order: "asc" | "desc";
     sort_field: string;
+    sort_order: "asc" | "desc";
     start_date?: Date | undefined;
     end_date?: Date | undefined;
     user_id?: string | undefined;
@@ -206,7 +206,6 @@ export declare const AuditQuerySchema: z.ZodObject<{
     start_date?: Date | undefined;
     end_date?: Date | undefined;
     user_id?: string | undefined;
-    sort_order?: "asc" | "desc" | undefined;
     severities?: AuditSeverity[] | undefined;
     compliance_frameworks?: ComplianceFramework[] | undefined;
     statuses?: AuditStatus[] | undefined;
@@ -216,6 +215,7 @@ export declare const AuditQuerySchema: z.ZodObject<{
     min_risk_score?: number | undefined;
     max_risk_score?: number | undefined;
     sort_field?: string | undefined;
+    sort_order?: "asc" | "desc" | undefined;
 }>;
 export type AuditQuery = z.infer<typeof AuditQuerySchema>;
 export declare const AuditAnalyticsSchema: z.ZodObject<{
@@ -241,8 +241,8 @@ export declare const AuditAnalyticsSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         limit: number;
         page: number;
-        sort_order: "asc" | "desc";
         sort_field: string;
+        sort_order: "asc" | "desc";
         start_date?: Date | undefined;
         end_date?: Date | undefined;
         user_id?: string | undefined;
@@ -260,7 +260,6 @@ export declare const AuditAnalyticsSchema: z.ZodObject<{
         start_date?: Date | undefined;
         end_date?: Date | undefined;
         user_id?: string | undefined;
-        sort_order?: "asc" | "desc" | undefined;
         severities?: AuditSeverity[] | undefined;
         compliance_frameworks?: ComplianceFramework[] | undefined;
         statuses?: AuditStatus[] | undefined;
@@ -270,6 +269,7 @@ export declare const AuditAnalyticsSchema: z.ZodObject<{
         min_risk_score?: number | undefined;
         max_risk_score?: number | undefined;
         sort_field?: string | undefined;
+        sort_order?: "asc" | "desc" | undefined;
     }>>;
 }, "strip", z.ZodTypeAny, {
     metrics: ("event_count" | "unique_users" | "risk_score_average" | "severity_distribution" | "compliance_violations" | "geographic_distribution" | "system_component_activity")[];
@@ -277,8 +277,8 @@ export declare const AuditAnalyticsSchema: z.ZodObject<{
     filters?: {
         limit: number;
         page: number;
-        sort_order: "asc" | "desc";
         sort_field: string;
+        sort_order: "asc" | "desc";
         start_date?: Date | undefined;
         end_date?: Date | undefined;
         user_id?: string | undefined;
@@ -301,7 +301,6 @@ export declare const AuditAnalyticsSchema: z.ZodObject<{
         start_date?: Date | undefined;
         end_date?: Date | undefined;
         user_id?: string | undefined;
-        sort_order?: "asc" | "desc" | undefined;
         severities?: AuditSeverity[] | undefined;
         compliance_frameworks?: ComplianceFramework[] | undefined;
         statuses?: AuditStatus[] | undefined;
@@ -311,6 +310,7 @@ export declare const AuditAnalyticsSchema: z.ZodObject<{
         min_risk_score?: number | undefined;
         max_risk_score?: number | undefined;
         sort_field?: string | undefined;
+        sort_order?: "asc" | "desc" | undefined;
     } | undefined;
     group_by?: string[] | undefined;
 }>;
@@ -336,7 +336,7 @@ export declare class AuditManagementSystem {
         totalCount: number;
         page: number;
         totalPages: number;
-        analytics: any;
+        analytics: unknown;
     }>;
     /**
      * Generate comprehensive audit analytics and insights
@@ -400,10 +400,7 @@ export declare class AuditManagementSystem {
     private deleteEvent;
     private archiveEvent;
 }
-export declare const auditManagementSystem: AuditManagementSystem;
-export declare const createAuditEvent: (eventData: Omit<AuditEvent, "id" | "timestamp" | "chain_hash">) => {
-    id: string;
-    description: string;
+export declare     description: string;
     status: AuditStatus;
     category: string;
     tags: string[];
@@ -447,7 +444,7 @@ export declare const queryAuditEvents: (query: AuditQuery) => Promise<{
     totalCount: number;
     page: number;
     totalPages: number;
-    analytics: any;
+    analytics: unknown;
 }>;
 export declare const generateAuditAnalytics: (request: AuditAnalytics) => any;
 export default AuditManagementSystem;

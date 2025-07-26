@@ -203,7 +203,7 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
           <div className="filter-section">
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
+              onChange={(e) => setSortBy(e.target.value as 'name' | 'created_at' | 'updated_at')}
               className="sort-select"
             >
               <option value="updated_at">Sort by Updated</option>

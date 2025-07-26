@@ -4,7 +4,7 @@
  *
  * Concrete implementation of BaseAIModel for OpenAI GPT models
  */
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel.js';
+import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
 export class OpenAIAdapter extends BaseAIModel {
     config;
     apiEndpoint;

@@ -123,7 +123,7 @@ export function createTimeoutMiddleware(config?: Partial<TimeoutMiddlewareConfig
   
   return async function timeoutMiddleware(
     fastify: FastifyInstance,
-    options: any
+    options: Record<string, unknown>
   ) {
     const timeoutManager = getTimeoutManager();
 
@@ -159,8 +159,7 @@ export function createTimeoutMiddleware(config?: Partial<TimeoutMiddlewareConfig
         const success = reply.statusCode < 400;
         
         // Record metrics in timeout manager
-        const metricKey = `${request.timeoutContext.operationType}.${request.timeoutContext.operationSubtype}`;
-        
+                
         // We'll track this through the timeout manager's internal metrics
         // when operations are executed through executeWithTimeout
         
@@ -323,7 +322,7 @@ export function withTimeout<T extends any[], R>(
   operationType: string,
   operationSubtype: string
 ) {
-  return async function(this: any, ...args: T): Promise<R> {
+  return async function(this: unknown, ...args: T): Promise<R> {
     const request = args[0] as FastifyRequest;
     
     if (request.timeoutContext) {

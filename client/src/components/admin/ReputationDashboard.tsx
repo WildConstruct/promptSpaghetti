@@ -9,7 +9,7 @@
  * Task: E17-1753114397412-B12019 - Add reputation system
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
@@ -119,11 +119,7 @@ interface ReputationDashboardProps {
   refreshInterval?: number;
 }
 
-export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({ 
-  className, 
-  refreshInterval = 300000 
-}) => {
-  const [loading, setLoading] = useState(true);
+export   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
   
@@ -138,13 +134,21 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
   });
   
   // Selected user for detailed view
-  const [___selectedUser, setSelectedUser] = useState<string | null>(null);
+  const [_selectedUser, setSelectedUser] = useState<string | null>(null);
   
   // Leaderboard data
-  const [leaderboard, setLeaderboard] = useState<any[]>([]);
+  const [leaderboard, setLeaderboard] = useState<Array<{
+    userId: string;
+    username: string;
+    rank: number;
+    reputationLevel: string;
+    achievementCount: number;
+    verificationLevel: string;
+    overallTrustScore: number;
+  }>>([]);
 
   // Fetch dashboard data
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     try {
       const response = await fetch('/api/admin/reputation/dashboard');
       const result = await response.json();
@@ -161,10 +165,10 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   // Search users
-  const searchUsers = async () => {
+  const searchUsers = useCallback(async () => {
     try {
       const params = new URLSearchParams();
       if (searchQuery) params.append('search', searchQuery);
@@ -182,10 +186,10 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
     } catch (err) {
       console.error('Error searching users:', err);
     }
-  };
+  }, [searchQuery, searchFilters]);
 
   // Fetch leaderboard
-  const fetchLeaderboard = async () => {
+  const fetchLeaderboard = useCallback(async () => {
     try {
       const response = await fetch('/api/admin/reputation/leaderboard?limit=10');
       const result = await response.json();
@@ -196,10 +200,10 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
     } catch (err) {
       console.error('Error fetching leaderboard:', err);
     }
-  };
+  }, []);
 
   // Handle user flag/unflag
-  const handleFlagUser = async (userId: string, reason: string) => {
+  const handleFlagUser = useCallback(async (userId: string, reason: string) => {
     try {
       const response = await fetch(`/api/admin/reputation/users/${userId}/flag`, {
         method: 'POST',
@@ -215,10 +219,10 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
     } catch (err) {
       console.error('Error flagging user:', err);
     }
-  };
+  }, [searchUsers, fetchDashboardData]);
 
   // Handle reputation recalculation
-  const handleRecalculateReputation = async (userId: string) => {
+  const handleRecalculateReputation = useCallback(async (userId: string) => {
     try {
       const response = await fetch(`/api/admin/reputation/users/${userId}/recalculate`, {
         method: 'POST'
@@ -232,10 +236,10 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
     } catch (err) {
       console.error('Error recalculating reputation:', err);
     }
-  };
+  }, [searchUsers, fetchDashboardData]);
 
   // Handle alert acknowledgment
-  const handleAcknowledgeAlert = async (alertId: string) => {
+  const handleAcknowledgeAlert = useCallback(async (alertId: string) => {
     try {
       const response = await fetch(`/api/admin/reputation/alerts/${alertId}/assign`, {
         method: 'POST',
@@ -249,7 +253,7 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
     } catch (err) {
       console.error('Error acknowledging alert:', err);
     }
-  };
+  }, [fetchDashboardData]);
 
   // Setup periodic refresh
   useEffect(() => {
@@ -258,14 +262,14 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
     
     const interval = setInterval(fetchDashboardData, refreshInterval);
     return () => clearInterval(interval);
-  }, [refreshInterval]);
+  }, [refreshInterval, fetchDashboardData, fetchLeaderboard]);
 
   // Search users when filters change
   useEffect(() => {
     if (searchQuery || Object.values(searchFilters).some(v => v)) {
       searchUsers();
     }
-  }, [searchQuery, searchFilters]);
+  }, [searchQuery, searchFilters, searchUsers]);
 
   if (loading) {
     return (

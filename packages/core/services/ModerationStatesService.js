@@ -14,19 +14,19 @@
  * advanced workflows, automation, and compliance tracking.
  */
 export class ModerationStatesService {
-    static instance;
-    states = new Map();
-    items = new Map();
-    transitions = new Map();
-    autoActions = new Map();
-    listeners = new Map();
-    processor = null;
+    static instance: ModerationStatesService;
+    states: Map<string, any> = new Map();
+    items: Map<string, any> = new Map();
+    transitions: Map<string, any> = new Map();
+    autoActions: Map<string, any> = new Map();
+    listeners: Map<string, any> = new Map();
+    processor: any = null;
     constructor() {
         this.initializeDefaultStates();
         this.initializeDefaultTransitions();
         this.startAutomationProcessor();
     }
-    static getInstance() {
+    static getInstance(): ModerationStatesService {
         if (!ModerationStatesService.instance) {
             ModerationStatesService.instance = new ModerationStatesService();
         }
@@ -35,7 +35,7 @@ export class ModerationStatesService {
     /**
      * State Management
      */
-    async createState(stateData, createdBy) {
+    async createState(stateData: any, createdBy: string): Promise<any> {
         const state = {
             ...stateData,
             id: this.generateStateId(),
@@ -47,7 +47,7 @@ export class ModerationStatesService {
         this.notifyListeners('state_created', state);
         return state;
     }
-    async updateState(stateId, updates, updatedBy) {
+    async updateState(stateId: string, updates: any, updatedBy: string): Promise<any> {
         const state = this.states.get(stateId);
         if (!state)
             return null;

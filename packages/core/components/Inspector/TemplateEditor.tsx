@@ -30,30 +30,10 @@ export interface TemplateEditorProps {
   className?: string;
 }
 
-export const TemplateEditor: React.FC<TemplateEditorProps> = ({
-  value,
-  onChange,
-  onVariablesChange,
-  variableValues = {},
-  nodeType,
-  existingVariables = [],
-  placeholder = 'Enter your template...',
-  disabled = false,
-  showPreview = false,
-  showRealTimePreview = false,
-  autoComplete = true,
-  showCategoryFilters = false,
-  maxSuggestions = 10,
-  className = ''
-}) => {
-  const [isFocused, setIsFocused] = useState(false);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [_____currentSuggestion, _____setCurrentSuggestion] = useState('');
+export   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestionIndex, setSuggestionIndex] = useState(-1);
   const [cursorPosition, setCursorPosition] = useState(0);
-  
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [_____suggestionScrollIndex, _____setSuggestionScrollIndex] = useState(0);
   
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);

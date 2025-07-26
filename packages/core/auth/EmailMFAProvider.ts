@@ -95,8 +95,8 @@ interface EmailMFAStorage {
   updateRateLimitState(userId: string, action: string, count: number): Promise<void>;
   
   // Audit logging
-  logVerificationAttempt(attempt: any): Promise<void>;
-  logSecurityEvent(event: any): Promise<void>;
+  logVerificationAttempt(attempt: unknown): Promise<void>;
+  logSecurityEvent(event: unknown): Promise<void>;
 }
 
 // ========================================
@@ -650,7 +650,7 @@ export class EmailMFAProvider {
     return verification.expiresAt < new Date();
   }
 
-  private async logVerificationAttempt(attempt: any): Promise<void> {
+  private async logVerificationAttempt(attempt: unknown): Promise<void> {
     await this.storage.logVerificationAttempt({
       id: crypto.randomUUID(),
       ...attempt,

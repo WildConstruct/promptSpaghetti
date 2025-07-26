@@ -22,7 +22,7 @@ export interface TargetingCondition {
     type: 'attribute' | 'behavior' | 'segment' | 'geography' | 'device' | 'time';
     field: string;
     operator: string;
-    value: any;
+    value: Error;
     logicalOperator?: 'AND' | 'OR' | 'NOT';
     weight?: number;
     isEnabled: boolean;
@@ -75,11 +75,7 @@ interface AudienceSelectorProps {
     showAnalytics?: boolean;
     compact?: boolean;
 }
-export declare const AudienceSelector: React.FC<AudienceSelectorProps>;
-interface AdvancedConditionBuilderProps {
-    conditions: TargetingCondition[];
-    onChange: (conditions: TargetingCondition[]) => void;
-    availableFields: Array<{
+export declare     availableFields: Array<{
         key: string;
         label: string;
         type: string;
@@ -89,22 +85,12 @@ interface AdvancedConditionBuilderProps {
     onPreview?: (conditions: TargetingCondition[]) => Promise<TargetingPreview>;
     showVisualBuilder?: boolean;
 }
-export declare const AdvancedConditionBuilder: React.FC<AdvancedConditionBuilderProps>;
-interface GeographicTargetingProps {
-    selectedCountries: string[];
-    selectedRegions: string[];
-    selectedCities: string[];
-    onCountriesChange: (countries: string[]) => void;
-    onRegionsChange: (regions: string[]) => void;
+export declare     onRegionsChange: (regions: string[]) => void;
     onCitiesChange: (cities: string[]) => void;
     excludeMode?: boolean;
     onExcludeModeChange?: (exclude: boolean) => void;
 }
-export declare const GeographicTargeting: React.FC<GeographicTargetingProps>;
-interface SegmentManagementProps {
-    segments: UserSegment[];
-    onCreateSegment: (segment: Omit<UserSegment, 'id' | 'createdAt' | 'lastUpdated'>) => void;
-    onUpdateSegment: (id: string, updates: Partial<UserSegment>) => void;
+export declare     onUpdateSegment: (id: string, updates: Partial<UserSegment>) => void;
     onDeleteSegment: (id: string) => void;
     onDuplicateSegment: (id: string) => void;
 }

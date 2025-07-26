@@ -45,7 +45,7 @@ export const ConsentBanner: React.FC<ConsentBannerProps> = ({
     error: undefined
   });
 
-  const [config, ___setConfig] = useState<ConsentConfiguration | null>(null);
+  const [config, _setConfig] = useState<ConsentConfiguration | null>(null);
 
   useEffect(() => {
     // Load configuration and check if banner should be shown

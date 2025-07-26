@@ -39,6 +39,12 @@ export type {
 
 // Epic 1 & Epic 17 Security Integration
 export { default as Epic1Epic17SecurityIntegration } from './Epic1Epic17SecurityIntegration';
+
+// Import Epic1Epic17SecurityIntegration for local use
+import { Epic1Epic17SecurityIntegration } from './Epic1Epic17SecurityIntegration';
+
+// Import SecurityAnalyticsMonitor for local use
+import { SecurityAnalyticsMonitor } from './SecurityAnalyticsMonitor';
 export type {
   IntegratedSecurityMetrics,
   IntegratedAlertRule,
@@ -47,47 +53,7 @@ export type {
 } from './Epic1Epic17SecurityIntegration';
 
 // Utility functions for monitoring integration
-export const createIntegratedMonitoringSystem = (
-  epic1Monitor: PerformanceMonitor,
-  epic17Monitor: any, // Epic17PerformanceMonitor from server
-  securityMonitor: SecurityAnalyticsMonitor,
-  alertingSystem: any // CrossSystemAlertingSystem
-): Epic1Epic17SecurityIntegration => {
-  const config: IntegrationConfig = {
-    epic1Integration: {
-      enabled: true,
-      performanceMonitoringInterval: 30000,
-      nodeMetricsCollection: true,
-      memoryTrackingEnabled: true
-    },
-    epic17Integration: {
-      enabled: true,
-      adminOperationTracking: true,
-      integrationHealthMonitoring: true,
-      complianceMonitoring: true,
-      auditIntegration: true
-    },
-    securityIntegration: {
-      enabled: true,
-      threatDetectionEnabled: true,
-      complianceMonitoring: true,
-      incidentResponseIntegration: true,
-      crossSystemCorrelation: true
-    },
-    correlationSettings: {
-      correlationWindow: 300000, // 5 minutes
-      confidenceThreshold: 0.7,
-      enablePredictiveAnalysis: true,
-      alertAggregationEnabled: true
-    },
-    dashboardSettings: {
-      refreshInterval: 10000, // 10 seconds
-      retentionPeriod: 86400000, // 24 hours
-      enableRealTimeUpdates: true,
-      maxHistoricalDataPoints: 1000
-    }
-  };
-  
+export   
   return new Epic1Epic17SecurityIntegration(config, {
     epic1Monitor,
     epic17Monitor,
@@ -96,41 +62,7 @@ export const createIntegratedMonitoringSystem = (
   });
 };
 
-export const createSecurityAnalyticsMonitor = (config?: Partial<SecurityAnalyticsConfig>): SecurityAnalyticsMonitor => {
-  const defaultConfig: SecurityAnalyticsConfig = {
-    performanceConfig: {
-      enableMemoryTracking: true,
-      enableContextTracking: true,
-      enableAggregation: true,
-      enableAlerting: true,
-      slowExecutionThreshold: 1000,
-      memoryThreshold: 50 * 1024 * 1024
-    },
-    securityConfig: {
-      enableThreatDetection: true,
-      enableComplianceMonitoring: true,
-      enableAccessControlTracking: true,
-      enableDataProtectionMonitoring: true,
-      enableIncidentResponseTracking: true,
-      
-      threatLevelThreshold: 7,
-      falsePositiveThreshold: 0.1,
-      complianceScoreThreshold: 85,
-      detectionTimeThreshold: 30000,
-      responseTimeThreshold: 300000,
-      
-      healthCheckInterval: 30000,
-      systemHealthThreshold: 80,
-      alertCorrelationWindow: 300000
-    },
-    integrationConfig: {
-      siemIntegration: true,
-      complianceIntegration: true,
-      auditIntegration: true,
-      threatIntelIntegration: false
-    }
-  };
-  
+export   
   return new SecurityAnalyticsMonitor({ ...defaultConfig, ...config });
 };
 
@@ -163,9 +95,7 @@ export const createDefaultSecuritySystemHealth = (
 });
 
 // Helper function to register security systems with the monitor
-export const registerSecuritySystems = (
-  monitor: SecurityAnalyticsMonitor,
-  systems: Array<{ id: string; type: SecuritySystemHealth['systemType'] }>
+export   systems: Array<{ id: string; type: SecuritySystemHealth['systemType'] }>
 ): void => {
   systems.forEach(system => {
     const healthStatus = createDefaultSecuritySystemHealth(system.id, system.type);
@@ -174,19 +104,9 @@ export const registerSecuritySystems = (
 };
 
 // Helper function to create integrated dashboard configuration
-export const createIntegratedDashboardConfig = (): IntegrationConfig['dashboardSettings'] => ({
-  refreshInterval: 10000, // 10 seconds for real-time updates
-  retentionPeriod: 86400000, // 24 hours of data retention
-  enableRealTimeUpdates: true,
-  maxHistoricalDataPoints: 1000
-});
-
+export 
 // Monitoring system health check utility
-export const performMonitoringSystemHealthCheck = (
-  integration: Epic1Epic17SecurityIntegration
-): {
-  epic1Health: 'healthy' | 'degraded' | 'unhealthy';
-  epic17Health: 'healthy' | 'degraded' | 'unhealthy';
+export   epic17Health: 'healthy' | 'degraded' | 'unhealthy';
   securityHealth: 'healthy' | 'degraded' | 'unhealthy';
   overallHealth: 'healthy' | 'degraded' | 'unhealthy';
   recommendations: string[];

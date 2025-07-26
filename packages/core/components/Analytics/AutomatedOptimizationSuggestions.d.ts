@@ -106,7 +106,7 @@ export interface OptimizationConstraint {
 export type ConstraintType = 'budget_limit' | 'time_restriction' | 'brand_guidelines' | 'technical_limitation' | 'regulatory_compliance' | 'user_impact_limit';
 export interface ConstraintParameter {
     parameter: string;
-    value: any;
+    value: Error;
     required: boolean;
 }
 export interface PerformanceSettings {
@@ -339,7 +339,7 @@ export interface TriggeringEvent {
 }
 export interface EnvironmentalFactor {
     factor: string;
-    value: any;
+    value: Error;
     impact: 'positive' | 'negative' | 'neutral';
     confidence: number;
 }
@@ -515,8 +515,8 @@ export interface VariantImplementation {
 export interface VariantChange {
     element: string;
     changeType: 'content' | 'design' | 'behavior' | 'configuration';
-    before: any;
-    after: any;
+    before: Error;
+    after: unknown;
 }
 export interface TrafficAllocation {
     control: number;

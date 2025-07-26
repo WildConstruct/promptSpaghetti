@@ -40,7 +40,7 @@ describe('KeyManagementService Access Control Integration', () => {
   };
 
   beforeEach(() => {
-    mockDb = new DatabaseService() as jest.Mocked<DatabaseService>;
+    mockDb = new DatabaseService({} as any) as jest.Mocked<DatabaseService>;
     mockRedis = new RedisService() as jest.Mocked<RedisService>;
     mockAudit = new AuditService() as jest.Mocked<AuditService>;
     mockAccessControlManager = new AccessControlManager(
@@ -496,11 +496,7 @@ describe('KeyManagementService Access Control Integration', () => {
   describe('Configuration Impact', () => {
     it('should respect access control configuration settings', async () => {
       // Test with access control disabled
-      const configWithoutAccessControl = {
-        ...defaultConfig,
-        enableAccessControl: false
-      };
-
+      
       
       // With access control disabled, should not call access control manager
       // This would require modifying the service to check config

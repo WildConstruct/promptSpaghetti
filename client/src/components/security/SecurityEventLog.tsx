@@ -33,7 +33,7 @@ interface SecurityEvent {
   resource: string;
   action: string;
   outcome: 'success' | 'failure' | 'blocked';
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 interface SecurityEventLogProps {
@@ -45,9 +45,7 @@ interface SecurityEventLogProps {
   };
 }
 
-export const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ onEventClick, initialFilters }) => {
-  const [events, setEvents] = useState<SecurityEvent[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+export   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSeverity, setSelectedSeverity] = useState<string[]>(initialFilters?.severity || []);
   const [selectedCategory, setSelectedCategory] = useState<string[]>(initialFilters?.category || []);

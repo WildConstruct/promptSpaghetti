@@ -1,6 +1,6 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React from 'react';
-export const SelectEditor = ({ label, value, fieldKey, error, onChange, placeholder, disabled = false, options = [], multiple = false, searchable = false, allowCustom = false, emptyLabel = 'None' }) => {
+export const SelectEditor = ({ label, value, fieldKey, error, onChange, placeholder, disabled = false, options = [], multiple = false, searchable = false, allowCustom = false, emptyLabel = 'None' }: { label: string, value: any, fieldKey: string, error?: string, onChange: (value: any) => void, placeholder?: string, disabled?: boolean, options?: any[], multiple?: boolean, searchable?: boolean, allowCustom?: boolean, emptyLabel?: string }) => {
     const [localValue, setLocalValue] = React.useState(value);
     const [isOpen, setIsOpen] = React.useState(false);
     const [searchTerm, setSearchTerm] = React.useState('');
@@ -14,7 +14,7 @@ export const SelectEditor = ({ label, value, fieldKey, error, onChange, placehol
     }, [value]);
     // Close dropdown when clicking outside
     React.useEffect(() => {
-        const handleClickOutside = (event) => {
+        const handleClickOutside = (event: any) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setIsOpen(false);
                 setShowCustomInput(false);
@@ -28,7 +28,7 @@ export const SelectEditor = ({ label, value, fieldKey, error, onChange, placehol
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [isOpen]);
-    const handleSelect = (optionValue) => {
+    const handleSelect = (optionValue: any) => {
         if (multiple) {
             const currentValues = Array.isArray(localValue) ? localValue : [];
             const newValues = currentValues.includes(optionValue)
@@ -124,7 +124,7 @@ export const SelectEditor = ({ label, value, fieldKey, error, onChange, placehol
         zIndex: 1000,
         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
     };
-    const optionStyle = (selected, disabled) => ({
+    const optionStyle = (selected: boolean, disabled: boolean) => ({
         padding: 8,
         cursor: disabled ? 'not-allowed' : 'pointer',
         background: selected ? '#4299e1' : 'transparent',

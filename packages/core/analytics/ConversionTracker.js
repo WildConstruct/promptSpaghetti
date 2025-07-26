@@ -161,8 +161,8 @@ export class ConversionTracker {
             value,
             properties,
             metadata: {
-                userAgent: navigator.userAgent,
-                referrer: document.referrer,
+                userAgent: (typeof navigator !== 'undefined' && navigator.userAgent) ? navigator.userAgent : 'server',
+                referrer: (typeof document !== 'undefined' && document.referrer) ? document.referrer : '',
                 campaignSource: this.getCampaignSource(),
                 experimentGroup: this.getExperimentGroup()
             }
@@ -386,7 +386,7 @@ export class ConversionTracker {
     }
     getCurrentUserId() {
         // This would integrate with your authentication system
-        return localStorage.getItem('userId') || 'anonymous';
+        return typeof localStorage !== 'undefined' ? localStorage.getItem('userId') || 'anonymous' : 'anonymous';
     }
     getCurrentSessionId() {
         const userId = this.getCurrentUserId();
@@ -410,14 +410,14 @@ export class ConversionTracker {
         return categoryMap[type] || 'retention';
     }
     getCampaignSource() {
-        const urlParams = new URLSearchParams(window.location.search);
+        const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
         return urlParams.get('utm_source') || undefined;
     }
     getExperimentGroup() {
-        return localStorage.getItem('experimentGroup') || undefined;
+        return typeof localStorage !== 'undefined' ? localStorage.getItem('experimentGroup') || undefined : undefined;
     }
     getSessionDuration() {
-        const sessionStart = sessionStorage.getItem('sessionStart');
+        const sessionStart = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('sessionStart') : null;
         return sessionStart ? Date.now() - parseInt(sessionStart) : 0;
     }
     triggerEventListeners(event) {
@@ -536,7 +536,7 @@ export class ConversionTracker {
 // Global instance
 export const conversionTracker = new ConversionTracker();
 // Auto-initialize session tracking
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && typeof sessionStorage !== 'undefined') {
     if (!sessionStorage.getItem('sessionStart')) {
         sessionStorage.setItem('sessionStart', Date.now().toString());
     }

@@ -138,7 +138,7 @@ export declare const FieldImportanceStyles: {
     };
 };
 export type FieldPriority = 'critical' | 'important' | 'standard' | 'supplementary';
-export declare const classifyFieldPriority: (fieldName: string, _____nodeType?: string) => FieldPriority;
+export declare const classifyFieldPriority: (fieldName: string, nodeType?: string) => FieldPriority;
 export interface HierarchyHeaderProps {
     title: string;
     level: 'basic' | 'advanced' | 'debug';
@@ -306,7 +306,7 @@ declare const _default: {
             backgroundColor: string;
         };
     };
-    classifyFieldPriority: (fieldName: string, _____nodeType?: string) => FieldPriority;
+    classifyFieldPriority: (fieldName: string, nodeType?: string) => FieldPriority;
     HierarchyHeader: React.FC<HierarchyHeaderProps>;
     HierarchyField: React.FC<HierarchyFieldProps>;
     ComplexityIndicator: React.FC<ComplexityIndicatorProps>;

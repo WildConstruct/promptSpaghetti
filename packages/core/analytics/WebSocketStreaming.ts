@@ -26,7 +26,7 @@ export enum WSMessageType {
 export const WSMessageSchema = z.object({
   type: z.nativeEnum(WSMessageType),
   id: z.string().optional(),
-  payload: z.any().optional(),
+  payload: z.unknown().optional(),
   timestamp: z.number(),
   clientId: z.string().optional()
 });
@@ -384,8 +384,16 @@ export class WebSocketStreamingServer extends EventEmitter {
       // Authorize subscription filter if authenticated
       let authorizedFilter = subscriptionConfig.filter;
       if (client.authContext) {
+        // Convert string arrays to proper enum types for EventFilter
+        const eventFilter: EventFilter = {
+          ...subscriptionConfig.filter,
+          types: subscriptionConfig.filter?.types as AnalyticsEventType[] | undefined,
+          categories: subscriptionConfig.filter?.categories as EventCategory[] | undefined,
+          severities: subscriptionConfig.filter?.severities as EventSeverity[] | undefined
+        };
+        
         const queryAuth = await this.authService.authorizeAnalyticsQuery(
-          subscriptionConfig.filter || {},
+          eventFilter,
           client.authContext
         );
 
@@ -527,7 +535,8 @@ export class WebSocketStreamingServer extends EventEmitter {
       handler: (event: UnifiedAnalyticsEvent) => {
         this.broadcastEvent(event);
       },
-      priority: 500
+      priority: 500,
+      enabled: true
     });
   }
 
@@ -542,7 +551,15 @@ export class WebSocketStreamingServer extends EventEmitter {
 
       // Check each subscription for matches
       for (const [subscriptionId, config] of client.subscriptions) {
-        if (this.eventMatchesFilter(event, config.filter)) {
+        // Convert subscription filter to EventFilter format
+        const eventFilter: EventFilter | undefined = config.filter ? {
+          ...config.filter,
+          types: config.filter.types as AnalyticsEventType[] | undefined,
+          categories: config.filter.categories as EventCategory[] | undefined,
+          severities: config.filter.severities as EventSeverity[] | undefined
+        } : undefined;
+        
+        if (this.eventMatchesFilter(event, eventFilter)) {
           broadcastPromises.push(
             this.sendEventToClient(client, event, subscriptionId, config)
           );

@@ -5,12 +5,12 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Comprehensive identity verification interface for Wild Construct creators
  */
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Progress } from '../ui/Progress.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
-import { useIdentityValidation } from '../../hooks/useIdentityValidation.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Progress } from '../ui/Progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
+import { useIdentityValidation } from '../../hooks/useIdentityValidation';
 import { CheckCircle, XCircle, Clock, Shield, Star, Award, User, Phone, Mail, FileText, Camera, ExternalLink, TrendingUp } from 'lucide-react';
 export const VerificationCenter = ({ userId, onVerificationComplete, className = '' }) => {
     const { userTrustScore, validationSummary, getVerificationCompletionPercentage, getRecommendedVerificationSteps, getTrustTierBenefits, submitEmailVerification, submitPhoneVerification, submitGovernmentIdVerification, submitProfessionalCredentials, submitSocialMediaVerification, submitPortfolioVerification, isLoading } = useIdentityValidation({ userId, autoLoadUserData: true });

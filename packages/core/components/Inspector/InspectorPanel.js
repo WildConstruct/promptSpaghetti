@@ -1,10 +1,10 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { PropertiesSection } from './PropertiesSection.js';
-import { PreviewSection } from './PreviewSection.js';
-import { PreferenceControls } from './PreferenceControls.js';
-import { useUISettingsStore } from '../../stores/uiSettingsStore.js';
-import { useAnimation, animationDurations, easingFunctions } from '../../utils/smoothAnimations.js';
+import { PropertiesSection } from './PropertiesSection';
+import { PreviewSection } from './PreviewSection';
+import { PreferenceControls } from './PreferenceControls';
+import { useUISettingsStore } from '../../stores/uiSettingsStore';
+import { useAnimation, animationDurations, easingFunctions } from '../../utils/smoothAnimations';
 // Map technical node types to filmmaker-friendly names
 const getFilmmakerFriendlyName = (nodeType) => {
     const friendlyNames = {

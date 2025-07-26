@@ -110,7 +110,7 @@ export interface Span {
   endTime?: number;
   duration?: number;
   tags: Record<string, string>;
-  logs: Array<{ timestamp: number; fields: Record<string, any> }>;
+  logs: Array<{ timestamp: number; fields: Record<string, unknown> }>;
   status: 'ok' | 'error' | 'timeout';
   error?: string;
 }

@@ -1,16 +1,18 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 /**
+import { CheckSquare } from 'lucide-react';
+
  * VFX Checklist Templates - E17-1753114397304-B22E55
  *
  * Pre-built checklist templates for common VFX workflows and production phases.
  * Supports template creation, sharing, and customization for different project types.
  */
 import { useState, useCallback, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select.js';
-import { Switch } from '../ui/Switch.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
+import { Switch } from '../ui/Switch';
 import { FileText, Copy, Edit3, Trash2, Search, Plus, Eye, Users, Clock, Zap, Camera, Film, Palette, BarChart3, CheckCircle } from 'lucide-react';
 // Built-in template data
 const BUILTIN_TEMPLATES = [

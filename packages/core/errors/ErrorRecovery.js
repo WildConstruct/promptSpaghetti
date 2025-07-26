@@ -4,8 +4,8 @@
  * Provides graceful error recovery mechanisms, fallback strategies,
  * and retry logic for improved system resilience.
  */
-import { BaseError, ErrorSeverity, ErrorCode } from './index.js';
-import { ErrorFactory } from './ErrorFactory.js';
+import { BaseError, ErrorSeverity, ErrorCode } from './index';
+import { ErrorFactory } from './ErrorFactory';
 /**
  * Centralized error recovery utilities
  */

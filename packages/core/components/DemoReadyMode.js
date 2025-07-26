@@ -9,7 +9,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * - Provides performance monitoring for smooth demos
  */
 import { useState, useEffect } from 'react';
-import { professionalColors } from '../styles/professional-design-system.js';
+import { professionalColors } from '../styles/professional-design-system';
 export const DemoReadyMode = ({ children, enabled = false, onToggle }) => {
     const [screenSize, setScreenSize] = useState({
         width: window.innerWidth,

@@ -300,7 +300,10 @@ export abstract class BaseAIModel {
     if (this._capabilities.inputTypes.length > 0) {
       const inputType = this._detectInputType(request.input);
       if (!this._capabilities.inputTypes.includes(inputType)) {
-        throw new Error(`Input type ${inputType} not supported. Supported types: ${this._capabilities.inputTypes.join(', ')}`);
+        throw new Error(
+          `Input type ${inputType} not supported. Supported types: ${this._capabilities.inputTypes.join(',
+          '
+        )}`);
       }
     }
   }
@@ -417,18 +420,5 @@ export class ModelUnavailableError extends Error {
   }
 }
 
-// Export all types and classes
-export {
-  BaseAIModel as default,
-  AIModelType,
-  AIModelProvider,
-  AIModelStatus,
-  ModelCapabilities,
-  ModelMetadata,
-  CostEstimate,
-  HealthStatus,
-  AIRequest,
-  AIResponse,
-  AIModelFactory,
-  ModelConfiguration
-};
+// Export the default class
+export { BaseAIModel as default };

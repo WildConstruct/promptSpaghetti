@@ -12,7 +12,7 @@ interface SubmissionData {
   is_ai_generated: boolean;
   claude_compat: string[];
   claude_model: string;
-  graph_json: Record<string, any>;
+  graph_json: Record<string, unknown>;
   prompt_yaml?: string;
   changelog_md?: string;
   token_per_run_estimate: number;
@@ -30,7 +30,7 @@ interface ValidationResult {
   rule_id: string;
   severity: 'error' | 'warning' | 'info';
   message: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
   suggested_fix?: string;
   auto_fixable: boolean;
   location?: {
@@ -81,7 +81,7 @@ export const SubmissionReview: React.FC = () => {
   const [comments, setComments] = useState('');
   const [detailedFeedback, setDetailedFeedback] = useState<ReviewFeedback[]>(
     FEEDBACK_CATEGORIES.map(cat => ({
-      category: cat.id as any,
+      category: cat.id as 'content' | 'quality' | 'compliance' | 'usability' | 'technical',
       rating: 3,
       comments: '',
       suggestions: []
@@ -414,7 +414,7 @@ export const SubmissionReview: React.FC = () => {
                   name="decision"
                   value="approved"
                   checked={decision === 'approved'}
-                  onChange={(e) => setDecision(e.target.value as any)}
+                  onChange={(e) => setDecision(e.target.value as 'approved' | 'rejected' | 'changes_requested' | '')}
                 />
                 <span className="approve">Approve</span>
               </label>
@@ -424,7 +424,7 @@ export const SubmissionReview: React.FC = () => {
                   name="decision"
                   value="changes_requested"
                   checked={decision === 'changes_requested'}
-                  onChange={(e) => setDecision(e.target.value as any)}
+                  onChange={(e) => setDecision(e.target.value as 'approved' | 'rejected' | 'changes_requested' | '')}
                 />
                 <span className="changes">Request Changes</span>
               </label>
@@ -434,7 +434,7 @@ export const SubmissionReview: React.FC = () => {
                   name="decision"
                   value="rejected"
                   checked={decision === 'rejected'}
-                  onChange={(e) => setDecision(e.target.value as any)}
+                  onChange={(e) => setDecision(e.target.value as 'approved' | 'rejected' | 'changes_requested' | '')}
                 />
                 <span className="reject">Reject</span>
               </label>

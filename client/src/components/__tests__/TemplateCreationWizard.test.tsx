@@ -18,40 +18,45 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 // Mock the API service
 jest.mock('../../services/templateService', () => ({
   templateService: {
-    createTemplate: jest.fn(),
-    getTemplatesByCategory: jest.fn(),
-    validateTemplate: jest.fn()
+    createTemplate: jest.fn<unknown[], unknown>(),
+    getTemplatesByCategory: jest.fn<unknown[], unknown>(),
+    validateTemplate: jest.fn<unknown[], unknown>()
   }
 }));
 
 // Mock React Flow components
 jest.mock('reactflow', () => ({
-  ReactFlow: ({ children, ...props }: any) => (
+  ReactFlow: ({ children, nodes = [], edges = [], ...props }: { 
+    children?: React.ReactNode; 
+    nodes?: unknown[];
+    edges?: unknown[];
+    [key: string]: unknown 
+  }) => (
     <div data-testid="react-flow" {...props}>
       {children}
-      <div data-testid="flow-nodes">{JSON.stringify(props.nodes || [])}</div>
-      <div data-testid="flow-edges">{JSON.stringify(props.edges || [])}</div>
+      <div data-testid="flow-nodes">{JSON.stringify(nodes)}</div>
+      <div data-testid="flow-edges">{JSON.stringify(edges)}</div>
     </div>
   ),
   Controls: () => <div data-testid="flow-controls">Controls</div>,
   Background: () => <div data-testid="flow-background">Background</div>,
-  useNodesState: () => [[], jest.fn(), jest.fn()],
-  useEdgesState: () => [[], jest.fn(), jest.fn()],
-  addEdge: jest.fn(),
+  useNodesState: () => [[], jest.fn<unknown[], unknown>(), jest.fn<unknown[], unknown>()],
+  useEdgesState: () => [[], jest.fn<unknown[], unknown>(), jest.fn<unknown[], unknown>()],
+  addEdge: jest.fn<unknown[], unknown>(),
   useReactFlow: () => ({
     getNodes: jest.fn(() => []),
     getEdges: jest.fn(() => []),
-    setNodes: jest.fn(),
-    setEdges: jest.fn(),
+    setNodes: jest.fn<unknown[], unknown>(),
+    setEdges: jest.fn<unknown[], unknown>(),
     getViewport: jest.fn(() => ({ x: 0, y: 0, zoom: 1 }))
   })
 }));
 
 // Mock the drag and drop context
 jest.mock('react-dnd', () => ({
-  useDrag: () => [{ isDragging: false }, jest.fn(), jest.fn()],
-  useDrop: () => [{ isOver: false }, jest.fn()],
-  DndProvider: ({ children }: any) => <div>{children}</div>
+  useDrag: () => [{ isDragging: false }, jest.fn<unknown[], unknown>(), jest.fn<unknown[], unknown>()],
+  useDrop: () => [{ isOver: false }, jest.fn<unknown[], unknown>()],
+  DndProvider: ({ children }: { children: React.ReactNode }) => <div>{children}</div>
 }));
 
 import { templateService } from '../../services/templateService';
@@ -115,14 +120,14 @@ describe('TemplateCreationWizard', () => {
         rating: 4.2,
         tags: ['creative']
       }
-    ]);
+    ] as unknown);
 
     mockTemplateService.validateTemplate.mockResolvedValue({ 
       isValid: true, 
       errors: [], 
       warnings: [], 
       compatibility: { version: '1.0', features: [], missingFeatures: [] } 
-    });
+    } as unknown);
   });
 
   describe('Wizard Navigation', () => {
@@ -133,9 +138,9 @@ describe('TemplateCreationWizard', () => {
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn()}
-            onComplete={jest.fn()}
-            templateManager={{} as any}
+            onClose={jest.fn<unknown[], unknown>()}
+            onComplete={jest.fn<unknown[], unknown>()}
+            templateManager={{} as unknown}
           />
         </TestWrapper>
       );
@@ -158,9 +163,9 @@ describe('TemplateCreationWizard', () => {
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn()}
-            onComplete={jest.fn()}
-            templateManager={{} as any}
+            onClose={jest.fn<unknown[], unknown>()}
+            onComplete={jest.fn<unknown[], unknown>()}
+            templateManager={{} as unknown}
           />
         </TestWrapper>
       );
@@ -196,9 +201,9 @@ describe('TemplateCreationWizard', () => {
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn()}
-            onComplete={jest.fn()}
-            templateManager={{} as any}
+            onClose={jest.fn<unknown[], unknown>()}
+            onComplete={jest.fn<unknown[], unknown>()}
+            templateManager={{} as unknown}
           />
         </TestWrapper>
       );
@@ -218,9 +223,9 @@ describe('TemplateCreationWizard', () => {
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn()}
-            onComplete={jest.fn()}
-            templateManager={{} as any}
+            onClose={jest.fn<unknown[], unknown>()}
+            onComplete={jest.fn<unknown[], unknown>()}
+            templateManager={{} as unknown}
           />
         </TestWrapper>
       );
@@ -242,16 +247,16 @@ describe('TemplateCreationWizard', () => {
         errors: ['Template name already exists'],
         warnings: [], 
         compatibility: { version: '1.0', features: [], missingFeatures: [] } 
-      });
+      } as unknown);
 
       render(
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn()}
-            onComplete={jest.fn()}
-            templateManager={{} as any}
+            onClose={jest.fn<unknown[], unknown>()}
+            onComplete={jest.fn<unknown[], unknown>()}
+            templateManager={{} as unknown}
           />
         </TestWrapper>
       );
@@ -275,9 +280,9 @@ describe('TemplateCreationWizard', () => {
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn()}
-            onComplete={jest.fn()}
-            templateManager={{} as any}
+            onClose={jest.fn<unknown[], unknown>()}
+            onComplete={jest.fn<unknown[], unknown>()}
+            templateManager={{} as unknown}
           />
         </TestWrapper>
       );
@@ -297,9 +302,9 @@ describe('TemplateCreationWizard', () => {
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn()}
-            onComplete={jest.fn()}
-            templateManager={{} as any}
+            onClose={jest.fn<unknown[], unknown>()}
+            onComplete={jest.fn<unknown[], unknown>()}
+            templateManager={{} as unknown}
           />
         </TestWrapper>
       );
@@ -332,9 +337,9 @@ describe('TemplateCreationWizard', () => {
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn()}
-            onComplete={jest.fn()}
-            templateManager={{} as any}
+            onClose={jest.fn<unknown[], unknown>()}
+            onComplete={jest.fn<unknown[], unknown>()}
+            templateManager={{} as unknown}
           />
         </TestWrapper>
       );
@@ -357,9 +362,9 @@ describe('TemplateCreationWizard', () => {
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn()}
-            onComplete={jest.fn()}
-            templateManager={{} as any}
+            onClose={jest.fn<unknown[], unknown>()}
+            onComplete={jest.fn<unknown[], unknown>()}
+            templateManager={{} as unknown}
           />
         </TestWrapper>
       );
@@ -461,9 +466,9 @@ describe('TemplateCreationWizard', () => {
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn()}
-            onComplete={jest.fn()}
-            templateManager={{} as any}
+            onClose={jest.fn<unknown[], unknown>()}
+            onComplete={jest.fn<unknown[], unknown>()}
+            templateManager={{} as unknown}
           />
         </TestWrapper>
       );
@@ -593,9 +598,9 @@ describe('TemplateCreationWizard', () => {
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn()}
-            onComplete={jest.fn()}
-            templateManager={{} as any}
+            onClose={jest.fn<unknown[], unknown>()}
+            onComplete={jest.fn<unknown[], unknown>()}
+            templateManager={{} as unknown}
           />
         </TestWrapper>
       );
@@ -679,9 +684,9 @@ describe('TemplateCreationWizard', () => {
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn()}
-            onComplete={jest.fn()}
-            templateManager={{} as any}
+            onClose={jest.fn<unknown[], unknown>()}
+            onComplete={jest.fn<unknown[], unknown>()}
+            templateManager={{} as unknown}
           />
         </TestWrapper>
       );
@@ -731,7 +736,7 @@ describe('TemplateCreationWizard', () => {
 
     it('should submit template successfully', async () => {
       // Arrange
-      const mockOnComplete = jest.fn();
+      const mockOnComplete = jest.fn<unknown[], unknown>();
       const createdTemplate = {
         id: 1,
         name: 'Complete Template',
@@ -741,16 +746,16 @@ describe('TemplateCreationWizard', () => {
         created_at: new Date().toISOString()
       };
 
-      mockTemplateService.createTemplate.mockResolvedValue(createdTemplate as unknown as unknown);
+      mockTemplateService.createTemplate.mockResolvedValue(createdTemplate as unknown as unknown as unknown);
 
       render(
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn()}
+            onClose={jest.fn<unknown[], unknown>()}
             onComplete={mockOnComplete}
-            templateManager={{} as any}
+            templateManager={{} as unknown}
           />
         </TestWrapper>
       );
@@ -822,9 +827,9 @@ describe('TemplateCreationWizard', () => {
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn()}
-            onComplete={jest.fn()}
-            templateManager={{} as any}
+            onClose={jest.fn<unknown[], unknown>()}
+            onComplete={jest.fn<unknown[], unknown>()}
+            templateManager={{} as unknown}
           />
         </TestWrapper>
       );
@@ -848,15 +853,15 @@ describe('TemplateCreationWizard', () => {
 
     it('should handle wizard cancellation', async () => {
       // Arrange
-      const mockOnCancel = jest.fn();
+      const mockOnCancel = jest.fn<unknown[], unknown>();
       render(
         <TestWrapper>
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
             onClose={mockOnCancel}
-            onComplete={jest.fn()}
-            templateManager={{} as any}
+            onComplete={jest.fn<unknown[], unknown>()}
+            templateManager={{} as unknown}
           />
         </TestWrapper>
       );
@@ -878,9 +883,9 @@ describe('TemplateCreationWizard', () => {
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn()}
-            onComplete={jest.fn()}
-            templateManager={{} as any}
+            onClose={jest.fn<unknown[], unknown>()}
+            onComplete={jest.fn<unknown[], unknown>()}
+            templateManager={{} as unknown}
           />
         </TestWrapper>
       );
@@ -898,7 +903,7 @@ describe('TemplateCreationWizard', () => {
     it('should auto-save draft templates periodically', async () => {
       // This would require implementing auto-save functionality
       // Mock implementation for testing purposes
-      const mockAutoSave = jest.fn();
+      const mockAutoSave = jest.fn<unknown[], unknown>();
       jest.spyOn(window, 'setInterval').mockImplementation((fn) => {
         // Simulate auto-save trigger
         setTimeout(fn, 5000);
@@ -910,9 +915,9 @@ describe('TemplateCreationWizard', () => {
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn()}
-            onComplete={jest.fn()}
-            templateManager={{} as any}
+            onClose={jest.fn<unknown[], unknown>()}
+            onComplete={jest.fn<unknown[], unknown>()}
+            templateManager={{} as unknown}
           />
         </TestWrapper>
       );
@@ -936,9 +941,9 @@ describe('TemplateCreationWizard', () => {
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn()}
-            onComplete={jest.fn()}
-            templateManager={{} as any}
+            onClose={jest.fn<unknown[], unknown>()}
+            onComplete={jest.fn<unknown[], unknown>()}
+            templateManager={{} as unknown}
           />
         </TestWrapper>
       );
@@ -960,9 +965,9 @@ describe('TemplateCreationWizard', () => {
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn()}
-            onComplete={jest.fn()}
-            templateManager={{} as any}
+            onClose={jest.fn<unknown[], unknown>()}
+            onComplete={jest.fn<unknown[], unknown>()}
+            templateManager={{} as unknown}
           />
         </TestWrapper>
       );
@@ -980,9 +985,9 @@ describe('TemplateCreationWizard', () => {
           <TemplateCreationWizard 
             graphData={{}}
             isOpen={true}
-            onClose={jest.fn()}
-            onComplete={jest.fn()}
-            templateManager={{} as any}
+            onClose={jest.fn<unknown[], unknown>()}
+            onComplete={jest.fn<unknown[], unknown>()}
+            templateManager={{} as unknown}
           />
         </TestWrapper>
       );

@@ -63,7 +63,7 @@ describe('Epic 24.2 - Plugin Loader Integration Tests', () => {
         getAllRegistered: jest.fn<unknown[], unknown>()
       },
       
-      initialize: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown),
+      initialize: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown),
       loadAndActivatePlugin: jest.fn<unknown[], unknown>(),
       deactivateAndUnloadPlugin: jest.fn<unknown[], unknown>(),
       getSystemStatus: jest.fn<unknown[], unknown>()
@@ -85,9 +85,9 @@ describe('Epic 24.2 - Plugin Loader Integration Tests', () => {
       };
     });
 
-    pluginSystem.lifecycle.activateExtension.mockResolvedValue(true as unknown as unknown);
-    pluginSystem.lifecycle.deactivateExtension.mockResolvedValue(true as unknown as unknown);
-    pluginSystem.lifecycle.getExtensionState.mockReturnValue('active' as unknown as unknown);
+    pluginSystem.lifecycle.activateExtension.mockResolvedValue(true as unknown as unknown as unknown);
+    pluginSystem.lifecycle.deactivateExtension.mockResolvedValue(true as unknown as unknown as unknown);
+    pluginSystem.lifecycle.getExtensionState.mockReturnValue('active' as unknown as unknown as unknown);
   });
 
   afterEach(async () => {
@@ -238,7 +238,7 @@ describe('Epic 24.2 - Plugin Loader Integration Tests', () => {
         cachedAt: new Date().toISOString()
       };
 
-      pluginSystem.loader.getCachedPlugin.mockReturnValue(cachedPlugin as unknown as unknown);
+      pluginSystem.loader.getCachedPlugin.mockReturnValue(cachedPlugin as unknown as unknown as unknown);
       
       // Mock integrated loading that checks cache first
       pluginSystem.loadAndActivatePlugin.mockImplementationOnce(async (source: string) => {

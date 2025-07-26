@@ -101,7 +101,7 @@ export class CompressionMiddleware {
       // Intercept reply.send to compress response
       const originalSend = reply.send.bind(reply);
       
-      reply.send = (payload: any) => {
+      reply.send = (payload: unknown) => {
         return this.compressResponse(request, reply, payload, originalSend, acceptEncoding);
       };
       
@@ -115,8 +115,8 @@ export class CompressionMiddleware {
   private async compressResponse(
     request: FastifyRequest,
     reply: FastifyReply,
-    payload: any,
-    originalSend: (payload: any) => FastifyReply,
+    payload: unknown,
+    originalSend: (payload: unknown) => FastifyReply,
     acceptEncoding: string
   ): Promise<FastifyReply> {
         this.stats.totalRequests++;
@@ -215,7 +215,7 @@ export class CompressionMiddleware {
   /**
    * Determine if response should be compressed
    */
-  private shouldCompress(payload: any, contentType: string): boolean {
+  private shouldCompress(payload: unknown, contentType: string): boolean {
     // Skip if no payload
     if (!payload) return false;
     
@@ -282,7 +282,7 @@ export class CompressionMiddleware {
   /**
    * Prepare payload for compression
    */
-  private preparePayload(payload: any): Buffer {
+  private preparePayload(payload: unknown): Buffer {
     if (Buffer.isBuffer(payload)) {
       return payload;
     }

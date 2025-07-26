@@ -58,7 +58,7 @@ export interface EventDefinition {
   description: string;
   category: string;
   properties: PropertyDefinition[];
-  examples: any[];
+  examples: unknown[];
 }
 
 export interface PropertyDefinition {
@@ -66,7 +66,7 @@ export interface PropertyDefinition {
   name: string;
   type: 'string' | 'number' | 'boolean' | 'date' | 'array' | 'object';
   description: string;
-  possibleValues?: any[];
+  possibleValues?: unknown[];
   validation?: PropertyValidation;
 }
 
@@ -90,7 +90,7 @@ export interface ValidationError {
 export interface DragItem {
   type: 'step' | 'condition' | 'path';
   id: string;
-  data: any;
+  data: Record<string, unknown>;
 }
 
 /**
@@ -244,7 +244,7 @@ export const FunnelConfiguration: React.FC<FunnelConfigurationProps> = ({
   }, [funnel, validateFunnel, onValidation]);
 
   // Handlers
-  const handleBasicInfoChange = useCallback((field: string, value: any) => {
+  const handleBasicInfoChange = useCallback((field: string, value: Error) => {
     setFunnel(prev => ({
       ...prev,
       [field]: value,
@@ -255,7 +255,7 @@ export const FunnelConfiguration: React.FC<FunnelConfigurationProps> = ({
     }));
   }, []);
 
-  const handleConfigurationChange = useCallback((field: string, value: any) => {
+  const handleConfigurationChange = useCallback((field: string, value: Error) => {
     setFunnel(prev => ({
       ...prev,
       configuration: {
@@ -536,8 +536,8 @@ const ValidationPanel: React.FC<ValidationPanelProps> = ({ errors }) => {
  */
 interface BasicConfigurationProps {
   funnel: Partial<ConversionFunnelDefinition>;
-  onChange: (field: string, value: any) => void;
-  onConfigChange: (field: string, value: any) => void;
+  onChange: (field: string, value: Error) => void;
+  onConfigChange: (field: string, value: Error) => void;
 }
 
 const BasicConfiguration: React.FC<BasicConfigurationProps> = ({
@@ -1182,15 +1182,15 @@ const TimeConstraintsEditor: React.FC<TimeConstraintsEditorProps> = ({
 };
 
 // Placeholder components for other tabs
-const ConditionalPathsConfiguration: React.FC<any> = () => (
+const ConditionalPathsConfiguration: React.FC<unknown> = () => (
   <div>Conditional Paths Configuration (TODO: Implement)</div>
 );
 
-const SuccessCriteriaConfiguration: React.FC<any> = () => (
+const SuccessCriteriaConfiguration: React.FC<unknown> = () => (
   <div>Success Criteria Configuration (TODO: Implement)</div>
 );
 
-const AnalyticsConfiguration: React.FC<any> = () => (
+const AnalyticsConfiguration: React.FC<unknown> = () => (
   <div>Analytics Configuration (TODO: Implement)</div>
 );
 

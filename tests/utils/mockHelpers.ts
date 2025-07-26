@@ -6,30 +6,19 @@
 import { jest } from '@jest/globals';
 
 // React Flow Mock Utilities
-export const createMockReactFlow = (overrides = {}) => ({
-  getNodes: jest.fn(() => []),
-  getEdges: jest.fn(() => []),
-  setNodes: jest.fn(),
-  setEdges: jest.fn(),
-  addEdge: jest.fn(),
-  getViewport: jest.fn(() => ({ x: 0, y: 0, zoom: 1 })),
-  ...overrides
-});
-
+export 
 // API Mock Utilities  
-export const createMockApiResponse = (data: any, status = 200) => ({
+export const createMockApiResponse = (data: unknown, status = 200) => ({
   ok: status >= 200 && status < 300,
   status,
   statusText: status === 200 ? 'OK' : 'Error',
-  json: jest.fn<unknown[], unknown>().mockResolvedValue(data as unknown),
-  text: jest.fn<unknown[], unknown>().mockResolvedValue(JSON.stringify(data as unknown)),
+  json: jest.fn<unknown[], unknown>().mockResolvedValue(data as unknown as unknown),
+  text: jest.fn<unknown[], unknown>().mockResolvedValue(JSON.stringify(data as unknown as unknown)),
   headers: new Headers()
 });
 
 // Local Storage Mock
-export const createMockLocalStorage = () => {
-  const storage = new Map<string, string>();
-  
+export   
   return {
     getItem: jest.fn((key: string) => storage.get(key) || null),
     setItem: jest.fn((key: string, value: string) => {
@@ -52,9 +41,7 @@ export const createMockLocalStorage = () => {
 };
 
 // WebSocket Mock
-export const createMockWebSocket = () => {
-  const eventListeners = new Map<string, Function[]>();
-  
+export   
   return {
     send: jest.fn<unknown[], unknown>(),
     close: jest.fn<unknown[], unknown>(),
@@ -73,11 +60,11 @@ export const createMockWebSocket = () => {
         }
       }
     }),
-    dispatchEvent: jest.fn((event: any) => {
+    dispatchEvent: jest.fn((event: unknown) => {
       const listeners = eventListeners.get(event.type) || [];
       listeners.forEach(listener => listener(event));
     }),
-    simulateMessage: (data: any) => {
+    simulateMessage: (data: unknown) => {
       const listeners = eventListeners.get('message') || [];
       listeners.forEach(listener => listener(data));
     },
@@ -86,19 +73,9 @@ export const createMockWebSocket = () => {
 };
 
 // Performance Mock
-export const createMockPerformance = () => ({
-  now: jest.fn(() => Date.now()),
-  mark: jest.fn<unknown[], unknown>(),
-  measure: jest.fn<unknown[], unknown>(),
-  getEntriesByName: jest.fn(() => []),
-  clearMarks: jest.fn<unknown[], unknown>(),
-  clearMeasures: jest.fn<unknown[], unknown>()
-});
-
+export 
 // Intersection Observer Mock
-export const createMockIntersectionObserver = () => {
-  const mockObserve = jest.fn<unknown[], unknown>();
-  const mockUnobserve = jest.fn<unknown[], unknown>();
+export   const mockUnobserve = jest.fn<unknown[], unknown>();
   const mockDisconnect = jest.fn<unknown[], unknown>();
   
   return jest.fn<unknown[], unknown>().mockImplementation(() => ({
@@ -109,9 +86,7 @@ export const createMockIntersectionObserver = () => {
 };
 
 // Resize Observer Mock
-export const createMockResizeObserver = () => {
-  const mockObserve = jest.fn<unknown[], unknown>();
-  const mockUnobserve = jest.fn<unknown[], unknown>();
+export   const mockUnobserve = jest.fn<unknown[], unknown>();
   const mockDisconnect = jest.fn<unknown[], unknown>();
   
   return jest.fn<unknown[], unknown>().mockImplementation(() => ({
@@ -122,72 +97,39 @@ export const createMockResizeObserver = () => {
 };
 
 // File Reader Mock
-export const createMockFileReader = () => {
-  const mockFileReader = {
-    readAsText: jest.fn<unknown[], unknown>(),
-    readAsDataURL: jest.fn<unknown[], unknown>(),
-    readAsArrayBuffer: jest.fn<unknown[], unknown>(),
-    abort: jest.fn<unknown[], unknown>(),
-    addEventListener: jest.fn<unknown[], unknown>(),
-    removeEventListener: jest.fn<unknown[], unknown>(),
-    result: null,
-    error: null,
-    readyState: FileReader.EMPTY
-  };
-
+export 
   // Utility to simulate successful file read
-  (mockFileReader as any).simulateSuccess = (result: any) => {
+  (mockFileReader as Record<string, unknown>).simulateSuccess = (result: unknown) => {
     mockFileReader.result = result;
     mockFileReader.readyState = FileReader.DONE;
     const listeners = (mockFileReader.addEventListener as jest.Mock).mock.calls
-      .filter((call: any) => call[0] === 'load')
-      .map((call: any) => call[1]);
-    listeners.forEach((listener: any) => listener({ target: mockFileReader }));
+      .filter((call: unknown[]) => call[0] === 'load')
+      .map((call: unknown[]) => call[1]);
+    listeners.forEach((listener) => listener({ target: mockFileReader }));
   };
 
   // Utility to simulate file read error
-  (mockFileReader as any).simulateError = (error: any) => {
+  (mockFileReader as Record<string, unknown>).simulateError = (error: unknown) => {
     mockFileReader.error = error;
     mockFileReader.readyState = FileReader.DONE;
     const listeners = (mockFileReader.addEventListener as jest.Mock).mock.calls
-      .filter((call: any) => call[0] === 'error')
-      .map((call: any) => call[1]);
-    listeners.forEach((listener: any) => listener({ target: mockFileReader }));
+      .filter((call: unknown[]) => call[0] === 'error')
+      .map((call: unknown[]) => call[1]);
+    listeners.forEach((listener) => listener({ target: mockFileReader }));
   };
 
   return mockFileReader;
 };
 
 // Canvas Context Mock
-export const createMockCanvasContext = () => ({
-  fillRect: jest.fn<unknown[], unknown>(),
-  strokeRect: jest.fn<unknown[], unknown>(),
-  fillText: jest.fn<unknown[], unknown>(),
-  strokeText: jest.fn<unknown[], unknown>(),
-  measureText: jest.fn(() => ({ width: 100 })),
-  arc: jest.fn<unknown[], unknown>(),
-  beginPath: jest.fn<unknown[], unknown>(),
-  closePath: jest.fn<unknown[], unknown>(),
-  stroke: jest.fn<unknown[], unknown>(),
-  fill: jest.fn<unknown[], unknown>(),
-  moveTo: jest.fn<unknown[], unknown>(),
-  lineTo: jest.fn<unknown[], unknown>(),
-  save: jest.fn<unknown[], unknown>(),
-  restore: jest.fn<unknown[], unknown>(),
-  translate: jest.fn<unknown[], unknown>(),
-  rotate: jest.fn<unknown[], unknown>(),
-  scale: jest.fn<unknown[], unknown>(),
-  setTransform: jest.fn<unknown[], unknown>(),
-  clearRect: jest.fn<unknown[], unknown>()
-});
-
+export 
 // Date Mock Utilities
 export const mockDate = (isoDate: string) => {
   const mockDate = new Date(isoDate);
   const originalDate = global.Date;
   
   const MockDate = class extends Date {
-    constructor(...args: any[]) {
+    constructor(...args: unknown[]) {
       if (args.length === 0) {
         super(mockDate.getTime());
       } else {
@@ -215,9 +157,7 @@ export const mockDate = (isoDate: string) => {
 };
 
 // Timer Mock Utilities
-export const mockTimers = () => {
-  jest.useFakeTimers();
-  
+export   
   return {
     advanceByTime: (ms: number) => jest.advanceTimersByTime(ms),
     runAllTimers: () => jest.runAllTimers(),
@@ -227,9 +167,7 @@ export const mockTimers = () => {
 };
 
 // Random Mock for Deterministic Testing
-export const mockRandom = (seed: number) => {
-  const originalRandom = Math.random;
-  Math.random = jest.fn(() => seed);
+export   Math.random = jest.fn(() => seed);
   
   return () => {
     Math.random = originalRandom;
@@ -237,9 +175,7 @@ export const mockRandom = (seed: number) => {
 };
 
 // Console Mock for Testing Console Output
-export const mockConsole = () => {
-  const originalConsole = { ...console };
-  
+export   
   console.log = jest.fn<unknown[], unknown>();
   console.error = jest.fn<unknown[], unknown>();
   console.warn = jest.fn<unknown[], unknown>();
@@ -257,10 +193,8 @@ export const mockConsole = () => {
 };
 
 // Fetch Mock
-export const mockFetch = (response?: any) => {
-  const mockResponse = response || { success: true };
-  const fetchMock = jest.fn<unknown[], unknown>().mockResolvedValue(
-    createMockApiResponse(mockResponse as unknown)
+export   const fetchMock = jest.fn<unknown[], unknown>().mockResolvedValue(
+    createMockApiResponse(mockResponse as unknown as unknown)
   );
   
   global.fetch = fetchMock;
@@ -289,55 +223,11 @@ export const createMockEvent = (type: string, properties = {}) => ({
 });
 
 // Mouse Event Mock
-export const createMockMouseEvent = (type: string, properties = {}) => ({
-  ...createMockEvent(type),
-  button: 0,
-  buttons: 1,
-  clientX: 0,
-  clientY: 0,
-  pageX: 0,
-  pageY: 0,
-  screenX: 0,
-  screenY: 0,
-  offsetX: 0,
-  offsetY: 0,
-  movementX: 0,
-  movementY: 0,
-  altKey: false,
-  ctrlKey: false,
-  metaKey: false,
-  shiftKey: false,
-  ...properties
-});
-
+export 
 // Keyboard Event Mock
-export const createMockKeyboardEvent = (type: string, properties = {}) => ({
-  ...createMockEvent(type),
-  key: '',
-  code: '',
-  keyCode: 0,
-  which: 0,
-  altKey: false,
-  ctrlKey: false,
-  metaKey: false,
-  shiftKey: false,
-  repeat: false,
-  ...properties
-});
-
+export 
 // Media Query Mock
-export const mockMediaQuery = (query: string, matches = false) => {
-  const mockMatch = {
-    matches,
-    media: query,
-    onchange: null,
-    addListener: jest.fn<unknown[], unknown>(),
-    removeListener: jest.fn<unknown[], unknown>(),
-    addEventListener: jest.fn<unknown[], unknown>(),
-    removeEventListener: jest.fn<unknown[], unknown>(),
-    dispatchEvent: jest.fn<unknown[], unknown>()
-  };
-
+export 
   window.matchMedia = jest.fn<unknown[], unknown>().mockImplementation(() => mockMatch);
   
   return mockMatch;

@@ -4,16 +4,16 @@
  * CLI and programmatic runner for Epic 16 prerequisite checks with
  * formatted reporting, auto-fix capabilities, and progress monitoring.
  */
-import { Epic16PrerequisiteSystem } from './Epic16PrerequisiteSystem.js';
+import { Epic16PrerequisiteSystem } from './Epic16PrerequisiteSystem';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 // =============================================================================
 // Prerequisite Runner Implementation
 // =============================================================================
 export class Epic16PrerequisiteRunner {
-    system;
-    options;
-    constructor(options = {}) {
+    system: any;
+    options: any;
+    constructor(options: any = {}) {
         this.options = {
             format: 'console',
             verbose: false,
@@ -29,7 +29,7 @@ export class Epic16PrerequisiteRunner {
     /**
      * Run prerequisite checks with the configured options
      */
-    async run() {
+    async run(): Promise<any> {
         const startTime = Date.now();
         try {
             // Load configuration if specified

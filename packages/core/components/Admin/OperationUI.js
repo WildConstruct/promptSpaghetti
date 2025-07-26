@@ -13,7 +13,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * - Batch operation management
  */
 import { useState, useCallback, useMemo } from 'react';
-import { ExecutionStatus, ParameterType, InputType, RiskLevel } from '../../admin/services/OperationTypesService.js';
+import { ExecutionStatus, ParameterType, InputType, RiskLevel } from '../../admin/services/OperationTypesService';
 export const OperationUI = ({ operationType, initialParameters = {}, onExecute, onCancel, onParametersChange, readonly = false, showAdvanced = false }) => {
     const [parameters, setParameters] = useState(initialParameters);
     const [validationErrors, setValidationErrors] = useState({});

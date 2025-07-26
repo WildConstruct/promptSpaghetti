@@ -2,7 +2,7 @@
  * Extension Documentation Generator - Epic 8.4 Story 8.4.1
  * Generates comprehensive documentation for extension points
  */
-import { ExtensionPointCategory, extensionPointRegistry } from './ExtensionPointRegistry.js';
+import { ExtensionPointCategory, extensionPointRegistry } from './ExtensionPointRegistry';
 export class ExtensionDocumentationGenerator {
     static instance;
     constructor() { }

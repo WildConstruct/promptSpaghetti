@@ -846,7 +846,7 @@ export class AuditFindingTrackingService {
     return new Date(now.getTime() + daysToAdd * 24 * 60 * 60 * 1000);
   }
 
-  private getDataClassification(severity: string): any {
+  private getDataClassification(severity: string): unknown {
     // Map severity to data sensitivity level
     const mapping = {
       'critical': 'restricted',
@@ -857,7 +857,7 @@ export class AuditFindingTrackingService {
     return mapping[severity as keyof typeof mapping] || 'internal';
   }
 
-  private extractComplianceFrameworks(implications: ComplianceImpact[]): any[] {
+  private extractComplianceFrameworks(implications: ComplianceImpact[]): unknown[] {
     return implications.map(imp => imp.framework as any);
   }
 

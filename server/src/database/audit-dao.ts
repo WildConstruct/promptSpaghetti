@@ -365,13 +365,13 @@ export class AuditDAO {
       new Promise<AuditEvent[]>((resolve, reject) => {
         this.db.all(sql, finalParams, (err, rows: unknown[]) => {
           if (err) reject(err);
-          else resolve(rows.map(row => this.mapRowToAuditEvent(row)));
+          else resolve((rows as unknown[]).map(row => this.mapRowToAuditEvent(row)));
         });
       }),
       new Promise<number>((resolve, reject) => {
         this.db.get(countSql, params, (err, row: unknown) => {
           if (err) reject(err);
-          else resolve(row.total);
+          else resolve((row as { total: number }).total);
         });
       })
     ]);
@@ -457,18 +457,18 @@ export class AuditDAO {
     ]);
 
     const statistics: AuditStatistics = {
-      totalEvents: totalResult.total_events || 0,
+      totalEvents: (totalResult as { total_events: number }).total_events || 0,
       eventsByType: this.arrayToRecord(eventsByType, 'event_type'),
       eventsByCategory: this.arrayToRecord(eventsByCategory, 'category'),
       eventsBySeverity: this.arrayToRecord(eventsBySeverity, 'severity'),
       eventsToday,
       eventsThisWeek,
       eventsThisMonth,
-      uniqueUsers: uniqueUsersResult.unique_users || 0,
-      topUsers: topUsers.map((user: unknown) => ({
-        userId: user.actor_id,
-        userEmail: user.actor_email,
-        eventCount: user.event_count
+      uniqueUsers: (uniqueUsersResult as { unique_users: number }).unique_users || 0,
+      topUsers: (topUsers as Array<Record<string, unknown>>).map((user: Record<string, unknown>) => ({
+        userId: user.actor_id as string,
+        userEmail: user.actor_email as string,
+        eventCount: user.event_count as number
       })),
       topResources: [], // TODO: Implement resource statistics
       securityEvents: 0, // TODO: Calculate security events
@@ -573,7 +573,12 @@ export class AuditDAO {
   }
 
   // Helper methods
-  private calculateChangedFields(beforeValue?: Record<string, any>, afterValue?: Record<string, any>): string[] {
+  private calculateChangedFields(
+    beforeValue?: Record<string,
+    unknown>,
+    afterValue?: Record<string,
+    unknown>
+  ): string[] {
     if (!beforeValue || !afterValue) return [];
     
     const changed: string[] = [];
@@ -687,7 +692,7 @@ export class AuditDAO {
       this.db.get('SELECT * FROM audit_configuration ORDER BY created_at DESC LIMIT 1', (err, row: unknown) => {
         if (err) reject(err);
         else if (!row) resolve(null);
-        else resolve(this.mapRowToConfiguration(row));
+        else resolve(this.mapRowToConfiguration(row as Record<string, unknown>));
       });
     });
   }
@@ -699,7 +704,7 @@ export class AuditDAO {
         [startDate.toISOString()],
         (err, row: unknown) => {
           if (err) reject(err);
-          else resolve(row.count || 0);
+          else resolve((row as { count: number }).count || 0);
         }
       );
     });
@@ -707,15 +712,18 @@ export class AuditDAO {
 
   private arrayToRecord(array: unknown[], keyField: string): Record<string, number> {
     const record: Record<string, number> = {};
-    array.forEach(item => {
-      record[item[keyField]] = item.count;
+    (array as Array<Record<string, unknown>>).forEach(item => {
+      record[item[keyField] as string] = item.count as number;
     });
     return record;
   }
 
-  private async generateQuerySummary(events: AuditEvent[], query: AuditEventQuery): Promise<AuditEventResponse['summary']> {
-    const eventsByCategory: Record<AuditCategory, number> = {} as any;
-    const eventsBySeverity: Record<AuditSeverity, number> = {} as any;
+  private async generateQuerySummary(
+    events: AuditEvent[],
+    query: AuditEventQuery
+  ): Promise<AuditEventResponse['summary']> {
+    const eventsByCategory: Record<AuditCategory, number> = {} as Record<AuditCategory, number>;
+    const eventsBySeverity: Record<AuditSeverity, number> = {} as Record<AuditSeverity, number>;
     const uniqueActors = new Set<string>();
 
     events.forEach(event => {
@@ -736,7 +744,10 @@ export class AuditDAO {
     };
   }
 
-  private detectComplianceViolations(___events: AuditEvent[], ___standard: ComplianceStandard): ComplianceReport['violations'] {
+  private detectComplianceViolations(
+    _events: AuditEvent[],
+    _standard: ComplianceStandard
+  ): ComplianceReport['violations'] {
     const violations: ComplianceReport['violations'] = [];
 
     // TODO: Implement compliance-specific violation detection
@@ -745,69 +756,70 @@ export class AuditDAO {
     return violations;
   }
 
-  private mapRowToAuditEvent(row: Event): AuditEvent {
+  private mapRowToAuditEvent(row: unknown): AuditEvent {
+    const auditRow = row as Record<string, unknown>;
     return {
-      id: row.id,
-      eventType: row.event_type as AuditEventType,
-      category: row.category as AuditCategory,
-      severity: row.severity as AuditSeverity,
-      actorId: row.actor_id,
-      actorType: row.actor_type,
-      actorEmail: row.actor_email,
-      actorName: row.actor_name,
-      actorRole: row.actor_role,
-      resourceType: row.resource_type,
-      resourceId: row.resource_id,
-      resourceName: row.resource_name,
-      action: row.action,
-      description: row.description,
-      outcome: row.outcome,
-      beforeValue: row.before_value ? JSON.parse(row.before_value) : undefined,
-      afterValue: row.after_value ? JSON.parse(row.after_value) : undefined,
-      changedFields: row.changed_fields ? JSON.parse(row.changed_fields) : [],
-      sessionId: row.session_id,
-      requestId: row.request_id,
-      correlationId: row.correlation_id,
-      ipAddress: row.ip_address,
-      userAgent: row.user_agent,
-      location: row.location ? JSON.parse(row.location) : undefined,
-      metadata: JSON.parse(row.metadata || '{}'),
-      tags: JSON.parse(row.tags || '[]'),
-      complianceStandards: JSON.parse(row.compliance_standards || '[]'),
-      retentionPeriod: row.retention_period,
-      checksum: row.checksum,
-      signature: row.signature,
-      timestamp: new Date(row.timestamp),
-      duration: row.duration,
-      error: row.error ? JSON.parse(row.error) : undefined
+      id: auditRow.id as string,
+      eventType: auditRow.event_type as AuditEventType,
+      category: auditRow.category as AuditCategory,
+      severity: auditRow.severity as AuditSeverity,
+      actorId: auditRow.actor_id as string,
+      actorType: auditRow.actor_type as string,
+      actorEmail: auditRow.actor_email as string,
+      actorName: auditRow.actor_name as string,
+      actorRole: auditRow.actor_role as string,
+      resourceType: auditRow.resource_type as string,
+      resourceId: auditRow.resource_id as string,
+      resourceName: auditRow.resource_name as string,
+      action: auditRow.action as string,
+      description: auditRow.description as string,
+      outcome: auditRow.outcome as string,
+      beforeValue: auditRow.before_value ? JSON.parse(auditRow.before_value as string) : undefined,
+      afterValue: auditRow.after_value ? JSON.parse(auditRow.after_value as string) : undefined,
+      changedFields: auditRow.changed_fields ? JSON.parse(auditRow.changed_fields as string) : [],
+      sessionId: auditRow.session_id as string,
+      requestId: auditRow.request_id as string,
+      correlationId: auditRow.correlation_id as string,
+      ipAddress: auditRow.ip_address as string,
+      userAgent: auditRow.user_agent as string,
+      location: auditRow.location ? JSON.parse(auditRow.location as string) : undefined,
+      metadata: JSON.parse((auditRow.metadata as string) || '{}'),
+      tags: JSON.parse((auditRow.tags as string) || '[]'),
+      complianceStandards: JSON.parse((auditRow.compliance_standards as string) || '[]'),
+      retentionPeriod: auditRow.retention_period as number,
+      checksum: auditRow.checksum as string,
+      signature: auditRow.signature as string,
+      timestamp: new Date(auditRow.timestamp as string),
+      duration: auditRow.duration as number,
+      error: auditRow.error ? JSON.parse(auditRow.error as string) : undefined
     };
   }
 
-  private mapRowToConfiguration(row: unknown): AuditConfiguration {
+  private mapRowToConfiguration(row: Record<string, unknown>): AuditConfiguration {
     return {
-      id: row.id,
-      enabledEventTypes: JSON.parse(row.enabled_event_types),
-      excludedEventTypes: JSON.parse(row.excluded_event_types || '[]'),
+      id: row.id as string,
+      enabledEventTypes: JSON.parse(row.enabled_event_types as string),
+      excludedEventTypes: JSON.parse((row.excluded_event_types as string) || '[]'),
       minimumSeverity: row.minimum_severity as AuditSeverity,
-      defaultRetentionDays: row.default_retention_days,
-      retentionByCategory: JSON.parse(row.retention_by_category || '{}'),
-      archiveAfterDays: row.archive_after_days,
-      deleteAfterDays: row.delete_after_days,
+      defaultRetentionDays: row.default_retention_days as number,
+      retentionByCategory: JSON.parse((row.retention_by_category as string) || '{}'),
+      archiveAfterDays: row.archive_after_days as number,
+      deleteAfterDays: row.delete_after_days as number,
       enableIntegrityChecking: Boolean(row.enable_integrity_checking),
       enableDigitalSignatures: Boolean(row.enable_digital_signatures),
       enableEncryption: Boolean(row.enable_encryption),
-      encryptionAlgorithm: row.encryption_algorithm,
-      batchSize: row.batch_size,
-      flushInterval: row.flush_interval,
-      maxMemoryBuffer: row.max_memory_buffer,
-      requiredStandards: JSON.parse(row.required_standards || '[]'),
+      encryptionAlgorithm: row.encryption_algorithm as string,
+      batchSize: row.batch_size as number,
+      flushInterval: row.flush_interval as number,
+      maxMemoryBuffer: row.max_memory_buffer as number,
+      requiredStandards: JSON.parse((row.required_standards as string) || '[]'),
       automaticReportGeneration: Boolean(row.automatic_report_generation),
-      reportSchedule: row.report_schedule ? JSON.parse(row.report_schedule) : undefined,
+      reportSchedule: row.report_schedule ? JSON.parse(row.report_schedule as string) : undefined,
       alertOnCriticalEvents: Boolean(row.alert_on_critical_events),
       alertOnSecurityEvents: Boolean(row.alert_on_security_events),
-      alertRecipients: JSON.parse(row.alert_recipients || '[]'),
-      createdAt: new Date(row.created_at),
-      updatedAt: new Date(row.updated_at)
+      alertRecipients: JSON.parse((row.alert_recipients as string) || '[]'),
+      createdAt: new Date(row.created_at as string),
+      updatedAt: new Date(row.updated_at as string)
     };
   }
 }

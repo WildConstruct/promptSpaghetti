@@ -14,6 +14,27 @@ export { default as SecurityReliabilityEngineer } from './SecurityReliabilityEng
 export { default as SecurityCapacityManager } from './SecurityCapacityManager';
 export { default as SecurityFailoverManager } from './SecurityFailoverManager';
 export { default as SecurityDisasterRecoveryManager } from './SecurityDisasterRecoveryManager';
+export { default as SecurityCostOptimizer } from './SecurityCostOptimizer';
+export { default as SecurityDataArchiver } from './SecurityDataArchiver';
+export { default as SecuritySystemHealthTracker } from './SecuritySystemHealthTracker';
+export { default as SecurityQueryOptimizer } from './SecurityQueryOptimizer';
+export { default as SecurityOptimizationTools } from './SecurityOptimizationTools';
+export { default as SecurityDataPipelineMonitor } from './SecurityDataPipelineMonitor';
+export { default as SecurityQueryPerformanceOptimizer } from './SecurityQueryPerformanceOptimizer';
+export { default as SecurityInfrastructureMonitor } from './SecurityInfrastructureMonitor';
+// Epic 31 - ML Security Analytics Components (NEW)
+export { PredictiveSecurityAnalytics, PredictiveAnalyticsFactory, SecurityEventType as PredictiveEventType, ThreatType, ActionType } from './PredictiveSecurityAnalytics';
+export { UserBehaviorAnalytics, UserBehaviorAnalyticsFactory, UserActionType, AnomalyType } from './UserBehaviorAnalytics';
+export { MLSecurityAnalyticsFramework, Epic31SecurityAnalytics } from './MLSecurityAnalyticsFramework';
+// Epic 31.4.1 & 31.4.2 - Advanced Security Analytics Components (NEW)
+export { SecurityAnomalyDetector, AnomalyType, AnomalySeverity, AlertType, DetectionModelType } from './SecurityAnomalyDetector';
+export { SecurityThreatForecasting, ForecastType, RecommendationType, ForecastAlgorithm, SeasonalPeriod, TrendType } from './SecurityThreatForecasting';
+// Epic 31.4.1 - Security Intelligence Dashboard and Data Analysis Components (NEW)
+export { SecurityIntelligenceDashboard, ThreatLevel, RiskCategory, WidgetType, ReportType, ReportFrequency } from './SecurityIntelligenceDashboard';
+export { SecurityDataQualityMonitor, ValidationRuleType, ValidationSeverity, QualityDimension } from './SecurityDataQualityMonitor';
+// Epic 31.4.1 - Security Event Correlation and Data Pipeline Components (NEW)
+export { SecurityEventCorrelationEngine, SecurityEventCorrelationFactory, CorrelationRuleType, CorrelationOperator, CorrelationActionType, EventGroupType, EvidenceType, IndicatorType, RecommendationType, GroupStatus } from './SecurityEventCorrelationEngine';
+export { SecurityIntelligenceDataPipeline, SecurityIntelligenceDataPipelineFactory, StageType, FieldType, TransformationType, ValidationRuleType, ValidationSeverity, ExecutionStatus, ErrorType, SourceType, DestinationType, PipelineAlertType, OutputFormat } from './SecurityIntelligenceDataPipeline';
 // Re-export existing security components for convenience
 export { default as RateLimiter } from './RateLimiter';
 export { default as ComplianceMonitor } from '../services/ComplianceMonitor';

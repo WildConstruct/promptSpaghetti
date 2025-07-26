@@ -63,10 +63,10 @@ describe('SessionMonitoringService', () => {
     );
 
     // Setup default mock implementations
-    mockDbService.query = jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown);
-    mockAuditService.logEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
-    mockRedisService.setex = jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown);
-    mockRedisService.get = jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown);
+    mockDbService.query = jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown as unknown);
+    mockAuditService.logEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown);
+    mockRedisService.setex = jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown as unknown);
+    mockRedisService.get = jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown as unknown);
   });
 
   afterEach(() => {
@@ -199,7 +199,7 @@ describe('SessionMonitoringService', () => {
       mockDbService.query.mockResolvedValueOnce({ 
         rows: [{ email: 'user@example.com' }] 
       }); // User email lookup
-      mockSessionService.revokeAllUserSessions = jest.fn<unknown[], unknown>().mockResolvedValue(2 as unknown);
+      mockSessionService.revokeAllUserSessions = jest.fn<unknown[], unknown>().mockResolvedValue(2 as unknown as unknown);
 
       const alert = await service.createAlert(criticalAlert);
 
@@ -242,7 +242,7 @@ describe('SessionMonitoringService', () => {
         averageSessionDuration: 3600,
         suspiciousActivities: 0,
         concurrentSessionsPerUser: {}
-      } as unknown);
+      } as unknown as unknown);
 
       service.startMonitoring(100); // 100ms interval for testing
 
@@ -371,7 +371,7 @@ describe('SessionMonitoringService', () => {
       });
 
       // Mock additional queries for other anomaly checks
-      mockDbService.query.mockResolvedValue({ rows: [] } as unknown);
+      mockDbService.query.mockResolvedValue({ rows: [] } as unknown as unknown);
 
       await (service as any).checkForAnomalies(metrics);
 
@@ -445,7 +445,7 @@ describe('SessionMonitoringService', () => {
         }]
       });
 
-      mockSessionService.revokeSession = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
+      mockSessionService.revokeSession = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown);
 
       const createAlertSpy = jest.spyOn(service, 'createAlert').mockImplementation(async () => ({
         id: 'alert-1',
@@ -491,7 +491,7 @@ describe('SessionMonitoringService', () => {
         concurrentSessionsPerUser: { 'user-1': 2 }
       };
 
-      mockDbService.query.mockResolvedValue({ rows: [] } as unknown);
+      mockDbService.query.mockResolvedValue({ rows: [] } as unknown as unknown);
       
       await (service as any).updateMetricsCache(metrics);
 
@@ -515,7 +515,7 @@ describe('SessionMonitoringService', () => {
         timestamp: new Date()
       };
 
-      mockRedisService.get.mockResolvedValue(JSON.stringify(cachedMetrics as unknown));
+      mockRedisService.get.mockResolvedValue(JSON.stringify(cachedMetrics as unknown as unknown));
 
       const metrics = await service.getCachedMetrics();
 
@@ -538,7 +538,7 @@ describe('SessionMonitoringService', () => {
         }
       ];
 
-      mockDbService.query.mockResolvedValue({ rows: mockRules } as unknown);
+      mockDbService.query.mockResolvedValue({ rows: mockRules } as unknown as unknown);
 
       const rules = await service.getMonitoringRules();
 

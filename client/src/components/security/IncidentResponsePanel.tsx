@@ -75,9 +75,7 @@ interface IncidentResponsePanelProps {
   onClose?: () => void;
 }
 
-export const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({ incidentId, onIncidentUpdate, ___onClose }) => {
-  const [incident, setIncident] = useState<SecurityIncident | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+export   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'overview' | 'timeline' | 'evidence' | 'actions'>('overview');
   const [newNote, setNewNote] = useState('');
   const [newAction, setNewAction] = useState({ title: '', description: '', assigned_to: '', due_date: '' });

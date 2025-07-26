@@ -230,7 +230,7 @@ export const FeatureToggleDashboard: React.FC = () => {
     setShowParametersManager(true);
   };
 
-  const handleParametersChange = async (toggleId: string, parameters: Record<string, any>) => {
+  const handleParametersChange = async (toggleId: string, parameters: Record<string, unknown>) => {
     try {
       const response = await fetch(`/api/toggle-parameters/toggles/${toggleId}/parameters`, {
         method: 'PUT',
@@ -605,7 +605,7 @@ export const FeatureToggleDashboard: React.FC = () => {
                       <EnhancedToggleStatusControls
                         toggle={{
                           ...toggle,
-                          type: toggle.type.toUpperCase().replace('_', '_') as any,
+                          type: toggle.type.toUpperCase().replace('_', '_') as 'BOOLEAN' | 'PERCENTAGE' | 'MULTIVARIATE' | 'SCHEDULED' | 'SEGMENTATION',
                           hasActiveOverride: false, // TODO: Add override detection logic
                           percentage: toggle.type === 'percentage_rollout' ? 50 : undefined,
                           rolloutStatus: toggle.type === 'percentage_rollout' ? 'ACTIVE' : undefined
@@ -873,7 +873,7 @@ export const FeatureToggleDashboard: React.FC = () => {
                 return (
                   <ToggleParametersManager
                     toggleId={toggle.id}
-                    toggleType={toggle.type.toUpperCase() as any}
+                    toggleType={toggle.type.toUpperCase() as 'BOOLEAN' | 'PERCENTAGE_ROLLOUT' | 'MULTIVARIATE' | 'SCHEDULED' | 'SEGMENTATION'}
                     currentValue={toggle.value || {}}
                     onParametersChange={(parameters) => handleParametersChange(toggle.id, parameters)}
                     onSave={handleParametersSave}

@@ -125,6 +125,7 @@ export interface ValidationMetrics {
  * Handles all aspects of event validation and deduplication
  */
 export declare class ConversionEventValidator {
+    private static readonly MAX_EVENT_AGE;
     private rules;
     private recentEvents;
     private userProfiles;
@@ -191,6 +192,5 @@ export declare class ConversionEventValidator {
 /**
  * Factory function to create ConversionEventValidator
  */
-export declare const createConversionEventValidator: (config?: Partial<DeduplicationConfig>) => ConversionEventValidator;
-export default ConversionEventValidator;
+export declare export default ConversionEventValidator;
 //# sourceMappingURL=ConversionEventValidator.d.ts.map

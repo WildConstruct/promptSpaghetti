@@ -21,19 +21,19 @@ describe('KeyManagementService', () => {
   beforeEach(() => {
     // Mock database
     mockDb = {
-      query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown as unknown as unknown)
+      query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown as unknown as unknown as unknown)
     };
 
     // Mock Redis
     mockRedis = {
-      get: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown as unknown as unknown),
-      setex: jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown as unknown as unknown),
-      del: jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown as unknown as unknown)
+      get: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown as unknown as unknown as unknown),
+      setex: jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown as unknown as unknown as unknown),
+      del: jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown as unknown as unknown as unknown)
     };
 
     // Mock audit service
     mockAuditService = {
-      logEvent: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown as unknown as unknown)
+      logEvent: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown as unknown as unknown as unknown)
     };
 
     // Test configuration
@@ -326,7 +326,7 @@ describe('KeyManagementService', () => {
 
       // Mock decryption
       const mockDecrypt = jest.spyOn(keyManagementService as any, 'decryptKeyMaterial')
-        .mockReturnValue(Buffer.from('decrypted-key-material' as unknown as unknown as unknown));
+        .mockReturnValue(Buffer.from('decrypted-key-material' as unknown as unknown as unknown as unknown));
 
       const result = await keyManagementService.getKeyMaterial('test-key', context);
 
@@ -415,7 +415,7 @@ describe('KeyManagementService', () => {
 
       // Mock getMasterKey
       jest.spyOn(keyManagementService, 'getMasterKey')
-        .mockResolvedValue(currentKey as unknown as unknown as unknown);
+        .mockResolvedValue(currentKey as unknown as unknown as unknown as unknown);
 
       // Mock access validation
       mockDb.query
@@ -475,7 +475,7 @@ describe('KeyManagementService', () => {
       };
 
       jest.spyOn(keyManagementService, 'getMasterKey')
-        .mockResolvedValue(null as unknown as unknown as unknown);
+        .mockResolvedValue(null as unknown as unknown as unknown as unknown);
 
       await expect(
         keyManagementService.rotateKey('non-existent', context)
@@ -574,7 +574,7 @@ describe('KeyManagementService', () => {
       // Mock backup encryption
       const mockEncrypt = jest.spyOn(keyManagementService as any, 'encryptBackupData')
         .mockReturnValue({
-          encryptedData: Buffer.from('encrypted-backup' as unknown as unknown as unknown),
+          encryptedData: Buffer.from('encrypted-backup' as unknown as unknown as unknown as unknown),
           iv: Buffer.from('iv')
         });
 
@@ -600,7 +600,7 @@ describe('KeyManagementService', () => {
 
       jest.spyOn(keyManagementService as any, 'encryptBackupData')
         .mockReturnValue({
-          encryptedData: Buffer.from('encrypted-metadata' as unknown as unknown as unknown),
+          encryptedData: Buffer.from('encrypted-metadata' as unknown as unknown as unknown as unknown),
           iv: Buffer.from('iv')
         });
 
@@ -616,7 +616,7 @@ describe('KeyManagementService', () => {
 
       jest.spyOn(keyManagementService as any, 'encryptBackupData')
         .mockReturnValue({
-          encryptedData: Buffer.from('encrypted' as unknown as unknown as unknown),
+          encryptedData: Buffer.from('encrypted' as unknown as unknown as unknown as unknown),
           iv: Buffer.from('iv')
         });
 
@@ -746,7 +746,7 @@ describe('KeyManagementService', () => {
     it('should encrypt key material before storage', async () => {
       const mockEncrypt = jest.spyOn(keyManagementService as any, 'encryptKeyMaterial')
         .mockReturnValue({
-          encryptedData: Buffer.from('encrypted' as unknown as unknown as unknown),
+          encryptedData: Buffer.from('encrypted' as unknown as unknown as unknown as unknown),
           iv: Buffer.from('iv'),
           authTag: Buffer.from('tag')
         });

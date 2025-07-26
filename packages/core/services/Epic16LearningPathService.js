@@ -242,7 +242,7 @@ export class Epic16LearningPathService extends EventEmitter {
     /**
      * Create a new learning path
      */
-    async createLearningPath(pathData) {
+    async createLearningPath(pathData: any): Promise<any> {
         const pathId = this.generatePathId();
         const now = new Date();
         const learningPath = {

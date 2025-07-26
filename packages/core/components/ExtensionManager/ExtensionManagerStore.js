@@ -3,9 +3,9 @@
  * State management for extension manager UI
  */
 import { create } from 'zustand';
-import { extensionCompatibilityChecker } from '../../extensions/ExtensionCompatibilityChecker.js';
+import { extensionCompatibilityChecker } from '../../extensions/ExtensionCompatibilityChecker';
 // Default extension status
-const createDefaultStatus = (extension) => ({
+const createDefaultStatus = (extension: any) => ({
     enabled: false,
     loaded: false,
     hasErrors: false,
@@ -159,7 +159,7 @@ export const useExtensionManagerStore = create((set, get) => ({
         }
     },
     // Install extension
-    installExtension: async (extension) => {
+    installExtension: async (extension: any) => {
         set({ isLoading: true, error: null });
         try {
             // Check compatibility before installation
@@ -202,7 +202,7 @@ export const useExtensionManagerStore = create((set, get) => ({
         }
     },
     // Uninstall extension
-    uninstallExtension: async (extensionId) => {
+    uninstallExtension: async (extensionId: string) => {
         set({ isLoading: true, error: null });
         try {
             // Simulate uninstallation process
@@ -230,7 +230,7 @@ export const useExtensionManagerStore = create((set, get) => ({
         }
     },
     // Enable extension
-    enableExtension: async (extensionId) => {
+    enableExtension: async (extensionId: string) => {
         const state = get();
         const status = state.extensionStatuses.get(extensionId);
         if (!status) {
@@ -261,7 +261,7 @@ export const useExtensionManagerStore = create((set, get) => ({
         }
     },
     // Disable extension
-    disableExtension: async (extensionId) => {
+    disableExtension: async (extensionId: string) => {
         const state = get();
         const status = state.extensionStatuses.get(extensionId);
         if (!status) {
@@ -285,7 +285,7 @@ export const useExtensionManagerStore = create((set, get) => ({
         }
     },
     // Update extension
-    updateExtension: async (extensionId) => {
+    updateExtension: async (extensionId: string) => {
         set({ isLoading: true, error: null });
         try {
             // Simulate update process
@@ -322,7 +322,7 @@ export const useExtensionManagerStore = create((set, get) => ({
         }
     },
     // Configure extension
-    configureExtension: async (extensionId, config) => {
+    configureExtension: async (extensionId: string, config: any) => {
         try {
             // Simulate configuration save
             await new Promise(resolve => setTimeout(resolve, 300));
@@ -337,7 +337,7 @@ export const useExtensionManagerStore = create((set, get) => ({
         }
     },
     // Get extension status
-    getExtensionStatus: (extensionId) => {
+    getExtensionStatus: (extensionId: string) => {
         const state = get();
         return state.extensionStatuses.get(extensionId) || {
             enabled: false,
@@ -372,7 +372,7 @@ export const useExtensionManagerStore = create((set, get) => ({
         set({ error: null });
     },
     // Set selected extension
-    setSelectedExtension: (extensionId) => {
+    setSelectedExtension: (extensionId: string) => {
         set({ selectedExtensionId: extensionId });
     }
 }));

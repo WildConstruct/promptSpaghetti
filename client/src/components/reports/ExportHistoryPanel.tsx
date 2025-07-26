@@ -111,7 +111,7 @@ export const ExportHistoryPanel: React.FC = () => {
     loadExportData();
   }, []);
 
-  const loadExportData = async () => {
+  const loadExportData = async (): Promise<void> => {
     setIsLoading(true);
     try {
       await Promise.all([
@@ -119,45 +119,45 @@ export const ExportHistoryPanel: React.FC = () => {
         loadScheduledExports(),
         loadExportStatistics()
       ]);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to load export data:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const loadExportHistory = async () => {
+  const loadExportHistory = async (): Promise<void> => {
     try {
       const response = await fetch(`/api/reports/history?limit=100&format=${formatFilter !== 'all' ? formatFilter : ''}&delivery=${deliveryFilter !== 'all' ? deliveryFilter : ''}`);
       const data = await response.json();
       if (data.success) {
         setExportHistory(data.data);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to load export history:', error);
     }
   };
 
-  const loadScheduledExports = async () => {
+  const loadScheduledExports = async (): Promise<void> => {
     try {
       const response = await fetch('/api/reports/schedules');
       const data = await response.json();
       if (data.success) {
         setScheduledExports(data.data);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to load scheduled exports:', error);
     }
   };
 
-  const loadExportStatistics = async () => {
+  const loadExportStatistics = async (): Promise<void> => {
     try {
       const response = await fetch('/api/reports/statistics');
       const data = await response.json();
       if (data.success) {
         setStatistics(data.data);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to load export statistics:', error);
     }
   };
@@ -168,19 +168,18 @@ export const ExportHistoryPanel: React.FC = () => {
   };
 
   // Handle scheduled export toggle
-  const toggleScheduledExport = async (scheduleId: string, enabled: boolean) => {
+  const toggleScheduledExport = async (scheduleId: string, enabled: boolean): Promise<void> => {
     try {
       // This would be implemented with a PATCH endpoint
-      console.log(`Toggle schedule ${scheduleId} to ${enabled}`);
       // Reload data after update
       await loadScheduledExports();
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to toggle scheduled export:', error);
     }
   };
 
   // Handle scheduled export deletion
-  const deleteScheduledExport = async (scheduleId: string) => {
+  const deleteScheduledExport = async (scheduleId: string): Promise<void> => {
     try {
       const response = await fetch(`/api/reports/schedules/${scheduleId}`, {
         method: 'DELETE'
@@ -188,7 +187,7 @@ export const ExportHistoryPanel: React.FC = () => {
       if (response.ok) {
         await loadScheduledExports();
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to delete scheduled export:', error);
     }
   };
@@ -203,7 +202,7 @@ export const ExportHistoryPanel: React.FC = () => {
   });
 
   // Get format icon
-  const getFormatIcon = (___format: string) => {
+  const getFormatIcon = (_format: string) => {
     return <FileText className="w-4 h-4" />;
   };
 
@@ -217,7 +216,7 @@ export const ExportHistoryPanel: React.FC = () => {
   };
 
   // Get status badge
-  const getStatusBadge = (success: boolean, ___error?: string) => {
+  const getStatusBadge = (success: boolean, _error?: string) => {
     if (success) {
       return <Badge variant="default" className="bg-green-100 text-green-800"><CheckCircle className="w-3 h-3 mr-1" />Success</Badge>;
     } else {

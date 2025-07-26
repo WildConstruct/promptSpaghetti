@@ -6,10 +6,10 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Part of Epic 17.5.4 - Policy Enforcement (Backstage Admin Controls)
  */
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Shield, AlertTriangle, CheckCircle, Clock, Plus, Edit3, Trash2, Eye, Flag, TrendingUp, Search, RefreshCw, Download } from 'lucide-react';
 export const PolicyManagementDashboard = ({ className = '' }) => {
     const [activeTab, setActiveTab] = useState('overview');

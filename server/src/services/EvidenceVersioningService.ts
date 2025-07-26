@@ -99,7 +99,7 @@ export interface EvidenceVersionDiff {
     metadata?: {
       added: Record<string, any>;
       removed: string[];
-      modified: Record<string, { from: any; to: any }>;
+      modified: Record<string, { from: unknown; to: unknown }>;
     };
     classification?: {
       from: DataClassification;
@@ -762,7 +762,7 @@ export class EvidenceVersioningService {
     return result.length > 0 ? this.deserializeBranch(result[0]) : null;
   }
 
-  private deserializeVersion(row: any): EvidenceVersion {
+  private deserializeVersion(row: unknown): EvidenceVersion {
     return {
       id: row.id,
       evidenceId: row.evidence_id,
@@ -798,7 +798,7 @@ export class EvidenceVersioningService {
     };
   }
 
-  private deserializeBranch(row: any): EvidenceVersionBranch {
+  private deserializeBranch(row: unknown): EvidenceVersionBranch {
     return {
       name: row.name,
       baseVersion: row.base_version,
@@ -979,7 +979,7 @@ export class EvidenceVersioningService {
 
   private async updateVersionMetadata(versionId: string, updates: Partial<EvidenceVersion>): Promise<void> {
     const updateFields: string[] = [];
-    const updateValues: any[] = [];
+    const updateValues: unknown[] = [];
     
     if (updates.changeType !== undefined) {
       updateFields.push('change_type = ?');

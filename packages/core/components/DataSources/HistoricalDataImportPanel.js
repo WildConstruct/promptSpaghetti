@@ -2,7 +2,7 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
 // packages/core/components/DataSources/HistoricalDataImportPanel.tsx
 // Epic 8.8 Task 1: Historical Data Import Interface
 import { useState, useCallback, useEffect } from 'react';
-import { useExternalDataImport, useHistoricalQueryBuilder, useDataSourceCache } from '../../hooks/useExternalDataImport.js';
+import { useExternalDataImport, useHistoricalQueryBuilder, useDataSourceCache } from '../../hooks/useExternalDataImport';
 const ERA_OPTIONS = [
     { value: 'ancient', label: 'Ancient (3000 BC - 500 AD)' },
     { value: 'early-medieval', label: 'Early Medieval (500-1000)' },

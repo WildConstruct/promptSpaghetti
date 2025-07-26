@@ -21,21 +21,21 @@ declare const prerequisiteSchema: z.ZodObject<{
     name: string;
     description: string;
     isActive: boolean;
-    type: "tutorial" | "assessment" | "skill" | "certificate" | "experience";
+    type: "tutorial" | "assessment" | "experience" | "certificate" | "skill";
     category: string;
+    validityPeriod?: number | undefined;
     requiredScore?: number | undefined;
     requiredTime?: number | undefined;
-    validityPeriod?: number | undefined;
 }, {
     id: string;
     name: string;
     description: string;
-    type: "tutorial" | "assessment" | "skill" | "certificate" | "experience";
+    type: "tutorial" | "assessment" | "experience" | "certificate" | "skill";
     category: string;
     isActive?: boolean | undefined;
+    validityPeriod?: number | undefined;
     requiredScore?: number | undefined;
     requiredTime?: number | undefined;
-    validityPeriod?: number | undefined;
 }>;
 declare const prerequisiteGroupSchema: z.ZodObject<{
     id: z.ZodString;
@@ -87,33 +87,33 @@ declare const userProgressSchema: z.ZodObject<{
         verifiedBy?: string | undefined;
     }>, "many">>;
 }, "strip", z.ZodTypeAny, {
-    status: "expired" | "completed" | "failed" | "not_started" | "in_progress";
+    status: "expired" | "completed" | "failed" | "in_progress" | "not_started";
     userId: string;
     attempts: number;
     prerequisiteId: string;
     score?: number | undefined;
     expiresAt?: Date | undefined;
-    completedAt?: Date | undefined;
     evidence?: {
         value: string;
         type: "time" | "score" | "completion" | "peer_review" | "instructor_approval";
         timestamp: Date;
         verifiedBy?: string | undefined;
     }[] | undefined;
+    completedAt?: Date | undefined;
 }, {
-    status: "expired" | "completed" | "failed" | "not_started" | "in_progress";
+    status: "expired" | "completed" | "failed" | "in_progress" | "not_started";
     userId: string;
     prerequisiteId: string;
     score?: number | undefined;
-    expiresAt?: Date | undefined;
     attempts?: number | undefined;
-    completedAt?: Date | undefined;
+    expiresAt?: Date | undefined;
     evidence?: {
         value: string;
         type: "time" | "score" | "completion" | "peer_review" | "instructor_approval";
         timestamp: Date;
         verifiedBy?: string | undefined;
     }[] | undefined;
+    completedAt?: Date | undefined;
 }>;
 export type Prerequisite = z.infer<typeof prerequisiteSchema>;
 export type PrerequisiteGroup = z.infer<typeof prerequisiteGroupSchema>;
@@ -243,21 +243,21 @@ export declare const schemas: {
         name: string;
         description: string;
         isActive: boolean;
-        type: "tutorial" | "assessment" | "skill" | "certificate" | "experience";
+        type: "tutorial" | "assessment" | "experience" | "certificate" | "skill";
         category: string;
+        validityPeriod?: number | undefined;
         requiredScore?: number | undefined;
         requiredTime?: number | undefined;
-        validityPeriod?: number | undefined;
     }, {
         id: string;
         name: string;
         description: string;
-        type: "tutorial" | "assessment" | "skill" | "certificate" | "experience";
+        type: "tutorial" | "assessment" | "experience" | "certificate" | "skill";
         category: string;
         isActive?: boolean | undefined;
+        validityPeriod?: number | undefined;
         requiredScore?: number | undefined;
         requiredTime?: number | undefined;
-        validityPeriod?: number | undefined;
     }>;
     prerequisiteGroup: z.ZodObject<{
         id: z.ZodString;
@@ -309,33 +309,33 @@ export declare const schemas: {
             verifiedBy?: string | undefined;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
-        status: "expired" | "completed" | "failed" | "not_started" | "in_progress";
+        status: "expired" | "completed" | "failed" | "in_progress" | "not_started";
         userId: string;
         attempts: number;
         prerequisiteId: string;
         score?: number | undefined;
         expiresAt?: Date | undefined;
-        completedAt?: Date | undefined;
         evidence?: {
             value: string;
             type: "time" | "score" | "completion" | "peer_review" | "instructor_approval";
             timestamp: Date;
             verifiedBy?: string | undefined;
         }[] | undefined;
+        completedAt?: Date | undefined;
     }, {
-        status: "expired" | "completed" | "failed" | "not_started" | "in_progress";
+        status: "expired" | "completed" | "failed" | "in_progress" | "not_started";
         userId: string;
         prerequisiteId: string;
         score?: number | undefined;
-        expiresAt?: Date | undefined;
         attempts?: number | undefined;
-        completedAt?: Date | undefined;
+        expiresAt?: Date | undefined;
         evidence?: {
             value: string;
             type: "time" | "score" | "completion" | "peer_review" | "instructor_approval";
             timestamp: Date;
             verifiedBy?: string | undefined;
         }[] | undefined;
+        completedAt?: Date | undefined;
     }>;
 };
 export default PrerequisiteSystemService;

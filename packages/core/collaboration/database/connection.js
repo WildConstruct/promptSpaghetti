@@ -1,9 +1,9 @@
 import { Pool } from 'pg';
-import { ErrorFactory } from '../../errors/ErrorFactory.js';
+import { ErrorFactory } from '../../errors/ErrorFactory';
 export class DatabaseConnection {
     pool;
     isConnected = false;
-    constructor(config) {
+    constructor(config: any) {
         this.pool = new Pool({
             ...config,
             max: config.max || 20,
@@ -39,7 +39,7 @@ export class DatabaseConnection {
             throw error;
         }
     }
-    async query(text, params) {
+    async query(text: string, params?: any[]) {
         if (!this.isConnected) {
             throw ErrorFactory.createDatabaseConnectionError('Cannot execute query: Database not connected', undefined, { operation: 'query', metadata: { query: text.substring(0, 100) } });
         }
@@ -61,7 +61,7 @@ export class DatabaseConnection {
             throw error;
         }
     }
-    async transaction(callback) {
+    async transaction(callback: (client: any) => Promise<any>) {
         if (!this.isConnected) {
             throw ErrorFactory.createDatabaseConnectionError('Cannot start transaction: Database not connected', undefined, { operation: 'transaction' });
         }
@@ -120,7 +120,7 @@ export class DatabaseConnection {
 }
 // Utility functions for type-safe parameter binding
 export const ValidationHelpers = {
-    isValidUUID(id) {
+    isValidUUID(id: string): boolean {
         const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
         return uuidRegex.test(id);
     }
@@ -130,16 +130,16 @@ export class QueryBuilder {
     query = '';
     params = [];
     paramCount = 0;
-    constructor(baseQuery) {
+    constructor(baseQuery?: string) {
         if (baseQuery) {
             this.query = baseQuery;
         }
     }
-    append(sql) {
+    append(sql: string) {
         this.query += sql;
         return this;
     }
-    where(condition, ...params) {
+    where(condition: string, ...params: any[]) {
         if (this.query.includes('WHERE')) {
             this.query += ` AND ${condition}`;
         }
@@ -149,7 +149,7 @@ export class QueryBuilder {
         this.params.push(...params);
         return this;
     }
-    orderBy(column, direction = 'ASC') {
+    orderBy(column: string, direction: string = 'ASC') {
         if (this.query.includes('ORDER BY')) {
             this.query += `, ${column} ${direction}`;
         }
@@ -158,15 +158,15 @@ export class QueryBuilder {
         }
         return this;
     }
-    limit(count) {
+    limit(count: number) {
         this.query += ` LIMIT ${count}`;
         return this;
     }
-    offset(count) {
+    offset(count: number) {
         this.query += ` OFFSET ${count}`;
         return this;
     }
-    param(value) {
+    param(value: any) {
         this.params.push(value);
         return `$${++this.paramCount}`;
     }
@@ -180,32 +180,32 @@ export class QueryBuilder {
         this.paramCount = 0;
         return { query: finalQuery, params: finalParams };
     }
-    static select(columns = '*') {
+    static select(columns: string | string[] = '*') {
         const cols = Array.isArray(columns) ? columns.join(', ') : columns;
         return new QueryBuilder(`SELECT ${cols}`);
     }
-    static insert(table) {
+    static insert(table: string) {
         return new QueryBuilder(`INSERT INTO ${table}`);
     }
-    static update(table) {
+    static update(table: string) {
         return new QueryBuilder(`UPDATE ${table}`);
     }
-    static delete(table) {
+    static delete(table: string) {
         return new QueryBuilder(`DELETE FROM ${table}`);
     }
-    from(table) {
+    from(table: string) {
         this.query += ` FROM ${table}`;
         return this;
     }
-    join(table, condition) {
+    join(table: string, condition: string) {
         this.query += ` JOIN ${table} ON ${condition}`;
         return this;
     }
-    leftJoin(table, condition) {
+    leftJoin(table: string, condition: string) {
         this.query += ` LEFT JOIN ${table} ON ${condition}`;
         return this;
     }
-    set(assignments) {
+    set(assignments: Record<string, any>) {
         const setParts = Object.entries(assignments).map(([key, value]) => {
             this.params.push(value);
             return `${key} = $${++this.paramCount}`;
@@ -213,7 +213,7 @@ export class QueryBuilder {
         this.query += ` SET ${setParts.join(', ')}`;
         return this;
     }
-    values(data) {
+    values(data: Record<string, any>) {
         const columns = Object.keys(data);
         const placeholders = Object.values(data).map((value) => {
             this.params.push(value);
@@ -222,7 +222,7 @@ export class QueryBuilder {
         this.query += ` (${columns.join(', ')}) VALUES (${placeholders.join(', ')})`;
         return this;
     }
-    returning(columns = '*') {
+    returning(columns: string | string[] = '*') {
         const cols = Array.isArray(columns) ? columns.join(', ') : columns;
         this.query += ` RETURNING ${cols}`;
         return this;
@@ -231,7 +231,7 @@ export class QueryBuilder {
 // Database migration utilities
 export class MigrationRunner {
     db;
-    constructor(db) {
+    constructor(db: DatabaseConnection) {
         this.db = db;
     }
     async ensureMigrationsTable() {
@@ -248,13 +248,13 @@ export class MigrationRunner {
         const result = await this.db.query('SELECT version FROM schema_migrations ORDER BY version');
         return result.rows.map(row => row.version);
     }
-    async applyMigration(version, sql) {
+    async applyMigration(version: string, sql: string) {
         await this.db.transaction(async (client) => {
             await client.query(sql);
             await client.query('INSERT INTO schema_migrations (version, description) VALUES ($1, $2)', [version, `Migration ${version}`]);
         });
     }
-    async rollbackMigration(version) {
+    async rollbackMigration(version: string) {
         const result = await this.db.query('SELECT rollback_sql FROM schema_migrations WHERE version = $1', [version]);
         if (result.rows.length === 0) {
             throw ErrorFactory.createValidationError('version', version, 'existing migration version', { operation: 'rollback_migration' });

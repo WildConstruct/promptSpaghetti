@@ -71,7 +71,7 @@ export interface ComparisonFilter {
   type: 'segment' | 'cohort' | 'timeRange' | 'geography' | 'device' | 'custom';
   field: string;
   operator: string;
-  value: any;
+  value: Error;
   description?: string;
 }
 
@@ -213,8 +213,8 @@ export interface ComparisonExportData {
 export interface ComparisonVisualization {
   type: 'funnel_chart' | 'delta_chart' | 'significance_heatmap' | 'timeline_chart';
   title: string;
-  data: any;
-  configuration: any;
+  data: Record<string, unknown>;
+  configuration: unknown;
 }
 
 export interface ABTestIntegration {
@@ -772,7 +772,7 @@ const StepByStepComparison: React.FC<StepByStepComparisonProps> = ({
 /**
  * Detailed Comparison Component
  */
-const DetailedComparison: React.FC<any> = () => (
+const DetailedComparison: React.FC<unknown> = () => (
   <div className="detailed-comparison">
     <p>Detailed Comparison View (TODO: Implement)</p>
   </div>
@@ -781,7 +781,7 @@ const DetailedComparison: React.FC<any> = () => (
 /**
  * Statistical Analysis Component
  */
-const StatisticalAnalysis: React.FC<any> = () => (
+const StatisticalAnalysis: React.FC<unknown> = () => (
   <div className="statistical-analysis">
     <p>Statistical Analysis View (TODO: Implement)</p>
   </div>
@@ -790,7 +790,7 @@ const StatisticalAnalysis: React.FC<any> = () => (
 /**
  * Insight Detail Modal Component
  */
-const InsightDetailModal: React.FC<any> = () => (
+const InsightDetailModal: React.FC<unknown> = () => (
   <div className="insight-detail-modal">
     <p>Insight Detail Modal (TODO: Implement)</p>
   </div>

@@ -56,7 +56,7 @@ describe('TimeoutManager', () => {
 
   describe('Timeout Execution', () => {
     it('should execute operation successfully within timeout', async () => {
-      const operation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown);
+      const operation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown as unknown);
       
       const result = await timeoutManager.executeWithTimeout(
         operation,
@@ -96,7 +96,7 @@ describe('TimeoutManager', () => {
       const operation = jest.fn<unknown[], unknown>()
         .mockRejectedValueOnce(new Error('First failure'))
         .mockRejectedValueOnce(new Error('Second failure'))
-        .mockResolvedValue('success' as unknown);
+        .mockResolvedValue('success' as unknown as unknown);
       
       const result = await timeoutManager.executeWithTimeout(
         operation,
@@ -156,7 +156,7 @@ describe('TimeoutManager', () => {
       const operation = jest.fn<unknown[], unknown>()
         .mockRejectedValueOnce(new Error('Failure'))
         .mockRejectedValueOnce(new Error('Failure'))
-        .mockResolvedValue('success' as unknown);
+        .mockResolvedValue('success' as unknown as unknown);
       
       // Trigger circuit breaker
       await circuitBreakerManager.executeWithTimeout(operation, 'database', 'query');
@@ -176,7 +176,7 @@ describe('TimeoutManager', () => {
   describe('Fallback Operations', () => {
     it('should execute fallback when primary fails', async () => {
       const primaryOperation = jest.fn<unknown[], unknown>().mockRejectedValue(new Error('Primary failed'));
-      const fallbackOperation = jest.fn<unknown[], unknown>().mockResolvedValue('fallback success' as unknown);
+      const fallbackOperation = jest.fn<unknown[], unknown>().mockResolvedValue('fallback success' as unknown as unknown);
       
       const result = await timeoutManager.executeWithFallback(
         primaryOperation,
@@ -192,8 +192,8 @@ describe('TimeoutManager', () => {
     });
 
     it('should use primary result when it succeeds', async () => {
-      const primaryOperation = jest.fn<unknown[], unknown>().mockResolvedValue('primary success' as unknown);
-      const fallbackOperation = jest.fn<unknown[], unknown>().mockResolvedValue('fallback success' as unknown);
+      const primaryOperation = jest.fn<unknown[], unknown>().mockResolvedValue('primary success' as unknown as unknown);
+      const fallbackOperation = jest.fn<unknown[], unknown>().mockResolvedValue('fallback success' as unknown as unknown);
       
       const result = await timeoutManager.executeWithFallback(
         primaryOperation,
@@ -280,7 +280,7 @@ describe('TimeoutManager', () => {
 
   describe('Metrics Collection', () => {
     it('should collect metrics for operations', async () => {
-      const operation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown);
+      const operation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown as unknown);
       
       await timeoutManager.executeWithTimeout(operation, 'database', 'query');
       
@@ -413,7 +413,7 @@ describe('TimeoutMonitoringService', () => {
 
   describe('Performance Metrics', () => {
     it('should calculate performance metrics', async () => {
-      const operation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown);
+      const operation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown as unknown);
       
       await timeoutManager.executeWithTimeout(operation, 'database', 'query');
       
@@ -425,7 +425,7 @@ describe('TimeoutMonitoringService', () => {
     });
 
     it('should get all performance metrics', async () => {
-      const operation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown);
+      const operation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown as unknown);
       
       await timeoutManager.executeWithTimeout(operation, 'database', 'query');
       await timeoutManager.executeWithTimeout(operation, 'redis', 'operation');
@@ -493,7 +493,7 @@ describe('TimeoutMonitoringService', () => {
 
   describe('Dashboard Data', () => {
     it('should provide dashboard data', async () => {
-      const operation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown);
+      const operation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown as unknown);
       await timeoutManager.executeWithTimeout(operation, 'database', 'query');
       
       const dashboard = monitoringService.getDashboardData();

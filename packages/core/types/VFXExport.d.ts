@@ -60,6 +60,11 @@ export interface VFXPromptData {
         composition: number;
         style: number;
     };
+    mars?: VFXMARSStructure;
+    zadaVariants?: VFXZadaVariant[];
+    hollywoodProtocol?: VFXHollywoodProtocol;
+    humanReadable?: VFXHumanReadableLayer;
+    controlNetTags?: VFXControlNetTags;
 }
 export interface VFXPromptVariant {
     id: string;
@@ -642,5 +647,397 @@ export interface UTDGMetadata {
     historicalPeriods: string[];
     regions: string[];
     dataProvenance: string[];
+}
+/**
+ * MARS (Metadata, Actions, Rendering, Style) structure for VFX compatibility
+ * Provides structured sections that align with professional VFX workflows
+ */
+export interface VFXMARSStructure {
+    metadata: {
+        camera: {
+            shotType: 'extreme-wide' | 'wide' | 'medium' | 'close-up' | 'extreme-close-up' | 'two-shot' | 'over-shoulder';
+            movement: 'static' | 'pan' | 'tilt' | 'dolly' | 'crane' | 'handheld' | 'steadicam' | 'tracking';
+            angle: 'eye-level' | 'low-angle' | 'high-angle' | 'dutch-angle' | 'birds-eye' | 'worms-eye';
+            lens: {
+                focalLength: number;
+                aperture: number;
+                focusType: 'sharp' | 'shallow-dof' | 'deep-focus' | 'rack-focus' | 'soft-focus';
+            };
+            framing: {
+                composition: 'rule-of-thirds' | 'centered' | 'golden-ratio' | 'symmetrical' | 'asymmetrical';
+                aspectRatio: '16:9' | '21:9' | '4:3' | '2.35:1' | '1.85:1' | 'square';
+                headroom: 'tight' | 'standard' | 'loose';
+            };
+        };
+        scene: {
+            location: 'interior' | 'exterior' | 'studio' | 'practical-location' | 'virtual-set';
+            timeOfDay: 'golden-hour' | 'blue-hour' | 'day' | 'night' | 'magic-hour' | 'overcast';
+            season: 'spring' | 'summer' | 'autumn' | 'winter' | 'timeless';
+            weather: 'clear' | 'cloudy' | 'rainy' | 'stormy' | 'foggy' | 'snowy' | 'windy';
+            atmosphere: 'calm' | 'tense' | 'chaotic' | 'serene' | 'ominous' | 'festive' | 'melancholic';
+        };
+        technical: {
+            filmStock: 'digital' | '35mm' | '16mm' | 'super8' | 'imax' | 'alexa' | 'red' | 'blackmagic';
+            colorSpace: 'rec709' | 'rec2020' | 'dci-p3' | 'aces' | 'log' | 'srgb';
+            resolution: '2k' | '4k' | '6k' | '8k' | 'hd' | 'uhd' | 'cinema4k';
+            frameRate: 24 | 25 | 30 | 48 | 50 | 60 | 120;
+        };
+    };
+    actions: {
+        primary: {
+            subjects: VFXMARSSubject[];
+            primaryAction: string;
+            secondaryActions: string[];
+            interactions: VFXMARSInteraction[];
+        };
+        performance: {
+            emotionalState: 'neutral' | 'happy' | 'sad' | 'angry' | 'fearful' | 'surprised' | 'disgusted' | 'contemptuous';
+            intensity: 'subtle' | 'moderate' | 'intense' | 'extreme';
+            bodyLanguage: 'open' | 'closed' | 'confident' | 'nervous' | 'aggressive' | 'passive' | 'theatrical';
+            facialExpression: 'natural' | 'exaggerated' | 'stoic' | 'animated' | 'pensive' | 'determined';
+        };
+        movement: {
+            pace: 'slow' | 'moderate' | 'fast' | 'frenetic' | 'static';
+            direction: 'left-to-right' | 'right-to-left' | 'toward-camera' | 'away-from-camera' | 'circular' | 'chaotic';
+            choreography: 'natural' | 'staged' | 'dance-like' | 'combat' | 'athletic' | 'ceremonial';
+        };
+    };
+    rendering: {
+        lighting: {
+            setup: 'natural' | 'three-point' | 'key-only' | 'rim' | 'silhouette' | 'high-key' | 'low-key' | 'chiaroscuro';
+            quality: 'soft' | 'hard' | 'mixed' | 'dramatic' | 'flat' | 'volumetric' | 'practical';
+            temperature: {
+                kelvin: number;
+                description: 'warm' | 'cool' | 'neutral' | 'mixed' | 'color-contrast';
+            };
+            motivation: 'sun' | 'moon' | 'artificial' | 'fire' | 'neon' | 'candle' | 'fluorescent' | 'led';
+        };
+        effects: {
+            atmosphere: ('fog' | 'smoke' | 'dust' | 'rain' | 'snow' | 'mist' | 'haze' | 'steam')[];
+            particles: ('sparks' | 'embers' | 'ash' | 'pollen' | 'debris' | 'magical' | 'digital' | 'organic')[];
+            postProcessing: {
+                colorGrading: 'natural' | 'cinematic' | 'stylized' | 'desaturated' | 'high-contrast' | 'vintage' | 'futuristic';
+                filtration: 'clean' | 'film-grain' | 'digital-noise' | 'softening' | 'sharpening' | 'glow' | 'bloom';
+            };
+        };
+        quality: {
+            renderEngine: 'path-tracing' | 'ray-tracing' | 'rasterization' | 'hybrid' | 'real-time' | 'offline';
+            samples: number;
+            bounces: number;
+            denoising: boolean;
+            upscaling: '1x' | '2x' | '4x' | 'ai-upscale';
+        };
+    };
+    style: {
+        genre: 'drama' | 'action' | 'comedy' | 'horror' | 'sci-fi' | 'fantasy' | 'documentary' | 'commercial' | 'music-video';
+        visualStyle: {
+            overall: 'realistic' | 'stylized' | 'surreal' | 'abstract' | 'minimalist' | 'maximalist' | 'retro' | 'futuristic';
+            colorPalette: 'monochromatic' | 'analogous' | 'complementary' | 'triadic' | 'split-complementary' | 'tetradic' | 'natural';
+            contrast: 'low' | 'medium' | 'high' | 'extreme' | 'variable';
+            saturation: 'desaturated' | 'natural' | 'saturated' | 'hyper-saturated' | 'selective-color';
+        };
+        influences: {
+            cinematographer: string[];
+            director: string[];
+            period: string[];
+            artMovement: string[];
+        };
+        references: {
+            films: string[];
+            artwork: string[];
+            photography: string[];
+            other: string[];
+        };
+    };
+}
+/**
+ * Subject definition within MARS structure
+ */
+export interface VFXMARSSubject {
+    id: string;
+    type: 'human' | 'animal' | 'creature' | 'object' | 'vehicle' | 'environment' | 'abstract';
+    description: string;
+    importance: 'primary' | 'secondary' | 'background' | 'prop';
+    characteristics: {
+        physical: string[];
+        emotional: string[];
+        narrative: string[];
+    };
+    positioning: {
+        screenPosition: 'left' | 'center' | 'right' | 'multiple' | 'off-screen';
+        depth: 'foreground' | 'midground' | 'background';
+        relationship: string[];
+    };
+}
+/**
+ * Interaction definition between subjects
+ */
+export interface VFXMARSInteraction {
+    type: 'dialogue' | 'physical' | 'emotional' | 'spatial' | 'narrative';
+    participants: string[];
+    description: string;
+    intensity: 'subtle' | 'moderate' | 'strong' | 'dominant';
+    duration: 'brief' | 'sustained' | 'extended';
+}
+/**
+ * Zada-style natural language variants alongside structured data
+ * Provides human-readable alternatives to structured prompts
+ */
+export interface VFXZadaVariant {
+    id: string;
+    type: 'conversational' | 'technical' | 'poetic' | 'director-notes' | 'screenplay';
+    language: 'english' | 'spanish' | 'french' | 'german' | 'italian' | 'japanese' | string;
+    style: {
+        formality: 'casual' | 'professional' | 'academic' | 'artistic' | 'technical';
+        length: 'concise' | 'detailed' | 'verbose' | 'bullet-points' | 'paragraph';
+        perspective: 'objective' | 'subjective' | 'first-person' | 'second-person' | 'third-person';
+    };
+    content: {
+        naturalLanguage: string;
+        technicalNotes: string[];
+        creativeNotes: string[];
+        productionNotes: string[];
+    };
+    metadata: {
+        targetAudience: 'director' | 'cinematographer' | 'vfx-supervisor' | 'editor' | 'producer' | 'general';
+        expertiseLevel: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+        context: 'pre-production' | 'production' | 'post-production' | 'presentation' | 'documentation';
+    };
+    equivalence: {
+        marsMapping: {
+            metadata: boolean;
+            actions: boolean;
+            rendering: boolean;
+            style: boolean;
+        };
+        structuredPrompt: string;
+        confidence: number;
+    };
+}
+/**
+ * Hollywood protocol reproducibility seeds
+ * Industry-standard seed management for consistent results across productions
+ */
+export interface VFXHollywoodProtocol {
+    version: '1.0' | '1.1' | '2.0';
+    production: {
+        masterSeed: number;
+        projectCode: string;
+        episodeNumber?: number;
+        sequenceNumber?: number;
+        shotNumber?: number;
+    };
+    departmental: {
+        cinematography: number;
+        vfx: number;
+        editorial: number;
+        sound: number;
+        grading: number;
+    };
+    creative: {
+        directorVariant: number;
+        alternativeVersions: {
+            [versionName: string]: {
+                seed: number;
+                description: string;
+                approvalStatus: 'draft' | 'review' | 'approved' | 'final';
+                notes: string;
+            };
+        };
+    };
+    qa: {
+        validationSeed: number;
+        comparisonSeeds: number[];
+        benchmarkSeed: number;
+    };
+    reproducibility: {
+        guaranteeLevel: 'exact' | 'approximate' | 'creative-equivalent' | 'concept-only';
+        environmentHash: string;
+        softwareVersions: {
+            [software: string]: string;
+        };
+        hardwareFingerprint: string;
+        lastValidated: string;
+        validationNotes: string;
+    };
+    compliance: {
+        studioCertification: boolean;
+        distributorApproval: boolean;
+        archiveCompliant: boolean;
+        regulatoryCompliance: string[];
+    };
+}
+/**
+ * Human-readable export layer for filmmaker review
+ * Provides non-technical summaries for creative decision-making
+ */
+export interface VFXHumanReadableLayer {
+    executiveSummary: {
+        description: string;
+        keyElements: string[];
+        creativeIntent: string;
+        technicalComplexity: 'simple' | 'moderate' | 'complex' | 'experimental';
+        estimatedCost: 'low' | 'medium' | 'high' | 'premium';
+        estimatedTime: 'hours' | 'days' | 'weeks' | 'months';
+    };
+    creativeTeam: {
+        director: {
+            vision: string;
+            references: string[];
+            priorities: string[];
+            concerns: string[];
+        };
+        cinematographer: {
+            lookAndFeel: string;
+            lightingApproach: string;
+            cameraWork: string;
+            technicalChallenges: string[];
+        };
+        vfxSupervisor: {
+            vfxApproach: string;
+            practicalElements: string[];
+            digitalElements: string[];
+            integrationNotes: string[];
+        };
+    };
+    production: {
+        schedule: {
+            prep: string;
+            shoot: string;
+            post: string;
+        };
+        resources: {
+            crew: string[];
+            equipment: string[];
+            locations: string[];
+            talent: string[];
+        };
+        dependencies: {
+            prerequisites: string[];
+            deliverables: string[];
+            approvals: string[];
+        };
+    };
+    approval: {
+        reviewStages: {
+            [stageName: string]: {
+                reviewers: string[];
+                criteria: string[];
+                deliverables: string[];
+                timeline: string;
+            };
+        };
+        signOffs: {
+            creative: boolean;
+            technical: boolean;
+            legal: boolean;
+            budget: boolean;
+        };
+        notes: {
+            directorNotes: string[];
+            producerNotes: string[];
+            clientNotes: string[];
+            technicalNotes: string[];
+        };
+    };
+    documentation: {
+        projectDocuments: string[];
+        referenceImages: string[];
+        testFootage: string[];
+        alternativeVersions: string[];
+        archiveNotes: string;
+    };
+}
+/**
+ * ControlNet integration metadata tags for VFX pipeline compatibility
+ * Provides MARS tags ([CAM], [SUBJ], [FX]) as structured metadata for AI-driven animation
+ */
+export interface VFXControlNetTags {
+    camera: {
+        [tagName: string]: VFXControlNetTag;
+    };
+    subjects: {
+        [tagName: string]: VFXControlNetTag;
+    };
+    effects: {
+        [tagName: string]: VFXControlNetTag;
+    };
+    marsIntegration: {
+        enabled: boolean;
+        globalSettings: {
+            baseStrength: number;
+            adaptiveWeighting: boolean;
+            cascadeMode: boolean;
+        };
+        tagProcessingOrder: string[];
+    };
+}
+/**
+ * Individual ControlNet tag with specific parameters and rendering hints
+ */
+export interface VFXControlNetTag {
+    tag: string;
+    description: string;
+    controlNetParameters: {
+        depth?: {
+            enabled: boolean;
+            strength: number;
+            preprocessor: 'midas' | 'dpt' | 'zoe' | 'leres';
+            guidanceScale?: number;
+        };
+        pose?: {
+            enabled: boolean;
+            strength: number;
+            preprocessor: 'openpose' | 'dwpose' | 'animal_pose';
+            detectHands?: boolean;
+            detectFace?: boolean;
+        };
+        canny?: {
+            enabled: boolean;
+            strength: number;
+            lowThreshold?: number;
+            highThreshold?: number;
+        };
+        normal?: {
+            enabled: boolean;
+            strength: number;
+            preprocessor: 'normal' | 'bae';
+        };
+        segmentation?: {
+            enabled: boolean;
+            strength: number;
+            preprocessor: 'seg' | 'ade20k';
+        };
+        scribble?: {
+            enabled: boolean;
+            strength: number;
+            preprocessor: 'scribble' | 'fake_scribble';
+        };
+    };
+    renderingHints: {
+        cameraDistance?: number;
+        verticalAngle?: number;
+        horizontalAngle?: number;
+        fieldOfView?: number;
+        subjectScale?: number;
+        detailLevel?: 'background' | 'midground' | 'hero';
+        materialType?: string;
+        animationReady?: boolean;
+        mistDensity?: number;
+        lightingTemperature?: number;
+        atmosphericPerspective?: boolean;
+        volumetricLighting?: boolean;
+        priorityLevel?: 'low' | 'medium' | 'high' | 'critical';
+        processingOrder?: number;
+        dependsOnTags?: string[];
+        conflictsWith?: string[];
+    };
+    integration: {
+        softwareCompatibility: string[];
+        pipelineStage: 'previs' | 'lighting' | 'animation' | 'compositing' | 'final';
+        qualityLevel: 'draft' | 'preview' | 'final';
+        lastValidated?: string;
+        validationNotes?: string[];
+    };
 }
 //# sourceMappingURL=VFXExport.d.ts.map

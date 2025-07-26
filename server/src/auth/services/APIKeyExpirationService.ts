@@ -18,6 +18,29 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 import { ApiKey } from './ApiKeyManagementService';
 
+// Export enums for test compatibility
+export enum APIKeyType {
+  DEVELOPMENT = 'development',
+  PRODUCTION = 'production',
+  TESTING = 'testing',
+  API_ACCESS = 'api_access'
+}
+
+export enum ExpirationPolicyEnum {
+  FIXED_DURATION = 'fixed_duration',
+  USAGE_BASED = 'usage_based', 
+  SLIDING_WINDOW = 'sliding_window',
+  NEVER = 'never'
+}
+
+export enum APIKeyStatus {
+  ACTIVE = 'active',
+  EXPIRED = 'expired',
+  REVOKED = 'revoked',
+  PENDING = 'pending'
+}
+
+// Keep interface for backward compatibility
 export interface ExpirationPolicy {
   warningDays: number; // Days before expiration to send warning
   gracePerioddDays: number; // Days after expiration before cleanup

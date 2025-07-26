@@ -217,7 +217,7 @@ export class AuditManagementSystem {
     totalCount: number;
     page: number;
     totalPages: number;
-    analytics: any;
+    analytics: unknown;
   }> {
     const validatedQuery = AuditQuerySchema.parse(query);
     

@@ -9,12 +9,12 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Epic: 17 - Backstage Admin Controls
  */
 import { useState, useEffect, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
-import { Input } from '../ui/Input.js';
-import { Select } from '../ui/Select.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
+import { Input } from '../ui/Input';
+import { Select } from '../ui/Select';
 import { Calendar, Clock, PlayCircle, PauseCircle, StopCircle, Edit, FileText, Plus, Search, Download, RefreshCw, CheckCircle, XCircle, BarChart3, Bell, Activity, Zap, Target, Trash2 } from 'lucide-react';
 const STATUS_CONFIG = {
     pending: { color: 'text-yellow-600 bg-yellow-100', icon: Clock },

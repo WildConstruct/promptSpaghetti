@@ -13,6 +13,9 @@ export { GraphMutationEngine } from './GraphMutationEngine';
 export { GraphValidator } from './GraphValidator';
 export { ConflictResolver } from './ConflictResolver';
 export { OperationHistory } from './OperationHistory';
+
+// Import GraphMutationEngine for local use
+import { GraphMutationEngine } from './GraphMutationEngine';
 export { 
   CollaborativeSync, 
   SimpleWebSocketService,
@@ -70,15 +73,7 @@ export const createOperationId = (): string => {
   return `op-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 };
 
-export const createSnapshot = (nodes: any[], edges: any[]): any => {
-  return {
-    id: createOperationId(),
-    state: { nodes: [...nodes], edges: [...edges] },
-    timestamp: new Date(),
-    operationId: '',
-    checksum: calculateChecksum({ nodes, edges })
-  };
-};
+export };
 
 export const calculateChecksum = (state: { nodes: any[]; edges: any[] }): string => {
   const stateString = JSON.stringify(state);
@@ -92,9 +87,7 @@ export const calculateChecksum = (state: { nodes: any[]; edges: any[] }): string
 };
 
 // Factory Functions for Common Operations
-export const createNodeAddOperation = (
-  node: any,
-  position: { x: number; y: number },
+export   position: { x: number; y: number },
   userId?: string
 ): any => {
   return {
@@ -109,55 +102,14 @@ export const createNodeAddOperation = (
   };
 };
 
-export const createNodeUpdateOperation = (
-  nodeId: string,
-  updates: Record<string, unknown>,
-  previousValues: Record<string, unknown>,
-  userId?: string
-): any => {
-  return {
-    id: createOperationId(),
-    type: 'NODE_UPDATE',
-    timestamp: new Date(),
-    userId,
-    payload: {
-      nodeId,
-      updates,
-      previousValues
-    }
-  };
-};
+export };
 
-export const createEdgeAddOperation = (
-  edge: any,
-  userId?: string
-): any => {
-  return {
-    id: createOperationId(),
-    type: 'EDGE_ADD',
-    timestamp: new Date(),
-    userId,
-    payload: {
-      edge
-    }
-  };
-};
+export };
 
 // Validation Helpers
-export const validateOperationStructure = (operation: any): boolean => {
-  return !!(
-    operation &&
-    typeof operation === 'object' &&
-    operation.id &&
-    operation.type &&
-    operation.timestamp &&
-    operation.payload
-  );
-};
+export };
 
-export const isValidTimestamp = (timestamp: any): boolean => {
-  return timestamp instanceof Date && !isNaN(timestamp.getTime());
-};
+export };
 
 // Error Types for Better Error Handling
 export class MutationEngineError extends Error {
@@ -195,12 +147,7 @@ export class ConflictError extends Error {
 }
 
 // Integration Helpers for Existing Codebase
-export const createMutationEngineForStore = (
-  store: any,
-  config?: Partial<typeof defaultMutationEngineConfig>
-): GraphMutationEngine => {
-  const finalConfig = { ...defaultMutationEngineConfig, ...config };
-  const engine = new GraphMutationEngine(finalConfig);
+export   const engine = new GraphMutationEngine(finalConfig);
   
   // Setup state synchronization
   engine.on('state_changed', (data) => {

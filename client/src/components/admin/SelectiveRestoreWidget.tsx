@@ -11,7 +11,14 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button, Card, Form, Select, Input, Alert, Tabs, Progress, Table, Tag, Space } from 'antd';
-import { DatabaseOutlined, FilterOutlined, HistoryOutlined, PlayCircleOutlined, StopOutlined, ReloadOutlined } from '@ant-design/icons';
+import { 
+  DatabaseOutlined,
+  FilterOutlined,
+  HistoryOutlined,
+  PlayCircleOutlined,
+  StopOutlined,
+  ReloadOutlined
+} from '@ant-design/icons';
 
 const { TextArea } = Input;
 const { TabPane } = Tabs;
@@ -98,22 +105,11 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({
   const [activeTab, setActiveTab] = useState('configure');
   const [recoveryPoints, setRecoveryPoints] = useState<RecoveryPoint[]>([]);
   const [availableTables, setAvailableTables] = useState<string[]>([]);
-  const [___restoreRequest, ___setRestoreRequest] = useState<Partial<RestoreRequest>>({});
   const [activeRestores, setActiveRestores] = useState<RestoreProgress[]>([]);
   const [loading, setLoading] = useState(false);
   const [previewData, setPreviewData] = useState<unknown>(null);
   
-  // Load initial data
-  useEffect(() => {
-    loadRecoveryPoints();
-    loadActiveRestores();
-  }, []);
-
-  // =============================================================================
-  // Data Loading Functions
-  // =============================================================================
-
-  const loadRecoveryPoints = async () => {
+  const loadRecoveryPoints = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch('/api/admin/backup/recovery-points?limit=50');
@@ -129,9 +125,9 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [onError]);
 
-  const loadAvailableTables = async (recoveryPointId: string) => {
+  const loadAvailableTables = useCallback(async (recoveryPointId: string) => {
     try {
       const response = await fetch(`/api/admin/backup/recovery-points/${recoveryPointId}/tables`);
       const data = await response.json();
@@ -142,9 +138,9 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({
     } catch (error) {
       console.error('Failed to load available tables:', error);
     }
-  };
+  }, []);
 
-  const loadActiveRestores = async () => {
+  const loadActiveRestores = useCallback(async () => {
     try {
       const response = await fetch('/api/admin/backup/restore/active');
       const data = await response.json();
@@ -155,7 +151,13 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({
     } catch (error) {
       console.error('Failed to load active restores:', error);
     }
-  };
+  }, []);
+
+  // Load initial data
+  useEffect(() => {
+    loadRecoveryPoints();
+    loadActiveRestores();
+  }, [loadRecoveryPoints, loadActiveRestores]);
 
   // =============================================================================
   // Restore Configuration Handlers
@@ -172,7 +174,7 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({
         'table_filters.exclude_tables': point.excluded_tables
       });
     }
-  }, [recoveryPoints, form]);
+  }, [recoveryPoints, form, loadAvailableTables]);
 
   const generateRestorePreview = async () => {
     try {

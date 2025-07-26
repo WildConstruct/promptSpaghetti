@@ -124,7 +124,7 @@ export const PaymentOptimizationTools: React.FC<PaymentOptimizationToolsProps> =
           <button
             key={tab.id}
             className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
-            onClick={() => setActiveTab(tab.id as any)}
+            onClick={() => setActiveTab(tab.id as 'recommendations' | 'routing' | 'monitoring')}
           >
             {tab.label}
             {tab.count !== undefined && (

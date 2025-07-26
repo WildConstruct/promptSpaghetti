@@ -7,9 +7,9 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * & Community learning system.
  */
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Epic16LearningPathService } from '../../services/Epic16LearningPathService.js';
-import { LearningPathDashboard } from './LearningPathDashboard.js';
-import { LearningPathViewer } from './LearningPathViewer.js';
+import { Epic16LearningPathService } from '../../services/Epic16LearningPathService';
+import { LearningPathDashboard } from './LearningPathDashboard';
+import { LearningPathViewer } from './LearningPathViewer';
 export const Epic16LearningPaths = ({ userId, userRole, userTier, onAnalytics, onCertification }) => {
     // Service initialization
     const learningService = useMemo(() => new Epic16LearningPathService(), []);

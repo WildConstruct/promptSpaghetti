@@ -121,7 +121,7 @@ export class Epic16HelpRequestService extends EventEmitter {
     /**
      * Submit a new help request
      */
-    async submitHelpRequest(requestData) {
+    async submitHelpRequest(requestData: any): Promise<any> {
         const requestId = this.generateRequestId();
         const now = new Date();
         const helpRequest = {

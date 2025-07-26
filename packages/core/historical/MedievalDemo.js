@@ -4,7 +4,7 @@
  *
  * Provides historically accurate medieval content for Wild Construct demo
  */
-import { HISTORICAL_ERAS } from '../types/UTDG.js';
+import { HISTORICAL_ERAS } from '../types/UTDG';
 /**
  * Medieval-specific content types and constants
  */

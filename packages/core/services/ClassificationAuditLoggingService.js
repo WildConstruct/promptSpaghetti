@@ -7,11 +7,11 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
 export class ClassificationAuditLoggingService {
-    auditLogs = new Map();
-    reports = new Map();
-    retentionPolicies = new Map();
-    logHandlers = [];
-    archiveHandlers = [];
+    auditLogs: Map<string, any> = new Map();
+    reports: Map<string, any> = new Map();
+    retentionPolicies: Map<string, any> = new Map();
+    logHandlers: any[] = [];
+    archiveHandlers: any[] = [];
     constructor() {
         this.initializeRetentionPolicies();
         this.startRetentionCleanup();
@@ -19,7 +19,7 @@ export class ClassificationAuditLoggingService {
     /**
      * Initialize default audit retention policies
      */
-    initializeRetentionPolicies() {
+    initializeRetentionPolicies(): void {
         const policies = {
             PUBLIC: {
                 classification: 'PUBLIC',

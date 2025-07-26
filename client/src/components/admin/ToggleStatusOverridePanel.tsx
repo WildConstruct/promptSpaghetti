@@ -8,7 +8,7 @@
  * including emergency overrides, testing scenarios, and manual interventions.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
   Shield, AlertTriangle, Clock, User, Settings, X, Check,
   AlertCircle, RefreshCw, Calendar, FileText, Eye, Edit,
@@ -70,7 +70,7 @@ const ToggleStatusOverridePanel: React.FC<ToggleStatusOverridePanelProps> = ({
   const [activeOverrides, setActiveOverrides] = useState<StatusOverride[]>([]);
   const [loading, setLoading] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [___selectedOverrideType, ___setSelectedOverrideType] = useState<string>('FORCE_ENABLE');
+  const [_selectedOverrideType, _setSelectedOverrideType] = useState<string>('FORCE_ENABLE');
   
   // Form state for creating new overrides
   const [newOverride, setNewOverride] = useState({
@@ -85,8 +85,8 @@ const ToggleStatusOverridePanel: React.FC<ToggleStatusOverridePanelProps> = ({
     monitoringEnabled: true
   });
 
-  // Mock data for demonstration
-  const mockOverrides: StatusOverride[] = [
+  // Mock data for demonstration - wrapped in useMemo to prevent recreation on every render
+  const mockOverrides: StatusOverride[] = useMemo(() => [
     {
       id: 'override-1',
       toggleId: 'toggle-123',
@@ -131,15 +131,9 @@ const ToggleStatusOverridePanel: React.FC<ToggleStatusOverridePanelProps> = ({
       performanceImpact: 'No significant impact detected',
       monitoringEnabled: true
     }
-  ];
+  ], []); // Empty dependency array since this is static mock data
 
-  useEffect(() => {
-    if (isOpen) {
-      fetchActiveOverrides();
-    }
-  }, [isOpen, toggleId]);
-
-  const fetchActiveOverrides = async () => {
+  const fetchActiveOverrides = useCallback(async () => {
     setLoading(true);
     try {
       // Simulate API call
@@ -154,7 +148,13 @@ const ToggleStatusOverridePanel: React.FC<ToggleStatusOverridePanelProps> = ({
       console.error('Failed to fetch overrides:', error);
       setLoading(false);
     }
-  };
+  }, [toggleId, mockOverrides]);
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchActiveOverrides();
+    }
+  }, [isOpen, fetchActiveOverrides]);
 
   const handleCreateOverride = async () => {
     try {
@@ -163,9 +163,9 @@ const ToggleStatusOverridePanel: React.FC<ToggleStatusOverridePanelProps> = ({
         toggleId: toggleId || 'selected-toggle',
         toggleKey: 'example_toggle',
         toggleName: 'Example Toggle',
-        overrideType: newOverride.overrideType as any,
+        overrideType: newOverride.overrideType as 'FORCE_ENABLE' | 'FORCE_DISABLE' | 'PERCENTAGE_OVERRIDE' | 'TARGETING_OVERRIDE' | 'EMERGENCY_DISABLE',
         status: 'ACTIVE',
-        priority: newOverride.priority as any,
+        priority: newOverride.priority as 'LOW' | 'NORMAL' | 'HIGH' | 'EMERGENCY',
         reason: newOverride.reason,
         justification: newOverride.justification,
         createdByUserId: 'current-user',
@@ -501,7 +501,10 @@ const ToggleStatusOverridePanel: React.FC<ToggleStatusOverridePanelProps> = ({
                           <h4 className="font-medium text-gray-900">
                             {override.toggleName} ({override.toggleKey})
                           </h4>
-                          <p className="text-sm text-gray-600">{override.overrideType.replace('_', ' ').toLowerCase()}</p>
+                          <p className="text-sm text-gray-600">{override.overrideType.replace(
+                            '_',
+                            ' '
+                          ).toLowerCase()}</p>
                         </div>
                         <div className="flex items-center space-x-2">
                           <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getPriorityColor(override.priority)}`}>

@@ -14,7 +14,7 @@
  * - Real-time policy monitoring and violation detection
  */
 import { EventEmitter } from 'events';
-import { SecurityDashboardPolicies } from '../../../server/src/services/security/SecurityDashboardPolicies.js';
+import { SecurityDashboardPolicies } from '../../../server/src/services/security/SecurityDashboardPolicies';
 export var PolicyDomain;
 (function (PolicyDomain) {
     PolicyDomain["SECURITY"] = "SECURITY";
@@ -68,7 +68,7 @@ export class PolicyManagement extends EventEmitter {
     // Integrated Services
     securityDashboardPolicies;
     automatedEnforcementService;
-    constructor(securityDashboardPolicies, automatedEnforcementService) {
+    constructor(securityDashboardPolicies?: any, automatedEnforcementService?: any) {
         super();
         this.securityDashboardPolicies = securityDashboardPolicies || new SecurityDashboardPolicies();
         this.automatedEnforcementService = automatedEnforcementService || this.createMockEnforcementService();
@@ -83,7 +83,7 @@ export class PolicyManagement extends EventEmitter {
     /**
      * Create a new policy
      */
-    async createPolicy(policyData, createdBy) {
+    async createPolicy(policyData: any, createdBy: string): Promise<any> {
         const policy = {
             ...policyData,
             id: this.generatePolicyId(),
@@ -114,7 +114,7 @@ export class PolicyManagement extends EventEmitter {
     /**
      * Update an existing policy
      */
-    async updatePolicy(policyId, updates, updatedBy) {
+    async updatePolicy(policyId: string, updates: any, updatedBy: string): Promise<any> {
         const existingPolicy = this.policies.get(policyId);
         if (!existingPolicy) {
             throw new Error(`Policy not found: ${policyId}`);
@@ -151,7 +151,7 @@ export class PolicyManagement extends EventEmitter {
     /**
      * Delete a policy
      */
-    async deletePolicy(policyId, deletedBy) {
+    async deletePolicy(policyId: string, deletedBy: string) {
         const policy = this.policies.get(policyId);
         if (!policy) {
             throw new Error(`Policy not found: ${policyId}`);
@@ -172,7 +172,7 @@ export class PolicyManagement extends EventEmitter {
     /**
      * Evaluate policies for a given context
      */
-    async evaluatePolicies(context) {
+    async evaluatePolicies(context: any) {
         const startTime = Date.now();
         const results = [];
         // Check cache first
@@ -218,7 +218,7 @@ export class PolicyManagement extends EventEmitter {
     // =============================================================================
     // Policy Evaluation Logic
     // =============================================================================
-    async evaluatePolicy(policy, context) {
+    async evaluatePolicy(policy: any, context: any) {
         const evaluationId = this.generateEvaluationId();
         const startTime = Date.now();
         const result = {
@@ -294,7 +294,7 @@ export class PolicyManagement extends EventEmitter {
             return this.finalizeResult(result, startTime);
         }
     }
-    async evaluateRules(policy, context, exceptions) {
+    async evaluateRules(policy: any, context: any, exceptions: any[]) {
         const results = [];
         for (const rule of policy.configuration.rules) {
             if (!rule.enabled)
@@ -335,7 +335,7 @@ export class PolicyManagement extends EventEmitter {
         }
         return results;
     }
-    async evaluateRule(rule, context) {
+    async evaluateRule(rule: any, context: any) {
         const { logic } = rule;
         // Extract field value from context
         const fieldValue = this.extractFieldValue(logic.field, context);
@@ -415,7 +415,7 @@ export class PolicyManagement extends EventEmitter {
     // =============================================================================
     // VFX and Content-Specific Policy Logic
     // =============================================================================
-    async evaluateRuleContext(context, evaluationContext) {
+    async evaluateRuleContext(context: any, evaluationContext: any) {
         const results = {};
         let overallValid = true;
         let overallScore = 1.0;
@@ -480,7 +480,7 @@ export class PolicyManagement extends EventEmitter {
             details: results
         };
     }
-    async evaluateTimeBasedRule(rule, context) {
+    async evaluateTimeBasedRule(rule: any, context: any) {
         const contentContext = context.contentContext;
         if (!contentContext) {
             return { valid: true, score: 1.0, details: { reason: 'no_content_context' } };
@@ -510,7 +510,7 @@ export class PolicyManagement extends EventEmitter {
         }
         return { valid: true, score: 1.0, details: {} };
     }
-    async evaluateLocationBasedRule(rule, context) {
+    async evaluateLocationBasedRule(rule: any, context: any) {
         const contentContext = context.contentContext;
         // Check geopolitical context for content accuracy
         if (rule.geopoliticalContext && contentContext?.culturalContext) {
@@ -534,11 +534,11 @@ export class PolicyManagement extends EventEmitter {
         }
         return { valid: true, score: 1.0, details: {} };
     }
-    async evaluateRoleBasedRule(rule, context) {
+    async evaluateRoleBasedRule(rule: any, context: any) {
         // This would integrate with role-based access control
         return { valid: true, score: 1.0, details: { roleCheck: 'passed' } };
     }
-    async evaluateContentBasedRule(rule, context) {
+    async evaluateContentBasedRule(rule: any, context: any) {
         const contentContext = context.contentContext;
         // Check historical accuracy requirements
         if (rule.historicalAccuracy && contentContext) {
@@ -703,7 +703,7 @@ export class PolicyManagement extends EventEmitter {
         });
         console.log(`📋 Initialized ${this.policies.size} default policies`);
     }
-    async createDefaultPolicy(policyData) {
+    async createDefaultPolicy(policyData: any) {
         try {
             await this.createPolicy(policyData, 'system');
         }
@@ -723,10 +723,10 @@ export class PolicyManagement extends EventEmitter {
     generateEvaluationId() {
         return `eval-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     }
-    generateCacheKey(context) {
+    generateCacheKey(context: any) {
         return `${context.entityType}-${context.entityId}-${context.operation.type}`;
     }
-    isCacheValid(result) {
+    isCacheValid(result: any) {
         const cacheAge = Date.now() - result.timestamp.getTime();
         return cacheAge < 300000; // 5 minutes
     }
@@ -740,7 +740,7 @@ export class PolicyManagement extends EventEmitter {
             return 'autumn';
         return 'winter';
     }
-    extractFieldValue(field, context) {
+    extractFieldValue(field: string, context: any) {
         const parts = field.split('.');
         let value = context;
         for (const part of parts) {
@@ -748,7 +748,7 @@ export class PolicyManagement extends EventEmitter {
         }
         return value;
     }
-    extractQualityMetric(metric, context) {
+    extractQualityMetric(metric: string, context: any) {
         // This would extract quality metrics from the context
         // For now, return a default value
         return 0.8;
@@ -757,7 +757,7 @@ export class PolicyManagement extends EventEmitter {
     /**
      * Get all policies
      */
-    getPolicies(filters = {}) {
+    getPolicies(filters: any = {}) {
         let policies = Array.from(this.policies.values());
         if (filters.domain) {
             policies = policies.filter(p => p.domain === filters.domain);
@@ -773,13 +773,13 @@ export class PolicyManagement extends EventEmitter {
     /**
      * Get policy by ID
      */
-    getPolicy(policyId) {
+    getPolicy(policyId: string) {
         return this.policies.get(policyId) || null;
     }
     /**
      * Generate compliance report
      */
-    async generateComplianceReport(framework) {
+    async generateComplianceReport(framework: string) {
         const frameworkPolicies = this.getPolicies().filter(p => p.compliance.frameworks.includes(framework));
         return {
             framework,

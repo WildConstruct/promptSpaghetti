@@ -1,9 +1,9 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { TextFieldEditor } from '../TextFieldEditor.js';
-import { SelectEditor } from '../SelectEditor.js';
-import { VariationList } from '../VariationList.js';
-import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection.js';
-import { TemplateEditor } from '../TemplateEditor.js';
+import { TextFieldEditor } from '../TextFieldEditor';
+import { SelectEditor } from '../SelectEditor';
+import { VariationList } from '../VariationList';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
+import { TemplateEditor } from '../TemplateEditor';
 const VERB_TENSES = [
     { value: 'present', label: 'Present (walk, walks)' },
     { value: 'past', label: 'Past (walked)' },
@@ -31,7 +31,7 @@ const ACTION_TYPES = [
     { value: 'intransitive', label: 'Intransitive (no object)', group: 'Grammar' },
     { value: 'linking', label: 'Linking Verb (is, seems)', group: 'Grammar' }
 ];
-export const ActionEditor = ({ _____nodeId, nodeData, onChange }) => {
+export const ActionEditor = ({ _____nodeId, nodeData, onChange }: { _____nodeId: string; nodeData: any; onChange: (data: any) => void }) => {
     // Action specific fields
     const label = nodeData.label || '';
     const template = nodeData.template || '';
@@ -45,20 +45,20 @@ export const ActionEditor = ({ _____nodeId, nodeData, onChange }) => {
     const adverbVariations = nodeData.adverbVariations || [];
     const contextHints = nodeData.contextHints || [];
     // No state needed - ProgressiveDisclosureSection handles collapse state automatically
-    const handleFieldChange = (field, value) => {
+    const handleFieldChange = (field: string, value: any): void => {
         onChange({ [field]: value });
     };
-    const handleVariationsChange = (newVariations) => {
+    const handleVariationsChange = (newVariations: string[]): void => {
         handleFieldChange('variations', newVariations);
     };
-    const handleAdverbVariationsChange = (newAdverbs) => {
+    const handleAdverbVariationsChange = (newAdverbs: string[]): void => {
         handleFieldChange('adverbVariations', newAdverbs);
     };
-    const handleContextHintsChange = (newHints) => {
+    const handleContextHintsChange = (newHints: string[]): void => {
         handleFieldChange('contextHints', newHints);
     };
     // Auto-generate verb forms based on base form
-    const generateVerbForms = () => {
+    const generateVerbForms = (): void => {
         if (!baseForm.trim())
             return;
         const base = baseForm.trim().toLowerCase();
@@ -118,7 +118,7 @@ export const ActionEditor = ({ _____nodeId, nodeData, onChange }) => {
                                 color: '#e2e8f0',
                                 fontSize: 12
                             }, children: "Verb Variations" }), _jsx(VariationList, { nodeId: nodeData.id, variations: variations, onAdd: (variation) => handleVariationsChange([...variations, variation]), onRemove: (index) => {
-                                const newVariations = variations.filter((_, i) => i !== index);
+                                const newVariations = variations.filter((_: string, i: number) => i !== index);
                                 handleVariationsChange(newVariations);
                             }, onUpdate: (index, newValue) => {
                                 const newVariations = [...variations];
@@ -171,7 +171,7 @@ export const ActionEditor = ({ _____nodeId, nodeData, onChange }) => {
                                     color: '#e2e8f0',
                                     fontSize: 12
                                 }, children: "Adverb Modifiers" }), _jsx(VariationList, { nodeId: `${nodeData.id}-adverbs`, variations: adverbVariations, onAdd: (adverb) => handleAdverbVariationsChange([...adverbVariations, adverb]), onRemove: (index) => {
-                                    const newAdverbs = adverbVariations.filter((_, i) => i !== index);
+                                    const newAdverbs = adverbVariations.filter((_: string, i: number) => i !== index);
                                     handleAdverbVariationsChange(newAdverbs);
                                 }, onUpdate: (index, newValue) => {
                                     const newAdverbs = [...adverbVariations];
@@ -194,7 +194,7 @@ export const ActionEditor = ({ _____nodeId, nodeData, onChange }) => {
                                 color: '#e2e8f0',
                                 fontSize: 12
                             }, children: "Context Hints" }), _jsx(VariationList, { nodeId: `${nodeData.id}-context`, variations: contextHints, onAdd: (hint) => handleContextHintsChange([...contextHints, hint]), onRemove: (index) => {
-                                const newHints = contextHints.filter((_, i) => i !== index);
+                                const newHints = contextHints.filter((_: string, i: number) => i !== index);
                                 handleContextHintsChange(newHints);
                             }, onUpdate: (index, newValue) => {
                                 const newHints = [...contextHints];

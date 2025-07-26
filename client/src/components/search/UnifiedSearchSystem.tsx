@@ -14,7 +14,7 @@ import SearchBar from './SearchBar';
 import FilterPanel from './FilterPanel';
 import SearchResults from './SearchResults';
 
-interface UnifiedSearchSystemProps<T = any> {
+interface UnifiedSearchSystemProps<T = unknown> {
   // Data and search
   searchFunction?: (query: unknown) => Promise<{ items: T[], totalCount: number, facets?: Record<string, Array<{ value: string; count: number }>> }>;
   initialData?: T[];
@@ -48,7 +48,7 @@ interface UnifiedSearchSystemProps<T = any> {
 }
 
 // Internal component that has access to search context
-const SearchSystemInternal = <T = any,>({
+const SearchSystemInternal = <T = unknown,>({
   searchFunction,
   initialData = [],
   availableFields,
@@ -210,7 +210,7 @@ const SearchSystemInternal = <T = any,>({
 };
 
 // Main component that provides search context
-export const UnifiedSearchSystem = <T = any,>(props: UnifiedSearchSystemProps<T>) => {
+export const UnifiedSearchSystem = <T = unknown,>(props: UnifiedSearchSystemProps<T>) => {
   return (
     <SearchProvider>
       <SearchSystemInternal {...props} />

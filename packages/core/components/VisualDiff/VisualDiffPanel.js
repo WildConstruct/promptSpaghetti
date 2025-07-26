@@ -3,14 +3,14 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Story 9.3.2 - Visual Diff Tool
 import { useState, useCallback, useEffect } from 'react';
 import { ReactFlow, Controls, Background } from 'reactflow';
-import { ComparisonToolbar } from './ComparisonToolbar.js';
-import { DiffLegend } from './DiffLegend.js';
-import { VersionSelector } from './VersionSelector.js';
-import { ComparisonStats } from './ComparisonStats.js';
-import { DiffNodeRenderer } from './DiffNodeRenderer.js';
-import { DiffEdgeRenderer } from './DiffEdgeRenderer.js';
-import { useDiffSession } from '../../hooks/useDiffSession.js';
-import { useGraphVersions } from '../../hooks/useGraphVersions.js';
+import { ComparisonToolbar } from './ComparisonToolbar';
+import { DiffLegend } from './DiffLegend';
+import { VersionSelector } from './VersionSelector';
+import { ComparisonStats } from './ComparisonStats';
+import { DiffNodeRenderer } from './DiffNodeRenderer';
+import { DiffEdgeRenderer } from './DiffEdgeRenderer';
+import { useDiffSession } from '../../hooks/useDiffSession';
+import { useGraphVersions } from '../../hooks/useGraphVersions';
 const VisualDiffPanel = ({ graphId, sourceVersionId, initialSourceVersionId, initialTargetVersionId, onClose, className = '' }) => {
     const [targetVersionId, setTargetVersionId] = useState(initialTargetVersionId || '');
     const [viewMode, setViewMode] = useState('side-by-side');

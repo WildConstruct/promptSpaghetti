@@ -70,12 +70,7 @@ interface SatisfactionSurveyWidgetProps {
   refreshInterval?: number;
 }
 
-export const SatisfactionSurveyWidget: React.FC<SatisfactionSurveyWidgetProps> = ({ 
-  className, 
-  refreshInterval = 300000 
-}) => {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
 
   // Fetch dashboard data
@@ -235,7 +230,7 @@ export const SatisfactionSurveyWidget: React.FC<SatisfactionSurveyWidgetProps> =
 
             {/* Realtime Data */}
             <div className="border rounded-lg p-4">
-              <h3 className="font-medium mb-3">Today's Activity</h3>
+              <h3 className="font-medium mb-3">Today&apos;s Activity</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <div className="text-lg font-semibold">{realtime.todayResponses}</div>
@@ -473,7 +468,7 @@ export const SatisfactionSurveyWidget: React.FC<SatisfactionSurveyWidgetProps> =
                 <div className="space-y-3">
                   {recentFeedback.positive.map((feedback, i) => (
                     <div key={i} className="text-sm">
-                      <p className="text-gray-700">"{feedback.text}"</p>
+                      <p className="text-gray-700">&quot;{feedback.text}&quot;</p>
                       <div className="text-xs text-gray-500 mt-1">
                         — {feedback.user} • {new Date(feedback.timestamp).toLocaleDateString()}
                       </div>
@@ -488,7 +483,7 @@ export const SatisfactionSurveyWidget: React.FC<SatisfactionSurveyWidgetProps> =
                 <div className="space-y-3">
                   {recentFeedback.negative.map((feedback, i) => (
                     <div key={i} className="text-sm">
-                      <p className="text-gray-700">"{feedback.text}"</p>
+                      <p className="text-gray-700">&quot;{feedback.text}&quot;</p>
                       <div className="text-xs text-gray-500 mt-1">
                         — {feedback.user} • {new Date(feedback.timestamp).toLocaleDateString()}
                       </div>
@@ -503,7 +498,7 @@ export const SatisfactionSurveyWidget: React.FC<SatisfactionSurveyWidgetProps> =
                 <div className="space-y-3">
                   {recentFeedback.suggestions.map((feedback, i) => (
                     <div key={i} className="text-sm">
-                      <p className="text-gray-700">"{feedback.text}"</p>
+                      <p className="text-gray-700">&quot;{feedback.text}&quot;</p>
                       <div className="text-xs text-gray-500 mt-1">
                         — {feedback.user} • {new Date(feedback.timestamp).toLocaleDateString()}
                       </div>

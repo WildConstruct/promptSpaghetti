@@ -183,18 +183,18 @@ export declare const AuditScheduleSchema: z.ZodObject<{
             content: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             author: string;
-            timestamp: Date;
             content: string;
+            timestamp: Date;
         }, {
             author: string;
-            timestamp: Date;
             content: string;
+            timestamp: Date;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
         notes: {
             author: string;
-            timestamp: Date;
             content: string;
+            timestamp: Date;
         }[];
         completion_percentage: number;
         milestones: {
@@ -206,8 +206,8 @@ export declare const AuditScheduleSchema: z.ZodObject<{
     }, {
         notes?: {
             author: string;
-            timestamp: Date;
             content: string;
+            timestamp: Date;
         }[] | undefined;
         completion_percentage?: number | undefined;
         milestones?: {
@@ -243,17 +243,17 @@ export declare const AuditScheduleSchema: z.ZodObject<{
     created_at: Date;
     created_by: string;
     updated_at: Date;
-    prerequisites: {
-        description: string;
-        type: "task_completion" | "document_approval" | "system_ready";
-        completed: boolean;
-    }[];
     activity_type: AuditActivityType;
     scheduled_start: Date;
     scheduled_end: Date;
     estimated_duration: number;
     recurrence_pattern: RecurrencePattern;
     compliance_frameworks: string[];
+    prerequisites: {
+        description: string;
+        type: "task_completion" | "document_approval" | "system_ready";
+        completed: boolean;
+    }[];
     deliverables: {
         name: string;
         type: "documentation" | "assessment" | "report" | "certificate";
@@ -268,8 +268,8 @@ export declare const AuditScheduleSchema: z.ZodObject<{
     progress?: {
         notes: {
             author: string;
-            timestamp: Date;
             content: string;
+            timestamp: Date;
         }[];
         completion_percentage: number;
         milestones: {
@@ -321,8 +321,8 @@ export declare const AuditScheduleSchema: z.ZodObject<{
     progress?: {
         notes?: {
             author: string;
-            timestamp: Date;
             content: string;
+            timestamp: Date;
         }[] | undefined;
         completion_percentage?: number | undefined;
         milestones?: {
@@ -332,13 +332,13 @@ export declare const AuditScheduleSchema: z.ZodObject<{
             completion_date?: Date | undefined;
         }[] | undefined;
     } | undefined;
+    mandatory?: boolean | undefined;
     resources?: {
         personnel_count?: number | undefined;
         tools_required?: string[] | undefined;
         external_vendors?: string[] | undefined;
         budget_allocated?: number | undefined;
     } | undefined;
-    mandatory?: boolean | undefined;
     notifications?: {
         channels: ("email" | "sms" | "slack" | "dashboard")[];
         timing: NotificationTiming;
@@ -346,11 +346,6 @@ export declare const AuditScheduleSchema: z.ZodObject<{
         message_template?: string | undefined;
     }[] | undefined;
     dependencies?: string[] | undefined;
-    prerequisites?: {
-        description: string;
-        type: "task_completion" | "document_approval" | "system_ready";
-        completed?: boolean | undefined;
-    }[] | undefined;
     reviewer_id?: string | undefined;
     actual_start?: Date | undefined;
     actual_end?: Date | undefined;
@@ -366,6 +361,11 @@ export declare const AuditScheduleSchema: z.ZodObject<{
     assignee_group?: string | undefined;
     approver_id?: string | undefined;
     regulatory_deadline?: Date | undefined;
+    prerequisites?: {
+        description: string;
+        type: "task_completion" | "document_approval" | "system_ready";
+        completed?: boolean | undefined;
+    }[] | undefined;
     deliverables?: {
         name: string;
         type: "documentation" | "assessment" | "report" | "certificate";
@@ -628,11 +628,7 @@ export declare class AuditCalendarSystem {
     private getWeekStart;
     private calculateResourceUtilization;
 }
-export declare const auditCalendarSystem: AuditCalendarSystem;
-export declare const generateCalendarView: (config: CalendarViewConfig) => {
-    events: Array<{
-        id: string;
-        title: string;
+export declare         title: string;
         start: Date;
         end: Date;
         type: AuditActivityType;

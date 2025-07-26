@@ -41,8 +41,10 @@ export { default as ImageProcessor } from './utils/ImageProcessor';
 export type { ImageMetadata, ImageProcessingOptions, ImageVariationOptions, ImageBatchProcessingOptions } from './utils/ImageProcessor';
 export type { AIModelType, AIModelProvider, AIModelStatus, ModelCapabilities, ModelMetadata, CostEstimate, HealthStatus, AIRequest, AIResponse, ModelConfiguration, AIModelFactory as IAIModelFactory } from './BaseAIModel';
 export * from './performance';
-export declare const createOpenAIModel: (id: string, apiKey: string, modelName?: string) => Promise<any>;
-export declare const createAnthropicModel: (id: string, apiKey: string, modelName?: string) => Promise<any>;
-export declare const createLocalModel: (id: string, endpoint: string, modelName: string) => Promise<any>;
-export declare const createCustomHTTPModel: (id: string, endpoint: string, requestMapping: HTTPRequestMapping, apiKey?: string) => Promise<any>;
-//# sourceMappingURL=index.d.ts.map
+export declare export declare export declare interface HTTPRequestMapping {
+    inputPath: string;
+    outputPath: string;
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE';
+    headers?: Record<string, string>;
+}
+export declare //# sourceMappingURL=index.d.ts.map

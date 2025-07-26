@@ -48,22 +48,14 @@ export const ShoppingCart: React.FC<ShoppingCartProps> = ({
     }
   };
 
-  const ___formatLicenseType = (licenseType: LicenseType): string => {
+  const _formatLicenseType = (licenseType: LicenseType): string => {
     return licenseType
       .split('_')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   };
 
-  const ___getLicenseDescription = (licenseType: LicenseType): string => {
-    const descriptions = {
-      [LicenseType.PERSONAL]: 'For personal use only',
-      [LicenseType.COMMERCIAL]: 'For commercial projects',
-      [LicenseType.ENTERPRISE]: 'For large organizations',
-      [LicenseType.EDUCATIONAL]: 'For educational institutions',
-      [LicenseType.UNLIMITED]: 'No usage restrictions'
-    };
-    return descriptions[licenseType] || '';
+      return descriptions[licenseType] || '';
   };
 
   const subtotal = cart?.items.reduce((sum, item) => 
@@ -193,7 +185,7 @@ const CartItemComponent: React.FC<CartItemComponentProps> = ({
     });
   }, [item.template_id]);
 
-  const ___formatLicenseType = (licenseType: LicenseType): string => {
+  const _formatLicenseType = (licenseType: LicenseType): string => {
     return licenseType
       .split('_')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))

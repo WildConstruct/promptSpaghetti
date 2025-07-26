@@ -10,8 +10,7 @@
 
 import React, { useState } from 'react';
 import { 
-  CheckCircle, AlertTriangle, AlertCircle, Info, Zap, 
-  Shield, Activity, AlertOctagon, Eye, EyeOff 
+  CheckCircle, AlertTriangle, AlertCircle, AlertOctagon, Settings 
 } from 'lucide-react';
 import { AlertCount } from './AlertIndicatorBadge';
 
@@ -126,7 +125,7 @@ const AlertStatusIndicator: React.FC<AlertStatusIndicatorProps> = ({
     const statusConfig = getStatusConfig(currentStatus);
     
     const alertBreakdown = Object.entries(alertCounts)
-      .filter(([_, count]) => count > 0)
+      .filter(([, count]) => count > 0)
       .map(([severity, count]) => `${count} ${severity}`)
       .join(', ');
 

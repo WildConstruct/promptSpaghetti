@@ -47,16 +47,11 @@ interface UserSegmentManagerProps {
   readonly?: boolean;
 }
 
-export const UserSegmentManager: React.FC<UserSegmentManagerProps> = ({
-  onSelectSegment,
-  readonly = false
-}) => {
-  const [segments, setSegments] = useState<UserSegment[]>([]);
-  const [loading, setLoading] = useState(true);
+export   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingSegment, setEditingSegment] = useState<UserSegment | null>(null);
-  const [___testingSegment, ___setTestingSegment] = useState<string | null>(null);
+  const [_testingSegment, _setTestingSegment] = useState<string | null>(null);
 
   useEffect(() => {
     fetchSegments();
@@ -131,7 +126,7 @@ export const UserSegmentManager: React.FC<UserSegmentManagerProps> = ({
     }
   };
 
-  const testSegment = async (___rules: TargetingRule[]): Promise<{ matches: boolean; userCount: number }> => {
+  const testSegment = async (_rules: TargetingRule[]): Promise<{ matches: boolean; userCount: number }> => {
     // Mock implementation - replace with actual API call
     return new Promise((resolve) => {
       setTimeout(() => {

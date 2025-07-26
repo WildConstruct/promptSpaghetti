@@ -1,8 +1,9 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import { useState, useRef, useEffect } from 'react';
-import { WebSocketStatusIcon, WebSocketDetails } from './WebSocketStatus.js';
-import { EncryptionStatusIcon, EncryptionDetails } from './EncryptionStatus.js';
-export const StatusBar = ({ statusMessage, errors, onPreview, onSaveJson, onExportBundle, onSaveProject, onLoadProject, onNewProject, hasUnsavedChanges, currentProjectName, onCorrections, correctionsEnabled, correctionsOpen, onStats, statsOpen, onExtensions, extensionsOpen, connectionState, queuedMessages, onClearQueue, onReconnect, onDisconnect, encryptionState, onEncrypt, onDecrypt, onChangeAlgorithm, onOptimization, optimizationEnabled, onSaveTemplate, onBrowseTemplates }) => {
+import { WebSocketStatusIcon, WebSocketDetails } from './WebSocketStatus';
+import { EncryptionStatusIcon, EncryptionDetails } from './EncryptionStatus';
+import { RecentProjectsMenu } from './RecentProjects/RecentProjectsMenu';
+export const StatusBar = ({ statusMessage, errors, onPreview, onSaveJson, onExportBundle, onSaveProject, onLoadProject, onLoadRecentProject, onNewProject, hasUnsavedChanges, currentProjectName, onCorrections, correctionsEnabled, correctionsOpen, onStats, statsOpen, onExtensions, extensionsOpen, connectionState, queuedMessages, onClearQueue, onReconnect, onDisconnect, encryptionState, onEncrypt, onDecrypt, onChangeAlgorithm, onOptimization, optimizationEnabled, onSaveTemplate, onBrowseTemplates }: { statusMessage?: string, errors: any[], onPreview: () => void, onSaveJson: () => void, onExportBundle?: () => void, onSaveProject?: () => void, onLoadProject?: () => void, onLoadRecentProject?: (project: any) => void, onNewProject?: () => void, hasUnsavedChanges?: boolean, currentProjectName?: string, onCorrections?: () => void, correctionsEnabled?: boolean, correctionsOpen?: boolean, onStats?: () => void, statsOpen?: boolean, onExtensions?: () => void, extensionsOpen?: boolean, connectionState?: any, queuedMessages?: any[], onClearQueue?: () => void, onReconnect?: () => void, onDisconnect?: () => void, encryptionState?: any, onEncrypt?: () => void, onDecrypt?: () => void, onChangeAlgorithm?: (algorithm: string) => void, onOptimization?: () => void, optimizationEnabled?: boolean, onSaveTemplate?: () => void, onBrowseTemplates?: () => void }) => {
     const [showWebSocketDetails, setShowWebSocketDetails] = useState(false);
     const [showEncryptionDetails, setShowEncryptionDetails] = useState(false);
     const wsDetailsRef = useRef(null);
@@ -10,7 +11,7 @@ export const StatusBar = ({ statusMessage, errors, onPreview, onSaveJson, onExpo
     const errorCount = errors.length;
     // Close details when clicking outside
     useEffect(() => {
-        const handleClickOutside = (event) => {
+        const handleClickOutside = (event: any) => {
             if (wsDetailsRef.current && !wsDetailsRef.current.contains(event.target)) {
                 setShowWebSocketDetails(false);
             }
@@ -70,16 +71,15 @@ export const StatusBar = ({ statusMessage, errors, onPreview, onSaveJson, onExpo
                             borderRadius: 4,
                             fontWeight: 500,
                             cursor: 'pointer'
-                        }, children: ["\uD83D\uDCBE Save Project", hasUnsavedChanges ? ' *' : ''] })), onLoadProject && (_jsx("button", { onClick: onLoadProject, title: "Load project from .psg file", style: {
-                            marginRight: 16,
-                            padding: '6px 16px',
-                            background: '#eee',
-                            color: '#23272f',
-                            border: '1px solid #ccc',
-                            borderRadius: 4,
-                            fontWeight: 500,
-                            cursor: 'pointer'
-                        }, children: "\uD83D\uDCC2 Load Project" })), _jsx("button", { onClick: onSaveJson, style: {
+                        }, children: ["\uD83D\uDCBE Save Project", hasUnsavedChanges ? ' *' : ''] })), onLoadProject && (_jsxs("div", { style: { display: 'inline-flex', marginRight: 16 }, children: [_jsx("button", { onClick: onLoadProject, title: "Load project from .psg file", style: {
+                                    padding: '6px 16px',
+                                    background: '#eee',
+                                    color: '#23272f',
+                                    border: '1px solid #ccc',
+                                    borderRadius: '4px 0 0 4px',
+                                    fontWeight: 500,
+                                    cursor: 'pointer'
+                                }, children: "\uD83D\uDCC2 Load Project" }), onLoadRecentProject && (_jsx(RecentProjectsMenu, { onLoadRecentProject: onLoadRecentProject }))] })), _jsx("button", { onClick: onSaveJson, style: {
                             marginRight: 16,
                             padding: '6px 16px',
                             background: '#eee',

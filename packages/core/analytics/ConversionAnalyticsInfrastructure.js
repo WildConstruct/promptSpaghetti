@@ -443,13 +443,13 @@ export class ConversionMetricsCalculator {
 // Concrete metric calculators (simplified implementations)
 class ConversionRateCalculator {
     async calculate(events) {
-        const conversions = events.filter(e => e.type.includes('conversion') || e.value > 0);
+        const conversions = events.filter(e => e.type.includes('conversion') || (e.value || 0) > 0);
         return events.length > 0 ? (conversions.length / events.length) * 100 : 0;
     }
 }
 class DropOffRateCalculator {
     async calculate(events) {
-        const conversions = events.filter(e => e.type.includes('conversion') || e.value > 0);
+        const conversions = events.filter(e => e.type.includes('conversion') || (e.value || 0) > 0);
         return events.length > 0 ? ((events.length - conversions.length) / events.length) * 100 : 0;
     }
 }

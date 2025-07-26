@@ -114,7 +114,7 @@ export interface NetworkData {
 export interface ConsoleData {
   level: 'log' | 'warn' | 'error' | 'info';
   message: string;
-  args?: any[];
+  args?: unknown[];
 }
 
 export interface ErrorData {
@@ -412,7 +412,7 @@ export class SessionReplaySystem extends EventEmitter {
       timestamp: number;
       eventType: ReplayEventType;
       description: string;
-      data: any;
+      data: unknown;
     }>;
     insights: {
       userFriction: string[];

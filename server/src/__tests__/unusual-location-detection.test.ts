@@ -120,8 +120,8 @@ describe('UnusualLocationDetectionService', () => {
       };
 
       // Mock database calls
-      mockRedis.get.mockResolvedValue(JSON.stringify(userProfile as unknown));
-      mockDb.query.mockResolvedValue({ rows: [], command: '', rowCount: 0, oid: 0, fields: [] } as unknown);
+      mockRedis.get.mockResolvedValue(JSON.stringify(userProfile as unknown as unknown));
+      mockDb.query.mockResolvedValue({ rows: [], command: '', rowCount: 0, oid: 0, fields: [] } as unknown as unknown);
 
       const riskAssessment = await (service as any).assessLocationRisk(
         'user123',
@@ -278,7 +278,7 @@ describe('UnusualLocationDetectionService', () => {
       };
 
       // Mock geolocation service
-      mockGeolocationService.getGeolocationData.mockResolvedValue(location as unknown);
+      mockGeolocationService.getGeolocationData.mockResolvedValue(location as unknown as unknown);
 
       // Mock user profile (user typically logs in from US)
       const userProfile: UserLocationProfile = {
@@ -304,7 +304,7 @@ describe('UnusualLocationDetectionService', () => {
         lastAnalysis: new Date()
       };
 
-      mockRedis.get.mockResolvedValue(JSON.stringify(userProfile as unknown));
+      mockRedis.get.mockResolvedValue(JSON.stringify(userProfile as unknown as unknown));
       mockDb.query
         .mockResolvedValueOnce({ rows: [], command: '', rowCount: 0, oid: 0, fields: [] }) // Recent locations query
         .mockResolvedValueOnce(
@@ -348,7 +348,7 @@ describe('UnusualLocationDetectionService', () => {
         source: 'ipapi'
       };
 
-      mockGeolocationService.getGeolocationData.mockResolvedValue(location as unknown);
+      mockGeolocationService.getGeolocationData.mockResolvedValue(location as unknown as unknown);
 
       // Mock frequent traveller profile
       const userProfile: UserLocationProfile = {
@@ -374,7 +374,7 @@ describe('UnusualLocationDetectionService', () => {
         lastAnalysis: new Date()
       };
 
-      mockRedis.get.mockResolvedValue(JSON.stringify(userProfile as unknown));
+      mockRedis.get.mockResolvedValue(JSON.stringify(userProfile as unknown as unknown));
       mockDb.query
         .mockResolvedValueOnce({ rows: [], command: '', rowCount: 0, oid: 0, fields: [] }) // Recent locations query
         .mockResolvedValueOnce(
@@ -541,7 +541,7 @@ describe('UnusualLocationDetectionService', () => {
         }
       ];
 
-      mockGeolocationService.getUserLocationHistory.mockResolvedValue(locationHistory as unknown);
+      mockGeolocationService.getUserLocationHistory.mockResolvedValue(locationHistory as unknown as unknown);
 
       const profile = await (service as any).generateUserLocationProfile('user123');
 
@@ -638,7 +638,7 @@ describe('UnusualLocationDetectionService', () => {
         }
       ];
 
-      mockGeolocationService.getUserLocationHistory.mockResolvedValue(locationHistory as unknown);
+      mockGeolocationService.getUserLocationHistory.mockResolvedValue(locationHistory as unknown as unknown);
 
       const profile = await (service as any).generateUserLocationProfile('user123');
 
@@ -683,7 +683,7 @@ describe('UnusualLocationDetectionService', () => {
 
   describe('Schema Initialization', () => {
     it('should initialize database schema successfully', async () => {
-      mockDb.query.mockResolvedValue({ rows: [], command: '', rowCount: 0, oid: 0, fields: [] } as unknown);
+      mockDb.query.mockResolvedValue({ rows: [], command: '', rowCount: 0, oid: 0, fields: [] } as unknown as unknown);
 
       await service.initializeSchema();
 
@@ -718,7 +718,7 @@ describe('UnusualLocationDetectionService', () => {
         timezone: 'America/Los_Angeles',
         confidence: 0.9,
         source: 'ipapi'
-      } as GeolocationData as unknown);
+      } as GeolocationData as unknown as unknown);
 
       mockRedis.get.mockRejectedValue(new Error('Redis error'));
       mockDb.query.mockRejectedValue(new Error('Database error'));

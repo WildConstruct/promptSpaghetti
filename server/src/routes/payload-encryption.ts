@@ -5,7 +5,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { PayloadEncryptionService, EncryptedPayload } from '../middleware/payload-encryption';
 
 interface EncryptPayloadRequest {
-  data: any;
+  data: unknown;
   endpoint?: string;
   algorithm?: 'aes-256-gcm' | 'aes-256-cbc' | 'chacha20-poly1305';
   compression?: boolean;
@@ -21,7 +21,7 @@ interface KeyRotationRequest {
 }
 
 interface EncryptionTestRequest {
-  testData: any;
+  testData: unknown;
   iterations?: number;
 }
 

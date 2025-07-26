@@ -31,7 +31,7 @@ interface UserPreview {
   loginCount: number;
   featureUsage: number;
   experimentGroup?: string;
-  customAttributes: Record<string, any>;
+  customAttributes: Record<string, unknown>;
   orgId?: string;
 }
 
@@ -56,14 +56,7 @@ interface UserPreviewToolProps {
   }>;
 }
 
-export const UserPreviewTool: React.FC<UserPreviewToolProps> = ({
-  isOpen,
-  onClose,
-  toggleId,
-  rules = []
-}) => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedUser, setSelectedUser] = useState<UserPreview | null>(null);
+export   const [selectedUser, setSelectedUser] = useState<UserPreview | null>(null);
   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
   const [loading, setLoading] = useState(false);
   const [searching, setSearching] = useState(false);
@@ -109,7 +102,7 @@ export const UserPreviewTool: React.FC<UserPreviewToolProps> = ({
     }
   };
 
-  const evaluateUserToggles = async (___user: UserPreview) => {
+  const evaluateUserToggles = async (_user: UserPreview) => {
     setEvaluating(true);
     try {
       // Mock implementation - replace with actual API call

@@ -7,11 +7,15 @@ export declare class AdaptorTestFramework {
     private logger;
     private metrics;
     private testResults;
-    constructor(logger: any, metrics: any);
+    constructor(logger: unknown, metrics: unknown);
     /**
      * Run comprehensive test suite for an adaptor
      */
-    testAdaptor(adaptor: ModelAdaptor & AdaptorLifecycle, context: PluginContext, options?: AdaptorTestOptions): Promise<AdaptorTestResults>;
+    testAdaptor(
+      adaptor: ModelAdaptor & AdaptorLifecycle,
+      context: PluginContext,
+      options?: AdaptorTestOptions
+    ): Promise<AdaptorTestResults>;
     /**
      * Test adaptor compliance with interfaces and specifications
      */

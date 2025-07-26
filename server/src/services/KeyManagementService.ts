@@ -63,7 +63,7 @@ export interface MasterKey {
   // Security
   securityLevel: string;
   accessControlList?: AccessControlEntry[];
-  complianceTags?: { [key: string]: any };
+  complianceTags?: { [key: string]: unknown };
 }
 
 export interface AccessControlEntry {
@@ -71,7 +71,7 @@ export interface AccessControlEntry {
   serviceId?: string;
   role?: string;
   operations: string[];
-  conditions?: { [key: string]: any };
+  conditions?: { [key: string]: unknown };
   expiresAt?: Date;
 }
 
@@ -112,7 +112,7 @@ export interface KeyGenerationRequest {
   expiresAt?: Date;
   maxUsageCount?: number;
   accessControlList?: AccessControlEntry[];
-  complianceTags?: { [key: string]: any };
+  complianceTags?: { [key: string]: unknown };
   makePrimary?: boolean;
 }
 
@@ -124,7 +124,7 @@ export interface KeyOperationContext {
   userAgent?: string;
   operationType: 'encrypt' | 'decrypt' | 'sign' | 'verify' | 'derive' | 'export' | 'import' | 'rotate' | 'destroy';
   dataClassification?: string;
-  additionalContext?: { [key: string]: any };
+  additionalContext?: { [key: string]: unknown };
 }
 
 export interface KeyBackup {
@@ -531,7 +531,7 @@ export class KeyManagementService extends EventEmitter {
     try {
       const backupId = this.generateBackupId(keyId);
       
-      let backupData: any = {};
+      let backupData: unknown = {};
       
       if (backupType === 'full') {
         // Include encrypted key material
@@ -632,7 +632,7 @@ export class KeyManagementService extends EventEmitter {
         WHERE 1=1
       `;
       
-      const params: any[] = [];
+      const params: unknown[] = [];
       let paramIndex = 1;
       
       if (options.purpose) {
@@ -891,7 +891,7 @@ export class KeyManagementService extends EventEmitter {
   private async logKeyOperation(
     keyId: string,
     operation: string,
-    details: any,
+    details: unknown,
     context?: KeyOperationContext
   ): Promise<void> {
     if (!this.config.auditAllOperations) return;

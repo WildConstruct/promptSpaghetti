@@ -11,13 +11,15 @@
  * @since 2024-01-22
  */
 // Core Framework
-export { SecurityDashboardFramework, DashboardType, DashboardTheme, SecurityRole, WidgetCategory } from './SecurityDashboardFramework.js';
+export { SecurityDashboardFramework, DashboardType, DashboardTheme, SecurityRole, WidgetCategory } from './SecurityDashboardFramework';
+// Import SecurityRole and DashboardType for local use
+import { SecurityRole, DashboardType } from './SecurityDashboardFramework';
 // Dashboard Registry
-export { DashboardRegistry } from './DashboardRegistry.js';
+export { DashboardRegistry } from './DashboardRegistry';
 // Dashboard Implementations
-export { ExecutiveSecurityDashboard } from './ExecutiveSecurityDashboard.js';
-export { OperationalSecurityDashboard } from './OperationalSecurityDashboard.js';
-export { ComplianceSecurityDashboard, ComplianceFramework, ComplianceStatus } from './ComplianceSecurityDashboard.js';
+export { ExecutiveSecurityDashboard } from './ExecutiveSecurityDashboard';
+export { OperationalSecurityDashboard } from './OperationalSecurityDashboard';
+export { ComplianceSecurityDashboard, ComplianceFramework, ComplianceStatus } from './ComplianceSecurityDashboard';
 /**
  * Security Dashboard Framework Factory
  *

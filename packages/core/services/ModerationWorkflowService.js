@@ -7,7 +7,7 @@
  * Task: E17-1753114396900-7DA65F - Design moderation workflow
  * Epic: 17 - Backstage Admin Controls
  */
-import { moderationStatesService } from './ModerationStatesService.js';
+import { moderationStatesService } from './ModerationStatesService';
 /**
  * Moderation Workflow Service
  *
@@ -15,17 +15,17 @@ import { moderationStatesService } from './ModerationStatesService.js';
  * parallel processing, and comprehensive monitoring.
  */
 export class ModerationWorkflowService {
-    static instance;
-    workflows = new Map();
-    executions = new Map();
-    executionQueue = [];
-    listeners = new Map();
-    processor = null;
+    static instance: ModerationWorkflowService;
+    workflows: Map<string, any> = new Map();
+    executions: Map<string, any> = new Map();
+    executionQueue: any[] = [];
+    listeners: Map<string, any> = new Map();
+    processor: any = null;
     constructor() {
         this.initializeDefaultWorkflows();
         this.startWorkflowProcessor();
     }
-    static getInstance() {
+    static getInstance(): ModerationWorkflowService {
         if (!ModerationWorkflowService.instance) {
             ModerationWorkflowService.instance = new ModerationWorkflowService();
         }
@@ -34,7 +34,7 @@ export class ModerationWorkflowService {
     /**
      * Workflow Management
      */
-    async createWorkflow(workflowData, createdBy) {
+    async createWorkflow(workflowData: any, createdBy: string): Promise<any> {
         const workflow = {
             ...workflowData,
             id: this.generateWorkflowId(),
@@ -46,7 +46,7 @@ export class ModerationWorkflowService {
         this.notifyListeners('workflow_created', workflow);
         return workflow;
     }
-    async updateWorkflow(workflowId, updates, updatedBy) {
+    async updateWorkflow(workflowId: string, updates: any, updatedBy: string): Promise<any> {
         const workflow = this.workflows.get(workflowId);
         if (!workflow)
             return null;

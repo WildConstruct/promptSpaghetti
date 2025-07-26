@@ -6,9 +6,9 @@
  * moderation infrastructure. Provides comment-specific moderation capabilities,
  * bulk operations, and real-time processing.
  */
-import { AutomatedModerationService } from './AutomatedModerationService.js';
-import { ModerationWorkflowService } from './ModerationWorkflowService.js';
-import { CommentAnalyticsService } from './CommentAnalyticsService.js';
+import { AutomatedModerationService } from './AutomatedModerationService';
+import { ModerationWorkflowService } from './ModerationWorkflowService';
+import { CommentAnalyticsService } from './CommentAnalyticsService';
 /**
  * Comment Moderation Service
  *
@@ -16,13 +16,13 @@ import { CommentAnalyticsService } from './CommentAnalyticsService.js';
  * with existing moderation infrastructure while adding comment-specific features.
  */
 export class CommentModerationService {
-    automatedService;
-    workflowService;
-    analyticsService;
-    baseUrl;
-    moderationQueues = new Map();
-    realtimeSubscriptions = new Map();
-    constructor(baseUrl = 'http://localhost:8000') {
+    automatedService: any;
+    workflowService: any;
+    analyticsService: any;
+    baseUrl: string;
+    moderationQueues: Map<string, any> = new Map();
+    realtimeSubscriptions: Map<string, any> = new Map();
+    constructor(baseUrl: string = 'http://localhost:8000') {
         this.baseUrl = baseUrl;
         this.automatedService = new AutomatedModerationService();
         this.workflowService = new ModerationWorkflowService();
@@ -32,7 +32,7 @@ export class CommentModerationService {
     /**
      * Moderate a single comment
      */
-    async moderateComment(request) {
+    async moderateComment(request: any): Promise<any> {
         const startTime = Date.now();
         try {
             // Validate request

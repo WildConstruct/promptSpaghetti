@@ -63,7 +63,7 @@ export const FolderTree: React.FC<FolderTreeProps> = ({
             };
             
             // Set drag data
-            const dragEvent = event as any;
+            const dragEvent = event as React.DragEvent<HTMLElement>;
             if (dragEvent?.dataTransfer) {
               dragEvent.dataTransfer.setData('application/json', JSON.stringify(dragData));
               dragEvent.dataTransfer.effectAllowed = 'move';

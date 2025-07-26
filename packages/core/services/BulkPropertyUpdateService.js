@@ -11,15 +11,15 @@
  * Bulk Property Update Service
  */
 export class BulkPropertyUpdateService {
-    static instance;
-    operations = new Map();
-    templates = new Map();
-    listeners = new Map();
-    entityProviders = new Map();
+    static instance: BulkPropertyUpdateService;
+    operations: Map<string, any> = new Map();
+    templates: Map<string, any> = new Map();
+    listeners: Map<string, any> = new Map();
+    entityProviders: Map<string, any> = new Map();
     constructor() {
         this.registerDefaultEntityProviders();
     }
-    static getInstance() {
+    static getInstance(): BulkPropertyUpdateService {
         if (!BulkPropertyUpdateService.instance) {
             BulkPropertyUpdateService.instance = new BulkPropertyUpdateService();
         }
@@ -28,13 +28,13 @@ export class BulkPropertyUpdateService {
     /**
      * Entity Provider Registration
      */
-    registerEntityProvider(targetType, provider) {
+    registerEntityProvider(targetType: string, provider: any): void {
         this.entityProviders.set(targetType, provider);
     }
     /**
      * Operation Management
      */
-    async createOperation(name, targets, updates, options = {}, createdBy) {
+    async createOperation(name: string, targets: any[], updates: any, options: any = {}, createdBy: string): Promise<any> {
         const operation = {
             id: this.generateOperationId(),
             name,

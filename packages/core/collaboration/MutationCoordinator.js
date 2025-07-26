@@ -4,7 +4,7 @@
  * Coordinates graph mutations with operational transform and conflict resolution
  * Handles concurrent operations and maintains data consistency
  */
-import { ConflictType, ResolutionStrategy, OperationPriority, generateOperationId, compareOperations, operationsConflict } from './GraphMutations.js';
+import { ConflictType, ResolutionStrategy, OperationPriority, generateOperationId, compareOperations, operationsConflict } from './GraphMutations';
 // =============================================================================
 // Main Mutation Coordinator Class
 // =============================================================================
@@ -29,7 +29,7 @@ export class MutationCoordinator {
     onConflictDetected;
     onConflictResolved;
     onBatchCompleted;
-    constructor(graphCRDT, documentId, clientId, userId, options) {
+    constructor(graphCRDT: any, documentId: string, clientId: string, userId: string, options?: any) {
         this.graphCRDT = graphCRDT;
         this.documentId = documentId;
         this.clientId = clientId;
@@ -48,7 +48,7 @@ export class MutationCoordinator {
     /**
      * Apply a single mutation operation
      */
-    async applyOperation(operation) {
+    async applyOperation(operation: any): Promise<boolean> {
         try {
             // Add to pending operations
             this.pendingOperations.set(operation.operationId, operation);
@@ -74,7 +74,7 @@ export class MutationCoordinator {
     /**
      * Apply a batch of operations atomically
      */
-    async applyBatchOperation(batchOperation) {
+    async applyBatchOperation(batchOperation: any) {
         const result = {
             success: false,
             appliedOperations: [],
@@ -123,7 +123,7 @@ export class MutationCoordinator {
     /**
      * Transform two concurrent operations
      */
-    transformOperations(op1, op2) {
+    transformOperations(op1: any, op2: any) {
         // Check if operations actually conflict
         if (!operationsConflict(op1, op2)) {
             return {
@@ -153,7 +153,7 @@ export class MutationCoordinator {
     /**
      * Resolve a conflict with specified strategy
      */
-    async resolveConflict(conflictId, strategy, resolutionData) {
+    async resolveConflict(conflictId: string, strategy: string, resolutionData?: any): Promise<boolean> {
         const conflict = this.conflictOperations.get(conflictId);
         if (!conflict) {
             console.warn(`Conflict ${conflictId} not found`);
@@ -189,7 +189,7 @@ export class MutationCoordinator {
     /**
      * Transform concurrent node addition operations
      */
-    transformNodeAdd(op1, op2) {
+    transformNodeAdd(op1: any, op2: any) {
         if (op1.nodeId === op2.nodeId) {
             // ID conflict - later operation gets new ID
             const laterOp = compareOperations(op1, op2) > 0 ? op1 : op2;
@@ -206,7 +206,7 @@ export class MutationCoordinator {
     /**
      * Transform concurrent node update operations
      */
-    transformNodeUpdate(op1, op2) {
+    transformNodeUpdate(op1: any, op2: any) {
         if (op1.nodeId !== op2.nodeId) {
             return { op1, op2, requiresResolution: false };
         }
@@ -240,7 +240,7 @@ export class MutationCoordinator {
     /**
      * Transform update vs delete operations
      */
-    transformUpdateDelete(updateOp, deleteOp) {
+    transformUpdateDelete(updateOp: any, deleteOp: any) {
         if (updateOp.nodeId === deleteOp.nodeId) {
             // Delete wins - nullify update
             return {
@@ -254,7 +254,7 @@ export class MutationCoordinator {
     /**
      * Transform concurrent edge addition operations
      */
-    transformEdgeAdd(op1, op2) {
+    transformEdgeAdd(op1: any, op2: any) {
         // Check for same connection
         if (op1.sourceNodeId === op2.sourceNodeId &&
             op1.targetNodeId === op2.targetNodeId &&
@@ -273,7 +273,7 @@ export class MutationCoordinator {
     /**
      * Transform concurrent parameter updates
      */
-    transformParameterUpdate(op1, op2) {
+    transformParameterUpdate(op1: any, op2: any) {
         if (op1.nodeId !== op2.nodeId || op1.parameterKey !== op2.parameterKey) {
             return { op1, op2, requiresResolution: false };
         }
@@ -325,7 +325,7 @@ export class MutationCoordinator {
     /**
      * Handle generic conflict between operations
      */
-    handleGenericConflict(op1, op2) {
+    handleGenericConflict(op1: any, op2: any) {
         // Default to last-writer-wins for generic conflicts
         const winner = compareOperations(op1, op2) > 0 ? op1 : op2;
         const loser = winner === op1 ? op2 : op1;
@@ -341,7 +341,7 @@ export class MutationCoordinator {
     /**
      * Execute a single operation on the CRDT
      */
-    async executeOperation(operation) {
+    async executeOperation(operation: any): Promise<boolean> {
         switch (operation.type) {
             case 'NODE_ADD':
                 return this.graphCRDT.addNode(operation);
@@ -371,7 +371,7 @@ export class MutationCoordinator {
     /**
      * Detect conflicts with pending operations
      */
-    detectConflicts(operation) {
+    detectConflicts(operation: any): any[] {
         const conflicts = [];
         this.pendingOperations.forEach((pendingOp) => {
             if (operationsConflict(operation, pendingOp)) {
@@ -383,7 +383,7 @@ export class MutationCoordinator {
     /**
      * Handle detected conflicts
      */
-    async handleConflicts(operation, conflicts) {
+    async handleConflicts(operation: any, conflicts: any[]): Promise<boolean> {
         for (const conflictOp of conflicts) {
             const transformResult = this.transformOperations(operation, conflictOp);
             if (transformResult.requiresResolution) {
@@ -412,7 +412,7 @@ export class MutationCoordinator {
     /**
      * Apply automatic conflict resolution
      */
-    async applyAutomaticResolution(transformResult) {
+    async applyAutomaticResolution(transformResult: any): Promise<boolean> {
         if (!transformResult.conflict)
             return false;
         const resolution = {
@@ -430,7 +430,7 @@ export class MutationCoordinator {
     /**
      * Apply conflict resolution
      */
-    async applyConflictResolution(conflict, resolution) {
+    async applyConflictResolution(conflict: any, resolution: any): Promise<boolean> {
         try {
             let valueToApply;
             switch (resolution.strategy) {
@@ -481,7 +481,7 @@ export class MutationCoordinator {
     /**
      * Check if property paths conflict (overlap)
      */
-    propertyPathsConflict(path1, path2) {
+    propertyPathsConflict(path1: string[], path2: string[]): boolean {
         const minLength = Math.min(path1.length, path2.length);
         for (let i = 0; i < minLength; i++) {
             if (path1[i] !== path2[i]) {
@@ -493,7 +493,7 @@ export class MutationCoordinator {
     /**
      * Check if conflict requires user input
      */
-    requiresUserInput(op1, op2) {
+    requiresUserInput(op1: any, op2: any): boolean {
         // Complex objects or critical operations require user input
         return typeof op1.newValue === 'object' ||
             typeof op2.newValue === 'object' ||
@@ -503,7 +503,7 @@ export class MutationCoordinator {
     /**
      * Suggest resolution strategy
      */
-    suggestResolution(op1, op2) {
+    suggestResolution(op1: any, op2: any) {
         // Use configured strategy or last-writer-wins as default
         return this.conflictResolutionStrategy !== ResolutionStrategy.MANUAL_RESOLUTION
             ? this.conflictResolutionStrategy
@@ -512,7 +512,7 @@ export class MutationCoordinator {
     /**
      * Get resolution options for conflict UI
      */
-    getResolutionOptions(op1, op2) {
+    getResolutionOptions(op1: any, op2: any) {
         return [
             {
                 strategy: ResolutionStrategy.ACCEPT_LOCAL,
@@ -539,7 +539,7 @@ export class MutationCoordinator {
     /**
      * Attempt automatic merge of conflicting values
      */
-    attemptAutoMerge(localValue, remoteValue) {
+    attemptAutoMerge(localValue: any, remoteValue: any) {
         // Simple auto-merge logic
         if (typeof localValue === 'string' && typeof remoteValue === 'string') {
             return `${localValue} | ${remoteValue}`;
@@ -556,7 +556,7 @@ export class MutationCoordinator {
     /**
      * Validate batch operations for conflicts
      */
-    async validateBatchOperations(operations) {
+    async validateBatchOperations(operations: any[]) {
         const conflicts = [];
         // Check for internal conflicts within the batch
         for (let i = 0; i < operations.length; i++) {
@@ -577,7 +577,7 @@ export class MutationCoordinator {
     /**
      * Rollback applied operations
      */
-    async rollbackOperations(operations) {
+    async rollbackOperations(operations: any[]): Promise<void> {
         // Rollback in reverse order
         for (let i = operations.length - 1; i >= 0; i--) {
             const operation = operations[i];
@@ -591,7 +591,7 @@ export class MutationCoordinator {
     /**
      * Create inverse operation for rollback
      */
-    createInverseOperation(operation) {
+    createInverseOperation(operation: any) {
         switch (operation.type) {
             case 'NODE_ADD':
                 const nodeRemoveOp = {
@@ -665,7 +665,7 @@ export class MutationCoordinator {
     /**
      * Set event handlers
      */
-    setEventHandlers(handlers) {
+    setEventHandlers(handlers: any): void {
         this.onOperationApplied = handlers.onOperationApplied;
         this.onConflictDetected = handlers.onConflictDetected;
         this.onConflictResolved = handlers.onConflictResolved;
@@ -674,7 +674,7 @@ export class MutationCoordinator {
     /**
      * Set conflict resolution strategy
      */
-    setConflictResolutionStrategy(strategy) {
+    setConflictResolutionStrategy(strategy: string): void {
         this.conflictResolutionStrategy = strategy;
     }
     /**

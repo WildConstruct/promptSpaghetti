@@ -145,7 +145,7 @@ export class RandomizerSystem {
   /**
    * Import data
    */
-  importData(data: any) {
+  importData(data: unknown) {
     return this.parameterManager.importData(data);
   }
 }

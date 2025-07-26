@@ -8,15 +8,15 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Task: E17-1753114396844-90FA2F - Create filtering and search
  * Epic: 17 - Backstage Admin Controls, Substory: 17.1.6 (Audit Logging)
  */
-import { useState, useEffect } from 'react';
-import { Card, CardContent } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
-import { Input } from '../ui/Input.js';
-import { Select } from '../ui/Select.js';
+import { useState, useEffect, useCallback } from 'react';
+import { Card, CardContent } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
+import { Input } from '../ui/Input';
+import { Select } from '../ui/Select';
 import { Search, Filter, Download, RefreshCw, Clock, User, Shield, AlertTriangle, CheckCircle, XCircle, Settings, BarChart3, FileText, Save, ChevronDown, ChevronUp, Activity, Zap, Target, Database, Lock, Unlock, AlertCircle, Minus } from 'lucide-react';
-import { AuditEventType, AuditCategory, AuditSeverity, ComplianceStandard } from '../../services/audit-service.js';
+import { AuditEventType, AuditCategory, AuditSeverity, ComplianceStandard } from '../../services/audit-service';
 const SEVERITY_CONFIG = {
     low: { color: 'text-blue-600 bg-blue-100', icon: Minus, label: 'Low' },
     medium: { color: 'text-yellow-600 bg-yellow-100', icon: AlertCircle, label: 'Medium' },
@@ -57,12 +57,12 @@ export const AuditLogDashboard = ({ className = '', userId, userRole }) => {
     const [error, setError] = useState(null);
     // Filter state
     const [currentFilter, setCurrentFilter] = useState({});
-    const [_____savedFilters, setSavedFilters] = useState([]);
-    const [_____filterPresets, _____setFilterPresets] = useState({});
+    const [_savedFilters, setSavedFilters] = useState([]);
+    const [_filterPresets, _setFilterPresets] = useState({});
     const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
     // Search state
     const [searchQuery, setSearchQuery] = useState('');
-    const [searchSuggestions, _____setSearchSuggestions] = useState([]);
+    const [searchSuggestions, _setSearchSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     // UI state
     const [selectedEvents, setSelectedEvents] = useState([]);
@@ -70,11 +70,11 @@ export const AuditLogDashboard = ({ className = '', userId, userRole }) => {
     const [showSaveFilterDialog, setShowSaveFilterDialog] = useState(false);
     const [filterName, setFilterName] = useState('');
     // Analytics state
-    const [_____analytics, _____setAnalytics] = useState(null);
+    const [_analytics, _setAnalytics] = useState(null);
     // Load initial data
     useEffect(() => {
         loadInitialData();
-    }, []);
+    }, [loadInitialData]);
     // Auto-search when filter changes
     useEffect(() => {
         if (Object.keys(currentFilter).length > 0 || searchQuery) {
@@ -84,7 +84,7 @@ export const AuditLogDashboard = ({ className = '', userId, userRole }) => {
             return () => clearTimeout(timeoutId);
         }
     }, [currentFilter, searchQuery]);
-    const loadInitialData = async () => {
+    const loadInitialData = useCallback(async () => {
         try {
             setLoading(true);
             // Load filter presets, saved filters, and perform initial search
@@ -99,7 +99,7 @@ export const AuditLogDashboard = ({ className = '', userId, userRole }) => {
         finally {
             setLoading(false);
         }
-    };
+    }, []);
     const performSearch = async () => {
         try {
             setLoading(true);

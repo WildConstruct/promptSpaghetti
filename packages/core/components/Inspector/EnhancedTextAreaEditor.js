@@ -1,6 +1,6 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useCorrectionsStore } from '../../correctionsStore.js';
+import { useCorrectionsStore } from '../../correctionsStore';
 export const EnhancedTextAreaEditor = ({ label, value, fieldKey, error, onChange, placeholder, disabled = false, rows = 4, maxLength, minLength, autoResize = false, showWordCount = false, enableInlineCorrections = true, autoApplyCorrections = false, showCorrectionHighlights = true }) => {
     const [localValue, setLocalValue] = useState(String(value ?? ''));
     const [isFocused, setIsFocused] = useState(false);

@@ -8,7 +8,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * with configurable layouts, role-based access, and real-time updates.
  */
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { MonitoringWidget } from './MonitoringWidgets.js';
+import { MonitoringWidget } from './MonitoringWidgets';
 // Predefined Dashboard Layouts
 const DASHBOARD_LAYOUTS = [
     {

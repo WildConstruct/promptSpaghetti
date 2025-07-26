@@ -3,8 +3,8 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Story 12.4 - Randomizer Generator Implementation
 // Main randomizer panel with responsive design
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { ParameterManager } from '../parameters/parameter-manager.js';
-import { RandomizerWorkflow } from '../workflow/randomizer-workflow.js';
+import { ParameterManager } from '../parameters/parameter-manager';
+import { RandomizerWorkflow } from '../workflow/randomizer-workflow';
 /**
  * Main randomizer panel component
  */

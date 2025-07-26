@@ -3,7 +3,7 @@
 // Main parser interface that coordinates lexer, AST builder, and semantic analyzer
 
 import { GraphLexer, LexerError } from './lexer/graph-lexer';
-import { ASTBuilder, ParseError, GraphAST } from './ast/ast-builder';
+import { ASTBuilder, ParseError } from './ast/ast-builder';
 import { SemanticAnalyzer, SemanticError } from './semantic/semantic-analyzer';
 import { Graph } from '../../graphSchema';
 

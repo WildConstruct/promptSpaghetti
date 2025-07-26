@@ -46,7 +46,7 @@ export interface SegmentCondition {
     id: string;
     field: string;
     operator: SegmentOperator;
-    value: any;
+    value: Error;
     displayName: string;
     dataType: 'string' | 'number' | 'boolean' | 'date' | 'array';
 }
@@ -239,7 +239,7 @@ export interface FieldDefinition {
     dataType: 'string' | 'number' | 'boolean' | 'date' | 'array';
     category: string;
     description: string;
-    possibleValues?: any[];
+    possibleValues?: unknown[];
     validation?: FieldValidation;
 }
 export interface OperatorDefinition {

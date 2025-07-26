@@ -4,7 +4,7 @@
  * DEPLOYMENT BLOCKER FIX: Central export point for all data models
  */
 // User Segment Models
-export * from './UserSegmentModel.js';
-export * from './SegmentServiceModel.js';
+export * from './UserSegmentModel';
+export * from './SegmentServiceModel';
 // Re-export for convenience
-export { default as UserSegmentModel } from './UserSegmentModel.js';
+export { default as UserSegmentModel } from './UserSegmentModel';

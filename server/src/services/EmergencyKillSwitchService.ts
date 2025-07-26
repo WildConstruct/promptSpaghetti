@@ -532,7 +532,7 @@ export class EmergencyKillSwitchService {
 
   private async getAffectedToggles(killSwitch: EmergencyKillSwitchConfig): Promise<string[]> {
     let query = 'SELECT key FROM feature_toggles WHERE enabled = true';
-    const queryParams: any[] = [];
+    const queryParams: unknown[] = [];
 
     switch (killSwitch.scope) {
     case 'ALL':
@@ -640,7 +640,7 @@ export class EmergencyKillSwitchService {
     action: string,
     killSwitchId: string,
     userId: string,
-    details: any
+    details: unknown
   ): Promise<void> {
     await this.db.query(`
       INSERT INTO audit_logs (

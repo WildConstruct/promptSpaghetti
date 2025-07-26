@@ -13,7 +13,7 @@
  * - Integration with existing security services
  */
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { passwordResetTokenManager } from '../PasswordResetTokenManager.js';
+import { passwordResetTokenManager } from '../PasswordResetTokenManager';
 // Types
 export var ResetStep;
 (function (ResetStep) {

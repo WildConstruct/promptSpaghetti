@@ -52,15 +52,15 @@ describe('SOC2ComplianceRuleset', () => {
     ) as jest.Mocked<ComplianceRuleEngine>;
 
     // Mock AuditService methods
-    mockAuditService.logEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown);
+    mockAuditService.logEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown);
 
     // Mock ComplianceRuleEngine methods
     mockRuleEngine.registerRule = jest.fn<unknown[], unknown>().mockResolvedValue({ 
       registered: true, 
       ruleId: 'test-rule', 
       conflicts: [] 
-    } as unknown as unknown);
-    mockRuleEngine.evaluateRules = jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown as unknown);
+    } as unknown as unknown as unknown);
+    mockRuleEngine.evaluateRules = jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown as unknown as unknown);
 
     // Create SOC2 ruleset instance
     soc2Ruleset = new SOC2ComplianceRuleset(mockRuleEngine, mockAuditService);
@@ -483,7 +483,7 @@ describe('SOC2ComplianceRuleset', () => {
         }
       ];
 
-      mockRuleEngine.evaluateRules.mockResolvedValue(mockResults as unknown as unknown);
+      mockRuleEngine.evaluateRules.mockResolvedValue(mockResults as unknown as unknown as unknown);
 
       const results = await soc2Ruleset.evaluateCompliance(
         SOC2TrustServiceCategory.SECURITY,

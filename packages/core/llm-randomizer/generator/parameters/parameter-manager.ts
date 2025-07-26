@@ -11,15 +11,12 @@ import {
   RandomizerParametersSchema
 } from './parameter-schema';
 
-// Browser environment detection with proper typing
-declare const window: any;
-declare const localStorage: any;
+// Browser environment detection with proper typing - using global types
 
 const isBrowser = (function() {
   try {
-    return typeof globalThis !== 'undefined' && 
-           typeof globalThis.window !== 'undefined' && 
-           typeof globalThis.localStorage !== 'undefined';
+    return typeof window !== 'undefined' && 
+           typeof localStorage !== 'undefined';
   } catch {
     return false;
   }

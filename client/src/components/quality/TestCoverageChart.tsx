@@ -127,12 +127,22 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
   };
 
   // Custom tooltip for charts
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  interface TooltipEntry {
+    name?: string;
+    value?: number | string;
+    color?: string;
+  }
+
+  const CustomTooltip = (
+    { active,
+    payload,
+    label }: { active?: boolean; payload?: TooltipEntry[]; label?: string }
+  ) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
           <p className="font-medium text-gray-900 mb-2">{label}</p>
-          {payload.map((entry: unknown, index: number) => (
+          {payload.map((entry: TooltipEntry, index: number) => (
             <div key={index} className="flex items-center justify-between space-x-4">
               <div className="flex items-center space-x-2">
                 <div 

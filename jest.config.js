@@ -45,21 +45,15 @@ module.exports = {
     '<rootDir>/jest.setup.js',
     '<rootDir>/tests/utils/globalTestSetup.ts',
     // '<rootDir>/tests/utils/mswSetup.ts', // Temporarily disabled
-    '<rootDir>/tests/utils/axeSetup.ts',
-    '@testing-library/jest-dom'
+    '<rootDir>/tests/utils/axeSetup.ts'
   ],
   transform: {
-    '^.+\\.ts$': 'ts-jest',
-    '^.+\\.tsx$': 'ts-jest',
+    '^.+\\.ts$': ['ts-jest', { useESM: true }],
+    '^.+\\.tsx$': ['ts-jest', { useESM: true }],
     '^.+\\.js$': 'babel-jest',
     '^.+\\.jsx$': 'babel-jest'
   },
   // extensionsToTreatAsEsm: ['.js'], // Removed as .js is automatically inferred from package.json
-  globals: {
-    'ts-jest': {
-      useESM: true
-    }
-  },
   coverageThreshold: {
     global: {
       branches: 80,

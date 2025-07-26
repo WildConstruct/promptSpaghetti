@@ -11,15 +11,15 @@
  * Content Scheduling Service
  */
 export class ContentSchedulingService {
-    static instance;
-    content = new Map();
-    batches = new Map();
-    listeners = new Map();
-    scheduler = null;
+    static instance: ContentSchedulingService;
+    content: Map<string, any> = new Map();
+    batches: Map<string, any> = new Map();
+    listeners: Map<string, any> = new Map();
+    scheduler: any = null;
     constructor() {
         this.startScheduler();
     }
-    static getInstance() {
+    static getInstance(): ContentSchedulingService {
         if (!ContentSchedulingService.instance) {
             ContentSchedulingService.instance = new ContentSchedulingService();
         }
@@ -28,7 +28,7 @@ export class ContentSchedulingService {
     /**
      * Content Management
      */
-    async createContent(contentData, createdBy) {
+    async createContent(contentData: any, createdBy: string): Promise<any> {
         const content = {
             ...contentData,
             id: this.generateContentId(),
@@ -47,7 +47,7 @@ export class ContentSchedulingService {
         this.notifyListeners('content_created', content);
         return content;
     }
-    async updateContent(contentId, updates, updatedBy) {
+    async updateContent(contentId: string, updates: any, updatedBy: string): Promise<any> {
         const content = this.content.get(contentId);
         if (!content)
             return null;

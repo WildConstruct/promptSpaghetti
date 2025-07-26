@@ -14,13 +14,12 @@ import {
   AnalyticsEvent,
   AnalyticsQuery,
   TemplateMetrics
-} from '../../server/src/marketplace/analytics.types';
+} from '../../../server/src/marketplace/analytics.types';
 
 import {
   SkillLevel,
   SkillDomain,
-  UserSkillProfile,
-  TutorialProgress
+  UserSkillProfile
 } from '../community/SkillLevelTagging';
 
 import {
@@ -773,14 +772,33 @@ export const LearningAnalyticsEventSchema = z.object({
   learning_context: z.object({
     content_type: z.nativeEnum(ContentType),
     content_id: z.string(),
-    skill_domain: z.nativeEnum(SkillDomain).optional(),
-    skill_level: z.nativeEnum(SkillLevel).optional(),
+    skill_domain: z.enum(
+      ['programming',
+      'web-development',
+      'mobile-development',
+      'data-science',
+      'devops',
+      'design',
+      'business',
+      'marketing',
+      'writing',
+      'tools',
+      'soft-skills',
+      'project-management',
+      'security',
+      'database',
+      'ai-ml',
+      'quality-assurance',
+      'blockchain',
+      'game-development']
+    ).optional(),
+    skill_level: z.enum(['beginner', 'intermediate', 'advanced', 'expert']).optional(),
     learning_objective: z.string().optional(),
     session_id: z.string().optional()
   }),
   user_context: z.object({
     user_role: z.string(),
-    skill_profile_snapshot: z.any().optional(),
+    skill_profile_snapshot: z.unknown().optional(),
     learning_goals: z.array(z.string()).optional(),
     current_learning_path: z.string().optional()
   }),
@@ -796,8 +814,27 @@ export const LearningAnalyticsEventSchema = z.object({
 
 export const LearningAnalyticsQuerySchema = z.object({
   learning_filters: z.object({
-    skill_domains: z.array(z.nativeEnum(SkillDomain)).optional(),
-    skill_levels: z.array(z.nativeEnum(SkillLevel)).optional(),
+    skill_domains: z.array(
+      z.enum(['programming',
+      'web-development',
+      'mobile-development',
+      'data-science',
+      'devops',
+      'design',
+      'business',
+      'marketing',
+      'writing',
+      'tools',
+      'soft-skills',
+      'project-management',
+      'security',
+      'database',
+      'ai-ml',
+      'quality-assurance',
+      'blockchain',
+      'game-development']
+    )).optional(),
+    skill_levels: z.array(z.enum(['beginner', 'intermediate', 'advanced', 'expert'])).optional(),
     content_types: z.array(z.nativeEnum(ContentType)).optional(),
     learning_objectives: z.array(z.string()).optional(),
     user_segments: z.array(z.nativeEnum(LearningAnalyticsSegment)).optional()

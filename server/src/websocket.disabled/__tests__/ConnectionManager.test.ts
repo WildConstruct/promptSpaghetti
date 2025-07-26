@@ -95,7 +95,7 @@ describe('ConnectionManager', () => {
       const authManager = new ConnectionManager(authConfig);
       
       const jwt = require('jsonwebtoken');
-      jwt.verify = jest.fn<unknown[], unknown>().mockReturnValue({ userId: 'test-user' } as unknown);
+      jwt.verify = jest.fn<unknown[], unknown>().mockReturnValue({ userId: 'test-user' } as unknown as unknown);
 
       const request = {
         headers: { 'user-agent': 'test-agent' },

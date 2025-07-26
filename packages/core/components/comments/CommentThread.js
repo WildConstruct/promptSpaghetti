@@ -4,9 +4,9 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Individual comment thread with replies
  */
 import { useState } from 'react';
-import { CommentItem } from './CommentItem.js';
-import { CommentForm } from './CommentForm.js';
-import { useCommentReplies } from '../../hooks/useCommentReplies.js';
+import { CommentItem } from './CommentItem';
+import { CommentForm } from './CommentForm';
+import { useCommentReplies } from '../../hooks/useCommentReplies';
 export const CommentThread = ({ comment, workspaceId, userId, onReply, onUpdate, onDelete, onResolve, compact = false, isLast = false }) => {
     const [showReplyForm, setShowReplyForm] = useState(false);
     const [showReplies, setShowReplies] = useState(false);

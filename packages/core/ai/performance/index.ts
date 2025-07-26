@@ -47,72 +47,81 @@ export {
   AdaptiveEvictionStrategy
 } from './AdvancedCacheManager';
 
-// Utility functions for performance optimization
-export const createDefaultCacheConfig = (): CacheConfig => ({
-  maxSize: 1000,
-  maxMemoryMB: 500,
-  defaultTTL: 3600000, // 1 hour
-  evictionPolicy: 'ADAPTIVE',
-  compressionEnabled: true,
-  persistToDisk: false,
-  metrics: {
-    enabled: true,
-    reportingInterval: 60000 // 1 minute
-  }
-});
+// Type definitions for missing interfaces
+interface CacheConfig {
+  maxSize: number;
+  maxMemoryMB: number;
+  defaultTTL: number;
+  evictionPolicy: string;
+  compressionEnabled: boolean;
+  persistToDisk: boolean;
+  metrics: { enabled: boolean; reportingInterval?: number };
+}
 
-export const createDefaultLoadBalancerConfig = (): LoadBalancerConfig => ({
-  strategy: 'adaptive',
-  healthCheckInterval: 30000, // 30 seconds
-  failoverThreshold: 3,
-  maxRetries: 3,
-  timeoutMs: 30000,
-  circuitBreakerEnabled: true,
-  metricsCollection: true
-});
+interface LoadBalancerConfig {
+  maxRetries: number;
+  strategy: string;
+  healthCheckInterval?: number;
+  failoverThreshold?: number;
+  timeoutMs?: number;
+  maxConcurrentRequests?: number;
+  enableFailover?: boolean;
+}
 
-export const createDefaultMonitoringConfig = (): MonitoringConfig => ({
-  enabled: true,  
-  collectionInterval: 10000, // 10 seconds
-  retentionPeriod: 86400000, // 24 hours
-  alerting: {
-    enabled: true
-  },
-  thresholds: [],
-  sampling: {
-    enabled: true,
-    rate: 0.1 // 10% sampling
-  },
-  storage: {
-    type: 'memory'
-  }
-});
+interface MonitoringConfig {
+  enabled: boolean;
+  interval: number;
+  collectionInterval?: number;
+  retentionPeriod?: number;
+  alerting?: boolean;
+}
 
-export const createDefaultResourceOptimizationConfig = (): ResourceOptimizationConfig => ({
-  enabled: true,
-  monitoringInterval: 15000, // 15 seconds
+interface PerformanceMetrics {
+  responseTime: number;
+  throughput: number;
+  errorRate: number;
+  averageResponseTime?: number;
+  successRate?: number;
+  totalCost?: number;
+}
+
+interface CacheMetrics {
+  hitRate: number;
+  size: number;
+  memoryUsage?: number;
+}
+
+interface ResourceUsage {
+  memory: number;
+  cpu: number;
+  disk: number;
+  network: number;
+}
+
+interface ResourceOptimizationConfig {
+  enabled: boolean;
+  monitoringInterval: number;
   optimizationThresholds: {
-    memoryUsage: 0.8, // 80%
-    cpuUsage: 80, // 80%
-    diskUsage: 0.9, // 90%
-    responseTime: 10000 // 10 seconds
-  },
+    memoryUsage: number;
+    cpuUsage: number;
+    diskUsage: number;
+    responseTime: number;
+  };
   strategies: {
-    memoryOptimization: true,
-    modelPooling: true,
-    requestBatching: true,
-    dynamicScaling: true,
-    intelligentCaching: true,
-    resourcePreemption: false
-  },
-  limits: {
-    maxMemoryUsage: 2 * 1024 * 1024 * 1024, // 2GB
-    maxConcurrentRequests: 100,
-    maxModelInstances: 10,
-    maxCacheSize: 500 * 1024 * 1024 // 500MB
-  }
-});
+    memoryOptimization: boolean;
+    cpuOptimization: boolean;
+    cacheOptimization: boolean;
+    modelCompression: boolean;
+    modelPooling?: boolean;
+    requestBatching?: boolean;
+  };
+}
 
+// Utility functions for performance optimization
+export 
+export 
+export 
+export 
 // Performance analysis utilities
 export const analyzePerformanceMetrics = (metrics: PerformanceMetrics[]): {
   averageResponseTime: number;
@@ -129,14 +138,17 @@ export const analyzePerformanceMetrics = (metrics: PerformanceMetrics[]): {
     };
   }
 
-  const averageResponseTime = metrics.reduce((sum, m) => sum + m.averageResponseTime, 0) / metrics.length;
-  const successRateAverage = metrics.reduce((sum, m) => sum + m.successRate, 0) / metrics.length;
+  const averageResponseTime = metrics.reduce((sum, m) => sum + (m.averageResponseTime || 0), 0) / metrics.length;
+  const successRateAverage = metrics.reduce((sum, m) => sum + (m.successRate || 0), 0) / metrics.length;
   
   // Determine cost trend
   let costTrend: 'increasing' | 'decreasing' | 'stable' = 'stable';
   if (metrics.length >= 2) {
-    const recentCosts = metrics.slice(-5).map(m => m.totalCost);
-    const earlyAvg = recentCosts.slice(0, Math.floor(recentCosts.length / 2)).reduce((sum, c) => sum + c, 0) / Math.floor(recentCosts.length / 2);
+    const recentCosts = metrics.slice(-5).map(m => m.totalCost || 0);
+    const earlyAvg = recentCosts.slice(
+      0,
+      Math.floor(recentCosts.length / 2
+    )).reduce((sum, c) => sum + c, 0) / Math.floor(recentCosts.length / 2);
     const lateAvg = recentCosts.slice(Math.floor(recentCosts.length / 2)).reduce((sum, c) => sum + c, 0) / Math.ceil(recentCosts.length / 2);
     
     if (lateAvg > earlyAvg * 1.1) costTrend = 'increasing';
@@ -173,20 +185,14 @@ export const analyzePerformanceMetrics = (metrics: PerformanceMetrics[]): {
 
 export const calculateResourceEfficiency = (usage: ResourceUsage, performance: PerformanceMetrics): number => {
   // Calculate efficiency score based on resource usage vs performance
-  const memoryEfficiency = 1 - usage.memory.percentage;
-  const cpuEfficiency = 1 - (usage.cpu.usage / 100);
-  const performanceScore = performance.successRate * (1 / Math.max(performance.averageResponseTime / 1000, 0.1));
+  const memoryEfficiency = 1 - (usage.memory / 100);
+  const cpuEfficiency = 1 - (usage.cpu / 100);
+  const performanceScore = (performance.successRate || 0) * (1 / Math.max((performance.averageResponseTime || 1000) / 1000, 0.1));
   
   return (memoryEfficiency * 0.3) + (cpuEfficiency * 0.3) + (performanceScore * 0.4);
 };
 
-export const generateOptimizationReport = (
-  cacheMetrics: CacheMetrics,
-  performanceMetrics: PerformanceMetrics[],
-  resourceUsage: ResourceUsage
-): {
-  overallScore: number;
-  categories: {
+export   categories: {
     caching: { score: number; recommendations: string[] };
     performance: { score: number; recommendations: string[] };
     resources: { score: number; recommendations: string[] };
@@ -200,7 +206,7 @@ export const generateOptimizationReport = (
   if (cacheMetrics.hitRate < 0.6) {
     cacheRecommendations.push('Low cache hit rate - consider increasing cache size or TTL');
   }
-  if (cacheMetrics.memoryUsage / (1024 * 1024) > 400) {
+  if ((cacheMetrics.memoryUsage || 0) / (1024 * 1024) > 400) {
     cacheRecommendations.push('High cache memory usage - consider compression or eviction optimization');
   }
 

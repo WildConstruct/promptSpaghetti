@@ -12,10 +12,10 @@ import { EventEmitter } from 'events';
  * intelligent navigation features for Epic 17.
  */
 export class NavigationManagerService extends EventEmitter {
-    preferences = new Map();
-    analytics = new Map();
-    navigationCache = new Map();
-    searchIndex = new Map();
+    preferences: Map<string, any> = new Map();
+    analytics: Map<string, any> = new Map();
+    navigationCache: Map<string, any> = new Map();
+    searchIndex: Map<string, any> = new Map();
     constructor() {
         super();
         this.initializeSearchIndex();
@@ -23,7 +23,7 @@ export class NavigationManagerService extends EventEmitter {
     /**
      * Get user navigation preferences
      */
-    async getUserPreferences(userId) {
+    async getUserPreferences(userId: string): Promise<any> {
         let prefs = this.preferences.get(userId);
         if (!prefs) {
             prefs = await this.createDefaultPreferences(userId);
@@ -34,7 +34,7 @@ export class NavigationManagerService extends EventEmitter {
     /**
      * Update user navigation preferences
      */
-    async updateUserPreferences(userId, updates) {
+    async updateUserPreferences(userId: string, updates: any): Promise<any> {
         const currentPrefs = await this.getUserPreferences(userId);
         const updatedPrefs = { ...currentPrefs, ...updates };
         this.preferences.set(userId, updatedPrefs);
@@ -46,7 +46,7 @@ export class NavigationManagerService extends EventEmitter {
     /**
      * Add item to recent navigation
      */
-    async addToRecent(userId, item) {
+    async addToRecent(userId: string, item: any): Promise<void> {
         const prefs = await this.getUserPreferences(userId);
         // Remove existing entry if present
         const existingIndex = prefs.recentItems.findIndex(r => r.id === item.id);

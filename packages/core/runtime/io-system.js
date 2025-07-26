@@ -1,18 +1,18 @@
 // packages/core/runtime/io-system.ts
 // Standardized Input/Output handling system for Epic 7 advanced nodes
-import { ErrorFactory } from '../errors/ErrorFactory.js';
+import { ErrorFactory } from '../errors/ErrorFactory';
 /**
  * Advanced Input/Output handler for Epic 7 nodes
  */
 export class AdvancedIOHandler {
     spec;
-    constructor(spec) {
+    constructor(spec: any) {
         this.spec = spec;
     }
     /**
      * Validate that all required inputs are available and valid
      */
-    validateInputs(inputs) {
+    validateInputs(inputs: Map<string, any>) {
         const errors = [];
         const warnings = [];
         for (const inputDef of this.spec.inputs) {
@@ -40,7 +40,7 @@ export class AdvancedIOHandler {
     /**
      * Resolve inputs from connected nodes and apply defaults
      */
-    resolveInputs(connectedInputs, ___nodeId) {
+    resolveInputs(connectedInputs: Map<string, any>, ___nodeId?: string) {
         const values = new Map();
         const metadata = new Map();
         for (const inputDef of this.spec.inputs) {
@@ -77,7 +77,7 @@ export class AdvancedIOHandler {
     /**
      * Validate and format output values according to output specification
      */
-    validateOutputs(outputs) {
+    validateOutputs(outputs: Map<string, any>) {
         const errors = [];
         const warnings = [];
         for (const outputDef of this.spec.outputs) {
@@ -109,7 +109,7 @@ export class AdvancedIOHandler {
     /**
      * Validate a value against a port definition
      */
-    validateValue(value, portDef) {
+    validateValue(value: any, portDef: any) {
         const errors = [];
         const warnings = [];
         // Type validation
@@ -132,7 +132,7 @@ export class AdvancedIOHandler {
     /**
      * Check if value matches expected data type
      */
-    isValidType(value, dataType) {
+    isValidType(value: any, dataType: string): boolean {
         switch (dataType) {
             case 'string':
                 return typeof value === 'string';

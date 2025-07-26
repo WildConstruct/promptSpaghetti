@@ -6,14 +6,14 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Provides policy creation, editing, evaluation, and compliance monitoring.
  */
 import { useState, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select.js';
-import { Input } from '../ui/Input.js';
-import { usePolicyManagement } from '../../hooks/usePolicyManagement.js';
-import { PolicyDomain, PolicyStatus } from '../../services/PolicyManagement.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
+import { Input } from '../ui/Input';
+import { usePolicyManagement } from '../../hooks/usePolicyManagement';
+import { PolicyDomain, PolicyStatus } from '../../services/PolicyManagement';
 import { Shield, FileText, Settings, AlertTriangle, CheckCircle, Clock, TrendingUp, Search, Plus, Edit, Trash2, Eye, AlertCircle, Activity, BarChart3, Users, Globe, Lock } from 'lucide-react';
 export const PolicyManagementDashboard = ({ userId, userRole, className = '' }) => {
     const { policies, evaluationResults, violations, isLoading, error, createPolicy, updatePolicy, deletePolicy, evaluatePolicies, generateComplianceReport, getPolicyStatistics, getFilteredPolicies, getRecentEvaluations, getPolicyViolations, domains, types, statuses, frameworks } = usePolicyManagement({

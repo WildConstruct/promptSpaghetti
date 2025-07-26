@@ -13,10 +13,21 @@ import {
   EvidenceAccessAuditService, 
   AuditTrailQuery, 
   EvidenceAccessAction, 
-  EvidenceAccessOutcome 
+  EvidenceAccessOutcome,
+  AuditTrailReport,
+  EvidenceAccessAuditEntry
 } from '../services/security/EvidenceAccessAuditService';
 import { AccessControlFramework } from '../services/security/AccessControlFramework';
 import { z } from 'zod';
+
+// Internal interfaces for analytics
+interface UserRiskData {
+  userId: string;
+  totalRisk: number;
+  accessCount: number;
+  highRiskCount: number;
+  avgRisk?: number;
+}
 
 // Request/Response schemas for validation
 const AuditTrailQuerySchema = z.object({
@@ -48,7 +59,7 @@ const BulkAuditSchema = z.object({
     evidenceId: z.string(),
     action: z.nativeEnum(EvidenceAccessAction),
     outcome: z.nativeEnum(EvidenceAccessOutcome),
-    metadata: z.record(z.any()).optional()
+    metadata: z.record(z.unknown()).optional()
   })).max(100), // Limit bulk operations
   sharedContext: z.object({
     userId: z.string(),
@@ -95,7 +106,7 @@ export async function auditTrailRoutes(fastify: FastifyInstance) {
       querystring: AuditTrailQuerySchema,
       response: {
         200: z.object({
-          data: z.array(z.any()),
+          data: z.array(z.unknown()),
           pagination: z.object({
             total: z.number(),
             limit: z.number(),
@@ -120,7 +131,7 @@ export async function auditTrailRoutes(fastify: FastifyInstance) {
   }, async (request: AuthenticatedRequest, reply) => {
     try {
       const query: AuditTrailQuery = {
-        ...request.query as any,
+        ...request.query as Record<string, unknown>,
         dateFrom: request.query.dateFrom ? new Date(request.query.dateFrom) : undefined,
         dateTo: request.query.dateTo ? new Date(request.query.dateTo) : undefined
       };
@@ -192,7 +203,7 @@ export async function auditTrailRoutes(fastify: FastifyInstance) {
       querystring: AuditTrailQuerySchema.merge(AuditReportParamsSchema),
       response: {
         200: z.object({
-          report: z.any(),
+          report: z.unknown(),
           metadata: z.object({
             generatedAt: z.string().datetime(),
             generatedBy: z.string(),
@@ -205,7 +216,7 @@ export async function auditTrailRoutes(fastify: FastifyInstance) {
   }, async (request: AuthenticatedRequest, reply) => {
     try {
       const query: AuditTrailQuery = {
-        ...request.query as any,
+        ...request.query as Record<string, unknown>,
         dateFrom: request.query.dateFrom ? new Date(request.query.dateFrom) : undefined,
         dateTo: request.query.dateTo ? new Date(request.query.dateTo) : undefined
       };
@@ -218,7 +229,7 @@ export async function auditTrailRoutes(fastify: FastifyInstance) {
       const report = await auditService.generateAuditReport(query);
 
       // Format response based on requested format
-      const format = (request.query as any).format || 'json';
+      const format = (request.query as { format?: string }).format || 'json';
       
       if (format === 'csv') {
         const csv = await convertReportToCSV(report);
@@ -271,7 +282,7 @@ export async function auditTrailRoutes(fastify: FastifyInstance) {
   }, async (request: AuthenticatedRequest, reply) => {
     try {
       const { evidenceId } = request.params as { evidenceId: string };
-      const { includeIntegrityCheck, limit, offset } = request.query as any;
+      const { includeIntegrityCheck, limit, offset } = request.query as { includeIntegrityCheck?: boolean; limit?: number; offset?: number };
 
       // Check if user has access to this evidence
       const hasAccess = await checkEvidenceAccess(request.user, evidenceId, accessControl);
@@ -320,7 +331,7 @@ export async function auditTrailRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           isValid: z.boolean(),
-          verificationReport: z.any(),
+          verificationReport: z.unknown(),
           brokenChains: z.array(z.string()),
           recommendations: z.array(z.string())
         })
@@ -328,7 +339,7 @@ export async function auditTrailRoutes(fastify: FastifyInstance) {
     }
   }, async (request: AuthenticatedRequest, reply) => {
     try {
-      const { evidenceId, fullChainVerification } = request.body as any;
+      const { evidenceId, fullChainVerification } = request.body as { evidenceId: string; fullChainVerification?: boolean };
 
       // Check admin permissions for integrity verification
       const isAdmin = request.user.roles?.includes('admin') || 
@@ -413,7 +424,7 @@ export async function auditTrailRoutes(fastify: FastifyInstance) {
     }
   }, async (request: AuthenticatedRequest, reply) => {
     try {
-      const { operations, sharedContext } = request.body as any;
+      const { operations, sharedContext } = request.body as { operations: Array<{ evidenceId: string; action: string; outcome: string; metadata?: Record<string, unknown> }>; sharedContext: Record<string, unknown> };
 
       // Verify user can audit for the specified user
       if (sharedContext.userId !== request.user.id && !request.user.roles?.includes('admin')) {
@@ -476,7 +487,7 @@ export async function auditTrailRoutes(fastify: FastifyInstance) {
     }
   }, async (request: AuthenticatedRequest, reply) => {
     try {
-      const { timeRange, groupBy, includeRiskAnalysis } = request.query as any;
+      const { timeRange, groupBy, includeRiskAnalysis } = request.query as { timeRange?: string; groupBy?: string; includeRiskAnalysis?: boolean };
 
       // Calculate date range
       const now = new Date();
@@ -532,14 +543,14 @@ async function checkEvidenceAccess(
   return user.permissions?.includes('audit:read') || user.roles?.includes('auditor');
 }
 
-async function convertReportToCSV(report: any): Promise<string> {
+async function convertReportToCSV(report: AuditTrailReport): Promise<string> {
   // Convert audit report to CSV format
   const headers = [
     'Timestamp', 'Evidence ID', 'User ID', 'Action', 'Outcome', 
     'Risk Level', 'Risk Score', 'IP Address', 'User Agent'
   ];
   
-  const rows = report.entries.map((entry: any) => [
+  const rows = report.entries.map((entry: EvidenceAccessAuditEntry) => [
     entry.timestamp,
     entry.evidenceId,
     entry.subject.userId,
@@ -554,7 +565,7 @@ async function convertReportToCSV(report: any): Promise<string> {
   return [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
 }
 
-async function convertReportToXLSX(report: any): Promise<Buffer> {
+async function convertReportToXLSX(report: AuditTrailReport): Promise<Buffer> {
   // TODO: Implement XLSX conversion using a library like exceljs
   // For now, return empty buffer
   return Buffer.from('');
@@ -568,7 +579,7 @@ async function generateAuditAnalytics(
     groupBy: string;
     includeRiskAnalysis: boolean;
   }
-): Promise<any> {
+): Promise<Record<string, unknown>> {
   const query = {
     dateFrom: options.dateFrom,
     dateTo: options.dateTo,
@@ -603,7 +614,7 @@ async function generateAuditAnalytics(
     }
     acc[key].push(entry);
     return acc;
-  }, {} as Record<string, any[]>);
+  }, {} as Record<string, unknown[]>);
 
   // Calculate analytics for each time period
   const timeSeriesData = Object.keys(grouped).sort().map(key => {
@@ -647,7 +658,7 @@ async function generateAuditAnalytics(
   return analytics;
 }
 
-function getTopRiskUsers(entries: any[]): any[] {
+function getTopRiskUsers(entries: EvidenceAccessAuditEntry[]): UserRiskData[] {
   const userRisk = entries.reduce((acc, entry) => {
     const userId = entry.subject.userId;
     if (!acc[userId]) {
@@ -659,10 +670,10 @@ function getTopRiskUsers(entries: any[]): any[] {
       acc[userId].highRiskCount++;
     }
     return acc;
-  }, {} as Record<string, any>);
+  }, {} as Record<string, UserRiskData>);
 
   return Object.values(userRisk)
-    .map((user: any) => ({
+    .map((user: UserRiskData) => ({
       ...user,
       avgRisk: user.totalRisk / user.accessCount
     }))
@@ -670,7 +681,7 @@ function getTopRiskUsers(entries: any[]): any[] {
     .slice(0, 10);
 }
 
-function getTopRiskEvidence(entries: any[]): any[] {
+function getTopRiskEvidence(entries: EvidenceAccessAuditEntry[]): Array<{ evidenceId: string; riskScore: number; accessCount: number }> {
   const evidenceRisk = entries.reduce((acc, entry) => {
     const evidenceId = entry.evidenceId;
     if (!acc[evidenceId]) {
@@ -682,10 +693,10 @@ function getTopRiskEvidence(entries: any[]): any[] {
       acc[evidenceId].highRiskCount++;
     }
     return acc;
-  }, {} as Record<string, any>);
+  }, {} as Record<string, unknown>);
 
   return Object.values(evidenceRisk)
-    .map((evidence: any) => ({
+    .map((evidence: [string, unknown]) => ({
       ...evidence,
       avgRisk: evidence.totalRisk / evidence.accessCount
     }))
@@ -693,7 +704,7 @@ function getTopRiskEvidence(entries: any[]): any[] {
     .slice(0, 10);
 }
 
-function calculateRiskTrends(timeSeriesData: any[]): any {
+function calculateRiskTrends(timeSeriesData: Array<{ timestamp: string; riskScore: number }>): { trend: string; changeRate: number } {
   if (timeSeriesData.length < 2) {
     return { trend: 'insufficient_data' };
   }

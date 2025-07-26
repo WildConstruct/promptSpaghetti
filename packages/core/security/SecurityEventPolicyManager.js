@@ -5,9 +5,9 @@
  * with the existing PromptScape security infrastructure, providing centralized
  * policy enforcement, monitoring, and compliance management.
  */
-import { SecurityEventType, SecurityEventSeverity, ComplianceFramework, securityEventPolicyEngine } from './SecurityEventLoggingPolicies.js';
-import { auditManagementSystem } from '../audit/AuditManagementSystem.js';
-import { AuditEventType, AuditSeverity, ComplianceFramework as AuditComplianceFramework } from '../audit/AuditManagementSystem.js';
+import { SecurityEventType, SecurityEventSeverity, ComplianceFramework, securityEventPolicyEngine } from './SecurityEventLoggingPolicies';
+import { auditManagementSystem } from '../audit/AuditManagementSystem';
+import { AuditEventType, AuditSeverity, ComplianceFramework as AuditComplianceFramework } from '../audit/AuditManagementSystem';
 /**
  * Advanced Security Event Policy Manager
  *
@@ -620,5 +620,5 @@ export const defaultPolicyManagerConfig = {
 // Global security event policy manager instance
 export const securityEventPolicyManager = new SecurityEventPolicyManager(defaultPolicyManagerConfig);
 // Utility functions for common operations
-export export const queueSecurityEvent = (event) => securityEventPolicyManager.queueSecurityEvent(event);
+export const queueSecurityEvent = (event) => securityEventPolicyManager.queueSecurityEvent(event);
 export default SecurityEventPolicyManager;

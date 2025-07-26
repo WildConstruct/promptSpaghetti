@@ -75,7 +75,7 @@ describe('DocTestFramework', () => {
       
       // Mock glob to return test files
       const { glob } = await import('glob') as { glob: { mockResolvedValue: (value: unknown) => void } };
-      glob.mockResolvedValue(mockFiles as unknown);
+      glob.mockResolvedValue(mockFiles as unknown as unknown);
       
       const files = await (
         docTest as unknown as { findDocumentationFiles: () => Promise<string[]> }
@@ -86,7 +86,7 @@ describe('DocTestFramework', () => {
     
     it('should exclude files matching exclude patterns', async () => {
       const { glob } = await import('glob') as { glob: { mockResolvedValue: (value: unknown) => void } };
-      glob.mockResolvedValue(['/project/README.md'] as unknown); // Excluded files filtered by glob
+      glob.mockResolvedValue(['/project/README.md'] as unknown as unknown); // Excluded files filtered by glob
       
       const files = await (
         docTest as unknown as { findDocumentationFiles: () => Promise<string[]> }
@@ -114,8 +114,8 @@ describe('DocTestFramework', () => {
       \`\`\`
       `;
       
-      mockFs.stat.mockResolvedValue({ size: 1000 } as fs.Stats);
-      mockFs.readFile.mockResolvedValue(testContent as unknown);
+      mockFs.stat.mockResolvedValue({ size: 1000 } as fs.Stats as unknown);
+      mockFs.readFile.mockResolvedValue(testContent as unknown as unknown);
       
       const result = await docTest.testDocumentationFile(testFilePath);
       
@@ -143,7 +143,7 @@ describe('DocTestFramework', () => {
     it('should handle file size limits', async () => {
       const testFilePath = '/project/large.md';
       
-      mockFs.stat.mockResolvedValue({ size: 10 * 1024 * 1024 } as fs.Stats); // 10MB
+      mockFs.stat.mockResolvedValue({ size: 10 * 1024 * 1024 } as fs.Stats as unknown); // 10MB
       
       const result = await docTest.testDocumentationFile(testFilePath);
       
@@ -164,8 +164,8 @@ describe('DocTestFramework', () => {
       # Test
       `;
       
-      mockFs.stat.mockResolvedValue({ size: 100 } as fs.Stats);
-      mockFs.readFile.mockResolvedValue(testContent as unknown);
+      mockFs.stat.mockResolvedValue({ size: 100 } as fs.Stats as unknown);
+      mockFs.readFile.mockResolvedValue(testContent as unknown as unknown);
       
       const result = await docTest.testDocumentationFile(testFilePath);
       
@@ -196,9 +196,9 @@ describe('DocTestFramework', () => {
 
 See [other doc](./other.md) for more info.`;
       
-      mockFs.stat.mockResolvedValue({ size: 100 } as fs.Stats);
-      mockFs.readFile.mockResolvedValue(testContent as unknown);
-      mockFs.access.mockResolvedValue(undefined as unknown); // File exists
+      mockFs.stat.mockResolvedValue({ size: 100 } as fs.Stats as unknown);
+      mockFs.readFile.mockResolvedValue(testContent as unknown as unknown);
+      mockFs.access.mockResolvedValue(undefined as unknown as unknown); // File exists
       
       const result = await docTest.testDocumentationFile('/project/test.md');
       
@@ -216,8 +216,8 @@ See [other doc](./other.md) for more info.`;
 
 See [broken link](./nonexistent.md) for more info.`;
       
-      mockFs.stat.mockResolvedValue({ size: 100 } as fs.Stats);
-      mockFs.readFile.mockResolvedValue(testContent as unknown);
+      mockFs.stat.mockResolvedValue({ size: 100 } as fs.Stats as unknown);
+      mockFs.readFile.mockResolvedValue(testContent as unknown as unknown);
       mockFs.access.mockRejectedValue(new Error('File not found'));
       
       const result = await docTest.testDocumentationFile('/project/test.md');
@@ -244,8 +244,8 @@ Visit [GitHub](https://github.com) for more info.`;
       
       const networkDocTest = new DocTestFramework(configWithNetwork);
       
-      mockFs.stat.mockResolvedValue({ size: 100 } as fs.Stats);
-      mockFs.readFile.mockResolvedValue(testContent as unknown);
+      mockFs.stat.mockResolvedValue({ size: 100 } as fs.Stats as unknown);
+      mockFs.readFile.mockResolvedValue(testContent as unknown as unknown);
       
       const result = await networkDocTest.testDocumentationFile('/project/test.md');
       
@@ -265,8 +265,8 @@ Jump to [section](#example) below.
 
 ## Example`;
       
-      mockFs.stat.mockResolvedValue({ size: 100 } as fs.Stats);
-      mockFs.readFile.mockResolvedValue(testContent as unknown);
+      mockFs.stat.mockResolvedValue({ size: 100 } as fs.Stats as unknown);
+      mockFs.readFile.mockResolvedValue(testContent as unknown as unknown);
       
       const result = await docTest.testDocumentationFile('/project/test.md');
       
@@ -358,7 +358,7 @@ Jump to [section](#example) below.
       const timeoutConfig = { ...testConfig, timeout: 1 }; // 1ms timeout
       const timeoutDocTest = new DocTestFramework(timeoutConfig);
       
-      mockFs.stat.mockResolvedValue({ size: 100 } as fs.Stats);
+      mockFs.stat.mockResolvedValue({ size: 100 } as fs.Stats as unknown);
       mockFs.readFile.mockImplementation(() => 
         new Promise(resolve => setTimeout(() => resolve('# Test'), 100))
       );
@@ -385,8 +385,8 @@ const message: string = "Hello";
 console.log(message);
 \`\`\``;
       
-      mockFs.stat.mockResolvedValue({ size: 100 } as fs.Stats);
-      mockFs.readFile.mockResolvedValue(testContent as unknown);
+      mockFs.stat.mockResolvedValue({ size: 100 } as fs.Stats as unknown);
+      mockFs.readFile.mockResolvedValue(testContent as unknown as unknown);
       
       const result = await docTest.testDocumentationFile('/project/test.md');
       
@@ -406,8 +406,8 @@ npm install
 npm test
 \`\`\``;
       
-      mockFs.stat.mockResolvedValue({ size: 100 } as fs.Stats);
-      mockFs.readFile.mockResolvedValue(testContent as unknown);
+      mockFs.stat.mockResolvedValue({ size: 100 } as fs.Stats as unknown);
+      mockFs.readFile.mockResolvedValue(testContent as unknown as unknown);
       
       const result = await docTest.testDocumentationFile('/project/test.md');
       
@@ -435,8 +435,8 @@ npm test
       \`\`\`
       `;
       
-      mockFs.stat.mockResolvedValue({ size: 100 } as fs.Stats);
-      mockFs.readFile.mockResolvedValue(testContent as unknown);
+      mockFs.stat.mockResolvedValue({ size: 100 } as fs.Stats as unknown);
+      mockFs.readFile.mockResolvedValue(testContent as unknown as unknown);
       
       const result = await docTest.testDocumentationFile('/project/test.md');
       
@@ -541,8 +541,7 @@ const example = true;
     \`\`\`
     
     \`\`\`javascript
-    const js = "code";
-    \`\`\`
+        \`\`\`
     
     \`\`\`typescript
     const more = "typescript";

@@ -4,11 +4,11 @@
  *
  * Factory for creating and managing AI model adapters
  */
-import { AIModelType, AIModelProvider } from './BaseAIModel.js';
-import OpenAIAdapter from './adapters/OpenAIAdapter.js';
-import AnthropicAdapter from './adapters/AnthropicAdapter.js';
-import GenericHTTPAdapter from './adapters/GenericHTTPAdapter.js';
-import LocalModelAdapter from './adapters/LocalModelAdapter.js';
+import { AIModelType, AIModelProvider } from './BaseAIModel';
+import OpenAIAdapter from './adapters/OpenAIAdapter';
+import AnthropicAdapter from './adapters/AnthropicAdapter';
+import GenericHTTPAdapter from './adapters/GenericHTTPAdapter';
+import LocalModelAdapter from './adapters/LocalModelAdapter';
 export class AIModelFactory {
     factoryConfig;
     registeredModels = new Map();

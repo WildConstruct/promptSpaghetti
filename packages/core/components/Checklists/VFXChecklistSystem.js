@@ -6,11 +6,11 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Supports hierarchical tasks, team collaboration, asset tracking, and quality assurance.
  */
 import { useState, useCallback, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select.js';
-import { Switch } from '../ui/Switch.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
+import { Switch } from '../ui/Switch';
 import { CheckSquare, Plus, Edit3, Trash2, RotateCw, Timer, Calendar, Users, FileText, AlertTriangle, CheckCircle, Clock, Eye, Filter, Search, BarChart3, Zap, Camera, Film, Palette } from 'lucide-react';
 // Status configurations with VFX-specific colors and labels
 const STATUS_CONFIG = {

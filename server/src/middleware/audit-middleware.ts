@@ -87,11 +87,17 @@ export class AuditMiddleware {
    */
   createFeatureToggleAuditor(context: AuditContext) {
     return {
-      logToggleCreated: async (toggleId: string, toggleData: any) => {
+      logToggleCreated: async (toggleId: string, toggleData: Record<string, unknown>) => {
         await this.auditService.logToggleCreated(toggleId, toggleData, context);
       },
 
-      logToggleUpdated: async (toggleId: string, beforeData: any, afterData: any) => {
+      logToggleUpdated: async (
+        toggleId: string,
+        beforeData: Record<string,
+        unknown>,
+        afterData: Record<string,
+        unknown>
+      ) => {
         await this.auditService.logToggleUpdated(toggleId, beforeData, afterData, context);
       },
 
@@ -124,11 +130,11 @@ export class AuditMiddleware {
    */
   createScheduleAuditor(context: AuditContext) {
     return {
-      logScheduleCreated: async (scheduleId: string, scheduleData: any) => {
+      logScheduleCreated: async (scheduleId: string, scheduleData: Record<string, unknown>) => {
         await this.auditService.logScheduleCreated(scheduleId, scheduleData, context);
       },
 
-      logScheduleExecuted: async (scheduleId: string, scheduleName: string, execution: any) => {
+      logScheduleExecuted: async (scheduleId: string, scheduleName: string, execution: Record<string, unknown>) => {
         await this.auditService.logScheduleExecuted(scheduleId, scheduleName, execution, context);
       },
 
@@ -181,7 +187,7 @@ export class AuditMiddleware {
    */
   createUserAuditor(context: AuditContext) {
     return {
-      logUserCreated: async (userId: string, userData: any) => {
+      logUserCreated: async (userId: string, userData: Record<string, unknown>) => {
         await this.auditService.logEvent({
           eventType: AuditEventType.USER_CREATED,
           category: AuditCategory.DATA_MODIFICATION,
@@ -196,7 +202,13 @@ export class AuditMiddleware {
         }, context);
       },
 
-      logUserUpdated: async (userId: string, beforeData: any, afterData: any) => {
+      logUserUpdated: async (
+        userId: string,
+        beforeData: Record<string,
+        unknown>,
+        afterData: Record<string,
+        unknown>
+      ) => {
         await this.auditService.logEvent({
           eventType: AuditEventType.USER_UPDATED,
           category: AuditCategory.DATA_MODIFICATION,
@@ -247,7 +259,7 @@ export class AuditMiddleware {
    */
   createSystemAuditor(context: AuditContext) {
     return {
-      logConfigurationChanged: async (configKey: string, beforeValue: any, afterValue: any) => {
+      logConfigurationChanged: async (configKey: string, beforeValue: unknown, afterValue: unknown) => {
         await this.auditService.logEvent({
           eventType: AuditEventType.CONFIGURATION_CHANGED,
           category: AuditCategory.SYSTEM_CONFIGURATION,
@@ -343,7 +355,7 @@ export class AuditMiddleware {
           outcome: 'success'
         }, context),
 
-      logFailure: (action: string, resourceType: string, error: any, resourceId?: string) =>
+      logFailure: (action: string, resourceType: string, error: unknown, resourceId?: string) =>
         this.auditService.logEvent({
           eventType: AuditEventType.API_ERROR,
           category: AuditCategory.ERROR,
@@ -473,7 +485,7 @@ export class AuditMiddleware {
     )?.split(',')[0]?.trim() || 'unknown';
   }
 
-  private sanitizeHeaders(headers: any): any {
+  private sanitizeHeaders(headers: Record<string, unknown>): Record<string, unknown> {
     const sanitized = { ...headers };
     
     this.options.sensitiveHeaders.forEach(header => {
@@ -485,7 +497,7 @@ export class AuditMiddleware {
     return sanitized;
   }
 
-  private sanitizeParams(params: any): any {
+  private sanitizeParams(params: Record<string, unknown>): Record<string, unknown> {
     if (!params || typeof params !== 'object') return params;
     
     const sanitized = { ...params };
@@ -499,7 +511,7 @@ export class AuditMiddleware {
     return sanitized;
   }
 
-  private sanitizeUserData(userData: any): any {
+  private sanitizeUserData(userData: Record<string, unknown>): Record<string, unknown> {
     if (!userData) return userData;
     
     const sanitized = { ...userData };
@@ -522,7 +534,7 @@ declare module 'fastify' {
     audit?: {
       log: (eventRequest: CreateAuditEventRequest) => Promise<void>;
       logSuccess: (action: string, resourceType: string, resourceId?: string, description?: string) => Promise<void>;
-      logFailure: (action: string, resourceType: string, error: any, resourceId?: string) => Promise<void>;
+      logFailure: (action: string, resourceType: string, error: unknown, resourceId?: string) => Promise<void>;
       toggles: ReturnType<AuditMiddleware['createFeatureToggleAuditor']>;
       schedules: ReturnType<AuditMiddleware['createScheduleAuditor']>;
       users: ReturnType<AuditMiddleware['createUserAuditor']>;

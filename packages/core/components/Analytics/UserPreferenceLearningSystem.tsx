@@ -62,7 +62,7 @@ export interface LearningEvent {
   eventId: string;
   timestamp: number;
   type: LearningEventType;
-  data: any;
+  data: Record<string, unknown>;
   impact: LearningImpact;
   modelVersion: string;
 }
@@ -219,7 +219,10 @@ export const UserPreferenceLearningSystem: React.FC<UserPreferenceLearningSystem
         models,
         learningMetrics: {
           totalUsers: userProfiles.length,
-          averageConfidence: userProfiles.reduce((sum, p) => sum + p.confidenceMetrics.overall, 0) / userProfiles.length,
+          averageConfidence: userProfiles.reduce(
+            (sum,
+            p
+          ) => sum + p.confidenceMetrics.overall, 0) / userProfiles.length,
           bestModel: models.sort((a, b) => b.performance.accuracy - a.performance.accuracy)[0],
           learningRate: Math.random() * 0.1 + 0.05
         },
@@ -231,7 +234,10 @@ export const UserPreferenceLearningSystem: React.FC<UserPreferenceLearningSystem
 
   const systemStats = useMemo(() => ({
     totalUsers: userProfiles.length,
-    avgConfidence: Math.round(userProfiles.reduce((sum, p) => sum + p.confidenceMetrics.overall, 0) / userProfiles.length * 100),
+    avgConfidence: Math.round(
+      userProfiles.reduce((sum,
+      p
+    ) => sum + p.confidenceMetrics.overall, 0) / userProfiles.length * 100),
     totalModels: models.length,
     bestAccuracy: Math.round(Math.max(...models.map(m => m.performance.accuracy)) * 100),
     learningEvents: userProfiles.reduce((sum, p) => sum + p.learningHistory.length, 0)
@@ -571,7 +577,7 @@ export interface ModelMonitoringSettings {
 
 export interface Evidence {
   type: string;
-  value: any;
+  value: Error;
   timestamp: number;
   weight: number;
 }
@@ -616,9 +622,9 @@ export interface TrainingMetadata {
 export interface ModelPrediction {
   predictionId: string;
   timestamp: number;
-  prediction: any;
+  prediction: unknown;
   confidence: number;
-  actual?: any;
+  actual?: unknown;
 }
 
 export interface ConfidenceMetrics {

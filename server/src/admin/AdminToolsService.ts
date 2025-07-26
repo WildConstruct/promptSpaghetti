@@ -432,7 +432,7 @@ export class AdminToolsService {
    */
   async getSystemConfiguration(category?: string): Promise<SystemConfiguration[]> {
     let query = 'SELECT * FROM system_configuration';
-    const params: any[] = [];
+    const params: unknown[] = [];
 
     if (category) {
       query += ' WHERE category = $1';
@@ -738,7 +738,7 @@ export class AdminToolsService {
     return result.rows.map(this.mapMaintenanceTask);
   }
 
-  private mapSystemConfiguration(row: any): SystemConfiguration {
+  private mapSystemConfiguration(row: Record<string, unknown>): SystemConfiguration {
     return {
       category: row.category,
       settings: JSON.parse(row.settings),
@@ -749,7 +749,7 @@ export class AdminToolsService {
     };
   }
 
-  private mapSecurityAlert(row: any): SecurityAlert {
+  private mapSecurityAlert(row: Record<string, unknown>): SecurityAlert {
     return {
       id: row.id,
       severity: row.severity,
@@ -763,7 +763,7 @@ export class AdminToolsService {
     };
   }
 
-  private mapMaintenanceTask(row: any): MaintenanceTask {
+  private mapMaintenanceTask(row: Record<string, unknown>): MaintenanceTask {
     return {
       id: row.id,
       name: row.name,

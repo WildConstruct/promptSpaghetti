@@ -16,17 +16,17 @@
  * Enhanced Alert System Service
  */
 export class AlertSystem {
-    static instance;
-    alerts = new Map();
-    rules = new Map();
-    listeners = new Map();
-    suppressionRules = new Map();
-    escalationTimers = new Map();
+    static instance: AlertSystem;
+    alerts: Map<string, any> = new Map();
+    rules: Map<string, any> = new Map();
+    listeners: Map<string, any> = new Map();
+    suppressionRules: Map<string, any> = new Map();
+    escalationTimers: Map<string, any> = new Map();
     constructor() {
         this.initializeDefaultRules();
         this.startBackgroundProcessing();
     }
-    static getInstance() {
+    static getInstance(): AlertSystem {
         if (!AlertSystem.instance) {
             AlertSystem.instance = new AlertSystem();
         }
@@ -35,7 +35,7 @@ export class AlertSystem {
     /**
      * Register an alert rule
      */
-    registerRule(rule) {
+    registerRule(rule: any): void {
         this.validateRule(rule);
         this.rules.set(rule.id, {
             ...rule,
@@ -47,7 +47,7 @@ export class AlertSystem {
     /**
      * Trigger an alert based on conditions
      */
-    async triggerAlert(ruleId, context, overrides) {
+    async triggerAlert(ruleId: string, context: any, overrides?: any): Promise<void> {
         const rule = this.rules.get(ruleId);
         if (!rule || !rule.enabled) {
             return null;

@@ -2,6 +2,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { MarketplaceService } from './marketplace.service';
 import { RecommendationService } from './recommendation.service';
+import { CreatorManagementService } from './creator-management.service';
 import { submissionRoutes } from './submission.routes';
 import { Pool } from 'pg';
 import { 
@@ -113,6 +114,7 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
     }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const query = request.query as any;
+    const searchStartTime = Date.now();
     
     const filters: SearchFilters = {
       query: query.query,
@@ -130,7 +132,16 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
 
     try {
       const userId = (request as any).user?.id;
-      const results = await marketplaceService.searchTemplates(filters, userId);
+      
+      // Enhanced search context for analytics
+      const searchContext = {
+        sessionId: request.session?.id || request.headers['x-session-id'] as string,
+        ipAddress: request.ip,
+        userAgent: request.headers['user-agent'],
+        searchStartTime
+      };
+      
+      const results = await marketplaceService.searchTemplates(filters, userId, searchContext);
       return reply.send(results);
     } catch (error) {
       fastify.log.error(error);
@@ -715,6 +726,297 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
     } catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to refresh search index' });
+    }
+  });
+
+  // Creator Management endpoints (Epic 16 Story 16.2)
+  fastify.get('/creator/stats', {
+    preHandler: fastify.auth([fastify.verifyJWT]),
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          start_date: { type: 'string', format: 'date' },
+          end_date: { type: 'string', format: 'date' }
+        }
+      }
+    }
+  }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    const { start_date, end_date } = request.query as any;
+
+    try {
+      const creatorService = new CreatorManagementService(dbPool);
+      const stats = await creatorService.getCreatorStats(
+        user.id,
+        start_date ? new Date(start_date) : undefined,
+        end_date ? new Date(end_date) : undefined
+      );
+      return reply.send(stats);
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ error: 'Failed to fetch creator stats' });
+    }
+  });
+
+  fastify.get('/creator/profile', {
+    preHandler: fastify.auth([fastify.verifyJWT])
+  }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+
+    try {
+      const creatorService = new CreatorManagementService(dbPool);
+      const profile = await creatorService.getCreatorProfile(user.id);
+      return reply.send(profile);
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ error: 'Failed to fetch creator profile' });
+    }
+  });
+
+  fastify.put('/creator/profile', {
+    preHandler: fastify.auth([fastify.verifyJWT]),
+    schema: {
+      body: {
+        type: 'object',
+        properties: {
+          display_name: { type: 'string', minLength: 1, maxLength: 100 },
+          bio: { type: 'string', maxLength: 1000 },
+          website: { type: 'string', format: 'uri', maxLength: 500 },
+          social_links: { type: 'object' },
+          public_profile: { type: 'boolean' }
+        }
+      }
+    }
+  }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+
+    try {
+      const creatorService = new CreatorManagementService(dbPool);
+      const profile = await creatorService.updateCreatorProfile(user.id, request.body);
+      return reply.send(profile);
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ error: 'Failed to update creator profile' });
+    }
+  });
+
+  fastify.get('/creator/templates', {
+    preHandler: fastify.auth([fastify.verifyJWT])
+  }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+
+    try {
+      const creatorService = new CreatorManagementService(dbPool);
+      const templates = await creatorService.getCreatorTemplates(user.id);
+      return reply.send({ templates });
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ error: 'Failed to fetch creator templates' });
+    }
+  });
+
+  fastify.get('/creator/monetization', {
+    preHandler: fastify.auth([fastify.verifyJWT])
+  }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+
+    try {
+      const creatorService = new CreatorManagementService(dbPool);
+      const settings = await creatorService.getMonetizationSettings(user.id);
+      return reply.send(settings || {
+        payout_threshold_cents: 5000,
+        payout_schedule: 'monthly',
+        payment_method: 'stripe',
+        auto_payout_enabled: true,
+        tax_settings: {}
+      });
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ error: 'Failed to fetch monetization settings' });
+    }
+  });
+
+  fastify.put('/creator/monetization', {
+    preHandler: fastify.auth([fastify.verifyJWT]),
+    schema: {
+      body: {
+        type: 'object',
+        properties: {
+          payout_threshold_cents: { type: 'integer', minimum: 1000 },
+          payout_schedule: { type: 'string', enum: ['weekly', 'monthly'] },
+          payment_method: { type: 'string', enum: ['stripe', 'paypal', 'bank_transfer'] },
+          stripe_account_id: { type: 'string' },
+          paypal_email: { type: 'string', format: 'email' },
+          bank_details: { type: 'object' },
+          tax_settings: { type: 'object' },
+          auto_payout_enabled: { type: 'boolean' }
+        }
+      }
+    }
+  }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+
+    try {
+      const creatorService = new CreatorManagementService(dbPool);
+      const settings = await creatorService.updateMonetizationSettings(user.id, request.body);
+      return reply.send(settings);
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ error: 'Failed to update monetization settings' });
+    }
+  });
+
+  fastify.get('/creator/performance', {
+    preHandler: fastify.auth([fastify.verifyJWT]),
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          start_date: { type: 'string', format: 'date' },
+          end_date: { type: 'string', format: 'date' }
+        },
+        required: ['start_date', 'end_date']
+      }
+    }
+  }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    const { start_date, end_date } = request.query as any;
+
+    try {
+      const creatorService = new CreatorManagementService(dbPool);
+      const metrics = await creatorService.getPerformanceMetrics(
+        user.id,
+        new Date(start_date),
+        new Date(end_date)
+      );
+      return reply.send(metrics);
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ error: 'Failed to fetch performance metrics' });
+    }
+  });
+
+  fastify.get('/creator/payouts', {
+    preHandler: fastify.auth([fastify.verifyJWT]),
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          limit: { type: 'integer', minimum: 1, maximum: 100, default: 50 }
+        }
+      }
+    }
+  }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    const { limit = 50 } = request.query as any;
+
+    try {
+      const creatorService = new CreatorManagementService(dbPool);
+      const payouts = await creatorService.getPayoutHistory(user.id, limit);
+      return reply.send({ payouts });
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ error: 'Failed to fetch payout history' });
+    }
+  });
+
+  fastify.post('/creator/payout', {
+    preHandler: fastify.auth([fastify.verifyJWT])
+  }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+
+    try {
+      const creatorService = new CreatorManagementService(dbPool);
+      const payout = await creatorService.initiatePayout(user.id);
+      return reply.status(201).send(payout);
+    } catch (error) {
+      if (error instanceof Error && error.message.includes('Insufficient balance')) {
+        return reply.status(400).send({ error: error.message });
+      }
+      fastify.log.error(error);
+      return reply.status(500).send({ error: 'Failed to initiate payout' });
+    }
+  });
+
+  // Search Analytics endpoints (Epic 16 Story 16.1)
+  fastify.get('/analytics/search', {
+    preHandler: fastify.auth([fastify.verifyJWT]),
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          start_date: { type: 'string', format: 'date' },
+          end_date: { type: 'string', format: 'date' },
+          user_id: { type: 'string', format: 'uuid' }
+        },
+        required: ['start_date', 'end_date']
+      }
+    }
+  }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    const { start_date, end_date, user_id } = request.query as any;
+
+    if (!hasRole(user, ['admin', 'analyst'])) {
+      return reply.status(403).send({ error: 'Insufficient permissions' });
+    }
+
+    try {
+      const analytics = await marketplaceService.getSearchAnalytics(
+        new Date(start_date),
+        new Date(end_date),
+        user_id
+      );
+      return reply.send(analytics);
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ error: 'Failed to fetch search analytics' });
+    }
+  });
+
+  fastify.get('/analytics/search/popular-terms', {
+    preHandler: fastify.auth([fastify.verifyJWT]),
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          timeframe: { type: 'string', enum: ['day', 'week', 'month'], default: 'week' },
+          limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 }
+        }
+      }
+    }
+  }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    const { timeframe = 'week', limit = 20 } = request.query as any;
+
+    if (!hasRole(user, ['admin', 'analyst', 'creator'])) {
+      return reply.status(403).send({ error: 'Insufficient permissions' });
+    }
+
+    try {
+      const popularTerms = await marketplaceService.getPopularSearchTerms(timeframe, limit);
+      return reply.send({ popular_terms: popularTerms });
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ error: 'Failed to fetch popular search terms' });
+    }
+  });
+
+  fastify.get('/analytics/search/insights', {
+    preHandler: fastify.auth([fastify.verifyJWT])
+  }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+
+    if (!hasRole(user, ['admin', 'analyst'])) {
+      return reply.status(403).send({ error: 'Insufficient permissions' });
+    }
+
+    try {
+      const insights = await marketplaceService.getSearchInsights();
+      return reply.send(insights);
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ error: 'Failed to fetch search insights' });
     }
   });
 }

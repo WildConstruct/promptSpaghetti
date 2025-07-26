@@ -1,7 +1,7 @@
 // packages/core/runtime/nodes/examples/WeightedAdvancedExample.ts
 // Example usage of the WeightedAdvanced node
-import { WeightedAdvancedNode, DistributionPresets, createWeightedAdvancedNode } from '../WeightedAdvanced.js';
-import { AdvancedExecutionUtils } from '../../advanced.js';
+import { WeightedAdvancedNode, DistributionPresets, createWeightedAdvancedNode } from '../WeightedAdvanced';
+import { AdvancedExecutionUtils } from '../../advanced';
 /**
  * Example demonstrating WeightedAdvanced node capabilities
  */

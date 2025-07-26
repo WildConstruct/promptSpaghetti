@@ -163,7 +163,7 @@ export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> =
   const activityTrackerRef = useRef<SessionActivityTracker | null>(null);
 
   // Debug logging
-  const log = useCallback((message: string, data?: any) => {
+  const log = useCallback((message: string, data?: unknown) => {
     if (fullConfig.debug) {
       console.log(`[AuthMiddleware] ${message}`, data);
     }

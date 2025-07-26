@@ -6,7 +6,7 @@
  *
  * Task: E16-1753114247016-0B348A - Create sentiment analysis
  */
-import { validateAnalyzeSentimentRequest, validateSentimentAnalysis, validateSentimentAnalytics } from '../types/SentimentAnalysisTypes.js';
+import { validateAnalyzeSentimentRequest, validateSentimentAnalysis, validateSentimentAnalytics } from '../types/SentimentAnalysisTypes';
 import { v4 as uuidv4 } from 'uuid';
 export class SentimentAnalysisService {
     baseUrl;
@@ -14,7 +14,7 @@ export class SentimentAnalysisService {
     modelCache;
     analysisCache;
     analyticsCache;
-    constructor(serviceConfig) {
+    constructor(serviceConfig: any) {
         this.baseUrl = serviceConfig.baseUrl;
         this.config = serviceConfig.config || this.getDefaultConfig();
         this.modelCache = new Map();
@@ -24,7 +24,7 @@ export class SentimentAnalysisService {
     /**
      * Analyze sentiment for multiple texts
      */
-    async analyzeSentiment(request) {
+    async analyzeSentiment(request: any) {
         const validatedRequest = validateAnalyzeSentimentRequest(request);
         const startTime = Date.now();
         const requestId = uuidv4();
@@ -81,7 +81,7 @@ export class SentimentAnalysisService {
     /**
      * Get sentiment analytics for a resource
      */
-    async getSentimentAnalytics(resourceId, resourceType, timeRange) {
+    async getSentimentAnalytics(resourceId: string, resourceType: string, timeRange: any) {
         // Check cache first
         const cacheKey = `analytics:${resourceId}:${timeRange.start.getTime()}:${timeRange.end.getTime()}`;
         const cachedAnalytics = this.getCachedAnalytics(cacheKey);
@@ -99,7 +99,7 @@ export class SentimentAnalysisService {
     /**
      * Analyze single text for real-time processing
      */
-    async analyzeText(textId, content, sourceType, options) {
+    async analyzeText(textId: string, content: string, sourceType: string, options?: any) {
         const textData = {
             textId,
             content,
@@ -119,7 +119,7 @@ export class SentimentAnalysisService {
     /**
      * Update sentiment analysis configuration
      */
-    updateConfig(newConfig) {
+    updateConfig(newConfig: any) {
         this.config = { ...this.config, ...newConfig };
         // Clear caches when config changes
         this.clearAllCaches();
@@ -131,7 +131,7 @@ export class SentimentAnalysisService {
         return { ...this.config };
     }
     // Private methods
-    async performSentimentAnalysis(textData, options) {
+    async performSentimentAnalysis(textData: any, options: any) {
         const startTime = Date.now();
         // Preprocess text
         const processedText = this.preprocessText(textData.content);
@@ -192,7 +192,7 @@ export class SentimentAnalysisService {
         };
         return validateSentimentAnalysis(analysis);
     }
-    preprocessText(text) {
+    preprocessText(text: string) {
         if (!this.config.processing.enablePreprocessing) {
             return text;
         }
@@ -207,7 +207,7 @@ export class SentimentAnalysisService {
         }
         return processed;
     }
-    removePersonalInfo(text) {
+    removePersonalInfo(text: string) {
         // Remove email addresses
         text = text.replace(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g, '[EMAIL]');
         // Remove phone numbers (basic pattern)
@@ -216,7 +216,7 @@ export class SentimentAnalysisService {
         text = text.replace(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g, '[URL]');
         return text;
     }
-    normalizeText(text) {
+    normalizeText(text: string) {
         // Convert to lowercase
         let normalized = text.toLowerCase();
         // Remove extra whitespace
@@ -225,7 +225,7 @@ export class SentimentAnalysisService {
         normalized = normalized.replace(/[^a-z0-9\s.,!?;:'"-]/g, '');
         return normalized;
     }
-    async detectLanguage(text) {
+    async detectLanguage(text: string) {
         // Mock language detection - in real implementation would use ML model
         const commonWords = {
             en: ['the', 'and', 'is', 'in', 'to', 'of', 'a', 'that', 'it', 'with'],
@@ -245,7 +245,7 @@ export class SentimentAnalysisService {
         }
         return bestMatch;
     }
-    async analyzeSentimentCore(text, language) {
+    async analyzeSentimentCore(text: string, language: string) {
         // Mock sentiment analysis - in real implementation would use ML model
         const positiveWords = ['good', 'great', 'excellent', 'amazing', 'love', 'like', 'awesome', 'fantastic', 'wonderful'];
         const negativeWords = ['bad', 'terrible', 'awful', 'hate', 'dislike', 'horrible', 'worst', 'disappointing'];
@@ -277,7 +277,7 @@ export class SentimentAnalysisService {
             subjectivity: totalSentimentWords > 0 ? 0.7 : 0.3
         };
     }
-    async analyzeEmotions(text, language) {
+    async analyzeEmotions(text: string, language: string) {
         // Mock emotion analysis - in real implementation would use ML model
         const emotionKeywords = {
             joy: ['happy', 'excited', 'thrilled', 'delighted', 'cheerful'],
@@ -310,7 +310,7 @@ export class SentimentAnalysisService {
             mixed: Object.values(emotionScores).filter(score => score > 0.3).length > 1
         };
     }
-    async analyzeToxicity(text, language) {
+    async analyzeToxicity(text: string, language: string) {
         // Mock toxicity analysis - in real implementation would use ML model
         const toxicWords = ['hate', 'stupid', 'idiot', 'moron', 'damn', 'hell'];
         const harassmentWords = ['attack', 'harass', 'bully', 'threaten'];
@@ -346,7 +346,7 @@ export class SentimentAnalysisService {
             flags: toxicityScore > 0.5 ? ['high_toxicity'] : []
         };
     }
-    async extractTopics(text, language) {
+    async extractTopics(text: string, language: string) {
         // Mock topic extraction - in real implementation would use ML model
         const topicKeywords = {
             'user_experience': ['ux', 'ui', 'interface', 'design', 'usability', 'experience'],
@@ -371,7 +371,7 @@ export class SentimentAnalysisService {
         }
         return topics.sort((a, b) => b.relevance - a.relevance).slice(0, 5);
     }
-    getTopicSentiment(text, keywords) {
+    getTopicSentiment(text: string, keywords: string[]) {
         // Simple sentiment detection for topic context
         const context = text.toLowerCase();
         const hasPositive = ['good', 'great', 'excellent', 'love'].some(word => context.includes(word));
@@ -382,7 +382,7 @@ export class SentimentAnalysisService {
             return 'negative';
         return 'neutral';
     }
-    async extractKeywords(text, sentiment) {
+    async extractKeywords(text: string, sentiment: string) {
         // Mock keyword extraction
         const words = text.toLowerCase()
             .replace(/[^a-z\s]/g, '')
@@ -402,7 +402,7 @@ export class SentimentAnalysisService {
             frequency
         }));
     }
-    async detectIntent(text, sourceType) {
+    async detectIntent(text: string, sourceType: string) {
         // Mock intent detection
         const questionWords = ['how', 'what', 'why', 'when', 'where', 'can', 'could', 'would'];
         const complaintWords = ['problem', 'issue', 'broken', 'not working', 'disappointed'];
@@ -446,7 +446,7 @@ export class SentimentAnalysisService {
             actionRequired
         };
     }
-    async scoreQuality(text, sourceType) {
+    async scoreQuality(text: string, sourceType: string) {
         const words = text.split(/\s+/);
         const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
         // Base quality metrics
@@ -503,11 +503,11 @@ export class SentimentAnalysisService {
             flags: []
         };
     }
-    calculateOverallConfidence(sentiment, emotions, toxicity) {
+    calculateOverallConfidence(sentiment: any, emotions: any, toxicity: any) {
         const confidences = [sentiment.confidence, emotions.confidence, toxicity.confidence];
         return confidences.reduce((sum, conf) => sum + conf, 0) / confidences.length;
     }
-    calculateOverallSentiment(analyses) {
+    calculateOverallSentiment(analyses: any[]) {
         if (analyses.length === 0)
             return undefined;
         const sentimentCounts = { positive: 0, neutral: 0, negative: 0 };
@@ -517,7 +517,7 @@ export class SentimentAnalysisService {
         const maxCount = Math.max(...Object.values(sentimentCounts));
         return Object.entries(sentimentCounts).find(([_, count]) => count === maxCount)?.[0];
     }
-    calculateSentimentAnalytics(resourceId, resourceType, timeRange, analyses) {
+    calculateSentimentAnalytics(resourceId: string, resourceType: string, timeRange: any, analyses: any[]) {
         // Calculate sentiment distribution
         const sentimentCounts = { positive: 0, neutral: 0, negative: 0 };
         const sentimentScores = { positive: [], neutral: [], negative: [] };
@@ -640,7 +640,7 @@ export class SentimentAnalysisService {
         };
         return validateSentimentAnalytics(analytics);
     }
-    calculateOverallToxicityLevel(counts) {
+    calculateOverallToxicityLevel(counts: any) {
         const total = Object.values(counts).reduce((sum, count) => sum + count, 0);
         if (total === 0)
             return 'none';
@@ -657,11 +657,11 @@ export class SentimentAnalysisService {
         return 'none';
     }
     // Cache management methods
-    generateCacheKey(content, options) {
+    generateCacheKey(content: string, options: any) {
         const hash = this.simpleHash(content + JSON.stringify(options));
         return `analysis:${hash}`;
     }
-    simpleHash(str) {
+    simpleHash(str: string) {
         let hash = 0;
         for (let i = 0; i < str.length; i++) {
             const char = str.charCodeAt(i);
@@ -670,7 +670,7 @@ export class SentimentAnalysisService {
         }
         return Math.abs(hash).toString(36);
     }
-    getCachedAnalysis(cacheKey) {
+    getCachedAnalysis(cacheKey: string) {
         const cached = this.analysisCache.get(cacheKey);
         if (!cached)
             return null;
@@ -682,13 +682,13 @@ export class SentimentAnalysisService {
         }
         return cached.analysis;
     }
-    cacheAnalysis(cacheKey, analysis) {
+    cacheAnalysis(cacheKey: string, analysis: any) {
         this.analysisCache.set(cacheKey, {
             analysis,
             timestamp: Date.now()
         });
     }
-    getCachedAnalytics(cacheKey) {
+    getCachedAnalytics(cacheKey: string) {
         const cached = this.analyticsCache.get(cacheKey);
         if (!cached)
             return null;
@@ -700,7 +700,7 @@ export class SentimentAnalysisService {
         }
         return cached.analytics;
     }
-    cacheAnalytics(cacheKey, analytics) {
+    cacheAnalytics(cacheKey: string, analytics: any) {
         this.analyticsCache.set(cacheKey, {
             analytics,
             timestamp: Date.now()
@@ -712,7 +712,7 @@ export class SentimentAnalysisService {
         this.modelCache.clear();
     }
     // Mock data generators
-    generateMockAnalyses(resourceId, timeRange) {
+    generateMockAnalyses(resourceId: string, timeRange: any) {
         const analyses = [];
         const count = Math.floor(Math.random() * 50) + 20;
         for (let i = 0; i < count; i++) {

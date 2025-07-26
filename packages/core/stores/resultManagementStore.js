@@ -6,7 +6,7 @@
  */
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { ErrorFactory } from '../errors/ErrorFactory.js';
+import { ErrorFactory } from '../errors/ErrorFactory';
 export const useResultManagementStore = create()(persist((set, get) => ({
     // Initial state
     savedResults: {},

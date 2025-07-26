@@ -7,21 +7,21 @@
  * policy management, compliance monitoring, and content quality frameworks.
  */
 export class PolicyCheckersService {
-    checkers = new Map();
-    complianceMonitor;
-    contentQualityService;
-    cache = new Map();
-    constructor(complianceMonitor, contentQualityService) {
+    checkers: Map<string, any> = new Map();
+    complianceMonitor: any;
+    contentQualityService: any;
+    cache: Map<string, any> = new Map();
+    constructor(complianceMonitor: any, contentQualityService: any) {
         this.complianceMonitor = complianceMonitor;
         this.contentQualityService = contentQualityService;
         this.initializeBuiltInCheckers();
     }
     // Register policy checkers
-    registerChecker(checker) {
+    registerChecker(checker: any): void {
         this.checkers.set(checker.type, checker);
     }
     // Execute policy checks
-    async executeChecks(request) {
+    async executeChecks(request: any): Promise<any[]> {
         const startTime = Date.now();
         const results = [];
         const checksToRun = request.checksRequested || Array.from(this.checkers.keys());

@@ -48,7 +48,7 @@ export interface TimeRange {
 export interface RuleCondition {
   field: string;
   operator: ConditionOperator;
-  value: any;
+  value: unknown;
   logicalOperator?: LogicalOperator;
 }
 

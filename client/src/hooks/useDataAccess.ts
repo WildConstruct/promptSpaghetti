@@ -107,8 +107,13 @@ export const useDataAccess = (options: UseDataAccessOptions = {}): UseDataAccess
     });
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Request failed with status ${response.status}`);
+      let errorData = { message: `Request failed with status ${response.status}` };
+      try {
+        errorData = await response.json();
+      } catch {
+        // Use default error data if JSON parsing fails
+      }
+      throw new Error(errorData.message ?? `Request failed with status ${response.status}`);
     }
 
     return response.json();
@@ -130,8 +135,9 @@ export const useDataAccess = (options: UseDataAccessOptions = {}): UseDataAccess
       }));
       
       setGrants(grantsWithDates);
-    } catch (err: any) {
-      setError(`Failed to load access grants: ${err.message}`);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      setError(`Failed to load access grants: ${errorMessage}`);
       setGrants([]);
     } finally {
       setLoading(false);
@@ -162,8 +168,9 @@ export const useDataAccess = (options: UseDataAccessOptions = {}): UseDataAccess
       }));
       
       setHistory(historyWithDates);
-    } catch (err: any) {
-      setError(`Failed to load access history: ${err.message}`);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      setError(`Failed to load access history: ${errorMessage}`);
       setHistory([]);
     } finally {
       setLoading(false);
@@ -182,8 +189,9 @@ export const useDataAccess = (options: UseDataAccessOptions = {}): UseDataAccess
       });
       
       return response;
-    } catch (err: any) {
-      setError(`Failed to submit access request: ${err.message}`);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      setError(`Failed to submit access request: ${errorMessage}`);
       throw err;
     } finally {
       setLoading(false);
@@ -201,8 +209,12 @@ export const useDataAccess = (options: UseDataAccessOptions = {}): UseDataAccess
         `/data-access/permissions/${resourceId}?resourceType=${resourceType}&operation=${operation}`
       );
       return response;
-    } catch (err: any) {
-      console.error('Failed to check resource access:', err);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      console.error('Failed to check resource access:', {
+        error: errorMessage,
+        timestamp: new Date().toISOString()
+      });
       return null;
     }
   }, [apiRequest]);
@@ -219,8 +231,9 @@ export const useDataAccess = (options: UseDataAccessOptions = {}): UseDataAccess
       });
       
       return response.success;
-    } catch (err: any) {
-      setError(`Failed to revoke access: ${err.message}`);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      setError(`Failed to revoke access: ${errorMessage}`);
       return false;
     } finally {
       setLoading(false);

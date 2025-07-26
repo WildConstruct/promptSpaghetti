@@ -7,7 +7,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * with filtering, sorting, and search capabilities.
  */
 import { useState, useEffect, useCallback } from 'react';
-import { CaseStudyCard } from './CaseStudyCard.js';
+import { CaseStudyCard } from './CaseStudyCard';
 export const CaseStudyGallery = ({ initialFilter = {}, initialSort = { field: 'publishedAt', direction: 'desc' }, layout = 'grid', showFilters = true, showSearch = true, showSort = true, maxItems, onCaseStudyClick, onTemplateClick, onAuthorClick, className = '' }) => {
     const [caseStudies, setCaseStudies] = useState([]);
     const [loading, setLoading] = useState(true);

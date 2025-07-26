@@ -754,7 +754,7 @@ export class ISO27001ControlsService {
   /**
    * Create default metadata for a control
    */
-  private createDefaultMetadata(_____controlId: string): ControlMetadata {
+  private createDefaultMetadata(_controlId: string): ControlMetadata {
     return {
       version: '1.0',
       lastUpdated: new Date(),
@@ -863,21 +863,21 @@ export class ISO27001ControlsService {
           },
           dataTypes: [],
           processingActivities: [],
-          geographicScope: {} as any,
-          organizationalScope: {} as any,
-          temporalScope: {} as any,
-          technicalScope: {} as any,
+          geographicScope: {} as Record<string, unknown>,
+          organizationalScope: {} as Record<string, unknown>,
+          temporalScope: {} as Record<string, unknown>,
+          technicalScope: {} as Record<string, unknown>,
           exceptions: []
         },
         conditions: [],
         actions: [],
         conflicts: [],
         dependencies: [],
-        metadata: {} as any,
-        validation: {} as any,
-        testing: {} as any,
-        lifecycle: {} as any,
-        compliance: {} as any
+        metadata: {} as Record<string, unknown>,
+        validation: {} as Record<string, unknown>,
+        testing: {} as Record<string, unknown>,
+        lifecycle: {} as Record<string, unknown>,
+        compliance: {} as Record<string, unknown>
       };
 
       rules.push(rule);

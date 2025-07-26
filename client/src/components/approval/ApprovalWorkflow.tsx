@@ -14,7 +14,7 @@ export interface ApprovalRequest {
   rejectedBy?: string;
   rejectedAt?: Date;
   reason?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   requiredApprovals?: number;
   currentApprovals?: string[];
 }

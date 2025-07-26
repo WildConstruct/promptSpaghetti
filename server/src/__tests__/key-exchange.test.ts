@@ -17,19 +17,19 @@ describe('KeyExchangeService', () => {
   beforeEach(() => {
     // Mock database
     mockDb = {
-      query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown)
+      query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown as unknown)
     };
 
     // Mock Redis
     mockRedis = {
-      get: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown),
-      setex: jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown),
-      del: jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown)
+      get: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown as unknown),
+      setex: jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown as unknown),
+      del: jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown as unknown)
     };
 
     // Mock audit service
     mockAuditService = {
-      logEvent: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown)
+      logEvent: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown as unknown)
     };
 
     // Test configuration
@@ -228,7 +228,7 @@ describe('KeyExchangeService', () => {
 
       // Mock key decryption (simplified)
       jest.spyOn(keyExchangeService as any, 'getDecryptedPrivateKey')
-        .mockResolvedValue(serverKeyPair.privateKey as unknown);
+        .mockResolvedValue(serverKeyPair.privateKey as unknown as unknown);
 
       const requestedKeys = [
         { purpose: 'encryption' as const, keyLength: 32 },
@@ -348,7 +348,7 @@ describe('KeyExchangeService', () => {
         .mockResolvedValueOnce({ rows: [] }); // Insert signing key
 
       jest.spyOn(keyExchangeService as any, 'getDecryptedPrivateKey')
-        .mockResolvedValue(serverKeyPair.privateKey as unknown);
+        .mockResolvedValue(serverKeyPair.privateKey as unknown as unknown);
 
       const requestedKeys = [
         { purpose: 'encryption' as const, keyLength: 32, expiryHours: 24 },
@@ -390,7 +390,7 @@ describe('KeyExchangeService', () => {
         .mockResolvedValueOnce({ rows: [] });
 
       jest.spyOn(keyExchangeService as any, 'getDecryptedPrivateKey')
-        .mockResolvedValue(serverKeyPair.privateKey as unknown);
+        .mockResolvedValue(serverKeyPair.privateKey as unknown as unknown);
 
       const requestedKeys = [
         { purpose: 'encryption' as const, keyLength: 16 } // Weak key length
@@ -714,7 +714,7 @@ describe('KeyExchangeService', () => {
       });
 
       jest.spyOn(keyExchangeService as any, 'getDecryptedPrivateKey')
-        .mockResolvedValue(serverKeyPair.privateKey as unknown);
+        .mockResolvedValue(serverKeyPair.privateKey as unknown as unknown);
 
       const clearSensitiveDataSpy = jest.spyOn(keyExchangeService as any, 'clearSensitiveData');
 

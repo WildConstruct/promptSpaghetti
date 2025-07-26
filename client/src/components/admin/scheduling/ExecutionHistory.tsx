@@ -1,6 +1,6 @@
 // Epic 17.1.5 - Execution History Component
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -65,7 +65,7 @@ interface ExecutionRecord {
     retryable: boolean;
   };
   duration: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt: Date;
 }
 
@@ -84,24 +84,12 @@ const STATUS_CONFIG = {
   retrying: { color: 'warning', icon: ReplayIcon, label: 'Retrying' }
 };
 
-export const ExecutionHistory: React.FC<ExecutionHistoryProps> = ({
-  open,
-  onClose,
-  scheduleId
-}) => {
-  const [executions, setExecutions] = useState<ExecutionRecord[]>([]);
-  const [loading, setLoading] = useState(false);
+export   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [selectedExecution, setSelectedExecution] = useState<ExecutionRecord | null>(null);
 
-  useEffect(() => {
-    if (open && scheduleId) {
-      loadExecutions();
-    }
-  }, [open, scheduleId]);
-
-  const loadExecutions = async () => {
+  const loadExecutions = useCallback(async () => {
     if (!scheduleId) return;
     
     setLoading(true);
@@ -189,7 +177,13 @@ export const ExecutionHistory: React.FC<ExecutionHistoryProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [scheduleId]);
+
+  useEffect(() => {
+    if (open && scheduleId) {
+      loadExecutions();
+    }
+  }, [open, scheduleId, loadExecutions]);
 
   const getExecutionStats = () => {
     const total = executions.length;
@@ -334,7 +328,7 @@ export const ExecutionHistory: React.FC<ExecutionHistoryProps> = ({
               <dd>
                 <Chip
                   size="small"
-                  color={STATUS_CONFIG[execution.status].color as any}
+                  color={STATUS_CONFIG[execution.status].color as 'info' | 'warning' | 'success' | 'error' | 'default'}
                   label={STATUS_CONFIG[execution.status].label}
                 />
               </dd>
@@ -461,7 +455,7 @@ export const ExecutionHistory: React.FC<ExecutionHistoryProps> = ({
                 No execution history
               </Typography>
               <Typography variant="body2">
-                This schedule hasn't been executed yet
+                This schedule hasn&apos;t been executed yet
               </Typography>
             </Box>
           </Box>
@@ -501,7 +495,7 @@ export const ExecutionHistory: React.FC<ExecutionHistoryProps> = ({
                           </TableCell>
                           <TableCell>
                             <Box display="flex" alignItems="center" gap={1}>
-                              <StatusIcon color={statusConfig.color as any} fontSize="small" />
+                              <StatusIcon color={statusConfig.color as 'info' | 'warning' | 'success' | 'error' | 'default'} fontSize="small" />
                               <Typography variant="body2">
                                 {statusConfig.label}
                               </Typography>

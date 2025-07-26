@@ -1,6 +1,6 @@
 // Epic 17.1.5 - Schedule Calendar Component
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Box,
   Paper,
@@ -69,19 +69,12 @@ const MONTHS = [
   'July', 'August', 'September', 'October', 'November', 'December'
 ];
 
-export const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({
-  schedules,
-  onScheduleClick,
-  onCreateSchedule
-}) => {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+export   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [popoverSchedules, setPopoverSchedules] = useState<Schedule[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   // Get first day of the month and calculate calendar grid
   const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-  const ___lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
   const startDate = new Date(firstDayOfMonth);
   startDate.setDate(startDate.getDate() - firstDayOfMonth.getDay());
 
@@ -94,7 +87,7 @@ export const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({
     currentCalendarDate.setDate(currentCalendarDate.getDate() + 1);
   }
 
-  const navigateMonth = (direction: 'prev' | 'next') => {
+  const navigateMonth = useCallback((direction: 'prev' | 'next') => {
     const newDate = new Date(currentDate);
     if (direction === 'prev') {
       newDate.setMonth(newDate.getMonth() - 1);
@@ -102,13 +95,13 @@ export const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({
       newDate.setMonth(newDate.getMonth() + 1);
     }
     setCurrentDate(newDate);
-  };
+  }, [currentDate]);
 
-  const goToToday = () => {
+  const goToToday = useCallback(() => {
     setCurrentDate(new Date());
-  };
+  }, []);
 
-  const getSchedulesForDate = (date: Date): Schedule[] => {
+  const getSchedulesForDate = useCallback((date: Date): Schedule[] => {
     return schedules.filter(schedule => {
       const scheduleDate = new Date(schedule.startTime);
       return (
@@ -122,7 +115,7 @@ export const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({
         schedule.nextExecution.getFullYear() === date.getFullYear()
       );
     });
-  };
+  }, [schedules]);
 
   const handleDayClick = (date: Date, daySchedules: Schedule[]) => {
     if (daySchedules.length === 0) {

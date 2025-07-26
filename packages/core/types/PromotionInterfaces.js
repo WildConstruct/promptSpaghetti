@@ -135,4 +135,3 @@ export const CheckEligibilitySchema = z.object({
     cart_id: z.string().uuid().optional(),
     item_ids: z.array(z.string().uuid()).optional()
 });
-//# sourceMappingURL=PromotionInterfaces.js.map

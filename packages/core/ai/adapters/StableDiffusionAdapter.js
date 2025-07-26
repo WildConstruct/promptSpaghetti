@@ -4,7 +4,7 @@
  *
  * Adapter for Stable Diffusion models (local and hosted)
  */
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel.js';
+import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
 export class StableDiffusionAdapter extends BaseAIModel {
     config;
     availableModels = [];

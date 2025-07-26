@@ -634,8 +634,8 @@ export interface DriftingFeature {
 
 export interface PredictionHistoryEntry {
   timestamp: number;
-  prediction: any;
-  actual?: any;
+  prediction: unknown;
+  actual?: unknown;
   accuracy: number;
   model: PredictiveModelType;
 }
@@ -692,7 +692,7 @@ export interface EnsembleConfig {
 
 export interface PredictionUpdate {
   type: 'forecast' | 'behavior' | 'churn' | 'seasonal';
-  update: any;
+  update: Error;
   confidence: number;
   impact: 'high' | 'medium' | 'low';
   timestamp: number;
@@ -752,20 +752,7 @@ const defaultModelConfig: PredictiveModelConfiguration = {
   }
 };
 
-export const FunnelPredictiveModeling: React.FC<FunnelPredictiveModelingProps> = ({
-  funnelDefinition,
-  analyticsInfrastructure,
-  timeRange,
-  modelConfig = defaultModelConfig,
-  segments = [],
-  cohorts = [],
-  forecastHorizon = 'medium',
-  onPredictionUpdate,
-  onModelAlert,
-  onExport
-}) => {
-  const [modelingData, setModelingData] = useState<PredictiveModelingData | null>(null);
-  const [loading, setLoading] = useState(true);
+export   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'forecasts' | 'behavior' | 'churn' | 'scenarios' | 'models'>('forecasts');
   const [selectedModel, setSelectedModel] = useState<PredictiveModelType>(modelConfig.models[0]);
@@ -828,7 +815,7 @@ export const FunnelPredictiveModeling: React.FC<FunnelPredictiveModelingProps> =
 
   // Process predictive data
   const processPredictiveData = async (
-    rawData: any,
+    rawData: unknown,
     config: PredictiveModelConfiguration,
     horizon: ForecastHorizon
   ): Promise<PredictiveModelingData> => {
@@ -1635,7 +1622,10 @@ export const FunnelPredictiveModeling: React.FC<FunnelPredictiveModelingProps> =
                   <span className="stat-label">Avg Conversion Probability</span>
                   <span className="stat-value">
                     {Math.round(
-                      modelingData.userBehaviorPredictions.reduce((sum, p) => sum + p.conversionProbability.probability, 0) /
+                      modelingData.userBehaviorPredictions.reduce(
+                        (sum,
+                        p
+                      ) => sum + p.conversionProbability.probability, 0) /
                       modelingData.userBehaviorPredictions.length * 100
                     )}%
                   </span>

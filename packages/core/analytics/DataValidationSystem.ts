@@ -28,15 +28,25 @@ export const ValidationRuleSchema = z.object({
   validation: z.object({
     rules: z.array(z.object({
       field: z.string(),
-      operator: z.enum(['exists', 'not_exists', 'equals', 'not_equals', 'greater_than', 'less_than', 'matches', 'in_range', 'custom']),
-      value: z.any().optional(),
+      operator: z.enum(
+        ['exists',
+        'not_exists',
+        'equals',
+        'not_equals',
+        'greater_than',
+        'less_than',
+        'matches',
+        'in_range',
+        'custom']
+      ),
+      value: z.unknown().optional(),
       customFunction: z.string().optional(),
       required: z.boolean().default(false)
     })),
     crossFieldValidation: z.array(z.object({
       fields: z.array(z.string()),
       relationship: z.enum(['sum_equals', 'all_or_none', 'mutually_exclusive', 'sequential', 'custom']),
-      expectedValue: z.any().optional(),
+      expectedValue: z.unknown().optional(),
       customFunction: z.string().optional()
     })).optional()
   })
@@ -53,10 +63,16 @@ export interface ValidationResult {
   message: string;
   affectedRecords: string[];
   details: {
-    expectedValue?: any;
-    actualValue?: any;
+    expectedValue?: unknown;
+    actualValue?: unknown;
     field?: string;
     operator?: string;
+    // Allow additional custom properties for specific validation types
+    duplicateCount?: number;
+    totalDuplicateEvents?: number;
+    inconsistentEventCount?: number;
+    orphanedEventCount?: number;
+    [key: string]: unknown;
   };
   timestamp: number;
 }
@@ -472,7 +488,10 @@ export class DataValidationSystem {
     
     const grade = this.calculateGrade(overallScore);
     const issueCount = Object.values({completeness, accuracy, consistency, timeliness, integrity})
-      .reduce((sum, metric) => sum + Object.values(metric).filter(v => typeof v === 'number' && v > 0).length, 0) - 5; // Subtract the 5 score properties
+      .reduce(
+        (sum,
+        metric
+      ) => sum + Object.values(metric).filter(v => typeof v === 'number' && v > 0).length, 0) - 5; // Subtract the 5 score properties
     
     return {
       completeness,
@@ -547,7 +566,7 @@ export class DataValidationSystem {
    */
   private async validateField(
     event: UnifiedAnalyticsEvent,
-    fieldRule: any,
+    fieldRule: ValidationRule['validation']['rules'][0],
     validationRule: ValidationRule
   ): Promise<ValidationResult | null> {
     const fieldValue = this.getNestedProperty(event, fieldRule.field);
@@ -573,11 +592,11 @@ export class DataValidationSystem {
         break;
         
       case 'greater_than':
-        passed = typeof fieldValue === 'number' && fieldValue > fieldRule.value;
+        passed = typeof fieldValue === 'number' && typeof fieldRule.value === 'number' && fieldValue > fieldRule.value;
         break;
         
       case 'less_than':
-        passed = typeof fieldValue === 'number' && fieldValue < fieldRule.value;
+        passed = typeof fieldValue === 'number' && typeof fieldRule.value === 'number' && fieldValue < fieldRule.value;
         break;
         
       case 'matches':
@@ -634,7 +653,7 @@ export class DataValidationSystem {
    */
   private async validateCrossFields(
     event: UnifiedAnalyticsEvent,
-    crossFieldRule: any,
+    crossFieldRule: NonNullable<ValidationRule['validation']['crossFieldValidation']>[0],
     validationRule: ValidationRule
   ): Promise<ValidationResult | null> {
     const fieldValues = crossFieldRule.fields.map((field: string) => 
@@ -646,22 +665,25 @@ export class DataValidationSystem {
 
     switch (crossFieldRule.relationship) {
       case 'all_or_none':
-        const nonNullCount = fieldValues.filter(v => v !== null && v !== undefined).length;
+        const nonNullCount = fieldValues.filter((v: unknown) => v !== null && v !== undefined).length;
         passed = nonNullCount === 0 || nonNullCount === fieldValues.length;
         message = passed ? 'All-or-none relationship satisfied' : 
           `All-or-none violation: ${nonNullCount}/${fieldValues.length} fields have values`;
         break;
         
       case 'mutually_exclusive':
-        const hasValueCount = fieldValues.filter(v => v !== null && v !== undefined).length;
+        const hasValueCount = fieldValues.filter((v: unknown) => v !== null && v !== undefined).length;
         passed = hasValueCount <= 1;
         message = passed ? 'Mutual exclusivity satisfied' : 
           `Mutual exclusivity violation: ${hasValueCount} fields have values`;
         break;
         
       case 'sum_equals':
-        const numericValues = fieldValues.filter(v => typeof v === 'number');
-        const sum = numericValues.reduce((a, b) => a + b, 0);
+        const numericValues = fieldValues.filter((v: unknown) => typeof v === 'number');
+        const sum = numericValues.reduce(
+          (a: unknown,
+          b: unknown
+        ) => (typeof a === 'number' ? a : 0) + (typeof b === 'number' ? b : 0), 0);
         passed = sum === crossFieldRule.expectedValue;
         message = passed ? 'Sum equals expectation' : 
           `Sum mismatch: expected ${crossFieldRule.expectedValue}, got ${sum}`;
@@ -669,7 +691,10 @@ export class DataValidationSystem {
         
       case 'sequential':
         // Check if numeric values are in ascending order
-        const sortedValues = [...fieldValues].sort((a, b) => a - b);
+        const sortedValues = [...fieldValues].sort(
+          (a: unknown,
+          b: unknown
+        ) => (typeof a === 'number' ? a : 0) - (typeof b === 'number' ? b : 0));
         passed = JSON.stringify(fieldValues) === JSON.stringify(sortedValues);
         message = passed ? 'Sequential order maintained' : 'Sequential order violation';
         break;
@@ -845,20 +870,20 @@ export class DataValidationSystem {
    * Execute custom validation function
    */
   private async executeCustomValidation(
-    value: any,
+    value: unknown,
     functionName: string,
     event: UnifiedAnalyticsEvent
   ): Promise<boolean> {
     switch (functionName) {
       case 'validateUserExists':
         // In production, this would check against user database
-        return value && typeof value === 'string' && value.length > 0;
+        return Boolean(value && typeof value === 'string' && value.length > 0);
         
       case 'validateEventDataStructure':
-        return value && typeof value === 'object' && !Array.isArray(value);
+        return Boolean(value && typeof value === 'object' && !Array.isArray(value));
         
       case 'validateMetadataStructure':
-        return !value || (typeof value === 'object' && !Array.isArray(value));
+        return Boolean(!value || (typeof value === 'object' && !Array.isArray(value)));
         
       default:
         console.warn(`Unknown custom validation function: ${functionName}`);
@@ -870,7 +895,7 @@ export class DataValidationSystem {
    * Execute custom cross-field validation
    */
   private async executeCustomCrossFieldValidation(
-    values: any[],
+    values: unknown[],
     functionName: string,
     event: UnifiedAnalyticsEvent
   ): Promise<boolean> {
@@ -890,7 +915,7 @@ export class DataValidationSystem {
       for (const field of requiredFields) {
         const value = this.getNestedProperty(event, field);
         if (value === undefined || value === null || value === '') {
-          missingFields[field] = (missingFields[field] || 0) + 1;
+          missingFields[field] = (missingFields[field] ?? 0) + 1;
           totalMissingFields++;
         }
       }
@@ -966,7 +991,7 @@ export class DataValidationSystem {
     // Check for duplicates
     for (const event of events) {
       const signature = `${event.type}_${event.source}_${event.timestamp}_${event.userId}`;
-      const count = eventSignatures.get(signature) || 0;
+      const count = eventSignatures.get(signature) ?? 0;
       eventSignatures.set(signature, count + 1);
       if (count > 0) duplicates++;
     }
@@ -1024,7 +1049,8 @@ export class DataValidationSystem {
       const event = sortedEvents[i];
       
       // Check for late arrivals (events with old timestamps arriving recently)
-      if (event.timestamp < oneDayAgo && event.metadata?.storedAt && event.metadata.storedAt > now - (60 * 60 * 1000)) {
+      const storedAt = typeof event.metadata?.storedAt === 'number' ? event.metadata.storedAt : 0;
+      if (event.timestamp < oneDayAgo && storedAt && storedAt > now - (60 * 60 * 1000)) {
         lateArrivals++;
       }
       
@@ -1044,7 +1070,10 @@ export class DataValidationSystem {
     }
     
     const totalTimelinessChecks = events.length;
-    const totalTimelinessIssues = lateArrivals + futureTimestamps + Math.min(timestampGaps, events.length * 0.1); // Cap gaps at 10%
+    const totalTimelinessIssues = lateArrivals + futureTimestamps + Math.min(
+      timestampGaps,
+      events.length * 0.1
+    ); // Cap gaps at 10%
     const timelinessScore = totalTimelinessChecks > 0 
       ? ((totalTimelinessChecks - totalTimelinessIssues) / totalTimelinessChecks) * 100
       : 100;
@@ -1159,9 +1188,9 @@ export class DataValidationSystem {
    */
   private generateValidationMessage(
     rule: ValidationRule,
-    fieldRule: any,
+    fieldRule: ValidationRule['validation']['rules'][0],
     passed: boolean,
-    actualValue: any
+    actualValue: unknown
   ): string {
     if (passed) {
       return `${rule.name}: Validation passed for field ${fieldRule.field}`;
@@ -1247,8 +1276,11 @@ export class DataValidationSystem {
   /**
    * Get nested property value
    */
-  private getNestedProperty(obj: any, path: string): any {
-    return path.split('.').reduce((current, key) => current?.[key], obj);
+  private getNestedProperty(obj: unknown, path: string): unknown {
+    return path.split('.').reduce((current: Record<string, unknown> | unknown, key) => 
+      (current && typeof current === 'object' && current !== null) ? 
+        (current as Record<string, unknown>)[key] : 
+        undefined, obj);
   }
 
   /**

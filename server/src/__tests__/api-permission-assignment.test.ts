@@ -37,13 +37,13 @@ describe('API Permission Assignment System', () => {
     jest.clearAllMocks();
     
     // Create mock instances
-    mockDatabaseService = new DatabaseService() as jest.Mocked<DatabaseService>;
-    mockAuditService = new AuditService(mockDatabaseService) as jest.Mocked<AuditService>;
+    mockDatabaseService = new DatabaseService({} as any) as jest.Mocked<DatabaseService>;
+    mockAuditService = new AuditService({} as any, mockDatabaseService) as jest.Mocked<AuditService>;
     mockRBACService = {} as jest.Mocked<RBACService>;
     mockUsageControlService = {} as jest.Mocked<UsageControlService>;
     
     // Setup mock implementations
-    mockAuditService.logAction = jest.fn().mockResolvedValue(undefined);
+    mockAuditService.logAction = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
     
     // Create service instance
     permissionService = new ApiPermissionAssignmentService(
@@ -368,7 +368,7 @@ describe('API Permission Assignment System', () => {
   describe('Permission Checking', () => {
     let testUser: string;
     let testPermission: ApiPermission;
-    let testAssignment: any;
+    let testAssignment: unknown;
 
     beforeEach(async () => {
       testUser = 'test-user-check';
@@ -823,7 +823,7 @@ describe('API Permission Assignment System', () => {
     test('should handle database errors gracefully', async () => {
       // Mock database error
       const originalQuery = mockDatabaseService.query;
-      mockDatabaseService.query = jest.fn().mockRejectedValue(new Error('Database connection failed'));
+      mockDatabaseService.query = jest.fn<unknown[], unknown>().mockRejectedValue(new Error('Database connection failed'));
 
       // Operations should still work with in-memory data
       const permissions = await permissionService.getPermissions();

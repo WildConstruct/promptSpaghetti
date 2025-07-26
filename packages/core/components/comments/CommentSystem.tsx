@@ -74,7 +74,7 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({
     }
   };
 
-  const handleUpdateComment = async (commentId: string, content: string, metadata?: any) => {
+  const handleUpdateComment = async (commentId: string, content: string, metadata?: Record<string, unknown>) => {
     const updates: UpdateComment = { content };
     if (metadata) {
       updates.metadata = metadata;

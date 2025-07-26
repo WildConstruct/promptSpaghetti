@@ -242,7 +242,7 @@ export class DeviceFingerprintService {
   private async collectHardwareInfo(): Promise<Partial<FingerprintComponents>> {
     return {
       hardwareConcurrency: navigator.hardwareConcurrency || 0,
-      deviceMemory: (navigator as any).deviceMemory || null,
+      deviceMemory: (navigator as Navigator & { deviceMemory?: number }).deviceMemory || null,
       maxTouchPoints: navigator.maxTouchPoints || 0
     };
   }
@@ -361,7 +361,18 @@ export class DeviceFingerprintService {
       // Draw scene
       const buffer = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-0.2, -0.9, 0, 0.4, -0.26, 0, 0, 0.732134444, 0]), gl.STATIC_DRAW);
+      gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array([-0.2,
+        -0.9,
+        0,
+        0.4,
+        -0.26,
+        0,
+        0,
+        0.732134444,
+        0]
+      ), gl.STATIC_DRAW);
 
       canvas.width = 256;
       canvas.height = 128;
@@ -401,7 +412,7 @@ export class DeviceFingerprintService {
    */
   private async collectAudioFingerprint(errors: string[]): Promise<Partial<FingerprintComponents>> {
     try {
-      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+      const AudioContext = window.AudioContext || (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
       if (!AudioContext) {
         return { audioFingerprint: '', audioSupported: false };
       }
@@ -565,9 +576,13 @@ export class DeviceFingerprintService {
    */
   private async collectNetworkInfo(errors: string[]): Promise<Partial<FingerprintComponents>> {
     try {
-      const connection = (navigator as any).connection || 
-                        (navigator as any).mozConnection || 
-                        (navigator as any).webkitConnection;
+      const connection = (navigator as Navigator & {
+        connection?: { effectiveType?: string };
+        mozConnection?: { effectiveType?: string };
+        webkitConnection?: { effectiveType?: string };
+      }).connection || 
+                        (navigator as Navigator & { mozConnection?: { effectiveType?: string } }).mozConnection || 
+                        (navigator as Navigator & { webkitConnection?: { effectiveType?: string } }).webkitConnection;
       
       return {
         connectionType: connection?.effectiveType || null

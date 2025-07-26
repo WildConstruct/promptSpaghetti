@@ -1,7 +1,52 @@
 /**
  * Project Manager - File and project management utilities
  * Provides interfaces and utilities for managing .psg files and projects
+ * Extended for Story 6.1 with .psg serialization and file management
  */
+
+import { Node, Edge } from 'reactflow';
+import { 
+  serializeProject, 
+  deserializeProject, 
+  SerializationOptions,
+  DeserializationOptions
+} from './utils/projectSerialization';
+import { 
+  ProjectMetadata, 
+  ProjectSettings, 
+  createDefaultMetadata, 
+  createDefaultSettings 
+} from './schemas/psgSchema';
+
+// Export types used by graph store
+export { ProjectMetadata, ProjectSettings } from './schemas/psgSchema';
+
+// Interfaces for save/load operations
+export interface SaveProjectOptions {
+  name: string;
+  description?: string;
+  author?: string;
+  tags?: string[];
+  fileName?: string;
+}
+
+export interface LoadProjectResult {
+  success: boolean;
+  data?: {
+    graph: { nodes: Node[]; edges: Edge[] };
+    metadata: ProjectMetadata;
+    settings: ProjectSettings;
+  };
+  error?: string;
+  warnings?: string[];
+}
+
+export interface SaveProjectResult {
+  success: boolean;
+  fileName?: string;
+  error?: string;
+  warnings?: string[];
+}
 
 export interface PSGFile {
   id: string;
@@ -193,6 +238,174 @@ export class ProjectManager {
     } catch (error) {
       console.warn('Failed to save user data to localStorage:', error);
     }
+  }
+
+  /**
+   * Static method to save project to device (Story 6.1)
+   */
+  static async saveProjectToDevice(
+    graphData: { nodes: Node[]; edges: Edge[] },
+    options: SaveProjectOptions,
+    settings: ProjectSettings
+  ): Promise<SaveProjectResult> {
+    try {
+      // Create metadata
+      const metadata = createDefaultMetadata(
+        options.name,
+        options.author
+      );
+      
+      if (options.description) {
+        metadata.description = options.description;
+      }
+      
+      if (options.tags) {
+        metadata.tags = options.tags;
+      }
+
+      // Serialize project
+      const serializationOptions: SerializationOptions = {
+        includeMetadata: true,
+        includeSettings: true,
+        includeCollaboration: true,
+        compress: false,
+        validateOutput: true
+      };
+
+      const result = serializeProject(
+        graphData,
+        metadata,
+        settings,
+        serializationOptions
+      );
+
+      if (!result.success) {
+        return {
+          success: false,
+          error: result.error,
+          warnings: result.warnings
+        };
+      }
+
+      // Create and trigger download
+      const fileName = ProjectManager.sanitizeFileName(
+        options.fileName || `${options.name}.psg`
+      );
+      
+      const blob = new Blob([result.data!], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      return {
+        success: true,
+        fileName,
+        warnings: result.warnings
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error during save'
+      };
+    }
+  }
+
+  /**
+   * Static method to load project from device (Story 6.1)
+   */
+  static async loadProjectFromDevice(): Promise<LoadProjectResult> {
+    return new Promise((resolve) => {
+      try {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.psg';
+        
+        input.onchange = async (event) => {
+          try {
+            const file = (event.target as HTMLInputElement).files?.[0];
+            if (!file) {
+              resolve({
+                success: false,
+                error: 'No file selected'
+              });
+              return;
+            }
+
+            const content = await file.text();
+            const deserializationOptions: DeserializationOptions = {
+              skipValidation: false,
+              autoMigrate: true,
+              preserveIds: true
+            };
+
+            const result = deserializeProject(content, deserializationOptions);
+
+            if (!result.success) {
+              resolve({
+                success: false,
+                error: result.error,
+                warnings: result.warnings
+              });
+              return;
+            }
+
+            resolve({
+              success: true,
+              data: result.data,
+              warnings: result.warnings
+            });
+
+          } catch (error) {
+            resolve({
+              success: false,
+              error: error instanceof Error ? error.message : 'Unknown error during load'
+            });
+          }
+        };
+
+        input.click();
+
+      } catch (error) {
+        resolve({
+          success: false,
+          error: error instanceof Error ? error.message : 'Unknown error creating file dialog'
+        });
+      }
+    });
+  }
+
+  /**
+   * Sanitize file name to prevent invalid characters
+   */
+  static sanitizeFileName(fileName: string): string {
+    // Remove or replace invalid characters
+    let sanitized = fileName
+      .replace(/[<>:"/\\|?*]/g, '_')  // Replace invalid chars with underscore
+      .replace(/\s+/g, '_');          // Replace spaces with underscore
+    
+    // Keep multiple underscores for now, then clean up
+    sanitized = sanitized
+      .replace(/_+/g, '_')           // Replace multiple underscores with single
+      .replace(/^_|_$/g, '');        // Remove leading/trailing underscores
+
+    // Handle empty result
+    if (!sanitized) {
+      sanitized = 'untitled';
+    }
+
+    // Ensure .psg extension
+    if (!sanitized.toLowerCase().endsWith('.psg')) {
+      return `${sanitized}.psg`;
+    }
+
+    return sanitized;
   }
 }
 

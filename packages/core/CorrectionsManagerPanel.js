@@ -1,11 +1,12 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import { useState, useCallback, useMemo, useEffect } from 'react';
-import { useCorrectionsStore, DEFAULT_CORRECTION_RULES, useCorrectionsEnabled } from './correctionsStore.js';
-import { WorkflowManager } from './components/WorkflowManager.js';
-import { NotificationSystem } from './components/NotificationSystem.js';
-export const CorrectionsManagerPanel = ({ isOpen, onClose }) => {
+import { useCorrectionsStore, DEFAULT_CORRECTION_RULES, useCorrectionsEnabled } from './correctionsStore';
+import { WorkflowManager } from './components/WorkflowManager';
+import { NotificationSystem } from './components/NotificationSystem';
+import { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboard';
+export const CorrectionsManagerPanel = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
     const isEnabled = useCorrectionsEnabled();
-    const { rules, addRule, updateRule, deleteRule, toggleRule, clearAllRules, applyCorrections, getDraftRules } = useCorrectionsStore();
+    const { rules, addRule, updateRule, deleteRule, toggleRule, clearAllRules, applyCorrections, getDraftRules, exportRules, importRules } = useCorrectionsStore();
     // UI State
     const [editingRule, setEditingRule] = useState(null);
     const [selectedRules, setSelectedRules] = useState(new Set());
@@ -37,7 +38,7 @@ export const CorrectionsManagerPanel = ({ isOpen, onClose }) => {
     // Mobile detection
     const [isMobile, setIsMobile] = useState(false);
     useEffect(() => {
-        const checkMobile = () => {
+        const checkMobile = (): void => {
             setIsMobile(window.innerWidth < 768);
         };
         checkMobile();
@@ -50,7 +51,7 @@ export const CorrectionsManagerPanel = ({ isOpen, onClose }) => {
         // Apply search filter
         if (searchQuery) {
             const query = searchQuery.toLowerCase();
-            filtered = filtered.filter(rule => rule.name.toLowerCase().includes(query) ||
+            filtered = filtered.filter((rule: any) => rule.name.toLowerCase().includes(query) ||
                 rule.description?.toLowerCase().includes(query) ||
                 rule.findPattern.toLowerCase().includes(query) ||
                 rule.replaceWith.toLowerCase().includes(query));
@@ -97,7 +98,7 @@ export const CorrectionsManagerPanel = ({ isOpen, onClose }) => {
         return filtered;
     }, [rules, searchQuery, filterType, sortType]);
     // Event handlers
-    const handleAddRule = useCallback(() => {
+    const handleAddRule = useCallback((): void => {
         if (newRule.name.trim() && newRule.findPattern.trim()) {
             addRule(newRule);
             setNewRule({
@@ -111,22 +112,22 @@ export const CorrectionsManagerPanel = ({ isOpen, onClose }) => {
             });
         }
     }, [newRule, addRule, rules.length]);
-    const handleUpdateRule = useCallback((rule) => {
+    const handleUpdateRule = useCallback((rule: any): void => {
         updateRule(rule.id, rule);
         setEditingRule(null);
     }, [updateRule]);
-    const handleDeleteRule = useCallback((id) => {
+    const handleDeleteRule = useCallback((id: string): void => {
         if (window.confirm('Are you sure you want to delete this correction rule?')) {
             deleteRule(id);
         }
     }, [deleteRule]);
-    const handleBulkAction = useCallback((action) => {
+    const handleBulkAction = useCallback((action: string): void => {
         if (selectedRules.size === 0)
             return;
         const confirmed = window.confirm(`Are you sure you want to ${action} ${selectedRules.size} rule(s)?`);
         if (!confirmed)
             return;
-        selectedRules.forEach(ruleId => {
+        selectedRules.forEach((ruleId: string) => {
             switch (action) {
                 case 'delete':
                     deleteRule(ruleId);
@@ -141,65 +142,62 @@ export const CorrectionsManagerPanel = ({ isOpen, onClose }) => {
         });
         setSelectedRules(new Set());
     }, [selectedRules, deleteRule, updateRule]);
-    const handleSelectAll = useCallback(() => {
+    const handleSelectAll = useCallback((): void => {
         if (selectedRules.size === filteredAndSortedRules.length) {
             setSelectedRules(new Set());
         }
         else {
-            setSelectedRules(new Set(filteredAndSortedRules.map(rule => rule.id)));
+            setSelectedRules(new Set(filteredAndSortedRules.map((rule: any) => rule.id)));
         }
     }, [selectedRules.size, filteredAndSortedRules]);
-    const handleExport = useCallback(async () => {
+    const handleExport = useCallback(async (): Promise<void> => {
         try {
-            const response = await fetch(`/api/corrections/export?format=${exportFormat}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+            const result = await exportRules(exportFormat, {
+                includeInactive: filterType === 'all' || filterType === 'inactive',
+                includeStatistics: true
             });
-            if (response.ok) {
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
+            if (result.success && result.data && result.filename) {
+                const url = window.URL.createObjectURL(result.data);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `corrections-${Date.now()}.${exportFormat}`;
+                a.download = result.filename;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
                 window.URL.revokeObjectURL(url);
             }
+            else {
+                console.error('Export failed:', result.error);
+            }
         }
         catch (error) {
             console.error('Export failed:', error);
         }
-    }, [exportFormat]);
-    const handleImport = useCallback(async () => {
+    }, [exportFormat, exportRules, filterType]);
+    const handleImport = useCallback(async (): Promise<void> => {
         if (!importContent || !importFilename)
             return;
         try {
-            const response = await fetch('/api/corrections/import', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    filename: importFilename,
-                    content: importContent,
-                    skipDuplicates: true
-                })
+            const result = await importRules(importContent, importFilename, {
+                skipDuplicates: true,
+                merge: true
             });
-            if (response.ok) {
-                const result = await response.json();
+            if (result.success) {
                 alert(`Successfully imported ${result.importedCount} correction rules`);
                 setImportContent('');
                 setImportFilename('');
             }
+            else {
+                console.error('Import failed:', result.error);
+                alert(`Import failed: ${result.error}`);
+            }
         }
         catch (error) {
             console.error('Import failed:', error);
+            alert('Import failed: ' + (error instanceof Error ? error.message : 'Unknown error'));
         }
-    }, [importContent, importFilename]);
-    const handleTestCorrections = useCallback(() => {
+    }, [importContent, importFilename, importRules]);
+    const handleTestCorrections = useCallback((): string => {
         return applyCorrections(testText);
     }, [testText, applyCorrections]);
     if (!isOpen)
@@ -443,7 +441,7 @@ export const CorrectionsManagerPanel = ({ isOpen, onClose }) => {
                                     marginBottom: '16px'
                                 }, children: [_jsxs("h3", { style: { fontSize: '14px', margin: 0, fontWeight: 600 }, children: ["Rules (", filteredAndSortedRules.length, ")"] }), _jsxs("div", { style: { display: 'flex', gap: '8px' }, children: [_jsx("button", { onClick: () => {
                                                     if (window.confirm('This will add default correction rules. Continue?')) {
-                                                        DEFAULT_CORRECTION_RULES.forEach(rule => addRule(rule));
+                                                        DEFAULT_CORRECTION_RULES.forEach((rule: any) => addRule(rule));
                                                     }
                                                 }, style: {
                                                     padding: '6px 12px',
@@ -644,5 +642,5 @@ export const CorrectionsManagerPanel = ({ isOpen, onClose }) => {
                                                 flex: 1,
                                                 fontSize: '14px',
                                                 fontWeight: 500
-                                            }, children: "Cancel" })] })] })] }) })), _jsx(WorkflowManager, { isOpen: showWorkflow, onClose: () => setShowWorkflow(false) }), _jsx(NotificationSystem, { position: "top-right", maxVisible: 3, autoHideDuration: 5000 })] }));
+                                            }, children: "Cancel" })] })] })] }) })), _jsx(WorkflowManager, { isOpen: showWorkflow, onClose: () => setShowWorkflow(false) }), _jsx(NotificationSystem, { position: "top-right", maxVisible: 3, autoHideDuration: 5000 }), _jsx(CorrectionsStatsDashboard, { isOpen: showStats, onClose: () => setShowStats(false) })] }));
 };

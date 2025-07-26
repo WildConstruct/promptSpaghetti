@@ -9,7 +9,8 @@ export const ExportFormatSchema = z.enum([
   'markdown',
   'pdf',
   'html',
-  'zip'
+  'zip',
+  'vfx'  // Wild Construct VFX Pipeline Export Format
 ]);
 
 export const TemplateTypeSchema = z.enum([
@@ -38,14 +39,14 @@ export const ExportTemplateSchema = z.object({
   include_attachments: z.boolean().default(false),
   
   // Format-specific options
-  format_options: z.record(z.any()).default({}),
+  format_options: z.record(z.unknown()).default({}),
   
   // Filtering options
-  filter_options: z.record(z.any()).default({}),
+  filter_options: z.record(z.unknown()).default({}),
   
   // Template content
   template_content: z.string().optional(),
-  template_schema: z.record(z.any()).optional(),
+  template_schema: z.record(z.unknown()).optional(),
   
   // Template metadata
   created_by: z.string().uuid(),
@@ -93,7 +94,7 @@ export const ExportJobSchema = z.object({
   // Export configuration
   export_format: ExportFormatSchema,
   export_type: ExportTypeSchema,
-  export_scope: z.record(z.any()).default({}),
+  export_scope: z.record(z.unknown()).default({}),
   
   // Source data
   source_snapshot_id: z.string().uuid().optional(),
@@ -101,8 +102,8 @@ export const ExportJobSchema = z.object({
   comparison_snapshot_id: z.string().uuid().optional(),
   
   // Export options
-  export_options: z.record(z.any()).default({}),
-  custom_filters: z.record(z.any()).default({}),
+  export_options: z.record(z.unknown()).default({}),
+  custom_filters: z.record(z.unknown()).default({}),
   
   // Job status
   status: ExportJobStatusSchema.default('pending'),
@@ -177,8 +178,8 @@ export const ExportScheduleSchema = z.object({
   timezone: z.string().default('UTC'),
   
   // Export configuration
-  export_options: z.record(z.any()).default({}),
-  notification_options: z.record(z.any()).default({}),
+  export_options: z.record(z.unknown()).default({}),
+  notification_options: z.record(z.unknown()).default({}),
   
   // Schedule metadata
   created_by: z.string().uuid(),
@@ -317,8 +318,8 @@ export const ExportFormatDefinitionSchema = z.object({
   max_file_size: z.number().int().min(0).optional(),
   
   // Format configuration
-  default_options: z.record(z.any()).default({}),
-  validation_schema: z.record(z.any()).optional(),
+  default_options: z.record(z.unknown()).default({}),
+  validation_schema: z.record(z.unknown()).optional(),
   
   // Format status
   is_enabled: z.boolean().default(true),
@@ -425,6 +426,41 @@ export const ZipExportOptionsSchema = CommonExportOptionsSchema.extend({
   folder_structure: z.boolean().default(true)
 });
 
+export const VFXExportOptionsSchema = CommonExportOptionsSchema.extend({
+  // Export quality level
+  quality: z.enum(['production', 'preview', 'debug']).default('production'),
+  
+  // VFX-specific features
+  include_debug_info: z.boolean().default(false),
+  include_historical_data: z.boolean().default(true),
+  include_performance_data: z.boolean().default(false),
+  include_variant_data: z.boolean().default(true),
+  
+  // ControlNet compatibility
+  enable_controlnet_support: z.boolean().default(true),
+  
+  // Animation support
+  enable_animation_framework: z.boolean().default(true),
+  
+  // Rendering parameters
+  include_rendering_data: z.boolean().default(true),
+  include_camera_data: z.boolean().default(true),
+  include_lighting_data: z.boolean().default(true),
+  
+  // Wild Construct ecosystem integration
+  include_ecosystem_data: z.boolean().default(false),
+  
+  // Format compatibility
+  format_version: z.string().default('1.2.0'),
+  backwards_compatible: z.boolean().default(true),
+  
+  // Reproducibility options
+  include_reproducibility_data: z.boolean().default(true),
+  exact_reproduction: z.boolean().default(true),
+  preserve_node_configuration: z.boolean().default(true),
+  include_rng_states: z.boolean().default(true)
+});
+
 // Export Result Types
 export const ExportResultSchema = z.object({
   job_id: z.string().uuid(),
@@ -499,6 +535,7 @@ export type MarkdownExportOptions = z.infer<typeof MarkdownExportOptionsSchema>;
 export type PdfExportOptions = z.infer<typeof PdfExportOptionsSchema>;
 export type HtmlExportOptions = z.infer<typeof HtmlExportOptionsSchema>;
 export type ZipExportOptions = z.infer<typeof ZipExportOptionsSchema>;
+export type VFXExportOptions = z.infer<typeof VFXExportOptionsSchema>;
 
 export type ExportResult = z.infer<typeof ExportResultSchema>;
 export type ExportProgress = z.infer<typeof ExportProgressSchema>;
@@ -539,6 +576,8 @@ export function validateExportOptions(format: ExportFormat, options: any) {
     return HtmlExportOptionsSchema.safeParse(options);
   case 'zip':
     return ZipExportOptionsSchema.safeParse(options);
+  case 'vfx':
+    return VFXExportOptionsSchema.safeParse(options);
   default:
     return CommonExportOptionsSchema.safeParse(options);
   }

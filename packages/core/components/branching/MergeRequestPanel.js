@@ -2,7 +2,7 @@ import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-run
 import { useState, useEffect } from 'react';
 import { Card, List, Button, Modal, Form, Input, Select, Tag, Typography, Space, Alert, Divider, Badge, Dropdown, Menu } from 'antd';
 import { MergeOutlined, PlusOutlined, CloseOutlined, UserOutlined, ClockCircleOutlined, MoreOutlined, EyeOutlined, BranchesOutlined } from '@ant-design/icons';
-import { useBranching } from '../../hooks/useBranching.js';
+import { useBranching } from '../../hooks/useBranching';
 const { Title, Text } = Typography;
 const { Option } = Select;
 const { TextArea } = Input;

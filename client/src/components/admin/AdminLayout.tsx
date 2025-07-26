@@ -99,13 +99,7 @@ const adminSections = [
   }
 ];
 
-export const AdminLayout: React.FC<AdminLayoutProps> = ({
-  children,
-  currentSection,
-  onSectionChange
-}) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [alertCounts, setAlertCounts] = useState<AlertCount>(createEmptyAlertCount());
+export   const [alertCounts, setAlertCounts] = useState<AlertCount>(createEmptyAlertCount());
   const [lastAlertUpdate, setLastAlertUpdate] = useState<Date>(new Date());
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
@@ -165,18 +159,31 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
 
   return (
     <div className="admin-layout">
+      {/* Skip Navigation Link */}
+      <a 
+        href="#main-content" 
+        className="skip-link"
+        onFocus={(e) => e.target.style.position = 'static'}
+        onBlur={(e) => e.target.style.position = 'absolute'}
+      >
+        Skip to main content
+      </a>
       {/* Mobile Header */}
-      <div className="mobile-header">
+      <header className="mobile-header" role="banner">
         <button
           className="mobile-menu-btn"
           onClick={() => setSidebarOpen(!sidebarOpen)}
+          aria-expanded={sidebarOpen}
+          aria-controls="admin-sidebar"
+          aria-label={sidebarOpen ? 'Close navigation menu' : 'Open navigation menu'}
         >
-          {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
+          {sidebarOpen ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
         </button>
         
         <div className="mobile-header-content">
-          <Shield size={20} />
-          <span>Admin Panel</span>
+          <Shield size={20} aria-hidden="true" />
+          <h1 className="sr-only">Admin Panel</h1>
+          <span aria-hidden="true">Admin Panel</span>
         </div>
         
         <div className="mobile-header-actions">
@@ -199,18 +206,24 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
           <button 
             className="mobile-logout-btn"
             onClick={handleLogout}
-            title="Logout"
+            aria-label="Logout from admin panel"
           >
-            <LogOut size={20} />
+            <LogOut size={20} aria-hidden="true" />
           </button>
         </div>
-      </div>
+      </header>
 
       {/* Sidebar */}
-      <aside className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`}>
+      <aside 
+        id="admin-sidebar"
+        className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`}
+        role="navigation"
+        aria-label="Admin navigation"
+        aria-hidden={!sidebarOpen}
+      >
         <div className="sidebar-header">
           <div className="sidebar-logo">
-            <Shield size={24} />
+            <Shield size={24} aria-hidden="true" />
             <span>Admin Panel</span>
             
             {/* Alert Status in Sidebar */}
@@ -226,7 +239,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
           <button
             className="back-to-app-btn"
             onClick={handleBackToApp}
-            title="Back to Main App"
+            aria-label="Return to main application"
             style={{
               padding: '6px',
               border: 'none',
@@ -239,11 +252,11 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
               justifyContent: 'center'
             }}
           >
-            <ArrowLeft size={18} />
+            <ArrowLeft size={18} aria-hidden="true" />
           </button>
         </div>
 
-        <nav className="sidebar-nav">
+        <nav className="sidebar-nav" role="navigation" aria-label="Admin sections">
           {availableSections.map((section) => {
             const Icon = section.icon;
             const isActive = section.id === currentSection;
@@ -272,8 +285,10 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
                   onSectionChange(section.id);
                   setSidebarOpen(false);
                 }}
+                aria-current={isActive ? 'page' : undefined}
+                aria-describedby={`${section.id}-description`}
               >
-                <Icon size={20} />
+                <Icon size={20} aria-hidden="true" />
                 <div className="nav-item-content">
                   <div className="nav-item-header">
                     <span className="nav-item-label">{section.label}</span>
@@ -285,7 +300,12 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
                       />
                     )}
                   </div>
-                  <span className="nav-item-description">{section.description}</span>
+                  <span 
+                    id={`${section.id}-description`}
+                    className="nav-item-description"
+                  >
+                    {section.description}
+                  </span>
                 </div>
               </button>
             );
@@ -296,6 +316,8 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
           <div className="user-info">
             <div 
               className="user-avatar"
+              role="img"
+              aria-label={`User avatar for ${displayName}`}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -321,8 +343,9 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
           <button 
             className="logout-btn"
             onClick={handleLogout}
+            aria-label="Logout from admin panel"
           >
-            <LogOut size={16} />
+            <LogOut size={16} aria-hidden="true" />
             Logout
           </button>
         </div>
@@ -333,22 +356,33 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
         <div 
           className="sidebar-overlay"
           onClick={() => setSidebarOpen(false)}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              setSidebarOpen(false);
+            }
+          }}
+          aria-hidden="true"
+          role="presentation"
         />
       )}
 
       {/* Main Content */}
-      <main className="admin-main">
+      <main id="main-content" className="admin-main" role="main">
         {/* Breadcrumb */}
-        <div className="admin-breadcrumb">
-          <span className="breadcrumb-item">Admin</span>
-          <span className="breadcrumb-separator">/</span>
-          <span className="breadcrumb-item current">
-            {currentSectionData?.label || 'Dashboard'}
-          </span>
-        </div>
+        <nav className="admin-breadcrumb" aria-label="Breadcrumb navigation">
+          <ol className="breadcrumb-list">
+            <li className="breadcrumb-item">
+              <span>Admin</span>
+            </li>
+            <li className="breadcrumb-separator" aria-hidden="true">/</li>
+            <li className="breadcrumb-item current" aria-current="page">
+              <span>{currentSectionData?.label || 'Dashboard'}</span>
+            </li>
+          </ol>
+        </nav>
 
         {/* Content */}
-        <div className="admin-content">
+        <div className="admin-content" role="region" aria-label="Admin section content">
           {children}
         </div>
       </main>

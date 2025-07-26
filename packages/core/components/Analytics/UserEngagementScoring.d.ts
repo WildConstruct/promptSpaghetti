@@ -48,7 +48,7 @@ export interface ScoringModel {
 }
 export type ScoringModelType = 'weighted_sum' | 'neural_network' | 'ensemble' | 'bayesian' | 'time_series' | 'hybrid';
 export interface ModelParameters {
-    [key: string]: any;
+    [key: string]: unknown;
     learningRate?: number;
     regularization?: number;
     hiddenLayers?: number[];
@@ -71,7 +71,7 @@ export interface FeatureComputation {
 }
 export type ComputationMethod = 'sum' | 'average' | 'weighted_average' | 'exponential_decay' | 'percentile' | 'z_score' | 'custom_function';
 export interface ComputationParameters {
-    [key: string]: any;
+    [key: string]: unknown;
     decayRate?: number;
     window?: number;
     threshold?: number;
@@ -127,7 +127,7 @@ export interface MetricNormalization {
 }
 export type NormalizationMethod = 'min_max' | 'z_score' | 'percentile' | 'log_transform' | 'power_transform' | 'custom';
 export interface NormalizationParameters {
-    [key: string]: any;
+    [key: string]: unknown;
     scale?: number;
     shift?: number;
     power?: number;
@@ -233,7 +233,7 @@ export interface SegmentRule {
     ruleId: string;
     field: string;
     operator: RuleOperator;
-    value: any;
+    value: Error;
     weight: number;
 }
 export type RuleOperator = 'equals' | 'not_equals' | 'greater_than' | 'less_than' | 'between' | 'in' | 'not_in' | 'contains' | 'matches_pattern';
@@ -355,7 +355,7 @@ export interface SegmentMigrationRule {
 export interface MigrationCondition {
     field: string;
     operator: RuleOperator;
-    value: any;
+    value: Error;
     duration: number;
 }
 export interface UserEngagementData {
@@ -776,13 +776,13 @@ export interface InsightSupportingData {
 export interface ChartData {
     type: string;
     title: string;
-    data: any[];
+    data: Record<string, unknown>[];
     config: Record<string, any>;
 }
 export interface TableData {
     title: string;
     headers: string[];
-    rows: any[][];
+    rows: unknown[][];
     sortable: boolean;
 }
 export interface StatisticalData {

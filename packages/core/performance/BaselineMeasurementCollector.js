@@ -3,8 +3,8 @@
  *
  * Collects real performance measurements to establish baselines for the system
  */
-import { PerformanceBaselineManager, BaselineCategory, MeasurementType, TestEnvironment } from './PerformanceBaselines.js';
-import { measureExecution } from '../utils.js';
+import { PerformanceBaselineManager, BaselineCategory, MeasurementType, TestEnvironment } from './PerformanceBaselines';
+import { measureExecution } from '../utils';
 /**
  * Collects baseline performance measurements from the actual system
  */

@@ -4,7 +4,7 @@ import { useAuthStore } from '../../stores/authStore';
 import { ArrowLeft } from 'lucide-react';
 
 const SettingsPage: React.FC = () => {
-  const { ___user } = useAuthStore();
+  const { user: _user } = useAuthStore();
   const navigate = useNavigate();
   const [settings, setSettings] = useState({
     notifications: {

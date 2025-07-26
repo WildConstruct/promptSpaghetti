@@ -6,14 +6,14 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * and configuring alert rules.
  */
 import { useState, useEffect, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card.js';
-import { Button } from '../ui/Button.js';
-import { Badge } from '../ui/Badge.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs.js';
-import { Input } from '../ui/Input.js';
-import { Select } from '../ui/Select.js';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
+import { Input } from '../ui/Input';
+import { Select } from '../ui/Select';
 import { AlertTriangle, Shield, Clock, CheckCircle, XCircle, Search, Bell, Settings, TrendingUp, AlertOctagon, Info } from 'lucide-react';
-import { alertSystem } from '../../services/AlertSystem.js';
+import { alertSystem } from '../../services/AlertSystem';
 /**
  * Severity configurations for UI styling
  */

@@ -17,9 +17,7 @@ interface UserNavigationProps {
   className?: string;
 }
 
-export const UserNavigation: React.FC<UserNavigationProps> = ({ className = '' }) => {
-  const { user, isAuthenticated } = useAuthStore();
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+export   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
   if (!isAuthenticated || !user) {
@@ -32,7 +30,7 @@ export const UserNavigation: React.FC<UserNavigationProps> = ({ className = '' }
   // Get user display name
   const displayName = user.firstName && user.lastName 
     ? `${user.firstName} ${user.lastName}`
-    : user.firstName || user.lastName || user.email.split('@')[0];
+    : user.firstName ?? user.lastName ?? user.email.split('@')[0];
 
   const userInitials = user.firstName && user.lastName
     ? `${user.firstName[0]}${user.lastName[0]}`
@@ -82,11 +80,11 @@ export const UserNavigation: React.FC<UserNavigationProps> = ({ className = '' }
           transition: 'all 0.2s ease',
           boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)'
         }}
-        onMouseEnter={(e) => {
+        onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
           e.currentTarget.style.backgroundColor = '#f8f9fa';
           e.currentTarget.style.borderColor = '#d1d5db';
         }}
-        onMouseLeave={(e) => {
+        onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
           e.currentTarget.style.backgroundColor = '#ffffff';
           e.currentTarget.style.borderColor = '#e1e5e9';
         }}
@@ -216,10 +214,10 @@ export const UserNavigation: React.FC<UserNavigationProps> = ({ className = '' }
                   gap: '8px',
                   transition: 'background-color 0.2s ease'
                 }}
-                onMouseEnter={(e) => {
+                onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
                   e.currentTarget.style.backgroundColor = '#f9fafb';
                 }}
-                onMouseLeave={(e) => {
+                onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
                   e.currentTarget.style.backgroundColor = 'transparent';
                 }}
               >
@@ -243,10 +241,10 @@ export const UserNavigation: React.FC<UserNavigationProps> = ({ className = '' }
                   gap: '8px',
                   transition: 'background-color 0.2s ease'
                 }}
-                onMouseEnter={(e) => {
+                onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
                   e.currentTarget.style.backgroundColor = '#f9fafb';
                 }}
-                onMouseLeave={(e) => {
+                onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
                   e.currentTarget.style.backgroundColor = 'transparent';
                 }}
               >
@@ -279,10 +277,10 @@ export const UserNavigation: React.FC<UserNavigationProps> = ({ className = '' }
                       gap: '8px',
                       transition: 'background-color 0.2s ease'
                     }}
-                    onMouseEnter={(e) => {
+                    onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
                       e.currentTarget.style.backgroundColor = '#fef3c7';
                     }}
-                    onMouseLeave={(e) => {
+                    onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
                       e.currentTarget.style.backgroundColor = 'transparent';
                     }}
                   >
@@ -306,10 +304,10 @@ export const UserNavigation: React.FC<UserNavigationProps> = ({ className = '' }
                       gap: '8px',
                       transition: 'background-color 0.2s ease'
                     }}
-                    onMouseEnter={(e) => {
+                    onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
                       e.currentTarget.style.backgroundColor = '#fef3c7';
                     }}
-                    onMouseLeave={(e) => {
+                    onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
                       e.currentTarget.style.backgroundColor = 'transparent';
                     }}
                   >

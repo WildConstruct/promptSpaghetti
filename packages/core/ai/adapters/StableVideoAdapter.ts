@@ -5,7 +5,18 @@
  * Adapter for Stable Video Diffusion models (SVD and SVD-XT)
  */
 
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelMetadata, ModelCapabilities, CostEstimate, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
+import { 
+  BaseAIModel,
+  AIModelType,
+  AIModelProvider,
+  AIModelStatus,
+  ModelMetadata,
+  ModelCapabilities,
+  CostEstimate,
+  ModelInitializationError,
+  ModelProcessingError,
+  ModelUnavailableError
+} from '../BaseAIModel';
 
 export interface StableVideoConfig {
   endpoint: string; // API endpoint (local, Stability AI, or custom)
@@ -495,7 +506,7 @@ export class StableVideoAdapter extends BaseAIModel {
     }
   }
 
-  private _processOptions(options?: StableVideoRequestOptions): Required<Pick<StableVideoRequestOptions, 'model' | 'motion_bucket_id' | 'cond_aug' | 'num_frames' | 'fps' | 'steps' | 'cfg_scale'>> & StableVideoRequestOptions {
+  private _processOptions(options?: StableVideoRequestOptions): Required<Pick<StableVideoRequestOptions, 'model' | 'motion_bucket_id' | 'cond_aug' | 'num_frames' | 'fps' | 'steps' | 'cfg_scale'>> & Omit<StableVideoRequestOptions, 'image'> {
     const defaults = {
       model: 'svd-xt' as const,
       motion_bucket_id: 127,
@@ -530,7 +541,7 @@ export class StableVideoAdapter extends BaseAIModel {
     return processed;
   }
 
-  private async _generateVideo(imageData: string, options: StableVideoRequestOptions): Promise<any> {
+  private async _generateVideo(imageData: string, options: Omit<StableVideoRequestOptions, 'image'>): Promise<any> {
     let endpoint: string;
     let payload: any;
 
@@ -553,53 +564,53 @@ export class StableVideoAdapter extends BaseAIModel {
     return this._makeRequest(endpoint, 'POST', payload);
   }
 
-  private _buildAutomatic1111Payload(imageData: string, options: StableVideoRequestOptions): any {
+  private _buildAutomatic1111Payload(imageData: string, options: Omit<StableVideoRequestOptions, 'image'>): any {
     return {
       init_images: [imageData],
       prompt: 'video generation',
-      steps: options.steps,
-      cfg_scale: options.cfg_scale,
-      width: options.width,
-      height: options.height,
+      steps: options.steps || 20,
+      cfg_scale: options.cfg_scale || 2.5,
+      width: options.width || 576,
+      height: options.height || 1024,
       seed: options.seed || -1,
       sampler_name: options.scheduler || 'euler',
       // SVD-specific parameters
-      motion_bucket_id: options.motion_bucket_id,
-      cond_aug: options.cond_aug,
-      num_frames: options.num_frames,
-      fps: options.fps
+      motion_bucket_id: options.motion_bucket_id || 127,
+      cond_aug: options.cond_aug || 0.02,
+      num_frames: options.num_frames || 14,
+      fps: options.fps || 6
     };
   }
 
-  private _buildStabilityAIPayload(imageData: string, options: StableVideoRequestOptions): any {
+  private _buildStabilityAIPayload(imageData: string, options: Omit<StableVideoRequestOptions, 'image'>): any {
     return {
       image: imageData,
-      cfg_scale: options.cfg_scale,
-      motion_bucket_id: options.motion_bucket_id,
-      seed: options.seed
+      cfg_scale: options.cfg_scale || 2.5,
+      motion_bucket_id: options.motion_bucket_id || 127,
+      seed: options.seed || -1
     };
   }
 
-  private _buildGenericPayload(imageData: string, options: StableVideoRequestOptions): any {
+  private _buildGenericPayload(imageData: string, options: Omit<StableVideoRequestOptions, 'image'>): any {
     return {
       image: imageData,
-      model: options.model,
-      motion_bucket_id: options.motion_bucket_id,
-      cond_aug: options.cond_aug,
-      num_frames: options.num_frames,
-      fps: options.fps,
-      steps: options.steps,
-      cfg_scale: options.cfg_scale,
-      seed: options.seed,
-      width: options.width,
-      height: options.height
+      model: options.model || 'svd-xt',
+      motion_bucket_id: options.motion_bucket_id || 127,
+      cond_aug: options.cond_aug || 0.02,
+      num_frames: options.num_frames || 14,
+      fps: options.fps || 6,
+      steps: options.steps || 20,
+      cfg_scale: options.cfg_scale || 2.5,
+      seed: options.seed || -1,
+      width: options.width || 576,
+      height: options.height || 1024
     };
   }
 
   private _processVideoResult(
     response: any,
     imageData: string,
-    options: StableVideoRequestOptions,
+    options: Omit<StableVideoRequestOptions, 'image'>,
     generationTime: number
   ): StableVideoGenerationResult {
     // Process frames from response
@@ -612,30 +623,34 @@ export class StableVideoAdapter extends BaseAIModel {
       frames = Array.isArray(response.output) ? response.output : [response.output];
     }
 
-    const computeUnits = this._calculateComputeUnits(options.model, options.num_frames, options.steps);
+    const computeUnits = this._calculateComputeUnits(
+      options.model || 'svd-xt',
+      options.num_frames || 14,
+      options.steps || 20
+    );
     const estimatedCost = computeUnits * (this._metadata.costPerRequest || 0.02);
 
     return {
       video: {
         frames,
         format: 'frames', // Individual frames
-        duration: options.num_frames / options.fps,
+        duration: (options.num_frames || 14) / (options.fps || 6),
         resolution: {
           width: options.width || 576,
           height: options.height || 1024
         },
-        fps: options.fps,
+        fps: options.fps || 6,
         frame_count: frames.length,
         size: this._estimateVideoSize(frames)
       },
       metadata: {
-        model: options.model,
+        model: options.model || 'svd-xt',
         input_image: imageData,
-        motion_bucket_id: options.motion_bucket_id,
-        cond_aug: options.cond_aug,
+        motion_bucket_id: options.motion_bucket_id || 127,
+        cond_aug: options.cond_aug || 0.02,
         seed: options.seed || -1,
-        steps: options.steps,
-        cfg_scale: options.cfg_scale,
+        steps: options.steps || 20,
+        cfg_scale: options.cfg_scale || 2.5,
         generation_time: generationTime
       },
       usage: {

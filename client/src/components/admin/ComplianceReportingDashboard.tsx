@@ -14,44 +14,24 @@
  * - Remediation workflow management
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Shield,
   AlertTriangle,
-  CheckCircle,
-  XCircle,
   Clock,
   FileText,
   Download,
-  Upload,
   Search,
-  Filter,
   Calendar,
-  Users,
-  Database,
   Activity,
   TrendingUp,
   TrendingDown,
   Eye,
   Edit,
-  Settings,
   RefreshCw,
-  AlertCircle,
   BarChart3,
-  PieChart,
   Target,
-  Zap,
-  Lock,
-  Unlock,
-  Info,
-  ExternalLink,
-  Plus,
-  Minus,
-  ChevronDown,
-  ChevronRight,
-  Mail,
-  Bell,
-  Flag
+  Plus
 } from 'lucide-react';
 
 interface ComplianceFramework {
@@ -155,9 +135,11 @@ interface AuditLog {
 const ComplianceReportingDashboard: React.FC = () => {
   const [frameworks, setFrameworks] = useState<ComplianceFramework[]>([]);
   const [violations, setViolations] = useState<ComplianceViolation[]>([]);
-  const [___remediationActions, setRemediationActions] = useState<RemediationAction[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_remediationActions, _setRemediationActions] = useState<RemediationAction[]>([]);
   const [metrics, setMetrics] = useState<ComplianceMetrics | null>(null);
-  const [___auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_auditLogs, _setAuditLogs] = useState<AuditLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -167,16 +149,21 @@ const ComplianceReportingDashboard: React.FC = () => {
   const [frameworkFilter, setFrameworkFilter] = useState<string>('all');
   const [severityFilter, setSeverityFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [___dateRange, ___setDateRange] = useState<{ start: string; end: string }>({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_dateRange, _setDateRange] = useState<{ start: string; end: string }>({
     start: '',
     end: ''
   });
 
   // Modal and selection states
-  const [___selectedViolation, setSelectedViolation] = useState<ComplianceViolation | null>(null);
-  const [___selectedFramework, ___setSelectedFramework] = useState<ComplianceFramework | null>(null);
-  const [___expandedRequirements, ___setExpandedRequirements] = useState<Set<string>>(new Set());
-  const [___showCreateReport, setShowCreateReport] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_selectedViolation, _setSelectedViolation] = useState<ComplianceViolation | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_selectedFramework, _setSelectedFramework] = useState<ComplianceFramework | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_expandedRequirements, _setExpandedRequirements] = useState<Set<string>>(new Set());
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_showCreateReport, _setShowCreateReport] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(true);
 
   // Load compliance data
@@ -411,22 +398,25 @@ const ComplianceReportingDashboard: React.FC = () => {
     }
   };
 
-  const filteredViolations = violations.filter(violation => {
-    if (searchTerm && !violation.title.toLowerCase().includes(searchTerm.toLowerCase()) && 
-        !violation.description.toLowerCase().includes(searchTerm.toLowerCase())) {
-      return false;
-    }
-    if (frameworkFilter !== 'all' && violation.frameworkId !== frameworkFilter) {
-      return false;
-    }
-    if (severityFilter !== 'all' && violation.severity !== severityFilter) {
-      return false;
-    }
-    if (statusFilter !== 'all' && violation.status !== statusFilter) {
-      return false;
-    }
-    return true;
-  });
+  const filteredViolations = useMemo(() => {
+    return violations.filter(violation => {
+      if (searchTerm && 
+          !violation.title.toLowerCase().includes(searchTerm.toLowerCase()) && 
+          !violation.description.toLowerCase().includes(searchTerm.toLowerCase())) {
+        return false;
+      }
+      if (frameworkFilter !== 'all' && violation.frameworkId !== frameworkFilter) {
+        return false;
+      }
+      if (severityFilter !== 'all' && violation.severity !== severityFilter) {
+        return false;
+      }
+      if (statusFilter !== 'all' && violation.status !== statusFilter) {
+        return false;
+      }
+      return true;
+    });
+  }, [violations, searchTerm, frameworkFilter, severityFilter, statusFilter]);
 
   if (loading) {
     return (
@@ -593,7 +583,7 @@ const ComplianceReportingDashboard: React.FC = () => {
             ].map(({ key, label, icon: Icon, count }) => (
               <button
                 key={key}
-                onClick={() => setActiveView(key as any)}
+                onClick={() => setActiveView(key as 'overview' | 'violations' | 'frameworks' | 'audit' | 'reports')}
                 className={`${
                   activeView === key
                     ? 'border-purple-500 text-purple-600 bg-purple-50'

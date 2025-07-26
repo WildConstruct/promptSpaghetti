@@ -1,7 +1,7 @@
 // Epic 11 Password Reset Form
 // React component for password reset request functionality
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { z } from 'zod';
 import { usePasswordReset } from '../../hooks/usePasswordReset';
 import { PasswordStrengthIndicator } from './PasswordStrengthIndicator';
@@ -85,7 +85,7 @@ export const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!validateForm()) {
@@ -108,7 +108,7 @@ export const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [validateForm, mode, formData.email, token, formData.newPassword, formData.confirmPassword, requestPasswordReset, confirmPasswordReset, onSuccess]);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -125,7 +125,7 @@ export const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
         <div className="auth-card">
           <div className="auth-header">
             <h2>Reset Your Password</h2>
-            <p>Enter your email address and we'll send you a link to reset your password.</p>
+            <p>Enter your email address and we&apos;ll send you a link to reset your password.</p>
           </div>
 
           <form onSubmit={handleSubmit} className="auth-form">

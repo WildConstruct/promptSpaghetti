@@ -111,8 +111,7 @@ export function QRCodeGenerator({
   showSecretDetails = true,
   className = ''
 }: QRCodeGeneratorProps) {
-  const ___canvasRef = useRef<HTMLCanvasElement>(null);
-  const [state, setState] = useState<GeneratorState>({
+    const [state, setState] = useState<GeneratorState>({
     style: DEFAULT_STYLE,
     showAdvanced: false,
     showSecret: false,
@@ -487,7 +486,7 @@ export function QRCodeGenerator({
                         key={level}
                         variant={state.style.errorCorrectionLevel === level ? 'default' : 'outline'}
                         size="sm"
-                        onClick={() => updateStyle({ errorCorrectionLevel: level as any })}
+                        onClick={() => updateStyle({ errorCorrectionLevel: level as 'L' | 'M' | 'Q' | 'H' })}
                         className="text-left justify-start"
                       >
                         <div>

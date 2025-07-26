@@ -6,7 +6,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * milestones, achievements, animations, and reward celebrations.
  */
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { InteractionType } from '../../services/Epic16InteractiveElementsService.js';
+import { InteractionType } from '../../services/Epic16InteractiveElementsService';
 export const GamifiedProgressBar = ({ element, interactiveService, userId, currentValue, onMilestoneReached, onComplete, className = '' }) => {
     // Configuration
     const config = element.config.progress_config;

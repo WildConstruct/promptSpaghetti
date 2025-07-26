@@ -6,7 +6,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Creates complex demo graphs and tests performance for presentations
  */
 import { useState, useCallback, useRef } from 'react';
-import { ProfessionalSpinner } from '../LoadingStates/ProfessionalSpinner.js';
+import { ProfessionalSpinner } from '../LoadingStates/ProfessionalSpinner';
 export const DemoPerformanceTester = ({ onTestComplete, onGraphGenerated, targetFPS = 30, maxRenderTime = 16 }) => {
     const [isRunning, setIsRunning] = useState(false);
     const [currentTest, setCurrentTest] = useState('');

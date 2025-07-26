@@ -3,14 +3,14 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Main UI component for managing locks in the workspace
 import { useState, useEffect, useCallback } from 'react';
 import { Lock, Unlock, AlertTriangle, X, Filter, Search } from 'lucide-react';
-import { useLockingStore } from '../stores/lockingStore.js';
-import { LockIndicator } from './LockIndicator.js';
-import { LockRequestDialog } from './LockRequestDialog.js';
-import { LockBreakingWorkflow } from './LockBreakingWorkflow.js';
-import { LockStatusOverview } from './LockStatusOverview.js';
-import { LockQueueVisualization } from './LockQueueVisualization.js';
-import { LockNotifications } from './LockNotifications.js';
-import { LockPolicyEditor } from './LockPolicyEditor.js';
+import { useLockingStore } from '../stores/lockingStore';
+import { LockIndicator } from './LockIndicator';
+import { LockRequestDialog } from './LockRequestDialog';
+import { LockBreakingWorkflow } from './LockBreakingWorkflow';
+import { LockStatusOverview } from './LockStatusOverview';
+import { LockQueueVisualization } from './LockQueueVisualization';
+import { LockNotifications } from './LockNotifications';
+import { LockPolicyEditor } from './LockPolicyEditor';
 export const LockingManager = ({ workspaceId, userId, onLockStateChange }) => {
     const [activeTab, setActiveTab] = useState('overview');
     const [selectedResource, setSelectedResource] = useState(null);

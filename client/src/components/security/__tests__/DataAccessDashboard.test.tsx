@@ -31,7 +31,7 @@ describe('DataAccessDashboard', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockUseDataAccess.mockReturnValue(mockHookReturn as unknown);
+    mockUseDataAccess.mockReturnValue(mockHookReturn as unknown as unknown);
   });
 
   it('renders dashboard header correctly', () => {
@@ -52,7 +52,7 @@ describe('DataAccessDashboard', () => {
     mockUseDataAccess.mockReturnValue({
       ...mockHookReturn,
       loading: true
-    } as unknown);
+    } as unknown as unknown);
 
     render(<DataAccessDashboard userId="user-123" />);
     
@@ -63,7 +63,7 @@ describe('DataAccessDashboard', () => {
     mockUseDataAccess.mockReturnValue({
       ...mockHookReturn,
       error: 'Failed to load data'
-    } as unknown);
+    } as unknown as unknown);
 
     render(<DataAccessDashboard userId="user-123" />);
     
@@ -75,7 +75,7 @@ describe('DataAccessDashboard', () => {
     mockUseDataAccess.mockReturnValue({
       ...mockHookReturn,
       error: 'Test error'
-    } as unknown);
+    } as unknown as unknown);
 
     render(<DataAccessDashboard userId="user-123" />);
     
@@ -110,7 +110,7 @@ describe('DataAccessDashboard', () => {
       mockUseDataAccess.mockReturnValue({
         ...mockHookReturn,
         grants: mockGrants
-      } as unknown);
+      } as unknown as unknown);
 
       render(<DataAccessDashboard userId="user-123" />);
       
@@ -170,7 +170,7 @@ describe('DataAccessDashboard', () => {
       mockUseDataAccess.mockReturnValue({
         ...mockHookReturn,
         history: mockHistory
-      } as unknown);
+      } as unknown as unknown);
 
       render(<DataAccessDashboard userId="user-123" />);
       
@@ -214,7 +214,7 @@ describe('DataAccessDashboard', () => {
         requestId: 'req-123',
         status: 'approved',
         message: 'Request approved'
-      } as unknown);
+      } as unknown as unknown);
 
       const resourceIdInput = screen.getByLabelText('Resource ID');
       const resourceTypeSelect = screen.getByLabelText('Resource Type');
@@ -303,7 +303,7 @@ describe('DataAccessDashboard', () => {
       mockUseDataAccess.mockReturnValue({
         ...mockHookReturn,
         grants: mockGrants
-      } as unknown);
+      } as unknown as unknown);
 
       render(<DataAccessDashboard userId="user-123" />);
       

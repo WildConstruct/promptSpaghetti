@@ -7,6 +7,7 @@ import {
 } from './correctionsStore';
 import { WorkflowManager } from './components/WorkflowManager';
 import { NotificationSystem } from './components/NotificationSystem';
+import { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboard';
 
 interface CorrectionsPanelProps {
   isOpen: boolean;
@@ -17,9 +18,7 @@ type FilterType = 'all' | 'active' | 'inactive' | 'regex' | 'text' | 'draft' | '
 type SortType = 'name' | 'priority' | 'created' | 'updated' | 'usage';
 type ViewMode = 'list' | 'grid' | 'compact';
 
-export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onClose }) => {
-  const isEnabled = useCorrectionsEnabled();
-  const {
+export   const {
     rules,
     addRule,
     updateRule,
@@ -27,7 +26,9 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
     toggleRule,
     clearAllRules,
     applyCorrections,
-    getDraftRules
+    getDraftRules,
+    exportRules,
+    importRules
   } = useCorrectionsStore();
 
   // UI State
@@ -192,55 +193,50 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
 
   const handleExport = useCallback(async () => {
     try {
-      const response = await fetch(`/api/corrections/export?format=${exportFormat}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      const result = await exportRules(exportFormat, {
+        includeInactive: filterType === 'all' || filterType === 'inactive',
+        includeStatistics: true
       });
 
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
+      if (result.success && result.data && result.filename) {
+        const url = window.URL.createObjectURL(result.data);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `corrections-${Date.now()}.${exportFormat}`;
+        a.download = result.filename;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
+      } else {
+        console.error('Export failed:', result.error);
       }
     } catch (error) {
       console.error('Export failed:', error);
     }
-  }, [exportFormat]);
+  }, [exportFormat, exportRules, filterType]);
 
   const handleImport = useCallback(async () => {
     if (!importContent || !importFilename) return;
 
     try {
-      const response = await fetch('/api/corrections/import', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          filename: importFilename,
-          content: importContent,
-          skipDuplicates: true
-        })
+      const result = await importRules(importContent, importFilename, {
+        skipDuplicates: true,
+        merge: true
       });
 
-      if (response.ok) {
-        const result = await response.json();
+      if (result.success) {
         alert(`Successfully imported ${result.importedCount} correction rules`);
         setImportContent('');
         setImportFilename('');
+      } else {
+        console.error('Import failed:', result.error);
+        alert(`Import failed: ${result.error}`);
       }
     } catch (error) {
       console.error('Import failed:', error);
+      alert('Import failed: ' + (error instanceof Error ? error.message : 'Unknown error'));
     }
-  }, [importContent, importFilename]);
+  }, [importContent, importFilename, importRules]);
 
   const handleTestCorrections = useCallback(() => {
     return applyCorrections(testText);
@@ -1198,6 +1194,12 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
         position="top-right"
         maxVisible={3}
         autoHideDuration={5000}
+      />
+
+      {/* Statistics Dashboard */}
+      <CorrectionsStatsDashboard
+        isOpen={showStats}
+        onClose={() => setShowStats(false)}
       />
     </div>
   );

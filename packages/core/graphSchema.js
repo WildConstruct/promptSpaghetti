@@ -2,7 +2,7 @@
 // Shared Zod schema for a graph JSON used by both UI and executor.
 // Nodes are stored in an object keyed by node id for O(1) lookup.
 import { z } from 'zod';
-import { SecureValidation } from './validation/security.js';
+import { SecureValidation } from './validation/security';
 export const NodeTypeEnum = z.enum([
     'WeightedChoice',
     'Concat',
@@ -90,7 +90,7 @@ export const SequentialNodeSchema = BaseNode.extend({
         config: z.object({
             weights: z.array(z.number()).optional(),
             allowRepeats: z.boolean().optional(),
-            custom: z.record(z.any()).optional()
+            custom: z.record(z.unknown()).optional()
         }).optional()
     }).optional()
 });
@@ -104,7 +104,7 @@ export const MarkovNodeSchema = BaseNode.extend({
         normalizeProbabilities: z.boolean().optional(),
         terminationStates: z.array(z.string()).optional(),
         detectLoops: z.boolean().optional(),
-        custom: z.record(z.any()).optional()
+        custom: z.record(z.unknown()).optional()
     }).optional()
 });
 // Epic 8 Python Integration

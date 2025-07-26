@@ -52,8 +52,8 @@ describe('RepositoryFactory', () => {
     
     // Mock the getDatabase function to return our test database
     const { getDatabase, healthCheck } = require('../../database/connection');
-    getDatabase.mockReturnValue(mockDb as unknown);
-    healthCheck.mockReturnValue(true as unknown);
+    getDatabase.mockReturnValue(mockDb as unknown as unknown);
+    healthCheck.mockReturnValue(true as unknown as unknown);
   });
   
   afterEach(() => {

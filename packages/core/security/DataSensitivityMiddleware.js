@@ -10,9 +10,9 @@
  * - Automated security headers based on data classification
  * - Compliance validation and reporting
  */
-import { DataSensitivityLevel, DataSensitivityUtils } from './DataSensitivityLevels.js';
-import { DataClassificationHelpers } from './DataClassificationHelpers.js';
-import { createSecurityMiddleware, SecurityPresets } from './SecurityMiddleware.js';
+import { DataSensitivityLevel, DataSensitivityUtils } from './DataSensitivityLevels';
+import { DataClassificationHelpers } from './DataClassificationHelpers';
+import { createSecurityMiddleware, SecurityPresets } from './SecurityMiddleware';
 /**
  * Default configuration
  */

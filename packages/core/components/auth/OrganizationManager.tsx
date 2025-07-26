@@ -24,8 +24,8 @@ interface Organization {
   description?: string;
   website?: string;
   logoUrl?: string;
-  branding: Record<string, any>;
-  settings: Record<string, any>;
+  branding: Record<string, unknown>;
+  settings: Record<string, unknown>;
   plan: 'free' | 'pro' | 'enterprise';
   maxUsers: number;
   createdAt: Date;
@@ -56,13 +56,11 @@ interface CreateOrganizationData {
   website?: string;
   plan?: 'free' | 'pro' | 'enterprise';
   maxUsers?: number;
-  settings?: Record<string, any>;
-  branding?: Record<string, any>;
+  settings?: Record<string, unknown>;
+  branding?: Record<string, unknown>;
 }
 
-export const OrganizationManager: React.FC = () => {
-  const [organizations, setOrganizations] = useState<Organization[]>([]);
-  const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null);
+export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null);
   const [stats, setStats] = useState<OrganizationStats | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'settings' | 'branding' | 'members' | 'teams'>('overview');
   const [showCreateForm, setShowCreateForm] = useState(false);

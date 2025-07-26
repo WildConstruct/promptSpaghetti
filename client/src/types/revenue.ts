@@ -8,13 +8,21 @@
 import { LicenseType, PaymentProvider } from '../../../server/src/marketplace/transaction.types';
 
 // Time Range Options
-export enum RevenueTimeRange {
-  LAST_7D = 'last_7d',
-  LAST_30D = 'last_30d',
-  LAST_90D = 'last_90d',
-  LAST_YEAR = 'last_year',
-  CUSTOM = 'custom'
-}
+export type RevenueTimeRange = 
+  | 'last_7d'
+  | 'last_30d'
+  | 'last_90d'
+  | 'last_year'
+  | 'custom';
+
+// Legacy enum values for backwards compatibility
+export const RevenueTimeRange = {
+  LAST_7D: 'last_7d' as const,
+  LAST_30D: 'last_30d' as const,
+  LAST_90D: 'last_90d' as const,
+  LAST_YEAR: 'last_year' as const,
+  CUSTOM: 'custom' as const
+} as const;
 
 // Revenue Metrics Summary
 export interface RevenueMetrics {

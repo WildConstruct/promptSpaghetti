@@ -14,8 +14,6 @@ import {
   RotateCcw,
   Clock,
   Activity,
-  Eye,
-  Plus,
   Settings,
   Zap,
   AlertCircle,

@@ -5,7 +5,7 @@ import * as engineModule from '../engine';
 
 // Mock the executeGraph function
 jest.mock('../engine', () => ({
-  executeGraph: jest.fn<unknown[], unknown>().mockReturnValue(Promise.resolve([] as unknown))
+  executeGraph: jest.fn<unknown[], unknown>().mockReturnValue(Promise.resolve([] as unknown as unknown))
 }));
 
 // Mock the graph validation function
@@ -35,7 +35,7 @@ describe('Preview API', () => {
     jest.resetAllMocks();
     
     // Default mock implementation
-    (engineModule.executeGraph as jest.MockedFunction<typeof engineModule.executeGraph>).mockResolvedValue(['Test output'] as unknown);
+    (engineModule.executeGraph as jest.MockedFunction<typeof engineModule.executeGraph>).mockResolvedValue(['Test output'] as unknown as unknown);
   });
 
   describe('generatePreviewOutputs function', () => {
@@ -116,7 +116,7 @@ describe('Preview API', () => {
             severity: 'error'
           }
         ]
-      } as unknown);
+      } as unknown as unknown);
       
       // Create a test invalid graph
       const invalidGraph: Graph = { 

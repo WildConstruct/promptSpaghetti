@@ -4,7 +4,7 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Individual comment display and interaction
  */
 import { useState } from 'react';
-import { CommentForm } from './CommentForm.js';
+import { CommentForm } from './CommentForm';
 export const CommentItem = ({ comment, userId, onUpdate, onDelete, onResolve, onReply, compact = false, isReply = false, isThreadRoot = false, isLast = false }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [showActions, setShowActions] = useState(false);

@@ -179,7 +179,7 @@ describe('SaveTemplateDialog', () => {
 
   it('should call onSave with correct data', async () => {
     const user = userEvent.setup();
-    mockOnSave.mockResolvedValue({ success: true } as unknown);
+    mockOnSave.mockResolvedValue({ success: true } as unknown as unknown);
     
     render(
       <SaveTemplateDialog
@@ -219,7 +219,7 @@ describe('SaveTemplateDialog', () => {
 
   it('should handle save errors', async () => {
     const user = userEvent.setup();
-    mockOnSave.mockResolvedValue({ success: false, error: 'Save failed' } as unknown);
+    mockOnSave.mockResolvedValue({ success: false, error: 'Save failed' } as unknown as unknown);
     
     render(
       <SaveTemplateDialog
@@ -274,7 +274,7 @@ describe('SaveTemplateDialog', () => {
 
   it('should close dialog on successful save', async () => {
     const user = userEvent.setup();
-    mockOnSave.mockResolvedValue({ success: true } as unknown);
+    mockOnSave.mockResolvedValue({ success: true } as unknown as unknown);
     
     render(
       <SaveTemplateDialog
@@ -299,7 +299,7 @@ describe('SaveTemplateDialog', () => {
 
   it('should reset form on successful save', async () => {
     const user = userEvent.setup();
-    mockOnSave.mockResolvedValue({ success: true } as unknown);
+    mockOnSave.mockResolvedValue({ success: true } as unknown as unknown);
     
     const { rerender } = render(
       <SaveTemplateDialog
@@ -456,7 +456,7 @@ describe('TemplateBrowser', () => {
     jest.clearAllMocks();
     
     const { templateService } = require('../services/TemplateService');
-    templateService.searchTemplates.mockResolvedValue(sampleTemplates as unknown);
+    templateService.searchTemplates.mockResolvedValue(sampleTemplates as unknown as unknown);
   });
 
   it('should render when open', async () => {
@@ -578,7 +578,7 @@ describe('TemplateBrowser', () => {
 
   it('should show empty state', async () => {
     const { templateService } = require('../services/TemplateService');
-    templateService.searchTemplates.mockResolvedValue([] as unknown);
+    templateService.searchTemplates.mockResolvedValue([] as unknown as unknown);
 
     render(
       <TemplateBrowser
@@ -729,7 +729,7 @@ describe('TemplateBrowser', () => {
     const deleteButton = screen.getByTitle('Delete template');
     
     // Mock window.confirm
-    window.confirm = jest.fn<unknown[], unknown>().mockReturnValue(true as unknown);
+    window.confirm = jest.fn<unknown[], unknown>().mockReturnValue(true as unknown as unknown);
     
     await user.click(deleteButton);
 

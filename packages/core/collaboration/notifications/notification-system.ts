@@ -13,7 +13,7 @@ import { WorkspaceDAO } from '../dao/workspace-dao';
 export interface NotificationChannel {
   type: 'in_app' | 'email' | 'slack' | 'webhook';
   enabled: boolean;
-  config: Record<string, any>;
+  config: Record<string, unknown>;
 }
 
 export interface NotificationPreferences {
@@ -39,7 +39,7 @@ export interface NotificationTemplate {
     [channel: string]: {
       subject: string;
       body: string;
-      metadata?: Record<string, any>;
+      metadata?: Record<string, unknown>;
     };
   };
 }
@@ -50,7 +50,7 @@ export interface NotificationContext {
   resourceId?: ResourceId;
   actorUserId: UserId;
   targetUserIds: UserId[];
-  data: Record<string, any>;
+  data: Record<string, unknown>;
 }
 
 export interface NotificationDelivery {
@@ -458,7 +458,7 @@ The Team`
     notification: Notification,
     userId: UserId,
     channel: string,
-    template: any,
+    template: unknown,
     context: NotificationContext
   ): Promise<void> {
     const delivery: NotificationDelivery = {

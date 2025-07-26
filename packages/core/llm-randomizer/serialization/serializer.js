@@ -1,16 +1,16 @@
 // Epic 12 - LLM Agent Randomizer System
 // Story 12.1 - Serialization Format Design
 // Core serialization logic for converting graphs to LLM-friendly format
-// Use Node.js crypto in Node environment, or web crypto API in browser
 let createHash;
 try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     createHash = require('crypto').createHash;
 }
 catch {
     // Browser environment - use a simple hash alternative
-    createHash = (algorithm) => ({
+    createHash = () => ({
         update: (data) => ({
-            digest: (format) => {
+            digest: () => {
                 // Simple hash fallback for browser testing
                 let hash = 0;
                 for (let i = 0; i < data.length; i++) {

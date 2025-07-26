@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React from 'react';
-import { useUISettingsStore } from '../../stores/uiSettingsStore.js';
-import { HierarchyColors, TypographyScale, SpacingScale, ComponentSizes, classifyFieldPriority, AccessibilityUtils } from '../VisualHierarchy/HierarchyDesignSystem.js';
+import { useUISettingsStore } from '../../stores/uiSettingsStore';
+import { HierarchyColors, TypographyScale, SpacingScale, ComponentSizes, classifyFieldPriority, AccessibilityUtils } from '../VisualHierarchy/HierarchyDesignSystem';
 /**
  * Epic 8.4 - Progressive Disclosure Section Component
  *
@@ -35,11 +35,11 @@ const ProgressiveDisclosureSection = ({ title, level, children, description, def
     // Auto-expand for basic level or debug level
     const shouldAutoExpand = level === 'basic' || complexityLevel === 'expert';
     const effectivelyExpanded = shouldAutoExpand ? true : isExpanded;
-    // Get visual hierarchy colors and styles
-    const colors = HierarchyColors[level];
-    const typography = priority === 'critical' ? TypographyScale.secondary : TypographyScale.tertiary;
-    // Enhanced section styles using design system
-    const getSectionStyles = () => {
+    // Memoize visual hierarchy colors and styles for performance
+    const colors = React.useMemo(() => HierarchyColors[level], [level]);
+    const typography = React.useMemo(() => priority === 'critical' ? TypographyScale.secondary : TypographyScale.tertiary, [priority]);
+    // Enhanced section styles using design system - memoized for performance
+    const sectionStyles = React.useMemo(() => {
         const baseStyles = {
             marginBottom: SpacingScale.md,
             borderRadius: 6,
@@ -63,31 +63,30 @@ const ProgressiveDisclosureSection = ({ title, level, children, description, def
             ...priorityIndicator,
             border: `1px solid ${colors.border}`,
         };
-    };
-    const getHeaderStyles = () => {
-        return {
-            ...ComponentSizes.header,
-            cursor: shouldAutoExpand ? 'default' : 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            userSelect: 'none',
-            backgroundColor: colors.background,
-            borderBottom: effectivelyExpanded ? `1px solid ${colors.border}` : 'none',
-            transition: 'all 0.2s ease-in-out',
-            ...typography,
-            // Enhanced focus styles for accessibility
-            ':focus': {
-                outline: `2px solid ${colors.primary}`,
-                outlineOffset: 2,
-            },
-            ':hover': shouldAutoExpand ? {} : {
-                backgroundColor: colors.accent,
-                transform: 'translateY(-1px)',
-                boxShadow: `0 4px 12px ${colors.primary}20`,
-            }
-        };
-    };
+    }, [colors, priority]);
+    // Memoize header styles for performance
+    const headerStyles = React.useMemo(() => ({
+        ...ComponentSizes.header,
+        cursor: shouldAutoExpand ? 'default' : 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        userSelect: 'none',
+        backgroundColor: colors.background,
+        borderBottom: effectivelyExpanded ? `1px solid ${colors.border}` : 'none',
+        transition: 'all 0.2s ease-in-out',
+        ...typography,
+        // Enhanced focus styles for accessibility
+        ':focus': {
+            outline: `2px solid ${colors.primary}`,
+            outlineOffset: 2,
+        },
+        ':hover': shouldAutoExpand ? {} : {
+            backgroundColor: colors.accent,
+            transform: 'translateY(-1px)',
+            boxShadow: `0 4px 12px ${colors.primary}20`,
+        }
+    }), [colors, typography, shouldAutoExpand, effectivelyExpanded]);
     const getLevelIndicator = () => {
         switch (level) {
             case 'basic':
@@ -100,7 +99,7 @@ const ProgressiveDisclosureSection = ({ title, level, children, description, def
                 return '';
         }
     };
-    return (_jsxs("div", { style: getSectionStyles(), className: className, role: "region", "aria-labelledby": `section-header-${title.replace(/\s+/g, '-').toLowerCase()}`, children: [_jsxs("div", { id: `section-header-${title.replace(/\s+/g, '-').toLowerCase()}`, style: getHeaderStyles(), onClick: shouldAutoExpand ? undefined : () => setIsExpanded(!isExpanded), role: shouldAutoExpand ? undefined : "button", tabIndex: shouldAutoExpand ? undefined : 0, "aria-expanded": shouldAutoExpand ? undefined : effectivelyExpanded, "aria-label": AccessibilityUtils.getAriaLabel(level, title), "aria-describedby": description ? `section-desc-${title.replace(/\s+/g, '-').toLowerCase()}` : undefined, onKeyDown: shouldAutoExpand ? undefined : (e) => {
+    return (_jsxs("div", { style: sectionStyles, className: className, role: "region", "aria-labelledby": `section-header-${title.replace(/\s+/g, '-').toLowerCase()}`, children: [_jsxs("div", { id: `section-header-${title.replace(/\s+/g, '-').toLowerCase()}`, style: headerStyles, onClick: shouldAutoExpand ? undefined : () => setIsExpanded(!isExpanded), role: shouldAutoExpand ? undefined : "button", tabIndex: shouldAutoExpand ? undefined : 0, "aria-expanded": shouldAutoExpand ? undefined : effectivelyExpanded, "aria-label": AccessibilityUtils.getAriaLabel(level, title), "aria-describedby": description ? `section-desc-${title.replace(/\s+/g, '-').toLowerCase()}` : undefined, onKeyDown: shouldAutoExpand ? undefined : (e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
                         setIsExpanded(!isExpanded);

@@ -43,13 +43,13 @@ export declare const useTrustIndicators: (config?: TrustIndicatorConfig) => {
     lastUpdated: Date | null;
     loadTrustData: (forceRefresh?: boolean) => Promise<void>;
     refreshTrustData: () => Promise<void>;
-    getTrustLevel: (score?: number) => "expert" | "basic" | "professional" | "verified" | "unverified";
+    getTrustLevel: (score?: number) => "verified" | "basic" | "professional" | "expert" | "unverified";
     getTrustLevelColor: (level: string) => string;
     getTrustLevelBenefits: (level: string) => string[];
     formatTrustScore: (score?: number) => string;
     getTrustScoreColor: (score?: number) => string;
     trustScore: number;
-    trustTier: "expert" | "basic" | "professional" | "verified" | "unverified";
+    trustTier: "verified" | "basic" | "professional" | "expert" | "unverified";
     verificationStatus: {
         email: boolean;
         phone: boolean;

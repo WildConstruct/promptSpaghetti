@@ -12,6 +12,10 @@ export { PerformanceAnalytics } from './PerformanceAnalytics';
 export { default as SecurityAnalyticsMonitor } from './SecurityAnalyticsMonitor';
 // Epic 1 & Epic 17 Security Integration
 export { default as Epic1Epic17SecurityIntegration } from './Epic1Epic17SecurityIntegration';
+// Import Epic1Epic17SecurityIntegration for local use
+import { Epic1Epic17SecurityIntegration } from './Epic1Epic17SecurityIntegration';
+// Import SecurityAnalyticsMonitor for local use
+import { SecurityAnalyticsMonitor } from './SecurityAnalyticsMonitor';
 // Utility functions for monitoring integration
 export const createIntegratedMonitoringSystem = (epic1Monitor, epic17Monitor, // Epic17PerformanceMonitor from server
 securityMonitor, alertingSystem // CrossSystemAlertingSystem

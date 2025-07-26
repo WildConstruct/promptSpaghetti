@@ -208,7 +208,7 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({
       const states = updated.reduce((acc, section) => {
         acc[section.id] = { isCollapsed: section.isCollapsed };
         return acc;
-      }, {} as Record<string, any>);
+      }, {} as Record<string, { isCollapsed: boolean }>);
       
       localStorage.setItem('quickNavigationState', JSON.stringify(states));
       return updated;

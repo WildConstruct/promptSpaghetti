@@ -4,9 +4,9 @@
  *
  * Workflow nodes for audio generation, transcription, and processing
  */
-import { AdvancedRuntimeNode } from '../advanced.js';
-import { IOSpecBuilder } from '../io-system.js';
-import { AIModelFactory, OpenAITTSAdapter, ElevenLabsAdapter, WhisperAdapter } from '../../ai.js';
+import { AdvancedRuntimeNode } from '../advanced';
+import { IOSpecBuilder } from '../io-system';
+import { AIModelFactory, OpenAITTSAdapter, ElevenLabsAdapter, WhisperAdapter } from '../../ai';
 export class TextToSpeechNode extends AdvancedRuntimeNode {
     modelFactory;
     adapters = new Map();

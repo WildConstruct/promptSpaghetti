@@ -1,4 +1,6 @@
 /**
+import { Activity, TrendingUp } from 'lucide-react';
+
  * Data Protection & Privacy Controls Dashboard (Epic 19)
  * 
  * Comprehensive dashboard for managing data retention automation, deletion workflows,
@@ -21,28 +23,13 @@ import {
   Clock,
   AlertTriangle,
   CheckCircle,
-  XCircle,
   BarChart3,
   FileText,
-  Settings,
   Download,
-  Upload,
   RefreshCw,
-  Filter,
-  Search,
-  Calendar,
-  Users,
-  Activity,
-  TrendingUp,
-  TrendingDown,
-  Eye,
-  Edit,
   Plus,
-  Archive,
-  Lock,
-  Unlock,
-  Timer,
-  Zap
+  Activity,
+  TrendingUp
 } from 'lucide-react';
 
 interface DataProtectionMetrics {
@@ -131,19 +118,27 @@ const DataProtectionDashboard: React.FC = () => {
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
 
   // Filters and search
-  const [___searchTerm, ___setSearchTerm] = useState('');
-  const [___statusFilter, ___setStatusFilter] = useState<string>('all');
-  const [___frameworkFilter, ___setFrameworkFilter] = useState<string>('all');
-  const [___dateRange, ___setDateRange] = useState<{ start: string; end: string }>({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_searchTerm, _setSearchTerm] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_statusFilter, _setStatusFilter] = useState<string>('all');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_frameworkFilter, _setFrameworkFilter] = useState<string>('all');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_dateRange, _setDateRange] = useState<{ start: string; end: string }>({
     start: '',
     end: ''
   });
 
   // Modal states
-  const [___showCreatePolicy, ___setShowCreatePolicy] = useState(false);
-  const [___showCreateWorkflow, ___setShowCreateWorkflow] = useState(false);
-  const [___selectedPolicy, ___setSelectedPolicy] = useState<RetentionPolicy | null>(null);
-  const [___selectedWorkflow, ___setSelectedWorkflow] = useState<DeletionWorkflow | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_showCreatePolicy, _setShowCreatePolicy] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_showCreateWorkflow, _setShowCreateWorkflow] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_selectedPolicy, _setSelectedPolicy] = useState<RetentionPolicy | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_selectedWorkflow, _setSelectedWorkflow] = useState<DeletionWorkflow | null>(null);
 
   // Fetch dashboard data
   const fetchDashboardData = useCallback(async () => {

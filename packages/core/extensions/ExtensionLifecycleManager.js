@@ -2,7 +2,7 @@
  * Extension Lifecycle Manager - Epic 8.4 Story 8.4.2
  * Manages the complete lifecycle of extensions including loading, activation, and disposal
  */
-import { ExtensionLifecycleState, ExtensionError, ExtensionErrorType } from './interfaces/ExtensionInterfaces.js';
+import { ExtensionLifecycleState, ExtensionError, ExtensionErrorType } from './interfaces/ExtensionInterfaces';
 // Extension Lifecycle Manager
 export class ExtensionLifecycleManager {
     static instance;

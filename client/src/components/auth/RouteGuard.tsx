@@ -200,7 +200,7 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({
   } = useAuthStore();
   
   const [accessCheckStatus, setAccessCheckStatus] = useState<'checking' | 'granted' | 'denied' | 'unauthenticated'>('checking');
-  const [___customCheckResult, setCustomCheckResult] = useState<boolean | null>(null);
+  const [_customCheckResult, setCustomCheckResult] = useState<boolean | null>(null);
 
   // Determine access requirements for current route
   const routeAccess = access || DEFAULT_ROUTE_ACCESS[location.pathname] || { requireAuth: true };
@@ -396,33 +396,11 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({
 /**
  * Admin-only route protection
  */
-export const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <RouteGuard
-    access={{
-      requireAuth: true,
-      requiredRoles: ['admin'],
-      unauthorizedRedirect: '/unauthorized'
-    }}
-  >
-    {children}
-  </RouteGuard>
-);
-
+export 
 /**
  * Moderator or admin route protection
  */
-export const ModeratorRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <RouteGuard
-    access={{
-      requireAuth: true,
-      requiredRoles: ['moderator', 'admin'],
-      unauthorizedRedirect: '/unauthorized'
-    }}
-  >
-    {children}
-  </RouteGuard>
-);
-
+export 
 /**
  * Hook to check user permissions
  */

@@ -222,7 +222,7 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
     URL.revokeObjectURL(url);
   };
 
-  const handleEnrollmentComplete = (___methodType: MFAMethodType, ___configId: string) => {
+  const handleEnrollmentComplete = (_methodType: MFAMethodType, _configId: string) => {
     setState(prev => ({ ...prev, showEnrollment: false }));
     loadMFAData();
   };

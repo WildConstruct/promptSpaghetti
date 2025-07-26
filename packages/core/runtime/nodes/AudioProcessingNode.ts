@@ -167,7 +167,7 @@ export class TextToSpeechNode extends AdvancedRuntimeNode {
 
   private async _initializeAdapter(config: AudioConfig): Promise<void> {
     try {
-      let adapter: any;
+      let adapter: unknown;
 
       switch (config.provider) {
         case 'openai-tts':
@@ -207,7 +207,7 @@ export class TextToSpeechNode extends AdvancedRuntimeNode {
     return Array.from(this.adapters.keys())[0] || 'openai-tts';
   }
 
-  private _buildSynthesisOptions(provider: string, params: any): any {
+  private _buildSynthesisOptions(provider: string, params: unknown): unknown {
     const { text, voice, language, speed, pitch, volume, format } = params;
 
     switch (provider) {
@@ -362,7 +362,7 @@ export class AudioTranscriptionNode extends AdvancedRuntimeNode {
 
   private async _initializeAdapter(config: AudioConfig): Promise<void> {
     try {
-      let adapter: any;
+      let adapter: unknown;
 
       switch (config.provider) {
         case 'whisper':
@@ -391,7 +391,7 @@ export class AudioTranscriptionNode extends AdvancedRuntimeNode {
     return Array.from(this.adapters.keys())[0] || 'whisper';
   }
 
-  private _buildTranscriptionOptions(provider: string, params: any): any {
+  private _buildTranscriptionOptions(provider: string, params: unknown): unknown {
     const { language, task, format, temperature, prompt } = params;
 
     switch (provider) {
@@ -462,7 +462,7 @@ export class AudioAnalysisNode extends AdvancedRuntimeNode {
     }
   }
 
-  private async _analyzeAudio(audioFile: any, analysisType: string): Promise<AudioMetadata> {
+  private async _analyzeAudio(audioFile: Error, analysisType: string): Promise<AudioMetadata> {
     // Basic audio file analysis
     const size = audioFile instanceof ArrayBuffer ? audioFile.byteLength : (audioFile.size || 0);
     
@@ -604,7 +604,7 @@ export class AudioConversionNode extends AdvancedRuntimeNode {
     }
   }
 
-  private async _convertAudio(audioFile: any, options: any): Promise<ArrayBuffer> {
+  private async _convertAudio(audioFile: Error, options: unknown): Promise<ArrayBuffer> {
     // Placeholder implementation - in reality, this would use actual audio conversion
     // Libraries like FFmpeg, Web Audio API, or similar
     
@@ -619,7 +619,7 @@ export class AudioConversionNode extends AdvancedRuntimeNode {
     throw new Error('Unsupported audio file format for conversion');
   }
 
-  private _getFormatFromFile(audioFile: any): string {
+  private _getFormatFromFile(audioFile: Error): string {
     if (audioFile.type) {
       return audioFile.type.split('/')[1] || 'unknown';
     }

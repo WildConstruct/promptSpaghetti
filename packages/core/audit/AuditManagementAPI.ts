@@ -183,7 +183,7 @@ export class AuditManagementAPI {
    */
   async queryAuditEvents(request: AuditQueryRequestType): Promise<{
     success: boolean;
-    data?: any;
+    data?: unknown;
     error?: string;
   }> {
     try {

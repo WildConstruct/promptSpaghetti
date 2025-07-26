@@ -4,6 +4,7 @@
  * Service layer for integrating the real-time dashboard with existing
  * analytics routes and consolidating dashboard functionality.
  */
+import { AnalyticsEventType, EventCategory } from './UnifiedEventBus';
 /**
  * Dashboard Integration Service
  *
@@ -154,12 +155,12 @@ export class DashboardIntegrationService {
         const uniqueSessions = new Set(events.map(e => e.sessionId).filter(Boolean)).size;
         // Top sources from all integrated systems
         const sourceCounts = statistics.eventsBySource || {};
-        const totalSourceEvents = Object.values(sourceCounts).reduce((sum, count) => sum + count, 0);
+        const totalSourceEvents = Object.values(sourceCounts).reduce((sum, count) => sum + (typeof count === 'number' ? count : 0), 0);
         const topSources = Object.entries(sourceCounts)
             .map(([source, count]) => ({
             source,
-            count: count,
-            percentage: totalSourceEvents > 0 ? (count / totalSourceEvents) * 100 : 0
+            count: typeof count === 'number' ? count : 0,
+            percentage: totalSourceEvents > 0 ? ((typeof count === 'number' ? count : 0) / totalSourceEvents) * 100 : 0
         }))
             .sort((a, b) => b.count - a.count)
             .slice(0, 10);
@@ -190,21 +191,23 @@ export class DashboardIntegrationService {
      * Calculate business metrics from consolidated data
      */
     async calculateBusinessMetrics(events, filter) {
-        const businessEvents = events.filter(e => e.category === 'business' || e.category === 'user');
+        const businessEvents = events.filter(e => e.category === EventCategory.BUSINESS || e.category === EventCategory.USER);
         // Graph creation metrics
-        const graphEvents = events.filter(e => e.type === 'GRAPH_EXECUTION' || e.type === 'GRAPH_CREATED');
-        const graphsCreated = graphEvents.filter(e => e.type === 'GRAPH_CREATED').length;
-        const graphsExecuted = graphEvents.filter(e => e.type === 'GRAPH_EXECUTION').length;
+        const graphEvents = events.filter(e => e.type === AnalyticsEventType.GRAPH_EXECUTION || e.type === AnalyticsEventType.GRAPH_CREATED);
+        const graphsCreated = graphEvents.filter(e => e.type === AnalyticsEventType.GRAPH_CREATED).length;
+        const graphsExecuted = graphEvents.filter(e => e.type === AnalyticsEventType.GRAPH_EXECUTION).length;
         // Revenue metrics (from revenue analytics system)
         const revenueEvents = events.filter(e => e.source === 'RevenueAnalytics');
         const totalRevenue = revenueEvents.reduce((sum, event) => {
-            return sum + (event.data.amount || 0);
+            const amount = typeof event.data.amount === 'number' ? event.data.amount : 0;
+            return sum + amount;
         }, 0);
         // Feature usage metrics
         const featureUsage = {};
         events.forEach(event => {
-            if (event.data.feature) {
-                featureUsage[event.data.feature] = (featureUsage[event.data.feature] || 0) + 1;
+            const feature = typeof event.data.feature === 'string' ? event.data.feature : null;
+            if (feature) {
+                featureUsage[feature] = (featureUsage[feature] || 0) + 1;
             }
         });
         const topFeatures = Object.entries(featureUsage)
@@ -303,21 +306,21 @@ export class DashboardIntegrationService {
      */
     async getPerformanceWidgetData(filter, authContext) {
         const performanceEvents = await this.eventRepository.findMany({
-            filter: { ...filter, categories: ['performance'] },
+            filter: { ...filter, categories: [EventCategory.PERFORMANCE] },
             limit: 1000,
             sortBy: 'timestamp',
             sortOrder: 'desc'
         });
-        const timeSeriesData = await this.eventRepository.getTimeSeriesData('avg', 'minute', { ...filter, categories: ['performance'] });
+        const timeSeriesData = await this.eventRepository.getTimeSeriesData('avg', 'minute', { ...filter, categories: [EventCategory.PERFORMANCE] });
         // Calculate performance metrics
         const executionTimes = performanceEvents
-            .filter(e => e.data.executionTime)
+            .filter(e => typeof e.data.executionTime === 'number')
             .map(e => e.data.executionTime);
         const avgExecutionTime = executionTimes.length > 0
             ? executionTimes.reduce((sum, time) => sum + time, 0) / executionTimes.length
             : 0;
         const memoryUsage = performanceEvents
-            .filter(e => e.data.memoryUsage)
+            .filter(e => typeof e.data.memoryUsage === 'number')
             .map(e => e.data.memoryUsage);
         const avgMemoryUsage = memoryUsage.length > 0
             ? memoryUsage.reduce((sum, usage) => sum + usage, 0) / memoryUsage.length
@@ -338,7 +341,7 @@ export class DashboardIntegrationService {
      */
     async getIntegrationWidgetData(filter, authContext) {
         const integrationEvents = await this.eventRepository.findMany({
-            filter: { ...filter, categories: ['integration'] },
+            filter: { ...filter, categories: [EventCategory.INTEGRATION] },
             limit: 1000
         });
         const integrationStatus = {};
@@ -366,11 +369,11 @@ export class DashboardIntegrationService {
      */
     async getBusinessWidgetData(filter, authContext) {
         const businessEvents = await this.eventRepository.findMany({
-            filter: { ...filter, categories: ['business', 'user'] },
+            filter: { ...filter, categories: [EventCategory.BUSINESS, EventCategory.USER] },
             limit: 1000
         });
         const metrics = await this.calculateBusinessMetrics(businessEvents, filter);
-        const timeSeriesData = await this.eventRepository.getTimeSeriesData('count', 'hour', { ...filter, categories: ['business'] });
+        const timeSeriesData = await this.eventRepository.getTimeSeriesData('count', 'hour', { ...filter, categories: [EventCategory.BUSINESS] });
         return {
             ...metrics,
             timeSeriesData: timeSeriesData.map(point => ({
@@ -387,8 +390,8 @@ export class DashboardIntegrationService {
         const securityEvents = await this.eventRepository.findMany({
             filter: {
                 ...filter,
-                categories: ['security'],
-                types: ['SECURITY_EVENT', 'FRAUD_DETECTION', 'AUTH_EVENT']
+                categories: [EventCategory.SECURITY],
+                types: [AnalyticsEventType.SECURITY_EVENT, AnalyticsEventType.FRAUD_DETECTION, AnalyticsEventType.AUTH_EVENT]
             },
             limit: 100,
             sortBy: 'timestamp',
@@ -396,8 +399,8 @@ export class DashboardIntegrationService {
         });
         const riskLevels = { high: 0, medium: 0, low: 0 };
         securityEvents.forEach(event => {
-            const riskLevel = event.data.riskLevel || 'low';
-            if (riskLevels.hasOwnProperty(riskLevel)) {
+            const riskLevel = typeof event.data.riskLevel === 'string' ? event.data.riskLevel : 'low';
+            if (riskLevel in riskLevels) {
                 riskLevels[riskLevel]++;
             }
         });

@@ -2,7 +2,7 @@
  * Optimized Project Serialization System
  * Implements compression, binary formats, and incremental serialization for large graphs
  */
-import { OptimizedGraphStorage } from './OptimizedGraphStorage.js';
+import { OptimizedGraphStorage } from './OptimizedGraphStorage';
 /**
  * Performance-optimized serialization system
  */

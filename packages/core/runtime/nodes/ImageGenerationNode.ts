@@ -98,7 +98,7 @@ export class ImageGenerationNode extends AdvancedRuntimeNode {
       const generationTime = Date.now() - startTime;
 
       // Process results
-      const images: GeneratedImage[] = result.images.map((img: any) => ({
+      const images: GeneratedImage[] = result.images.map((img: unknown) => ({
         url: img.url,
         base64: img.base64,
         metadata: {
@@ -166,7 +166,7 @@ export class ImageGenerationNode extends AdvancedRuntimeNode {
 
   private async _initializeAdapter(config: ImageGenerationConfig): Promise<void> {
     try {
-      let adapter: any;
+      let adapter: unknown;
 
       switch (config.provider) {
         case 'dalle':
@@ -217,7 +217,7 @@ export class ImageGenerationNode extends AdvancedRuntimeNode {
     return Array.from(this.adapters.keys())[0] || 'dalle';
   }
 
-  private _buildGenerationOptions(provider: string, params: any): any {
+  private _buildGenerationOptions(provider: string, params: unknown): unknown {
     const { prompt, negativePrompt, width, height, style, quality, seed } = params;
 
     switch (provider) {
@@ -314,7 +314,7 @@ export class ImageVariationNode extends AdvancedRuntimeNode {
       // For now, use DALL-E 2 for variations (DALL-E 3 doesn't support variations)
       // In the future, could use Stable Diffusion img2img or other providers
 
-      const variations: any[] = [];
+      const variations: unknown[] = [];
       for (let i = 0; i < count; i++) {
         // Simulate variation generation
         variations.push({

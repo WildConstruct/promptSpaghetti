@@ -108,7 +108,7 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
       systemEvents.push({ type: event, data, timestamp: Date.now() });
     });
 
-    extensionSystem.lifecycle.getExtensionState.mockReturnValue('inactive' as unknown as unknown);
+    extensionSystem.lifecycle.getExtensionState.mockReturnValue('inactive' as unknown as unknown as unknown);
   });
 
   afterEach(async () => {
@@ -187,11 +187,11 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
       });
 
       // Mock sub-operations
-      extensionSystem.loader.loadPlugin.mockResolvedValue(manifest as unknown as unknown);
-      extensionSystem.loader.validatePlugin.mockReturnValue(true as unknown as unknown);
-      extensionSystem.resolver.resolveDependencies.mockResolvedValue([manifest] as unknown as unknown);
-      extensionSystem.lifecycle.registerExtension.mockResolvedValue(true as unknown as unknown);
-      extensionSystem.registry.register.mockReturnValue(true as unknown as unknown);
+      extensionSystem.loader.loadPlugin.mockResolvedValue(manifest as unknown as unknown as unknown);
+      extensionSystem.loader.validatePlugin.mockReturnValue(true as unknown as unknown as unknown);
+      extensionSystem.resolver.resolveDependencies.mockResolvedValue([manifest] as unknown as unknown as unknown);
+      extensionSystem.lifecycle.registerExtension.mockResolvedValue(true as unknown as unknown as unknown);
+      extensionSystem.registry.register.mockReturnValue(true as unknown as unknown as unknown);
 
       const result = await extensionSystem.installExtension(extensionSource);
       
@@ -241,9 +241,9 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
         }
       });
 
-      extensionSystem.loader.loadPlugin.mockResolvedValue({} as unknown as unknown);
-      extensionSystem.loader.validatePlugin.mockReturnValue(true as unknown as unknown);
-      extensionSystem.loader.unloadPlugin.mockResolvedValue(true as unknown as unknown);
+      extensionSystem.loader.loadPlugin.mockResolvedValue({} as unknown as unknown as unknown);
+      extensionSystem.loader.validatePlugin.mockReturnValue(true as unknown as unknown as unknown);
+      extensionSystem.loader.unloadPlugin.mockResolvedValue(true as unknown as unknown as unknown);
 
       await expect(extensionSystem.installExtension(failingSource))
         .rejects.toThrow('Dependency not found: missing-dep');
@@ -333,11 +333,11 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
         mockExtensions[0], // base-extension first
         mockExtensions[1], // ui-extension second
         mockExtensions[2]  // advanced-extension last
-      ] as unknown as unknown);
+      ] as unknown as unknown as unknown);
 
-      extensionSystem.loader.loadPlugin.mockResolvedValue({} as unknown as unknown);
-      extensionSystem.lifecycle.registerExtension.mockResolvedValue(true as unknown as unknown);
-      extensionSystem.registry.register.mockReturnValue(true as unknown as unknown);
+      extensionSystem.loader.loadPlugin.mockResolvedValue({} as unknown as unknown as unknown);
+      extensionSystem.lifecycle.registerExtension.mockResolvedValue(true as unknown as unknown as unknown);
+      extensionSystem.registry.register.mockReturnValue(true as unknown as unknown as unknown);
 
       const results = await extensionSystem.installMultiple(extensionSources);
       
@@ -511,7 +511,7 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
       
       // Mock system state before shutdown
       extensionSystem.registry.getAllRegistered.mockReturnValue(
-        activeExtensions.map(id => ({ id, state: 'active' } as unknown as unknown))
+        activeExtensions.map(id => ({ id, state: 'active' } as unknown as unknown as unknown))
       );
 
       extensionSystem.shutdown.mockImplementationOnce(async () => {
@@ -646,7 +646,7 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
       
       const systemHealth = { status: 'healthy', activeExtensions: 0, errors: 0 };
 
-      extensionSystem.getSystemHealth.mockReturnValue(systemHealth as unknown as unknown);
+      extensionSystem.getSystemHealth.mockReturnValue(systemHealth as unknown as unknown as unknown);
 
       extensionSystem.enableExtension.mockImplementation(async (id: string) => {
         if (faultyExtensions.includes(id)) {

@@ -40,7 +40,7 @@ describe('AutomatedEnforcementService', () => {
     };
 
     mockDatabase = {
-      getClient: jest.fn<unknown[], unknown>().mockResolvedValue(mockClient as unknown as unknown as unknown as unknown),
+      getClient: jest.fn<unknown[], unknown>().mockResolvedValue(mockClient as unknown as unknown as unknown as unknown as unknown),
       query: jest.fn<unknown[], unknown>()
     } as any;
 
@@ -232,7 +232,7 @@ describe('AutomatedEnforcementService', () => {
       mockTrustScoreService.calculateUserTrustScore.mockResolvedValue({
         ...userTrustScore,
         score: 95 // High trust user
-      } as unknown as unknown as unknown as unknown);
+      } as unknown as unknown as unknown as unknown as unknown);
 
       // Act
       const actions = await enforcementService.enforceUserTrustPolicies(userTrustScore);
@@ -528,7 +528,7 @@ describe('AutomatedEnforcementService', () => {
         calculationMethod: 'comprehensive'
       };
 
-      mockTrustScoreService.calculateUserTrustScore.mockResolvedValue(userTrustScore as unknown as unknown as unknown as unknown);
+      mockTrustScoreService.calculateUserTrustScore.mockResolvedValue(userTrustScore as unknown as unknown as unknown as unknown as unknown);
       
       mockClient.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
@@ -566,7 +566,7 @@ describe('AutomatedEnforcementService', () => {
         warnings: []
       };
 
-      mockTrustScoreService.calculateTemplateTrustScore.mockResolvedValue(templateTrustScore as unknown as unknown as unknown as unknown);
+      mockTrustScoreService.calculateTemplateTrustScore.mockResolvedValue(templateTrustScore as unknown as unknown as unknown as unknown as unknown);
       
       mockClient.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN

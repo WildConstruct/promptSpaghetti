@@ -25,7 +25,7 @@ const COLOR_SCHEMES = {
         '#6495ed', '#00bfff', '#1e90ff', '#87ceeb', '#87cefa'
     ]
 };
-export const WeightDistributionChart = ({ options, type = 'pie', width = 240, height = 240, showLabels = true, showPercentages = true, showLegend = false, colorScheme = 'cinema4d', animationDuration = 300, onOptionHover, onOptionClick }) => {
+export const WeightDistributionChart = ({ options, type = 'pie', width = 240, height = 240, showLabels = true, showPercentages = true, showLegend = false, colorScheme = 'cinema4d', animationDuration = 300, onOptionHover, onOptionClick }: { options: any[], type?: string, width?: number, height?: number, showLabels?: boolean, showPercentages?: boolean, showLegend?: boolean, colorScheme?: string, animationDuration?: number, onOptionHover?: (option: any) => void, onOptionClick?: (option: any) => void }) => {
     const [hoveredOption, setHoveredOption] = useState(null);
     // Calculate normalized weights and percentages
     const processedOptions = useMemo(() => {
@@ -44,11 +44,11 @@ export const WeightDistributionChart = ({ options, type = 'pie', width = 240, he
         });
     }, [options, colorScheme]);
     // Handle option interactions
-    const handleOptionHover = useCallback((option) => {
+    const handleOptionHover = useCallback((option: any) => {
         setHoveredOption(option?.id || null);
         onOptionHover?.(option);
     }, [onOptionHover]);
-    const handleOptionClick = useCallback((option) => {
+    const handleOptionClick = useCallback((option: any) => {
         onOptionClick?.(option);
     }, [onOptionClick]);
     // Pie Chart Component
@@ -157,7 +157,7 @@ export const WeightDistributionChart = ({ options, type = 'pie', width = 240, he
                 fontStyle: 'italic'
             }, children: "No options to visualize" }));
     }
-    return (_jsxs("div", { style: { position: 'relative' }, children: [_jsx("svg", { width: width, height: height, style: {
+    return (_jsxs("div", { style: { position: 'relative' }, children: [_jsx("svg", { width: width, height: height, role: "img", style: {
                     background: 'transparent',
                     overflow: 'visible'
                 }, children: type === 'bar' ? _jsx(BarChart, {}) : _jsx(PieChart, {}) }), showLegend && _jsx(Legend, {}), hoveredOption && (_jsxs("div", { style: {

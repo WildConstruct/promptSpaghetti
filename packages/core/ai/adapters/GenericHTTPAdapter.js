@@ -4,7 +4,7 @@
  *
  * Flexible adapter for custom AI model endpoints following REST conventions
  */
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel.js';
+import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
 export class GenericHTTPAdapter extends BaseAIModel {
     config;
     requestMapping;

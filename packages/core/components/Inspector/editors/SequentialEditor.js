@@ -1,9 +1,10 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { TextFieldEditor } from '../TextFieldEditor.js';
-import { SelectEditor } from '../SelectEditor.js';
-import { VariationList } from '../VariationList.js';
-import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection.js';
-import { WeightSlider } from '../WeightSlider.js';
+import { TextFieldEditor } from '../TextFieldEditor';
+import { SelectEditor } from '../SelectEditor';
+import { VariationList } from '../VariationList';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
+import { WeightSlider } from '../WeightSlider';
+import { useContextualHelp } from '../../Help';
 /**
  * Epic 8.4 - Sequential Editor with Progressive Disclosure
  *
@@ -76,7 +77,44 @@ export const SequentialEditor = ({ _____nodeId, nodeData, onChange }) => {
         { value: 'random', label: 'Random - Random selection' },
         { value: 'weighted', label: 'Weighted - Probability-based selection' }
     ];
-    return (_jsxs("div", { className: "sequential-editor", children: [_jsxs(ProgressiveDisclosureSection, { title: "Essential Settings", level: "basic", description: "Core sequence configuration for storytelling", defaultExpanded: true, priority: "critical", fieldName: "sequence", children: [_jsx("div", { style: { marginBottom: 16 }, children: _jsx(TextFieldEditor, { label: "Sequence Name", value: name, fieldKey: "name", zodType: null, onChange: handleNameChange, placeholder: "e.g., Dialogue Styles, Scene Transitions, Character Arcs" }) }), _jsxs("div", { style: { marginBottom: 8 }, children: [_jsx("label", { style: {
+    // Contextual help for the sequence name field
+    const { wrapWithHelp: wrapNameHelp } = useContextualHelp({
+        id: 'sequential-sequence-name',
+        title: 'Sequence Name',
+        description: 'Give your sequential node a descriptive name that explains what sequence it manages.',
+        category: 'basic',
+        trigger: 'focus',
+        position: 'right',
+        showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
+        examples: ['Dialogue Styles', 'Scene Transitions', 'Character Arcs'],
+        priority: 'high'
+    });
+    // Contextual help for sequence items
+    const { wrapWithHelp: wrapItemsHelp } = useContextualHelp({
+        id: 'sequential-sequence-items',
+        title: 'Sequence Items',
+        description: 'Add items that will be cycled through in your chosen pattern. The order matters for linear and cyclical patterns.',
+        category: 'basic',
+        trigger: 'hover',
+        position: 'left',
+        showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
+        examples: ['Dramatic pause', 'Quick cut', 'Character entrance'],
+        relatedFeatures: ['drag-reorder', 'pattern-selection'],
+        priority: 'high'
+    });
+    // Contextual help for pattern selection
+    const { wrapWithHelp: wrapPatternHelp } = useContextualHelp({
+        id: 'sequential-pattern-selection',
+        title: 'Selection Method',
+        description: 'Choose how items are selected from your sequence. Linear goes in order, cyclical repeats infinitely, random is unpredictable, and weighted uses probability.',
+        category: 'advanced',
+        trigger: 'hover',
+        position: 'top',
+        showOnDisclosureLevel: ['advanced', 'debug'],
+        examples: ['Linear: 1→2→3→3...', 'Cyclical: 1→2→3→1→2...', 'Random: 2→1→3→1...'],
+        priority: 'medium'
+    });
+    return (_jsxs("div", { className: "sequential-editor", children: [_jsxs(ProgressiveDisclosureSection, { title: "Essential Settings", level: "basic", description: "Core sequence configuration for storytelling", defaultExpanded: true, priority: "critical", fieldName: "sequence", children: [wrapNameHelp(_jsx("div", { style: { marginBottom: 16 }, children: _jsx(TextFieldEditor, { label: "Sequence Name", value: name, fieldKey: "name", zodType: null, onChange: handleNameChange, placeholder: "e.g., Dialogue Styles, Scene Transitions, Character Arcs" }) })), wrapItemsHelp(_jsxs("div", { style: { marginBottom: 8 }, children: [_jsx("label", { style: {
                                     display: 'block',
                                     fontWeight: 500,
                                     marginBottom: 8,
@@ -98,11 +136,11 @@ export const SequentialEditor = ({ _____nodeId, nodeData, onChange }) => {
                                     fontSize: 10,
                                     color: '#a0aec0',
                                     marginTop: 4
-                                }, children: "Add items that will be cycled through in your chosen pattern" })] })] }), _jsxs(ProgressiveDisclosureSection, { title: "Sequence Pattern", level: "advanced", description: "Control how items are selected from the sequence", defaultExpanded: false, priority: "important", fieldName: "patternType", children: [_jsxs("div", { style: { marginBottom: 16 }, children: [_jsx(SelectEditor, { label: "Selection Method", value: patternType, fieldKey: "patternType", zodType: null, onChange: handlePatternTypeChange, options: patternOptions }), _jsx("div", { style: {
+                                }, children: "Add items that will be cycled through in your chosen pattern" })] }))] }), _jsxs(ProgressiveDisclosureSection, { title: "Sequence Pattern", level: "advanced", description: "Control how items are selected from the sequence", defaultExpanded: false, priority: "important", fieldName: "patternType", children: [wrapPatternHelp(_jsxs("div", { style: { marginBottom: 16 }, children: [_jsx(SelectEditor, { label: "Selection Method", value: patternType, fieldKey: "patternType", zodType: null, onChange: handlePatternTypeChange, options: patternOptions }), _jsx("div", { style: {
                                     fontSize: 10,
                                     color: '#a0aec0',
                                     marginTop: 4
-                                }, children: "Choose how the system selects items from your sequence" })] }), patternType === 'weighted' && sequence.length > 0 && (_jsxs("div", { style: { marginBottom: 16 }, children: [_jsx("label", { style: {
+                                }, children: "Choose how the system selects items from your sequence" })] })), patternType === 'weighted' && sequence.length > 0 && (_jsxs("div", { style: { marginBottom: 16 }, children: [_jsx("label", { style: {
                                     display: 'block',
                                     fontWeight: 500,
                                     marginBottom: 8,

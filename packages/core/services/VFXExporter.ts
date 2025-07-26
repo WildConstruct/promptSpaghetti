@@ -6,15 +6,12 @@ import {
   VFXExporter, 
   VFXExportOptions, 
   VFXValidationResult,
-  VFXExportQuality,
   VFXPromptVariant,
   VFXGraphNode,
   VFXGraphConnection,
-  VFXExecutionIteration,
   VFXRenderingData
 } from '../types/VFXExport';
 import { Node, Edge } from 'reactflow';
-import { substituteVariables } from '../utils/templateParser';
 import seedrandom from 'seedrandom';
 
 export class WildConstructVFXExporter implements VFXExporter {
@@ -147,8 +144,7 @@ export class WildConstructVFXExporter implements VFXExporter {
 
   private buildPromptData(
     graph: { nodes: Node[]; edges: Edge[] },
-    executionResults?: any,
-    options?: VFXExportOptions
+    executionResults?: Record<string, unknown>
   ) {
     const finalPrompt = executionResults?.finalPrompt || 'No prompt generated';
     const variables = executionResults?.variables || {};
@@ -188,7 +184,7 @@ export class WildConstructVFXExporter implements VFXExporter {
   }
 
   private buildVariableData(variables: Record<string, string>) {
-    const result: any = {};
+    const result: Record<string, { value: string; source: 'user'; alternatives: string[]; confidence: number }> = {};
     
     for (const [name, value] of Object.entries(variables)) {
       result[name] = {
@@ -1064,8 +1060,5 @@ This export is ready for integration into VFX pipelines and supports Wild Constr
 export const vfxExporter = WildConstructVFXExporter.getInstance();
 
 // Export utility functions
-export const generateVFXDocumentation = (exportData: VFXExportFormat): string =>
-  vfxExporter.generateDocumentation(exportData);
-
-export const validateVFXExport = (exportData: VFXExportFormat): VFXValidationResult =>
-  vfxExporter.validateExport(exportData);
+export 
+export   vfxExporter.validateExport(exportData);

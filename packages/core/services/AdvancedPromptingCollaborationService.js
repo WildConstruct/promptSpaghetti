@@ -13,16 +13,16 @@ import { EventEmitter } from 'events';
  * language patterns, and VFX pipeline integration.
  */
 export class AdvancedPromptingCollaborationService extends EventEmitter {
-    sessions = new Map();
-    users = new Map();
-    templates = new Map();
-    marsRegionTemplates = new Map();
-    zadaPatterns = new Map();
+    sessions: Map<string, any> = new Map();
+    users: Map<string, any> = new Map();
+    templates: Map<string, any> = new Map();
+    marsRegionTemplates: Map<string, any> = new Map();
+    zadaPatterns: Map<string, any> = new Map();
     constructor() {
         super();
         this.initializeDefaults();
     }
-    initializeDefaults() {
+    initializeDefaults(): void {
         // Initialize MARS region templates
         this.initializeMARSRegionTemplates();
         // Initialize Zada prompt patterns
@@ -30,7 +30,7 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
         // Initialize film industry workflow templates
         this.initializeWorkflowTemplates();
     }
-    initializeMARSRegionTemplates() {
+    initializeMARSRegionTemplates(): void {
         const marsTemplates = [
             {
                 id: 'mars-camera-zone',

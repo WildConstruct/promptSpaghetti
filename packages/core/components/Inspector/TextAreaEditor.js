@@ -1,6 +1,6 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React from 'react';
-export const TextAreaEditor = ({ label, value, fieldKey, error, onChange, placeholder, disabled = false, rows = 4, maxLength, minLength, autoResize = false, showWordCount = false }) => {
+export const TextAreaEditor = ({ label, value, fieldKey, error, onChange, placeholder, disabled = false, rows = 4, maxLength, minLength, autoResize = false, showWordCount = false }: { label: string, value: any, fieldKey: string, error?: string, onChange: (value: string) => void, placeholder?: string, disabled?: boolean, rows?: number, maxLength?: number, minLength?: number, autoResize?: boolean, showWordCount?: boolean }) => {
     const [localValue, setLocalValue] = React.useState(String(value ?? ''));
     const [isFocused, setIsFocused] = React.useState(false);
     const textareaRef = React.useRef(null);
@@ -16,11 +16,11 @@ export const TextAreaEditor = ({ label, value, fieldKey, error, onChange, placeh
             textarea.style.height = `${textarea.scrollHeight}px`;
         }
     }, [localValue, autoResize]);
-    const handleChange = (newValue) => {
+    const handleChange = (newValue: string) => {
         setLocalValue(newValue);
         onChange(newValue);
     };
-    const getWordCount = (text) => {
+    const getWordCount = (text: string) => {
         return text.trim().split(/\s+/).filter(word => word.length > 0).length;
     };
     const inputId = `field-${fieldKey}`;

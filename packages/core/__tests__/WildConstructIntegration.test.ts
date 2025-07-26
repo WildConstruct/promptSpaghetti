@@ -103,7 +103,7 @@ describe('Wild Construct Integration Framework', () => {
     let mockCrowdControlAPI: jest.MockedFunction<any>;
     
     beforeEach(() => {
-      mockCrowdControlAPI = jest.fn<unknown[], unknown>().mockResolvedValue(mockAPIResponse as unknown);
+      mockCrowdControlAPI = jest.fn<unknown[], unknown>().mockResolvedValue(mockAPIResponse as unknown as unknown);
     });
 
     it('should generate historically accurate crowd data', async () => {

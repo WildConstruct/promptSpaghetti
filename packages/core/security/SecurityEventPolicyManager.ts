@@ -845,9 +845,7 @@ export const defaultPolicyManagerConfig: PolicyManagerConfig = {
 export const securityEventPolicyManager = new SecurityEventPolicyManager(defaultPolicyManagerConfig);
 
 // Utility functions for common operations
-export 
 export const queueSecurityEvent = (event: SecurityEvent) =>
   securityEventPolicyManager.queueSecurityEvent(event);
 
-export 
 export default SecurityEventPolicyManager;

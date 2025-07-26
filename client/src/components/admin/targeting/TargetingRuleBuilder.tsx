@@ -68,14 +68,7 @@ const OPERATORS = {
   not_exists: { label: 'Not Exists', symbol: '∄', description: 'Attribute is missing' }
 };
 
-export const TargetingRuleBuilder: React.FC<TargetingRuleBuilderProps> = ({
-  initialRules = [],
-  onRulesChange,
-  segments = [],
-  onTestRule
-}) => {
-  const [rules, setRules] = useState<TargetingRule[]>(initialRules);
-  const [testResult, setTestResult] = useState<{ matches: boolean; userCount: number } | null>(null);
+export   const [testResult, setTestResult] = useState<{ matches: boolean; userCount: number } | null>(null);
   const [testing, setTesting] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
 
@@ -350,7 +343,7 @@ export const TargetingRuleBuilder: React.FC<TargetingRuleBuilderProps> = ({
                       <select
                         value={rule.operator}
                         onChange={(e) => updateRule(rule.id, { 
-                          operator: e.target.value as any,
+                          operator: e.target.value as 'equals' | 'not_equals' | 'in' | 'not_in' | 'greater_than' | 'less_than' | 'contains' | 'regex' | 'exists' | 'not_exists',
                           value: '' // Reset value when operator changes
                         })}
                         className="rule-input"
