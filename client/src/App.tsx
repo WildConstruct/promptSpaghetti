@@ -126,8 +126,8 @@ function MainApp(): React.ReactElement {
       <div style={{ 
         display: 'flex', 
         justifyContent: 'space-between',
-        borderBottom: '1px solid #ccc', 
-        backgroundColor: '#f5f5f5',
+        borderBottom: '1px solid var(--color-ui-border, #404040)', 
+        backgroundColor: 'var(--color-bg-secondary, #2a2a2a)',
         padding: '0'
       }}>
         <div style={{ display: 'flex' }}>
@@ -136,11 +136,12 @@ function MainApp(): React.ReactElement {
             style={{
               padding: '10px 20px',
               border: 'none',
-              backgroundColor: activeTab === 'editor' ? '#fff' : 'transparent',
-              borderBottom: activeTab === 'editor' ? '2px solid #007bff' : '2px solid transparent',
+              backgroundColor: activeTab === 'editor' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
+              borderBottom: activeTab === 'editor' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
               cursor: 'pointer',
               fontSize: '14px',
-              fontWeight: activeTab === 'editor' ? 'bold' : 'normal'
+              fontWeight: activeTab === 'editor' ? 'bold' : 'normal',
+              color: 'var(--color-text-primary, #e8e8e8)'
             }}
           >
             Graph Editor
@@ -150,14 +151,30 @@ function MainApp(): React.ReactElement {
             style={{
               padding: '10px 20px',
               border: 'none',
-              backgroundColor: activeTab === 'randomizer' ? '#fff' : 'transparent',
-              borderBottom: activeTab === 'randomizer' ? '2px solid #007bff' : '2px solid transparent',
+              backgroundColor: activeTab === 'randomizer' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
+              borderBottom: activeTab === 'randomizer' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
               cursor: 'pointer',
               fontSize: '14px',
-              fontWeight: activeTab === 'randomizer' ? 'bold' : 'normal'
+              fontWeight: activeTab === 'randomizer' ? 'bold' : 'normal',
+              color: 'var(--color-text-primary, #e8e8e8)'
             }}
           >
             LLM Randomizer
+          </button>
+          <button
+            onClick={() => handleTabChange('files')}
+            style={{
+              padding: '10px 20px',
+              border: 'none',
+              backgroundColor: activeTab === 'files' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
+              borderBottom: activeTab === 'files' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: activeTab === 'files' ? 'bold' : 'normal',
+              color: 'var(--color-text-primary, #e8e8e8)'
+            }}
+          >
+            Files
           </button>
         </div>
           
@@ -174,18 +191,101 @@ function MainApp(): React.ReactElement {
             initialNodes={(generatedGraph as { nodes?: unknown[] })?.nodes || []}
             initialEdges={(generatedGraph as { edges?: unknown[] })?.edges || []}
           />
-        ) : (
+        ) : activeTab === 'randomizer' ? (
           <div style={{ 
             padding: '20px', 
             height: '100%', 
             overflow: 'auto',
-            backgroundColor: '#f8f9fa'
+            backgroundColor: 'var(--color-bg-primary, #1e1e1e)'
           }}>
             <RandomizerPanel
               onGraphGenerated={handleGraphGenerated}
               onError={handleRandomizerError}
               className="randomizer-main"
             />
+          </div>
+        ) : (
+          <div style={{ 
+            padding: '20px', 
+            height: '100%', 
+            overflow: 'auto',
+            backgroundColor: 'var(--color-bg-primary, #1e1e1e)',
+            color: 'var(--color-text-primary, #e8e8e8)'
+          }}>
+            <div style={{
+              fontSize: '24px',
+              fontWeight: 'bold',
+              marginBottom: '20px',
+              color: 'var(--color-text-primary, #e8e8e8)'
+            }}>
+              📁 File Browser
+            </div>
+            <div style={{
+              fontSize: '16px',
+              color: 'var(--color-text-secondary, #b8b8b8)',
+              marginBottom: '30px'
+            }}>
+              Manage your saved graphs and project files
+            </div>
+            
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+              gap: '16px',
+              marginBottom: '30px'
+            }}>
+              <div style={{
+                background: 'var(--color-bg-secondary, #2a2a2a)',
+                border: '1px solid var(--color-ui-border, #404040)',
+                borderRadius: '8px',
+                padding: '16px',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              }}>
+                <div style={{ fontSize: '18px', marginBottom: '8px' }}>📊 Recent Graphs</div>
+                <div style={{ fontSize: '14px', color: 'var(--color-text-secondary, #b8b8b8)' }}>
+                  View and load recently saved graphs
+                </div>
+              </div>
+              
+              <div style={{
+                background: 'var(--color-bg-secondary, #2a2a2a)',
+                border: '1px solid var(--color-ui-border, #404040)',
+                borderRadius: '8px',
+                padding: '16px',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              }}>
+                <div style={{ fontSize: '18px', marginBottom: '8px' }}>📂 Project Templates</div>
+                <div style={{ fontSize: '14px', color: 'var(--color-text-secondary, #b8b8b8)' }}>
+                  Browse pre-built graph templates
+                </div>
+              </div>
+              
+              <div style={{
+                background: 'var(--color-bg-secondary, #2a2a2a)',
+                border: '1px solid var(--color-ui-border, #404040)',
+                borderRadius: '8px',
+                padding: '16px',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              }}>
+                <div style={{ fontSize: '18px', marginBottom: '8px' }}>💾 Export/Import</div>
+                <div style={{ fontSize: '14px', color: 'var(--color-text-secondary, #b8b8b8)' }}>
+                  Manage file imports and exports
+                </div>
+              </div>
+            </div>
+            
+            <div style={{
+              fontSize: '14px',
+              color: 'var(--color-text-secondary, #b8b8b8)',
+              fontStyle: 'italic',
+              textAlign: 'center',
+              padding: '20px'
+            }}>
+              Professional file management coming soon - use save/load in the Graph Editor for now
+            </div>
           </div>
         )}
       </div>

@@ -94,7 +94,7 @@ const professionalShadows = {
   node: {
     default: '0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2)',
     hover: '0 8px 25px rgba(0, 0, 0, 0.45), 0 4px 10px rgba(0, 0, 0, 0.25)',
-    selected: '0 0 0 2px #ff7c00, 0 8px 25px rgba(255, 124, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.4)',
+    selected: '0 8px 25px rgba(255, 124, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.4)',
   }
 };
 
@@ -1848,28 +1848,52 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({
                   left: '200px',
                   width: '200px',
                   height: '150px',
-                  background: '#ffffaa',
-                  boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
-                  padding: '10px',
-                  fontSize: '14px',
-                  fontFamily: 'Arial',
+                  background: professionalColors.accent.orange + '20',
+                  border: `2px solid ${professionalColors.accent.orange}`,
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
+                  padding: '12px',
+                  fontSize: '13px',
+                  fontFamily: 'var(--font-family-primary)',
+                  color: professionalColors.text.primary,
                   pointerEvents: 'auto',
                   cursor: 'move',
-                  border: '1px solid #d4d4aa',
+                  backdropFilter: 'blur(8px)',
+                  transition: 'all 0.2s ease',
                 }}
                 onDoubleClick={(e) => {
                   const target = e.target as HTMLElement;
                   if (target.contentEditable !== 'true') {
                     target.contentEditable = 'true';
                     target.focus();
+                    target.style.background = professionalColors.accent.orange + '40';
                   }
                 }}
                 onBlur={(e) => {
                   const target = e.target as HTMLElement;
                   target.contentEditable = 'false';
+                  target.style.background = professionalColors.accent.orange + '20';
+                }}
+                onMouseDown={(e) => {
+                  const note = e.currentTarget;
+                  const startX = e.clientX - note.offsetLeft;
+                  const startY = e.clientY - note.offsetTop;
+                  
+                  const handleMouseMove = (e: MouseEvent) => {
+                    note.style.left = (e.clientX - startX) + 'px';
+                    note.style.top = (e.clientY - startY) + 'px';
+                  };
+                  
+                  const handleMouseUp = () => {
+                    document.removeEventListener('mousemove', handleMouseMove);
+                    document.removeEventListener('mouseup', handleMouseUp);
+                  };
+                  
+                  document.addEventListener('mousemove', handleMouseMove);
+                  document.addEventListener('mouseup', handleMouseUp);
                 }}
               >
-                Double-click to edit this note. This is a demo sticky note for the graph editor.
+                💡 Double-click to edit this professional sticky note. Drag to move around the canvas.
               </div>
               
               <div 
@@ -1879,28 +1903,52 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({
                   left: '400px',
                   width: '180px',
                   height: '120px',
-                  background: '#aaffaa',
-                  boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
-                  padding: '10px',
-                  fontSize: '14px',
-                  fontFamily: 'Arial',
+                  background: professionalColors.accent.green + '20',
+                  border: `2px solid ${professionalColors.accent.green}`,
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
+                  padding: '12px',
+                  fontSize: '13px',
+                  fontFamily: 'var(--font-family-primary)',
+                  color: professionalColors.text.primary,
                   pointerEvents: 'auto',
                   cursor: 'move',
-                  border: '1px solid #aaddaa',
+                  backdropFilter: 'blur(8px)',
+                  transition: 'all 0.2s ease',
                 }}
                 onDoubleClick={(e) => {
                   const target = e.target as HTMLElement;
                   if (target.contentEditable !== 'true') {
                     target.contentEditable = 'true';
                     target.focus();
+                    target.style.background = professionalColors.accent.green + '40';
                   }
                 }}
                 onBlur={(e) => {
                   const target = e.target as HTMLElement;
                   target.contentEditable = 'false';
+                  target.style.background = professionalColors.accent.green + '20';
+                }}
+                onMouseDown={(e) => {
+                  const note = e.currentTarget;
+                  const startX = e.clientX - note.offsetLeft;
+                  const startY = e.clientY - note.offsetTop;
+                  
+                  const handleMouseMove = (e: MouseEvent) => {
+                    note.style.left = (e.clientX - startX) + 'px';
+                    note.style.top = (e.clientY - startY) + 'px';
+                  };
+                  
+                  const handleMouseUp = () => {
+                    document.removeEventListener('mousemove', handleMouseMove);
+                    document.removeEventListener('mouseup', handleMouseUp);
+                  };
+                  
+                  document.addEventListener('mousemove', handleMouseMove);
+                  document.addEventListener('mouseup', handleMouseUp);
                 }}
               >
-                Green note: Check panel weight distribution for better randomization.
+                ✅ Note: Check panel weight distribution for better randomization results.
               </div>
             </div>
           )}
