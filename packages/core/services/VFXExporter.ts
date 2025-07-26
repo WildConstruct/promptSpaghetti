@@ -1060,5 +1060,4 @@ This export is ready for integration into VFX pipelines and supports Wild Constr
 export const vfxExporter = WildConstructVFXExporter.getInstance();
 
 // Export utility functions
-export 
-export   vfxExporter.validateExport(exportData);
+export export const createVFXExport = (graphData: any) => vfxExporter.createExport(graphData);

@@ -8,11 +8,10 @@
  * Task: T-1752989143998-325
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { GranularConsentInterface } from '../consent/GranularConsentInterface';
 import { 
   UserPreferences, 
-  PrivacySettings, 
   CommunicationPreferences,
   NotificationSettings,
   DataManagementSettings,
@@ -42,9 +41,7 @@ interface TabConfig {
   description: string;
 }
 
-export const PreferenceCenter: React.FC<PreferenceCenterProps> = ({ userId, onClose, initialTab = 'privacy' }) => {
-  const [activeTab, setActiveTab] = useState<PreferenceTab>(initialTab);
-  const [preferences, setPreferences] = useState<UserPreferences | null>(null);
+export   const [preferences, setPreferences] = useState<UserPreferences | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -97,9 +94,9 @@ export const PreferenceCenter: React.FC<PreferenceCenterProps> = ({ userId, onCl
 
   useEffect(() => {
     loadUserPreferences();
-  }, [userId]);
+  }, [loadUserPreferences]);
 
-  const loadUserPreferences = async () => {
+  const loadUserPreferences = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/users/${userId}/preferences`);
@@ -112,7 +109,7 @@ export const PreferenceCenter: React.FC<PreferenceCenterProps> = ({ userId, onCl
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
 
   const updatePreferences = (section: keyof UserPreferences, updates: Partial<unknown>) => {
     if (!preferences) return;

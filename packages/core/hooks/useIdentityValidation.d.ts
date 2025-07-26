@@ -54,7 +54,7 @@ export declare const useIdentityValidation: (config?: IdentityValidationHookConf
     isProfessionalVerified: boolean;
     isSocialVerified: boolean;
     isPortfolioVerified: boolean;
-    trustLevel: "professional" | "expert" | "basic" | "verified" | "unverified";
+    trustLevel: "professional" | "basic" | "expert" | "verified" | "unverified";
     trustPercentage: number;
     canAccessPremiumFeatures: boolean;
     canSellTemplates: boolean;

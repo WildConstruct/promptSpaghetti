@@ -48,14 +48,12 @@ export const ShoppingCart: React.FC<ShoppingCartProps> = ({
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _formatLicenseType = (licenseType: LicenseType): string => {
     return licenseType
       .split('_')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
-  };
-
-      return descriptions[licenseType] || '';
   };
 
   const subtotal = cart?.items.reduce((sum, item) => 
@@ -185,6 +183,7 @@ const CartItemComponent: React.FC<CartItemComponentProps> = ({
     });
   }, [item.template_id]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _formatLicenseType = (licenseType: LicenseType): string => {
     return licenseType
       .split('_')
@@ -297,3 +296,4 @@ const CartItemComponent: React.FC<CartItemComponentProps> = ({
     </div>
   );
 };
+export default ShoppingCart;

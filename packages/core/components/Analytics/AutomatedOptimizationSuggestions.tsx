@@ -1099,64 +1099,8 @@ export interface OptimizationSuggestionsExportData {
 }
 
 // Default configuration
-const defaultOptimizationConfig: OptimizationConfiguration = {
-  enabledSuggestionTypes: [
-    'conversion_optimization',
-    'user_experience_improvement',
-    'performance_enhancement',
-    'ab_test_opportunity'
-  ],
-  automationSettings: {
-    enableAutomatedImplementation: true,
-    automationLevel: 'semi_automated',
-    riskTolerance: 'moderate',
-    approvalRequired: true,
-    rollbackEnabled: true,
-    testingRequired: true,
-    minimumConfidence: 0.8,
-    maximumImpact: 0.1
-  },
-  alertThresholds: [
-    { metric: 'conversion_rate', condition: 'change_exceeds', value: 0.1, timeframe: 24, severity: 'warning', actionRequired: true },
-    { metric: 'revenue', condition: 'below', value: 1000, timeframe: 48, severity: 'critical', actionRequired: true }
-  ],
-  learningModels: [
-    {
-      modelId: 'conversion_predictor',
-      modelType: 'conversion_prediction',
-      enabled: true,
-      confidence: 0.87,
-      accuracy: 0.84,
-      lastTraining: Date.now() - 24 * 60 * 60 * 1000,
-      dataRequirements: [
-        { dataType: 'conversion_events', minimumSampleSize: 1000, freshness: 24, quality: 0.9 }
-      ]
-    }
-  ],
-  integrations: [],
-  constraints: [
-    {
-      constraintId: 'budget_limit',
-      type: 'budget_limit',
-      description: 'Maximum budget per optimization action',
-      parameters: [
-        { parameter: 'max_cost', value: 1000, required: true }
-      ],
-      enabled: true,
-      priority: 1
-    }
-  ],
-  performance: {
-    updateFrequency: 300, // 5 minutes
-    batchSize: 50,
-    maxConcurrentSuggestions: 10,
-    suggestionLifetime: 72, // 3 days
-    cacheDuration: 15 // 15 minutes
-  }
-};
 
-export   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'suggestions' | 'actions' | 'experiments' | 'insights'>('suggestions');
   const [filterPriority, setFilterPriority] = useState<SuggestionPriority | 'all'>('all');
   const [filterStatus, setFilterStatus] = useState<SuggestionStatus | 'all'>('all');

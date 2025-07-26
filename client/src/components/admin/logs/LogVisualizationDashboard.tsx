@@ -20,20 +20,16 @@ import {
   IconButton,
   Tooltip,
   Chip,
-  Alert,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
-  TextField,
   Switch,
   FormControlLabel,
-  Divider,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  CircularProgress,
   LinearProgress,
   Badge,
   Dialog,
@@ -42,21 +38,15 @@ import {
 } from '@mui/material';
 import {
   Timeline as TimelineIcon,
-  Assessment as AssessmentIcon,
   Security as SecurityIcon,
   Speed as SpeedIcon,
   Error as ErrorIcon,
   Warning as WarningIcon,
-  Info as InfoIcon,
   CheckCircle as CheckCircleIcon,
   Refresh as RefreshIcon,
   ZoomIn as ZoomInIcon,
-  FilterList as FilterIcon,
   Download as DownloadIcon,
   Visibility as VisibilityIcon,
-  TrendingUp as TrendingUpIcon,
-  TrendingDown as TrendingDownIcon,
-  Hub as HubIcon,
   Close as CloseIcon
 } from '@mui/icons-material';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
@@ -194,8 +184,10 @@ const SimpleChart: React.FC<{ data: ChartData[]; height?: number; type?: 'line' 
   );
 };
 
-export   const [autoRefresh, setAutoRefresh] = useState<boolean>(true);
+export   const [timeRange, setTimeRange] = useState<string>('1h');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedSources, _setSelectedSources] = useState<string[]>(LOG_SOURCES);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_selectedLevels, _setSelectedLevels] = useState<string[]>(['warn', 'error', 'fatal']);
   const [loading, setLoading] = useState<boolean>(false);
   const [metrics, setMetrics] = useState<LogMetrics | null>(null);
@@ -209,7 +201,7 @@ export   const [autoRefresh, setAutoRefresh] = useState<boolean>(true);
   const [selectedLogSource, setSelectedLogSource] = useState<string | null>(null);
 
   // Fetch data from actual LogAnalysisService API
-  const fetchAnalyticsData = useCallback(async () => {
+  const fetchAnalyticsData = useCallback(async (): Promise<void> => {
     const now = new Date();
     const hours = TIME_RANGES.find(r => r.value === timeRange)?.hours || 1;
     const startDate = new Date(now.getTime() - (hours * 60 * 60 * 1000));
@@ -253,15 +245,18 @@ export   const [autoRefresh, setAutoRefresh] = useState<boolean>(true);
         }));
         
         // Process alerts data
-        const processedAlerts: PatternAlert[] = alertsData.alerts.map((alert: unknown) => ({
-          id: alert.alert_id,
-          type: alert.anomaly_type,
-          severity: alert.severity,
-          title: alert.title,
-          description: alert.description,
-          timestamp: new Date(alert.first_detected),
-          affectedSources: alert.affected_sources || [],
-          count: alert.trigger_conditions_met?.occurrences || 1
+        const processedAlerts: PatternAlert[] = alertsData.alerts.map(
+          (alert: Record<string,
+          unknown>
+        ): PatternAlert => ({
+          id: (alert.alert_id as string) || '',
+          type: (alert.anomaly_type as string) || '',
+          severity: (alert.severity as 'low' | 'medium' | 'high' | 'critical') || 'low',
+          title: (alert.title as string) || '',
+          description: (alert.description as string) || '',
+          timestamp: new Date((alert.first_detected as string) || Date.now()),
+          affectedSources: (alert.affected_sources as string[]) || [],
+          count: ((alert.trigger_conditions_met as Record<string, unknown>)?.occurrences as number) || 1
         }));
         
         // Build metrics object
@@ -289,10 +284,10 @@ export   const [autoRefresh, setAutoRefresh] = useState<boolean>(true);
       // Fallback to mock data
       generateMockData();
     }
-  }, [timeRange]);
+  }, [timeRange, generateMockData]);
 
   // Mock data generation for development/fallback
-  const generateMockData = useCallback(() => {
+  const generateMockData = useCallback((): void => {
     const now = new Date();
     const hours = TIME_RANGES.find(r => r.value === timeRange)?.hours || 1;
     const points = Math.min(50, Math.max(10, hours * 4)); // 4 points per hour, max 50
@@ -361,7 +356,7 @@ export   const [autoRefresh, setAutoRefresh] = useState<boolean>(true);
   }, [timeRange]);
 
   // Load data
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async (): Promise<void> => {
     setLoading(true);
     try {
       await fetchAnalyticsData();
@@ -450,7 +445,7 @@ export   const [autoRefresh, setAutoRefresh] = useState<boolean>(true);
     );
   }, [chartData, selectedSources]);
 
-  const handleExportData = () => {
+  const handleExportData = (): void => {
     // Export functionality
     const data = {
       timeRange,
@@ -470,18 +465,18 @@ export   const [autoRefresh, setAutoRefresh] = useState<boolean>(true);
     URL.revokeObjectURL(url);
   };
 
-  const handleSourceClick = (sourceName: string) => {
+  const handleSourceClick = (sourceName: string): void => {
     setSelectedLogSource(sourceName);
     setLogDetailsOpen(true);
   };
 
-  const formatNumber = (num: number) => {
+  const formatNumber = (num: number): string => {
     if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
     if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
     return num.toString();
   };
 
-  const formatLatency = (ms: number) => {
+  const formatLatency = (ms: number): string => {
     if (ms >= 1000) return `${(ms / 1000).toFixed(1)}s`;
     return `${ms.toFixed(0)}ms`;
   };

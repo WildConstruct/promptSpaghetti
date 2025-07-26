@@ -18,13 +18,10 @@ import {
   SortDesc,
   Bookmark,
   Plus,
-  Trash2,
-  RefreshCw,
   Clock,
   Activity,
   AlertTriangle,
   TrendingUp,
-  Users,
   Zap
 } from 'lucide-react';
 import { Badge } from '../common/Badge';
@@ -144,9 +141,6 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({
   availableTypes,
   availableOrganizations,
   availableUsers,
-  availableToggles,
-  _loading = false,
-  _filtersLoading = false,
   totalResults = 0,
   filteredResults = 0,
   showAdvanced = true,
@@ -758,16 +752,16 @@ const SaveFilterModal: React.FC<SaveFilterModalProps> = ({ onSave, onCancel }) =
   );
 };
 
-// Debounce utility function
-function debounce<T extends (...args: unknown[]) => void>(
-  func: T,
-  delay: number
-): (...args: Parameters<T>) => void {
-  let timeoutId: NodeJS.Timeout;
-  return (...args: Parameters<T>) => {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => func(...args), delay);
-  };
-}
+// Debounce utility function - currently unused but may be needed for search optimization
+// function debounce<T extends (...args: unknown[]) => void>(
+//   func: T,
+//   delay: number
+// ): (...args: Parameters<T>) => void {
+//   let timeoutId: NodeJS.Timeout;
+//   return (...args: Parameters<T>) => {
+//     clearTimeout(timeoutId);
+//     timeoutId = setTimeout(() => func(...args), delay);
+//   };
+// }
 
 export default EnhancedToggleFilters;

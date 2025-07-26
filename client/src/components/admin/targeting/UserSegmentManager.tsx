@@ -15,7 +15,6 @@ import {
   Save,
   X,
   AlertCircle,
-  CheckCircle
 } from 'lucide-react';
 import { Badge } from '../../common/Badge';
 import { LoadingSpinner } from '../../common/LoadingSpinner';
@@ -47,11 +46,11 @@ interface UserSegmentManagerProps {
   readonly?: boolean;
 }
 
-export   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+export   const [searchTerm, setSearchTerm] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingSegment, setEditingSegment] = useState<UserSegment | null>(null);
-  const [_testingSegment, _setTestingSegment] = useState<string | null>(null);
+  const [segments, setSegments] = useState<UserSegment[]>([]);
+  // const [testingSegment, setTestingSegment] = useState<string | null>(null); // TODO: Implement segment testing feature
 
   useEffect(() => {
     fetchSegments();
@@ -126,8 +125,9 @@ export   const [loading, setLoading] = useState(true);
     }
   };
 
-  const testSegment = async (_rules: TargetingRule[]): Promise<{ matches: boolean; userCount: number }> => {
+  const testSegment = async (rules: TargetingRule[]): Promise<{ matches: boolean; userCount: number }> => {
     // Mock implementation - replace with actual API call
+    console.log('Testing segment with rules:', rules);
     return new Promise((resolve) => {
       setTimeout(() => {
         const randomUserCount = Math.floor(Math.random() * 10000) + 100;
@@ -437,7 +437,7 @@ const SegmentModal: React.FC<SegmentModalProps> = ({
       };
       
       onSave(segmentData);
-    } catch (error) {
+    } catch {
       setErrors({ submit: 'Failed to save segment' });
     } finally {
       setSaving(false);

@@ -315,7 +315,7 @@ class PerformanceBudgetChecker {
   getAllFiles(dir) {
     const files = [];
     
-    function walk(directory) {
+    function walk(directory: string): string[] {
       const items = fs.readdirSync(directory);
       
       for (const item of items) {
@@ -466,7 +466,7 @@ class PerformanceBudgetChecker {
 }
 
 // CLI interface
-function main() {
+function main(): void {
   const args = process.argv.slice(2);
   const options = {};
   

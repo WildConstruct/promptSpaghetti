@@ -359,7 +359,7 @@ export const VFXVisualizationDemo: React.FC<VFXVisualizationDemoProps> = ({
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .vfx-visualization-demo {
           max-width: 1400px;
           margin: 0 auto;

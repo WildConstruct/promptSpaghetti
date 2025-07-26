@@ -10,7 +10,6 @@ import {
   MapPin, 
   Mail,
   Zap,
-  AlertCircle,
   CheckCircle,
   X,
   RefreshCw
@@ -56,8 +55,7 @@ interface UserPreviewToolProps {
   }>;
 }
 
-export   const [selectedUser, setSelectedUser] = useState<UserPreview | null>(null);
-  const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
+export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
   const [loading, setLoading] = useState(false);
   const [searching, setSearching] = useState(false);
   const [evaluating, setEvaluating] = useState(false);
@@ -102,10 +100,11 @@ export   const [selectedUser, setSelectedUser] = useState<UserPreview | null>(nu
     }
   };
 
-  const evaluateUserToggles = async (_user: UserPreview) => {
+  const evaluateUserToggles = async (user: UserPreview) => {
     setEvaluating(true);
     try {
       // Mock implementation - replace with actual API call
+      console.log('Evaluating toggles for user:', user.id);
       await new Promise(resolve => setTimeout(resolve, 600));
       
       const mockToggles: TogglePreview[] = [

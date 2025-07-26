@@ -41,6 +41,7 @@ export const FeaturedTemplates: React.FC<FeaturedTemplatesProps> = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(autoPlay);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_isDragging, _setIsDragging] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);

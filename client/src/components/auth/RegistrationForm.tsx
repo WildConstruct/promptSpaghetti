@@ -11,22 +11,18 @@ import { LoadingSpinner } from '../common/LoadingSpinner';
 import { ValidationMessage } from '../common/ValidationMessage';
 import { OAuthProviderButtons } from './OAuthProviderButtons';
 
-// Registration form schema
-const RegistrationSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
-  password: z.string().min(12, 'Password must be at least 12 characters'),
-  confirmPassword: z.string(),
-  firstName: z.string().min(2, 'First name must be at least 2 characters').optional(),
-  lastName: z.string().min(2, 'Last name must be at least 2 characters').optional(),
-  displayName: z.string().min(2, 'Display name must be at least 2 characters').optional(),
-  acceptTerms: z.boolean().refine(val => val === true, 'You must accept the terms and conditions'),
-  marketingConsent: z.boolean().optional()
-}).refine(data => data.password === data.confirmPassword, {
-  message: 'Passwords don\'t match',
-  path: ['confirmPassword']
-});
-
-type RegistrationFormData = z.infer<typeof RegistrationSchema>;
+// Registration form schema - commented out as only used for type inference
+// 
+type RegistrationFormData = {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  firstName?: string;
+  lastName?: string;
+  displayName?: string;
+  acceptTerms: boolean;
+  marketingConsent?: boolean;
+};
 
 interface RegistrationFormProps {
   invitationToken?: string;
@@ -35,11 +31,9 @@ interface RegistrationFormProps {
   className?: string;
 }
 
-export   const [formData, setFormData] = useState<Partial<RegistrationFormData>>({
-    marketingConsent: false
-  });
-  const [errors, setErrors] = useState<Record<string, string>>({});
+export   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showPassword, setShowPassword] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
 
   const {
     register,
@@ -376,7 +370,7 @@ export   const [formData, setFormData] = useState<Partial<RegistrationFormData>>
           />
           {errors.displayName && <ValidationMessage message={errors.displayName} type="error" />}
           <p className="mt-1 text-sm text-gray-500">
-            If not provided, we'll use your first and last name
+            If not provided, we&apos;ll use your first and last name
           </p>
         </div>
       </div>
@@ -451,7 +445,7 @@ export   const [formData, setFormData] = useState<Partial<RegistrationFormData>>
           </div>
           <div className="ml-3 text-sm">
             <label htmlFor="marketingConsent" className="font-medium text-gray-700">
-              I'd like to receive updates and marketing communications
+              I&apos;d like to receive updates and marketing communications
             </label>
             <p className="text-gray-500">You can unsubscribe at any time</p>
           </div>

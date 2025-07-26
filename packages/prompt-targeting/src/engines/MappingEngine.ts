@@ -10,7 +10,7 @@ import {
   ValidationResult,
   AdaptorRegistry,
   TranslationError,
-  ValidationError,
+  ValidationException,
   TranslationCache
 } from '../types';
 import { createHash } from 'crypto';
@@ -242,7 +242,7 @@ export class DefaultMappingEngine implements MappingEngine {
 
       return result;
     } catch (error) {
-      if (error instanceof ValidationError) {
+      if (error instanceof ValidationException) {
         throw error;
       }
       

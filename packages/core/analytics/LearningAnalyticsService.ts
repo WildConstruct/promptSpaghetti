@@ -108,7 +108,7 @@ export class LearningAnalyticsServiceImpl implements LearningAnalyticsService {
       await this.updateTutorialEffectivenessMetrics(event);
       
       // Check for learning milestone achievements
-      if (event.event_type === LearningMetricType.TUTORIAL_COMPLETION as unknown) {
+      if (event.event_type === 'TUTORIAL_COMPLETION') {
         await this.processLearningMilestones(event);
       }
       
@@ -124,7 +124,7 @@ export class LearningAnalyticsServiceImpl implements LearningAnalyticsService {
       await this.trackLearningEvent(event);
       
       // Process knowledge base search patterns
-      if (event.event_type === LearningMetricType.KNOWLEDGE_BASE_SEARCH as unknown) {
+      if (event.event_type === 'KNOWLEDGE_BASE_SEARCH') {
         await this.processSearchPatterns(event);
       }
       
@@ -598,21 +598,20 @@ export class LearningAnalyticsServiceImpl implements LearningAnalyticsService {
 
   private isSkillRelevantEvent(event: LearningAnalyticsEvent): boolean {
     return [
-      LearningMetricType.SKILL_ACQUISITION,
-      LearningMetricType.SKILL_LEVEL_PROGRESSION,
-      LearningMetricType.TUTORIAL_COMPLETION
-    ].includes(event.event_type as unknown as LearningMetricType);
+      'SKILL_ACQUISITION',
+      'SKILL_LEVEL_PROGRESSION', 
+      'TUTORIAL_COMPLETION'
+    ].includes(event.event_type as string);
   }
 
   private async updateUserSkillContext(event: LearningAnalyticsEvent): Promise<void> {
     // Update user's skill context based on learning event
     if (event.user_id && event.learning_context.skill_domain) {
       try {
-        await this.skillAssessmentEngine.updateUserSkillAssessment(
+        // Update user skill assessment using available method
+        await this.skillAssessmentEngine.assessUserSkillLevel(
           event.user_id,
-          event.learning_context.skill_domain,
-          event.learning_context.skill_level || 'beginner',
-          [`Learning event: ${event.event_type}`]
+          event.learning_context.skill_domain
         );
       } catch (error) {
         console.error('Failed to update user skill context:', error);
@@ -815,8 +814,8 @@ export class LearningAnalyticsServiceImpl implements LearningAnalyticsService {
   }
 
   private async calculateLearningInvestment(
-    data: any,
-    userId: string
+    userId: string,
+    timeRange: TimeRange
   ): Promise<{ time_invested_hours: number; learning_activities_completed: number; community_contributions: number; }> {
     return {
       time_invested_hours: 0,
@@ -826,8 +825,8 @@ export class LearningAnalyticsServiceImpl implements LearningAnalyticsService {
   }
 
   private async measureLearningOutcomes(
-    data: any,
-    userId: string
+    userId: string,
+    timeRange: TimeRange
   ): Promise<{ learning_efficiency_score: number; skill_development_velocity: number; marketplace_outcome_correlation: number; overall_roi_score: number; }> {
     return {
       learning_efficiency_score: 0.8,
@@ -837,7 +836,10 @@ export class LearningAnalyticsServiceImpl implements LearningAnalyticsService {
     };
   }
 
-  private async calculateSkillDevelopmentROI(data: any, userId: string): Promise<SkillDevelopmentROI> {
+  private async calculateSkillDevelopmentROI(
+    investmentMetrics: unknown,
+    outcomeMetrics: unknown
+  ): Promise<SkillDevelopmentROI> {
     return {} as SkillDevelopmentROI;
   }
 

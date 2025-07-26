@@ -142,7 +142,6 @@ const DeletionWorkflowManager: React.FC = () => {
   const [, setShowTemplateModal] = useState(false);
   const [, setSelectedWorkflow] = useState<DeletionWorkflow | null>(null);
   const [selectedWorkflows, setSelectedWorkflows] = useState<Set<string>>(new Set());
-  const [,] = useState(false);
 
   // Real-time updates
   const [autoRefresh, setAutoRefresh] = useState(true);

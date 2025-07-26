@@ -88,7 +88,7 @@ const MIGRATION_PATTERNS = {
   descriptiveNaming: /^\d{3}_[a-z0-9_]{10,}\.sql$/
 };
 
-function checkMigrationSafety(filePath) {
+function checkMigrationSafety(filePath: string): any[] {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
     const fileName = path.basename(filePath);
@@ -185,13 +185,13 @@ function checkMigrationSafety(filePath) {
   }
 }
 
-function hasDangerousOperations(content) {
+function hasDangerousOperations(content: string): boolean {
   return Object.values(DANGEROUS_PATTERNS).some(patterns =>
     patterns.some(pattern => pattern.test(content))
   );
 }
 
-function hasDataModifications(content) {
+function hasDataModifications(content: string): boolean {
   const dataModPatterns = [
     /INSERT\s+INTO/i,
     /UPDATE\s+/i,
@@ -201,7 +201,7 @@ function hasDataModifications(content) {
   return dataModPatterns.some(pattern => pattern.test(content));
 }
 
-function getSeverity(category) {
+function getSeverity(category: string): string {
   const severityMap = {
     destructive: 'critical',
     breakingChanges: 'high',
@@ -212,7 +212,7 @@ function getSeverity(category) {
   return severityMap[category] || 'medium';
 }
 
-function getDangerousOperationMessage(category, statement) {
+function getDangerousOperationMessage(category: string, statement: string): string {
   const messages = {
     destructive: 'Destructive operation detected - ensure this is intentional and properly backed up',
     breakingChanges: 'Schema change may break existing application code - verify compatibility',
@@ -223,7 +223,7 @@ function getDangerousOperationMessage(category, statement) {
   return messages[category] || 'Potentially dangerous database operation';
 }
 
-function checkPerformanceConsiderations(content) {
+function checkPerformanceConsiderations(content: string): any[] {
   const issues = [];
   
   // Check for large table operations
@@ -258,7 +258,7 @@ function checkPerformanceConsiderations(content) {
   return issues;
 }
 
-function checkEpic17Requirements(content, fileName) {
+function checkEpic17Requirements(content: string, fileName: string): any[] {
   const issues = [];
   
   // Check for Epic 17 specific requirements
@@ -302,11 +302,11 @@ function checkEpic17Requirements(content, fileName) {
   return issues;
 }
 
-function getLineNumber(content, index) {
+function getLineNumber(content: string, index: number): number {
   return content.substring(0, index).split('\n').length;
 }
 
-function main() {
+function main(): void {
   const filePaths = process.argv.slice(2);
   let totalViolations = 0;
   let criticalCount = 0;

@@ -12,7 +12,7 @@ export interface TestNode {
   id: string;
   type: string;
   position: { x: number; y: number };
-  data: any;
+  data: Record<string, unknown>;
 }
 
 export interface TestEdge {
@@ -272,7 +272,7 @@ export interface TestUser {
   email: string;
   role: string;
   permissions: string[];
-  preferences: Record<string, any>;
+  preferences: Record<string, unknown>;
 }
 
 export const testUsers: TestUser[] = [

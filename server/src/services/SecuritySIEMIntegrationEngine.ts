@@ -332,10 +332,10 @@ export class SecuritySIEMIntegrationEngine extends EventEmitter {
   
   private siemConnections: Map<string, SIEMConnection> = new Map();
   private exportJobs: Map<string, SIEMExportJob> = new Map();
-  private activeStreams: Map<string, any> = new Map();
+  private activeStreams: Map<string, unknown> = new Map();
   private exportHistory: Map<string, ThreatIntelligenceExport> = new Map();
   
-  private performanceMetrics: any = {
+  private performanceMetrics: Record<string, number> = {
     total_exports: 0,
     successful_exports: 0,
     failed_exports: 0,

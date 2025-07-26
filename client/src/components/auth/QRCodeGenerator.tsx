@@ -3,7 +3,7 @@
  * Secure QR code generation for TOTP authenticator app enrollment with customization options
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Button } from '../ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
@@ -122,12 +122,7 @@ export function QRCodeGenerator({
     validationPassed: false
   });
 
-  // Validate QR data on mount and when it changes
-  useEffect(() => {
-    validateQRData();
-  }, [qrData]);
-
-  const validateQRData = () => {
+  const validateQRData = useCallback(() => {
     const issues: string[] = [];
 
     if (!qrData.uri || !qrData.uri.startsWith('otpauth://totp/')) {
@@ -152,7 +147,12 @@ export function QRCodeGenerator({
       validationPassed: isValid,
       error: isValid ? null : issues.join('; ')
     }));
-  };
+  }, [qrData]);
+
+  // Validate QR data on mount and when it changes
+  useEffect(() => {
+    validateQRData();
+  }, [validateQRData]);
 
   const updateStyle = (updates: Partial<QRCodeStyle>) => {
     setState(prev => ({
@@ -175,6 +175,8 @@ export function QRCodeGenerator({
         setState(prev => ({ ...prev, copying: false }));
       }, 2000);
     } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      console.error('Copy failed:', error);
       setState(prev => ({ 
         ...prev, 
         copying: false,

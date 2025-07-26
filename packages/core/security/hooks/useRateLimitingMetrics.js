@@ -313,52 +313,50 @@ export const useRateLimitingMetrics = ({ rateLimitingService, throttlingEngine, 
 // ========================================
 // Utility Hook for Widget Data
 // ========================================
-export const useWidgetData = (metricsHook, widgetId) => {
-    const [widgetData, setWidgetData] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-    useEffect(() => {
-        const widget = metricsHook.widgets.find(w => w.widgetId === widgetId);
-        if (!widget) {
-            setWidgetData(null);
-            setIsLoading(false);
-            return;
+export const [isLoading, setIsLoading] = useState(true);
+useEffect(() => {
+    const widget = metricsHook.widgets.find(w => w.widgetId === widgetId);
+    if (!widget) {
+        setWidgetData(null);
+        setIsLoading(false);
+        return;
+    }
+    setIsLoading(true);
+    // Simulate async data loading
+    const loadWidgetData = () => {
+        try {
+            let data = null;
+            switch (widget.dataSource) {
+                case 'timeseries':
+                    data = metricsHook.visualizationData?.timeSeriesData;
+                    break;
+                case 'heatmap':
+                    data = metricsHook.visualizationData?.heatmapData;
+                    break;
+                case 'geospatial':
+                    data = metricsHook.visualizationData?.geospatialData;
+                    break;
+                case 'distribution':
+                    data = metricsHook.visualizationData?.distributionData;
+                    break;
+                case 'current':
+                    data = metricsHook.currentMetrics;
+                    break;
+                default:
+                    data = null;
+            }
+            setWidgetData(data);
         }
-        setIsLoading(true);
-        // Simulate async data loading
-        const loadWidgetData = () => {
-            try {
-                let data = null;
-                switch (widget.dataSource) {
-                    case 'timeseries':
-                        data = metricsHook.visualizationData?.timeSeriesData;
-                        break;
-                    case 'heatmap':
-                        data = metricsHook.visualizationData?.heatmapData;
-                        break;
-                    case 'geospatial':
-                        data = metricsHook.visualizationData?.geospatialData;
-                        break;
-                    case 'distribution':
-                        data = metricsHook.visualizationData?.distributionData;
-                        break;
-                    case 'current':
-                        data = metricsHook.currentMetrics;
-                        break;
-                    default:
-                        data = null;
-                }
-                setWidgetData(data);
-            }
-            catch (error) {
-                console.error('Error loading widget data:', error);
-                setWidgetData(null);
-            }
-            finally {
-                setIsLoading(false);
-            }
-        };
-        loadWidgetData();
-    }, [metricsHook.visualizationData, metricsHook.currentMetrics, widgetId, metricsHook.widgets]);
-    return { data: widgetData, isLoading };
-};
+        catch (error) {
+            console.error('Error loading widget data:', error);
+            setWidgetData(null);
+        }
+        finally {
+            setIsLoading(false);
+        }
+    };
+    loadWidgetData();
+}, [metricsHook.visualizationData, metricsHook.currentMetrics, widgetId, metricsHook.widgets]);
+return { data: widgetData, isLoading };
+;
 export default useRateLimitingMetrics;

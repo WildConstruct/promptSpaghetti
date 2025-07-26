@@ -20,7 +20,7 @@ import {
   Clock,
   PlayCircle,
   PauseCircle,
-  StopCircle,
+  // StopCircle, // Unused import
   Edit,
   Eye,
   TrendingUp,
@@ -342,7 +342,10 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
                       <div 
                         className="performance-bar"
                         style={{ 
-                          width: `${Math.min(100, (item.views / Math.max(...stats.performanceMetrics.topPerformingContent.map(c => c.views))) * 100)}%` 
+                          width: `${Math.min(
+                            100,
+                            (item.views / Math.max(...stats.performanceMetrics.topPerformingContent.map(c => c.views
+                          ))) * 100)}%` 
                         }}
                       />
                     </div>
@@ -583,7 +586,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
         />
       )}
 
-      <style jsx>{`
+      <style>{`
         .content-scheduling-dashboard {
           max-width: 1400px;
           margin: 0 auto;
@@ -1074,7 +1077,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
         </div>
       </CardContent>
 
-      <style jsx>{`
+      <style>{`
         .content-card {
           transition: box-shadow 0.2s ease;
         }
@@ -1214,7 +1217,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, onExecute, onCancel }) => 
         </div>
       </CardContent>
 
-      <style jsx>{`
+      <style>{`
         .batch-card {
           transition: box-shadow 0.2s ease;
         }
@@ -1379,7 +1382,7 @@ const ContentDetailModal: React.FC<ContentDetailModalProps> = ({
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .modal-overlay {
           position: fixed;
           inset: 0;

@@ -215,7 +215,7 @@ export function setup() {
 }
 
 // Teardown function (runs once at the end)
-export function teardown(data) {
+export function teardown(data: any): void {
   const duration = Date.now() - data.startTime;
   console.log('✅ K6 test completed in', duration + 'ms');
 }
@@ -432,7 +432,7 @@ export function teardown(data) {
 }
 
 // CLI interface
-async function main() {
+async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const options = {};
   let scenario = 'baseline';

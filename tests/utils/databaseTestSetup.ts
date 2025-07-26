@@ -304,7 +304,7 @@ export class DatabaseTestManager {
   /**
    * Execute custom SQL query
    */
-  async query(sql: string, params?: any[]): Promise<any> {
+  async query(sql: string, params?: unknown[]): Promise<unknown> {
     if (!this.client) {
       throw new Error('Database not initialized');
     }
@@ -437,14 +437,7 @@ export async function teardownTestDatabase(): Promise<void> {
 /**
  * Jest setup helpers
  */
-export const DatabaseTestHelpers = {
-  
-  /**
-   * Setup database for entire test suite
-   */
-  setupForSuite: () => {
-    let dbManager: DatabaseTestManager;
-
+export 
     beforeAll(async () => {
       dbManager = new DatabaseTestManager();
       await dbManager.start();

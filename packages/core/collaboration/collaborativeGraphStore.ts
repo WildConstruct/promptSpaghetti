@@ -72,20 +72,7 @@ export interface CollaborativeGraphState {
   getSyncState: () => any;
 }
 
-export const useCollaborativeGraphStore = create<CollaborativeGraphState>()(
-  subscribeWithSelector((set, get) => ({
-    // Initial state
-    graph: { nodes: [], edges: [] },
-    isCollaborative: false,
-    collaborationEnabled: false,
-    connectedUsers: new Map(),
-    isConnected: false,
-    connectionStatus: 'disconnected',
-    
-    // Enable collaborative editing
-    enableCollaboration: async (options: CollaborativeGraphOptions) => {
-      const currentGraph = get().graph;
-      
+export       
       // Create CRDT adapter
       const crdtAdapter = new GraphCRDTAdapter(
         {
@@ -93,7 +80,7 @@ export const useCollaborativeGraphStore = create<CollaborativeGraphState>()(
           onGraphChange: (graph: Graph) => {
             set({ graph, lastSyncTime: Date.now() });
           },
-          onUserPresence: (awareness: Map<string, any>) => {
+          onUserPresence: (awareness: Map<string, unknown>) => {
             const connectedUsers = new Map<string, UserPresence>();
             awareness.forEach((presence, userId) => {
               connectedUsers.set(userId, {
@@ -331,33 +318,10 @@ export const useCollaborativeGraphStore = create<CollaborativeGraphState>()(
 );
 
 // Selector hooks for common use cases
-export const useCollaborationEnabled = () => 
-  useCollaborativeGraphStore(state => state.collaborationEnabled);
-
-export const useConnectedUsers = () => 
-  useCollaborativeGraphStore(state => state.connectedUsers);
-
-export const useConnectionStatus = () => 
-  useCollaborativeGraphStore(state => state.connectionStatus);
-
-export const useLocalPresence = () => 
-  useCollaborativeGraphStore(state => state.localPresence);
-
-export const useCollaborativeGraph = () => 
-  useCollaborativeGraphStore(state => state.graph);
-
+export 
+export 
+export 
+export 
+export 
 // Action hooks
-export const useCollaborativeActions = () => 
-  useCollaborativeGraphStore(state => ({
-    enableCollaboration: state.enableCollaboration,
-    disableCollaboration: state.disableCollaboration,
-    addNode: state.addNode,
-    updateNode: state.updateNode,
-    deleteNode: state.deleteNode,
-    addEdge: state.addEdge,
-    deleteEdge: state.deleteEdge,
-    updateNodePosition: state.updateNodePosition,
-    updateLocalPresence: state.updateLocalPresence,
-    updateUserCursor: state.updateUserCursor,
-    updateUserSelection: state.updateUserSelection
-  }));
+export   }));

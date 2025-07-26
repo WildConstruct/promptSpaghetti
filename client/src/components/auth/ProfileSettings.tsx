@@ -13,7 +13,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   User, 
-  Mail, 
+  // Mail, // Unused
   Globe, 
   Camera,
   Bell,
@@ -618,6 +618,7 @@ const PreferencesTab: React.FC<{
   preferences: UserPreferences;
   onUpdate: (updates: Partial<UserPreferences>) => void;
   saving: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
 }> = ({ preferences, onUpdate, saving }) => {
   // Implementation for preferences tab
   return <div>Preferences Tab - Coming Soon</div>;
@@ -627,6 +628,7 @@ const NotificationsTab: React.FC<{
   preferences: UserPreferences;
   onUpdate: (updates: Partial<UserPreferences>) => void;
   saving: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
 }> = ({ preferences, onUpdate, saving }) => {
   // Implementation for notifications tab
   return <div>Notifications Tab - Coming Soon</div>;
@@ -636,6 +638,7 @@ const PrivacyTab: React.FC<{
   preferences: UserPreferences;
   onUpdate: (updates: Partial<UserPreferences>) => void;
   saving: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
 }> = ({ preferences, onUpdate, saving }) => {
   // Implementation for privacy tab
   return <div>Privacy Tab - Coming Soon</div>;

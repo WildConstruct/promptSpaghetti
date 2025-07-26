@@ -166,7 +166,7 @@ export interface FallbackConfiguration {
   };
   implementation: {
     component: string;
-    params: Record<string, any>;
+    params: Record<string, unknown>;
     validationRules: string[];
   };
   compliance: {
@@ -210,7 +210,7 @@ export interface EmergencyBypass {
   auditTrail: Array<{
     timestamp: Date;
     action: string;
-    details: Record<string, any>;
+    details: Record<string, unknown>;
   }>;
 }
 
@@ -221,7 +221,7 @@ export class AccessibilityManager extends EventEmitter {
   private userProfiles: Map<string, UserAccessibilityProfile> = new Map();
   private fallbackConfigs: Map<FallbackMethod, FallbackConfiguration> = new Map();
   private emergencyBypasses: Map<string, EmergencyBypass> = new Map();
-  private accessibilityMetrics: Map<string, any> = new Map();
+  private accessibilityMetrics: Map<string, unknown> = new Map();
   
   constructor() {
     super();
@@ -398,7 +398,7 @@ export class AccessibilityManager extends EventEmitter {
    * Validate accessibility compliance for authentication flow
    */
   public validateAccessibilityCompliance(
-    authenticationFlow: any,
+    authenticationFlow: unknown,
     userProfile?: UserAccessibilityProfile
   ): AccessibilityValidationResult {
     const issues: AccessibilityValidationResult['issues'] = [];
@@ -565,7 +565,7 @@ export class AccessibilityManager extends EventEmitter {
    */
   public useEmergencyBypass(
     bypassId: string,
-    context: Record<string, any>
+    context: Record<string, unknown>
   ): { allowed: boolean; reason?: string; remainingUses?: number } {
     const bypass = this.emergencyBypasses.get(bypassId);
     
@@ -602,7 +602,7 @@ export class AccessibilityManager extends EventEmitter {
    */
   public getAdaptationRecommendations(
     userId: string,
-    currentInterface: any
+    _currentInterface: unknown
   ): {
     adaptations: Array<{
       type: InterfaceAdaptation;
@@ -617,7 +617,7 @@ export class AccessibilityManager extends EventEmitter {
     estimatedImpact: number; // 0-100 improvement score
   } {
     const profile = this.userProfiles.get(userId);
-    const adaptations: any[] = [];
+    const adaptations: unknown[] = [];
     
     if (!profile) {
       return { adaptations: [], estimatedImpact: 0 };
@@ -728,13 +728,13 @@ export class AccessibilityManager extends EventEmitter {
     const activeProfiles = profiles.filter(p => p.isActive);
     
     // Count accessibility needs
-    const needsCounts: Record<AccessibilityNeed, number> = {} as any;
+    const needsCounts: Record<AccessibilityNeed, number> = {} as unknown;
     Object.values(AccessibilityNeed).forEach(need => {
       needsCounts[need] = profiles.filter(p => p.needs.includes(need)).length;
     });
     
     // Count fallback usage (would be tracked in production)
-    const fallbackUsage: Record<FallbackMethod, number> = {} as any;
+    const fallbackUsage: Record<FallbackMethod, number> = {} as unknown;
     Object.values(FallbackMethod).forEach(method => {
       fallbackUsage[method] = Math.floor(Math.random() * 50); // Simulated data
     });

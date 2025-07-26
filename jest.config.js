@@ -12,7 +12,7 @@ module.exports = {
     '**/__tests__/**/*.(spec|test).js?(x)',
     '**/?(*.)+(spec|test).js?(x)'
   ],
-  testPathIgnorePatterns: ['/node_modules/', 'tests/performance/', '.*timeout-examples\\.(ts|js)', '\\.test\\.d\\.ts$', '\\.spec\\.d\\.ts$'],
+  testPathIgnorePatterns: ['/node_modules/', '/dist/', 'tests/performance/', '.*timeout-examples\\.(ts|js)', '\\.test\\.d\\.ts$', '\\.spec\\.d\\.ts$'],
   coverageDirectory: 'coverage',
   collectCoverageFrom: [
     'packages/**/*.{ts,tsx}',

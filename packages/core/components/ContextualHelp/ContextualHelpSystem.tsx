@@ -456,7 +456,7 @@ export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .contextual-help-system {
           position: relative;
         }

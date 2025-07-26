@@ -15,7 +15,7 @@ import {
   ActivityStream,
   ActivityStreamEvent,
   ActivityRetentionPolicy,
-  ActivityType,
+  // ActivityType, // Unused import
   ActivitySeverity,
   BaseActivity
 } from '../types/ActivityDataModel';
@@ -121,7 +121,7 @@ export class ActivityTrackingService {
     category: string;
     page?: string;
     component?: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
     severity?: ActivitySeverity;
   }): Promise<Activity> {
     return this.trackActivity({
@@ -148,8 +148,8 @@ export class ActivityTrackingService {
     description: string;
     category: string;
     severity?: ActivitySeverity;
-    systemMetrics?: any;
-    metadata?: Record<string, any>;
+    systemMetrics?: unknown;
+    metadata?: Record<string, unknown>;
   }): Promise<Activity> {
     return this.trackActivity({
       type: 'system_event',
@@ -174,7 +174,7 @@ export class ActivityTrackingService {
     targetUserId?: string;
     resourceType?: string;
     resourceId?: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
     severity?: ActivitySeverity;
   }): Promise<Activity> {
     return this.trackActivity({
@@ -205,8 +205,8 @@ export class ActivityTrackingService {
     blocked?: boolean;
     ipAddress?: string;
     userAgent?: string;
-    forensicData?: any;
-    metadata?: Record<string, any>;
+    forensicData?: unknown;
+    metadata?: Record<string, unknown>;
   }): Promise<Activity> {
     return this.trackActivity({
       type: 'security_event',
@@ -236,7 +236,7 @@ export class ActivityTrackingService {
     userId?: string;
     requestSize?: number;
     responseSize?: number;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   }): Promise<Activity> {
     const severity = this.getApiCallSeverity(params.statusCode, params.duration);
     
@@ -266,7 +266,7 @@ export class ActivityTrackingService {
     source: string;
     metrics: Record<string, number>;
     thresholdViolations?: string[];
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   }): Promise<Activity> {
     const severity = params.thresholdViolations?.length ? 'high' : 'info';
     
@@ -466,14 +466,5 @@ export function createActivityTrackingService(config: ActivityServiceConfig): Ac
 }
 
 // Default configuration
-export const DEFAULT_ACTIVITY_CONFIG: Partial<ActivityServiceConfig> = {
-  enableRealTime: true,
-  enableAnalytics: true,
-  enableRetention: true,
-  maxBatchSize: 100,
-  flushInterval: 5000,
-  enableCompression: false,
-  enableEncryption: false
-};
-
+export 
 export default ActivityTrackingService;

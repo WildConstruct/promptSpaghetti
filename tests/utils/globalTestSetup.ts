@@ -43,7 +43,7 @@ afterAll(() => {
 });
 
 // Global test utilities available in all tests
-(global as any).testUtils = {
+(global as Record<string, unknown>).testUtils = {
   createMockUser: (overrides = {}) => ({
     id: 'test-user-id',
     email: 'test@example.com',

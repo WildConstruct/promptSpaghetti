@@ -36,9 +36,9 @@ import {
 export interface ToggleAwareArchiveOptions {
   // Standard archive options
   description?: string;
-  compressionAlgorithm?: any;
-  encryptionAlgorithm?: any;
-  storageClass?: any;
+  compressionAlgorithm?: unknown;
+  encryptionAlgorithm?: unknown;
+  storageClass?: unknown;
   retentionPolicyId?: string;
   tags?: string[];
   businessCriticality?: BusinessCriticality;

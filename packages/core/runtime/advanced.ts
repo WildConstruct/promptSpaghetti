@@ -184,9 +184,10 @@ export abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode
 export class AdvancedExecutionContextImpl implements AdvancedExecutionContext {
   variables: Record<string, unknown>;
   seed: string | number;
-  nodeStates: Map<string, any>;
+  nodeStates: Map<string, unknown>;
   evaluationDepth: number;
-  cache: Map<string, any>;
+  cache: Map<string, unknown>;
+  prng: () => number;
   executionMeta: {
     startTime: number;
     executionId: string;
@@ -202,8 +203,10 @@ export class AdvancedExecutionContextImpl implements AdvancedExecutionContext {
     this.nodeStates = new Map();
     this.evaluationDepth = 0;
     this.cache = new Map();
+    this.prng = seedrandom(String(seed));
     this.executionMeta = {
       startTime: performance.now(),
+      executionId: `exec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       nodeExecutionOrder: [],
       performanceMetrics: new Map()
     };
@@ -212,8 +215,8 @@ export class AdvancedExecutionContextImpl implements AdvancedExecutionContext {
   }
 }
 
-// Export the implementation class
-export { AdvancedExecutionContextImpl as AdvancedExecutionContext };
+// Export the implementation class 
+// Note: Interface AdvancedExecutionContext is already exported above
 
 /**
  * Utility functions for working with advanced execution contexts
@@ -228,6 +231,7 @@ export class AdvancedExecutionUtils {
       nodeStates: new Map(),
       evaluationDepth: 0,
       cache: new Map(),
+      prng: seedrandom(String(basicCtx.seed)),
       executionMeta: {
         startTime: performance.now(),
         executionId: `exec_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
@@ -341,10 +345,11 @@ export abstract class AdvancedRuntimeNodeWithIO<TOutput = unknown> extends Advan
 
   constructor(id: string, config: AdvancedNodeConfig, ioSpec?: unknown) {
     super(id, config);
-    if (ioSpec) {
+    if (ioSpec && typeof ioSpec === 'object' && ioSpec !== null && 'inputs' in ioSpec && 'outputs' in ioSpec) {
       // Dynamic import to avoid circular dependency
       import('./io-system').then(({ AdvancedIOHandler }) => {
-        this.ioHandler = new AdvancedIOHandler(ioSpec);
+        // Use type assertion since we already validated the structure
+        this.ioHandler = new AdvancedIOHandler(ioSpec as any);
       });
     }
   }

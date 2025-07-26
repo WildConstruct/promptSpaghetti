@@ -572,7 +572,7 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .verification-queue {
           max-width: 1400px;
           margin: 0 auto;

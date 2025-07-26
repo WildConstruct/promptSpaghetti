@@ -109,7 +109,7 @@ const skipPatterns = [
   /dist/
 ];
 
-async function analyzeAnyTypes(directory) {
+async function analyzeAnyTypes(directory: string): Promise<any[]> {
   console.log(`\n🔍 Analyzing TypeScript any types in: ${directory}`);
   
   try {
@@ -141,7 +141,7 @@ async function analyzeAnyTypes(directory) {
   }
 }
 
-async function fixAnyTypesInFile(filePath, issues) {
+async function fixAnyTypesInFile(filePath: string, issues: any[]): Promise<boolean> {
   const filename = path.basename(filePath);
   
   // Skip if file doesn't exist
@@ -230,7 +230,7 @@ async function fixAnyTypesInFile(filePath, issues) {
   return fixCount;
 }
 
-async function processDirectory(directory) {
+async function processDirectory(directory: string): Promise<void> {
   console.log(`\n🚀 Processing directory: ${directory}`);
   
   const issues = await analyzeAnyTypes(directory);
@@ -262,7 +262,7 @@ async function processDirectory(directory) {
   return totalFixed;
 }
 
-async function main() {
+async function main(): Promise<void> {
   console.log('🎯 TypeScript Any Type Cleanup Script');
   console.log('📝 Converting unsafe `any` types to safer alternatives\n');
   

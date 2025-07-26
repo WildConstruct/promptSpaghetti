@@ -724,7 +724,7 @@ export class APIRateLimitingOptimizationService extends EventEmitter {
     console.log('Initializing service integrations for optimization suggestions');
   }
 
-  private async performComprehensiveAnalysis(analysisScope?: any): Promise<OptimizationAnalysis> {
+  private async performComprehensiveAnalysis(analysisScope?: Record<string, unknown>): Promise<OptimizationAnalysis> {
     const analysisId = `analysis-${Date.now()}`;
     const currentTime = new Date();
     const windowHours = analysisScope?.time_window_hours || this.config.analysis.analysis_window_hours;
@@ -772,7 +772,10 @@ export class APIRateLimitingOptimizationService extends EventEmitter {
     };
   }
 
-  private async identifyOptimizationOpportunities(analysisScope?: any): Promise<OptimizationAnalysis['optimization_opportunities']> {
+  private async identifyOptimizationOpportunities(
+    analysisScope?: Record<string,
+    unknown>
+  ): Promise<OptimizationAnalysis['optimization_opportunities']> {
     return {
       performance_opportunities: [
         {
@@ -948,7 +951,7 @@ export class APIRateLimitingOptimizationService extends EventEmitter {
 
   private async generateSuggestionsFromAnalysis(
     analysis: OptimizationAnalysis,
-    analysisScope?: any
+    analysisScope?: Record<string, unknown>
   ): Promise<OptimizationSuggestion[]> {
     const suggestions: OptimizationSuggestion[] = [];
     

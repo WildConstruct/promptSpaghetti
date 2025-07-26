@@ -72,7 +72,7 @@ export interface ElevenLabsGenerationResult {
     model_id: string;
     text_length: number;
     audio_length: number;
-    voice_settings: any;
+    voice_settings: unknown;
     generation_time: number;
     request_id?: string;
   };
@@ -177,7 +177,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
   private config: ElevenLabsConfig;
   private availableVoices: ElevenLabsVoice[] = [];
   private availableModels: ElevenLabsModel[] = [];
-  private quotaInfo: any = null;
+  private quotaInfo: unknown = null;
 
   constructor(id: string, config: ElevenLabsConfig) {
     const metadata: ModelMetadata = {
@@ -245,7 +245,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
     }
   }
 
-  async process(input: any, options?: ElevenLabsRequestOptions): Promise<ElevenLabsGenerationResult> {
+  async process(input: unknown, options?: ElevenLabsRequestOptions): Promise<ElevenLabsGenerationResult> {
     try {
       if (this._status !== AIModelStatus.READY) {
         throw new ModelUnavailableError(this._id);

@@ -296,7 +296,7 @@ export class APIPayloadGenerator {
           'Authorization': 'Bearer valid-token'
         },
         body: {
-          name: '<script>alert(\"XSS\")</script>',
+          name: '<script>alert("XSS")</script>',
           pattern: 'test',
           replacement: 'safe',
           isRegex: false
@@ -362,7 +362,7 @@ export class APIPayloadGenerator {
           nodes: Array.from({ length: 100000 }, (_, i) => ({
             id: `malicious-node-${i}`,
             type: 'WeightedChoice',
-            choices: Array.from({ length: 1000 }, (_, j) => ({
+            choices: Array.from({ length: 1000 }, () => ({
               text: 'A'.repeat(10000), // Very large text
               weight: 1
             }))

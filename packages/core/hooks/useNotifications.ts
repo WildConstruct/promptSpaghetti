@@ -8,7 +8,11 @@ import {
   NotificationEvent
 } from '../types/NotificationTypes';
 
-export   const [unreadCount, setUnreadCount] = useState(0);
+export   userId: string; 
+  workspaceId?: string; 
+}): UseNotificationsReturn => {
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [stats, setStats] = useState<NotificationStats | null>(null);

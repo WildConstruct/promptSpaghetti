@@ -22,8 +22,8 @@ export const ProjectMetadataSchema = z.object({
 
 // Graph content schema - the actual node/edge data
 export const GraphContentSchema = z.object({
-  nodes: z.array(z.any()), // Using z.any() to allow for flexible node data structures
-  edges: z.array(z.any()), // Using z.any() to allow for flexible edge data structures
+  nodes: z.array(z.unknown()), // Using z.unknown() to allow for flexible node data structures
+  edges: z.array(z.unknown()), // Using z.unknown() to allow for flexible edge data structures
   seed: z.number().optional(),
   viewport: z.object({
     x: z.number(),
@@ -151,7 +151,7 @@ export enum PSGErrorType {
 export interface PSGError {
   type: PSGErrorType;
   message: string;
-  details?: any;
+  details?: unknown;
   suggestions?: string[];
 }
 
@@ -190,7 +190,7 @@ export function parsePSGFile(jsonString: string, options: {
     }
 
     // Parse JSON with better error messages
-    let parsed: any;
+    let parsed: unknown;
     try {
       parsed = JSON.parse(jsonString);
     } catch (syntaxError) {
@@ -403,10 +403,7 @@ function generateProjectIdFromMetadata(metadata: ProjectMetadata): string {
 /**
  * File extension and MIME type constants
  */
-export const PSG_FILE_EXTENSION = '.psg';
-export const PSG_MIME_TYPE = 'application/json';
-export const PSG_FILE_DESCRIPTION = 'PromptScape Graph Project';
-
+export export export 
 /**
  * Version compatibility checker
  */
@@ -469,10 +466,10 @@ function compareVersions(a: string, b: string): number {
 /**
  * Security validation to prevent dangerous content
  */
-function checkForSecurityViolations(data: any): string[] {
+function checkForSecurityViolations(data: unknown): string[] {
   const violations: string[] = [];
   
-  const checkObject = (obj: any, path: string = ''): void => {
+  const checkObject = (obj: unknown, path: string = ''): void => {
     if (!obj || typeof obj !== 'object') return;
     
     for (const key in obj) {
@@ -517,13 +514,13 @@ function checkForSecurityViolations(data: any): string[] {
 /**
  * Validates internal data consistency
  */
-function validateDataConsistency(data: any): string[] {
+function validateDataConsistency(data: unknown): string[] {
   const errors: string[] = [];
   
   try {
     // Check if nodes reference valid IDs
     if (data.graph?.nodes && data.graph?.edges) {
-      const nodeIds = new Set(data.graph.nodes.map((node: any) => node.id).filter(Boolean));
+      const nodeIds = new Set(data.graph.nodes.map((node: unknown) => (node as any).id).filter(Boolean));
       
       // Validate edges reference existing nodes
       for (const edge of data.graph.edges) {
@@ -536,7 +533,7 @@ function validateDataConsistency(data: any): string[] {
       }
       
       // Check for duplicate node IDs
-      const nodeIdArray = data.graph.nodes.map((node: any) => node.id).filter(Boolean);
+      const nodeIdArray = data.graph.nodes.map((node: unknown) => (node as any).id).filter(Boolean);
       const duplicates = nodeIdArray.filter((id: string, index: number) => nodeIdArray.indexOf(id) !== index);
       if (duplicates.length > 0) {
         errors.push(`Duplicate node IDs found: ${[...new Set(duplicates)].join(', ')}`);
@@ -636,8 +633,7 @@ export function serializePSGFile(psgFile: PSGFile, options: {
   try {
     // Pre-serialization validation
     if (validate) {
-      const validationResult = validatePSGFile(psgFile);
-      // If validation passes, continue
+            // If validation passes, continue
     }
     
     // Update timestamps

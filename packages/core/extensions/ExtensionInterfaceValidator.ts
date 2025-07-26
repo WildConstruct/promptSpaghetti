@@ -589,4 +589,4 @@ interface RuntimeTypeInfo {
 }
 
 // Export singletons
-export export 
+export export const runtimeTypeChecker = ExtensionRuntimeTypeChecker.getInstance(); 

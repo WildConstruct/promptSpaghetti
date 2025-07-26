@@ -49,6 +49,7 @@ import { buildAuthConfig, CORS_CONFIG } from './auth/config';
 import securityAnalyticsPerformanceRoutes from './routes/security-analytics-performance';
 import securityAnalyticsOptimizationRoutes from './routes/security-analytics-optimization';
 import securityAnalyticsReliabilityRoutes from './routes/security-analytics-reliability';
+import { apiOptimizationRoutes } from './admin/routes/api-optimization';
 import { marketplaceRoutes } from './marketplace/routes';
 import { communityRoutes } from './community/community.routes';
 import { knowledgeBaseRoutes } from './knowledge/knowledge-base.routes';
@@ -971,6 +972,9 @@ server.register(authRoutes, { prefix: '/auth' });
 
 // Register enhanced security routes (Epic 19)
 server.register(enhancedSecurityRoutes, { prefix: '/auth' });
+
+// Epic 31: API Optimization Routes - Security Analytics Integration
+server.register(apiOptimizationRoutes, { prefix: '' }); // No prefix since routes include /admin
 
 // Register role cloning routes (Epic 17 RBAC)
 try {

@@ -31,6 +31,7 @@ interface ApprovalWorkflowProps {
 
 export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
   requests,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   currentUserId,
   userRole,
   onApprove,

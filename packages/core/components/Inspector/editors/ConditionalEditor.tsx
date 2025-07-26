@@ -18,10 +18,7 @@ export interface ConditionalEditorProps extends Omit<BaseNodeEditorProps, 'child
  * - Debug: Technical settings, strict mode, variable access controls
  */
 
-export   
-  // Conditional specific fields
-  const branches = (nodeData.branches as ConditionalBranch[]) || [];
-  const defaultOutput = (nodeData.defaultOutput as string) || '';
+export   const defaultOutput = (nodeData.defaultOutput as string) || '';
   const name = (nodeData.name as string) || (nodeData.label as string) || 'Conditional';
   const allowVariableAccess = (nodeData.allowVariableAccess as boolean) ?? true;
   const strictMode = (nodeData.strictMode as boolean) ?? false;

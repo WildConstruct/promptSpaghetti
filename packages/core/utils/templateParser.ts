@@ -1013,7 +1013,8 @@ export type VariableCategory = typeof VARIABLE_CATEGORIES[number];
 /**
  * Generate smart default values for a template based on its variables
  */
-export   
+export   const parseResult = parseTemplate(template);
+  
   parseResult.variables
     .filter(v => v.isValid)
     .forEach(variable => {
@@ -1032,8 +1033,7 @@ export
 /**
  * Get contextual default values based on node type and template content
  */
-export     if (name.includes('description') || name.includes('summary')) return 'A thrilling tale of discovery and courage';
-  }
+export   }
   
   if (nodeType === 'subject' || nodeType === 'character') {
     if (name.includes('hero') || name.includes('protagonist')) return 'brave warrior';

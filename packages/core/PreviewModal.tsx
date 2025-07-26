@@ -46,7 +46,22 @@ interface PreviewModalProps {
   onVarianceSuggestion?: (suggestion: VarianceSuggestion) => void;
 }
 
-export   const [showVarianceAnalysis, setShowVarianceAnalysis] = useState(false);
+export const PreviewModal: React.FC<PreviewModalProps> = ({ 
+  open, 
+  loading, 
+  error, 
+  results, 
+  onClose, 
+  onCancel, 
+  onResultHover, 
+  onNodeHighlight,
+  onResultAction,
+  lockedResults = [],
+  regeneratingResults = [],
+  onVarianceSuggestion
+}) => {
+  const [showExecutionPaths, setShowExecutionPaths] = useState(false);
+  const [showVarianceAnalysis, setShowVarianceAnalysis] = useState(false);
   const [compareMode, setCompareMode] = useState(false);
   const [selectedForComparison, setSelectedForComparison] = useState<number[]>([]);
   const [exportDialog, setExportDialog] = useState<{
@@ -868,3 +883,5 @@ style.textContent = `
   }
 `;
 document.head.appendChild(style);
+
+export default PreviewModal;

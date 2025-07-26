@@ -264,7 +264,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .document-upload {
           width: 100%;
         }

@@ -264,7 +264,7 @@ export const DirectorPreviewToolbar: React.FC<DirectorPreviewToolbarProps> = ({
         />
       )}
 
-      <style jsx>{`
+      <style>{`
         .director-preview-toolbar {
           background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
           border: 1px solid #444;

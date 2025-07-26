@@ -110,32 +110,11 @@ export type {
 export * from './performance';
 
 // Utility functions and helpers
-export   return factory.createModel({
-    id,
-    type: 'text' as any,
-    provider: 'openai' as any,
-    modelName,
-    apiKey
-  });
-};
+export };
 
-export   return factory.createModel({
-    id,
-    type: 'text' as any,
-    provider: 'anthropic' as any,
-    modelName,
-    apiKey
-  });
-};
+export };
 
-export   return factory.createModel({
-    id,
-    type: 'text' as any,
-    provider: 'local' as any,
-    modelName,
-    endpoint
-  });
-};
+export };
 
 interface HTTPRequestMapping {
   inputPath: string;
@@ -144,14 +123,7 @@ interface HTTPRequestMapping {
   headers?: Record<string, string>;
 }
 
-export   const registration = {
-    id,
-    provider: 'custom' as any,
-    modelName: 'custom-model',
-    config: { baseURL: endpoint, apiKey },
-    requestMapping
-  };
-  
+export   
   factory.registerModel(registration);
   return factory.createModel({
     id,

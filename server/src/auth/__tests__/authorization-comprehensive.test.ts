@@ -437,7 +437,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
             fromUserId: 3, // manager
             toUserId: 4, // user
             permissions: ['reports:read'],
-            expiresAt: new Date(Date.now( as unknown) + 3600000).toISOString(), // 1 hour
+            expiresAt: new Date(Date.now( as unknown as unknown) + 3600000).toISOString(), // 1 hour
             constraints: { maxUses: 5 }
           }),
           checkDelegation: jest.fn<unknown[], unknown>().mockImplementation(async (userId, permission) => {
@@ -449,7 +449,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
             }
             return { allowed: false };
           }),
-          revokeDelegation: jest.fn<unknown[], unknown>().mockResolvedValue({ success: true } as unknown as unknown as unknown)
+          revokeDelegation: jest.fn<unknown[], unknown>().mockResolvedValue({ success: true } as unknown as unknown as unknown as unknown as unknown)
         };
 
         // Create delegation endpoint

@@ -15,19 +15,17 @@ import {
   AlertThresholds,
   DataAccessExemption
 } from './DataRetrievalRateLimit';
-import {
-  DataClassificationLevel,
-  DataOperation
-} from './DataClassificationAccessControl';
+import { DataClassificationLevel } from '../types/DataClassification';
+import { DataOperation } from './DataClassificationAccessControl';
 import { BackoffStrategy } from './RateLimitingService';
 
 /**
  * Standard Rate Limiting Configurations by Classification Level
  */
 export const STANDARD_DATA_RETRIEVAL_LIMITS: Record<DataClassificationLevel, DataRetrievalLimits> = {
-  PUBLIC: {
-    classification: 'PUBLIC',
-    operation: 'read',
+  [DataClassificationLevel.PUBLIC]: {
+    classification: DataClassificationLevel.PUBLIC,
+    operation: 'READ',
     limits: {
       requestsPerMinute: 200,
       requestsPerHour: 5000,
@@ -52,9 +50,9 @@ export const STANDARD_DATA_RETRIEVAL_LIMITS: Record<DataClassificationLevel, Dat
     }
   },
 
-  INTERNAL: {
-    classification: 'INTERNAL',
-    operation: 'read',
+  [DataClassificationLevel.INTERNAL]: {
+    classification: DataClassificationLevel.INTERNAL,
+    operation: 'READ',
     limits: {
       requestsPerMinute: 100,
       requestsPerHour: 2000,
@@ -79,9 +77,9 @@ export const STANDARD_DATA_RETRIEVAL_LIMITS: Record<DataClassificationLevel, Dat
     }
   },
 
-  CONFIDENTIAL: {
-    classification: 'CONFIDENTIAL',
-    operation: 'read',
+  [DataClassificationLevel.CONFIDENTIAL]: {
+    classification: DataClassificationLevel.CONFIDENTIAL,
+    operation: 'READ',
     limits: {
       requestsPerMinute: 30,
       requestsPerHour: 500,
@@ -106,9 +104,9 @@ export const STANDARD_DATA_RETRIEVAL_LIMITS: Record<DataClassificationLevel, Dat
     }
   },
 
-  RESTRICTED: {
-    classification: 'RESTRICTED',
-    operation: 'read',
+  [DataClassificationLevel.RESTRICTED]: {
+    classification: DataClassificationLevel.RESTRICTED,
+    operation: 'READ',
     limits: {
       requestsPerMinute: 10,
       requestsPerHour: 100,
@@ -131,6 +129,33 @@ export const STANDARD_DATA_RETRIEVAL_LIMITS: Record<DataClassificationLevel, Dat
       locationMultiplier: 0.1,
       deviceTrustMultiplier: 0.3
     }
+  },
+
+  [DataClassificationLevel.TOP_SECRET]: {
+    classification: DataClassificationLevel.TOP_SECRET,
+    operation: 'READ',
+    limits: {
+      requestsPerMinute: 5,
+      requestsPerHour: 25,
+      requestsPerDay: 100,
+      bytesPerMinute: 524288, // 512KB
+      bytesPerHour: 2621440, // 2.5MB
+      recordsPerMinute: 25,
+      recordsPerHour: 100,
+      concurrentRequests: 1
+    },
+    backoff: {
+      strategy: BackoffStrategy.EXPONENTIAL,
+      baseDelay: 30,
+      maxDelay: 1800,
+      multiplier: 5
+    },
+    adaptiveFactors: {
+      userRiskMultiplier: 0.2,
+      timeOfDayMultiplier: 0.1,
+      locationMultiplier: 0.05,
+      deviceTrustMultiplier: 0.1
+    }
   }
 };
 
@@ -138,7 +163,7 @@ export const STANDARD_DATA_RETRIEVAL_LIMITS: Record<DataClassificationLevel, Dat
  * Operation-Specific Rate Limiting Modifiers
  */
 export const OPERATION_MODIFIERS: Record<DataOperation, OperationModifier> = {
-  read: {
+  READ: {
     requestMultiplier: 1.0,
     volumeMultiplier: 1.0,
     concurrencyMultiplier: 1.0,

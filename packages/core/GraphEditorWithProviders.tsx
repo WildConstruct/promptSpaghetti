@@ -3,7 +3,7 @@
  * Extends the existing GraphEditor with client-side provider hooking capabilities
  */
 
-import React, { useCallback, useState, useMemo, useRef, useEffect } from 'react';
+import React, { useCallback, useState, useMemo, useEffect } from 'react';
 import {
   Edge,
   Node,
@@ -243,7 +243,6 @@ const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({
   initialEdges,
   validateConnection,
   registry,
-  editorContext,
   editorActions,
   isProviderLoading
 }) => {
@@ -269,7 +268,7 @@ const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({
   
   // Custom hooks
   const { getNodeMeta, getCategoryColor } = useNodeUtils({ nodeTypes: NODE_TYPES });
-  const { showRestorePrompt, restoreDraft, setShowRestorePrompt } = useAutosave({ nodes, edges });
+  useAutosave({ nodes, edges });
   
   // Highlighted nodes & edges from preview result hover
   const [highlightNodeIds, setHighlightNodeIds] = useState<Set<string>>(new Set());
@@ -467,7 +466,7 @@ const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({
   const handlePreview = useCallback(async () => {
     try {
       // Execute graph via provider system
-      const result = await editorActions.executeGraph();
+      await editorActions.executeGraph();
       runPreview({ nodes, edges });
       setPreviewOpen(true);
     } catch (error) {
@@ -636,23 +635,15 @@ export const GraphEditorWithProviders: React.FC<GraphEditorWithProvidersProps> =
 };
 
 // Example usage and built-in providers
-export const createAnalyticsProviderHook = (): ProviderHook => createProviderHook({
-  id: 'analytics',
-  name: 'Analytics Provider',
-  version: '1.0.0',
-  priority: 200,
+export   },
   
-  onInit: (context, actions) => {
-    console.log('[Analytics] Editor initialized with', context.nodes.length, 'nodes');
-  },
-  
-  onNodeAdd: (node, context) => {
+  onNodeAdd: (node) => {
     console.log('[Analytics] Node added:', node.data?.nodeType);
     // Could send analytics event here
     return node;
   },
   
-  onExecutionError: (error, context) => {
+  onExecutionError: (error) => {
     console.error('[Analytics] Execution error:', error.message);
     // Could send error analytics here
   },

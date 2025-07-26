@@ -313,7 +313,7 @@ export class VersionRestoreManager {
     }
   }
 
-  private async getCurrentGraphData(): Promise<any> {
+  private async getCurrentGraphData(): Promise<unknown> {
     try {
       const response = await this.apiClient.get(`/api/projects/${this.projectId}/current-graph`);
       return response.data;
@@ -575,7 +575,7 @@ export class VersionRestoreManager {
     snapshotData: any,
     options: RestoreOptions,
     resolvedConflicts: any
-  ): Promise<any> {
+  ): Promise<unknown> {
     const changes = {
       nodes_to_add: [],
       nodes_to_remove: [],
@@ -623,7 +623,7 @@ export class VersionRestoreManager {
     };
   }
 
-  private async applyChanges(changesToApply: any, options: RestoreOptions): Promise<any> {
+  private async applyChanges(changesToApply: unknown, options: RestoreOptions): Promise<unknown> {
     // Apply the calculated changes to the graph
     const response = await this.apiClient.post(`/api/projects/${this.projectId}/apply-changes`, {
       changes: changesToApply,

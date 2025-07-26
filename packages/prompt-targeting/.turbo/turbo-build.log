@@ -1,8 +1,0 @@
-
-> @prompt-graph/targeting@1.0.0 build /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/prompt-targeting
-> tsc
-
-error TS6059: File '/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/prompt-targeting/index.ts' is not under 'rootDir' '/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/prompt-targeting/src'. 'rootDir' is expected to contain all source files.
-  The file is in the program because:
-    Matched by include pattern 'index.ts' in '/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/prompt-targeting/tsconfig.json'
- ELIFECYCLE  Command failed with exit code 2.

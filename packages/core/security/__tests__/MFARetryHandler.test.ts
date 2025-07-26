@@ -31,7 +31,7 @@ describe('MFARetryHandler', () => {
 
   describe('Basic Operation Execution', () => {
     test('should execute successful operation without retries', async () => {
-      const mockOperation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown as unknown);
+      const mockOperation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown as unknown as unknown as unknown);
 
       const result = await retryHandler.executeWithRetry(
         MFAOperation.TOTP_VERIFICATION,
@@ -51,13 +51,18 @@ describe('MFARetryHandler', () => {
         .fn()
         .mockRejectedValueOnce(new Error('Network error'))
         .mockRejectedValueOnce(new Error('Network error'))
-        .mockResolvedValue('success' as unknown as unknown);
+        .mockResolvedValue('success' as unknown as unknown as unknown as unknown);
 
-      const result = await retryHandler.executeWithRetry(
+      const resultPromise = retryHandler.executeWithRetry(
         MFAOperation.SMS_SEND,
         mockOperation,
         { userId: 'test-user' }
       );
+
+      // Use runAllTimersAsync to handle nested async timers properly
+      await jest.runAllTimersAsync();
+      
+      const result = await resultPromise;
 
       expect(result.success).toBe(true);
       expect(result.data).toBe('success');
@@ -66,13 +71,18 @@ describe('MFARetryHandler', () => {
     });
 
     test('should fail after max retry attempts', async () => {
-      const mockOperation = jest.fn<unknown[], unknown>().mockRejectedValue(new Error('Persistent error'));
+      const mockOperation = jest.fn<unknown[], unknown>().mockRejectedValue(new Error('Network error'));
 
-      const result = await retryHandler.executeWithRetry(
+      const resultPromise = retryHandler.executeWithRetry(
         MFAOperation.EMAIL_SEND,
         mockOperation,
         { userId: 'test-user' }
       );
+
+      // Use runAllTimersAsync to handle retry delays
+      await jest.runAllTimersAsync();
+      
+      const result = await resultPromise;
 
       expect(result.success).toBe(false);
       expect(result.error).toBeInstanceOf(Error);
@@ -102,18 +112,15 @@ describe('MFARetryHandler', () => {
         .fn()
         .mockRejectedValueOnce(new Error('Network error'))
         .mockRejectedValueOnce(new Error('Network error'))
-        .mockResolvedValue('success' as unknown as unknown);
+        .mockResolvedValue('success' as unknown as unknown as unknown as unknown);
 
       const resultPromise = customHandler.executeWithRetry(
         MFAOperation.TOTP_VERIFICATION,
         mockOperation
       );
 
-      // Fast forward timers to simulate delays
-      jest.advanceTimersByTime(100); // First retry delay
-      await Promise.resolve(); // Allow microtasks to process
-      jest.advanceTimersByTime(200); // Second retry delay (exponential)
-      await Promise.resolve();
+      // Use runAllTimersAsync to handle all nested timers properly
+      await jest.runAllTimersAsync();
 
       const result = await resultPromise;
 
@@ -146,17 +153,15 @@ describe('MFARetryHandler', () => {
         .fn()
         .mockRejectedValueOnce(new Error('Network error'))
         .mockRejectedValueOnce(new Error('Network error'))
-        .mockResolvedValue('success' as unknown as unknown);
+        .mockResolvedValue('success' as unknown as unknown as unknown as unknown);
 
       const resultPromise = customHandler.executeWithRetry(
         MFAOperation.SMS_SEND,
         mockOperation
       );
 
-      jest.advanceTimersByTime(100); // First retry delay
-      await Promise.resolve();
-      jest.advanceTimersByTime(200); // Second retry delay (linear)
-      await Promise.resolve();
+      // Use runAllTimersAsync to handle all nested timers properly
+      await jest.runAllTimersAsync();
 
       const result = await resultPromise;
 
@@ -189,13 +194,18 @@ describe('MFARetryHandler', () => {
       const mockOperation = jest
         .fn()
         .mockRejectedValueOnce(new Error('Network error'))
-        .mockResolvedValue('success' as unknown as unknown);
+        .mockResolvedValue('success' as unknown as unknown as unknown as unknown);
 
-      const result = await retryHandler.executeWithRetry(
+      const resultPromise = retryHandler.executeWithRetry(
         MFAOperation.SMS_SEND,
         mockOperation,
         { userId: 'test-user' }
       );
+
+      // Use runAllTimersAsync to handle nested async timers properly
+      await jest.runAllTimersAsync();
+      
+      const result = await resultPromise;
 
       expect(result.success).toBe(true);
       expect(result.attempts).toHaveLength(2);
@@ -217,13 +227,19 @@ describe('MFARetryHandler', () => {
       const mockOperation = jest.fn<unknown[], unknown>().mockRejectedValue(new Error('Service unavailable'));
 
       // First operation - should fail and increment failure count
-      await customHandler.executeWithRetry(MFAOperation.EMAIL_SEND, mockOperation);
+      const firstResult = customHandler.executeWithRetry(MFAOperation.EMAIL_SEND, mockOperation);
+      await jest.runAllTimersAsync();
+      await firstResult;
       
       // Second operation - should fail and open circuit breaker
-      await customHandler.executeWithRetry(MFAOperation.EMAIL_SEND, mockOperation);
+      const secondResult = customHandler.executeWithRetry(MFAOperation.EMAIL_SEND, mockOperation);
+      await jest.runAllTimersAsync();
+      await secondResult;
 
       // Third operation - should be blocked by circuit breaker
-      const result = await customHandler.executeWithRetry(MFAOperation.EMAIL_SEND, mockOperation);
+      const thirdResult = customHandler.executeWithRetry(MFAOperation.EMAIL_SEND, mockOperation);
+      await jest.runAllTimersAsync();
+      const result = await thirdResult;
 
       expect(result.circuitBreakerTriggered).toBe(true);
       expect(result.success).toBe(false);
@@ -263,10 +279,15 @@ describe('MFARetryHandler', () => {
         new Promise(resolve => setTimeout(resolve, 200)) // Takes longer than timeout
       );
 
-      const result = await customHandler.executeWithRetry(
+      const resultPromise = customHandler.executeWithRetry(
         MFAOperation.EMAIL_SEND,
         mockOperation
       );
+
+      // Use runAllTimersAsync to handle both timeout and operation timers
+      await jest.runAllTimersAsync();
+      
+      const result = await resultPromise;
 
       expect(result.success).toBe(false);
       expect(result.error?.message).toContain('timeout');
@@ -281,13 +302,18 @@ describe('MFARetryHandler', () => {
       const mockOperation = jest
         .fn()
         .mockRejectedValueOnce(new Error('Network error'))
-        .mockResolvedValue('success' as unknown as unknown);
+        .mockResolvedValue('success' as unknown as unknown as unknown as unknown);
 
-      await retryHandler.executeWithRetry(
+      const resultPromise = retryHandler.executeWithRetry(
         MFAOperation.TOTP_VERIFICATION,
         mockOperation,
         { userId: 'test-user' }
       );
+
+      // Use runAllTimersAsync to handle nested async timers properly
+      await jest.runAllTimersAsync();
+      
+      await resultPromise;
 
       const metrics = retryHandler.getMetrics();
 
@@ -347,7 +373,7 @@ describe('MFARetryHandler', () => {
       const successHandler = jest.fn<unknown[], unknown>();
       retryHandler.on('operationSuccess', successHandler);
 
-      const mockOperation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown as unknown);
+      const mockOperation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown as unknown as unknown as unknown);
 
       await retryHandler.executeWithRetry(
         MFAOperation.BACKUP_CODE_VERIFICATION,
@@ -463,7 +489,7 @@ describe('MFARetryHandler', () => {
 
   describe('Edge Cases', () => {
     test('should handle immediate success', async () => {
-      const mockOperation = jest.fn<unknown[], unknown>().mockResolvedValue('immediate success' as unknown as unknown);
+      const mockOperation = jest.fn<unknown[], unknown>().mockResolvedValue('immediate success' as unknown as unknown as unknown as unknown);
 
       const result = await retryHandler.executeWithRetry(
         MFAOperation.TOTP_VERIFICATION,
@@ -489,7 +515,7 @@ describe('MFARetryHandler', () => {
     });
 
     test('should handle operation with undefined result', async () => {
-      const mockOperation = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown);
+      const mockOperation = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown as unknown);
 
       const result = await retryHandler.executeWithRetry(
         MFAOperation.METHOD_DISABLE,

@@ -37,8 +37,20 @@
  */
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { SecurityDashboardFramework, DashboardConfig, DashboardType, SecurityRole, WidgetConfiguration } from './SecurityDashboardFramework';
-import { useWorkflowStore, WorkflowState, WorkflowTransition, WorkflowApproval, StateTransitionResult } from '../stores/workflowStore';
+import { 
+  SecurityDashboardFramework,
+  DashboardConfig,
+  DashboardType,
+  SecurityRole,
+  WidgetConfiguration
+} from './SecurityDashboardFramework';
+import { 
+  useWorkflowStore,
+  WorkflowState,
+  WorkflowTransition,
+  WorkflowApproval,
+  StateTransitionResult
+} from '../stores/workflowStore';
 import './SecurityDashboardWorkflow.css';
 
 // Security Dashboard Workflow Types
@@ -138,6 +150,13 @@ export interface SecurityDashboardWorkflowProps {
 /**
  * Main Security Dashboard Workflow Component
  */
+// Safe reload function that can be mocked in tests
+export const safeReload = (): void => {
+  if (typeof window !== 'undefined' && window.location) {
+    window.location.reload();
+  }
+};
+
 export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps> = ({
   workspaceId,
   userId,
@@ -626,15 +645,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
   };
 
   // Handle manual workflow transitions
-  const handleWorkflowTransition = async (
-    eventId: string,
-    toStateId: string,
-    comment?: string
-  ) => {
-    try {
-      // Acquire lock for the resource
-      await acquireLock(eventId, userId, 'state_change');
-
+  
       try {
         const result = await transitionResourceState(
           eventId,
@@ -719,7 +730,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
         <h3>Dashboard Error</h3>
         <p>{error}</p>
         <button 
-          onClick={() => window.location.reload()}
+          onClick={safeReload}
           className="retry-button"
         >
           Retry
@@ -743,7 +754,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
         </div>
         
         <div className="dashboard-controls">
-          <button className="refresh-button" onClick={() => window.location.reload()}>
+          <button className="refresh-button" onClick={safeReload}>
             🔄 Refresh
           </button>
           <div className="user-info">

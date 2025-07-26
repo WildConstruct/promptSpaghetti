@@ -1,7 +1,7 @@
 // Epic 17.1.2 - Main Admin Dashboard Component
 
 import React, { useState } from 'react';
-import { AdminLayout } from './AdminLayout';
+import AdminLayout from './AdminLayout';
 import { FeatureToggleDashboard } from './FeatureToggleDashboard';
 import { ApiManagementDashboard } from './ApiManagementDashboard';
 import { ModerationAdminDashboard } from './ModerationAdminDashboard';
@@ -40,9 +40,7 @@ const SystemConfigurationDashboard: React.FC = () => (
   </div>
 );
 
-export const AdminDashboard: React.FC = () => {
-  const [currentSection, setCurrentSection] = useState('feature-toggles');
-
+export 
   const renderCurrentSection = () => {
     switch (currentSection) {
     case 'feature-toggles':

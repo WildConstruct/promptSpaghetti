@@ -92,7 +92,7 @@ function log(level, message, data = null) {
 // =============================================================================
 
 class MockEvidenceCollectionService {
-  constructor(config) {
+  constructor(config: any) {
     this.config = config;
     this.evidence = new Map();
     this.metrics = {
@@ -105,7 +105,7 @@ class MockEvidenceCollectionService {
     };
   }
 
-  async collectEvidence(type, source, data, options = {}) {
+  async collectEvidence(type: string, source: string, data: any, options: any = {}): Promise<string> {
     const startTime = Date.now();
     
     try {
@@ -160,7 +160,7 @@ class MockEvidenceCollectionService {
     }
   }
 
-  async verifyEvidence(evidenceId) {
+  async verifyEvidence(evidenceId: string): Promise<any> {
     const evidence = this.evidence.get(evidenceId);
     if (!evidence) {
       throw new Error(`Evidence ${evidenceId} not found`);
@@ -184,7 +184,7 @@ class MockEvidenceCollectionService {
     return allPassed;
   }
 
-  async verifyDataIntegrity(evidence) {
+  async verifyDataIntegrity(evidence: any): Promise<boolean> {
     const dataString = JSON.stringify(evidence.data);
     const computedHash = crypto.createHash('sha256').update(dataString).digest('hex');
     
@@ -195,12 +195,12 @@ class MockEvidenceCollectionService {
     }
   }
 
-  async verifyComplianceRequirements(evidence) {
+  async verifyComplianceRequirements(evidence: any): Promise<boolean> {
     // Mock compliance verification
     return { result: 'passed', message: 'Compliance requirements satisfied' };
   }
 
-  async searchEvidence(criteria) {
+  async searchEvidence(criteria: any): Promise<any[]> {
     const results = Array.from(this.evidence.values()).filter(evidence => {
       if (criteria.type && evidence.metadata.type !== criteria.type) return false;
       if (criteria.userId && evidence.metadata.userId !== criteria.userId) return false;
@@ -215,7 +215,7 @@ class MockEvidenceCollectionService {
     };
   }
 
-  async generateComplianceReport(framework, dateRange, options = {}) {
+  async generateComplianceReport(framework: string, dateRange: any, options: any = {}): Promise<any> {
     const reportId = crypto.randomUUID();
     const relevantEvidence = Array.from(this.evidence.values()).filter(evidence => 
       evidence.metadata.complianceFrameworks.includes(framework) &&
@@ -240,7 +240,7 @@ class MockEvidenceCollectionService {
     };
   }
 
-  getPerformanceMetrics() {
+  getPerformanceMetrics(): any {
     return {
       ...this.metrics,
       queueSize: 0,
@@ -248,7 +248,7 @@ class MockEvidenceCollectionService {
     };
   }
 
-  async getHealthCheck() {
+  async getHealthCheck(): Promise<any> {
     return {
       status: 'healthy',
       services: {

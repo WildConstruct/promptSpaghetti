@@ -3,29 +3,29 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { WeightVisualization, WeightLegend } from '../WeightControls/WeightVisualization';
 import { DragReorderList } from '../WeightControls/DragReorderList';
 import { WeightPresets } from '../WeightControls/WeightPresets';
-export const WeightControlSlider = ({ options, onOptionsChange, onPreviewRequest, visualization = 'slider-only', showLegend = true, enableDragReorder = true, showPresets = true, compactPresets = false, customPresets = [], onSaveCustomPreset, className = '' }: any) => {
+export const WeightControlSlider = ({ options, onOptionsChange, onPreviewRequest, visualization = 'slider-only', showLegend = true, enableDragReorder = true, showPresets = true, compactPresets = false, customPresets = [], onSaveCustomPreset, className = '' }) => {
     const [localOptions, setLocalOptions] = useState(options);
     useEffect(() => {
         setLocalOptions(options);
     }, [options]);
-    const handleWeightChange = (optionId: string, newWeight: number) => {
+    const handleWeightChange = (optionId, newWeight) => {
         const updatedOptions = localOptions.map(option => option.id === optionId ? { ...option, weight: Math.max(0, newWeight) } : option);
         setLocalOptions(updatedOptions);
         onOptionsChange(updatedOptions);
     };
-    const handleTextChange = (optionId: string, newText: string) => {
+    const handleTextChange = (optionId, newText) => {
         const updatedOptions = localOptions.map(option => option.id === optionId ? { ...option, text: newText } : option);
         setLocalOptions(updatedOptions);
         onOptionsChange(updatedOptions);
     };
-    const handleReorder = (fromIndex: number, toIndex: number) => {
+    const handleReorder = (fromIndex, toIndex) => {
         const newOptions = [...localOptions];
         const [movedOption] = newOptions.splice(fromIndex, 1);
         newOptions.splice(toIndex, 0, movedOption);
         setLocalOptions(newOptions);
         onOptionsChange(newOptions);
     };
-    const handleApplyPreset = (newWeights: number[]) => {
+    const handleApplyPreset = (newWeights) => {
         const updatedOptions = localOptions.map((option, index) => ({
             ...option,
             weight: newWeights[index] || 0
@@ -98,20 +98,11 @@ export const WeightControlSlider = ({ options, onOptionsChange, onPreviewRequest
                 }, children: "Preview" }))] }));
 };
 // Helper function to get consistent colors for options
-const _____getOptionColor = (index) => {
-    const colors = [
-        '#4299e1', // Blue
-        '#48bb78', // Green
-        '#ed8936', // Orange
-        '#9f7aea', // Purple
-        '#38b2ac', // Teal
-        '#ec4899' // Pink
-    ];
-    return colors[index % colors.length];
-};
+return colors[index % colors.length];
+;
 // Hook for integrating weight controls with preview system
 // Epic 8.5 Task 6: Real-Time Weight Integration with debouncing
-export const useWeightControlIntegration = (options, onPreviewRequest) => {
+export const useWeightControlIntegration = (onPreviewRequest) => {
     const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
     const updateTimeoutRef = useRef(null);
     const handleOptionsChange = useCallback((newOptions) => {

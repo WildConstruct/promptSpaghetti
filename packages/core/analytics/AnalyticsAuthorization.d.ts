@@ -17,25 +17,25 @@ export declare const AuthContextSchema: z.ZodObject<{
     tokenType: z.ZodEnum<["jwt", "api_key", "session"]>;
     expiresAt: z.ZodOptional<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
-    sessionId: string;
     userId: string;
     environment: string;
-    roles: string[];
+    sessionId: string;
     permissions: string[];
-    tokenType: "jwt" | "api_key" | "session";
-    organizationId?: string | undefined;
+    roles: string[];
+    tokenType: "session" | "jwt" | "api_key";
     workspaceId?: string | undefined;
     expiresAt?: number | undefined;
-}, {
-    sessionId: string;
-    userId: string;
-    roles: string[];
-    permissions: string[];
-    tokenType: "jwt" | "api_key" | "session";
     organizationId?: string | undefined;
+}, {
+    userId: string;
+    sessionId: string;
+    permissions: string[];
+    roles: string[];
+    tokenType: "session" | "jwt" | "api_key";
     environment?: string | undefined;
     workspaceId?: string | undefined;
     expiresAt?: number | undefined;
+    organizationId?: string | undefined;
 }>;
 export type AuthContext = z.infer<typeof AuthContextSchema>;
 export declare enum AnalyticsPermission {
@@ -99,7 +99,7 @@ export interface AuthorizationResult {
 export declare class AnalyticsAuthorizationService {
     private policies;
     private authService;
-    constructor(authService?: any);
+    constructor(authService?: unknown);
     /**
      * Initialize default authorization policies
      */
@@ -169,7 +169,7 @@ export declare class AnalyticsAuthorizationService {
     /**
      * Validate auth context
      */
-    validateAuthContext(authContext: any): AuthContext | null;
+    validateAuthContext(authContext: unknown): AuthContext | null;
     /**
      * Create auth context from authentication service
      */

@@ -6,11 +6,11 @@
  * Comprehensive example demonstrating the rate limiting performance metrics
  * system including dashboard integration, real-time monitoring, and alerts.
  */
-import React from 'react';
 import { RateLimitingService } from '../RateLimitingService';
+import { AdaptiveThrottlingRulesEngine } from '../AdaptiveThrottlingRules';
 import { RateLimitingPerformanceMetrics } from '../RateLimitingPerformanceMetrics';
 export declare function BasicMetricsExample(): RateLimitingPerformanceMetrics;
-export declare const ReactDashboardExample: React.FC;
+export declare const throttlingEngine: AdaptiveThrottlingRulesEngine;
 export declare function AdvancedVisualizationExample(): RateLimitingPerformanceMetrics;
 export declare function CustomWidgetExample(): RateLimitingPerformanceMetrics;
 export declare function AlertManagementExample(): RateLimitingPerformanceMetrics;

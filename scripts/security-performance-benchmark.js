@@ -124,7 +124,7 @@ class SecurityPerformanceBenchmark {
   /**
    * Run a performance test
    */
-  async runTest(testName, validationFunction, testData, iterations = 1000) {
+  async runTest(testName: string, validationFunction: Function, testData: any[], iterations: number = 1000): Promise<void> {
     console.log(`\n🔍 Running ${testName}...`);
     
     const results = {
@@ -167,7 +167,7 @@ class SecurityPerformanceBenchmark {
   /**
    * Calculate statistical measures
    */
-  calculateStatistics(measurements) {
+  calculateStatistics(measurements: number[]): any {
     const sorted = measurements.slice().sort((a, b) => a - b);
     const sum = measurements.reduce((a, b) => a + b, 0);
     
@@ -187,7 +187,7 @@ class SecurityPerformanceBenchmark {
   /**
    * Run comprehensive benchmark suite
    */
-  async runComprehensiveBenchmark() {
+  async runComprehensiveBenchmark(): Promise<void> {
     console.log('🚀 Starting Security Performance Benchmark Suite');
     console.log('=' .repeat(60));
     
@@ -245,7 +245,7 @@ class SecurityPerformanceBenchmark {
   /**
    * Generate performance report
    */
-  generateReport() {
+  generateReport(): any {
     const report = {
       summary: this.generateSummary(),
       detailed: this.results,
@@ -264,7 +264,7 @@ class SecurityPerformanceBenchmark {
   /**
    * Generate performance summary
    */
-  generateSummary() {
+  generateSummary(): any {
     const summary = {
       totalTests: this.results.tests.length,
       overallPerformance: 'excellent',
@@ -288,7 +288,7 @@ class SecurityPerformanceBenchmark {
   /**
    * Generate performance recommendations
    */
-  generateRecommendations() {
+  generateRecommendations(): string[] {
     const recommendations = [];
     
     for (const test of this.results.tests) {
@@ -329,7 +329,7 @@ class SecurityPerformanceBenchmark {
   /**
    * Print summary to console
    */
-  printSummary() {
+  printSummary(): void {
     console.log('\n📈 PERFORMANCE SUMMARY');
     console.log('=' .repeat(40));
     
@@ -350,7 +350,7 @@ class SecurityPerformanceBenchmark {
 }
 
 // CLI interface
-async function main() {
+async function main(): Promise<void> {
   const benchmark = new SecurityPerformanceBenchmark();
   
   try {

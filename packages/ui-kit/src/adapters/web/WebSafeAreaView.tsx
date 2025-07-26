@@ -119,7 +119,7 @@ export const WebSafeAreaView = forwardRef<HTMLDivElement, WebSafeAreaViewProps>(
   return (
     <>
       {/* CSS custom properties for safe area insets */}
-      <style jsx global>{`
+      <style>{`
         :root {
           --safe-area-inset-top: env(safe-area-inset-top, ${safeAreaInsets.top}px);
           --safe-area-inset-bottom: env(safe-area-inset-bottom, ${safeAreaInsets.bottom}px);

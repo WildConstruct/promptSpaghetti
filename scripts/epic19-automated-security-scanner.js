@@ -220,7 +220,7 @@ class AutomatedSecurityScanner {
   /**
    * Run comprehensive security scan
    */
-  async runComprehensiveSecurityScan(projectPath = '.') {
+  async runComprehensiveSecurityScan(projectPath: string = '.'): Promise<void> {
     console.log('🔒 Starting Epic 19 Automated Security Scan');
     console.log('=' .repeat(60));
     
@@ -258,7 +258,7 @@ class AutomatedSecurityScanner {
   /**
    * Run Static Application Security Testing (SAST)
    */
-  async runSASTScan(projectPath) {
+  async runSASTScan(projectPath: string): Promise<void> {
     console.log('\n🔍 Running Static Application Security Testing (SAST)...');
     
     const sastFindings = [];
@@ -293,7 +293,7 @@ class AutomatedSecurityScanner {
   /**
    * Analyze SAST security patterns in code
    */
-  async analyzeSASTPatterns(filePath, content) {
+  async analyzeSASTPatterns(filePath: string, content: string): Promise<any[]> {
     const findings = [];
     const patterns = SECURITY_SCANNER_CONFIG.sast.patterns;
 
@@ -398,7 +398,7 @@ class AutomatedSecurityScanner {
   /**
    * Run dependency vulnerability scanning
    */
-  async runDependencyVulnerabilityScan(projectPath) {
+  async runDependencyVulnerabilityScan(projectPath: string): Promise<void> {
     console.log('\n📦 Running Dependency Vulnerability Scan...');
     
     const dependencyFindings = [];
@@ -434,7 +434,7 @@ class AutomatedSecurityScanner {
   /**
    * Scan npm dependencies for vulnerabilities
    */
-  async scanNpmDependencies(projectPath) {
+  async scanNpmDependencies(projectPath: string): Promise<any[]> {
     const findings = [];
     
     try {
@@ -484,7 +484,7 @@ class AutomatedSecurityScanner {
   /**
    * Run configuration security analysis
    */
-  async runConfigurationSecurityScan(projectPath) {
+  async runConfigurationSecurityScan(projectPath: string): Promise<void> {
     console.log('\n⚙️ Running Configuration Security Analysis...');
     
     const configFindings = [];
@@ -516,7 +516,7 @@ class AutomatedSecurityScanner {
   /**
    * Run Dynamic Application Security Testing (DAST)
    */
-  async runDASTScan() {
+  async runDASTScan(): Promise<void> {
     console.log('\n🌐 Running Dynamic Application Security Testing (DAST)...');
     
     const dastFindings = [];
@@ -562,7 +562,7 @@ class AutomatedSecurityScanner {
   /**
    * Run compliance validation
    */
-  async runComplianceValidation() {
+  async runComplianceValidation(): Promise<void> {
     console.log('\n📋 Running Compliance Validation...');
     
     const complianceResults = {};
@@ -591,7 +591,7 @@ class AutomatedSecurityScanner {
   /**
    * Generate security metrics
    */
-  async generateSecurityMetrics() {
+  async generateSecurityMetrics(): Promise<any> {
     console.log('\n📊 Generating Security Metrics...');
     
     const allFindings = this.scanResults.findings;
@@ -624,7 +624,7 @@ class AutomatedSecurityScanner {
   /**
    * Generate comprehensive security report
    */
-  async generateSecurityReport() {
+  async generateSecurityReport(): Promise<void> {
     console.log('\n📄 Generating Security Report...');
     
     const reportData = {
@@ -658,12 +658,12 @@ class AutomatedSecurityScanner {
   }
 
   // Helper methods
-  async getSourceFiles(projectPath) {
+  async getSourceFiles(projectPath: string): Promise<string[]> {
     const files = [];
     const extensions = SECURITY_SCANNER_CONFIG.sast.fileExtensions;
     const excludePaths = SECURITY_SCANNER_CONFIG.sast.excludePaths;
     
-    async function walkDir(dir) {
+    async function walkDir(dir: string): Promise<string[]> {
       const entries = await fs.readdir(dir, { withFileTypes: true });
       
       for (const entry of entries) {
@@ -690,11 +690,11 @@ class AutomatedSecurityScanner {
     return files;
   }
 
-  getLineNumber(content, index) {
+  getLineNumber(content: string, index: number): number {
     return content.substring(0, index).split('\n').length;
   }
 
-  categorizeBySeverity(findings) {
+  categorizeBySeverity(findings: any[]): any {
     return findings.reduce((count, finding) => {
       const severity = finding.severity || 'low';
       count[severity] = (count[severity] || 0) + 1;
@@ -702,25 +702,25 @@ class AutomatedSecurityScanner {
     }, { critical: 0, high: 0, medium: 0, low: 0 });
   }
 
-  calculateRiskScore(severityCount) {
+  calculateRiskScore(severityCount: any): number {
     const weights = { critical: 40, high: 20, medium: 5, low: 1 };
     const totalRisk = Object.entries(severityCount)
       .reduce((sum, [sev, count]) => sum + (weights[sev] || 0) * count, 0);
     return Math.min(100, totalRisk);
   }
 
-  calculateSecurityScore(severityCount) {
+  calculateSecurityScore(severityCount: any): number {
     const riskScore = this.calculateRiskScore(severityCount);
     return Math.max(0, 100 - riskScore);
   }
 
-  calculateComplianceScore() {
+  calculateComplianceScore(): number {
     const compliance = this.scanResults.summary.compliance || {};
     const scores = Object.values(compliance).map(c => c.score || 0);
     return scores.length > 0 ? scores.reduce((sum, score) => sum + score, 0) / scores.length : 0;
   }
 
-  async fileExists(filePath) {
+  async fileExists(filePath: string): Promise<boolean> {
     try {
       await fs.access(filePath);
       return true;
@@ -730,7 +730,7 @@ class AutomatedSecurityScanner {
   }
 
   // Mock methods for demonstration
-  generateMockDependencyFindings() {
+  generateMockDependencyFindings(): any[] {
     return [
       {
         type: 'dependency',
@@ -745,7 +745,7 @@ class AutomatedSecurityScanner {
     ];
   }
 
-  async scanDockerConfigurations(projectPath) {
+  async scanDockerConfigurations(projectPath: string): Promise<any[]> {
     const findings = [];
     
     // Mock Docker security findings
@@ -764,7 +764,7 @@ class AutomatedSecurityScanner {
     return findings;
   }
 
-  async scanEnvironmentConfigurations(projectPath) {
+  async scanEnvironmentConfigurations(projectPath: string): Promise<any[]> {
     const findings = [];
     
     // Mock environment configuration findings
@@ -783,28 +783,28 @@ class AutomatedSecurityScanner {
     return findings;
   }
 
-  async scanWebServerConfigurations(projectPath) {
+  async scanWebServerConfigurations(projectPath: string): Promise<any[]> {
     // Mock web server configuration scan
     return [];
   }
 
-  async validateOWASPCompliance() {
+  async validateOWASPCompliance(): Promise<any> {
     return { score: 85, issues: ['Missing CSRF protection', 'Insufficient logging'] };
   }
 
-  async validateNISTCompliance() {
+  async validateNISTCompliance(): Promise<any> {
     return { score: 78, issues: ['Access control gaps', 'Incident response procedures'] };
   }
 
-  async validateSOXCompliance() {
+  async validateSOXCompliance(): Promise<any> {
     return { score: 92, issues: ['Audit trail completeness'] };
   }
 
-  async validateGDPRCompliance() {
+  async validateGDPRCompliance(): Promise<any> {
     return { score: 88, issues: ['Data retention policies', 'Right to deletion'] };
   }
 
-  generateExecutiveSummary() {
+  generateExecutiveSummary(): any {
     const metrics = this.scanResults.metrics;
     return {
       overallRisk: metrics.riskScore > 70 ? 'HIGH' : metrics.riskScore > 40 ? 'MEDIUM' : 'LOW',
@@ -814,7 +814,7 @@ class AutomatedSecurityScanner {
     };
   }
 
-  generateVulnerabilityBreakdown() {
+  generateVulnerabilityBreakdown(): any {
     const breakdown = {};
     for (const finding of this.scanResults.findings) {
       const type = finding.type || 'other';
@@ -824,7 +824,7 @@ class AutomatedSecurityScanner {
     return breakdown;
   }
 
-  generateSecurityRecommendations(metrics) {
+  generateSecurityRecommendations(metrics: any): string[] {
     const recommendations = [];
     
     if (metrics.severityDistribution.critical > 0) {
@@ -860,7 +860,7 @@ class AutomatedSecurityScanner {
     this.scanResults.recommendations = recommendations;
   }
 
-  generateNextSteps() {
+  generateNextSteps(): string[] {
     return [
       'Review and prioritize security findings',
       'Implement fixes for critical vulnerabilities',
@@ -870,31 +870,31 @@ class AutomatedSecurityScanner {
     ];
   }
 
-  async saveJSONReport(reportData) {
+  async saveJSONReport(reportData: any): Promise<void> {
     const reportPath = path.join(__dirname, '../docs/security/epic19-security-scan-report.json');
     await fs.mkdir(path.dirname(reportPath), { recursive: true });
     await fs.writeFile(reportPath, JSON.stringify(reportData, null, 2));
   }
 
-  async saveHTMLReport(reportData) {
+  async saveHTMLReport(reportData: any): Promise<void> {
     const htmlContent = this.generateHTMLReport(reportData);
     const reportPath = path.join(__dirname, '../docs/security/epic19-security-scan-report.html');
     await fs.writeFile(reportPath, htmlContent);
   }
 
-  async saveSARIFReport(reportData) {
+  async saveSARIFReport(reportData: any): Promise<void> {
     const sarifContent = this.generateSARIFReport(reportData);
     const reportPath = path.join(__dirname, '../docs/security/epic19-security-scan.sarif');
     await fs.writeFile(reportPath, JSON.stringify(sarifContent, null, 2));
   }
 
-  async saveMarkdownSummary(reportData) {
+  async saveMarkdownSummary(reportData: any): Promise<void> {
     const markdownContent = this.generateMarkdownSummary(reportData);
     const reportPath = path.join(__dirname, '../docs/security/epic19-security-scan-summary.md');
     await fs.writeFile(reportPath, markdownContent);
   }
 
-  generateHTMLReport(reportData) {
+  generateHTMLReport(reportData: any): string {
     return `
 <!DOCTYPE html>
 <html>
@@ -954,7 +954,7 @@ class AutomatedSecurityScanner {
 </html>`;
   }
 
-  generateSARIFReport(reportData) {
+  generateSARIFReport(reportData: any): string {
     return {
       $schema: "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
       version: "2.1.0",
@@ -981,7 +981,7 @@ class AutomatedSecurityScanner {
     };
   }
 
-  generateMarkdownSummary(reportData) {
+  generateMarkdownSummary(reportData: any): string {
     const summary = reportData.executiveSummary;
     const metrics = reportData.securityMetrics;
     
@@ -1032,7 +1032,7 @@ ${(reportData.nextSteps || []).map((step, i) => `${i + 1}. ${step}`).join('\n')}
 }
 
 // CLI interface
-async function main() {
+async function main(): Promise<void> {
   const scanner = new AutomatedSecurityScanner();
   
   try {

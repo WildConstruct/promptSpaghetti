@@ -24,7 +24,7 @@ if (!existsSync(GOLDEN_FILES_DIR)) {
   console.log(`Created golden files directory: ${GOLDEN_FILES_DIR}`);
 }
 
-async function main() {
+async function main(): Promise<void> {
   console.log('🔄 Generating golden files for regression tests...');
   console.log('');
 

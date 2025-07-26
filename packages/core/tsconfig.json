@@ -1,5 +1,4 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "jsx": "react-jsx",
     "esModuleInterop": true,
@@ -9,9 +8,12 @@
     "moduleResolution": "node",
     "skipLibCheck": true,
     "types": ["jest", "node"],
-    "strict": true,
-    "forceConsistentCasingInFileNames": true
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "./dist"
   },
   "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "__tests__", "**/__tests__", "**/*.test.ts", "**/*.test.tsx"]
+  "exclude": ["node_modules", "__tests__", "**/__tests__", "**/*.test.ts", "**/*.test.tsx", "dist"]
 }

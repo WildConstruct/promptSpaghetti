@@ -10,8 +10,8 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
-  Shield, AlertTriangle, Clock, User, Settings, X, Check,
-  AlertCircle, RefreshCw, Calendar, FileText, Eye, Edit,
+  Shield, AlertTriangle, Settings, X, Check,
+  RefreshCw, Eye, Edit,
   Lock, Unlock, Zap, Target, Percent
 } from 'lucide-react';
 
@@ -70,6 +70,7 @@ const ToggleStatusOverridePanel: React.FC<ToggleStatusOverridePanelProps> = ({
   const [activeOverrides, setActiveOverrides] = useState<StatusOverride[]>([]);
   const [loading, setLoading] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_selectedOverrideType, _setSelectedOverrideType] = useState<string>('FORCE_ENABLE');
   
   // Form state for creating new overrides
@@ -199,7 +200,7 @@ const ToggleStatusOverridePanel: React.FC<ToggleStatusOverridePanelProps> = ({
       });
       
       onOverrideCreated?.(override);
-    } catch (error) {
+    } catch (error) { // eslint-disable-line @typescript-eslint/no-unused-vars
       alert('Failed to create override');
     }
   };
@@ -214,7 +215,7 @@ const ToggleStatusOverridePanel: React.FC<ToggleStatusOverridePanelProps> = ({
             : override
         )
       );
-    } catch (error) {
+    } catch (error) { // eslint-disable-line @typescript-eslint/no-unused-vars
       alert('Failed to cancel override');
     }
   };

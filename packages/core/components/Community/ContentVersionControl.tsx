@@ -511,7 +511,7 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({
         />
       )}
 
-      <style jsx>{`
+      <style>{`
         .content-version-control {
           background: #ffffff;
           border: 1px solid #e5e7eb;
@@ -1198,7 +1198,7 @@ const CreateVersionModal: React.FC<CreateVersionModalProps> = ({
         </form>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .modal-overlay {
           position: fixed;
           top: 0;

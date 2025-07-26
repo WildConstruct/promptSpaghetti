@@ -41,7 +41,7 @@ class PerformanceAnalysisExecutor {
     console.log(`${colors[level]}${message}${colors.reset}`);
   }
 
-  async executeCommand(command, description) {
+  async executeCommand(command: string, description: string): Promise<any> {
     this.log('info', `\n🔧 ${description}...`);
     
     try {
@@ -77,7 +77,7 @@ class PerformanceAnalysisExecutor {
     }
   }
 
-  async runPerformanceBudgetCheck() {
+  async runPerformanceBudgetCheck(): Promise<void> {
     this.log('info', '\n🎯 Performance Budget Analysis');
     console.log('=' .repeat(50));
     
@@ -90,7 +90,7 @@ class PerformanceAnalysisExecutor {
     return budgetResult;
   }
 
-  async runCorePerformanceTests() {
+  async runCorePerformanceTests(): Promise<void> {
     this.log('info', '\n⚡ Core Performance Testing');
     console.log('=' .repeat(50));
     
@@ -124,7 +124,7 @@ class PerformanceAnalysisExecutor {
     }
   }
 
-  async runLoadTestAnalysis() {
+  async runLoadTestAnalysis(): Promise<void> {
     this.log('info', '\n🚀 Load Testing Analysis');
     console.log('=' .repeat(50));
     
@@ -148,7 +148,7 @@ class PerformanceAnalysisExecutor {
     }
   }
 
-  async analyzeCurrentPerformance() {
+  async analyzeCurrentPerformance(): Promise<void> {
     this.log('info', '\n📊 Current Performance Analysis');
     console.log('=' .repeat(50));
     
@@ -183,7 +183,7 @@ class PerformanceAnalysisExecutor {
     this.results.existingReports = existingReports;
   }
 
-  async runSystemResourceAnalysis() {
+  async runSystemResourceAnalysis(): Promise<void> {
     this.log('info', '\n🔍 System Resource Analysis');
     console.log('=' .repeat(50));
     
@@ -357,7 +357,7 @@ class PerformanceAnalysisExecutor {
     }
   }
 
-  async saveResults() {
+  async saveResults(): Promise<void> {
     const reportFile = path.join(PERFORMANCE_REPORT_DIR, `performance-analysis-${CURRENT_TIMESTAMP}.json`);
     const summaryFile = path.join(PERFORMANCE_REPORT_DIR, `performance-summary-${CURRENT_TIMESTAMP}.md`);
     
@@ -450,7 +450,7 @@ The PromptScape performance testing infrastructure demonstrates enterprise-grade
 `;
   }
 
-  async execute() {
+  async execute(): Promise<void> {
     this.log('info', '🚀 Starting Comprehensive Performance Analysis');
     this.log('info', '=' .repeat(60));
     

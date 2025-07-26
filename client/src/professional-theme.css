@@ -1,0 +1,270 @@
+/* Professional Theme - Cinema 4D Inspired Design System */
+
+/* Import the professional color system */
+@import url('./randomizer.css');
+
+/* Global Professional Theme Application */
+* {
+  box-sizing: border-box;
+}
+
+/* Apply professional theme to body and main containers */
+body {
+  background: var(--color-bg-primary) !important;
+  color: var(--color-text-primary) !important;
+  font-family: var(--font-family-primary) !important;
+  margin: 0;
+  padding: 0;
+}
+
+/* Professional Application Container */
+#root {
+  background: var(--color-bg-primary);
+  min-height: 100vh;
+  color: var(--color-text-primary);
+}
+
+/* Professional Header Styling */
+.App header {
+  background: linear-gradient(145deg, var(--color-bg-secondary), var(--color-bg-tertiary)) !important;
+  border-bottom: 1px solid var(--color-ui-border) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* Professional Tab Navigation */
+.App button {
+  background: linear-gradient(145deg, var(--color-bg-tertiary), var(--color-bg-secondary)) !important;
+  border: 1px solid var(--color-ui-border) !important;
+  color: var(--color-text-primary) !important;
+  transition: all var(--transition-normal) !important;
+}
+
+.App button:hover {
+  background: linear-gradient(145deg, var(--color-bg-quaternary), var(--color-bg-tertiary)) !important;
+  border-color: var(--color-accent-orange) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* Professional Active Tab */
+.App button[style*="background: #fff"] {
+  background: linear-gradient(145deg, var(--color-accent-orange), #e65100) !important;
+  color: white !important;
+  border-color: var(--color-accent-orange) !important;
+  box-shadow: var(--shadow-md), 0 0 0 2px rgba(255, 120, 0, 0.3) !important;
+}
+
+/* Professional Status Indicator */
+.App div[style*="color: #666"] {
+  color: var(--color-text-secondary) !important;
+  background: var(--color-bg-secondary) !important;
+  padding: 8px 16px !important;
+  border-radius: 6px !important;
+  border: 1px solid var(--color-ui-border) !important;
+}
+
+/* Professional Main Content Area */
+.App > div[style*="flex: 1"] {
+  background: var(--color-bg-primary) !important;
+}
+
+/* Professional Panel Backgrounds */
+.App div[style*="background: #f8f9fa"] {
+  background: var(--color-bg-primary) !important;
+}
+
+/* Professional Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-ui-border);
+  border-radius: 4px;
+  transition: background var(--transition-fast);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-orange);
+}
+
+/* Professional Selection */
+::selection {
+  background: var(--color-accent-orange);
+  color: white;
+}
+
+/* Professional Focus Indicators */
+*:focus {
+  outline: 2px solid var(--color-accent-orange) !important;
+  outline-offset: 2px !important;
+}
+
+/* Professional Form Elements */
+input, select, textarea {
+  background: var(--color-bg-primary) !important;
+  border: 1px solid var(--color-ui-border) !important;
+  color: var(--color-text-primary) !important;
+  border-radius: 6px !important;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--color-accent-orange) !important;
+  box-shadow: 0 0 0 3px rgba(255, 120, 0, 0.2) !important;
+}
+
+/* Professional Buttons */
+button {
+  font-family: var(--font-family-primary) !important;
+  font-weight: 500 !important;
+  border-radius: 6px !important;
+  transition: all var(--transition-normal) !important;
+}
+
+/* Professional Modal Overlays */
+.modal-overlay, [role="dialog"] {
+  background: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+/* Professional Tooltips */
+[title]:hover::after {
+  background: var(--color-bg-tertiary) !important;
+  color: var(--color-text-primary) !important;
+  border: 1px solid var(--color-ui-border) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+/* Professional Loading States */
+.loading, [aria-busy="true"] {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+/* Professional Error States */
+.error, [aria-invalid="true"] {
+  border-color: var(--color-accent-red) !important;
+  background: rgba(239, 68, 68, 0.1) !important;
+}
+
+/* Professional Success States */
+.success, [aria-valid="true"] {
+  border-color: var(--color-accent-green) !important;
+  background: rgba(16, 185, 129, 0.1) !important;
+}
+
+/* Professional Disabled States */
+:disabled, [aria-disabled="true"] {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  background: var(--color-text-disabled) !important;
+}
+
+/* Professional Code Elements */
+code, pre {
+  background: var(--color-bg-secondary) !important;
+  color: var(--color-text-primary) !important;
+  border: 1px solid var(--color-ui-border) !important;
+  border-radius: 4px !important;
+  font-family: var(--font-family-mono) !important;
+}
+
+/* Professional Links */
+a {
+  color: var(--color-accent-blue) !important;
+  transition: color var(--transition-fast) !important;
+}
+
+a:hover {
+  color: var(--color-accent-orange) !important;
+}
+
+/* Professional Tables */
+table {
+  background: var(--color-bg-secondary) !important;
+  border: 1px solid var(--color-ui-border) !important;
+  border-radius: 8px !important;
+}
+
+th, td {
+  border-bottom: 1px solid var(--color-ui-border) !important;
+  color: var(--color-text-primary) !important;
+}
+
+th {
+  background: var(--color-bg-tertiary) !important;
+  font-weight: 600 !important;
+}
+
+/* Professional Animations */
+@keyframes professionalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: professionalFadeIn 0.3s var(--transition-normal);
+}
+
+/* Professional Shadows for Elevated Elements */
+.elevated {
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.highly-elevated {
+  box-shadow: var(--shadow-xl) !important;
+}
+
+/* Professional Glass Effect */
+.glass {
+  background: rgba(56, 56, 56, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Professional Gradients */
+.professional-gradient {
+  background: linear-gradient(145deg, var(--color-bg-tertiary), var(--color-bg-secondary)) !important;
+}
+
+.accent-gradient {
+  background: linear-gradient(145deg, var(--color-accent-orange), #e65100) !important;
+}
+
+/* Responsive Professional Theme */
+@media (max-width: 768px) {
+  /* Ensure professional theme works on mobile */
+  :root {
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* High DPI Display Optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Enhanced shadows for high DPI displays */
+  .react-flow__node {
+    box-shadow: var(--shadow-md), 0 0 1px rgba(255, 120, 0, 0.1) !important;
+  }
+}
+
+/* Dark Mode Preference Override */
+@media (prefers-color-scheme: dark) {
+  /* Ensure our professional dark theme takes precedence */
+  * {
+    color-scheme: dark;
+  }
+}

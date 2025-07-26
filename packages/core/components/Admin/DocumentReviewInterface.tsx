@@ -548,7 +548,7 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .document-review-interface {
           max-width: 1600px;
           margin: 0 auto;

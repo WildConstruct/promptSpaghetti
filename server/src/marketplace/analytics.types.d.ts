@@ -250,8 +250,8 @@ export declare const AnalyticsEventSchema: z.ZodObject<{
         referrer?: string | undefined;
         session_id?: string | undefined;
         device_type?: string | undefined;
-        ip_address?: string | undefined;
         user_agent?: string | undefined;
+        ip_address?: string | undefined;
     }, {
         location?: {
             region?: string | undefined;
@@ -261,8 +261,8 @@ export declare const AnalyticsEventSchema: z.ZodObject<{
         referrer?: string | undefined;
         session_id?: string | undefined;
         device_type?: string | undefined;
-        ip_address?: string | undefined;
         user_agent?: string | undefined;
+        ip_address?: string | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
     metadata: {
@@ -274,8 +274,8 @@ export declare const AnalyticsEventSchema: z.ZodObject<{
         referrer?: string | undefined;
         session_id?: string | undefined;
         device_type?: string | undefined;
-        ip_address?: string | undefined;
         user_agent?: string | undefined;
+        ip_address?: string | undefined;
     };
     template_id: string;
     event_type: MetricType;
@@ -291,8 +291,8 @@ export declare const AnalyticsEventSchema: z.ZodObject<{
         referrer?: string | undefined;
         session_id?: string | undefined;
         device_type?: string | undefined;
-        ip_address?: string | undefined;
         user_agent?: string | undefined;
+        ip_address?: string | undefined;
     };
     template_id: string;
     event_type: MetricType;
@@ -315,15 +315,15 @@ export declare const AnalyticsQuerySchema: z.ZodObject<{
         min_value: z.ZodOptional<z.ZodNumber>;
         max_value: z.ZodOptional<z.ZodNumber>;
     }, "strip", z.ZodTypeAny, {
-        user_segments?: string[] | undefined;
         countries?: string[] | undefined;
         device_types?: string[] | undefined;
+        user_segments?: string[] | undefined;
         min_value?: number | undefined;
         max_value?: number | undefined;
     }, {
-        user_segments?: string[] | undefined;
         countries?: string[] | undefined;
         device_types?: string[] | undefined;
+        user_segments?: string[] | undefined;
         min_value?: number | undefined;
         max_value?: number | undefined;
     }>>;
@@ -343,28 +343,28 @@ export declare const AnalyticsQuerySchema: z.ZodObject<{
     limit: number;
     offset: number;
     aggregation: AggregationType;
-    time_range: TimeRange;
     metric_types: MetricType[];
+    time_range: TimeRange;
     sort?: {
         field: string;
         direction: "asc" | "desc";
     } | undefined;
     filters?: {
-        user_segments?: string[] | undefined;
         countries?: string[] | undefined;
         device_types?: string[] | undefined;
+        user_segments?: string[] | undefined;
         min_value?: number | undefined;
         max_value?: number | undefined;
     } | undefined;
     start_date?: Date | undefined;
     end_date?: Date | undefined;
-    group_by?: string[] | undefined;
-    template_ids?: string[] | undefined;
     creator_id?: string | undefined;
+    template_ids?: string[] | undefined;
+    group_by?: string[] | undefined;
 }, {
     aggregation: AggregationType;
-    time_range: TimeRange;
     metric_types: MetricType[];
+    time_range: TimeRange;
     sort?: {
         field: string;
         direction: "asc" | "desc";
@@ -372,17 +372,17 @@ export declare const AnalyticsQuerySchema: z.ZodObject<{
     limit?: number | undefined;
     offset?: number | undefined;
     filters?: {
-        user_segments?: string[] | undefined;
         countries?: string[] | undefined;
         device_types?: string[] | undefined;
+        user_segments?: string[] | undefined;
         min_value?: number | undefined;
         max_value?: number | undefined;
     } | undefined;
     start_date?: Date | undefined;
     end_date?: Date | undefined;
-    group_by?: string[] | undefined;
-    template_ids?: string[] | undefined;
     creator_id?: string | undefined;
+    template_ids?: string[] | undefined;
+    group_by?: string[] | undefined;
 }>;
 export declare const CustomReportSchema: z.ZodObject<{
     name: z.ZodString;
@@ -404,15 +404,15 @@ export declare const CustomReportSchema: z.ZodObject<{
                 min_value: z.ZodOptional<z.ZodNumber>;
                 max_value: z.ZodOptional<z.ZodNumber>;
             }, "strip", z.ZodTypeAny, {
-                user_segments?: string[] | undefined;
                 countries?: string[] | undefined;
                 device_types?: string[] | undefined;
+                user_segments?: string[] | undefined;
                 min_value?: number | undefined;
                 max_value?: number | undefined;
             }, {
-                user_segments?: string[] | undefined;
                 countries?: string[] | undefined;
                 device_types?: string[] | undefined;
+                user_segments?: string[] | undefined;
                 min_value?: number | undefined;
                 max_value?: number | undefined;
             }>>;
@@ -432,28 +432,28 @@ export declare const CustomReportSchema: z.ZodObject<{
             limit: number;
             offset: number;
             aggregation: AggregationType;
-            time_range: TimeRange;
             metric_types: MetricType[];
+            time_range: TimeRange;
             sort?: {
                 field: string;
                 direction: "asc" | "desc";
             } | undefined;
             filters?: {
-                user_segments?: string[] | undefined;
                 countries?: string[] | undefined;
                 device_types?: string[] | undefined;
+                user_segments?: string[] | undefined;
                 min_value?: number | undefined;
                 max_value?: number | undefined;
             } | undefined;
             start_date?: Date | undefined;
             end_date?: Date | undefined;
-            group_by?: string[] | undefined;
-            template_ids?: string[] | undefined;
             creator_id?: string | undefined;
+            template_ids?: string[] | undefined;
+            group_by?: string[] | undefined;
         }, {
             aggregation: AggregationType;
-            time_range: TimeRange;
             metric_types: MetricType[];
+            time_range: TimeRange;
             sort?: {
                 field: string;
                 direction: "asc" | "desc";
@@ -461,17 +461,17 @@ export declare const CustomReportSchema: z.ZodObject<{
             limit?: number | undefined;
             offset?: number | undefined;
             filters?: {
-                user_segments?: string[] | undefined;
                 countries?: string[] | undefined;
                 device_types?: string[] | undefined;
+                user_segments?: string[] | undefined;
                 min_value?: number | undefined;
                 max_value?: number | undefined;
             } | undefined;
             start_date?: Date | undefined;
             end_date?: Date | undefined;
-            group_by?: string[] | undefined;
-            template_ids?: string[] | undefined;
             creator_id?: string | undefined;
+            template_ids?: string[] | undefined;
+            group_by?: string[] | undefined;
         }>;
         visualization: z.ZodObject<{
             chart_type: z.ZodEnum<["line", "bar", "pie", "area", "table", "metric"]>;
@@ -505,24 +505,24 @@ export declare const CustomReportSchema: z.ZodObject<{
             limit: number;
             offset: number;
             aggregation: AggregationType;
-            time_range: TimeRange;
             metric_types: MetricType[];
+            time_range: TimeRange;
             sort?: {
                 field: string;
                 direction: "asc" | "desc";
             } | undefined;
             filters?: {
-                user_segments?: string[] | undefined;
                 countries?: string[] | undefined;
                 device_types?: string[] | undefined;
+                user_segments?: string[] | undefined;
                 min_value?: number | undefined;
                 max_value?: number | undefined;
             } | undefined;
             start_date?: Date | undefined;
             end_date?: Date | undefined;
-            group_by?: string[] | undefined;
-            template_ids?: string[] | undefined;
             creator_id?: string | undefined;
+            template_ids?: string[] | undefined;
+            group_by?: string[] | undefined;
         };
         refresh_interval?: number | undefined;
     }, {
@@ -535,8 +535,8 @@ export declare const CustomReportSchema: z.ZodObject<{
         };
         query: {
             aggregation: AggregationType;
-            time_range: TimeRange;
             metric_types: MetricType[];
+            time_range: TimeRange;
             sort?: {
                 field: string;
                 direction: "asc" | "desc";
@@ -544,17 +544,17 @@ export declare const CustomReportSchema: z.ZodObject<{
             limit?: number | undefined;
             offset?: number | undefined;
             filters?: {
-                user_segments?: string[] | undefined;
                 countries?: string[] | undefined;
                 device_types?: string[] | undefined;
+                user_segments?: string[] | undefined;
                 min_value?: number | undefined;
                 max_value?: number | undefined;
             } | undefined;
             start_date?: Date | undefined;
             end_date?: Date | undefined;
-            group_by?: string[] | undefined;
-            template_ids?: string[] | undefined;
             creator_id?: string | undefined;
+            template_ids?: string[] | undefined;
+            group_by?: string[] | undefined;
         };
         refresh_interval?: number | undefined;
     }>;
@@ -586,24 +586,24 @@ export declare const CustomReportSchema: z.ZodObject<{
             limit: number;
             offset: number;
             aggregation: AggregationType;
-            time_range: TimeRange;
             metric_types: MetricType[];
+            time_range: TimeRange;
             sort?: {
                 field: string;
                 direction: "asc" | "desc";
             } | undefined;
             filters?: {
-                user_segments?: string[] | undefined;
                 countries?: string[] | undefined;
                 device_types?: string[] | undefined;
+                user_segments?: string[] | undefined;
                 min_value?: number | undefined;
                 max_value?: number | undefined;
             } | undefined;
             start_date?: Date | undefined;
             end_date?: Date | undefined;
-            group_by?: string[] | undefined;
-            template_ids?: string[] | undefined;
             creator_id?: string | undefined;
+            template_ids?: string[] | undefined;
+            group_by?: string[] | undefined;
         };
         refresh_interval?: number | undefined;
     };
@@ -626,8 +626,8 @@ export declare const CustomReportSchema: z.ZodObject<{
         };
         query: {
             aggregation: AggregationType;
-            time_range: TimeRange;
             metric_types: MetricType[];
+            time_range: TimeRange;
             sort?: {
                 field: string;
                 direction: "asc" | "desc";
@@ -635,27 +635,27 @@ export declare const CustomReportSchema: z.ZodObject<{
             limit?: number | undefined;
             offset?: number | undefined;
             filters?: {
-                user_segments?: string[] | undefined;
                 countries?: string[] | undefined;
                 device_types?: string[] | undefined;
+                user_segments?: string[] | undefined;
                 min_value?: number | undefined;
                 max_value?: number | undefined;
             } | undefined;
             start_date?: Date | undefined;
             end_date?: Date | undefined;
-            group_by?: string[] | undefined;
-            template_ids?: string[] | undefined;
             creator_id?: string | undefined;
+            template_ids?: string[] | undefined;
+            group_by?: string[] | undefined;
         };
         refresh_interval?: number | undefined;
     };
     description?: string | undefined;
+    is_scheduled?: boolean | undefined;
     schedule?: {
         time: string;
         frequency: "monthly" | "daily" | "weekly";
         recipients: string[];
     } | undefined;
-    is_scheduled?: boolean | undefined;
 }>;
 export type AnalyticsEventInput = z.infer<typeof AnalyticsEventSchema>;
 export type AnalyticsQueryInput = z.infer<typeof AnalyticsQuerySchema>;

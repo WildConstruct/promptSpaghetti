@@ -135,6 +135,34 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({
   const [bookmarks, setBookmarks] = useState<BookmarkItem[]>([]);
   const [isAddingBookmark, setIsAddingBookmark] = useState(false);
 
+  // Update file counts for navigation items
+  const updateFileCounts = useCallback(async () => {
+    try {
+      // TODO: Replace with actual API calls
+      // Mock data for file counts
+      const mockCounts = {
+        recent: 15,
+        favorites: 8,
+        projects: 42,
+        templates: 18,
+        shared: 6,
+        'psg-files': 35,
+        'json-files': 12,
+        'text-files': 9
+      };
+
+      setSections(prev => prev.map(section => ({
+        ...section,
+        items: section.items.map(item => ({
+          ...item,
+          count: mockCounts[item.id as keyof typeof mockCounts] || undefined
+        }))
+      })));
+    } catch (error) {
+      console.error('Failed to update file counts:', error);
+    }
+  }, []);
+
   // Load navigation state and bookmarks
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -165,35 +193,7 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({
     } catch (error) {
       console.error('Failed to load navigation state:', error);
     }
-  }, [isAuthenticated]);
-
-  // Update file counts for navigation items
-  const updateFileCounts = useCallback(async () => {
-    try {
-      // TODO: Replace with actual API calls
-      // Mock data for file counts
-      const mockCounts = {
-        recent: 15,
-        favorites: 8,
-        projects: 42,
-        templates: 18,
-        shared: 6,
-        'psg-files': 35,
-        'json-files': 12,
-        'text-files': 9
-      };
-
-      setSections(prev => prev.map(section => ({
-        ...section,
-        items: section.items.map(item => ({
-          ...item,
-          count: mockCounts[item.id as keyof typeof mockCounts] || undefined
-        }))
-      })));
-    } catch (error) {
-      console.error('Failed to update file counts:', error);
-    }
-  }, []);
+  }, [isAuthenticated, updateFileCounts]);
 
   // Toggle section collapsed state
   const toggleSection = useCallback((sectionId: string) => {

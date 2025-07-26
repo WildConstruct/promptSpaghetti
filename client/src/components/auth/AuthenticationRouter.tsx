@@ -5,7 +5,7 @@
  * enhanced navigation, breadcrumbs, and state management
  */
 
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import { RouteGuard } from './RouteGuard';
@@ -48,6 +48,7 @@ interface AuthBreadcrumbProps {
   currentPath: string;
 }
 
+// eslint-disable-next-line react/prop-types
 const AuthBreadcrumb: React.FC<AuthBreadcrumbProps> = React.memo(({ currentPath }) => {
   const route = useMemo(() => 
     AUTH_ROUTE_CONFIG.public.find(r => r.path === currentPath) ||

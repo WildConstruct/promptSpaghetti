@@ -19,27 +19,27 @@ export declare const BackupConfigSchema: z.ZodObject<{
     maxBackupSize: z.ZodDefault<z.ZodNumber>;
     format: z.ZodDefault<z.ZodEnum<["json", "jsonl", "csv", "parquet"]>>;
 }, "strip", z.ZodTypeAny, {
-    batchSize: number;
+    format: "json" | "csv" | "parquet" | "jsonl";
     includeMetadata: boolean;
-    backupLocation: string;
-    compressionEnabled: boolean;
-    encryptionEnabled: boolean;
+    batchSize: number;
     retentionDays: number;
+    compressionEnabled: boolean;
+    backupLocation: string;
+    encryptionEnabled: boolean;
     verifyBackup: boolean;
     maxBackupSize: number;
-    format: "json" | "jsonl" | "csv" | "parquet";
     encryptionKey?: string | undefined;
 }, {
-    batchSize?: number | undefined;
+    format?: "json" | "csv" | "parquet" | "jsonl" | undefined;
     includeMetadata?: boolean | undefined;
-    backupLocation?: string | undefined;
-    compressionEnabled?: boolean | undefined;
-    encryptionEnabled?: boolean | undefined;
+    batchSize?: number | undefined;
     encryptionKey?: string | undefined;
     retentionDays?: number | undefined;
+    compressionEnabled?: boolean | undefined;
+    backupLocation?: string | undefined;
+    encryptionEnabled?: boolean | undefined;
     verifyBackup?: boolean | undefined;
     maxBackupSize?: number | undefined;
-    format?: "json" | "jsonl" | "csv" | "parquet" | undefined;
 }>;
 export type BackupConfig = z.infer<typeof BackupConfigSchema>;
 export declare enum BackupStatus {

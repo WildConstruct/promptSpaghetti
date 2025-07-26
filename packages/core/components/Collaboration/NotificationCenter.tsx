@@ -11,7 +11,12 @@ interface NotificationCenterProps {
   className?: string;
 }
 
-export   const [showPreferences, setShowPreferences] = useState(false);
+const NotificationCenter: React.FC<NotificationCenterProps> = ({ 
+  userId, 
+  workspaceId, 
+  className 
+}) => {
+  const [showPreferences, setShowPreferences] = useState(false);
   const [filter, setFilter] = useState<NotificationType | 'all'>('all');
   const [showUnreadOnly, setShowUnreadOnly] = useState(false);
 
@@ -218,3 +223,5 @@ export   const [showPreferences, setShowPreferences] = useState(false);
     </div>
   );
 };
+
+export default NotificationCenter;

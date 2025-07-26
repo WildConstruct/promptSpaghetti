@@ -893,7 +893,7 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
         </TabsContent>
       </Tabs>
 
-      <style jsx>{`
+      <style>{`
         .recommendation-engine-admin {
           max-width: 1400px;
           margin: 0 auto;

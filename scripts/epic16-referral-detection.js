@@ -99,7 +99,7 @@ function log(level, message, data = null) {
 // =============================================================================
 
 class MockReferralDetectionService {
-  constructor(config) {
+  constructor(config: any) {
     this.config = config;
     this.referrals = new Map();
     this.campaigns = new Map();
@@ -113,7 +113,7 @@ class MockReferralDetectionService {
     this.initializeDefaultData();
   }
 
-  async trackReferral(referralCode, referrerId, options = {}) {
+  async trackReferral(referralCode: string, referrerId: string, options: any = {}): Promise<string> {
     const startTime = Date.now();
     
     try {
@@ -200,7 +200,7 @@ class MockReferralDetectionService {
     }
   }
 
-  async calculateFraudRisk(options) {
+  async calculateFraudRisk(options: any): Promise<any> {
     let riskScore = 0;
     const indicators = {};
     
@@ -264,7 +264,7 @@ class MockReferralDetectionService {
     };
   }
 
-  async createCampaign(campaignData) {
+  async createCampaign(campaignData: any): Promise<string> {
     const campaignId = crypto.randomUUID();
     
     const campaign = {
@@ -305,7 +305,7 @@ class MockReferralDetectionService {
     return campaign;
   }
 
-  async calculateReward(referralId) {
+  async calculateReward(referralId: string): Promise<any> {
     const referral = this.referrals.get(referralId);
     if (!referral || referral.status !== 'verified' || !referral.conversionValue) {
       return null;
@@ -398,7 +398,7 @@ class MockReferralDetectionService {
     }
   }
 
-  async generateAnalytics(options = {}) {
+  async generateAnalytics(options: any = {}): Promise<any> {
     const dateRange = {
       start: options.startDate || new Date(Date.now() - (30 * 24 * 60 * 60 * 1000)),
       end: options.endDate || new Date()
@@ -581,7 +581,7 @@ class MockReferralDetectionService {
     return event;
   }
 
-  async getHealthCheck() {
+  async getHealthCheck(): Promise<any> {
     const totalReferrals = this.referrals.size;
     const last24Hours = Array.from(this.referrals.values()).filter(r => 
       r.clickedAt > new Date(Date.now() - 24 * 60 * 60 * 1000)

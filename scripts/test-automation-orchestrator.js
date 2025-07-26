@@ -14,7 +14,7 @@ const path = require('path');
 const chalk = require('chalk');
 
 class TestAutomationOrchestrator {
-  constructor(options = {}) {
+  constructor(options: any = {}) {
     this.options = {
       parallel: options.parallel || false,
       coverage: options.coverage || true,
@@ -96,7 +96,7 @@ class TestAutomationOrchestrator {
   /**
    * Run all test suites with comprehensive orchestration
    */
-  async runAllTests() {
+  async runAllTests(): Promise<any> {
     console.log(chalk.blue.bold('🚀 Starting Test Automation Orchestrator\n'));
     
     this.results.startTime = Date.now();
@@ -126,7 +126,7 @@ class TestAutomationOrchestrator {
   /**
    * Run specific test suite by name
    */
-  async runSpecificSuite(suiteName) {
+  async runSpecificSuite(suiteName: string): Promise<any> {
     const suite = this.testSuites.find(s => 
       s.name.toLowerCase().includes(suiteName.toLowerCase())
     );
@@ -154,7 +154,7 @@ class TestAutomationOrchestrator {
   /**
    * Setup test environment
    */
-  async setupTestEnvironment() {
+  async setupTestEnvironment(): Promise<void> {
     console.log(chalk.yellow('🔧 Setting up test environment...'));
     
     // Ensure output directory exists
@@ -180,7 +180,7 @@ class TestAutomationOrchestrator {
   /**
    * Run tests in parallel
    */
-  async runTestsInParallel() {
+  async runTestsInParallel(): Promise<void> {
     console.log(chalk.blue('🔀 Running tests in parallel...\n'));
     
     const promises = this.testSuites.map(async (suite) => {
@@ -206,7 +206,7 @@ class TestAutomationOrchestrator {
   /**
    * Run tests sequentially
    */
-  async runTestsSequentially() {
+  async runTestsSequentially(): Promise<void> {
     console.log(chalk.blue('➡️ Running tests sequentially...\n'));
     
     for (const suite of this.testSuites) {
@@ -224,7 +224,7 @@ class TestAutomationOrchestrator {
   /**
    * Run a single test suite
    */
-  async runSingleTestSuite(suite) {
+  async runSingleTestSuite(suite: any): Promise<any> {
     const startTime = Date.now();
     console.log(chalk.cyan(`🧪 Running: ${suite.name}`));
     console.log(chalk.gray(`   Description: ${suite.description}`));
@@ -282,7 +282,7 @@ class TestAutomationOrchestrator {
   /**
    * Execute a command with promise
    */
-  async executeCommand(command, options = {}) {
+  async executeCommand(command: string, options: any = {}): Promise<any> {
     return new Promise((resolve, reject) => {
       const timeout = options.timeout || this.options.timeout;
       

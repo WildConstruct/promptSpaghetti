@@ -25,7 +25,7 @@ console.log('Running production build...');
 // Try safe config first, fall back to regular if it fails
 try {
   execSync('vite build --config vite.config.production-safe.ts', { stdio: 'inherit' });
-} catch (_err) {
+} catch {
   console.log('Safe config failed, trying regular config...');
   execSync('vite build --config vite.config.production.ts', { stdio: 'inherit' });
 }

@@ -361,7 +361,7 @@ export interface AgingPrediction {
   predictionId: string;
   type: PredictionType;
   horizon: number; // days
-  prediction: unknown;
+  prediction: Record<string, number | string | boolean>;
   confidence: number;
   factors: string[];
 }
@@ -455,7 +455,7 @@ export interface PredictiveModel {
   accuracy: number;
   lastTrained: Date;
   features: string[];
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
 }
 
 export enum ModelType {
@@ -1015,7 +1015,7 @@ export class DataAgingTrackingService {
   private async logAgingEvent(
     eventType: string,
     record: DataAgingRecord,
-    additionalData?: any
+    additionalData?: Record<string, unknown>
   ): Promise<void> {
     await this.auditService.logEvent({
       eventType: `AGING_${eventType}`,
@@ -1049,11 +1049,11 @@ export class DataAgingTrackingService {
     return {};
   }
 
-  private async generateAgingRecommendations(__records: DataAgingRecord[]): Promise<any[]> {
+  private async generateAgingRecommendations(__records: DataAgingRecord[]): Promise<AgingRecommendation[]> {
     return [];
   }
 
-  private async calculateAgingTrends(__records: DataAgingRecord[]): Promise<any[]> {
+  private async calculateAgingTrends(__records: DataAgingRecord[]): Promise<unknown[]> {
     return [];
   }
 

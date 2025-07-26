@@ -35,7 +35,7 @@ class QualityGate {
     this.passed = true;
   }
 
-  async run() {
+  async run(): Promise<void> {
     console.log(chalk.blue('🔍 Running Quality Gate Analysis...\n'));
 
     try {
@@ -57,7 +57,7 @@ class QualityGate {
     }
   }
 
-  async checkESLintResults() {
+  async checkESLintResults(): Promise<void> {
     const reportPath = path.join('reports', 'eslint-report.json');
     
     if (!fs.existsSync(reportPath)) {
@@ -67,8 +67,8 @@ class QualityGate {
 
     const eslintData = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
     
-    const totalErrors = eslintData.reduce((sum, file) => sum + file.errorCount, 0);
-    const totalWarnings = eslintData.reduce((sum, file) => sum + file.warningCount, 0);
+    const totalErrors = eslintData.reduce((sum: number, file: any) => sum + file.errorCount, 0);
+    const totalWarnings = eslintData.reduce((sum: number, file: any) => sum + file.warningCount, 0);
 
     this.results.eslint = { errors: totalErrors, warnings: totalWarnings };
 
@@ -92,7 +92,7 @@ class QualityGate {
     console.log();
   }
 
-  async checkComplexityResults() {
+  async checkComplexityResults(): Promise<void> {
     const reportPath = path.join('reports', 'complexity-report.json');
     
     if (!fs.existsSync(reportPath)) {
@@ -108,9 +108,9 @@ class QualityGate {
     let maxComplexity = 0;
 
     if (complexityData.results) {
-      complexityData.results.forEach(file => {
+      complexityData.results.forEach((file: any) => {
         if (file.functions) {
-          file.functions.forEach(func => {
+          file.functions.forEach((func: any) => {
             totalComplexity += func.complexity || 0;
             functionCount++;
             maxComplexity = Math.max(maxComplexity, func.complexity || 0);
@@ -148,7 +148,7 @@ class QualityGate {
     console.log();
   }
 
-  async checkSecurityResults() {
+  async checkSecurityResults(): Promise<void> {
     // For now, we'll rely on npm audit output
     // In the future, we could integrate with dedicated security tools
     console.log(chalk.blue('🔒 Security Check:'));
@@ -156,7 +156,7 @@ class QualityGate {
     console.log();
   }
 
-  printSummary() {
+  printSummary(): void {
     console.log(chalk.blue('📊 Quality Gate Summary:'));
     console.log('=' .repeat(50));
     

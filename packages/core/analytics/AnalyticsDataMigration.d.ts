@@ -20,10 +20,10 @@ export declare const MigrationConfigSchema: z.ZodObject<{
     preserveTimestamps: z.ZodDefault<z.ZodBoolean>;
     includeMetadata: z.ZodDefault<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    batchSize: number;
-    includeMetadata: boolean;
-    concurrency: number;
     retryAttempts: number;
+    includeMetadata: boolean;
+    batchSize: number;
+    concurrency: number;
     retryDelayMs: number;
     validationEnabled: boolean;
     backupEnabled: boolean;
@@ -31,10 +31,10 @@ export declare const MigrationConfigSchema: z.ZodObject<{
     dryRun: boolean;
     preserveTimestamps: boolean;
 }, {
-    batchSize?: number | undefined;
-    includeMetadata?: boolean | undefined;
-    concurrency?: number | undefined;
     retryAttempts?: number | undefined;
+    includeMetadata?: boolean | undefined;
+    batchSize?: number | undefined;
+    concurrency?: number | undefined;
     retryDelayMs?: number | undefined;
     validationEnabled?: boolean | undefined;
     backupEnabled?: boolean | undefined;

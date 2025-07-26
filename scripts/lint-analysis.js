@@ -7,7 +7,7 @@
 
 const { execSync } = require('child_process');
 
-async function analyzeLintIssues() {
+async function analyzeLintIssues(): Promise<void> {
   console.log('🔍 Comprehensive Lint Analysis');
   console.log('📊 Categorizing remaining linting issues...\n');
   
@@ -128,7 +128,7 @@ async function analyzeLintIssues() {
   }
 }
 
-async function main() {
+async function main(): Promise<void> {
   await analyzeLintIssues();
 }
 

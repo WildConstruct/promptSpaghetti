@@ -17,8 +17,8 @@ interface UserNavigationProps {
   className?: string;
 }
 
-export   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const navigate = useNavigate();
+export   const navigate = useNavigate();
+  const { isAuthenticated, user } = useAuthStore();
 
   if (!isAuthenticated || !user) {
     return null;

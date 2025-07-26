@@ -25,7 +25,7 @@ const healthCheckOnly = args.includes('--health-check-only');
 const reportIndex = args.findIndex(arg => arg === '--report');
 const reportPath = reportIndex !== -1 && args[reportIndex + 1] ? args[reportIndex + 1] : null;
 
-async function main() {
+async function main(): Promise<void> {
   console.log('🚀 Integrated Performance Test Runner');
   console.log('=====================================');
   console.log('');
@@ -188,7 +188,7 @@ async function main() {
   }
 }
 
-function getStatusIcon(status) {
+function getStatusIcon(status: string): string {
   switch (status) {
   case 'HEALTHY': return '✅';
   case 'WARNING': return '⚠️';
@@ -197,7 +197,7 @@ function getStatusIcon(status) {
   }
 }
 
-function getScoreIcon(score) {
+function getScoreIcon(score: number): string {
   if (score >= 90) return '🟢';
   if (score >= 70) return '🟡';
   if (score >= 50) return '🟠';

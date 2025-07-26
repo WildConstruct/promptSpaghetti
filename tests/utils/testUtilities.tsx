@@ -407,19 +407,21 @@ export const PerformanceTestUtils = {
 };
 
 // Custom Jest matchers
-export     return {
+export const toHaveClass = (received: Element, className: string) => {
+  const pass = received.classList.contains(className);
+  return {
       message: () =>
         pass
           ? `expected element not to have class "${className}"`
           : `expected element to have class "${className}"`,
       pass
     };
-  },
+};
 
-  /**
-   * Check if API response has expected structure
-   */
-  toMatchAPIResponse: (received: Record<string, unknown>, expected: Record<string, unknown>) => {
+/**
+ * Check if API response has expected structure
+ */
+export const toMatchAPIResponse = (received: Record<string, unknown>, expected: Record<string, unknown>) => {
     const requiredFields = Object.keys(expected);
     const receivedFields = Object.keys(received);
     
@@ -433,12 +435,12 @@ export     return {
           : `expected API response to have fields: ${missingFields.join(', ')}`,
       pass
     };
-  },
+};
 
-  /**
-   * Check if execution time is within expected range
-   */
-  toCompleteWithin: (received: Promise<unknown>, maxTime: number) => {
+/**
+ * Check if execution time is within expected range
+ */
+export const toCompleteWithin = (received: Promise<unknown>, maxTime: number) => {
     return PerformanceTestUtils.measureTime(() => received).then(({ duration }) => {
       const pass = duration <= maxTime;
       return {
@@ -449,7 +451,6 @@ export     return {
         pass
       };
     });
-  }
 };
 
 // Test environment utilities

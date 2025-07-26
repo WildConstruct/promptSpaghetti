@@ -244,8 +244,8 @@ export class SecurityIntelligenceDataRefreshEngine extends EventEmitter {
   
   private activeJobs: Map<string, RefreshJob> = new Map();
   private jobHistory: RefreshJob[] = [];
-  private sourceHealth: Map<string, any> = new Map();
-  private performanceMetrics: any = {};
+  private sourceHealth: Map<string, unknown> = new Map();
+  private performanceMetrics: Record<string, unknown> = {};
   private refreshIntervals: Map<string, NodeJS.Timeout> = new Map();
   private initialized: boolean = false;
 

@@ -47,7 +47,7 @@ const requiredFiles = [
 let filesMissing = 0;
 let filesPresent = 0;
 
-requiredFiles.forEach(file => {
+requiredFiles.forEach((file: string) => {
   const filePath = path.join(__dirname, file);
   if (fs.existsSync(filePath)) {
     console.log(`   ✓ ${file}`);
@@ -119,7 +119,7 @@ if (fs.existsSync(analyticsRoutesPath)) {
     '/analytics/recommendations'
   ];
   
-  endpoints.forEach(endpoint => {
+  endpoints.forEach((endpoint: string) => {
     if (content.includes(endpoint)) {
       console.log(`   ✓ ${endpoint} endpoint found`);
     } else {
@@ -143,7 +143,7 @@ if (fs.existsSync(databasePath)) {
     'getRecommendations'
   ];
   
-  methods.forEach(method => {
+  methods.forEach((method: string) => {
     if (content.includes(method)) {
       console.log(`   ✓ ${method} method found`);
     } else {
@@ -168,7 +168,7 @@ if (fs.existsSync(planPath)) {
     'Story 13.4'
   ];
   
-  stories.forEach(story => {
+  stories.forEach((story: string) => {
     if (content.includes(story)) {
       console.log(`   ✓ ${story} documented`);
     } else {

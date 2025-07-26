@@ -6,9 +6,9 @@
  * autocomplete, filtering, sorting, and analytics tracking.
  */
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { UnifiedSearchSystem } from './UnifiedSearchSystem';
-import { SearchQuery, SearchResult, FilterCondition } from './SearchContext';
+import { SearchQuery, SearchResult } from './SearchContext';
 import { searchApiService, Template } from '../../services/searchApiService';
 
 interface MarketplaceSearchProps {
@@ -39,7 +39,7 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {
   onClick?: (template: Template, index: number) => void;
   onDoubleClick?: (template: Template, index: number) => void;
 }) => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery] = useState('');
 
   const handleClick = () => {
     onClick?.(template, index);
@@ -243,7 +243,7 @@ const DefaultEmptyStateRenderer = () => (
       No templates found
     </h3>
     <p style={{ margin: 0, fontSize: '14px' }}>
-      Try adjusting your search terms or filters to find what you're looking for.
+      Try adjusting your search terms or filters to find what you&apos;re looking for.
     </p>
   </div>
 );

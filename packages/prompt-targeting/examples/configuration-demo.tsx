@@ -7,24 +7,24 @@ import React, { useState } from 'react';
 import {
   ConfigurationManager,
   ConfigurationPanel,
-  useConfiguration,
+  // useConfiguration,
   ConfigurationProvider
 } from '../index';
 
 // Mock React DOM for demo purposes
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      div: any;
-      button: any;
-      h1: any;
-      h2: any;
-      p: any;
-      pre: any;
-      code: any;
-    }
-  }
-}
+// declare global {
+  // namespace JSX {
+    // interface IntrinsicElements {
+      // div: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
+      // button: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
+      // h1: React.DetailedHTMLProps<React.HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
+      // h2: React.DetailedHTMLProps<React.HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
+      // p: React.DetailedHTMLProps<React.HTMLAttributes<HTMLParagraphElement>, HTMLParagraphElement>;
+      // pre: React.DetailedHTMLProps<React.HTMLAttributes<HTMLPreElement>, HTMLPreElement>;
+      // code: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+    // }
+  // }
+// }
 
 /**
  * Main demo component
@@ -142,7 +142,7 @@ const ReactHooksDemo: React.FC = () => {
       result = JSON.stringify(configHook.config, null, 2);
       break;
         
-    case 'updateConfig':
+    case 'updateConfig': {
       const updateResult = configHook.updateConfig({
         qualityPreference: 0.9,
         stylePreference: 'photorealistic'
@@ -151,6 +151,7 @@ const ReactHooksDemo: React.FC = () => {
                  `Errors: ${updateResult.errors.length}\n` +
                  `Warnings: ${updateResult.warnings.length}`;
       break;
+    }
         
     case 'setConfigValue':
       const setResult = configHook.setConfigValue('platformOverrides.openai.temperature', 0.2);
@@ -351,7 +352,6 @@ presets.forEach(preset => {
         <pre style={{ background: '#f8f9fa', padding: '15px', borderRadius: '4px' }}>
           {`// Export configuration
 const jsonConfig = configManager.exportConfig('json');
-const yamlConfig = configManager.exportConfig('yaml');
 
 // Import configuration
 const importResult = configManager.importConfig(jsonConfig, 'json');

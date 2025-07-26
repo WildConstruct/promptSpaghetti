@@ -23,9 +23,18 @@ interface CreateToggleData {
   enabled: boolean;
 }
 
-export 
+export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, onClose, onSubmit }) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState<CreateToggleData>({
+    key: '',
+    name: '',
+    description: '',
+    type: 'boolean',
+    value: false,
+    claudeImpact: 'NONE',
+    enabled: true
+  });
 
   if (!isOpen) return null;
 
@@ -465,3 +474,4 @@ export
     </div>
   );
 };
+export default CreateToggleModal;

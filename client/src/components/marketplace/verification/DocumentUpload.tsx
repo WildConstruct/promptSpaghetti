@@ -35,9 +35,7 @@ const ALLOWED_TYPES = [
   'text/plain'
 ];
 
-export const DocumentUpload: React.FC<DocumentUploadProps> = ({ verificationRequestId, onUploadComplete, onError }) => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [documentType, setDocumentType] = useState<DocumentType>('identity');
+export   const [documentType, setDocumentType] = useState<DocumentType>('identity');
   const [uploadState, setUploadState] = useState<UploadState>({
     isUploading: false,
     progress: 0,
@@ -258,7 +256,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({ verificationRequ
         </ul>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .document-upload {
           max-width: 600px;
           margin: 0 auto;

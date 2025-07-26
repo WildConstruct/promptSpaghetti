@@ -106,7 +106,17 @@ const handleApiResponse = async (response: Response) => {
   return response.json();
 };
 
-export 
+export const useMarketplace = () => {
+  const [state, setState] = useState<MarketplaceState>({
+    templates: { all: [], featured: [] },
+    categories: [],
+    featuredTemplates: [],
+    searchResults: null,
+    loading: false,
+    error: null,
+    filters: { limit: 20, page: 1 }
+  });
+
   // Keep track of ongoing requests to prevent race conditions
   const requestIdRef = useRef(0);
 
@@ -441,3 +451,5 @@ export
     getSearchBasedRecommendations
   };
 };
+
+export default useMarketplace;

@@ -472,7 +472,7 @@ export class ClientPerformanceProfiler {
   /**
    * Custom metric tracking
    */
-  addCustomMetric(key: string, value: any): void {
+  addCustomMetric(key: string, value: unknown): void {
     if (this.snapshots.length > 0) {
       const lastSnapshot = this.snapshots[this.snapshots.length - 1];
       lastSnapshot.customMetrics[key] = value;
@@ -546,7 +546,7 @@ export class ClientPerformanceProfiler {
   /**
    * Send report to server
    */
-  private async sendReportToServer(report: any): Promise<void> {
+  private async sendReportToServer(report: PerformanceSnapshot): Promise<void> {
     try {
       await fetch('/api/performance/client-report', {
         method: 'POST',
@@ -564,7 +564,7 @@ export class ClientPerformanceProfiler {
   /**
    * Generate summary metrics
    */
-  private generateSummaryMetrics(): any {
+  private generateSummaryMetrics(): Record<string, unknown> {
     if (this.snapshots.length === 0) return null;
 
     const renderTimes = this.snapshots.map(s => s.render.renderTime);
@@ -670,7 +670,7 @@ export class ClientPerformanceProfiler {
   /**
    * Get current performance stats
    */
-  getCurrentStats(): any {
+  getCurrentStats(): PerformanceSnapshot {
     if (this.snapshots.length === 0) return null;
     
     const latest = this.snapshots[this.snapshots.length - 1];

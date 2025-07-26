@@ -8,13 +8,13 @@
  * permissions, activity, team assignments, settings, and security management.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, User, Shield, Activity, Users, Settings, Lock,
-  Edit, Mail, Phone, Calendar, MapPin, Building, Clock,
+  Edit, Mail, Calendar, MapPin, Building, Clock,
   CheckCircle, AlertCircle, XCircle, MoreVertical, Key,
-  Download, RefreshCw, Trash2, UserCheck
+  Download, RefreshCw
 } from 'lucide-react';
 
 // Types
@@ -72,13 +72,13 @@ const UserProfileDetail: React.FC = () => {
   
   const [activeTab, setActiveTab] = useState<'profile' | 'permissions' | 'activity' | 'team' | 'settings' | 'security'>('profile');
   const [loading, setLoading] = useState(true);
-  const [_editMode, setEditMode] = useState(false);
+  const [, setEditMode] = useState(false);
   const [user, setUser] = useState<UserProfile | null>(null);
   const [activityLog, setActivityLog] = useState<ActivityLog[]>([]);
   const [teamMemberships, setTeamMemberships] = useState<TeamMembership[]>([]);
 
-  // Mock data for demonstration
-  const mockUser: UserProfile = {
+  // Mock data for demonstration - wrapped in useMemo for proper dependency tracking
+  const mockUser: UserProfile = useMemo(() => ({
     id: userId || 'user-1',
     name: 'John Smith',
     firstName: 'John',
@@ -104,9 +104,9 @@ const UserProfileDetail: React.FC = () => {
     mfaEnabled: true,
     sessionCount: 1,
     passwordLastChanged: '2024-12-15T14:20:00Z'
-  };
+  }), [userId]); // Depends on userId
 
-  const mockActivityLog: ActivityLog[] = [
+  const mockActivityLog: ActivityLog[] = useMemo(() => [
     {
       id: '1',
       type: 'login',
@@ -127,9 +127,9 @@ const UserProfileDetail: React.FC = () => {
       description: 'Granted "Project Manager" role to robert.johnson@company.com',
       timestamp: '2025-07-22T13:30:00Z'
     }
-  ];
+  ], []); // Static mock data
 
-  const mockTeamMemberships: TeamMembership[] = [
+  const mockTeamMemberships: TeamMembership[] = useMemo(() => [
     {
       id: '1',
       name: 'Engineering Team',
@@ -154,7 +154,7 @@ const UserProfileDetail: React.FC = () => {
       memberCount: 8,
       department: 'Cross-functional'
     }
-  ];
+  ], []); // Static mock data
 
   useEffect(() => {
     const loadUserData = async () => {
@@ -175,7 +175,7 @@ const UserProfileDetail: React.FC = () => {
     if (userId) {
       loadUserData();
     }
-  }, [userId]);
+  }, [userId, mockUser, mockActivityLog, mockTeamMemberships]);
 
   const getStatusColor = (status: string) => {
     switch (status) {

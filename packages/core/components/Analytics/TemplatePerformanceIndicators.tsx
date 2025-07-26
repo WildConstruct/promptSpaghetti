@@ -724,8 +724,7 @@ export interface ExportConfig {
   metrics: string[];
 }
 
-export   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export   const [error, setError] = useState<string | null>(null);
   const [selectedIndicator, setSelectedIndicator] = useState<string | null>(null);
   const [showAlerts, setShowAlerts] = useState(true);
   const [refreshing, setRefreshing] = useState(false);

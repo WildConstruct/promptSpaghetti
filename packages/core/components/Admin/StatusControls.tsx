@@ -678,7 +678,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
         />
       )}
 
-      <style jsx>{`
+      <style>{`
         .status-controls {
           max-width: 1400px;
           margin: 0 auto;
@@ -1059,7 +1059,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
         </div>
       </CardContent>
 
-      <style jsx>{`
+      <style>{`
         .service-card {
           transition: box-shadow 0.2s ease;
         }
@@ -1246,7 +1246,7 @@ const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .modal-overlay {
           position: fixed;
           inset: 0;

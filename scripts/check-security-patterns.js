@@ -115,7 +115,7 @@ const ALLOWED_PATTERNS = [
   /jest/
 ];
 
-function checkSecurityPatterns(filePath) {
+function checkSecurityPatterns(filePath: string): any[] {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
     const violations = [];
@@ -172,11 +172,11 @@ function checkSecurityPatterns(filePath) {
   }
 }
 
-function getLineNumber(content, index) {
+function getLineNumber(content: string, index: number): number {
   return content.substring(0, index).split('\n').length;
 }
 
-function getSeverity(category) {
+function getSeverity(category: string): string {
   const severityMap = {
     sqlInjection: 'critical',
     codeInjection: 'critical',
@@ -190,7 +190,7 @@ function getSeverity(category) {
   return severityMap[category] || 'medium';
 }
 
-function getSecurityMessage(category, match) {
+function getSecurityMessage(category: string, match: string): string {
   const messages = {
     sqlInjection: 'Potential SQL injection vulnerability detected',
     xssRisks: 'Potential XSS vulnerability - unsafe HTML manipulation',
@@ -204,7 +204,7 @@ function getSecurityMessage(category, match) {
   return messages[category] || 'Security vulnerability detected';
 }
 
-function getBestPracticeMessage(category, match) {
+function getBestPracticeMessage(category: string, match: string): string {
   const messages = {
     missingValidation: 'Input validation missing - validate all user inputs',
     missingErrorHandling: 'Error handling missing - wrap in try-catch or handle errors',
@@ -213,7 +213,7 @@ function getBestPracticeMessage(category, match) {
   return messages[category] || 'Security best practice violation';
 }
 
-function main() {
+function main(): void {
   const filePaths = process.argv.slice(2);
   let totalViolations = 0;
   let criticalCount = 0;

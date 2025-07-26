@@ -317,7 +317,7 @@ describe('PricingOptimizer', () => {
       jest.spyOn(
         Date.prototype,
         'getMonth'
-      ).mockReturnValue(1 as unknown as unknown as unknown as unknown); // February (0-indexed)
+      ).mockReturnValue(1 as unknown as unknown); // February (0-indexed)
 
       const request: PricingCalculationRequest = {
         modelId: 'film-industry-model',

@@ -26,7 +26,8 @@ const createMockContext = (overrides: Partial<AdvancedExecutionContext> = {}): A
   executionMeta: {
     startTime: Date.now(),
     executionId: 'test-exec-123',
-    nodeExecutionOrder: []
+    nodeExecutionOrder: [],
+    performanceMetrics: new Map()
   },
   prng: () => Math.random(),
   seed: 12345,
@@ -478,6 +479,7 @@ describe('PerformanceMonitor', () => {
       
       testMonitor.on('monitor_cleared', () => {
         eventsReceived++;
+        if (eventsReceived === 2) done();
       });
       
       testMonitor.on('monitor_shutdown', () => {
@@ -485,8 +487,11 @@ describe('PerformanceMonitor', () => {
         if (eventsReceived === 2) done();
       });
       
-      testMonitor.clear();
-      testMonitor.shutdown();
+      // Use setTimeout to ensure events are processed in next tick
+      setTimeout(() => {
+        testMonitor.clear();
+        testMonitor.shutdown();
+      }, 0);
     });
 
     it('should emit alert resolution events', (done) => {

@@ -18,8 +18,8 @@ export const ProjectMetadataSchema = z.object({
 });
 // Graph content schema - the actual node/edge data
 export const GraphContentSchema = z.object({
-    nodes: z.array(z.unknown()), // Using z.unknown() to allow for flexible node data structures
-    edges: z.array(z.unknown()), // Using z.unknown() to allow for flexible edge data structures
+    nodes: z.array(z.any()), // Using z.any() to allow for flexible node data structures
+    edges: z.array(z.any()), // Using z.any() to allow for flexible edge data structures
     seed: z.number().optional(),
     viewport: z.object({
         x: z.number(),
@@ -60,7 +60,7 @@ export const PSGFileSchema = z.object({
 /**
  * Creates a new .psg file from graph data
  */
-export function createPSGFile(nodes: unknown[], edges: unknown[], metadata: unknown, settings: unknown, seed?: number, viewport?: unknown) {
+export function createPSGFile(nodes, edges, metadata, settings, seed, viewport) {
     const now = new Date().toISOString();
     return {
         metadata: {
@@ -104,7 +104,7 @@ export function createPSGFile(nodes: unknown[], edges: unknown[], metadata: unkn
 /**
  * Validates a .psg file structure
  */
-export function validatePSGFile(data: unknown) {
+export function validatePSGFile(data) {
     return PSGFileSchema.parse(data);
 }
 /**
@@ -125,7 +125,7 @@ export var PSGErrorType;
 /**
  * Safely parses a .psg file with comprehensive error handling
  */
-export function parsePSGFile(jsonString: string, options: unknown = {}) {
+export function parsePSGFile(jsonString, options = {}) {
     const { maxFileSize = 10 * 1024 * 1024, // 10MB default limit
     strictValidation = false, allowLegacyFormat = true } = options;
     try {
@@ -286,7 +286,7 @@ export function parsePSGFile(jsonString: string, options: unknown = {}) {
 /**
  * Updates the modified timestamp and increments version if needed
  */
-export function updatePSGFileMetadata(psgFile: unknown, changes: unknown) {
+export function updatePSGFileMetadata(psgFile, changes) {
     const now = new Date().toISOString();
     return {
         ...psgFile,
@@ -300,7 +300,7 @@ export function updatePSGFileMetadata(psgFile: unknown, changes: unknown) {
 /**
  * Extracts a lightweight summary of a .psg file for listing purposes
  */
-export function extractPSGFileSummary(psgFile: unknown) {
+export function extractPSGFileSummary(psgFile) {
     const content = JSON.stringify(psgFile);
     return {
         id: generateProjectIdFromMetadata(psgFile.metadata),
@@ -318,7 +318,7 @@ export function extractPSGFileSummary(psgFile: unknown) {
 /**
  * Generates a consistent project ID based on metadata
  */
-function generateProjectIdFromMetadata(metadata: unknown) {
+function generateProjectIdFromMetadata(metadata) {
     const name = metadata.name.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
     const created = metadata.created ? new Date(metadata.created).getTime() : Date.now();
     return `${name}_${created}`;
@@ -332,7 +332,7 @@ export const PSG_FILE_DESCRIPTION = 'PromptScape Graph Project';
 /**
  * Version compatibility checker
  */
-export function checkPSGCompatibility(psgFile: unknown, currentVersion = '1.0.0') {
+export function checkPSGCompatibility(psgFile, currentVersion = '1.0.0') {
     const warnings = [];
     let compatible = true;
     let requiresUpgrade = false;
@@ -379,7 +379,7 @@ function compareVersions(a, b) {
 /**
  * Security validation to prevent dangerous content
  */
-function checkForSecurityViolations(data: unknown) {
+function checkForSecurityViolations(data) {
     const violations = [];
     const checkObject = (obj, path = '') => {
         if (!obj || typeof obj !== 'object')
@@ -420,7 +420,7 @@ function checkForSecurityViolations(data: unknown) {
 /**
  * Validates internal data consistency
  */
-function validateDataConsistency(data: unknown) {
+function validateDataConsistency(data) {
     const errors = [];
     try {
         // Check if nodes reference valid IDs
@@ -461,7 +461,7 @@ function validateDataConsistency(data: unknown) {
 /**
  * Validates data integrity and returns warnings for potential issues
  */
-function validateDataIntegrity(psgFile: unknown) {
+function validateDataIntegrity(psgFile) {
     const warnings = [];
     try {
         // Check graph complexity
@@ -509,7 +509,7 @@ function validateDataIntegrity(psgFile: unknown) {
 /**
  * Enhanced serialization with validation and error handling
  */
-export function serializePSGFile(psgFile: unknown, options: unknown = {}) {
+export function serializePSGFile(psgFile, options = {}) {
     const { pretty = false, validate = true } = options;
     try {
         // Pre-serialization validation

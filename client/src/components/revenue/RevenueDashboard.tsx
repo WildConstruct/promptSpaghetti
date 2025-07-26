@@ -6,7 +6,7 @@
  */
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { RevenueMetrics, RevenueTimeRange, RevenueDashboardData, RevenueFilters } from '../../types/revenue';
+import { RevenueTimeRange, RevenueFilters } from '../../types/revenue';
 import { RevenueOverviewPanel } from './RevenueOverviewPanel';
 import { RevenueTrendChart } from './RevenueTrendChart';
 import { TopPerformersWidget } from './TopPerformersWidget';
@@ -144,7 +144,7 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
     setRefreshing(true);
     try {
       await refreshData();
-    } catch (err) {
+    } catch {
       setError('Failed to refresh dashboard data');
     } finally {
       setRefreshing(false);
@@ -161,7 +161,7 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
         filters,
         includeForecast: !!forecast
       });
-    } catch (err) {
+    } catch {
       setError('Failed to export dashboard data');
     }
   }, [exportData, scope, entityId, timeRange, customDateRange, filters, forecast]);
@@ -169,7 +169,7 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
   const handleGenerateForecast = useCallback(async () => {
     try {
       await generateForecast();
-    } catch (err) {
+    } catch {
       setError('Failed to generate revenue forecast');
     }
   }, [generateForecast]);

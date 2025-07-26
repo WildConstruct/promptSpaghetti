@@ -5,8 +5,8 @@
 
 import { z } from 'zod';
 
-// Re-export PromptGraph type from core package
-export type { PromptGraph } from '../../../core/types';
+// Re-export Graph type from core package as PromptGraph
+export type { Graph as PromptGraph } from '@promptscape/core/graphSchema';
 
 /**
  * Platform-specific capabilities and constraints
@@ -104,6 +104,16 @@ export interface PlatformPrompt {
     qualityScore: number;
     /** Applied optimizations */
     optimizations: string[];
+    /** Pipeline information */
+    pipeline?: {
+      stages: string[];
+      version: string;
+    };
+    /** Additional metadata */
+    enableEvents?: boolean;
+    enableTiming?: boolean;
+    aspect?: string;
+    transformTime?: number;
   };
 }
 
@@ -121,6 +131,18 @@ export interface AdaptorConfig {
   enableOptimizations?: boolean;
   /** Custom parameter mappings */
   customMappings?: Record<string, unknown>;
+  /** Pipeline configuration */
+  pipeline?: {
+    skipValidation?: boolean;
+    skipOptimization?: boolean;
+    stages?: string[];
+    stageTimeouts?: Record<string, number>;
+    retries?: number | {
+      maxAttempts?: number;
+      backoffMs?: number;
+      retryableErrors?: string[];
+    };
+  };
 }
 
 /**
@@ -140,6 +162,8 @@ export interface TranslationContext {
     startTime: Date;
     userId?: string;
     sessionId?: string;
+    adaptorId?: string;
+    adaptorVersion?: string;
   };
 }
 
@@ -335,63 +359,10 @@ export interface TranslationCache {
 /**
  * Zod schemas for runtime validation
  */
-export const PlatformCapabilitiesSchema = z.object({
-  platform: z.string(),
-  version: z.string(),
-  maxTokens: z.number().optional(),
-  supportedAspectRatios: z.array(z.string()).optional(),
-  parameterRanges: z.record(z.tuple([z.number(), z.number()])),
-  features: z.array(z.string()),
-  styleSupport: z.boolean(),
-  negativePromptSupport: z.boolean(),
-  customParameters: z.record(z.unknown()).optional()
-});
-
-export const ValidationResultSchema = z.object({
-  valid: z.boolean(),
-  errors: z.array(z.object({
-    code: z.string(),
-    message: z.string(),
-    severity: z.enum(['error', 'warning', 'info']),
-    source: z.object({
-      nodeId: z.string().optional(),
-      property: z.string().optional()
-    }).optional(),
-    suggestion: z.string().optional()
-  })),
-  warnings: z.array(z.object({
-    code: z.string(),
-    message: z.string(),
-    source: z.object({
-      nodeId: z.string().optional(),
-      property: z.string().optional()
-    }).optional(),
-    optimization: z.string().optional()
-  })),
-  compatibilityScore: z.number().min(0).max(1)
-});
-
-export const PlatformPromptSchema = z.object({
-  platform: z.string(),
-  prompt: z.string(),
-  negativePrompt: z.string().optional(),
-  parameters: z.record(z.unknown()),
-  metadata: z.object({
-    sourceHash: z.string(),
-    timestamp: z.date(),
-    qualityScore: z.number().min(0).max(1),
-    optimizations: z.array(z.string())
-  })
-});
-
-export const AdaptorConfigSchema = z.object({
-  qualityPreference: z.number().min(0).max(1).optional(),
-  stylePreference: z.enum(['default', 'artistic', 'photorealistic', 'minimal']).optional(),
-  platformOverrides: z.record(z.unknown()).optional(),
-  enableOptimizations: z.boolean().optional(),
-  customMappings: z.record(z.unknown()).optional()
-});
-
+export 
+export 
+export 
+export 
 /**
  * Error classes for prompt targeting system
  */
@@ -419,14 +390,14 @@ export class AdaptorError extends PromptTargetingError {
   }
 }
 
-export class ValidationError extends PromptTargetingError {
+export class ValidationException extends PromptTargetingError {
   constructor(
     message: string,
     public validationErrors: ValidationError[],
     code: string = 'VALIDATION_ERROR'
   ) {
     super(message, code);
-    this.name = 'ValidationError';
+    this.name = 'ValidationException';
   }
 }
 

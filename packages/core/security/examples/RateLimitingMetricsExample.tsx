@@ -92,7 +92,12 @@ export function BasicMetricsExample() {
 // Example 2: React Dashboard Integration
 // ========================================
 
-export   const [throttlingEngine] = useState(() => new AdaptiveThrottlingRulesEngine(
+export function RateLimitingDashboardExample() {
+  // Rate limiting service instance
+  const [rateLimitingService] = useState(() => new RateLimitingService());
+  
+  // Throttling engine with analytics enabled
+  const [throttlingEngine] = useState(() => new AdaptiveThrottlingRulesEngine(
     rateLimitingService,
     true,
     { enableAnalytics: true }

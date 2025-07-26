@@ -105,7 +105,7 @@ export const NotificationMethodSchema = z.object({
 export const EscalationActionSchema = z.object({
   actionId: z.string(),
   type: z.nativeEnum(EscalationActionType),
-  configuration: z.record(z.any()),
+  configuration: z.record(z.unknown()),
   executeImmediately: z.boolean(),
   rollbackable: z.boolean()
 });

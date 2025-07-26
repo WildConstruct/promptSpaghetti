@@ -38,7 +38,6 @@ import {
   Visibility as VisibilityIcon,
   ExpandMore as ExpandMoreIcon,
   Timeline as TimelineIcon,
-  Assessment as AssessmentIcon,
   History as HistoryIcon
 } from '@mui/icons-material';
 
@@ -84,8 +83,7 @@ const STATUS_CONFIG = {
   retrying: { color: 'warning', icon: ReplayIcon, label: 'Retrying' }
 };
 
-export   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(0);
+export   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [selectedExecution, setSelectedExecution] = useState<ExecutionRecord | null>(null);
 

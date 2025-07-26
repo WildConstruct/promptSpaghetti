@@ -449,7 +449,7 @@ export function MFAEnrollmentWorkflow({
             <Alert>
               <Mail className="h-4 w-4" />
               <AlertDescription>
-                We've sent a verification code to <strong>{state.emailAddress}</strong>. 
+                We&apos;ve sent a verification code to <strong>{state.emailAddress}</strong>. 
                 Check your email and enter the code below.
               </AlertDescription>
             </Alert>
@@ -459,7 +459,7 @@ export function MFAEnrollmentWorkflow({
             <Alert>
               <MessageSquare className="h-4 w-4" />
               <AlertDescription>
-                We've sent a verification code to <strong>{state.phoneNumber}</strong>. 
+                We&apos;ve sent a verification code to <strong>{state.phoneNumber}</strong>. 
                 Enter the code below.
               </AlertDescription>
             </Alert>
@@ -610,7 +610,7 @@ export function MFAEnrollmentWorkflow({
             <Shield className="h-4 w-4" />
             <AlertDescription>
               Your account is now protected with multi-factor authentication. 
-              You'll need to provide a verification code along with your password when signing in.
+              You&apos;ll need to provide a verification code along with your password when signing in.
             </AlertDescription>
           </Alert>
 

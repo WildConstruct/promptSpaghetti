@@ -652,8 +652,7 @@ interface GeographicTargetingProps {
   onExcludeModeChange?: (exclude: boolean) => void;
 }
 
-export   const [searchTerm, setSearchTerm] = useState('');
-
+export 
   // Mock data - in real implementation, this would come from props or API
   const countries = [
     { code: 'US', name: 'United States', userCount: 125000 },
@@ -769,8 +768,7 @@ interface SegmentManagementProps {
   onDuplicateSegment: (id: string) => void;
 }
 
-export   const [editingSegment, setEditingSegment] = useState<string | null>(null);
-
+export 
   return (
     <div className="segment-management">
       <div className="segments-header">

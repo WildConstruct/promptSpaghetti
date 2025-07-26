@@ -30,7 +30,16 @@ interface TemplateGalleryProps {
   viewMode?: 'grid' | 'list';
 }
 
-export   const [categoryFilter, setCategoryFilter] = useState<TemplateCategory | 'all'>('all');
+const TemplateGallery: React.FC<TemplateGalleryProps> = ({ 
+  workspaceId,
+  onSelectTemplate,
+  onCreateFromTemplate,
+  className,
+  showCreateButton = true,
+  allowCreation = true,
+  viewMode = 'grid'
+}) => {
+  const [categoryFilter, setCategoryFilter] = useState<TemplateCategory | 'all'>('all');
   const [difficultyFilter, setDifficultyFilter] = useState<TemplateDifficulty | 'all'>('all');
   const [sortBy, setSortBy] = useState<'popular' | 'recent' | 'name' | 'rating'>('popular');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>(initialViewMode);
@@ -375,3 +384,5 @@ export   const [categoryFilter, setCategoryFilter] = useState<TemplateCategory |
     </div>
   );
 };
+
+export default TemplateGallery;

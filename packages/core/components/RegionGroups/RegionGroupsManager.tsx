@@ -48,8 +48,7 @@ export const RegionGroupsManager: React.FC<RegionGroupsManagerProps> = ({
   }, [setRegionGroups]);
 
   // Handle group hover state
-      onGroupHover?.(groupId);
-  }, [onGroupHover]);
+    }, [onGroupHover]);
 
   // Handle group selection
     }, [onGroupSelect]);

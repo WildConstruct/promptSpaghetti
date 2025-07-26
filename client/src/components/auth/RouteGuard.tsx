@@ -4,7 +4,7 @@
  * Provides comprehensive authentication and authorization for protected routes
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 
@@ -200,10 +200,13 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({
   } = useAuthStore();
   
   const [accessCheckStatus, setAccessCheckStatus] = useState<'checking' | 'granted' | 'denied' | 'unauthenticated'>('checking');
-  const [_customCheckResult, setCustomCheckResult] = useState<boolean | null>(null);
+  const [, setCustomCheckResult] = useState<boolean | null>(null);
 
   // Determine access requirements for current route
-  const routeAccess = access || DEFAULT_ROUTE_ACCESS[location.pathname] || { requireAuth: true };
+  const routeAccess = useMemo(() => 
+    access || DEFAULT_ROUTE_ACCESS[location.pathname] || { requireAuth: true }, 
+    [access, location.pathname]
+  );
 
   // Check authentication status on mount
   useEffect(() => {
@@ -354,7 +357,7 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({
             color: '#666',
             marginBottom: '20px'
           }}>
-            You don't have permission to access this page.
+            You don&apos;t have permission to access this page.
           </p>
           {routeAccess.requiredRoles && (
             <p style={{ fontSize: '14px', color: '#888', marginBottom: '10px' }}>

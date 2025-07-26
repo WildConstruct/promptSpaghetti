@@ -30,8 +30,10 @@ import {
   STANDARD_CLASSIFICATION_ROLES,
   ACCESS_CONTROL_MATRIX,
   DataOperation,
-  DataClassificationLevel
+  RoleConstraint,
+  AccessRequirement
 } from './DataClassificationAccessControl';
+import { DataClassificationLevel } from '../types/DataClassification';
 import {
   DelegationRule,
   InheritanceFramework,
@@ -251,10 +253,14 @@ export class CentralizedAccessControlService extends EventEmitter {
       subject.userId,
       subject.roles,
       {
-        timestamp: new Date(),
-        requestSource: 'access_control_service',
+        operation: 'read',
+        userId: subject.userId,
         sessionId: 'current_session', // Should be passed from request
-        purpose: 'permission_evaluation'
+        purpose: 'permission_evaluation',
+        environment: 'system',
+        timestamp: new Date(),
+        source: 'access_control_service',
+        requestId: 'perm_eval_' + Date.now()
       }
     );
   }
@@ -343,7 +349,7 @@ export class CentralizedAccessControlService extends EventEmitter {
           source: 'access_control_service',
           timestamp: new Date()
         });
-        request.object.classification = classificationResult.level;
+        request.object.classification = classificationResult.level as unknown as DataClassificationLevel;
       } catch (error) {
         return { valid: false, reason: 'Unable to determine object classification' };
       }
@@ -415,7 +421,7 @@ export class CentralizedAccessControlService extends EventEmitter {
    */
   private async getBasicPermissions(subject: SubjectAttributes): Promise<EffectivePermissions> {
     const permissions: string[] = [];
-    const constraints: any[] = [];
+    const constraints: RoleConstraint[] = [];
 
     // Get permissions from roles
     for (const roleId of subject.roles) {
@@ -437,7 +443,9 @@ export class CentralizedAccessControlService extends EventEmitter {
       validationStatus: {
         isValid: true,
         lastValidated: new Date(),
-        validatedBy: 'access_control_service'
+        validatedBy: 'access_control_service',
+        warnings: [],
+        errors: []
       }
     };
   }
@@ -449,7 +457,12 @@ export class CentralizedAccessControlService extends EventEmitter {
     const permissions: string[] = [];
     
     // Iterate through classification levels up to user's clearance
-    const levels: DataClassificationLevel[] = ['PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED'];
+    const levels: DataClassificationLevel[] = [
+      DataClassificationLevel.PUBLIC, 
+      DataClassificationLevel.INTERNAL, 
+      DataClassificationLevel.CONFIDENTIAL, 
+      DataClassificationLevel.RESTRICTED
+    ];
     const maxLevelIndex = levels.indexOf(clearanceLevel);
 
     for (let i = 0; i <= maxLevelIndex; i++) {
@@ -457,7 +470,7 @@ export class CentralizedAccessControlService extends EventEmitter {
       const levelMatrix = ACCESS_CONTROL_MATRIX[level];
       
       for (const [operation, allowedRoles] of Object.entries(levelMatrix)) {
-        if (allowedRoles.includes(roleId)) {
+        if (Array.isArray(allowedRoles) && allowedRoles.includes(roleId)) {
           permissions.push(`${level}:${operation}`);
         }
       }
@@ -1069,7 +1082,7 @@ class RBACEngine {
     const matchedRoles: string[] = [];
     const matchedPermissions: string[] = [];
     const denialReasons: string[] = [];
-    const requirements: any[] = [];
+    const requirements: AccessRequirement[] = [];
 
     // Check if user has required permissions for the operation
     const requiredPermission = `${request.object.classification}:${request.action.operation}`;

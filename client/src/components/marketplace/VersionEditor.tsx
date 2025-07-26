@@ -1,5 +1,5 @@
 // Epic 16.2.2 Version Editor Component
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './VersionEditor.css';
 
@@ -69,9 +69,9 @@ export const VersionEditor: React.FC = () => {
         fetchVersion();
       }
     }
-  }, [templateId, versionId]);
+  }, [templateId, versionId, fetchLastVersion, fetchVersion]);
 
-  const fetchLastVersion = async () => {
+  const fetchLastVersion = useCallback(async () => {
     try {
       const response = await fetch(`/api/marketplace/templates/${templateId}/versions`, {
         headers: {
@@ -103,9 +103,9 @@ export const VersionEditor: React.FC = () => {
     } catch (error) {
       console.error('Failed to fetch last version:', error);
     }
-  };
+  }, [templateId, versionId]);
 
-  const fetchVersion = async () => {
+  const fetchVersion = useCallback(async () => {
     if (!versionId) return;
 
     try {
@@ -148,9 +148,9 @@ export const VersionEditor: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [versionId]);
 
-  const handleInputChange = (field: keyof VersionData, value: Error) => {
+  const handleInputChange = (field: keyof VersionData, value: string) => {
     setVersionData(prev => ({
       ...prev,
       [field]: value
@@ -190,6 +190,8 @@ export const VersionEditor: React.FC = () => {
       const parsed = JSON.parse(value);
       handleInputChange('graph_json', parsed);
     } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      console.debug('Invalid JSON input:', error);
       // Invalid JSON, don't update the version data
     }
   };
@@ -410,7 +412,7 @@ export const VersionEditor: React.FC = () => {
           rows={12}
           className="code-textarea"
         />
-        <small>Valid JSON representing your template's graph structure</small>
+        <small>Valid JSON representing your template&apos;s graph structure</small>
       </div>
 
       <div className="form-group">

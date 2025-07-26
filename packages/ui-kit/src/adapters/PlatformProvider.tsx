@@ -33,7 +33,7 @@ export const PlatformProvider: React.FC<PlatformProviderProps> = ({
   }, [overridePlatform]);
 
   const defaultCapabilities: DeviceCapabilities = useMemo(() => {
-    const isWebPlatform = detectedPlatform === 'web';
+    // const isWebPlatform = detectedPlatform === 'web';
     const isMobilePlatform = detectedPlatform === 'mobile';
     
     return {

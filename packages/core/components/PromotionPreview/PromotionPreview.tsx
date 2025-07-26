@@ -658,7 +658,7 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({
         )}
       </Tabs>
 
-      <style jsx>{`
+      <style>{`
         .promotion-preview {
           background: #fff;
           border-radius: 8px;

@@ -104,7 +104,7 @@ export const ApiManagementDashboard: React.FC = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'overview' | 'keys' | 'analytics' | 'monitoring' | 'configuration'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'keys' | 'analytics' | 'monitoring' | 'optimization' | 'configuration'>('overview');
   
   // State for overview data
   const [globalStats, setGlobalStats] = useState<GlobalApiKeyStats | null>(null);
@@ -137,27 +137,15 @@ export const ApiManagementDashboard: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_rateLimitConfig, _setRateLimitConfig] = useState<RateLimitConfiguration | null>(null);
 
+  // State for Epic 31 optimization integration
+  const [optimizationInsights, setOptimizationInsights] = useState<unknown>(null);
+  const [optimizationLoading, setOptimizationLoading] = useState(false);
+  const [optimizationTimeRange, setOptimizationTimeRange] = useState<'7' | '30' | '90'>('30');
+
   // Check if user has admin privileges
   const isAdmin = user?.roles?.includes('admin') || user?.roles?.includes('super_admin');
 
-  useEffect(() => {
-    if (user && isAdmin) {
-      fetchGlobalStats();
-      fetchApiKeys();
-      fetchUsageMetrics();
-      fetchRealTimeAlerts();
-      
-      // Set up real-time updates
-      const interval = setInterval(() => {
-        fetchGlobalStats();
-        fetchRealTimeAlerts();
-      }, 30000); // Update every 30 seconds
-      
-      return () => clearInterval(interval);
-    }
-  }, [user, isAdmin, fetchUsageMetrics]);
-
-  const fetchGlobalStats = async () => {
+  const fetchGlobalStats = useCallback(async () => {
     try {
       const response = await fetch('/api/auth/api-keys/admin/statistics', {
         headers: {
@@ -175,9 +163,9 @@ export const ApiManagementDashboard: React.FC = () => {
       console.error('Error fetching global stats:', error);
       setError('Failed to load global statistics');
     }
-  };
+  }, []);
 
-  const fetchApiKeys = async () => {
+  const fetchApiKeys = useCallback(async () => {
     try {
       const response = await fetch('/api/auth/api-keys/admin/all', {
         headers: {
@@ -197,7 +185,7 @@ export const ApiManagementDashboard: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const fetchUsageMetrics = useCallback(async () => {
     try {
@@ -216,7 +204,7 @@ export const ApiManagementDashboard: React.FC = () => {
     }
   }, [timeRange]);
 
-  const fetchRealTimeAlerts = async () => {
+  const fetchRealTimeAlerts = useCallback(async () => {
     try {
       const response = await fetch('/api/auth/api-keys/admin/alerts', {
         headers: {
@@ -231,7 +219,52 @@ export const ApiManagementDashboard: React.FC = () => {
     } catch (error) {
       console.error('Error fetching alerts:', error);
     }
-  };
+  }, []);
+
+  // Epic 31: Fetch API optimization insights
+  const fetchOptimizationInsights = useCallback(async () => {
+    setOptimizationLoading(true);
+    try {
+      const response = await fetch(`/admin/api-optimization/insights?timeWindow=${optimizationTimeRange}&focusAreas=performance,security,cost,reliability&includeBenchmarks=true`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setOptimizationInsights(data.data);
+      } else {
+        console.error('Failed to fetch optimization insights:', response.status);
+      }
+    } catch (error) {
+      console.error('Error fetching optimization insights:', error);
+    } finally {
+      setOptimizationLoading(false);
+    }
+  }, [optimizationTimeRange]);
+
+  useEffect(() => {
+    if (user && isAdmin) {
+      fetchGlobalStats();
+      fetchApiKeys();
+      fetchUsageMetrics();
+      fetchRealTimeAlerts();
+      fetchOptimizationInsights();
+      
+      // Set up real-time updates
+      const interval = setInterval(() => {
+        fetchGlobalStats();
+        fetchRealTimeAlerts();
+        // Only refresh optimization data occasionally since it's more expensive
+        if (Math.random() < 0.1) { // 10% chance per update cycle
+          fetchOptimizationInsights();
+        }
+      }, 30000); // Update every 30 seconds
+      
+      return () => clearInterval(interval);
+    }
+  }, [user, isAdmin, fetchGlobalStats, fetchApiKeys, fetchUsageMetrics, fetchRealTimeAlerts, fetchOptimizationInsights]);
 
   const adminRevokeKey = async (keyId: string, reason: string) => {
     try {
@@ -295,7 +328,7 @@ export const ApiManagementDashboard: React.FC = () => {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  
+        
       if (!response.ok) {
         throw new Error(`Failed to perform bulk ${operation}`);
       }
@@ -406,11 +439,12 @@ export const ApiManagementDashboard: React.FC = () => {
             { key: 'keys', label: 'API Keys', icon: '🔑' },
             { key: 'analytics', label: 'Analytics', icon: '📈' },
             { key: 'monitoring', label: 'Monitoring', icon: '👁️' },
+            { key: 'optimization', label: 'Optimization', icon: '🚀' },
             { key: 'configuration', label: 'Configuration', icon: '⚙️' }
           ].map(tab => (
             <button
               key={tab.key}
-              onClick={() => setActiveTab(tab.key as 'overview' | 'keys' | 'analytics' | 'monitoring' | 'configuration')}
+              onClick={() => setActiveTab(tab.key as 'overview' | 'keys' | 'analytics' | 'monitoring' | 'optimization' | 'configuration')}
               className={`whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${
                 activeTab === tab.key
                   ? 'border-blue-500 text-blue-600'
@@ -784,8 +818,8 @@ export const ApiManagementDashboard: React.FC = () => {
                   <div key={keyId} className="border-l-4 border-blue-500 pl-4">
                     <div className="text-sm font-medium text-gray-900">{keyId}</div>
                     <div className="text-sm text-gray-600">
-                      Requests: {metrics.totalRequests.toLocaleString()} | 
-                      Errors: {metrics.errorCount} | 
+                      Requests (24h): {metrics.callsLast24Hours.toLocaleString()} | 
+                      Error Rate: {metrics.errorRate}% | 
                       Avg Response: {metrics.averageResponseTime}ms
                     </div>
                   </div>
@@ -879,6 +913,328 @@ export const ApiManagementDashboard: React.FC = () => {
                   ))
               )}
             </div>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'optimization' && (
+        <div className="space-y-6">
+          {/* Epic 31: API Optimization Insights */}
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">API Performance Optimization</h3>
+                <p className="text-sm text-gray-600">AI-powered insights and recommendations to improve your API performance</p>
+              </div>
+              <div className="flex items-center space-x-4">
+                <div className="flex space-x-2">
+                  {(['7', '30', '90'] as const).map((days) => (
+                    <button
+                      key={days}
+                      onClick={() => {
+                        setOptimizationTimeRange(days);
+                        fetchOptimizationInsights();
+                      }}
+                      className={`px-3 py-1 text-sm rounded-md ${
+                        optimizationTimeRange === days
+                          ? 'bg-blue-100 text-blue-700'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      {days} days
+                    </button>
+                  ))}
+                </div>
+                <button
+                  onClick={fetchOptimizationInsights}
+                  disabled={optimizationLoading}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {optimizationLoading ? 'Analyzing...' : '🔄 Refresh'}
+                </button>
+              </div>
+            </div>
+
+            {optimizationLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="flex items-center space-x-3">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                  <span className="text-gray-600">Analyzing API performance patterns...</span>
+                </div>
+              </div>
+            ) : optimizationInsights ? (
+              <div className="space-y-6">
+                {/* Executive Summary */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4">
+                    <div className="flex items-center">
+                      <div className="text-2xl">💰</div>
+                      <div className="ml-3">
+                        <p className="text-sm font-medium text-blue-700">Estimated Savings</p>
+                        <p className="text-xl font-bold text-blue-900">
+                          ${optimizationInsights.summary?.estimatedSavings?.toLocaleString() || '0'}
+                        </p>
+                        <p className="text-xs text-blue-600">per month</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-4">
+                    <div className="flex items-center">
+                      <div className="text-2xl">⚡</div>
+                      <div className="ml-3">
+                        <p className="text-sm font-medium text-green-700">Performance Gain</p>
+                        <p className="text-xl font-bold text-green-900">
+                          {optimizationInsights.summary?.performanceGains?.toFixed(1) || '0'}%
+                        </p>
+                        <p className="text-xs text-green-600">faster response</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-4">
+                    <div className="flex items-center">
+                      <div className="text-2xl">🔴</div>
+                      <div className="ml-3">
+                        <p className="text-sm font-medium text-orange-700">Critical Issues</p>
+                        <p className="text-xl font-bold text-orange-900">
+                          {optimizationInsights.summary?.criticalIssues || 0}
+                        </p>
+                        <p className="text-xs text-orange-600">need attention</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Recommendations */}
+                {(optimizationInsights as any)?.recommendations && (optimizationInsights as any)?.recommendations?.length > 0 && (
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-900 mb-4">Optimization Recommendations</h4>
+                    <div className="space-y-4">
+                      {(optimizationInsights as any)?.recommendations?.slice(0, 10).map((rec: unknown, index: number) => (
+                        <div
+                          key={(rec as any)?.id || index}
+                          className={`border rounded-lg p-4 ${
+                            (rec as any)?.severity === 'critical' ? 'border-red-200 bg-red-50' :
+                            (rec as any)?.severity === 'high' ? 'border-orange-200 bg-orange-50' :
+                            (rec as any)?.severity === 'medium' ? 'border-yellow-200 bg-yellow-50' :
+                            'border-blue-200 bg-blue-50'
+                          }`}
+                        >
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center space-x-2 mb-2">
+                                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                  (rec as any)?.severity === 'critical' ? 'bg-red-100 text-red-800' :
+                                  (rec as any)?.severity === 'high' ? 'bg-orange-100 text-orange-800' :
+                                  (rec as any)?.severity === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                                  'bg-blue-100 text-blue-800'
+                                }`}>
+                                  {(rec as any)?.severity?.toUpperCase()}
+                                </span>
+                                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                  (rec as any)?.type === 'performance' ? 'bg-green-100 text-green-800' :
+                                  (rec as any)?.type === 'security' ? 'bg-purple-100 text-purple-800' :
+                                  (rec as any)?.type === 'cost' ? 'bg-blue-100 text-blue-800' :
+                                  'bg-gray-100 text-gray-800'
+                                }`}>
+                                  {(rec as any)?.type?.toUpperCase()}
+                                </span>
+                                <span className="text-xs text-gray-500">
+                                  Priority: {(rec as any)?.recommendation?.priority || 'N/A'}/10
+                                </span>
+                              </div>
+                              <h5 className="font-medium text-gray-900 mb-1">{(rec as any)?.title}</h5>
+                              <p className="text-sm text-gray-600 mb-3">{(rec as any)?.description}</p>
+                              
+                              {/* Implementation Steps */}
+                              {(rec as any)?.recommendation?.implementation && (rec as any)?.recommendation?.implementation?.length > 0 && (
+                                <div>
+                                  <p className="text-sm font-medium text-gray-700 mb-1">Implementation:</p>
+                                  <ul className="text-sm text-gray-600 space-y-1">
+                                    {(rec as any)?.recommendation?.implementation?.slice(0, 3).map((step: string, stepIndex: number) => (
+                                      <li key={stepIndex} className="flex items-start">
+                                        <span className="text-blue-500 mr-2">•</span>
+                                        <span>{step}</span>
+                                      </li>
+                                    ))}
+                                    {(rec as any)?.recommendation?.implementation?.length > 3 && (
+                                      <li className="text-gray-500 italic">
+                                        +{(rec as any)?.recommendation?.implementation?.length - 3} more steps
+                                      </li>
+                                    )}
+                                  </ul>
+                                </div>
+                              )}
+                            </div>
+                            
+                            {/* Impact Metrics */}
+                            <div className="ml-6 text-right">
+                              {(rec as any)?.impact?.estimatedSavings && (
+                                <div className="text-sm">
+                                  <span className="text-gray-500">Savings:</span>
+                                  <span className="font-medium text-green-600 ml-1">
+                                    ${(rec as any)?.impact?.estimatedSavings?.toLocaleString()}
+                                  </span>
+                                </div>
+                              )}
+                              {(rec as any)?.impact?.performanceImprovement && (
+                                <div className="text-sm">
+                                  <span className="text-gray-500">Speed:</span>
+                                  <span className="font-medium text-blue-600 ml-1">
+                                    +{(rec as any)?.impact?.performanceImprovement}%
+                                  </span>
+                                </div>
+                              )}
+                              {(rec as any)?.recommendation?.timeToImplement && (
+                                <div className="text-sm">
+                                  <span className="text-gray-500">Time:</span>
+                                  <span className="font-medium text-gray-600 ml-1">
+                                    {(rec as any)?.recommendation?.timeToImplement}h
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Performance Trends */}
+                {optimizationInsights.trends && (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="bg-white border border-gray-200 rounded-lg p-4">
+                      <h5 className="font-medium text-gray-900 mb-2">Performance Trend</h5>
+                      <div className="flex items-center">
+                        <span className={`text-2xl ${
+                          optimizationInsights.trends.performanceTrend === 'improving' ? 'text-green-500' :
+                          optimizationInsights.trends.performanceTrend === 'declining' ? 'text-red-500' :
+                          'text-gray-500'
+                        }`}>
+                          {optimizationInsights.trends.performanceTrend === 'improving' ? '📈' :
+                           optimizationInsights.trends.performanceTrend === 'declining' ? '📉' : '➡️'}
+                        </span>
+                        <span className="ml-2 font-medium capitalize">
+                          {optimizationInsights.trends.performanceTrend}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="bg-white border border-gray-200 rounded-lg p-4">
+                      <h5 className="font-medium text-gray-900 mb-2">Usage Trend</h5>
+                      <div className="flex items-center">
+                        <span className={`text-2xl ${
+                          optimizationInsights.trends.usageTrend === 'increasing' ? 'text-blue-500' :
+                          optimizationInsights.trends.usageTrend === 'decreasing' ? 'text-orange-500' :
+                          'text-gray-500'
+                        }`}>
+                          {optimizationInsights.trends.usageTrend === 'increasing' ? '📊' :
+                           optimizationInsights.trends.usageTrend === 'decreasing' ? '📉' : '➡️'}
+                        </span>
+                        <span className="ml-2 font-medium capitalize">
+                          {optimizationInsights.trends.usageTrend}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="bg-white border border-gray-200 rounded-lg p-4">
+                      <h5 className="font-medium text-gray-900 mb-2">Error Trend</h5>
+                      <div className="flex items-center">
+                        <span className={`text-2xl ${
+                          optimizationInsights.trends.errorTrend === 'improving' ? 'text-green-500' :
+                          optimizationInsights.trends.errorTrend === 'worsening' ? 'text-red-500' :
+                          'text-gray-500'
+                        }`}>
+                          {optimizationInsights.trends.errorTrend === 'improving' ? '✅' :
+                           optimizationInsights.trends.errorTrend === 'worsening' ? '❌' : '➡️'}
+                        </span>
+                        <span className="ml-2 font-medium capitalize">
+                          {optimizationInsights.trends.errorTrend}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Benchmarks */}
+                {optimizationInsights.benchmarks && (
+                  <div className="bg-white border border-gray-200 rounded-lg p-6">
+                    <h4 className="text-lg font-semibold text-gray-900 mb-4">Performance Benchmarks</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div>
+                        <h5 className="font-medium text-gray-700 mb-2">Response Time</h5>
+                        <div className="space-y-2">
+                          <div className="flex justify-between">
+                            <span className="text-sm text-gray-600">Your Performance:</span>
+                            <span className="font-medium">
+                              {optimizationInsights.benchmarks.yourPerformance?.responseTime || 'N/A'}ms
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-sm text-gray-600">Industry Average:</span>
+                            <span className="font-medium text-gray-500">
+                              {optimizationInsights.benchmarks.industryAverages?.responseTime || 'N/A'}ms
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <h5 className="font-medium text-gray-700 mb-2">Error Rate</h5>
+                        <div className="space-y-2">
+                          <div className="flex justify-between">
+                            <span className="text-sm text-gray-600">Your Performance:</span>
+                            <span className="font-medium">
+                              {optimizationInsights.benchmarks.yourPerformance?.errorRate || 'N/A'}%
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-sm text-gray-600">Industry Average:</span>
+                            <span className="font-medium text-gray-500">
+                              {optimizationInsights.benchmarks.industryAverages?.errorRate || 'N/A'}%
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <h5 className="font-medium text-gray-700 mb-2">Uptime</h5>
+                        <div className="space-y-2">
+                          <div className="flex justify-between">
+                            <span className="text-sm text-gray-600">Your Performance:</span>
+                            <span className="font-medium">
+                              {optimizationInsights.benchmarks.yourPerformance?.uptime || 'N/A'}%
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-sm text-gray-600">Industry Average:</span>
+                            <span className="font-medium text-gray-500">
+                              {optimizationInsights.benchmarks.industryAverages?.uptime || 'N/A'}%
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <div className="text-4xl mb-4">🚀</div>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No optimization data available</h3>
+                <p className="text-gray-600 mb-4">
+                  Click &quot;Refresh&quot; to analyze your API performance and get personalized recommendations
+                </p>
+                <button
+                  onClick={fetchOptimizationInsights}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                >
+                  🔄 Analyze Performance
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

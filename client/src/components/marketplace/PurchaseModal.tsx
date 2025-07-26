@@ -29,9 +29,9 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
   const [step, setStep] = useState<'confirm' | 'payment' | 'processing' | 'success' | 'error'>('confirm');
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('');
-  const [_loading, setLoading] = useState(false);
+  const [/*_loading*/, setLoading] = useState(false); // Commented out unused variable
   const [error, setError] = useState<string | null>(null);
-  const [_purchaseId, setPurchaseId] = useState<string | null>(null);
+  const [/*_purchaseId*/, setPurchaseId] = useState<string | null>(null); // Commented out unused variable
 
   useEffect(() => {
     if (template.price_cents > 0) {
@@ -113,7 +113,9 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
         setError(errorData.error || 'Purchase failed');
         setStep('error');
       }
-    } catch (err) {
+    } catch (_err) { 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      console.debug('Purchase error:', _err);
       setError('Purchase failed. Please try again.');
       setStep('error');
     } finally {
@@ -121,7 +123,9 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
     }
   };
 
-  const processPayment = async (_purchase: Error) => {
+  const processPayment = async (_purchase: unknown) => { 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    console.debug('Processing payment for purchase:', _purchase);
     // This would integrate with Stripe or other payment processor
     // For now, we'll simulate payment processing
     
@@ -134,6 +138,8 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
         onComplete(true);
       }, 2000);
     } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      console.error('Payment processing failed:', error);
       setError('Payment processing failed');
       setStep('error');
     }
@@ -156,7 +162,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
     <div className="purchase-step">
       <div className="step-header">
         <h3>Confirm Purchase</h3>
-        <p>You're about to {template.price_cents === 0 ? 'get' : 'purchase'} this template:</p>
+        <p>You&apos;re about to {template.price_cents === 0 ? 'get' : 'purchase'} this template:</p>
       </div>
 
       <div className="template-summary">
@@ -317,9 +323,9 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
           }
         </p>
         <div className="next-steps">
-          <h4>What's next?</h4>
+          <h4>What&apos;s next?</h4>
           <ul>
-            <li>Access your template in the "My Templates" section</li>
+            <li>Access your template in the &quot;My Templates&quot; section</li>
             <li>Import it into your workspace</li>
             <li>Start creating amazing content!</li>
           </ul>

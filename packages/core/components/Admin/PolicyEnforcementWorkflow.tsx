@@ -644,7 +644,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
 
       {selectedWorkflow && renderWorkflowDetails()}
 
-      <style jsx>{`
+      <style>{`
         .policy-enforcement-workflow {
           max-width: 1400px;
           margin: 0 auto;

@@ -47,7 +47,7 @@ class ComprehensiveTestRunner {
     };
   }
 
-  async run(options = {}) {
+  async run(options: any = {}): Promise<void> {
     this.config = { ...this.config, ...options };
     
     console.log(chalk.blue('🚀 Starting Comprehensive Test Execution\n'));
@@ -104,7 +104,7 @@ class ComprehensiveTestRunner {
     process.exit(success ? 0 : 1);
   }
 
-  async validateEnvironment() {
+  async validateEnvironment(): Promise<void> {
     console.log(chalk.cyan('🔍 Validating test environment...'));
     
     try {
@@ -140,7 +140,7 @@ class ComprehensiveTestRunner {
     }
   }
 
-  async runUnitTests() {
+  async runUnitTests(): Promise<void> {
     console.log(chalk.cyan('\n📋 Running unit tests...'));
     
     const startTime = Date.now();
@@ -169,7 +169,7 @@ class ComprehensiveTestRunner {
     }
   }
 
-  async runIntegrationTests() {
+  async runIntegrationTests(): Promise<void> {
     console.log(chalk.cyan('\n🔗 Running integration tests...'));
     
     const startTime = Date.now();
@@ -198,7 +198,7 @@ class ComprehensiveTestRunner {
     }
   }
 
-  async runEdgeCaseTests() {
+  async runEdgeCaseTests(): Promise<void> {
     console.log(chalk.cyan('\n⚠️  Running edge case tests...'));
     
     const startTime = Date.now();
@@ -245,7 +245,7 @@ class ComprehensiveTestRunner {
     }
   }
 
-  async runPerformanceTests() {
+  async runPerformanceTests(): Promise<void> {
     console.log(chalk.cyan('\n⚡ Running performance tests...'));
     
     const startTime = Date.now();
@@ -280,7 +280,7 @@ class ComprehensiveTestRunner {
     }
   }
 
-  async runE2ETests() {
+  async runE2ETests(): Promise<void> {
     console.log(chalk.cyan('\n🌐 Running E2E tests...'));
     
     const startTime = Date.now();
@@ -313,7 +313,7 @@ class ComprehensiveTestRunner {
     }
   }
 
-  async runReliabilityAnalysis() {
+  async runReliabilityAnalysis(): Promise<void> {
     console.log(chalk.cyan('\n🔬 Running reliability analysis...'));
     
     try {

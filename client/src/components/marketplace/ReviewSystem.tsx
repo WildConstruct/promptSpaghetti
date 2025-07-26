@@ -1,18 +1,21 @@
 // Epic 16.1.6 - Comprehensive Review System Component
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   HandThumbUpIcon, 
   HandThumbDownIcon,
   FlagIcon,
   PencilIcon,
-  TrashIcon,
+  // TrashIcon,
   UserIcon,
   CheckBadgeIcon,
   ChatBubbleLeftRightIcon,
-  PhotoIcon,
+  // PhotoIcon,
   ExclamationTriangleIcon
 } from '@heroicons/react/24/outline';
-import { HandThumbUpIcon as HandThumbUpSolidIcon, HandThumbDownIcon as HandThumbDownSolidIcon } from '@heroicons/react/24/solid';
+import { 
+  HandThumbUpIcon as HandThumbUpSolidIcon,
+  HandThumbDownIcon as HandThumbDownSolidIcon
+} from '@heroicons/react/24/solid';
 import { RatingStars, RatingSummary } from './RatingStars';
 import { Badge } from './Badge';
 import { Modal } from './Modal';
@@ -73,7 +76,7 @@ interface ReviewSystemProps {
 export const ReviewSystem: React.FC<ReviewSystemProps> = ({
   templateId,
   templateTitle,
-  templateOwnerId,
+  // templateOwnerId, // Commented out unused prop
   currentUserId,
   isOwner = false,
   userHasPurchased = false
@@ -90,9 +93,9 @@ export const ReviewSystem: React.FC<ReviewSystemProps> = ({
 
   useEffect(() => {
     loadReviews();
-  }, [templateId, currentPage, sortBy, filterBy]);
+  }, [loadReviews]);
 
-  const loadReviews = async () => {
+  const loadReviews = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -113,7 +116,7 @@ export const ReviewSystem: React.FC<ReviewSystemProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [templateId, currentPage, sortBy, filterBy]);
 
   const handleReviewSubmit = async (reviewData: unknown) => {
     try {
@@ -470,7 +473,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
           {review.would_recommend ? (
             <span className="recommend-yes">👍 Recommends this template</span>
           ) : (
-            <span className="recommend-no">👎 Doesn't recommend this template</span>
+            <span className="recommend-no">👎 Doesn&apos;t recommend this template</span>
           )}
         </div>
       </div>
@@ -568,7 +571,7 @@ interface ReviewModalProps {
 }
 
 const ReviewModal: React.FC<ReviewModalProps> = ({
-  templateId,
+  // templateId, // Commented out unused prop
   templateTitle,
   editingReview,
   onSubmit,

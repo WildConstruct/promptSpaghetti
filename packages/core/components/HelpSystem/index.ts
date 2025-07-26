@@ -44,8 +44,9 @@ export type {
 } from '../ContextualHelp/HelpContentManager';
 
 // Helper functions for help system integration
-export 
-export     effectiveness: {} as Record<string, { views: number; helpful: number }>
+export     helpInteractions: [] as Array<{ event: string; data: any; timestamp: number; sessionId: string }>,
+    userStruggles: [] as Array<{ event: string; data: any; timestamp: number; sessionId: string }>,
+    effectiveness: {} as Record<string, { views: number; helpful: number }>
   };
 
   const trackEvent = (event: string, data: Record<string, any>) => {

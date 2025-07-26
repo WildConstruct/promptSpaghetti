@@ -110,8 +110,8 @@ export interface DeduplicationConfig {
 export interface DeduplicationField {
   name: string;
   weight: number;
-  transform?: (value: any) => string;
-  matcher?: (val1: any, val2: any) => number; // Returns similarity 0-1
+  transform?: (value: unknown) => string;
+  matcher?: (val1: unknown, val2: unknown) => number; // Returns similarity 0-1
 }
 
 export interface DeduplicationResult {
@@ -432,8 +432,8 @@ export class ConversionEventValidator {
     return weights[field] || 0.1;
   }
 
-  private getFieldValue(event: EnhancedConversionEvent, field: string): any {
-    const fieldMap: Record<string, any> = {
+  private getFieldValue(event: EnhancedConversionEvent, field: string): unknown {
+    const fieldMap: Record<string, unknown> = {
       'userId': event.userId,
       'type': event.type,
       'sessionId': event.sessionId,
@@ -444,7 +444,7 @@ export class ConversionEventValidator {
     return fieldMap[field];
   }
 
-  private calculateFieldSimilarity(val1: any, val2: any, field: string): number {
+  private calculateFieldSimilarity(val1: unknown, val2: unknown, field: string): number {
     if (val1 === val2) return 1.0;
     if (val1 == null || val2 == null) return 0.0;
 
@@ -472,7 +472,7 @@ export class ConversionEventValidator {
     return this.calculateStringSimilarity(String(val1), String(val2));
   }
 
-  private calculateObjectSimilarity(obj1: any, obj2: any): number {
+  private calculateObjectSimilarity(obj1: unknown, obj2: unknown): number {
     if (typeof obj1 !== 'object' || typeof obj2 !== 'object') {
       return this.calculateStringSimilarity(String(obj1), String(obj2));
     }

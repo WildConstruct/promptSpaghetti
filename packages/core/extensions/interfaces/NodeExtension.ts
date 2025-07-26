@@ -387,7 +387,7 @@ export namespace NodeExtensionHelpers {
       category: config.category || NodeCategory.CUSTOM,
       description: config.description || 'A custom node',
       version: config.version || '1.0.0',
-      nodeClass: config.nodeClass || class extends RuntimeNode<any> {
+      nodeClass: config.nodeClass || class extends RuntimeNode<unknown> {
         run() { return null; }
       },
       configSchema: config.configSchema || z.object({}),

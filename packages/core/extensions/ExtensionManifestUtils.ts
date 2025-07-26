@@ -360,8 +360,8 @@ export class ExtensionManifestUtils {
     // Check other fields
     const fields = ['name', 'description', 'main', 'ui', 'runtime', 'security'];
     for (const field of fields) {
-      const val1 = JSON.stringify((manifest1 as any)[field]);
-      const val2 = JSON.stringify((manifest2 as any)[field]);
+      const val1 = JSON.stringify((manifest1 as Record<string, unknown>)[field]);
+      const val2 = JSON.stringify((manifest2 as Record<string, unknown>)[field]);
       if (val1 !== val2) {
         comparison.configurationChanged = true;
         comparison.changes.push({

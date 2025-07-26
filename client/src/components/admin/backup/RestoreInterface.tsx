@@ -15,30 +15,19 @@ import {
   RotateCcw,
   Database,
   Search,
-  Calendar,
-  Clock,
   HardDrive,
-  Shield,
-  CheckCircle,
   AlertTriangle,
   XCircle,
   Eye,
   Download,
-  Upload,
-  Settings,
   Play,
   Pause,
   RefreshCw,
   ArrowLeft,
-  Filter,
-  FileText,
   Users,
-  Archive,
   Activity,
   Target,
-  Zap,
-  Info,
-  Warning
+  Clock
 } from 'lucide-react';
 
 // Types extending Epic 19 restore infrastructure for admin use
@@ -180,6 +169,7 @@ export interface RestorePreview {
   blockers: string[];
 }
 
+export const RestoreInterface: React.FC = () => {
   const [selectedPoint, setSelectedPoint] = useState<AdminRestorePoint | null>(null);
   const [restorePreview, setRestorePreview] = useState<RestorePreview | null>(null);
   const [restoreRequest, setRestoreRequest] = useState<Partial<RestoreRequest>>({
@@ -207,7 +197,8 @@ export interface RestorePreview {
     }
   });
   const [activeExecutions, setActiveExecutions] = useState<RestoreExecution[]>([]);
-  const [_loading, setLoading] = useState(true);
+  const [recoveryPoints, setRecoveryPoints] = useState<AdminRestorePoint[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('select');
 
   // Load recovery points
@@ -323,13 +314,18 @@ export interface RestorePreview {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
-      const minutes = Math.floor((totalSeconds % 3600) / 60);
+  // TODO: Consider using formatDuration for execution time display
+  /*
+  const formatDuration = (totalSeconds: number) => {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
     
     if (hours > 0) return `${hours}h ${minutes}m`;
     if (minutes > 0) return `${minutes}m ${seconds}s`;
     return `${seconds}s`;
   };
+  */
 
   const getStatusColor = (status: string) => {
     const colors = {
@@ -373,7 +369,11 @@ export interface RestorePreview {
       </div>
 
       <div className="recovery-points-grid">
-        {recoveryPoints.map(point => (
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
+            Loading recovery points...
+          </div>
+        ) : recoveryPoints.map(point => (
           <Card 
             key={point.recovery_point_id} 
             className={`recovery-point-card ${selectedPoint?.recovery_point_id === point.recovery_point_id ? 'selected' : ''}`}
@@ -864,7 +864,7 @@ export interface RestorePreview {
         </TabsContent>
       </Tabs>
 
-      <style jsx>{`
+      <style>{`
         .restore-interface {
           max-width: 1400px;
           margin: 0 auto;
@@ -1365,3 +1365,5 @@ export interface RestorePreview {
     </div>
   );
 };
+
+export default RestoreInterface;

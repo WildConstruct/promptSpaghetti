@@ -12,11 +12,11 @@
  */
 
 import { 
-  DataClassificationLevel, 
   DataClassificationRole,
   RoleConstraint,
   UserRoleAssignment 
 } from './DataClassificationAccessControl';
+import { DataClassificationLevel, OperationContext } from '../types/DataClassification';
 
 export interface DelegationRule {
   id: string;
@@ -778,4 +778,3 @@ class AuditLogger {
   }
 }
 
-export { DelegationInheritanceEngine };

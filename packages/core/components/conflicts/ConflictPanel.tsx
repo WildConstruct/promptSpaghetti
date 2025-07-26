@@ -27,7 +27,14 @@ export interface ConflictPanelProps {
   className?: string;
 }
 
-export   const [selectedStrategy, setSelectedStrategy] = useState<string>('last_writer_wins');
+export const ConflictPanel: React.FC<ConflictPanelProps> = (
+  { conflicts,
+  onResolveConflict,
+  onViewConflict,
+  currentUserId,
+  className }
+) => {
+  const [selectedStrategy, setSelectedStrategy] = useState<string>('last_writer_wins');
 
   const formatTimestamp = (timestamp: number): string => {
     const date = new Date(timestamp);
@@ -296,36 +303,13 @@ export   const [selectedStrategy, setSelectedStrategy] = useState<string>('last_
   );
 };
 
+export default ConflictPanel;
+
 // Notification component for conflict alerts
-export   onDismiss: () => void;
-}> = ({ conflict, onResolve, onDismiss }) => {
-  return (
-    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 shadow-lg">
-      <div className="flex items-start space-x-3">
-        <span className="text-lg">⚠️</span>
-        <div className="flex-1 min-w-0">
-          <h4 className="font-medium text-yellow-800 text-sm">
-            Conflict Detected
-          </h4>
-          <p className="text-yellow-700 text-xs mt-1">
-            {conflict.description}
-          </p>
-          <div className="flex items-center space-x-2 mt-2">
-            <button
-              onClick={onResolve}
-              className="bg-yellow-500 text-white px-2 py-1 rounded text-xs font-medium hover:bg-yellow-600"
-            >
-              Resolve
-            </button>
-            <button
-              onClick={onDismiss}
-              className="text-yellow-600 hover:text-yellow-800 text-xs"
-            >
-              Dismiss
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+interface ConflictNotificationProps {
+  conflict: ConflictData;
+  onResolve: (conflict: ConflictData) => void;
+  onDismiss: () => void;
+}
+
+export };

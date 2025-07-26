@@ -39,9 +39,9 @@ import {
   ActivityFilter,
   ActivityStats,
   ActivityType,
-  ActivityCategory,
+  ActivityCategory as _ActivityCategory,
   ActivityImpact,
-  ActivitySource
+  ActivitySource as _ActivitySource
 } from '../../services/ActivityTimeline';
 
 interface ActivityTimelineProps {
@@ -187,7 +187,7 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
 
     // Subscribe to real-time updates
     const listenerId = `activity-timeline-${Math.random().toString(36).substr(2, 9)}`;
-    activityTimeline.subscribe(listenerId, (event) => {
+    activityTimeline.subscribe(listenerId, (_event) => {
       loadData(); // Refresh data when new activities are tracked
     });
 

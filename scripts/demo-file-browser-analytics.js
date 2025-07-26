@@ -13,7 +13,7 @@ console.log('📊 File Browser Usage Analytics & Download Stats Demo');
 console.log('====================================================\n');
 
 // Simulate file browser analytics functionality
-function demoFileBrowserAnalytics() {
+function demoFileBrowserAnalytics(): void {
   console.log('🎯 Analytics System Overview');
   console.log('============================');
   console.log();

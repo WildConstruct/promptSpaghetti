@@ -141,7 +141,7 @@ export interface ParameterDefinition {
   type: 'string' | 'number' | 'boolean' | 'object' | 'array';
   description: string;
   required: boolean;
-  defaultValue?: any;
+  defaultValue?: unknown;
   validation?: ParameterValidation;
   sensitive?: boolean; // For passwords, tokens, etc.
 }
@@ -169,13 +169,13 @@ export interface ValidationRules {
 
 export interface InputValidation {
   required: string[];
-  schema?: Record<string, any>; // JSON Schema
+  schema?: Record<string, unknown>; // JSON Schema
   customValidators: CustomValidator[];
 }
 
 export interface OutputValidation {
   expectedFormat: 'json' | 'text' | 'xml' | 'binary';
-  schema?: Record<string, any>;
+  schema?: Record<string, unknown>;
   successConditions: SuccessCondition[];
   warningConditions: WarningCondition[];
   errorConditions: ErrorCondition[];
@@ -231,7 +231,7 @@ export interface ScheduleConfig {
 export interface TriggerConfig {
   type: TriggerType;
   condition: string; // Expression or condition
-  parameters?: Record<string, any>;
+  parameters?: Record<string, unknown>;
 }
 
 export enum TriggerType {
@@ -396,7 +396,7 @@ export interface Finding {
   description: string;
   impact: string;
   remediation?: string;
-  evidence?: Record<string, any>;
+  evidence?: Record<string, unknown>;
 }
 
 export interface ResultMetrics {
@@ -588,7 +588,7 @@ export interface CustomValidator {
 export interface SuccessCondition {
   field: string;
   operator: ComparisonOperator;
-  value: any;
+  value: unknown;
   description: string;
 }
 
@@ -620,7 +620,7 @@ export interface ResponseValidation {
 
 export interface JsonPathValidation {
   path: string;
-  expectedValue?: any;
+  expectedValue?: unknown;
   expectedType?: string;
   required: boolean;
 }
@@ -636,7 +636,7 @@ export interface QueryExpectation {
 export interface QueryConstraint {
   column: string;
   operator: ComparisonOperator;
-  value: any;
+  value: unknown;
 }
 
 export interface AuthenticationConfig {
@@ -788,7 +788,7 @@ export interface ValidationResult {
 // EXAMPLE DEFINITIONS
 // ==========================================
 
-export 
+export     
   // API endpoint check
   const apiCheck = new HealthCheckDefinitionBuilder('api_health', 'API Health Check')
     .description('Monitors primary API endpoint availability and performance')

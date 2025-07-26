@@ -51,13 +51,13 @@ export declare const ValidationRuleSchema: z.ZodObject<{
             required: z.ZodDefault<z.ZodBoolean>;
         }, "strip", z.ZodTypeAny, {
             required: boolean;
+            operator: "custom" | "matches" | "equals" | "exists" | "not_equals" | "greater_than" | "less_than" | "not_exists" | "in_range";
             field: string;
-            operator: "custom" | "exists" | "not_exists" | "equals" | "not_equals" | "greater_than" | "less_than" | "matches" | "in_range";
             value?: unknown;
             customFunction?: string | undefined;
         }, {
+            operator: "custom" | "matches" | "equals" | "exists" | "not_equals" | "greater_than" | "less_than" | "not_exists" | "in_range";
             field: string;
-            operator: "custom" | "exists" | "not_exists" | "equals" | "not_equals" | "greater_than" | "less_than" | "matches" | "in_range";
             value?: unknown;
             required?: boolean | undefined;
             customFunction?: string | undefined;
@@ -69,66 +69,66 @@ export declare const ValidationRuleSchema: z.ZodObject<{
             customFunction: z.ZodOptional<z.ZodString>;
         }, "strip", z.ZodTypeAny, {
             fields: string[];
-            relationship: "custom" | "sum_equals" | "all_or_none" | "mutually_exclusive" | "sequential";
-            customFunction?: string | undefined;
+            relationship: "custom" | "sequential" | "sum_equals" | "all_or_none" | "mutually_exclusive";
             expectedValue?: unknown;
+            customFunction?: string | undefined;
         }, {
             fields: string[];
-            relationship: "custom" | "sum_equals" | "all_or_none" | "mutually_exclusive" | "sequential";
-            customFunction?: string | undefined;
+            relationship: "custom" | "sequential" | "sum_equals" | "all_or_none" | "mutually_exclusive";
             expectedValue?: unknown;
+            customFunction?: string | undefined;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
         rules: {
             required: boolean;
+            operator: "custom" | "matches" | "equals" | "exists" | "not_equals" | "greater_than" | "less_than" | "not_exists" | "in_range";
             field: string;
-            operator: "custom" | "exists" | "not_exists" | "equals" | "not_equals" | "greater_than" | "less_than" | "matches" | "in_range";
             value?: unknown;
             customFunction?: string | undefined;
         }[];
         crossFieldValidation?: {
             fields: string[];
-            relationship: "custom" | "sum_equals" | "all_or_none" | "mutually_exclusive" | "sequential";
-            customFunction?: string | undefined;
+            relationship: "custom" | "sequential" | "sum_equals" | "all_or_none" | "mutually_exclusive";
             expectedValue?: unknown;
+            customFunction?: string | undefined;
         }[] | undefined;
     }, {
         rules: {
+            operator: "custom" | "matches" | "equals" | "exists" | "not_equals" | "greater_than" | "less_than" | "not_exists" | "in_range";
             field: string;
-            operator: "custom" | "exists" | "not_exists" | "equals" | "not_equals" | "greater_than" | "less_than" | "matches" | "in_range";
             value?: unknown;
             required?: boolean | undefined;
             customFunction?: string | undefined;
         }[];
         crossFieldValidation?: {
             fields: string[];
-            relationship: "custom" | "sum_equals" | "all_or_none" | "mutually_exclusive" | "sequential";
-            customFunction?: string | undefined;
+            relationship: "custom" | "sequential" | "sum_equals" | "all_or_none" | "mutually_exclusive";
             expectedValue?: unknown;
+            customFunction?: string | undefined;
         }[] | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
     id: string;
+    name: string;
+    description: string;
     validation: {
         rules: {
             required: boolean;
+            operator: "custom" | "matches" | "equals" | "exists" | "not_equals" | "greater_than" | "less_than" | "not_exists" | "in_range";
             field: string;
-            operator: "custom" | "exists" | "not_exists" | "equals" | "not_equals" | "greater_than" | "less_than" | "matches" | "in_range";
             value?: unknown;
             customFunction?: string | undefined;
         }[];
         crossFieldValidation?: {
             fields: string[];
-            relationship: "custom" | "sum_equals" | "all_or_none" | "mutually_exclusive" | "sequential";
-            customFunction?: string | undefined;
+            relationship: "custom" | "sequential" | "sum_equals" | "all_or_none" | "mutually_exclusive";
             expectedValue?: unknown;
+            customFunction?: string | undefined;
         }[] | undefined;
     };
-    category: "integrity" | "consistency" | "completeness" | "accuracy" | "timeliness";
-    severity: "critical" | "high" | "medium" | "low";
-    name: string;
+    category: "accuracy" | "integrity" | "consistency" | "completeness" | "timeliness";
     enabled: boolean;
-    description: string;
+    severity: "low" | "medium" | "high" | "critical";
     conditions: {
         sources?: string[] | undefined;
         timeRange?: {
@@ -139,25 +139,25 @@ export declare const ValidationRuleSchema: z.ZodObject<{
     };
 }, {
     id: string;
+    name: string;
+    description: string;
     validation: {
         rules: {
+            operator: "custom" | "matches" | "equals" | "exists" | "not_equals" | "greater_than" | "less_than" | "not_exists" | "in_range";
             field: string;
-            operator: "custom" | "exists" | "not_exists" | "equals" | "not_equals" | "greater_than" | "less_than" | "matches" | "in_range";
             value?: unknown;
             required?: boolean | undefined;
             customFunction?: string | undefined;
         }[];
         crossFieldValidation?: {
             fields: string[];
-            relationship: "custom" | "sum_equals" | "all_or_none" | "mutually_exclusive" | "sequential";
-            customFunction?: string | undefined;
+            relationship: "custom" | "sequential" | "sum_equals" | "all_or_none" | "mutually_exclusive";
             expectedValue?: unknown;
+            customFunction?: string | undefined;
         }[] | undefined;
     };
-    category: "integrity" | "consistency" | "completeness" | "accuracy" | "timeliness";
-    severity: "critical" | "high" | "medium" | "low";
-    name: string;
-    description: string;
+    category: "accuracy" | "integrity" | "consistency" | "completeness" | "timeliness";
+    severity: "low" | "medium" | "high" | "critical";
     conditions: {
         sources?: string[] | undefined;
         timeRange?: {

@@ -671,13 +671,13 @@ export declare const ShareAnalyticsEventSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         region?: string | undefined;
         country?: string | undefined;
-        timezone?: string | undefined;
         city?: string | undefined;
+        timezone?: string | undefined;
     }, {
         region?: string | undefined;
         country?: string | undefined;
-        timezone?: string | undefined;
         city?: string | undefined;
+        timezone?: string | undefined;
     }>>;
     deviceInfo: z.ZodOptional<z.ZodObject<{
         type: z.ZodOptional<z.ZodEnum<["desktop", "mobile", "tablet"]>>;
@@ -710,8 +710,8 @@ export declare const ShareAnalyticsEventSchema: z.ZodObject<{
     geolocation?: {
         region?: string | undefined;
         country?: string | undefined;
-        timezone?: string | undefined;
         city?: string | undefined;
+        timezone?: string | undefined;
     } | undefined;
     referer?: string | undefined;
     deviceInfo?: {
@@ -733,8 +733,8 @@ export declare const ShareAnalyticsEventSchema: z.ZodObject<{
     geolocation?: {
         region?: string | undefined;
         country?: string | undefined;
-        timezone?: string | undefined;
         city?: string | undefined;
+        timezone?: string | undefined;
     } | undefined;
     referer?: string | undefined;
     deviceInfo?: {

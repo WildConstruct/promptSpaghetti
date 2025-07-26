@@ -115,7 +115,7 @@ class MockSecurityServices {
   }
 
   // Mock authentication operations
-  async performLogin(username, password, complexity = 'medium') {
+  async performLogin(username: string, password: string, complexity: string = 'medium'): Promise<any> {
     const start = performance.now();
     const startMemory = process.memoryUsage();
     
@@ -137,7 +137,7 @@ class MockSecurityServices {
     };
   }
 
-  async performMFAVerification(code, method = 'totp') {
+  async performMFAVerification(code: string, method: string = 'totp'): Promise<any> {
     const start = performance.now();
     const startMemory = process.memoryUsage();
     
@@ -155,7 +155,7 @@ class MockSecurityServices {
     };
   }
 
-  async performTokenValidation(token) {
+  async performTokenValidation(token: string): Promise<any> {
     const start = performance.now();
     const startMemory = process.memoryUsage();
     
@@ -189,7 +189,7 @@ class MockSecurityServices {
   }
 
   // Mock security operations
-  async performInputValidation(input, complexity = 'medium') {
+  async performInputValidation(input: string, complexity: string = 'medium'): Promise<any> {
     const start = performance.now();
     const startMemory = process.memoryUsage();
     
@@ -210,7 +210,7 @@ class MockSecurityServices {
     };
   }
 
-  async performEncryption(data, algorithm = 'aes-256-gcm') {
+  async performEncryption(data: string, algorithm: string = 'aes-256-gcm'): Promise<any> {
     const start = performance.now();
     const startMemory = process.memoryUsage();
     
@@ -232,7 +232,7 @@ class MockSecurityServices {
     };
   }
 
-  async performKeyDerivation(password, salt, iterations = 100000) {
+  async performKeyDerivation(password: string, salt: string, iterations: number = 100000): Promise<any> {
     const start = performance.now();
     const startMemory = process.memoryUsage();
     
@@ -249,7 +249,7 @@ class MockSecurityServices {
     };
   }
 
-  async performRiskAssessment(context) {
+  async performRiskAssessment(context: any): Promise<any> {
     const start = performance.now();
     const startMemory = process.memoryUsage();
     
@@ -274,7 +274,7 @@ class MockSecurityServices {
   }
 
   // Mock database operations
-  async performUserQuery(userId) {
+  async performUserQuery(userId: string): Promise<any> {
     const start = performance.now();
     const startMemory = process.memoryUsage();
     
@@ -292,7 +292,7 @@ class MockSecurityServices {
     };
   }
 
-  async performAuditLogWrite(logEntry) {
+  async performAuditLogWrite(logEntry: any): Promise<void> {
     const start = performance.now();
     const startMemory = process.memoryUsage();
     
@@ -314,12 +314,12 @@ class MockSecurityServices {
   }
 
   // Utility methods
-  async simulateDelay(min, max) {
+  async simulateDelay(min: number, max: number): Promise<void> {
     const delay = Math.random() * (max - min) + min;
     return new Promise(resolve => setTimeout(resolve, delay));
   }
 
-  generateTestData(size) {
+  generateTestData(size: number): string {
     return crypto.randomBytes(size).toString('hex');
   }
 }
@@ -344,7 +344,7 @@ class PerformanceRegressionTester {
   /**
    * Run comprehensive performance regression testing
    */
-  async runPerformanceRegressionTests() {
+  async runPerformanceRegressionTests(): Promise<void> {
     console.log('⚡ Starting Epic 19 Performance Regression Testing');
     console.log('=' .repeat(60));
     
@@ -382,7 +382,7 @@ class PerformanceRegressionTester {
   /**
    * Run authentication performance tests
    */
-  async runAuthenticationPerformanceTests() {
+  async runAuthenticationPerformanceTests(): Promise<void> {
     console.log('\n🔐 Testing Authentication Performance...');
     
     const authTests = {
@@ -406,7 +406,7 @@ class PerformanceRegressionTester {
   /**
    * Run security performance tests
    */
-  async runSecurityPerformanceTests() {
+  async runSecurityPerformanceTests(): Promise<void> {
     console.log('\n🛡️ Testing Security Performance...');
     
     const securityTests = {
@@ -448,7 +448,7 @@ class PerformanceRegressionTester {
   /**
    * Run database performance tests
    */
-  async runDatabasePerformanceTests() {
+  async runDatabasePerformanceTests(): Promise<void> {
     console.log('\n🗄️ Testing Database Performance...');
     
     const dbTests = {
@@ -488,7 +488,7 @@ class PerformanceRegressionTester {
   /**
    * Run API performance tests
    */
-  async runAPIPerformanceTests() {
+  async runAPIPerformanceTests(): Promise<void> {
     console.log('\n🌐 Testing API Performance...');
     
     const apiTests = {
@@ -536,7 +536,7 @@ class PerformanceRegressionTester {
   /**
    * Run individual performance test with statistical analysis
    */
-  async runPerformanceTest(testFunction, testName, category) {
+  async runPerformanceTest(testFunction: Function, testName: string, category: string): Promise<any> {
     const iterations = PERFORMANCE_CONFIG.execution.testIterations;
     const warmupIterations = PERFORMANCE_CONFIG.execution.warmupIterations;
     const results = [];
@@ -627,7 +627,7 @@ class PerformanceRegressionTester {
   /**
    * Analyze performance regressions compared to baseline
    */
-  async analyzePerformanceRegressions() {
+  async analyzePerformanceRegressions(): Promise<void> {
     console.log('\n📊 Analyzing Performance Regressions...');
     
     if (!this.baseline) {
@@ -710,7 +710,7 @@ class PerformanceRegressionTester {
   /**
    * Generate performance trend analysis
    */
-  async generatePerformanceTrends() {
+  async generatePerformanceTrends(): Promise<void> {
     console.log('\n📈 Generating Performance Trends...');
     
     if (this.history.length < 2) {
@@ -755,7 +755,7 @@ class PerformanceRegressionTester {
   /**
    * Generate comprehensive regression report
    */
-  async generateRegressionReport() {
+  async generateRegressionReport(): Promise<void> {
     console.log('\n📄 Generating Performance Regression Report...');
     
     const reportData = {
@@ -795,7 +795,7 @@ class PerformanceRegressionTester {
   /**
    * Update performance history and baseline
    */
-  async updatePerformanceHistory() {
+  async updatePerformanceHistory(): Promise<void> {
     console.log('\n💾 Updating Performance History...');
     
     // Add current results to history
@@ -823,7 +823,7 @@ class PerformanceRegressionTester {
   }
 
   // Helper methods
-  async loadPerformanceHistory() {
+  async loadPerformanceHistory(): Promise<void> {
     try {
       const baselinePath = path.resolve(PERFORMANCE_CONFIG.storage.baselineFile);
       const historyPath = path.resolve(PERFORMANCE_CONFIG.storage.historyFile);
@@ -844,7 +844,7 @@ class PerformanceRegressionTester {
     }
   }
 
-  async savePerformanceData() {
+  async savePerformanceData(): Promise<void> {
     try {
       const baselinePath = path.resolve(PERFORMANCE_CONFIG.storage.baselineFile);
       const historyPath = path.resolve(PERFORMANCE_CONFIG.storage.historyFile);
@@ -863,7 +863,7 @@ class PerformanceRegressionTester {
     }
   }
 
-  async fileExists(filePath) {
+  async fileExists(filePath: string): Promise<boolean> {
     try {
       await fs.access(filePath);
       return true;
@@ -873,11 +873,11 @@ class PerformanceRegressionTester {
   }
 
   // Statistical calculation methods
-  calculateMean(values) {
+  calculateMean(values: number[]): number {
     return values.length > 0 ? values.reduce((sum, val) => sum + val, 0) / values.length : 0;
   }
 
-  calculateMedian(sortedValues) {
+  calculateMedian(sortedValues: number[]): number {
     if (sortedValues.length === 0) return 0;
     const mid = Math.floor(sortedValues.length / 2);
     return sortedValues.length % 2 === 0 
@@ -885,13 +885,13 @@ class PerformanceRegressionTester {
       : sortedValues[mid];
   }
 
-  calculatePercentile(sortedValues, percentile) {
+  calculatePercentile(sortedValues: number[], percentile: number): number {
     if (sortedValues.length === 0) return 0;
     const index = Math.floor(sortedValues.length * percentile);
     return sortedValues[Math.min(index, sortedValues.length - 1)];
   }
 
-  calculateStandardDeviation(values) {
+  calculateStandardDeviation(values: number[]): number {
     if (values.length <= 1) return 0;
     const mean = this.calculateMean(values);
     const squaredDiffs = values.map(val => Math.pow(val - mean, 2));
@@ -899,7 +899,7 @@ class PerformanceRegressionTester {
     return Math.sqrt(variance);
   }
 
-  calculateTrend(values) {
+  calculateTrend(values: number[]): string {
     if (values.length < 2) return 'insufficient_data';
     
     // Simple linear regression to determine trend
@@ -918,7 +918,7 @@ class PerformanceRegressionTester {
     return slope > 0 ? 'increasing' : 'decreasing';
   }
 
-  calculateStability(historicalData) {
+  calculateStability(historicalData: any[]): string {
     if (historicalData.length < 3) return 'insufficient_data';
     
     const latencies = historicalData.map(d => d.latency);
@@ -930,7 +930,7 @@ class PerformanceRegressionTester {
     return 'unstable';
   }
 
-  getEnvironmentInfo() {
+  getEnvironmentInfo(): any {
     return {
       nodeVersion: process.version,
       platform: process.platform,
@@ -941,7 +941,7 @@ class PerformanceRegressionTester {
     };
   }
 
-  getTotalTestCount() {
+  getTotalTestCount(): number {
     let total = 0;
     for (const categoryResults of Object.values(this.testResults.results)) {
       total += Object.keys(categoryResults).length;
@@ -949,7 +949,7 @@ class PerformanceRegressionTester {
     return total;
   }
 
-  calculateOverallStatus() {
+  calculateOverallStatus(): string {
     const criticalRegressions = this.testResults.regressions.filter(r => r.overallSeverity === 'critical').length;
     const warningRegressions = this.testResults.regressions.filter(r => r.overallSeverity === 'warning').length;
     
@@ -959,7 +959,7 @@ class PerformanceRegressionTester {
     return 'PASS';
   }
 
-  printCategoryResults(categoryName, results) {
+  printCategoryResults(categoryName: string, results: any): void {
     console.log(`  📊 ${categoryName} Results:`);
     for (const [testName, result] of Object.entries(results)) {
       const status = result.performance.overallPass ? '✅' : '❌';
@@ -969,7 +969,7 @@ class PerformanceRegressionTester {
     }
   }
 
-  generatePerformanceRecommendations() {
+  generatePerformanceRecommendations(): string[] {
     const recommendations = [];
     
     for (const regression of this.testResults.regressions) {
@@ -1008,7 +1008,7 @@ class PerformanceRegressionTester {
     return recommendations;
   }
 
-  generateCICDReport() {
+  generateCICDReport(): any {
     const criticalRegressions = this.testResults.regressions.filter(r => r.overallSeverity === 'critical').length;
     const warningRegressions = this.testResults.regressions.filter(r => r.overallSeverity === 'warning').length;
     
@@ -1027,7 +1027,7 @@ class PerformanceRegressionTester {
     };
   }
 
-  async generateHTMLPerformanceReport(reportData) {
+  async generateHTMLPerformanceReport(reportData: any): Promise<string> {
     const htmlContent = `
 <!DOCTYPE html>
 <html>
@@ -1096,7 +1096,7 @@ class PerformanceRegressionTester {
     await fs.writeFile(reportPath, htmlContent);
   }
 
-  async generateMarkdownPerformanceSummary(reportData) {
+  async generateMarkdownPerformanceSummary(reportData: any): Promise<string> {
     const summary = reportData.summary;
     
     const markdownContent = `# Epic 19 Performance Regression Summary
@@ -1153,7 +1153,7 @@ ${reportData.recommendations.map((rec, i) =>
 }
 
 // CLI interface
-async function main() {
+async function main(): Promise<void> {
   const tester = new PerformanceRegressionTester();
   
   try {

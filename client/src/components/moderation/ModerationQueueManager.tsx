@@ -61,7 +61,7 @@ export const ModerationQueueManager: React.FC<ModerationQueueManagerProps> = ({
   const [sortBy, setSortBy] = useState<string>('priority');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [viewMode, setViewMode] = useState<'list' | 'grid' | 'detailed'>('list');
-  const [_showBulkActions, setShowBulkActions] = useState(false);
+  const [/*_showBulkActions*/, setShowBulkActions] = useState(false); // Commented out unused variable
 
   const filteredAndSortedItems = useMemo(() => {
     const filtered = items.filter(item => {

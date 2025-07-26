@@ -12,8 +12,8 @@ import React, { useState, useCallback } from 'react';
 import {
   Card,
   CardContent,
-  CardHeader,
-  CardTitle
+  // CardHeader, // Commented out unused import
+  // CardTitle // Commented out unused import
 } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';

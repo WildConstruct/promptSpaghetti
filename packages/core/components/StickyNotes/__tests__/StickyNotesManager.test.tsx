@@ -76,7 +76,7 @@ const mockStoreState = {
 describe('StickyNotesManager Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockUseGraphStore.mockReturnValue(mockStoreState as any as unknown);
+    mockUseGraphStore.mockReturnValue(mockStoreState as any as unknown as unknown as unknown);
   });
 
   describe('Rendering', () => {
@@ -158,7 +158,7 @@ describe('StickyNotesManager Component', () => {
     test('handles empty notes array', () => {
       mockUseGraphStore.mockReturnValue({
         stickyNotes: [],
-        setStickyNotes: jest.fn<unknown[], unknown>( as unknown)
+        setStickyNotes: jest.fn<unknown[], unknown>( as unknown as unknown)
       } as any);
 
       render(
@@ -187,7 +187,7 @@ describe('StickyNotesManager Component', () => {
     test('handles viewport changes', () => {
       // Mock different viewport
       const mockUseViewport = require('reactflow').useViewport as jest.Mock;
-      mockUseViewport.mockReturnValue({ x: -100, y: -50, zoom: 0.8 } as unknown);
+      mockUseViewport.mockReturnValue({ x: -100, y: -50, zoom: 0.8 } as unknown as unknown as unknown);
 
       render(
         <ReactFlowProvider>
@@ -222,8 +222,8 @@ describe('StickyNotesManager Component', () => {
       const mockUseReactFlow = require('reactflow').useReactFlow as jest.Mock;
       const mockUseViewport = require('reactflow').useViewport as jest.Mock;
       
-      mockUseReactFlow.mockReturnValue(null as unknown);
-      mockUseViewport.mockReturnValue({ x: 0, y: 0, zoom: 1 } as unknown);
+      mockUseReactFlow.mockReturnValue(null as unknown as unknown as unknown);
+      mockUseViewport.mockReturnValue({ x: 0, y: 0, zoom: 1 } as unknown as unknown as unknown);
 
       // Should still render without crashing
       expect(() => {
@@ -266,7 +266,7 @@ describe('StickyNotesManager Component', () => {
 
       mockUseGraphStore.mockReturnValue({
         stickyNotes: manyNotes,
-        setStickyNotes: jest.fn<unknown[], unknown>( as unknown)
+        setStickyNotes: jest.fn<unknown[], unknown>( as unknown as unknown)
       } as any);
 
       const startTime = performance.now();

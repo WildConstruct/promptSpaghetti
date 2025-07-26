@@ -811,5 +811,4 @@ export class DocTestFramework {
 /**
  * Default configuration for documentation testing
  */
-export 
 export default DocTestFramework;

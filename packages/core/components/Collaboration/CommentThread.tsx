@@ -33,7 +33,20 @@ interface CommentThreadProps {
   realTime?: boolean;
 }
 
-export   const [expandedReplies, setExpandedReplies] = useState<Set<string>>(new Set());
+const CommentThread: React.FC<CommentThreadProps> = ({ 
+  resourceId, 
+  resourceType,
+  workspaceId,
+  userId,
+  targetData,
+  className,
+  maxHeight = '400px',
+  showReplies = true,
+  allowEditing = true,
+  allowModeration = false,
+  realTime = true
+}) => {
+  const [expandedReplies, setExpandedReplies] = useState<Set<string>>(new Set());
   const [editingComment, setEditingComment] = useState<string | null>(null);
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
 
@@ -409,3 +422,5 @@ export   const [expandedReplies, setExpandedReplies] = useState<Set<string>>(new
     </div>
   );
 };
+
+export default CommentThread;

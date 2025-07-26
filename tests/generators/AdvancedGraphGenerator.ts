@@ -126,7 +126,7 @@ export class AdvancedGraphGenerator {
   /**
    * Generate graphs for validation testing (malformed, edge cases)
    */
-  private generateValidationScenario(options: GraphGenerationOptions): GraphScenario {
+  private generateValidationScenario(_options: GraphGenerationOptions): GraphScenario {
     const scenarios = [
       () => this.generateSelfLoopGraph(),
       () => this.generateDisconnectedGraph(),

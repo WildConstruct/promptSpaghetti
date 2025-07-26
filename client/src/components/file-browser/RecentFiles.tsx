@@ -62,7 +62,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({
   showFavorites = true,
   className = ''
 }) => {
-  const { _user, isAuthenticated } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
   const [recentFiles, setRecentFiles] = useState<RecentFileEntry[]>([]);
   const [favoriteFiles, setFavoriteFiles] = useState<FileItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -518,9 +518,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({
 };
 
 // Export utility function for adding files to recent list
-export 
-    const existing = localStorage.getItem('fileBrowserRecent');
-    const recentFiles = existing ? JSON.parse(existing) : [];
+export     const recentFiles = existing ? JSON.parse(existing) : [];
     
     // Remove existing entry
     const filtered = recentFiles.filter((item: unknown) => item.id !== file.id);

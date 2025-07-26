@@ -17,7 +17,6 @@ import {
   FileText,
   Users,
   BarChart3,
-  Settings,
   Download,
   Upload,
   Save,

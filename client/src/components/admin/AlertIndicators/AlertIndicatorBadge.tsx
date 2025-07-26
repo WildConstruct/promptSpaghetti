@@ -105,7 +105,7 @@ const AlertIndicatorBadge: React.FC<AlertIndicatorBadgeProps> = ({
 
   // Get size configuration
   const getSizeConfig = (sz: string) => {
-    const configs = {
+    const configs: Record<string, { container: string; icon: string; text: string }> = {
       sm: {
         container: 'px-1.5 py-0.5 text-xs min-w-[20px] h-5',
         icon: 'w-3 h-3',

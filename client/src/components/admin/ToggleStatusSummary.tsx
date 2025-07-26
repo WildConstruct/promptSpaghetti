@@ -17,7 +17,6 @@ import {
   Clock,
   Shield,
   Activity,
-  DollarSign,
   Brain,
   Eye,
   AlertCircle,

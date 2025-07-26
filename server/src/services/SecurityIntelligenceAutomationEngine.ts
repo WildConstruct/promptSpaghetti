@@ -396,7 +396,7 @@ export class SecurityIntelligenceAutomationEngine extends EventEmitter {
   
   private processingQueue: Error[] = [];
   private isProcessing: boolean = false;
-  private performanceMetrics: any = {
+  private performanceMetrics: Record<string, number> = {
     total_intelligence_processed: 0,
     successful_analyses: 0,
     failed_analyses: 0,
@@ -874,7 +874,7 @@ export class SecurityIntelligenceAutomationEngine extends EventEmitter {
 
   private async collectFromSource(
     source: SecurityIntelligenceSource, 
-    options?: any
+    options?: Record<string, unknown>
   ): Promise<ThreatIntelligenceData[]> {
     // Simulate intelligence collection from various sources
     const collectedData: ThreatIntelligenceData[] = [];
@@ -927,7 +927,7 @@ export class SecurityIntelligenceAutomationEngine extends EventEmitter {
 
   private async analyzeThreatLandscape(
     intelligence: ThreatIntelligenceData[], 
-    options?: any
+    options?: Record<string, unknown>
   ): Promise<unknown> {
     return {
       emerging_threats: this.identifyEmergingThreats(intelligence),
@@ -938,7 +938,7 @@ export class SecurityIntelligenceAutomationEngine extends EventEmitter {
 
   private async generateStrategicInsights(
     intelligence: ThreatIntelligenceData[], 
-    options?: any
+    options?: Record<string, unknown>
   ): Promise<unknown> {
     return {
       trend_analysis: this.performTrendAnalysis(intelligence),
@@ -949,7 +949,7 @@ export class SecurityIntelligenceAutomationEngine extends EventEmitter {
 
   private async generateTacticalRecommendations(
     intelligence: ThreatIntelligenceData[], 
-    options?: any
+    options?: Record<string, unknown>
   ): Promise<unknown> {
     return {
       immediate_actions: this.generateImmediateActions(intelligence),
@@ -971,7 +971,7 @@ export class SecurityIntelligenceAutomationEngine extends EventEmitter {
 
   private async identifyIntelligenceGaps(
     intelligence: ThreatIntelligenceData[], 
-    options?: any
+    options?: Record<string, unknown>
   ): Promise<unknown> {
     return {
       knowledge_gaps: this.identifyKnowledgeGaps(intelligence),

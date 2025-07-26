@@ -15,6 +15,16 @@ export type { AlertSystemStatus } from './AlertStatusIndicator';
 
 export { default as AdminAlertPanel } from './AdminAlertPanel';
 
+// Define types locally for use in this file
+type AlertSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
+type AlertCount = {
+  critical: number;
+  high: number;
+  medium: number;
+  low: number;
+  info: number;
+};
+
 // Re-export common types for convenience
 export interface AlertItem {
   id: string;
@@ -31,21 +41,10 @@ export interface AlertItem {
 }
 
 // Utility functions
-export const createEmptyAlertCount = (): AlertCount => ({
-  critical: 0,
-  high: 0,
-  medium: 0,
-  low: 0,
-  info: 0
-});
+export 
+export };
 
-export const getTotalAlertCount = (alertCounts: AlertCount): number => {
-  return Object.values(alertCounts).reduce((sum, count) => sum + count, 0);
-};
-
-export const getHighestSeverityLevel = (alertCounts: AlertCount): AlertSeverity | null => {
-  if (alertCounts.critical > 0) return 'critical';
-  if (alertCounts.high > 0) return 'high';
+export   if (alertCounts.high > 0) return 'high';
   if (alertCounts.medium > 0) return 'medium';
   if (alertCounts.low > 0) return 'low';
   if (alertCounts.info > 0) return 'info';

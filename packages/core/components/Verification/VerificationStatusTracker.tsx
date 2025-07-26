@@ -194,7 +194,7 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
     return (
       <div className="verification-status-tracker loading">
         <div className="loading-spinner">Loading verification status...</div>
-        <style jsx>{`
+        <style>{`
           .verification-status-tracker.loading {
             display: flex;
             align-items: center;
@@ -341,7 +341,7 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
         ))}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .verification-status-tracker {
           max-width: 900px;
           margin: 0 auto;

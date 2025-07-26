@@ -31,16 +31,16 @@ describe('Security Analytics Performance API Routes', () => {
     
     // Setup mock service
     mockService = {
-      initialize: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown),
+      initialize: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown),
       getIntegrationStatus: jest.fn<unknown[], unknown>().mockReturnValue({
         epic1_integration: true,
         epic17_integration: true,
         monitoring_active: true,
         metrics_buffer_size: 5,
         alerts_buffer_size: 2
-      } as unknown),
+      } as unknown as unknown as unknown),
       getCurrentPerformanceMetrics: jest.fn<unknown[], unknown>().mockResolvedValue({
-        timestamp: Date.now( as unknown),
+        timestamp: Date.now( as unknown as unknown),
         performance_score: 85,
         throughput_events_per_second: 100,
         latency_p95_ms: 50,
@@ -52,7 +52,7 @@ describe('Security Analytics Performance API Routes', () => {
         system_availability_percent: 99.5
       }),
       performDeepDiagnostics: jest.fn<unknown[], unknown>().mockResolvedValue({
-        timestamp: Date.now( as unknown),
+        timestamp: Date.now( as unknown as unknown),
         integration_status: {
           epic1_analytics: true,
           epic17_admin: true,
@@ -63,7 +63,7 @@ describe('Security Analytics Performance API Routes', () => {
           monitoring_active: true
         }
       }),
-      shutdown: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown),
+      shutdown: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown),
       on: jest.fn<unknown[], unknown>(),
       emit: jest.fn<unknown[], unknown>()
     } as any;
@@ -299,7 +299,7 @@ describe('Security Analytics Performance API Routes', () => {
     it('should determine health status based on metrics', async () => {
       // Mock degraded performance
       mockService.getCurrentPerformanceMetrics.mockResolvedValue({
-        timestamp: Date.now( as unknown),
+        timestamp: Date.now( as unknown as unknown),
         performance_score: 75, // Still above 80 threshold
         throughput_events_per_second: 50,
         latency_p95_ms: 100,

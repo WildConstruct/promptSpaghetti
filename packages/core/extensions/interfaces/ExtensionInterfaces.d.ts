@@ -283,14 +283,15 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
         promptSpaghetti: string;
         node?: string | undefined;
     };
+    main?: string | undefined;
     configuration?: {
         type: "object";
         properties: Record<string, any>;
     } | undefined;
-    main?: string | undefined;
+    keywords?: string[] | undefined;
+    permissions?: string[] | undefined;
     dependencies?: string[] | undefined;
     optionalDependencies?: string[] | undefined;
-    permissions?: string[] | undefined;
     browser?: string | undefined;
     contributes?: {
         nodes?: string[] | undefined;
@@ -302,7 +303,6 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     repository?: string | undefined;
     homepage?: string | undefined;
     bugs?: string | undefined;
-    keywords?: string[] | undefined;
 }, {
     id: string;
     name: string;
@@ -314,14 +314,15 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
         promptSpaghetti: string;
         node?: string | undefined;
     };
+    main?: string | undefined;
     configuration?: {
         type: "object";
         properties: Record<string, any>;
     } | undefined;
-    main?: string | undefined;
+    keywords?: string[] | undefined;
+    permissions?: string[] | undefined;
     dependencies?: string[] | undefined;
     optionalDependencies?: string[] | undefined;
-    permissions?: string[] | undefined;
     browser?: string | undefined;
     contributes?: {
         nodes?: string[] | undefined;
@@ -333,7 +334,6 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     repository?: string | undefined;
     homepage?: string | undefined;
     bugs?: string | undefined;
-    keywords?: string[] | undefined;
 }>;
 export type ExtensionManifest = z.infer<typeof ExtensionManifestSchema>;
 export { NodeExtension, NodeDefinition as NodeExtensionDefinition, NodeCategory } from './NodeExtension';

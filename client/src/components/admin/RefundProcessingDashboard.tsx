@@ -25,24 +25,15 @@ import {
   CheckCircle,
   XCircle,
   AlertTriangle,
-  Search,
   Filter,
   Download,
   Upload,
   BarChart3,
-  CreditCard,
-  Users,
   TrendingUp,
   TrendingDown,
-  Calendar,
-  FileText,
   Settings,
   Eye,
-  MessageCircle,
-  ArrowRight,
-  ArrowLeft,
-  Pause,
-  Play
+  MessageCircle
 } from 'lucide-react';
 
 interface RefundRequest {
@@ -97,7 +88,11 @@ export interface RefundProcessingDashboardProps {
   className?: string;
 }
 
-export   const [error, setError] = useState<string | null>(null);
+export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps> = ({
+  className
+}) => {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   
   // Data state
   const [stats, setStats] = useState<RefundStats | null>(null);
@@ -109,7 +104,7 @@ export   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
   const [selectedPriority, setSelectedPriority] = useState('');
-  const [_selectedReason, setSelectedReason] = useState('');
+  const [, setSelectedReason] = useState('');
   const [dateRange, setDateRange] = useState('7d');
   
   // Manual refund state
@@ -923,3 +918,5 @@ export   const [error, setError] = useState<string | null>(null);
     </Card>
   );
 };
+
+export default RefundProcessingDashboard;

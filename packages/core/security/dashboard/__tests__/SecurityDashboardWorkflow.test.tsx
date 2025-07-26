@@ -23,7 +23,12 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { SecurityDashboardWorkflow, SecurityWorkflowEvent, SecurityEventType, SecuritySeverity } from '../SecurityDashboardWorkflow';
+import { 
+  SecurityDashboardWorkflow,
+  SecurityWorkflowEvent,
+  SecurityEventType,
+  SecuritySeverity
+} from '../SecurityDashboardWorkflow';
 import { SecurityRole, DashboardType } from '../SecurityDashboardFramework';
 
 // Mock the workflow store
@@ -101,25 +106,25 @@ const mockWorkflowStore = {
   statistics: null,
   loading: false,
   error: null,
-  fetchStates: jest.fn().mockResolvedValue(undefined),
-  fetchTransitions: jest.fn().mockResolvedValue(undefined),
-  fetchApprovals: jest.fn().mockResolvedValue(undefined),
-  transitionResourceState: jest.fn().mockResolvedValue({
+  fetchStates: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown),
+  fetchTransitions: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown),
+  fetchApprovals: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown),
+  transitionResourceState: jest.fn<unknown[], unknown>().mockResolvedValue({
     success: true,
     new_state_id: 'state-2'
-  }),
-  approveWorkflow: jest.fn().mockResolvedValue({
+  } as unknown as unknown),
+  approveWorkflow: jest.fn<unknown[], unknown>().mockResolvedValue({
     success: true,
     new_state_id: 'state-2'
-  }),
-  rejectWorkflow: jest.fn().mockResolvedValue(true),
-  acquireLock: jest.fn().mockResolvedValue({
+  } as unknown as unknown),
+  rejectWorkflow: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown as unknown),
+  acquireLock: jest.fn<unknown[], unknown>().mockResolvedValue({
     id: 'lock-1',
     resource_id: 'event-1',
     locked_by: 'user-1',
     lock_type: 'state_change' as const
-  }),
-  releaseLock: jest.fn().mockResolvedValue(true)
+  } as unknown as unknown),
+  releaseLock: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown as unknown)
 };
 
 // Mock the useWorkflowStore hook
@@ -129,7 +134,7 @@ jest.mock('../stores/workflowStore', () => ({
 
 // Mock WebSocket
 const mockWebSocket = {
-  close: jest.fn(),
+  close: jest.fn<unknown[], unknown>(),
   onmessage: null as ((event: MessageEvent) => void) | null,
   onerror: null as ((event: Event) => void) | null
 };
@@ -138,7 +143,7 @@ const mockWebSocket = {
 global.WebSocket = jest.fn(() => mockWebSocket);
 
 // Mock fetch for API calls
-global.fetch = jest.fn();
+global.fetch = jest.fn<unknown[], unknown>();
 
 describe('SecurityDashboardWorkflow', () => {
   const defaultProps = {
@@ -153,7 +158,7 @@ describe('SecurityDashboardWorkflow', () => {
     // Reset fetch mock
     (fetch as jest.Mock).mockResolvedValue({
       ok: true,
-      json: () => Promise.resolve({})
+      json: ( as unknown as unknown) => Promise.resolve({})
     });
   });
 
@@ -213,7 +218,7 @@ describe('SecurityDashboardWorkflow', () => {
     });
 
     test('processes incoming security events via WebSocket', async () => {
-      const onSecurityEvent = jest.fn();
+      const onSecurityEvent = jest.fn<unknown[], unknown>();
       
       render(
         <SecurityDashboardWorkflow 
@@ -579,11 +584,12 @@ describe('SecurityDashboardWorkflow', () => {
 
   describe('User Interface Interactions', () => {
     test('refreshes dashboard when refresh button clicked', async () => {
-      // Mock window.location.reload
-      const mockReload = jest.fn();
+      // Mock window.location.reload to prevent JSDOM errors
+      const mockReload = jest.fn<unknown[], unknown>();
       Object.defineProperty(window, 'location', {
         value: { reload: mockReload },
-        writable: true
+        writable: true,
+        configurable: true
       });
 
       render(<SecurityDashboardWorkflow {...defaultProps} />);

@@ -12,11 +12,14 @@ export interface PreviewResult {
     usedNodeIds?: string[];
     usedEdgeIds?: string[];
     executionTimeMs?: number;
-    executionPath?: any;
+    executionPath?: Array<{
+        nodeId: string;
+        output: unknown;
+    }>;
     weightChoices?: Array<{
         nodeId: string;
-        selectedOption: any;
-        availableOptions: any[];
+        selectedOption: unknown;
+        availableOptions: unknown[];
         weights?: number[];
         selectionProbability?: number;
     }>;
@@ -25,9 +28,15 @@ export interface PreviewResult {
     lockedNote?: string;
     debugInfo?: {
         nodeExecutionOrder: string[];
-        randomChoices: any[];
-        performanceBreakdown: any;
-        memoryUsage?: any;
+        randomChoices: Array<{
+            nodeId: string;
+            choice: unknown;
+        }>;
+        performanceBreakdown: Record<string, number>;
+        memoryUsage?: {
+            used: number;
+            total: number;
+        };
     };
 }
 export interface PreviewCache {
@@ -83,7 +92,10 @@ export interface PreviewStateStore {
     enableRealTimeSync: (enabled: boolean) => void;
     setSyncInterval: (interval: number) => void;
     getCachedResults: (graphHash: string) => PreviewCache | null;
-    setCachedResults: (graphHash: string, results: PreviewResult[], stats: any) => void;
+    setCachedResults: (graphHash: string, results: PreviewResult[], stats: {
+        totalTime: number;
+        averageTime: number;
+    }) => void;
     clearCache: () => void;
     pruneCacheByAge: () => void;
     pruneCacheBySize: () => void;
@@ -101,7 +113,7 @@ export interface PreviewStateStore {
     shouldAutoRefresh: (changeSignificance?: number) => boolean;
     resetState: () => void;
     getStateSnapshot: () => any;
-    restoreFromSnapshot: (snapshot: any) => void;
+    restoreFromSnapshot: (snapshot: Record<string, unknown>) => void;
 }
 export declare }, "subscribe"> & {
     subscribe: {
@@ -112,19 +124,4 @@ export declare }, "subscribe"> & {
         } | undefined): () => void;
     };
 }>;
-export declare export declare export declare export declare     averageTime: number;
-} | null;
-export declare     getCached: (graphHash: string) => PreviewCache | null;
-    setCached: (graphHash: string, results: PreviewResult[], stats: any) => void;
-    clearCache: () => void;
-};
-export declare     history: PreviewPerformanceMetrics[];
-    insights: {
-        trend: "improving" | "degrading" | "stable";
-        bottlenecks: string[];
-        recommendations: string[];
-    };
-    updateMetrics: (metrics: Partial<PreviewPerformanceMetrics>) => void;
-    addSnapshot: () => void;
-};
-//# sourceMappingURL=previewStateStore.d.ts.map
+export declare export declare export declare export declare //# sourceMappingURL=previewStateStore.d.ts.map

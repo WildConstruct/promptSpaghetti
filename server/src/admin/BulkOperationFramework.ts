@@ -21,7 +21,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 import { RBACService } from '../auth/services/RBACService';
 
-export interface BulkOperationRequest<T = any> {
+export interface BulkOperationRequest<T = unknown> {
   id: string;
   resourceType: string;
   operation: string;
@@ -66,7 +66,7 @@ export interface BulkOperationResult {
   results: Array<{
     targetId: string;
     status: 'success' | 'failed' | 'skipped';
-    result?: any;
+    result?: unknown;
     error?: string;
     processingTime?: number;
   }>;

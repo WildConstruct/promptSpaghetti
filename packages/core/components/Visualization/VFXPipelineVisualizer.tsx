@@ -1029,7 +1029,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({
         </TabsContent>
       </Tabs>
 
-      <style jsx>{`
+      <style>{`
         .vfx-pipeline-visualizer {
           max-width: 1200px;
           margin: 0 auto;

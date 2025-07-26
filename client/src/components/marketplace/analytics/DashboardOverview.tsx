@@ -16,6 +16,7 @@ interface DashboardOverviewProps {
 export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
   dashboard,
   insights,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onRefresh
 }) => {
   const { overview, performance_summary } = dashboard;

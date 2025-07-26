@@ -7,7 +7,7 @@
  * Task: T-1752989144373-75 - Integrate usage analytics & download stats for developers
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 
 interface DashboardMetrics {
@@ -102,7 +102,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
   }, [user]);
 
   // Fetch dashboard data
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     try {
       const response = await fetch('/api/file-browser/analytics/dashboard', {
         method: 'GET',
@@ -122,10 +122,10 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load dashboard data');
     }
-  };
+  }, [user]);
 
   // Fetch developer insights
-  const fetchInsights = async () => {
+  const fetchInsights = useCallback(async () => {
     if (!hasAdminAccess || !showInsights) return;
 
     try {
@@ -146,7 +146,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
     } catch (err) {
       console.warn('Failed to load developer insights:', err);
     }
-  };
+  }, [hasAdminAccess, showInsights, user]);
 
   // Initial data load
   useEffect(() => {
@@ -165,7 +165,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
     };
 
     loadData();
-  }, [isAuthenticated, hasAdminAccess, showInsights]);
+  }, [isAuthenticated, hasAdminAccess, showInsights, fetchDashboardData, fetchInsights]);
 
   // Set up refresh interval
   useEffect(() => {
@@ -177,7 +177,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
     }, REFRESH_INTERVAL);
 
     return () => clearInterval(interval);
-  }, [isAuthenticated, hasAdminAccess, showInsights]);
+  }, [isAuthenticated, hasAdminAccess, showInsights, fetchDashboardData, fetchInsights]);
 
   // Format numbers for display
   const formatNumber = (num: number): string => {
@@ -339,7 +339,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
               boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
             }}>
               <h3 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#6b7280', fontWeight: '500' }}>
-                Today's Operations
+                Today&apos;s Operations
               </h3>
               <p style={{ margin: 0, fontSize: '24px', fontWeight: '700', color: '#1f2937' }}>
                 {formatNumber(dashboardData.summary.today.operations)}

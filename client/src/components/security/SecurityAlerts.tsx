@@ -1,18 +1,18 @@
 // Epic 19.4 - Security Alerts Component
 // Task: T-1752989145014 - Create frontend components for Security Monitoring & Incident Response
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Bell,
   AlertTriangle,
   CheckCircle,
   XCircle,
-  Clock,
+  // Clock, // Commented out unused import
   Settings,
   Volume2,
   VolumeX,
   Filter,
-  X,
+  // X, // Commented out unused import
   Eye,
   EyeOff,
   Trash2,
@@ -50,7 +50,13 @@ interface SecurityAlertsProps {
   showDismissed?: boolean;
 }
 
-export   const [filteredAlerts, setFilteredAlerts] = useState<SecurityAlert[]>([]);
+const SecurityAlerts: React.FC<SecurityAlertsProps> = ({ 
+  onAlertAction, 
+  maxVisible = 50, 
+  showDismissed = false 
+}) => {
+  const [alerts, setAlerts] = useState<SecurityAlert[]>([]);
+  const [filteredAlerts, setFilteredAlerts] = useState<SecurityAlert[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<'timestamp' | 'severity'>('timestamp');
@@ -63,13 +69,13 @@ export   const [filteredAlerts, setFilteredAlerts] = useState<SecurityAlert[]>([
     // Set up polling for new alerts
     const interval = setInterval(loadAlerts, 10000); // 10 seconds
     return () => clearInterval(interval);
-  }, []);
+  }, [loadAlerts]);
 
   useEffect(() => {
     filterAndSortAlerts();
-  }, [alerts, selectedFilters, sortBy, showDismissed]);
+  }, [filterAndSortAlerts]);
 
-  const loadAlerts = async () => {
+  const loadAlerts = useCallback(async () => {
     try {
       // Mock data - replace with actual API call
       const mockAlerts: SecurityAlert[] = [
@@ -158,9 +164,9 @@ export   const [filteredAlerts, setFilteredAlerts] = useState<SecurityAlert[]>([
       console.error('Failed to load security alerts:', error);
       setIsLoading(false);
     }
-  };
+  }, [soundEnabled]);
 
-  const filterAndSortAlerts = () => {
+  const filterAndSortAlerts = useCallback(() => {
     const filtered = alerts.filter(alert => {
       if (!showDismissed && alert.status === 'dismissed') return false;
       if (selectedFilters.length === 0) return true;
@@ -178,7 +184,7 @@ export   const [filteredAlerts, setFilteredAlerts] = useState<SecurityAlert[]>([
     });
 
     setFilteredAlerts(filtered.slice(0, maxVisible));
-  };
+  }, [alerts, selectedFilters, sortBy, showDismissed, maxVisible]);
 
   const playAlertSound = () => {
     // Create audio context and play alert sound
@@ -498,3 +504,5 @@ export   const [filteredAlerts, setFilteredAlerts] = useState<SecurityAlert[]>([
     </div>
   );
 };
+
+export default SecurityAlerts;

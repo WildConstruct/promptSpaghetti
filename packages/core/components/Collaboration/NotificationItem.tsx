@@ -70,7 +70,13 @@ const getPriorityBadge = (priority: string) => {
   }
 };
 
-export   const iconColor = getNotificationColor(notification.type);
+export const NotificationItem: React.FC<NotificationItemProps> = ({ 
+  notification, 
+  onMarkAsRead, 
+  onDelete 
+}) => {
+  const IconComponent = getNotificationIcon(notification.type);
+  const iconColor = getNotificationColor(notification.type);
   const isUnread = !notification.read_at;
 
   const handleMarkAsRead = (e: React.MouseEvent) => {
@@ -201,3 +207,5 @@ export   const iconColor = getNotificationColor(notification.type);
     </div>
   );
 };
+
+export default NotificationItem;

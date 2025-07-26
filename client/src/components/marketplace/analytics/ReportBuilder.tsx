@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   CustomReport,
   AnalyticsQuery,
@@ -67,7 +67,7 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   // Load preview data when query changes
-  const loadPreviewData = async () => {
+  const loadPreviewData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -85,14 +85,14 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [query, creatorId]);
 
   // Load preview data when entering preview step
   useEffect(() => {
     if (step === 'preview') {
       loadPreviewData();
     }
-  }, [step, query]);
+  }, [step, loadPreviewData]);
 
   // Validate current step
   const validateStep = (): boolean => {

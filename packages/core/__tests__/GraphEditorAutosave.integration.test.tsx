@@ -73,10 +73,10 @@ describe('GraphEditor autosave/restore/download integration', () => {
     );
     // Mock createObjectURL and click
     const createObjectURL = jest.fn(() => 'blob:url');
-    const revokeObjectURL = jest.fn();
-    // @ts-ignore
+    const revokeObjectURL = jest.fn<unknown[], unknown>();
+    // @ts-expect-error - Mock global URL for testing
     global.URL.createObjectURL = createObjectURL;
-    // @ts-ignore
+    // @ts-expect-error - Mock global URL for testing
     global.URL.revokeObjectURL = revokeObjectURL;
     const appendChild = jest.spyOn(document.body, 'appendChild');
     const removeChild = jest.spyOn(document.body, 'removeChild');

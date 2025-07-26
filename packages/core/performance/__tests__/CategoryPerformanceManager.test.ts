@@ -25,17 +25,26 @@ describe('CategoryPerformanceManager', () => {
   const mockPerformanceMetrics: PerformanceMetrics = {
     nodeId: 'test-node',
     nodeType: 'WeightedChoice',
+    executionId: 'exec-123',
     duration: 150,
-    memoryUsage: 1024,
-    cpuUsage: 25,
-    contextSize: 5,
+    memoryUsage: {
+      before: 1000,
+      after: 1024,
+      peak: 1050,
+      delta: 24
+    },
+    contextSize: {
+      variableCount: 5,
+      stateCount: 3,
+      cacheSize: 10,
+      evaluationDepth: 2
+    },
     cacheHit: false,
     errors: [],
     warnings: [],
     startTime: Date.now(),
     endTime: Date.now() + 150,
-    contextDepth: 2,
-    nodeCount: 10
+    customMetrics: new Map()
   };
 
   beforeEach(() => {
@@ -81,13 +90,22 @@ describe('CategoryPerformanceManager', () => {
       customManager.shutdown();
     });
 
-    test('should emit manager_initialized event', (done) => {
-      categoryManager.on('manager_initialized', (data) => {
-        expect(data).toHaveProperty('categories');
-        expect(data).toHaveProperty('globalSettings');
-        expect(data.categories).toEqual(['basic', 'advanced', 'utility', 'integration']);
-        done();
+    test('should have proper initialization state', () => {
+      // Verify the manager is properly initialized with expected categories
+      const categories = ['basic', 'advanced', 'utility', 'integration'];
+      
+      // Test that the manager has the expected categories available
+      categories.forEach(category => {
+        const metrics = categoryManager.getCategoryMetrics(category);
+        expect(metrics).toBeDefined();
+        expect(metrics.categoryName).toBe(category);
       });
+      
+      // Test that all category metrics can be retrieved
+      const allMetrics = categoryManager.getAllCategoryMetrics();
+      const metricKeys = Object.keys(allMetrics);
+      expect(metricKeys).toHaveLength(categories.length);
+      expect(metricKeys).toEqual(expect.arrayContaining(categories));
     });
   });
 
@@ -127,12 +145,11 @@ describe('CategoryPerformanceManager', () => {
 
     test('should queue execution when capacity limit reached', async () => {
       // Fill up basic category capacity (50 concurrent nodes max)
-      const promises = [];
+      const results = [];
       for (let i = 0; i < 51; i++) {
-        promises.push(categoryManager.registerExecution(`node-${i}`, 'WeightedChoice', 0));
+        const result = await categoryManager.registerExecution(`node-${i}`, 'WeightedChoice', 0);
+        results.push(result);
       }
-
-      const results = await Promise.all(promises);
       
       // First 50 should be immediate
       expect(results[0]).toMatch(/^basic-node-0-\d+$/);

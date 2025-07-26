@@ -23,11 +23,15 @@ class BrowserEventEmitter {
     this.events.get(event)!.push(listener);
   }
   
-  emit(event: string, ...args: any[]) {
+  emit(event: string, ...args: unknown[]) {
     const listeners = this.events.get(event);
     if (listeners) {
       listeners.forEach(listener => listener(...args));
     }
+  }
+  
+  removeAllListeners() {
+    this.events.clear();
   }
 }
 
@@ -35,8 +39,10 @@ class BrowserEventEmitter {
 const browserCrypto = {
   randomBytes: (size: number): string => {
     const array = new Uint8Array(size);
-    if (typeof window !== 'undefined' && window.crypto) {
-      window.crypto.getRandomValues(array);
+    if (typeof window !== 'undefined' && 
+        typeof (window as any).crypto !== 'undefined' && 
+        typeof (window as any).crypto.getRandomValues === 'function') {
+      (window as any).crypto.getRandomValues(array);
     } else {
       // Fallback for non-browser environments
       for (let i = 0; i < size; i++) {
@@ -89,7 +95,7 @@ export interface AuditLogEntry {
   dataSize?: number;
   recordCount?: number;
   fields?: string[];
-  filters?: Record<string, any>;
+  filters?: Record<string, unknown>;
   
   // Outcome
   success: boolean;
@@ -107,7 +113,7 @@ export interface AuditLogEntry {
   retentionPolicy?: string;
   
   // Additional metadata
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 /**
@@ -523,11 +529,14 @@ export class AuditLogger extends BrowserEventEmitter {
    * Hash sensitive data
    */
   private hashData(data: string): string {
-    return crypto
-      .createHash('sha256')
-      .update(data)
-      .digest('hex')
-      .substring(0, 16);
+    // Use a simple hash function for browser compatibility
+    let hash = 0;
+    for (let i = 0; i < data.length; i++) {
+      const char = data.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32-bit integer
+    }
+    return Math.abs(hash).toString(16).substring(0, 16);
   }
   
   /**
@@ -631,12 +640,3 @@ export function createAuditLogger(config?: AuditLoggerConfig): AuditLogger {
   return new AuditLogger(config);
 }
 
-// Export everything needed for external use
-export type {
-  AuditLogEntry,
-  AuditLoggerConfig,
-  AuditStorageBackend,
-  AuditQueryCriteria,
-  AlertThresholds,
-  AuditStatistics
-};

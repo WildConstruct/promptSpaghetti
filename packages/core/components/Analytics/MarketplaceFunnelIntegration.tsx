@@ -582,32 +582,8 @@ export interface MarketplaceIntegrationExportData {
 }
 
 // Default widget configuration
-const defaultWidgetConfig: WidgetConfiguration = {
-  widgets: ['conversion_summary', 'performance_chart', 'optimization_recommendations'],
-  layout: {
-    columns: 3,
-    rows: 2,
-    responsive: true,
-    spacing: 16,
-    widgetSizes: {
-      'conversion_summary': { width: 1, height: 1, resizable: false },
-      'performance_chart': { width: 2, height: 1, resizable: true },
-      'optimization_recommendations': { width: 3, height: 1, resizable: true },
-      'anomaly_alerts': { width: 1, height: 1, resizable: false },
-      'attribution_insights': { width: 2, height: 1, resizable: true },
-      'predictive_forecast': { width: 2, height: 1, resizable: true },
-      'template_performance': { width: 1, height: 1, resizable: false },
-      'creator_dashboard': { width: 3, height: 2, resizable: true }
-    }
-  },
-  refreshInterval: 30000, // 30 seconds
-  compactMode: false,
-  theme: 'auto',
-  customizations: []
-};
 
-export   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export   const [error, setError] = useState<string | null>(null);
   const [activeWidget, setActiveWidget] = useState<WidgetType>(widgetConfig.widgets[0]);
   const [refreshing, setRefreshing] = useState(false);
   

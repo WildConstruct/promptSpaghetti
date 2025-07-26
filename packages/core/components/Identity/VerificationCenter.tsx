@@ -519,7 +519,7 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
         </TabsContent>
       </Tabs>
 
-      <style jsx>{`
+      <style>{`
         .verification-center {
           max-width: 1200px;
           margin: 0 auto;

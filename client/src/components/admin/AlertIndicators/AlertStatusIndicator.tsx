@@ -98,7 +98,7 @@ const AlertStatusIndicator: React.FC<AlertStatusIndicatorProps> = ({
 
   // Get size configuration
   const getSizeConfig = (sz: string) => {
-    const configs = {
+    const configs: Record<string, { icon: string; container: string; tooltip: string }> = {
       sm: {
         icon: 'w-4 h-4',
         container: 'p-1.5',

@@ -8,24 +8,18 @@ import {
   Select,
   MenuItem,
   TextField,
-  FormControlLabel,
-  Checkbox,
-  Button,
   Typography,
   Grid,
-  Chip,
   ToggleButtonGroup,
   ToggleButton,
-  Alert,
-  Divider
+  Divider,
+  Alert
 } from '@mui/material';
 import {
   DatePicker
 } from '@mui/x-date-pickers/DatePicker';
 import {
-  Repeat as RepeatIcon,
-  CalendarToday as CalendarIcon,
-  AccessTime as TimeIcon
+  Repeat as RepeatIcon
 } from '@mui/icons-material';
 
 export interface RecurrenceData {
@@ -78,17 +72,7 @@ const MONTHS_OF_YEAR = [
   { value: 12, label: 'Dec', fullLabel: 'December' }
 ];
 
-export const RecurrenceEditor: React.FC<RecurrenceEditorProps> = ({
-  value,
-  onChange,
-  error
-}) => {
-  const [recurrenceData, setRecurrenceData] = useState<RecurrenceData>({
-    type: 'daily',
-    interval: 1,
-    ...value
-  });
-
+export 
   const [endType, setEndType] = useState<'never' | 'after' | 'on'>(
     value?.maxOccurrences ? 'after' : value?.endDate ? 'on' : 'never'
   );

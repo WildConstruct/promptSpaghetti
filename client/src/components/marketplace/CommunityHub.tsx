@@ -68,8 +68,7 @@ interface Event {
 }
 
 
-export   const [posts, setPosts] = useState<Post[]>([]);
-  const [discussions, setDiscussions] = useState<Discussion[]>([]);
+export   const [discussions, setDiscussions] = useState<Discussion[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
   const [topCreators, setTopCreators] = useState<User[]>([]);
   const [following, setFollowing] = useState<Set<string>>(new Set());
@@ -746,7 +745,7 @@ export   const [posts, setPosts] = useState<Post[]>([]);
         )}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .community-hub {
           max-width: 1200px;
           margin: 0 auto;

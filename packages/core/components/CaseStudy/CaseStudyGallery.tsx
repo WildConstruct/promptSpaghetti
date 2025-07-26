@@ -7,7 +7,13 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { CaseStudy, CaseStudyFilter, CaseStudySort, IndustryCategory, CaseStudyType } from '../../models/CaseStudyDataModel';
+import { 
+  CaseStudy,
+  CaseStudyFilter,
+  CaseStudySort,
+  IndustryCategory,
+  CaseStudyType
+} from '../../models/CaseStudyDataModel';
 import { CaseStudyCard } from './CaseStudyCard';
 
 export interface CaseStudyGalleryProps {
@@ -417,7 +423,7 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .case-study-gallery {
           padding: 20px 0;
         }

@@ -43,7 +43,7 @@ export interface StepCondition {
   type: 'boolean' | 'value' | 'expression' | 'function';
   field?: string;
   operator?: 'equals' | 'not_equals' | 'greater' | 'less' | 'contains' | 'exists';
-  value?: any;
+  value?: unknown;
   expression?: string;
   function?: string;
   negated?: boolean;
@@ -52,7 +52,7 @@ export interface StepCondition {
 export interface StepAction {
   type: 'function' | 'api' | 'ui' | 'data' | 'navigation' | 'notification';
   handler: string;
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
   async: boolean;
   timeout?: number;
   onSuccess?: string; // Next step ID
@@ -65,7 +65,7 @@ export interface StepValidation {
   validators: {
     type: 'required' | 'format' | 'range' | 'custom';
     message: string;
-    parameters?: Record<string, any>;
+    parameters?: Record<string, unknown>;
   }[];
   onValidationFailure: 'retry' | 'skip' | 'abort' | 'rollback';
 }
@@ -164,17 +164,17 @@ export interface SequenceExecution {
 }
 
 export interface ExecutionContext {
-  variables: Record<string, any>;
-  userInput: Record<string, any>;
-  sessionData: Record<string, any>;
-  executionState: Record<string, any>;
+  variables: Record<string, unknown>;
+  userInput: Record<string, unknown>;
+  sessionData: Record<string, unknown>;
+  executionState: Record<string, unknown>;
   rollbackStack: RollbackEntry[];
 }
 
 export interface RollbackEntry {
   stepId: string;
   timestamp: Date;
-  state: Record<string, any>;
+  state: Record<string, unknown>;
   action: string;
   reversible: boolean;
 }
@@ -236,9 +236,9 @@ export class StepSequencingSystem extends EventEmitter {
   private executions: Map<string, SequenceExecution> = new Map();
   private activeExecutions: Set<string> = new Set();
   private config: SequencingConfig;
-  private actionHandlers: Map<string, Function> = new Map();
-  private validators: Map<string, Function> = new Map();
-  private rollbackHandlers: Map<string, Function> = new Map();
+  private actionHandlers: Map<string, (...args: unknown[]) => unknown> = new Map();
+  private validators: Map<string, (...args: unknown[]) => unknown> = new Map();
+  private rollbackHandlers: Map<string, (...args: unknown[]) => unknown> = new Map();
 
   constructor(config?: Partial<SequencingConfig>) {
     super();
@@ -729,15 +729,15 @@ export class StepSequencingSystem extends EventEmitter {
   }
 
   // Handler registration
-  registerActionHandler(type: string, handler: Function): void {
+  registerActionHandler(type: string, handler: (...args: unknown[]) => unknown): void {
     this.actionHandlers.set(type, handler);
   }
 
-  registerValidator(type: string, validator: Function): void {
+  registerValidator(type: string, validator: (...args: unknown[]) => unknown): void {
     this.validators.set(type, validator);
   }
 
-  registerRollbackHandler(stepId: string, handler: Function): void {
+  registerRollbackHandler(stepId: string, handler: (...args: unknown[]) => unknown): void {
     this.rollbackHandlers.set(stepId, handler);
   }
 
@@ -747,7 +747,7 @@ export class StepSequencingSystem extends EventEmitter {
     successRate: number;
     averageDuration: number;
     commonFailurePoints: Array<{ stepId: string; failureRate: number }>;
-    performanceMetrics: Record<string, any>;
+    performanceMetrics: Record<string, unknown>;
   } {
     const executions = this.listExecutions({ sequenceId });
     const completedExecutions = executions.filter(exec => exec.status === 'completed');
@@ -1027,25 +1027,27 @@ export class StepSequencingSystem extends EventEmitter {
     case 'boolean':
       result = !!execution.context.variables[condition.field!];
       break;
-    case 'value':
+    case 'value': {
       const value = execution.context.variables[condition.field!];
       result = this.compareValues(value, condition.operator!, condition.value);
       break;
+    }
     case 'expression':
       result = this.evaluateExpression(condition.expression!, execution.context);
       break;
-    case 'function':
+    case 'function': {
       const validator = this.validators.get(condition.function!);
       if (validator) {
         result = await validator(execution.context);
       }
       break;
     }
+    }
 
     return condition.negated ? !result : result;
   }
 
-  private compareValues(actual: any, operator: string, expected: any): boolean {
+  private compareValues(actual: unknown, operator: string, expected: unknown): boolean {
     switch (operator) {
     case 'equals': return actual === expected;
     case 'not_equals': return actual !== expected;
@@ -1062,7 +1064,7 @@ export class StepSequencingSystem extends EventEmitter {
     try {
       const func = new Function('context', `return ${expression}`);
       return !!func(context);
-    } catch (error) {
+    } catch {
       return false;
     }
   }
@@ -1138,7 +1140,12 @@ export class StepSequencingSystem extends EventEmitter {
     }
   }
 
-  private updateStepPerformance(step: SequenceStep, startTime: number, status: StepExecutionStatus, attempts: number): void {
+  private updateStepPerformance(
+    step: SequenceStep,
+    startTime: number,
+    status: StepExecutionStatus,
+    attempts: number
+  ): void {
     const duration = performance.now() - startTime;
     
     const record: ExecutionRecord = {
@@ -1163,7 +1170,12 @@ export class StepSequencingSystem extends EventEmitter {
     step.performance.retryRate = (executions.filter(ex => ex.attempts > 1).length / executions.length) * 100;
   }
 
-  private updateExecutionProgress(execution: SequenceExecution, stepId: string, status: StepExecutionStatus, duration: number): void {
+  private updateExecutionProgress(
+    execution: SequenceExecution,
+    stepId: string,
+    status: StepExecutionStatus,
+    duration: number
+  ): void {
     if (status === 'completed') {
       execution.progress.completedSteps++;
     }
@@ -1217,29 +1229,29 @@ export class StepSequencingSystem extends EventEmitter {
 
   private registerBuiltInHandlers(): void {
     // Register built-in action handlers
-    this.registerActionHandler('function', async (params: any, context: ExecutionContext) => {
+    this.registerActionHandler('function', async (params: Record<string, unknown>, _context: ExecutionContext) => {
       // Execute a named function
       console.log('Executing function:', params.name);
     });
 
-    this.registerActionHandler('data', async (params: any, context: ExecutionContext) => {
+    this.registerActionHandler('data', async (params: Record<string, unknown>, context: ExecutionContext) => {
       // Set data in context
       if (params.set) {
         Object.assign(context.variables, params.set);
       }
     });
 
-    this.registerActionHandler('delay', async (params: any, context: ExecutionContext) => {
+    this.registerActionHandler('delay', async (params: Record<string, unknown>, context: ExecutionContext) => {
       // Add delay
       await this.delay(params.duration || 1000);
     });
 
     // Register built-in validators
-    this.registerValidator('required', async (context: ExecutionContext, params: any) => {
+    this.registerValidator('required', async (context: ExecutionContext, params: Record<string, unknown>) => {
       return context.variables[params.field] !== undefined;
     });
 
-    this.registerValidator('format', async (context: ExecutionContext, params: any) => {
+    this.registerValidator('format', async (context: ExecutionContext, params: Record<string, unknown>) => {
       const value = context.variables[params.field];
       const regex = new RegExp(params.pattern);
       return regex.test(String(value));

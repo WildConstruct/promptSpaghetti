@@ -29,21 +29,24 @@ describe('BreachNotificationService', () => {
   beforeEach(() => {
     // Mock Date.now() for consistent testing
     mockDate = new Date('2025-01-15T10:00:00Z');
-    jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
+    jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown as unknown));
     
-    // Mock Date constructor
-    const mockDateConstructor = jest.fn().mockImplementation((dateString?: string) => {
+    // Store original Date for safe access
+    const OriginalDate = Date;
+    
+    // Mock Date constructor safely to avoid infinite recursion
+    const mockDateConstructor = jest.fn<unknown[], unknown>().mockImplementation((dateString?: string) => {
       if (dateString) {
-        return new Date(dateString);
+        return new OriginalDate(dateString);
       }
-      return mockDate;
+      return new OriginalDate(mockDate.getTime());
     });
-    mockDateConstructor.now = jest.fn().mockReturnValue(mockDate.getTime());
+    mockDateConstructor.now = jest.fn<unknown[], unknown>().mockReturnValue(mockDate.getTime( as unknown as unknown));
     
     (global as any).Date = mockDateConstructor;
     
     // Mock Math.random for deterministic IDs
-    jest.spyOn(Math, 'random').mockReturnValue(0.123456789);
+    jest.spyOn(Math, 'random').mockReturnValue(0.123456789 as unknown as unknown);
     
     service = new BreachNotificationService({
       detection: {
@@ -312,7 +315,7 @@ describe('BreachNotificationService', () => {
     test('should handle notification delivery failures', async () => {
       // Mock a failing notification delivery
       const originalDeliverNotification = (service as any).deliverNotification;
-      (service as any).deliverNotification = jest.fn().mockRejectedValue(new Error('Delivery failed'));
+      (service as any).deliverNotification = jest.fn<unknown[], unknown>().mockRejectedValue(new Error('Delivery failed'));
 
       const incidentId = await service.reportBreach({
         title: 'Test Breach',

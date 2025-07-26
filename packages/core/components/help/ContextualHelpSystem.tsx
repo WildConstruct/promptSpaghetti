@@ -314,12 +314,16 @@ export const ContextualTooltip: React.FC<ContextualTooltipProps> = ({
 };
 
 // Progressive onboarding system
-export   onPrevious: () => void;
+interface ProgressiveOnboardingProps {
+  steps: any[];
+  currentStep: number;
+  onNext: () => void;
+  onPrevious: () => void;
   onSkip: () => void;
   onComplete: () => void;
-}> = ({ steps, currentStep, onNext, onPrevious, onSkip, onComplete }) => {
-  const currentContent = steps[currentStep];
-  
+}
+
+export   
   if (!currentContent) return null;
 
   return (

@@ -19,16 +19,11 @@ import { Input } from '../ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { 
   Shield, 
-  Star, 
   TrendingUp, 
   TrendingDown, 
-  Users, 
   AlertTriangle,
-  Award,
   Search,
   Filter,
-  CheckCircle,
-  XCircle,
   Flag,
   Eye
 } from 'lucide-react';
@@ -119,7 +114,12 @@ interface ReputationDashboardProps {
   refreshInterval?: number;
 }
 
-export   const [loading, setLoading] = useState(true);
+export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
+  className,
+  refreshInterval = 60000
+}) => {
+  const [dashboardData, setDashboardData] = useState<ReputationDashboardData | null>(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
   
@@ -134,7 +134,7 @@ export   const [loading, setLoading] = useState(true);
   });
   
   // Selected user for detailed view
-  const [_selectedUser, setSelectedUser] = useState<string | null>(null);
+  const [, setSelectedUser] = useState<string | null>(null);
   
   // Leaderboard data
   const [leaderboard, setLeaderboard] = useState<Array<{
@@ -709,7 +709,7 @@ export   const [loading, setLoading] = useState(true);
             <div className="border rounded-lg p-4">
               <h3 className="font-medium mb-3">Top Reputation Users</h3>
               <div className="space-y-2">
-                {leaderboard.map((user, index) => (
+                {leaderboard.map((user) => (
                   <div key={user.userId} className="flex items-center gap-3 p-2 rounded hover:bg-gray-50">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-r from-gold to-yellow-400 flex items-center justify-center text-white font-bold text-sm">
                       {user.rank}
@@ -783,3 +783,5 @@ export   const [loading, setLoading] = useState(true);
     </Card>
   );
 };
+
+export default ReputationDashboard;

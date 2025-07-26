@@ -638,7 +638,7 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .marketplace-contextual-help {
           position: relative;
         }

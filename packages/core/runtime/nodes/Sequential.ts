@@ -25,7 +25,7 @@ export interface SequencePatternConfig {
   /** For random pattern: whether to allow repeats */
   allowRepeats?: boolean;
   /** Custom configuration for extensibility */
-  custom?: Record<string, any>;
+  custom?: Record<string, unknown>;
 }
 
 /**
@@ -45,7 +45,7 @@ export interface SequenceState {
   /** History of returned values */
   history: string[];
   /** Pattern-specific state data */
-  patternData?: Record<string, any>;
+  patternData?: Record<string, unknown>;
 }
 
 /**
@@ -297,8 +297,10 @@ export class SequentialNode extends AdvancedRuntimeNode<string> {
           nodeStates: new Map(),
           evaluationDepth: 0,
           cache: new Map(),
+          prng: () => Math.random(),
           executionMeta: {
             startTime: Date.now(),
+            executionId: `exec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
             nodeExecutionOrder: [],
             performanceMetrics: new Map()
           }
@@ -397,4 +399,5 @@ export function createSequentialNode(
 /**
  * Utility functions for common sequential patterns
  */
-export } as const;
+export   }
+} as const;

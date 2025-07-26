@@ -45,7 +45,7 @@ export interface ModelCapabilities {
   supportsBatch?: boolean;
   supportsStreaming?: boolean;
   supportsAsync?: boolean;
-  customParameters?: Record<string, any>;
+  customParameters?: Record<string, unknown>;
 }
 
 export interface ModelMetadata {
@@ -95,8 +95,8 @@ export interface HealthStatus {
 
 export interface AIRequest {
   id: string;
-  input: any;
-  options?: Record<string, any>;
+  input: unknown;
+  options?: Record<string, unknown>;
   metadata?: {
     userId?: string;
     sessionId?: string;
@@ -110,7 +110,7 @@ export interface AIRequest {
 export interface AIResponse {
   id: string;
   requestId: string;
-  output: any;
+  output: unknown;
   metadata?: {
     processingTime: number;
     cost?: CostEstimate;
@@ -124,7 +124,7 @@ export interface AIResponse {
   error?: {
     code: string;
     message: string;
-    details?: any;
+    details?: unknown;
   };
   completedAt: Date;
 }
@@ -160,11 +160,11 @@ export abstract class BaseAIModel {
 
   // Abstract methods that must be implemented by concrete models
   abstract initialize(): Promise<void>;
-  abstract process(input: any, options?: any): Promise<any>;
+  abstract process(input: unknown, options?: unknown): Promise<unknown>;
   abstract cleanup(): Promise<void>;
 
   // Default implementations that can be overridden
-  async estimate(input: any, options?: any): Promise<CostEstimate> {
+  async estimate(input: unknown, options?: unknown): Promise<CostEstimate> {
     // Default estimation based on metadata
     const baseRequestCost = this._metadata.costPerRequest || 0;
     const tokenCost = this._calculateTokenCost(input, options);
@@ -301,14 +301,13 @@ export abstract class BaseAIModel {
       const inputType = this._detectInputType(request.input);
       if (!this._capabilities.inputTypes.includes(inputType)) {
         throw new Error(
-          `Input type ${inputType} not supported. Supported types: ${this._capabilities.inputTypes.join(',
-          '
-        )}`);
+          `Input type ${inputType} not supported. Supported types: ${this._capabilities.inputTypes.join(', ')}`
+        );
       }
     }
   }
 
-  protected _calculateInputSize(input: any): number {
+  protected _calculateInputSize(input: unknown): number {
     if (typeof input === 'string') {
       return new Blob([input]).size;
     }
@@ -318,7 +317,7 @@ export abstract class BaseAIModel {
     return JSON.stringify(input).length;
   }
 
-  protected _detectInputType(input: any): string {
+  protected _detectInputType(input: unknown): string {
     if (typeof input === 'string') {
       return 'text';
     }
@@ -331,7 +330,7 @@ export abstract class BaseAIModel {
     return 'unknown';
   }
 
-  protected _calculateTokenCost(input: any, options?: any): number {
+  protected _calculateTokenCost(input: unknown, options?: unknown): number {
     if (!this._metadata.costPerToken) {
       return 0;
     }
@@ -347,7 +346,7 @@ export abstract class BaseAIModel {
     return tokenCount * this._metadata.costPerToken;
   }
 
-  protected async _assessOutputQuality(output: any): Promise<number> {
+  protected async _assessOutputQuality(output: unknown): Promise<number> {
     // Default quality assessment - can be overridden
     if (!output || output === null || output === undefined) {
       return 0;
@@ -393,7 +392,7 @@ export interface ModelConfiguration {
   endpoint?: string;
   apiKey?: string;
   modelName?: string;
-  parameters?: Record<string, any>;
+  parameters?: Record<string, unknown>;
   capabilities?: Partial<ModelCapabilities>;
   metadata?: Partial<ModelMetadata>;
 }

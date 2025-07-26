@@ -11,7 +11,9 @@
 
 import { EventEmitter } from 'events';
 import {
-  DataClassificationLevel,
+  DataClassificationLevel
+} from '../types/DataClassification';
+import {
   DataOperation,
   SubjectAttributes,
   ObjectAttributes
@@ -531,7 +533,7 @@ export class UserAccessTransparencyService extends EventEmitter {
 
     // Start automated processing if enabled
     if (this.config.dsarAutomationEnabled) {
-      await this.processDSARAutomatically(request);
+      await this.processDBARAutomatically(request);
     }
 
     this.emit('dsarSubmitted', {
@@ -720,8 +722,15 @@ export class UserAccessTransparencyService extends EventEmitter {
   private isInQuietHours(quietHours: { start: string; end: string }): boolean { return false; }
   private queueNotification(notification: TransparencyNotification): void { this.notificationQueue.push(notification); }
   private deliverNotification(notification: TransparencyNotification): Promise<void> { return Promise.resolve(); }
-  private gatherUserDataForExport(userId: string, categories?: string[]): Promise<Record<string, unknown>> { return Promise.resolve({}); }
-  private generateDataExport(data: Record<string, unknown>, format: string): Promise<DSARResponse> { return Promise.resolve({} as DSARResponse); }
+  private gatherUserDataForExport(
+    userId: string,
+    categories?: string[]
+  ): Promise<Record<string, unknown>> { return Promise.resolve({}); }
+  private generateDataExport(
+    data: Record<string,
+    unknown>,
+    format: string
+  ): Promise<DSARResponse> { return Promise.resolve({} as DSARResponse); }
   private startPeriodicTasks(): void { /* Implementation */ }
   private processNotificationQueue(): void { /* Implementation */ }
 }

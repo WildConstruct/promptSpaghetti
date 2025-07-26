@@ -26,6 +26,7 @@ interface AccountLinkingProps {
 }
 
 export const AccountLinking: React.FC<AccountLinkingProps> = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onAccountLinked,
   onAccountUnlinked
 }) => {

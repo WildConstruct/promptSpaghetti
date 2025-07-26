@@ -28,7 +28,7 @@ export const ConsentBanner: React.FC<ConsentBannerProps> = ({
   const {
     preferences,
     isLoading,
-    error,
+    error: _error, // eslint-disable-line @typescript-eslint/no-unused-vars
     hasConsent,
     grantConsent,
     withdrawConsent,
@@ -45,7 +45,7 @@ export const ConsentBanner: React.FC<ConsentBannerProps> = ({
     error: undefined
   });
 
-  const [config, _setConfig] = useState<ConsentConfiguration | null>(null);
+  const [config] = useState<ConsentConfiguration | null>(null);
 
   useEffect(() => {
     // Load configuration and check if banner should be shown

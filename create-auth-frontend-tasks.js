@@ -493,7 +493,7 @@ console.log('\n=== Authentication Frontend Integration Epic Task Creation ===');
 console.log(`Creating ${allTasks.length} development tasks across 3 stories...\n`);
 
 // Function to create a single ticket
-async function createTicket(task) {
+async function createTicket(task: any): Promise<any> {
   try {
     const response = await fetch(`${API_URL}/tickets`, {
       method: 'POST',
@@ -521,7 +521,7 @@ async function createTicket(task) {
 }
 
 // Function to create all tickets
-async function createAllTickets() {
+async function createAllTickets(): Promise<void> {
   console.log('Starting ticket creation...\n');
   
   let successCount = 0;
@@ -561,7 +561,7 @@ async function createAllTickets() {
 }
 
 // Check if server is running first
-async function checkServer() {
+async function checkServer(): Promise<boolean> {
   try {
     const response = await fetch(`${API_URL}/health`);
     if (response.ok) {
@@ -574,7 +574,7 @@ async function checkServer() {
 }
 
 // Main execution
-async function main() {
+async function main(): Promise<void> {
   const serverRunning = await checkServer();
   
   if (!serverRunning) {

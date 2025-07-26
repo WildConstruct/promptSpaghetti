@@ -487,7 +487,7 @@ export interface AppealResult {
 
 export interface CommunityFeedback {
   feedback_type: 'quality_rating' | 'content_report' | 'improvement_suggestion' | 'expert_review';
-  feedback_data: any;
+  feedback_data: Record<string, unknown>;
   community_consensus: number; // 0-100
   expert_validation: boolean;
 }
@@ -548,11 +548,11 @@ export interface CalibrationResult {
 }
 
 // Additional supporting interfaces...
-export interface VolumeTrend { trend_type: string; data: any; }
-export interface QualityTrend { trend_type: string; data: any; }
+export interface VolumeTrend { trend_type: string; data: unknown; }
+export interface QualityTrend { trend_type: string; data: unknown; }
 export interface EfficiencyMetric { metric_name: string; value: number; }
-export interface UserBehaviorInsight { insight_type: string; data: any; }
-export interface CategoryPerformance { category: string; performance: any; }
+export interface UserBehaviorInsight { insight_type: string; data: unknown; }
+export interface CategoryPerformance { category: string; performance: unknown; }
 export interface OptimizationOpportunity { opportunity_type: string; details: any; }
 export interface VolumePrediction { prediction_data: any; }
 export interface QualityForecast { forecast_data: any; }
@@ -616,13 +616,25 @@ export class EnhancedModerationServiceImpl implements EnhancedModerationService 
       const businessImpactAssessment = await this.assessBusinessImpact(request, baseModerationResult, filteringResult);
       
       // Step 4: Generate workflow recommendations
-      const workflowRecommendations = await this.generateWorkflowRecommendations(request, baseModerationResult, filteringResult);
+      const workflowRecommendations = await this.generateWorkflowRecommendations(
+        request,
+        baseModerationResult,
+        filteringResult
+      );
       
       // Step 5: Perform escalation analysis
-      const escalationAnalysis = await this.performEscalationAnalysis(request, baseModerationResult, businessImpactAssessment);
+      const escalationAnalysis = await this.performEscalationAnalysis(
+        request,
+        baseModerationResult,
+        businessImpactAssessment
+      );
       
       // Step 6: Context-specific moderation
-      const contextSpecificResults = await this.performContextSpecificModeration(request, baseModerationResult, filteringResult);
+      const contextSpecificResults = await this.performContextSpecificModeration(
+        request,
+        baseModerationResult,
+        filteringResult
+      );
       
       // Step 7: Generate predictive insights
       const predictiveInsights = await this.generatePredictiveInsights(request, baseModerationResult);
@@ -631,10 +643,18 @@ export class EnhancedModerationServiceImpl implements EnhancedModerationService 
       const patternAnalysis = await this.analyzePatterns(request, baseModerationResult);
       
       // Step 9: Determine follow-up actions
-      const followUpActions = await this.determineFollowUpActions(request, baseModerationResult, businessImpactAssessment);
+      const followUpActions = await this.determineFollowUpActions(
+        request,
+        baseModerationResult,
+        businessImpactAssessment
+      );
       
       // Step 10: Define monitoring requirements
-      const monitoringRequirements = await this.defineMonitoringRequirements(request, baseModerationResult, escalationAnalysis);
+      const monitoringRequirements = await this.defineMonitoringRequirements(
+        request,
+        baseModerationResult,
+        escalationAnalysis
+      );
 
       const enhancedResult: EnhancedModerationResult = {
         ...baseModerationResult,
@@ -1010,14 +1030,38 @@ export class EnhancedModerationServiceImpl implements EnhancedModerationService 
   // - Automated action execution
   // - Contribution workflow updates
 
-  private async assessBusinessImpact(request: any, moderationResult: any, filteringResult: any): Promise<any> { return {}; }
-  private async generateWorkflowRecommendations(request: any, moderationResult: any, filteringResult: any): Promise<any> { return []; }
-  private async performEscalationAnalysis(request: any, moderationResult: any, businessImpact: any): Promise<any> { return {}; }
-  private async performContextSpecificModeration(request: any, moderationResult: any, filteringResult: any): Promise<any> { return {}; }
+  private async assessBusinessImpact(
+    request: any,
+    moderationResult: any,
+    filteringResult: any
+  ): Promise<any> { return {}; }
+  private async generateWorkflowRecommendations(
+    request: any,
+    moderationResult: any,
+    filteringResult: any
+  ): Promise<any> { return []; }
+  private async performEscalationAnalysis(
+    request: any,
+    moderationResult: any,
+    businessImpact: any
+  ): Promise<any> { return {}; }
+  private async performContextSpecificModeration(
+    request: any,
+    moderationResult: any,
+    filteringResult: any
+  ): Promise<any> { return {}; }
   private async generatePredictiveInsights(request: any, moderationResult: any): Promise<any> { return []; }
   private async analyzePatterns(request: any, moderationResult: any): Promise<any> { return {}; }
-  private async determineFollowUpActions(request: any, moderationResult: any, businessImpact: any): Promise<any> { return []; }
-  private async defineMonitoringRequirements(request: any, moderationResult: any, escalation: any): Promise<any> { return []; }
+  private async determineFollowUpActions(
+    request: any,
+    moderationResult: any,
+    businessImpact: any
+  ): Promise<any> { return []; }
+  private async defineMonitoringRequirements(
+    request: any,
+    moderationResult: any,
+    escalation: any
+  ): Promise<any> { return []; }
   private generateProcessingBreakdown(startTime: number): any { return {}; }
   private async calculateResourceUtilization(): Promise<any> { return {}; }
   private async trackEnhancedModerationEvent(request: any, result: any): Promise<void> { }

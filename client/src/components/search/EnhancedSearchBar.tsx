@@ -95,7 +95,7 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
     if (value.trim() || isDropdownOpen) {
       setIsDropdownOpen(true);
     }
-  }, [setText]);
+  }, [setText, isDropdownOpen]);
 
   // Handle input focus
   const handleInputFocus = useCallback(() => {
@@ -335,8 +335,6 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
             type="text"
             value={inputValue}
             onChange={handleInputChange}
-            onFocus={handleInputFocus}
-            onBlur={handleInputBlur}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
             style={{

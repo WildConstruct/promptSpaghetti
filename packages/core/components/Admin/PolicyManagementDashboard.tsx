@@ -552,7 +552,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
         </TabsContent>
       </Tabs>
 
-      <style jsx>{`
+      <style>{`
         .policy-management-dashboard {
           max-width: 1400px;
           margin: 0 auto;

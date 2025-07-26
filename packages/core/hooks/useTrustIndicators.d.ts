@@ -43,13 +43,13 @@ export declare const useTrustIndicators: (config?: TrustIndicatorConfig) => {
     lastUpdated: Date | null;
     loadTrustData: (forceRefresh?: boolean) => Promise<void>;
     refreshTrustData: () => Promise<void>;
-    getTrustLevel: (score?: number) => "verified" | "basic" | "professional" | "expert" | "unverified";
+    getTrustLevel: (score?: number) => "professional" | "basic" | "expert" | "verified" | "unverified";
     getTrustLevelColor: (level: string) => string;
     getTrustLevelBenefits: (level: string) => string[];
     formatTrustScore: (score?: number) => string;
     getTrustScoreColor: (score?: number) => string;
     trustScore: number;
-    trustTier: "verified" | "basic" | "professional" | "expert" | "unverified";
+    trustTier: "professional" | "basic" | "expert" | "verified" | "unverified";
     verificationStatus: {
         email: boolean;
         phone: boolean;
@@ -61,7 +61,7 @@ export declare const useTrustIndicators: (config?: TrustIndicatorConfig) => {
     verificationCount: number;
     shouldShowVerificationPrompt: boolean;
     getNextVerificationStep: () => string | null;
-    communityStanding: "excellent" | "good" | "fair" | "poor" | "unrated";
+    communityStanding: "excellent" | "good" | "poor" | "fair" | "unrated";
     getCommunityStandingColor: (standing: string) => string;
     trustTrend: "stable" | "improving" | "declining";
     getTrustTrendIcon: (trend: string) => string;

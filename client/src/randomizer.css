@@ -1,9 +1,64 @@
-/* Epic 12 - LLM Randomizer Panel Styles */
+/* Epic 12 - LLM Randomizer Panel Styles - Professional UI Upgrade */
+
+/* Professional Color System - Cinema 4D Inspired */
+:root {
+  /* Professional Dark Theme */
+  --color-bg-primary: #2c2c2c;     /* Cinema 4D main background */
+  --color-bg-secondary: #383838;   /* Cinema 4D secondary panels */
+  --color-bg-tertiary: #404040;    /* Elevated surfaces */
+  --color-bg-quaternary: #4a4a4a;  /* Highest elevation */
+  
+  /* Professional Accent Colors */
+  --color-accent-orange: #ff7800;  /* Cinema 4D signature orange */
+  --color-accent-blue: #0ea5e9;    /* Professional blue accent */
+  --color-accent-green: #10b981;   /* Success states */
+  --color-accent-red: #ef4444;     /* Error states */
+  --color-accent-purple: #8b5cf6;  /* Advanced features */
+  
+  /* Professional Text Colors */
+  --color-text-primary: #e5e7eb;   /* High contrast text */
+  --color-text-secondary: #9ca3af; /* Medium contrast text */
+  --color-text-tertiary: #6b7280;  /* Low contrast text */
+  --color-text-disabled: #4b5563;  /* Disabled text */
+  
+  /* Professional UI Colors */
+  --color-ui-border: #4a4a4a;      /* Professional borders */
+  --color-ui-border-light: #525252; /* Lighter borders */
+  --color-ui-hover: #404040;       /* Hover states */
+  --color-ui-selected: #525252;    /* Selected states */
+  --color-ui-focus: #ff7800;       /* Focus indicators */
+  
+  /* Professional Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6);
+  
+  /* Professional Typography */
+  --font-family-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'SF Pro Display', Helvetica, Arial, sans-serif;
+  --font-family-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  
+  /* Professional Transitions */
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Professional Dark Theme Base */
+body {
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-primary);
+}
 
 .randomizer-panel {
   max-width: 1200px;
   margin: 0 auto;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-family: var(--font-family-primary);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .randomizer-header {
@@ -12,15 +67,18 @@
   align-items: center;
   margin-bottom: 20px;
   padding: 20px;
-  background: white;
+  background: linear-gradient(145deg, var(--color-bg-secondary), var(--color-bg-tertiary));
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-ui-border);
 }
 
 .randomizer-header h2 {
   margin: 0;
-  color: #2c3e50;
+  color: var(--color-text-primary);
   font-size: 24px;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .header-controls {
@@ -30,36 +88,45 @@
 
 .preset-btn, .history-btn, .advanced-btn {
   padding: 8px 16px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background: white;
+  border: 1px solid var(--color-ui-border);
+  border-radius: 6px;
+  background: linear-gradient(145deg, var(--color-bg-tertiary), var(--color-bg-secondary));
+  color: var(--color-text-primary);
   cursor: pointer;
   font-size: 14px;
-  transition: all 0.2s;
+  font-weight: 500;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-sm);
 }
 
 .preset-btn:hover, .history-btn:hover, .advanced-btn:hover {
-  background: #f8f9fa;
-  border-color: #007bff;
+  background: linear-gradient(145deg, var(--color-bg-quaternary), var(--color-bg-tertiary));
+  border-color: var(--color-accent-orange);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .preset-btn.active, .history-btn.active, .advanced-btn.active {
-  background: #007bff;
+  background: linear-gradient(145deg, var(--color-accent-orange), #e65100);
   color: white;
-  border-color: #007bff;
+  border-color: var(--color-accent-orange);
+  box-shadow: var(--shadow-md), 0 0 0 2px rgba(255, 120, 0, 0.3);
 }
 
 .presets-panel, .history-panel {
-  background: white;
+  background: linear-gradient(145deg, var(--color-bg-secondary), var(--color-bg-tertiary));
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-ui-border);
 }
 
 .presets-panel h3, .history-panel h3 {
   margin-top: 0;
-  color: #2c3e50;
+  color: var(--color-text-primary);
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .preset-category {
@@ -68,8 +135,9 @@
 
 .preset-category h4 {
   margin: 0 0 10px 0;
-  color: #666;
+  color: var(--color-text-secondary);
   font-size: 16px;
+  font-weight: 500;
 }
 
 .preset-grid {
@@ -80,33 +148,38 @@
 
 .preset-card {
   padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  border: 1px solid var(--color-ui-border);
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s;
-  background: white;
+  transition: all var(--transition-normal);
+  background: linear-gradient(145deg, var(--color-bg-tertiary), var(--color-bg-secondary));
+  box-shadow: var(--shadow-sm);
 }
 
 .preset-card:hover {
-  border-color: #007bff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-color: var(--color-accent-orange);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+  background: linear-gradient(145deg, var(--color-bg-quaternary), var(--color-bg-tertiary));
 }
 
 .preset-card.selected {
-  border-color: #007bff;
-  background: #f8f9ff;
+  border-color: var(--color-accent-orange);
+  background: linear-gradient(145deg, var(--color-bg-quaternary), var(--color-bg-tertiary));
+  box-shadow: var(--shadow-md), 0 0 0 2px rgba(255, 120, 0, 0.3);
 }
 
 .preset-name {
-  font-weight: bold;
-  color: #2c3e50;
+  font-weight: 600;
+  color: var(--color-text-primary);
   margin-bottom: 5px;
 }
 
 .preset-description {
-  color: #666;
+  color: var(--color-text-secondary);
   font-size: 14px;
   margin-bottom: 10px;
+  line-height: 1.4;
 }
 
 .preset-tags {
@@ -191,11 +264,12 @@
 }
 
 .parameters-form {
-  background: white;
+  background: linear-gradient(145deg, var(--color-bg-secondary), var(--color-bg-tertiary));
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-ui-border);
 }
 
 .parameter-section {
@@ -204,9 +278,11 @@
 
 .parameter-section h3 {
   margin-top: 0;
-  color: #2c3e50;
-  border-bottom: 2px solid #e9ecef;
+  color: var(--color-text-primary);
+  border-bottom: 2px solid var(--color-ui-border);
   padding-bottom: 10px;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .parameter-group {
@@ -217,26 +293,33 @@
   display: block;
   margin-bottom: 5px;
   font-weight: 500;
-  color: #495057;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .parameter-group input,
 .parameter-group select,
 .parameter-group textarea {
   width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 10px 14px;
+  border: 1px solid var(--color-ui-border);
+  border-radius: 6px;
   font-size: 14px;
-  transition: border-color 0.2s;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  transition: all var(--transition-normal);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .parameter-group input:focus,
 .parameter-group select:focus,
 .parameter-group textarea:focus {
   outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+  border-color: var(--color-accent-orange);
+  box-shadow: 0 0 0 3px rgba(255, 120, 0, 0.2), inset 0 1px 3px rgba(0, 0, 0, 0.3);
+  background: var(--color-bg-secondary);
 }
 
 .parameter-group input.error,
@@ -331,27 +414,36 @@
 }
 
 .generate-btn {
-  padding: 12px 24px;
+  padding: 14px 28px;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-md);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .generate-btn.primary {
-  background: #007bff;
+  background: linear-gradient(145deg, var(--color-accent-orange), #e65100);
   color: white;
+  border: 1px solid var(--color-accent-orange);
 }
 
 .generate-btn.primary:hover:not(:disabled) {
-  background: #0056b3;
+  background: linear-gradient(145deg, #e65100, #bf360c);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 
 .generate-btn:disabled {
-  background: #6c757d;
+  background: var(--color-text-disabled);
   cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+  box-shadow: var(--shadow-sm);
 }
 
 .generation-progress {

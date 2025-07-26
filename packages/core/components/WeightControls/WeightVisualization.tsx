@@ -277,18 +277,7 @@ export interface WeightLegendProps {
   className?: string;
 }
 
-export 
-  return (
-    <div className={`weight-legend ${className}`} style={{
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '4px',
-      fontSize: '12px',
-      color: '#e2e8f0'
-    }}>
-      {options.map((option, index) => {
-        const percentage = totalWeight > 0 ? (option.weight / totalWeight) * 100 : 0;
-        
+export         
         return (
           <div
             key={option.id}

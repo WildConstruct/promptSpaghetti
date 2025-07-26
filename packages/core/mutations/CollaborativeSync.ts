@@ -24,8 +24,8 @@ export interface WebSocketService {
   disconnect(): Promise<void>;
   send(message: CollaborativeMessage): Promise<void>;
   broadcast(message: CollaborativeMessage): Promise<void>;
-  on(event: string, callback: (data: any) => void): void;
-  off(event: string, callback: (data: any) => void): void;
+  on(event: string, callback: (data: CollaborativeMessage) => void): void;
+  off(event: string, callback: (data: CollaborativeMessage) => void): void;
   isConnected(): boolean;
 }
 

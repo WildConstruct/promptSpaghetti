@@ -55,8 +55,63 @@ export interface ThrottlingAnalyticsInsight {
     usageMetrics?: Record<string, number>;
     scalingFactors?: Record<string, number>;
     anomalyScore?: number;
+    anomalyType?: string;
     supportingData?: Record<string, unknown>;
   };
+}
+
+export interface PatternDetectionData {
+  pattern: string;
+  confidence: number;
+  recommendation: string;
+}
+
+export interface EndpointUsageData {
+  endpoint: string;
+  usageMetrics: Record<string, number>;
+}
+
+export interface ScalingRecommendationData {
+  confidence: number;
+  action: string;
+  multiplier: number;
+  reason: string;
+  scaleUp?: boolean;
+  expectedImpact?: string;
+  scalingFactors?: Record<string, number>;
+  // Allow index signature for compatibility
+  [key: string]: unknown;
+}
+
+export interface QuotaRecommendationData {
+  endpoint: string;
+  currentQuota: number;
+  recommendedQuota: number;
+  reason: string;
+  confidence?: number;
+  action?: string;
+  multiplier?: number;
+  expectedImpact?: string;
+  // Allow index signature for compatibility
+  [key: string]: unknown;
+}
+
+export interface LoadPredictionData {
+  predictedLoad: number;
+  currentLoad: number;
+  confidence: number;
+  timeFrame: number;
+}
+
+export interface PerformanceAnomalyData {
+  anomalyType: string;
+  severity: number;
+  affectedEndpoints: string[];
+  recommendation: string;
+  confidence?: number;
+  anomalyScore?: number;
+  // Allow index signature for compatibility
+  [key: string]: unknown;
 }
 
 export interface ThrottlingDecisionContext extends ThrottlingContext {
@@ -207,6 +262,14 @@ export interface ThrottlingResult {
     systemCondition: SystemCondition;
     escalationLevel?: number;
     tokensRemaining?: number;
+    analyticsAdjustments?: {
+      appliedInsights: number;
+      originalAction: string;
+      originalDelay: number;
+      adjustmentReason: string;
+      confidenceScore: number;
+      adjustmentFactors?: Record<string, number>;
+    };
   };
 }
 
@@ -421,6 +484,20 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
   }
   
   /**
+   * Convert SystemCondition string to numeric code for analytics
+   */
+  private getSystemConditionCode(condition: SystemCondition): number {
+    switch (condition) {
+      case SystemCondition.NORMAL: return 0;
+      case SystemCondition.ELEVATED: return 1;
+      case SystemCondition.HIGH_LOAD: return 2;
+      case SystemCondition.OVERLOAD: return 3;
+      case SystemCondition.UNDER_ATTACK: return 4;
+      default: return 0;
+    }
+  }
+  
+  /**
    * Get throttling statistics
    */
   public getStatistics(): {
@@ -605,7 +682,12 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
         appliedInsights: sortedInsights.length,
         originalAction: baseResult.action,
         originalDelay: baseResult.delay,
-        adjustmentFactors: sortedInsights.map(i => i.recommendation.adjustmentFactor)
+        adjustmentReason: sortedInsights.length > 0 ? sortedInsights[0].recommendation.reason : 'No insights applied',
+        confidenceScore: sortedInsights.length > 0 ? sortedInsights[0].confidence : 0,
+        adjustmentFactors: sortedInsights.reduce((acc, insight, index) => {
+          acc[`insight_${index}`] = insight.recommendation.adjustmentFactor;
+          return acc;
+        }, {} as Record<string, number>)
       }
     };
     
@@ -802,7 +884,7 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
               scalingFactors: {
                 cpuUsage: this.systemMetrics.cpuUsage,
                 memoryUsage: this.systemMetrics.memoryUsage,
-                systemCondition: systemCondition
+                systemConditionCode: this.getSystemConditionCode(systemCondition)
               }
             }
           });
@@ -952,7 +1034,7 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
   /**
    * Handle pattern detected event
    */
-  private handlePatternDetected(data: unknown): void {
+  private handlePatternDetected(data: PatternDetectionData): void {
     this.emit('analyticsPatternDetected', {
       timestamp: new Date(),
       pattern: data.pattern,
@@ -964,7 +1046,7 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
   /**
    * Handle abuse detected event
    */
-  private handleAbuseDetected(data: unknown): void {
+  private handleAbuseDetected(data: EndpointUsageData): void {
     // Create emergency throttling rule for abuse pattern
     const emergencyRule: ThrottlingRule = {
       id: `emergency-${Date.now()}`,
@@ -1033,7 +1115,7 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
   /**
    * Handle quota recommendation event
    */
-  private handleQuotaRecommendation(data: unknown): void {
+  private handleQuotaRecommendation(data: QuotaRecommendationData): void {
     // Convert quota recommendations to throttling adjustments
     const insights: ThrottlingAnalyticsInsight[] = [];
     
@@ -1064,7 +1146,7 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
   /**
    * Handle scaling recommendation event
    */
-  private handleScalingRecommendation(data: unknown): void {
+  private handleScalingRecommendation(data: ScalingRecommendationData): void {
     const insights: ThrottlingAnalyticsInsight[] = [];
     
     for (const [ruleId] of this.rules) {
@@ -1094,7 +1176,7 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
   /**
    * Handle load prediction event
    */
-  private handleLoadPrediction(data: unknown): void {
+  private handleLoadPrediction(data: LoadPredictionData): void {
     if (data.predictedLoad > data.currentLoad * 1.5) {
       this.emit('predictiveThrottlingTrigger', {
         timestamp: new Date(),
@@ -1108,7 +1190,7 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
   /**
    * Handle performance anomaly event
    */
-  private handlePerformanceAnomaly(data: unknown): void {
+  private handlePerformanceAnomaly(data: PerformanceAnomalyData): void {
     const insights: ThrottlingAnalyticsInsight[] = [];
     
     for (const [ruleId] of this.rules) {
@@ -1302,11 +1384,15 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
   private evaluateStringCondition(condition: ThrottlingCondition, value: string): boolean {
     switch (condition.operator) {
     case 'equals':
-      return value === condition.value;
+      return value === String(condition.value);
     case 'contains':
-      return value.includes(condition.value);
+      return value.includes(String(condition.value));
     case 'pattern_match':
-      return new RegExp(condition.value).test(value);
+      try {
+        return new RegExp(String(condition.value)).test(value);
+      } catch {
+        return false;
+      }
     default:
       return false;
     }
@@ -1315,12 +1401,18 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
   private evaluateNumericCondition(condition: ThrottlingCondition, value: number): boolean {
     switch (condition.operator) {
     case 'greater_than':
-      return value > (condition.threshold || condition.value);
+      const gtThreshold = condition.threshold ?? (typeof condition.value === 'number' ? condition.value : Number(condition.value));
+      return !isNaN(gtThreshold) && value > gtThreshold;
     case 'less_than':
-      return value < (condition.threshold || condition.value);
+      const ltThreshold = condition.threshold ?? (typeof condition.value === 'number' ? condition.value : Number(condition.value));
+      return !isNaN(ltThreshold) && value < ltThreshold;
     case 'in_range':
-      const [min, max] = condition.value;
-      return value >= min && value <= max;
+      if (Array.isArray(condition.value) && condition.value.length >= 2) {
+        const min = typeof condition.value[0] === 'number' ? condition.value[0] : Number(condition.value[0]);
+        const max = typeof condition.value[1] === 'number' ? condition.value[1] : Number(condition.value[1]);
+        return !isNaN(min) && !isNaN(max) && value >= min && value <= max;
+      }
+      return false;
     default:
       return false;
     }

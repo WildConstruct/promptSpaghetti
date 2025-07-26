@@ -26,7 +26,6 @@ import {
   Form,
   message,
   Progress,
-  Alert,
   Drawer,
   List,
   Avatar,
@@ -104,7 +103,7 @@ export const PolicyManagementDashboard: React.FC = () => {
   const [selectedViolation, setSelectedViolation] = useState<Violation | null>(null);
   const [policyModalVisible, setPolicyModalVisible] = useState(false);
   const [violationDrawerVisible, setViolationDrawerVisible] = useState(false);
-  const [_filters, setFilters] = useState({
+  const [, setFilters] = useState({
     dateRange: null as { start: Date; end: Date } | null,
     policyType: null as string | null,
     violationStatus: null as string | null
@@ -162,7 +161,7 @@ export const PolicyManagementDashboard: React.FC = () => {
       });
       message.success('Policy status updated successfully');
       fetchDashboardData();
-    } catch (error) {
+    } catch {
       message.error('Failed to update policy status');
     }
   };
@@ -177,7 +176,7 @@ export const PolicyManagementDashboard: React.FC = () => {
       message.success('Violation reviewed successfully');
       fetchDashboardData();
       setViolationDrawerVisible(false);
-    } catch (error) {
+    } catch {
       message.error('Failed to review violation');
     }
   };

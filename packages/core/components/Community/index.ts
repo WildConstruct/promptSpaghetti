@@ -59,14 +59,9 @@ export type QualityAssessmentType = 'automated' | 'editorial' | 'community' | 'c
 export type WorkflowStage = 'automated_analysis' | 'editorial_review' | 'specialist_review' | 'final_approval' | 'published';
 
 // Default configurations
-export 
-export 
 // Workflow presets for common scenarios
-export 
 // Quality thresholds by content type
-export 
 // Integration helpers for Epic 16 components
-export 
 // Event types for component communication
 export interface CommunityComponentEvents {
   // Version control events
@@ -157,4 +152,4 @@ export     const bParts = b.split('.').map(Number);
     return allowedTransitions[currentStage]?.includes(targetStage) && 
            rolePermissions[userRole]?.includes(targetStage);
   }
-} as const;
+};

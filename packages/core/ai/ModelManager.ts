@@ -47,7 +47,7 @@ export interface ModelPerformanceMetrics {
 export interface WarmupStrategy {
   enabled: boolean;
   concurrency: number;
-  sampleRequests: any[];
+  sampleRequests: unknown[];
   timeout: number;
 }
 
@@ -107,12 +107,12 @@ export class ModelCache {
     return this.cache.size;
   }
 
-  getStats(): any {
+  getStats(): unknown {
     const stats = {
       size: this.cache.size,
       maxSize: this.config.maxSize,
       hitRate: 0,
-      models: [] as Array<{ id: string; lastUsed: Date; accessCount: number; status: any }>
+      models: [] as Array<{ id: string; lastUsed: Date; accessCount: number; status: unknown }>
     };
 
     for (const [modelId, entry] of this.cache) {
@@ -597,7 +597,7 @@ export class ModelManager {
     return model.estimate(request.input, request.options);
   }
 
-  getPoolStats(poolId: string): any {
+  getPoolStats(poolId: string): unknown {
     const pool = this.pools.get(poolId);
     if (!pool) {
       return null;
@@ -613,7 +613,7 @@ export class ModelManager {
     };
   }
 
-  getAllStats(): any {
+  getAllStats(): unknown {
     return {
       totalPools: this.pools.size,
       cacheStats: this.cache.getStats(),

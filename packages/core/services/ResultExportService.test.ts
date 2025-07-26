@@ -159,7 +159,7 @@ describe('ResultExportService', () => {
       data: 'mocked export data',
       mimeType: 'application/json',
       shouldDownload: true
-    } as unknown);
+    } as unknown as unknown as unknown);
   });
 
   describe('Individual Result Export', () => {
@@ -637,7 +637,7 @@ describe('ResultExportService', () => {
       const service = new ResultExportService();
       
       // Access private method through casting
-      const generateFilename = (service as any).generateFilename.bind(service);
+      const generateFilename = (service as unknown as { generateFilename: Function }).generateFilename.bind(service);
       
       const plainTextFilename = generateFilename('plain-text', 'individual', 12345);
       expect(plainTextFilename).toMatch(/promptscape-individual-seed12345-\d+\.txt/);
@@ -653,7 +653,7 @@ describe('ResultExportService', () => {
       const service = new ResultExportService();
       
       // Access private method through casting
-      const getFileExtension = (service as any).getFileExtension.bind(service);
+      const getFileExtension = (service as unknown as { getFileExtension: Function }).getFileExtension.bind(service);
       
       expect(getFileExtension('plain-text')).toBe('txt');
       expect(getFileExtension('json-complete')).toBe('json');

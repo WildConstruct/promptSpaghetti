@@ -39,22 +39,40 @@ jobs:
         eslint-args: '--ext .js,.jsx,.ts,.tsx .'
         annotations: true
         
-    - name: Run comprehensive code quality analysis
+    - name: Run comprehensive quality validation
       run: |
-        echo "## 📊 Code Quality Analysis" >> $GITHUB_STEP_SUMMARY
+        echo "## 📊 Comprehensive Quality Validation" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         
-        # Run enhanced static analysis
-        node scripts/analyze-code-quality.js > quality-report.txt || true
+        # Run our comprehensive quality check script
+        node scripts/dev-quality-check.js
         
-        # Display key metrics
-        if [ -f quality-report.txt ]; then
-          echo "### 🎯 Key Findings" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          head -20 quality-report.txt >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-        fi
+        # Run quality improvement tests
+        node -e "
+        const { runQualityTests } = require('./client/src/utils/__tests__/testRunner.js');
+        
+        (async () => {
+          try {
+            const report = await runQualityTests();
+            
+            console.log('### 🧪 Quality Test Results');
+            console.log('| Category | Passed | Failed | Coverage |');
+            console.log('|----------|--------|--------|----------|');
+            Object.entries(report.categories).forEach(([category, stats]) => {
+              const coverage = report.coverage[category] || 0;
+              console.log(\`| \${category} | \${stats.passed} | \${stats.failed} | \${coverage}% |\`);
+            });
+            
+            if (report.failedTests > 0) {
+              console.error('❌ Quality tests failed');
+              process.exit(1);
+            }
+          } catch (error) {
+            console.error('❌ Quality test runner failed:', error.message);
+            process.exit(1);
+          }
+        })();
+        " >> $GITHUB_STEP_SUMMARY
         
     - name: SonarJS analysis
       run: |

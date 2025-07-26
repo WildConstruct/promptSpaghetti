@@ -52,7 +52,7 @@ const skipFiles = [
   'app.tsx'
 ];
 
-async function analyzeUnusedVars(directory) {
+async function analyzeUnusedVars(directory: string): Promise<any[]> {
   console.log(`\n🔍 Analyzing unused variables in: ${directory}`);
   
   try {
@@ -86,7 +86,7 @@ async function analyzeUnusedVars(directory) {
   }
 }
 
-async function fixUnusedVarsInFile(filePath, issues) {
+async function fixUnusedVarsInFile(filePath: string, issues: any[]): Promise<number> {
   const filename = path.basename(filePath);
   
   // Skip critical files
@@ -182,7 +182,7 @@ async function fixUnusedVarsInFile(filePath, issues) {
   return fixCount;
 }
 
-async function processDirectory(directory) {
+async function processDirectory(directory: string): Promise<number> {
   console.log(`\n🚀 Processing directory: ${directory}`);
   
   const issues = await analyzeUnusedVars(directory);
@@ -214,7 +214,7 @@ async function processDirectory(directory) {
   return totalFixed;
 }
 
-async function main() {
+async function main(): Promise<void> {
   console.log('🎯 Unused Variable Cleanup Script');
   console.log('🔧 Automatically fixing unused variables by adding _ prefix\n');
   

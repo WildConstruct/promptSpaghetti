@@ -731,29 +731,8 @@ export interface PredictiveModelingExportData {
 }
 
 // Default configuration
-const defaultModelConfig: PredictiveModelConfiguration = {
-  models: ['random_forest', 'gradient_boosting', 'prophet', 'lstm'],
-  updateFrequency: 'daily',
-  confidenceLevel: 0.95,
-  seasonalityDetection: true,
-  trendAnalysis: true,
-  externalFactors: [],
-  modelValidation: {
-    crossValidation: true,
-    holdoutPercentage: 0.2,
-    timeBasedSplit: true,
-    validationMetrics: ['mae', 'mape', 'rmse', 'r2']
-  },
-  ensemble: {
-    enabled: true,
-    models: ['random_forest', 'gradient_boosting', 'prophet'],
-    weightingStrategy: 'performance',
-    combinationMethod: 'weighted'
-  }
-};
 
-export   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'forecasts' | 'behavior' | 'churn' | 'scenarios' | 'models'>('forecasts');
   const [selectedModel, setSelectedModel] = useState<PredictiveModelType>(modelConfig.models[0]);
   const [selectedHorizon, setSelectedHorizon] = useState<ForecastHorizon>(forecastHorizon);

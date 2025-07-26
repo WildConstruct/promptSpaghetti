@@ -8,11 +8,11 @@
  * Shows data categories, volume estimates, affected systems, and retention controls.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
-  User, Database, Shield, Calendar, FileText, Image, MessageSquare,
-  Download, Trash2, Archive, Eye, AlertTriangle, CheckCircle, Clock,
-  ChevronDown, ChevronRight, Filter, Search, RefreshCw
+  User, Database, Shield, FileText,
+  Download, Trash2, Archive, AlertTriangle, CheckCircle,
+  ChevronDown, ChevronRight, Search, RefreshCw
 } from 'lucide-react';
 
 // Types for user data preview
@@ -67,8 +67,8 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
   const [sensitivityFilter, setSensitivityFilter] = useState<string>('ALL');
   const [showRetentionActions, setShowRetentionActions] = useState(false);
 
-  // Mock data for demonstration
-  const mockDataCategories: UserDataCategory[] = [
+  // Mock data for demonstration - wrapped in useMemo to prevent recreation
+  const mockDataCategories: UserDataCategory[] = useMemo(() => [
     {
       category: 'profile_data',
       displayName: 'Profile Information',
@@ -193,9 +193,9 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
         }
       ]
     }
-  ];
+  ], []); // Empty dependency array since this is static mock data
 
-  const mockRetentionPolicies: RetentionPolicy[] = [
+  const mockRetentionPolicies: RetentionPolicy[] = useMemo(() => [
     {
       id: 'policy_1',
       name: 'Standard User Data Retention',
@@ -220,7 +220,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
       applicableCategories: ['content_data'],
       complianceFramework: 'Internal'
     }
-  ];
+  ], []); // Empty dependency array since this is static mock data
 
   useEffect(() => {
     // Simulate loading user data
@@ -230,7 +230,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
       setRetentionPolicies(mockRetentionPolicies);
       setLoading(false);
     }, 1000);
-  }, [userId]);
+  }, [userId, mockDataCategories, mockRetentionPolicies]);
 
   const toggleCategoryExpansion = (category: string) => {
     setExpandedCategories(prev => {
@@ -466,7 +466,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
                 <div>
                   <span className="text-gray-500">Affected Systems:</span>
                   <div className="mt-1">
-                    {category.affectedSystems.map((system, idx) => (
+                    {category.affectedSystems.map((system) => (
                       <span key={system} className="inline-block bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs mr-1 mb-1">
                         {system}
                       </span>

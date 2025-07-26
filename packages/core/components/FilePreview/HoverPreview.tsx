@@ -198,7 +198,7 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({
         </div>
       )}
       
-      <style jsx global>{`
+      <style>{`
         @keyframes fadeIn {
           from {
             opacity: 0;

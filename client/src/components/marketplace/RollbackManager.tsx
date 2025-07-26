@@ -1,5 +1,5 @@
 // Epic 16.2.2 Rollback Manager Component
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './RollbackManager.css';
 
@@ -90,13 +90,7 @@ export const RollbackManager: React.FC = () => {
 
   const totalSteps = 4;
 
-  useEffect(() => {
-    if (templateId) {
-      fetchVersions();
-    }
-  }, [templateId]);
-
-  const fetchVersions = async () => {
+  const fetchVersions = useCallback(async () => {
     try {
       setIsLoading(true);
       const response = await fetch(`/api/marketplace/templates/${templateId}/versions?include_private=true`, {
@@ -122,9 +116,15 @@ export const RollbackManager: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [templateId]);
 
-  const handleInputChange = (field: keyof RollbackData, value: Error) => {
+  useEffect(() => {
+    if (templateId) {
+      fetchVersions();
+    }
+  }, [templateId, fetchVersions]);
+
+  const handleInputChange = (field: keyof RollbackData, value: string) => {
     setRollbackData(prev => ({
       ...prev,
       [field]: value

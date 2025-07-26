@@ -403,7 +403,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
         </TabsContent>
       </Tabs>
 
-      <style jsx>{`
+      <style>{`
         .marketplace-dashboard {
           display: flex;
           flex-direction: column;

@@ -53,17 +53,9 @@ export type {
 } from './Epic1Epic17SecurityIntegration';
 
 // Utility functions for monitoring integration
-export   
-  return new Epic1Epic17SecurityIntegration(config, {
-    epic1Monitor,
-    epic17Monitor,
-    securityMonitor,
-    alertingSystem
-  });
-};
+export };
 
-export   
-  return new SecurityAnalyticsMonitor({ ...defaultConfig, ...config });
+export   return new SecurityAnalyticsMonitor({ ...defaultConfig, ...config });
 };
 
 export const createDefaultSecuritySystemHealth = (
@@ -104,7 +96,8 @@ export   systems: Array<{ id: string; type: SecuritySystemHealth['systemType'] }
 };
 
 // Helper function to create integrated dashboard configuration
-export 
+export };
+
 // Monitoring system health check utility
 export   epic17Health: 'healthy' | 'degraded' | 'unhealthy';
   securityHealth: 'healthy' | 'degraded' | 'unhealthy';

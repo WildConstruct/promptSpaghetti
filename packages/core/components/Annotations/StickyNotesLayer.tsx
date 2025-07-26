@@ -28,8 +28,7 @@ interface StickyNotesLayerProps {
   readOnly?: boolean;
 }
 
-export   const [contextMenu, setContextMenu] = useState<StickyNoteContextMenuOptions | null>(null);
-  const layerRef = useRef<HTMLDivElement>(null);
+export   const layerRef = useRef<HTMLDivElement>(null);
 
   // Generate unique ID for new notes
   const generateNoteId = useCallback((): string => {

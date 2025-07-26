@@ -5,7 +5,18 @@
  * Adapter for Midjourney image generation via unofficial API
  */
 
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelMetadata, ModelCapabilities, CostEstimate, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
+import { 
+  BaseAIModel,
+  AIModelType,
+  AIModelProvider,
+  AIModelStatus,
+  ModelMetadata,
+  ModelCapabilities,
+  CostEstimate,
+  ModelInitializationError,
+  ModelProcessingError,
+  ModelUnavailableError
+} from '../BaseAIModel';
 
 export interface MidjourneyConfig {
   apiKey?: string;
@@ -185,7 +196,7 @@ export class MidjourneyAdapter extends BaseAIModel {
     }
   }
 
-  async process(input: any, options?: MidjourneyRequestOptions): Promise<MidjourneyGenerationResult> {
+  async process(input: unknown, options?: MidjourneyRequestOptions): Promise<MidjourneyGenerationResult> {
     try {
       if (this._status !== AIModelStatus.READY) {
         throw new ModelUnavailableError(this._id);
@@ -222,7 +233,7 @@ export class MidjourneyAdapter extends BaseAIModel {
     this.activeJobs.clear();
   }
 
-  async estimate(input: any, options?: MidjourneyRequestOptions): Promise<CostEstimate> {
+  async estimate(input: unknown, options?: MidjourneyRequestOptions): Promise<CostEstimate> {
     const quality = options?.quality || 1;
     const baseCost = this._metadata.costPerRequest || 0.10;
     
@@ -344,7 +355,7 @@ export class MidjourneyAdapter extends BaseAIModel {
     return headers;
   }
 
-  private async _makeRequest(endpoint: string, method: 'GET' | 'POST' = 'POST', payload?: any): Promise<any> {
+  private async _makeRequest(endpoint: string, method: 'GET' | 'POST' = 'POST', payload?: unknown): Promise<unknown> {
     const url = `${this.config.serverUrl}${endpoint}`;
     
     const options: RequestInit = {

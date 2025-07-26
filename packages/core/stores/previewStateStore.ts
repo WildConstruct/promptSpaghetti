@@ -17,11 +17,11 @@ export interface PreviewResult {
   usedNodeIds?: string[];
   usedEdgeIds?: string[];
   executionTimeMs?: number;
-  executionPath?: any;
+  executionPath?: Array<{ nodeId: string; output: unknown }>;
   weightChoices?: Array<{
     nodeId: string;
-    selectedOption: any;
-    availableOptions: any[];
+    selectedOption: unknown;
+    availableOptions: unknown[];
     weights?: number[];
     selectionProbability?: number;
   }>;
@@ -30,9 +30,9 @@ export interface PreviewResult {
   lockedNote?: string;
   debugInfo?: {
     nodeExecutionOrder: string[];
-    randomChoices: any[];
-    performanceBreakdown: any;
-    memoryUsage?: any;
+    randomChoices: Array<{ nodeId: string; choice: unknown }>;
+    performanceBreakdown: Record<string, number>;
+    memoryUsage?: { used: number; total: number };
   };
 }
 
@@ -105,7 +105,11 @@ export interface PreviewStateStore {
   
   // Cache management
   getCachedResults: (graphHash: string) => PreviewCache | null;
-  setCachedResults: (graphHash: string, results: PreviewResult[], stats: any) => void;
+  setCachedResults: (
+    graphHash: string,
+    results: PreviewResult[],
+    stats: { totalTime: number; averageTime: number }
+  ) => void;
   clearCache: () => void;
   pruneCacheByAge: () => void;
   pruneCacheBySize: () => void;
@@ -131,10 +135,18 @@ export interface PreviewStateStore {
   // Utility actions
   resetState: () => void;
   getStateSnapshot: () => any;
-  restoreFromSnapshot: (snapshot: any) => void;
+  restoreFromSnapshot: (snapshot: Record<string, unknown>) => void;
 }
 
 // Generate hash for graph objects for caching
+const generateGraphHash = (graph: { nodes?: Array<{ id: string; type: string; data: unknown }>; edges?: Array<{ id: string; source: string; target: string }> }): string => {
+  try {
+    // Simple hash generation based on graph structure
+    const graphString = JSON.stringify({
+      nodes: graph.nodes?.map((n) => ({ id: n.id, type: n.type, data: n.data })) || [],
+      edges: graph.edges?.map((e) => ({ id: e.id, source: e.source, target: e.target })) || []
+    });
+    return btoa(graphString).substring(0, 16);
   } catch {
     return `hash_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
@@ -148,47 +160,7 @@ const defaultPerformanceMetrics: PreviewPerformanceMetrics = {
   lastExecutionCount: 0
 };
 
-export const usePreviewStateStore = create<PreviewStateStore>()(
-  devtools(
-    subscribeWithSelector((set, get) => ({
-      // Initial state
-      isLoading: false,
-      error: null,
-      results: [],
-      aggregateError: null,
-      performanceStats: null,
-      
-      // Real-time sync state
-      lastGraphHash: null,
-      lastUpdateTimestamp: 0,
-      isRealTimeEnabled: false,
-      syncInterval: 1000, // 1 second default
-      
-      // Cache system
-      cache: new Map<string, PreviewCache>(),
-      maxCacheSize: 50,
-      cacheExpirationMs: 5 * 60 * 1000, // 5 minutes
-      
-      // Result management
-      lockedResults: [],
-      regeneratingResults: [],
-      
-      // Performance monitoring
-      performanceMetrics: defaultPerformanceMetrics,
-      performanceHistory: [],
-      maxHistoryLength: 100,
-      
-      // Auto-refresh
-      autoRefreshEnabled: false,
-      autoRefreshInterval: 5000, // 5 seconds
-      autoRefreshThreshold: 0.3, // 30% change threshold
-      
-      // Basic actions
-      setLoading: (loading) => set({ isLoading: loading }),
-      setError: (error) => set({ error }),
-      setResults: (results) => {
-        set({ results });
-        // Update last update timestamp
+export         // Update last update timestamp
         set({ lastUpdateTimestamp: Date.now() });
       },
       setAggregateError: (aggregateError) => set({ aggregateError }),
@@ -476,6 +448,6 @@ export const usePreviewStateStore = create<PreviewStateStore>()(
 );
 
 // Utility hooks for common state selections
-export export export export export 
+export export export 
 // Performance monitoring hook
-export }));
+export const usePreviewPerformance = () => usePreviewStore(state => state.performanceMetrics);

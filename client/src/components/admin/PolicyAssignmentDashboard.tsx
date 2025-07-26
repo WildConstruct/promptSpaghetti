@@ -13,7 +13,6 @@ import {
   BulkPolicyAssignment,
   AssignmentTargetType,
   AssignmentStatus,
-  ConflictResolutionStrategy,
   PolicyConflict
 } from '../../types/PolicyAssignmentTypes';
 import { PolicyAssignmentForm } from './PolicyAssignmentForm';

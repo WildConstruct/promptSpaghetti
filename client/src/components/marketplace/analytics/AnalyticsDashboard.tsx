@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { TimeRange, CreatorDashboard, AnalyticsInsight } from '../../../types/analytics';
 import { DashboardOverview } from './DashboardOverview';
 import { PerformanceSummary } from './PerformanceSummary';
@@ -29,7 +29,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
   const [activeTab, setActiveTab] = useState<'overview' | 'performance' | 'traffic' | 'financial'>('overview');
 
   // Load dashboard data
-  const loadDashboard = async () => {
+  const loadDashboard = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -52,17 +52,17 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [creatorId, timeRange, customStartDate, customEndDate]);
 
   // Refresh dashboard data
-  const refreshDashboard = async () => {
+  const refreshDashboard = useCallback(async () => {
     try {
       setRefreshing(true);
       await loadDashboard();
     } finally {
       setRefreshing(false);
     }
-  };
+  }, [loadDashboard]);
 
   // Handle time range change
   const handleTimeRangeChange = (
@@ -78,7 +78,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
   // Load data on mount and when time range changes
   useEffect(() => {
     loadDashboard();
-  }, [creatorId, timeRange, customStartDate, customEndDate]);
+  }, [loadDashboard]);
 
   // Auto-refresh every 5 minutes
   useEffect(() => {
@@ -89,7 +89,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
     }, 5 * 60 * 1000);
 
     return () => clearInterval(interval);
-  }, [loading, refreshing]);
+  }, [loading, refreshing, refreshDashboard]);
 
   if (loading) {
     return (

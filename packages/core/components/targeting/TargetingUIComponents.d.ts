@@ -85,11 +85,6 @@ export declare     availableFields: Array<{
     onPreview?: (conditions: TargetingCondition[]) => Promise<TargetingPreview>;
     showVisualBuilder?: boolean;
 }
-export declare     onRegionsChange: (regions: string[]) => void;
-    onCitiesChange: (cities: string[]) => void;
-    excludeMode?: boolean;
-    onExcludeModeChange?: (exclude: boolean) => void;
-}
 export declare     onUpdateSegment: (id: string, updates: Partial<UserSegment>) => void;
     onDeleteSegment: (id: string) => void;
     onDuplicateSegment: (id: string) => void;

@@ -9,9 +9,9 @@
 
 import { 
   DataClassificationLevel, 
-  OperationContext,
-  DataOperation 
+  OperationContext 
 } from '../types/DataClassification';
+import { DataOperation } from './DataClassificationAccessControl';
 
 import {
   DataClassificationRole,
@@ -376,16 +376,4 @@ export interface PostEmergencyAction {
   assignee: string;
 }
 
-/**
- * Standard Permission Hierarchy Levels
- */
-export 
-/**
- * Standard Operation Permission Matrix
- */
-export 
-/**
- * Standard Escalation Paths
- */
-export 
 export default PermissionHierarchy;

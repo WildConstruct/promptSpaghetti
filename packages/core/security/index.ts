@@ -391,31 +391,23 @@ export { default as ComplianceSecurityDashboard } from './dashboard/ComplianceSe
 export { default as SecurityDashboardWorkflow } from './dashboard/SecurityDashboardWorkflow';
 
 // Utility functions for security integration
-export 
-export 
-export 
-export 
-export 
-export 
-export 
-export 
+export export export export export export export 
 // Security event severity mapping utilities
-export   if (threatLevel >= 6) return 'high';
-  if (threatLevel >= 3) return 'medium';
+export   if (threatLevel >= 3) return 'medium';
   return 'low';
 };
 
 export   
   // Base severity score
   const severityScores = { low: 1, medium: 3, high: 6, critical: 10 };
-  score += severityScores[event.severity];
+  score += severityScores[event.severity] || 1;
   
   // Impact multipliers
-  if (event.details.affected_users && event.details.affected_users.length > 0) {
+  if (event.details?.affected_users && event.details.affected_users.length > 0) {
     score *= 1 + (event.details.affected_users.length / 100);
   }
   
-  if (event.details.affected_systems && event.details.affected_systems.length > 1) {
+  if (event.details?.affected_systems && event.details.affected_systems.length > 1) {
     score *= 1.5;
   }
   
@@ -443,7 +435,7 @@ export   timeRange: { start: number; end: number }
     resolved_count: number;
     avg_response_time: number;
   };
-  top_threats: Array<{ type: SecurityEvent['type']; count: number }>;
+  top_threats: Array<{ type: string; count: number }>;
   affected_systems: Array<{ system: string; incident_count: number }>;
   recommendations: string[];
 } => {

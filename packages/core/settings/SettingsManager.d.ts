@@ -96,7 +96,7 @@ export declare class SettingsManager {
         logExecutionSteps: boolean;
         showExecutionTimes: boolean;
         showMemoryUsage: boolean;
-        outputFormat: "individual" | "combined" | "csv" | "json";
+        outputFormat: "json" | "csv" | "individual" | "combined";
         includeMetadata: boolean;
         autoDownload: boolean;
         namingPattern: string;

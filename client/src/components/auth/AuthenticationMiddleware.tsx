@@ -5,7 +5,7 @@
  * and automatic logout on token expiration
  */
 
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 
@@ -145,7 +145,7 @@ export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> =
   children,
   config = {}
 }) => {
-  const fullConfig = { ...DEFAULT_CONFIG, ...config };
+  const fullConfig = useMemo(() => ({ ...DEFAULT_CONFIG, ...config }), [config]);
   const location = useLocation();
   const navigate = useNavigate();
   
@@ -245,7 +245,7 @@ export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> =
       stopMonitoring();
     }
 
-  }, [isAuthenticated, location.pathname, tokenExpiration, fullConfig, log, navigate, checkAuthStatus]);
+  }, [isAuthenticated, location.pathname, tokenExpiration, fullConfig, log, navigate, checkAuthStatus, isPublicRoute, startSessionTimeoutMonitoring, startTokenRefreshMonitoring, stopMonitoring]);
 
   /**
    * Start token refresh monitoring
@@ -284,7 +284,7 @@ export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> =
       }
     }, fullConfig.refreshInterval);
 
-  }, [tokenExpiration, isAuthenticated, fullConfig, refreshTokens, log]);
+  }, [tokenExpiration, isAuthenticated, fullConfig, refreshTokens, log, handleForceLogout]);
 
   /**
    * Start session timeout monitoring
@@ -315,7 +315,7 @@ export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> =
       }
     }, 30000); // Check every 30 seconds
 
-  }, [isAuthenticated, fullConfig, log]);
+  }, [isAuthenticated, fullConfig, log, handleForceLogout]);
 
   /**
    * Stop all monitoring

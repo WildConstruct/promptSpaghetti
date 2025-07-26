@@ -579,10 +579,10 @@ export class SecurityInsightsAutomationEngine extends EventEmitter {
   private generationHistory: Map<string, InsightGenerationResult> = new Map();
   private personalizationProfiles: Map<string, PersonalizationProfile> = new Map();
   
-  private analysisModels: any = {};
-  private nlpProcessors: any = {};
-  private distributionChannels: Map<string, any> = new Map();
-  private insightTemplates: Map<string, any> = new Map();
+  private analysisModels: Record<string, unknown> = {};
+  private nlpProcessors: Record<string, unknown> = {};
+  private distributionChannels: Map<string, unknown> = new Map();
+  private insightTemplates: Map<string, unknown> = new Map();
   
   private isInitialized: boolean = false;
   private isShutdown: boolean = false;

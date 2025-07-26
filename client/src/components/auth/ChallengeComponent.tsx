@@ -93,6 +93,35 @@ export const ChallengeComponent: React.FC<ChallengeComponentProps> = ({
   const recaptchaWidgetId = useRef<number | null>(null);
   const hcaptchaWidgetId = useRef<string | null>(null);
 
+  // Handle external CAPTCHA response
+  const handleExternalCaptchaResponse = useCallback((token: string) => {
+    setSolution(token);
+    // Note: Auto-submit logic will be handled separately to avoid circular dependencies
+  }, []);
+
+  // Initialize external CAPTCHA widgets
+  const initializeExternalCaptcha = useCallback(async (challengeData: ChallengeData) => {
+    if (challengeData.type === ChallengeType.RECAPTCHA_V2) {
+      await loadRecaptchaScript();
+      if (recaptchaRef.current && window.grecaptcha) {
+        recaptchaWidgetId.current = window.grecaptcha.render(recaptchaRef.current, {
+          sitekey: challengeData.data.metadata?.siteKey,
+          theme: theme,
+          callback: (token: string) => handleExternalCaptchaResponse(token)
+        });
+      }
+    } else if (challengeData.type === ChallengeType.HCAPTCHA) {
+      await loadHCaptchaScript();
+      if (hcaptchaRef.current && window.hcaptcha) {
+        hcaptchaWidgetId.current = window.hcaptcha.render(hcaptchaRef.current, {
+          sitekey: challengeData.data.metadata?.siteKey,
+          theme: theme,
+          callback: (token: string) => handleExternalCaptchaResponse(token)
+        });
+      }
+    }
+  }, [theme, handleExternalCaptchaResponse]);
+
   // Generate new challenge
   const generateChallenge = useCallback(async () => {
     setLoading(true);
@@ -126,37 +155,8 @@ export const ChallengeComponent: React.FC<ChallengeComponentProps> = ({
     } finally {
       setLoading(false);
     }
-  }, [challengeEndpoint, onError]);
+  }, [challengeEndpoint, onError, initializeExternalCaptcha]);
 
-  // Initialize external CAPTCHA widgets
-  const initializeExternalCaptcha = async (challengeData: ChallengeData) => {
-    if (challengeData.type === ChallengeType.RECAPTCHA_V2) {
-      await loadRecaptchaScript();
-      if (recaptchaRef.current && window.grecaptcha) {
-        recaptchaWidgetId.current = window.grecaptcha.render(recaptchaRef.current, {
-          sitekey: challengeData.data.metadata?.siteKey,
-          theme: theme,
-          callback: (token: string) => handleExternalCaptchaResponse(token)
-        });
-      }
-    } else if (challengeData.type === ChallengeType.HCAPTCHA) {
-      await loadHCaptchaScript();
-      if (hcaptchaRef.current && window.hcaptcha) {
-        hcaptchaWidgetId.current = window.hcaptcha.render(hcaptchaRef.current, {
-          sitekey: challengeData.data.metadata?.siteKey,
-          theme: theme,
-          callback: (token: string) => handleExternalCaptchaResponse(token)
-        });
-      }
-    }
-  };
-
-  // Handle external CAPTCHA response
-  const handleExternalCaptchaResponse = useCallback((token: string) => {
-    setSolution(token);
-    // Auto-submit for external CAPTCHAs
-    validateChallenge(token);
-  }, []);
 
   // Validate challenge solution
   const validateChallenge = useCallback(async (solutionOverride?: string) => {
@@ -242,7 +242,7 @@ export const ChallengeComponent: React.FC<ChallengeComponentProps> = ({
     } finally {
       setLoading(false);
     }
-  }, [challenge, challengeEndpoint, onError]);
+  }, [challenge, challengeEndpoint, onError, initializeExternalCaptcha]);
 
   // Auto-generate challenge on mount
   useEffect(() => {
@@ -250,6 +250,14 @@ export const ChallengeComponent: React.FC<ChallengeComponentProps> = ({
       generateChallenge();
     }
   }, [autoGenerate, generateChallenge]);
+
+  // Auto-submit for external CAPTCHAs
+  useEffect(() => {
+    if (challenge && solution && 
+        (challenge.type === ChallengeType.RECAPTCHA_V2 || challenge.type === ChallengeType.HCAPTCHA)) {
+      validateChallenge(solution);
+    }
+  }, [challenge, solution, validateChallenge]);
 
   // Cleanup external CAPTCHA widgets
   useEffect(() => {
@@ -374,7 +382,7 @@ export const ChallengeComponent: React.FC<ChallengeComponentProps> = ({
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .challenge-component {
           max-width: 400px;
           margin: 0 auto;

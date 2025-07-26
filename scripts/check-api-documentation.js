@@ -59,7 +59,7 @@ const SECURITY_PATTERNS = {
   ]
 };
 
-function checkAPIDocumentation(filePath) {
+function checkAPIDocumentation(filePath: string): any[] {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
     const violations = [];
@@ -112,7 +112,7 @@ function checkAPIDocumentation(filePath) {
   }
 }
 
-function findRouteHandlers(content) {
+function findRouteHandlers(content: string): any[] {
   const handlers = [];
   const routePattern = /fastify\.(get|post|put|delete|patch)\s*\(\s*['"`]([^'"`]+)['"`]/g;
   
@@ -129,7 +129,7 @@ function findRouteHandlers(content) {
   return handlers;
 }
 
-function findJSDocForHandler(content, handler) {
+function findJSDocForHandler(content: string, handler: any): string | null {
   // Look backwards from handler position for JSDoc comment
   const beforeHandler = content.substring(0, handler.index);
   const lines = beforeHandler.split('\n');
@@ -163,7 +163,7 @@ function findJSDocForHandler(content, handler) {
   return null;
 }
 
-function checkRequiredTags(jsdoc, handler) {
+function checkRequiredTags(jsdoc: string, handler: any): any[] {
   const missingTags = [];
   
   // Basic required tags
@@ -193,7 +193,7 @@ function checkRequiredTags(jsdoc, handler) {
   return missingTags;
 }
 
-function checkSecurityDocumentation(content, handler, jsdoc) {
+function checkSecurityDocumentation(content: string, handler: any, jsdoc: string): any[] {
   const issues = [];
   
   // Determine if endpoint requires authentication
@@ -244,7 +244,7 @@ function checkSecurityDocumentation(content, handler, jsdoc) {
   return issues;
 }
 
-function checkParameterDocumentation(content, handler, jsdoc) {
+function checkParameterDocumentation(content: string, handler: any, jsdoc: string): any[] {
   const issues = [];
   
   // Extract route parameters
@@ -286,7 +286,7 @@ function checkParameterDocumentation(content, handler, jsdoc) {
   return issues;
 }
 
-function checkResponseDocumentation(jsdoc, handler) {
+function checkResponseDocumentation(jsdoc: string, handler: any): any[] {
   const issues = [];
   
   // Check for basic response documentation
@@ -316,7 +316,7 @@ function checkResponseDocumentation(jsdoc, handler) {
   return issues;
 }
 
-function getLineNumber(content, index) {
+function getLineNumber(content: string, index: number): number {
   return content.substring(0, index).split('\n').length;
 }
 

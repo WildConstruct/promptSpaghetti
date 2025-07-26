@@ -77,13 +77,29 @@ export const JustInTimeConsentProvider: React.FC<JustInTimeConsentProviderProps>
           if (!promptShown) {
             // If no prompt shown (already has consent), proceed with original action
             const originalHref = target.getAttribute('href');
-            const originalOnClick = target.getAttribute('onclick');
             
             if (originalHref) {
-              window.location.href = originalHref;
-            } else if (originalOnClick) {
-              // eslint-disable-next-line no-eval
-              eval(originalOnClick);
+              // Validate URL before navigation for security
+              try {
+                const url = new URL(originalHref, window.location.origin);
+                // Only allow same-origin or HTTPS URLs
+                if (url.origin === window.location.origin || url.protocol === 'https:') {
+                  window.location.href = originalHref;
+                } else {
+                  console.warn('Blocked navigation to untrusted URL:', originalHref);
+                }
+              } catch {
+                console.warn('Invalid URL blocked:', originalHref);
+              }
+            } else {
+              // SECURITY FIX: Instead of eval(), trigger a click event
+              // This preserves functionality while eliminating code injection risk
+              const clickEvent = new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+                view: window
+              });
+              target.dispatchEvent(clickEvent);
             }
           }
         } catch (error) {
@@ -140,9 +156,7 @@ export const JustInTimeConsentProvider: React.FC<JustInTimeConsentProviderProps>
 };
 
 // Utility hook for manually triggering consent prompts
-export const useConsentPrompt = () => {
-  const { showPrompt } = useJustInTimeConsentContext();
-
+export 
   const promptForConsent = React.useCallback(async (
     feature: string,
     action: string = 'manual',

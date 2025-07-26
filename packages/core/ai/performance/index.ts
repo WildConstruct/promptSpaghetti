@@ -192,13 +192,19 @@ export const calculateResourceEfficiency = (usage: ResourceUsage, performance: P
   return (memoryEfficiency * 0.3) + (cpuEfficiency * 0.3) + (performanceScore * 0.4);
 };
 
-export   categories: {
+export interface OptimizationCategories {
+  categories: {
     caching: { score: number; recommendations: string[] };
     performance: { score: number; recommendations: string[] };
     resources: { score: number; recommendations: string[] };
   };
   priorityActions: string[];
-} => {
+}
+
+export   cacheMetrics: { hitRate: number; memoryUsage?: number },
+  performanceMetrics: PerformanceMetrics,
+  resourceUsage: ResourceUsage
+): OptimizationCategories => {
   // Cache analysis
   const cacheScore = cacheMetrics.hitRate * 100;
   const cacheRecommendations: string[] = [];

@@ -6,6 +6,7 @@
  */
 
 import { setupServer } from 'msw/node';
+import { rest } from 'msw';
 import { handlers } from '../mocks/handlers';
 import { templateDb } from '../mocks/data/template-db';
 
@@ -32,17 +33,7 @@ export function setupMSW() {
 }
 
 // Utility functions for test-specific mocking
-export const MSWTestUtils = {
-  
-  /**
-   * Override specific endpoints for a test
-   */
-  mockEndpoint: (method: string, path: string, response: any, status = 200) => {
-    const { rest } = require('msw');
-    server.use(
-      rest[method.toLowerCase()](path, (req, res, ctx) => {
-        return res(ctx.status(status), ctx.json(response));
-      })
+export       })
     );
   },
   
@@ -50,7 +41,6 @@ export const MSWTestUtils = {
    * Mock network errors
    */
   mockNetworkError: (method: string, path: string) => {
-    const { rest } = require('msw');
     server.use(
       rest[method.toLowerCase()](path, (req, res) => {
         return res.networkError('Network connection failed');
@@ -61,8 +51,7 @@ export const MSWTestUtils = {
   /**
    * Mock slow responses for performance testing
    */
-  mockSlowResponse: (method: string, path: string, delay: number, response: any) => {
-    const { rest } = require('msw');
+  mockSlowResponse: (method: string, path: string, delay: number, response: unknown) => {
     server.use(
       rest[method.toLowerCase()](path, (req, res, ctx) => {
         return res(
@@ -77,7 +66,6 @@ export const MSWTestUtils = {
    * Mock authentication failures
    */
   mockAuthFailure: (path: string) => {
-    const { rest } = require('msw');
     server.use(
       rest.all(path, (req, res, ctx) => {
         return res(
@@ -94,8 +82,7 @@ export const MSWTestUtils = {
   /**
    * Mock validation errors
    */
-  mockValidationError: (method: string, path: string, errors: any) => {
-    const { rest } = require('msw');
+  mockValidationError: (method: string, path: string, errors: Record<string, string[]>) => {
     server.use(
       rest[method.toLowerCase()](path, (req, res, ctx) => {
         return res(
@@ -114,7 +101,6 @@ export const MSWTestUtils = {
    * Mock rate limiting
    */
   mockRateLimit: (path: string) => {
-    const { rest } = require('msw');
     server.use(
       rest.all(path, (req, res, ctx) => {
         return res(
@@ -164,7 +150,6 @@ export const MSWTestUtils = {
 
 // Request logging middleware for debugging
 export function enableRequestLogging() {
-  const { rest } = require('msw');
   
   server.use(
     rest.all('*', (req, res, ctx) => {
@@ -175,16 +160,7 @@ export function enableRequestLogging() {
 }
 
 // Common test scenarios
-export const MSWScenarios = {
-  
-  /**
-   * Simulate offline/network unavailable
-   */
-  offline: () => {
-    server.use(
-      require('msw').rest.all('*', (req, res) => {
-        return res.networkError('Failed to connect');
-      })
+export       })
     );
   },
   
@@ -193,7 +169,7 @@ export const MSWScenarios = {
    */
   maintenance: () => {
     server.use(
-      require('msw').rest.all('*', (req, res, ctx) => {
+      rest.all('*', (req, res, ctx) => {
         return res(
           ctx.status(503),
           ctx.json({
@@ -210,7 +186,7 @@ export const MSWScenarios = {
    */
   highLatency: (delay = 3000) => {
     server.use(
-      require('msw').rest.all('*', (req, res, ctx) => {
+      rest.all('*', (req, res, ctx) => {
         return res(
           ctx.delay(delay),
           ctx.json({ message: 'Delayed response' })
@@ -225,7 +201,7 @@ export const MSWScenarios = {
   partialOutage: (affectedPaths: string[]) => {
     affectedPaths.forEach(path => {
       server.use(
-        require('msw').rest.all(path, (req, res, ctx) => {
+        rest.all(path, (req, res, ctx) => {
           return res(
             ctx.status(503),
             ctx.json({

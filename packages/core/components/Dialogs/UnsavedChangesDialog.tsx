@@ -14,7 +14,16 @@ interface UnsavedChangesDialogProps {
   actionDescription?: string; // e.g., "opening a new project", "closing the browser"
 }
 
-export 
+const UnsavedChangesDialog: React.FC<UnsavedChangesDialogProps> = ({ 
+  isOpen, 
+  projectName = 'project', 
+  onSave, 
+  onDontSave, 
+  onCancel, 
+  actionDescription = 'continue' 
+}) => {
+  if (!isOpen) return null;
+
   const overlayStyle: React.CSSProperties = {
     position: 'fixed',
     top: 0,
@@ -167,3 +176,5 @@ export
     </div>
   );
 };
+
+export default UnsavedChangesDialog;

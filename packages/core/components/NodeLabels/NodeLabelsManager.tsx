@@ -45,7 +45,7 @@ export const NodeLabelsManager: React.FC<NodeLabelsManagerProps> = ({
   const [focusedNodeId, setFocusedNodeId] = useState<string | null>(null);
 
   // Handle label config changes from the layer
-  const handleLabelConfigsChange = useCallback((configs: Record<string, any>) => {
+  const handleLabelConfigsChange = useCallback((configs: Record<string, unknown>) => {
     setNodeLabelConfigs(configs);
   }, [setNodeLabelConfigs]);
 
@@ -56,13 +56,13 @@ export const NodeLabelsManager: React.FC<NodeLabelsManagerProps> = ({
   }, [onNodeHover]);
 
   // Handle node focus state
-      onNodeFocus?.(nodeId);
-  }, [onNodeFocus]);
+    }, [onNodeFocus]);
 
   // Set up node hover detection
   useEffect(() => {
     if (!reactFlowInstance) return;
 
+    // Set up node event listeners
         };
 
         };

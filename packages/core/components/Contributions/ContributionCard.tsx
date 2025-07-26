@@ -313,7 +313,7 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({
         )}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .contribution-card {
           background: #ffffff;
           border: 1px solid #e5e7eb;

@@ -24,8 +24,7 @@ import {
 } from '@/components/ui/tabs';
 import {
   Alert,
-  AlertDescription,
-  AlertTitle
+  AlertDescription
 } from '@/components/ui/alert';
 import {
   Badge,
@@ -37,37 +36,21 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-  Input,
-  Textarea,
-  Switch
+  SelectValue
 } from '@/components/ui';
 import {
   Eye,
-  Play,
-  Pause,
   RotateCcw,
   CheckCircle,
-  XCircle,
   AlertTriangle,
   Clock,
   Users,
   BarChart3,
-  Settings,
   ArrowUp,
-  ArrowDown,
-  Minus,
-  FileText,
   MessageSquare,
   Zap,
   Target,
@@ -164,9 +147,9 @@ const PolicyPreviewDashboard: React.FC = () => {
   const [deployments, setDeployments] = useState<StagingDeployment[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('previews');
-  const [_selectedPreview, _setSelectedPreview] = useState<PolicyPreview | null>(null);
-  const [validationResults, _setValidationResults] = useState<ValidationResult[]>([]);
-  const [userFeedback, _setUserFeedback] = useState<UserFeedback[]>([]);
+  const [, ] = useState<PolicyPreview | null>(null);
+  const [validationResults] = useState<ValidationResult[]>([]);
+  const [userFeedback] = useState<UserFeedback[]>([]);
 
   // Fetch data
   const fetchPreviews = useCallback(async () => {

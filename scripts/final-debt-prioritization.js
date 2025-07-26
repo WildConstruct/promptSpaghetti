@@ -25,7 +25,7 @@ class FinalDebtPrioritizationEngine {
   /**
    * Load debt inventory from file
    */
-  loadDebtInventory(filePath = './docs/debt-inventory.json') {
+  loadDebtInventory(filePath: string = './docs/debt-inventory.json'): any {
     try {
       const absolutePath = path.resolve(filePath);
       const data = fs.readFileSync(absolutePath, 'utf8');
@@ -39,7 +39,7 @@ class FinalDebtPrioritizationEngine {
   /**
    * Apply final correct prioritization scoring (100-point scale)
    */
-  applyFinalPrioritization(debtItem) {
+  applyFinalPrioritization(debtItem: any): number {
     // Calculate 10-point scores
     const impactScore = this.calculateRealImpactScore(debtItem);
     const riskScore = this.calculateRealRiskScore(debtItem);
@@ -99,7 +99,7 @@ class FinalDebtPrioritizationEngine {
   /**
    * Calculate impact score (0-10 scale)
    */
-  calculateRealImpactScore(debtItem) {
+  calculateRealImpactScore(debtItem: any): number {
     let score = 5; // Default medium impact
 
     // Security vulnerabilities have high business impact
@@ -136,7 +136,7 @@ class FinalDebtPrioritizationEngine {
   /**
    * Calculate risk score (0-10 scale)
    */
-  calculateRealRiskScore(debtItem) {
+  calculateRealRiskScore(debtItem: any): number {
     let score = 1; // Default minimal risk
 
     // Security risks
@@ -176,7 +176,7 @@ class FinalDebtPrioritizationEngine {
   /**
    * Calculate effort score (0-10 scale, higher score = lower effort = higher priority)
    */
-  calculateRealEffortScore(debtItem) {
+  calculateRealEffortScore(debtItem: any): number {
     const hours = debtItem.estimatedHours || 8;
     
     // Effort scoring: lower effort = higher score
@@ -198,7 +198,7 @@ class FinalDebtPrioritizationEngine {
   /**
    * Calculate strategic alignment score (0-10 scale)
    */
-  calculateRealStrategicScore(debtItem) {
+  calculateRealStrategicScore(debtItem: any): number {
     let score = 5; // Default medium alignment
 
     // Security items have high strategic alignment

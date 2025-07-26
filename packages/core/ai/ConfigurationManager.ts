@@ -52,7 +52,7 @@ export interface ValidationResult {
 
 export interface ConfigurationUpdate {
   path: string; // JSONPath to the configuration field
-  value: any;
+  value: unknown;
   environment?: string;
   modelId?: string;
   timestamp: Date;

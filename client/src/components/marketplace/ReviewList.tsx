@@ -76,7 +76,9 @@ export const ReviewList: React.FC<ReviewListProps> = ({
         const errorData = await response.json();
         setError(errorData.error || 'Failed to submit review');
       }
-    } catch (err) {
+    } catch (_err) { 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      console.debug('Review submission error:', _err);
       setError('Failed to submit review');
     } finally {
       setSubmitting(false);

@@ -532,7 +532,7 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({
         />
       )}
 
-      <style jsx>{`
+      <style>{`
         .system-access-dashboard {
           max-width: 1400px;
           margin: 0 auto;
@@ -874,7 +874,7 @@ const UserCard: React.FC<UserCardProps> = ({
         </div>
       </CardContent>
 
-      <style jsx>{`
+      <style>{`
         .user-card-header {
           display: flex;
           justify-content: space-between;
@@ -1025,7 +1025,7 @@ const AccessRequestCard: React.FC<AccessRequestCardProps> = ({
         </div>
       </CardContent>
 
-      <style jsx>{`
+      <style>{`
         .request-header {
           display: flex;
           justify-content: space-between;
@@ -1215,7 +1215,7 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .modal-overlay {
           position: fixed;
           inset: 0;

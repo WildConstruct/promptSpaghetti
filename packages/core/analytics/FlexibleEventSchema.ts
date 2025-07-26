@@ -131,7 +131,7 @@ export interface PropertyTransformationStep {
   // Transformation configuration
   config: {
     operation: string;
-    parameters: Record<string, any>;
+    parameters: Record<string, unknown>;
     conditions?: ConditionLogic;
     errorHandling: 'skip' | 'warn' | 'fail' | 'default';
   };
@@ -213,7 +213,7 @@ export interface SchemaTransformation {
 
 export interface TransformationDefinition {
   type: 'property_mapping' | 'data_enrichment' | 'format_conversion' | 'aggregation' | 'custom';
-  config: Record<string, any>;
+  config: Record<string, unknown>;
   inputFields: string[];
   outputFields: string[];
   preserveOriginal: boolean;
@@ -248,13 +248,13 @@ export interface ValidatorParameter {
   type: string;
   description: string;
   required: boolean;
-  defaultValue?: any;
+  defaultValue?: unknown;
 }
 
 export interface ValidatorTest {
   name: string;
-  input: any;
-  expectedOutput: any;
+  input: unknown;
+  expectedOutput: unknown;
   description: string;
 }
 
@@ -281,8 +281,8 @@ export interface PropertyQualityMetrics {
 
 export interface PropertyExample {
   description: string;
-  validExample: any;
-  invalidExample?: any;
+  validExample: unknown;
+  invalidExample?: unknown;
   explanation: string;
 }
 
@@ -325,8 +325,8 @@ export interface FieldValidationResult {
   ruleResults: RuleValidationResult[];
   
   // Transformation results
-  originalValue: any;
-  transformedValue: any;
+  originalValue: unknown;
+  transformedValue: unknown;
   transformationApplied: boolean;
   
   // Relationship validation
@@ -348,7 +348,7 @@ export interface RuleValidationResult {
   score: number;
   executionTime: number;
   message?: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
 }
 
 export interface RelationshipValidationResult {
@@ -390,7 +390,7 @@ export interface TransformationResult {
 export class FlexibleEventSchemaManager {
   private schemas: Map<string, EventSchemaDefinition> = new Map();
   private validationCache: Map<string, SchemaValidationResult> = new Map();
-  private transformationCache: Map<string, any> = new Map();
+  private transformationCache: Map<string, unknown> = new Map();
   
   private readonly CACHE_TTL = 300000; // 5 minutes
   private readonly MAX_VALIDATION_TIME = 5000; // 5 seconds
@@ -665,7 +665,7 @@ export class FlexibleEventSchemaManager {
   }
 
   private async validateProperty(
-    property: any,
+    property: { value?: unknown },
     propertyDef: PropertySchemaDefinition,
     propertyName: string,
     event: FlexibleConversionEvent,
@@ -716,7 +716,7 @@ export class FlexibleEventSchemaManager {
   }
 
   private async validatePropertyType(
-    property: any,
+    property: { value?: unknown },
     propertyDef: PropertySchemaDefinition,
     result: FieldValidationResult
   ): Promise<void> {
@@ -737,7 +737,7 @@ export class FlexibleEventSchemaManager {
   }
 
   private async validatePropertyConstraints(
-    property: any,
+    property: { value?: unknown },
     propertyDef: PropertySchemaDefinition,
     result: FieldValidationResult
   ): Promise<void> {
@@ -778,7 +778,7 @@ export class FlexibleEventSchemaManager {
   }
 
   private async validateCustomRules(
-    property: any,
+    property: { value?: unknown },
     propertyDef: PropertySchemaDefinition,
     result: FieldValidationResult,
     event: FlexibleConversionEvent
@@ -877,7 +877,7 @@ export class FlexibleEventSchemaManager {
   }
 
   // Helper methods
-  private getPropertyType(value: any): PropertyType {
+  private getPropertyType(value: unknown): PropertyType {
     if (typeof value === 'string') return 'string';
     if (typeof value === 'number') return 'number';
     if (typeof value === 'boolean') return 'boolean';
@@ -904,7 +904,7 @@ export class FlexibleEventSchemaManager {
   }
 
   private async validateConstraint(
-    value: any,
+    value: unknown,
     constraint: PropertyConstraint
   ): Promise<{ isValid: boolean; message?: string }> {
     switch (constraint.type) {
@@ -949,8 +949,8 @@ export class FlexibleEventSchemaManager {
     return { isValid: true };
   }
 
-  private async validateFormat(value: any, format: string): Promise<{ isValid: boolean; message?: string }> {
-    const formatValidators: Record<string, (val: any) => boolean> = {
+  private async validateFormat(value: unknown, format: string): Promise<{ isValid: boolean; message?: string }> {
+    const formatValidators: Record<string, (val: unknown) => boolean> = {
       'email': (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
       'url': (val) => {
         try { new URL(val); return true; } catch { return false; }
@@ -972,8 +972,8 @@ export class FlexibleEventSchemaManager {
   }
 
   private async executeCustomConstraint(
-    value: any,
-    constraintConfig: any
+    value: unknown,
+    constraintConfig: unknown
   ): Promise<{ isValid: boolean; message?: string }> {
     // Simplified custom constraint execution
     // In production, this would use a secure sandbox
@@ -993,7 +993,7 @@ export class FlexibleEventSchemaManager {
 
   private async executeCustomRule(
     rule: ValidationRule,
-    value: any,
+    value: unknown,
     event: FlexibleConversionEvent
   ): Promise<RuleValidationResult> {
     const startTime = Date.now();
@@ -1022,7 +1022,7 @@ export class FlexibleEventSchemaManager {
     }
   }
 
-  private async evaluateCondition(condition: ConditionLogic, context: any): Promise<boolean> {
+  private async evaluateCondition(condition: ConditionLogic, context: Record<string, unknown>): Promise<boolean> {
     // Simplified condition evaluation
     // In production, this would be more sophisticated
     return true;
@@ -1103,7 +1103,7 @@ export class FlexibleEventSchemaManager {
 
   private hasField(event: FlexibleConversionEvent, fieldPath: string): boolean {
     const parts = fieldPath.split('.');
-    let current: any = event;
+    let current: unknown = event;
     
     for (const part of parts) {
       if (current && typeof current === 'object' && part in current) {
@@ -1132,7 +1132,7 @@ export class FlexibleEventSchemaManager {
     return `${schemaId}:${eventHash}:${optionsHash}`;
   }
 
-  private hashObject(obj: any): string {
+  private hashObject(obj: unknown): string {
     return btoa(JSON.stringify(obj)).substring(0, 16);
   }
 
@@ -1199,9 +1199,9 @@ export class FlexibleEventSchemaManager {
   }
 
   private async transformProperty(
-    property: any,
+    property: unknown,
     propertyDef: PropertySchemaDefinition
-  ): Promise<any> {
+  ): Promise<unknown> {
     let transformed = property;
     
     for (const step of propertyDef.transformationPipeline) {
@@ -1214,9 +1214,9 @@ export class FlexibleEventSchemaManager {
   }
 
   private async applyTransformationStep(
-    property: any,
+    property: unknown,
     step: PropertyTransformationStep
-  ): Promise<any> {
+  ): Promise<unknown> {
     // Simplified transformation step application
     return property;
   }
@@ -1355,7 +1355,7 @@ export interface ValidationOptions {
   strictMode?: boolean;
   validateRelationships?: boolean;
   maxValidationTime?: number;
-  customContext?: Record<string, any>;
+  customContext?: Record<string, unknown>;
 }
 
 /**

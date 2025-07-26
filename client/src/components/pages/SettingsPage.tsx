@@ -4,7 +4,7 @@ import { useAuthStore } from '../../stores/authStore';
 import { ArrowLeft } from 'lucide-react';
 
 const SettingsPage: React.FC = () => {
-  const { user: _user } = useAuthStore();
+  const { user: _user } = useAuthStore(); // eslint-disable-line @typescript-eslint/no-unused-vars
   const navigate = useNavigate();
   const [settings, setSettings] = useState({
     notifications: {

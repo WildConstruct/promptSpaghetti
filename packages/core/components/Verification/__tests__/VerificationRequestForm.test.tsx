@@ -6,7 +6,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { VerificationRequestForm } from '../VerificationRequestForm';
-import { IdentityValidationType } from '../../../auth/IdentityValidation';
+// import { IdentityValidationType } from '../../../auth/IdentityValidation'; // Unused import
 
 // Mock the onSubmit function
 const mockOnSubmit = jest.fn<unknown[], unknown>();
@@ -24,8 +24,7 @@ describe('VerificationRequestForm', () => {
     mockOnCancel.mockClear();
     mockOnSubmit.mockResolvedValue(
       { requestId: 'req_123',
-      status: 'pending' } as unknown as unknown as unknown as unknown
-     as unknown);
+      status: 'pending' } as unknown as unknown);
   });
 
   describe('Form Rendering', () => {

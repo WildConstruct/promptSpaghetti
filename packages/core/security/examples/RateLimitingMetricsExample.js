@@ -11,7 +11,6 @@ import { useState, useEffect } from 'react';
 import { RateLimitingService } from '../RateLimitingService';
 import { AdaptiveThrottlingRulesEngine } from '../AdaptiveThrottlingRules';
 import { RateLimitingPerformanceMetrics } from '../RateLimitingPerformanceMetrics';
-import { RateLimitingMetricsDashboard } from '../components/RateLimitingMetricsDashboard';
 import { useRateLimitingMetrics } from '../hooks/useRateLimitingMetrics';
 // ========================================
 // Example 1: Basic Performance Metrics Setup
@@ -73,37 +72,35 @@ export function BasicMetricsExample() {
 // ========================================
 // Example 2: React Dashboard Integration
 // ========================================
-export const ReactDashboardExample = () => {
-    const [rateLimitingService] = useState(() => new RateLimitingService());
-    const [throttlingEngine] = useState(() => new AdaptiveThrottlingRulesEngine(rateLimitingService, true, { enableAnalytics: true }));
-    // Use the custom hook for metrics management
-    const metricsHook = useRateLimitingMetrics({
-        rateLimitingService,
-        throttlingEngine,
-        options: {
-            autoRefresh: true,
-            refreshInterval: 3,
-            timeRange: '1h',
-            enableAlerts: true,
-            retainHistoryHours: 48
-        }
-    });
-    // Simulate traffic on component mount
-    useEffect(() => {
-        const trafficTimer = setInterval(() => {
-            simulateTraffic(rateLimitingService);
-        }, 1000);
-        return () => clearInterval(trafficTimer);
-    }, [rateLimitingService]);
-    if (metricsHook.error) {
-        return (_jsxs("div", { className: "p-8 bg-red-50 dark:bg-red-900/20 rounded-lg", children: [_jsx("h2", { className: "text-lg font-semibold text-red-800 dark:text-red-200 mb-2", children: "Metrics Error" }), _jsx("p", { className: "text-red-700 dark:text-red-300", children: metricsHook.error }), _jsx("button", { onClick: metricsHook.clearError, className: "mt-4 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm", children: "Clear Error" })] }));
+export const [throttlingEngine] = useState(() => new AdaptiveThrottlingRulesEngine(rateLimitingService, true, { enableAnalytics: true }));
+// Use the custom hook for metrics management
+const metricsHook = useRateLimitingMetrics({
+    rateLimitingService,
+    throttlingEngine,
+    options: {
+        autoRefresh: true,
+        refreshInterval: 3,
+        timeRange: '1h',
+        enableAlerts: true,
+        retainHistoryHours: 48
     }
-    return (_jsxs("div", { className: "min-h-screen bg-gray-50 dark:bg-gray-900", children: [_jsx("div", { className: "bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700", children: _jsx("div", { className: "max-w-7xl mx-auto px-6 py-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("h1", { className: "text-2xl font-bold text-gray-900 dark:text-white", children: "Security Analytics Platform" }), _jsx("p", { className: "text-gray-600 dark:text-gray-400", children: "Rate Limiting Performance Monitoring" })] }), _jsxs("div", { className: "flex items-center space-x-4", children: [_jsxs("div", { className: `inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${metricsHook.systemStatus === 'healthy' ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' :
-                                            metricsHook.systemStatus === 'warning' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400' :
-                                                'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'}`, children: [_jsx("div", { className: `w-2 h-2 rounded-full mr-2 ${metricsHook.systemStatus === 'healthy' ? 'bg-green-500' :
-                                                    metricsHook.systemStatus === 'warning' ? 'bg-yellow-500' :
-                                                        'bg-red-500'}` }), metricsHook.systemStatus.charAt(0).toUpperCase() + metricsHook.systemStatus.slice(1)] }), metricsHook.isConnected && (_jsx("div", { className: "text-sm text-gray-500 dark:text-gray-400", children: "Connected" }))] })] }) }) }), _jsx(RateLimitingMetricsDashboard, { metricsService: new RateLimitingPerformanceMetrics(rateLimitingService, throttlingEngine), theme: "light", autoRefresh: true, refreshInterval: 3 })] }));
-};
+});
+// Simulate traffic on component mount
+useEffect(() => {
+    const trafficTimer = setInterval(() => {
+        simulateTraffic(rateLimitingService);
+    }, 1000);
+    return () => clearInterval(trafficTimer);
+}, [rateLimitingService]);
+if (metricsHook.error) {
+    return (_jsxs("div", { className: "p-8 bg-red-50 dark:bg-red-900/20 rounded-lg", children: [_jsx("h2", { className: "text-lg font-semibold text-red-800 dark:text-red-200 mb-2", children: "Metrics Error" }), _jsx("p", { className: "text-red-700 dark:text-red-300", children: metricsHook.error }), _jsx("button", { onClick: metricsHook.clearError, className: "mt-4 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm", children: "Clear Error" })] }));
+}
+return (_jsxs("div", { className: "min-h-screen bg-gray-50 dark:bg-gray-900", children: [_jsx("div", { className: "bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700", children: _jsx("div", { className: "max-w-7xl mx-auto px-6 py-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("h1", { className: "text-2xl font-bold text-gray-900 dark:text-white", children: "Security Analytics Platform" }), _jsx("p", { className: "text-gray-600 dark:text-gray-400", children: "Rate Limiting Performance Monitoring" })] }), _jsxs("div", { className: "flex items-center space-x-4", children: [_jsxs("div", { className: `inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${metricsHook.systemStatus === 'healthy' ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' :
+                                        metricsHook.systemStatus === 'warning' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400' :
+                                            'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'}`, children: [_jsx("div", { className: `w-2 h-2 rounded-full mr-2 ${metricsHook.systemStatus === 'healthy' ? 'bg-green-500' :
+                                                metricsHook.systemStatus === 'warning' ? 'bg-yellow-500' :
+                                                    'bg-red-500'}` }), metricsHook.systemStatus.charAt(0).toUpperCase() + metricsHook.systemStatus.slice(1)] }), metricsHook.isConnected && (_jsx("div", { className: "text-sm text-gray-500 dark:text-gray-400", children: "Connected" }))] })] }) }) }), _jsx(RateLimitingMetricsDashboard, { metricsService: new RateLimitingPerformanceMetrics(rateLimitingService, throttlingEngine), theme: "light", autoRefresh: true, refreshInterval: 3 })] }));
+;
 // ========================================
 // Example 3: Advanced Visualization Features
 // ========================================
@@ -156,7 +153,6 @@ export function AdvancedVisualizationExample() {
             userAgents: Object.keys(distributionData.userAgentDistribution).length
         });
         // Get complete visualization data
-        const completeData = metricsService.getVisualizationData('24h');
         console.log('🎯 Complete Visualization Data Generated');
     }, 3000);
     return metricsService;

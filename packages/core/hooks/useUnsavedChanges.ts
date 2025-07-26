@@ -20,7 +20,9 @@ interface UseUnsavedChangesReturn {
   handleCancel: () => void;
 }
 
-export   const [dialogAction, setDialogAction] = useState('');
+export function useUnsavedChanges(hasUnsavedChanges: boolean): UseUnsavedChangesReturn {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [dialogAction, setDialogAction] = useState('');
   const [pendingCallback, setPendingCallback] = useState<(() => void) | null>(null);
 
   // Handle beforeunload event for browser close/refresh

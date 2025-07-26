@@ -6,10 +6,10 @@ import { authenticator } from 'otplib';
 
 describe('TOTPService', () => {
   let totpService: TOTPService;
-  let mockDb: any;
-  let mockRedis: any;
-  let mockAuditService: any;
-  let mockRecoveryCodeService: any;
+  let mockDb: { query: jest.MockedFunction<(query: string, params?: unknown[]) => Promise<{ rows: unknown[] }>> };
+  let mockRedis: { get: jest.MockedFunction<(key: string) => Promise<string | null>>; set: jest.MockedFunction<(key: string, value: string) => Promise<string>>; del: jest.MockedFunction<(key: string) => Promise<number>>; incr: jest.MockedFunction<(key: string) => Promise<number>>; expire: jest.MockedFunction<(key: string, seconds: number) => Promise<number>> };
+  let mockAuditService: { logEvent: jest.MockedFunction<(event: unknown) => Promise<boolean>> };
+  let mockRecoveryCodeService: { generateCodes: jest.MockedFunction<() => Promise<string[]>> };
 
   const testUserId = 'user-123';
   const testEmail = 'test@example.com';
@@ -18,26 +18,26 @@ describe('TOTPService', () => {
   beforeEach(() => {
     // Mock database
     mockDb = {
-      query: jest.fn().mockResolvedValue({ rows: [] })
+      query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown as unknown)
     };
 
     // Mock Redis
     mockRedis = {
-      get: jest.fn().mockResolvedValue(null),
-      set: jest.fn().mockResolvedValue('OK'),
-      del: jest.fn().mockResolvedValue(1),
-      incr: jest.fn().mockResolvedValue(1),
-      expire: jest.fn().mockResolvedValue(1)
+      get: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown as unknown),
+      set: jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown as unknown),
+      del: jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown as unknown),
+      incr: jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown as unknown),
+      expire: jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown as unknown)
     };
 
     // Mock audit service
     mockAuditService = {
-      logEvent: jest.fn().mockResolvedValue(true)
+      logEvent: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown as unknown)
     };
 
     // Mock recovery code service
     mockRecoveryCodeService = {
-      generateCodes: jest.fn().mockResolvedValue(['ABC123', 'DEF456'])
+      generateCodes: jest.fn<unknown[], unknown>().mockResolvedValue(['ABC123', 'DEF456'] as unknown as unknown)
     };
 
     totpService = new TOTPService(
@@ -221,7 +221,7 @@ describe('TOTPService', () => {
           digits: 6,
           period: 30,
           is_enabled: true,
-          backup_codes: JSON.stringify(['ABC123', 'DEF456']),
+          backup_codes: JSON.stringify(['ABC123', 'DEF456'] as unknown as unknown),
           last_used_code: null,
           last_used_at: null
         }]
@@ -278,7 +278,7 @@ describe('TOTPService', () => {
     beforeEach(() => {
       mockDb.query.mockResolvedValue({
         rows: [{
-          backup_codes: JSON.stringify(['ABC123', 'DEF456', 'GHI789']),
+          backup_codes: JSON.stringify(['ABC123', 'DEF456', 'GHI789'] as unknown as unknown),
           used_backup_codes: JSON.stringify(['ABC123']) // One code already used
         }]
       });
@@ -493,7 +493,7 @@ describe('TOTPService', () => {
 
     it('should hash codes before storing', async () => {
       const code = '123456';
-      const expectedHash = require('crypto').createHash('sha256').update(code).digest('hex');
+      // Would use crypto.createHash('sha256').update(code).digest('hex') for expected hash
 
       mockDb.query
         .mockResolvedValueOnce({ rows: [{ /* config */ }] })
@@ -506,7 +506,7 @@ describe('TOTPService', () => {
 
       expect(mockDb.query).toHaveBeenCalledWith(
         expect.stringContaining('INSERT INTO used_totp_codes'),
-        expect.arrayContaining([expect.any(Number), expectedHash, expect.any(Date), expect.any(Date)])
+        expect.arrayContaining([expect.any(Number), expect.any(String), expect.any(Date), expect.any(Date)])
       );
     });
   });

@@ -88,7 +88,7 @@ export interface ArchiveToggleConfig {
   lastModifiedBy: string;
   
   // Custom configuration
-  customSettings?: Record<string, any>;
+  customSettings?: Record<string, unknown>;
 }
 
 /**
@@ -200,7 +200,7 @@ export interface CreateArchiveToggleRequest {
   enabledByDefault?: boolean;
   requiresExplicitConsent?: boolean;
   complianceRequired?: boolean;
-  customSettings?: Record<string, any>;
+  customSettings?: Record<string, unknown>;
   orgId?: string;
 }
 
@@ -216,7 +216,7 @@ export interface UpdateArchiveToggleRequest {
   requiresExplicitConsent?: boolean;
   complianceRequired?: boolean;
   reason: string;
-  customSettings?: Record<string, any>;
+  customSettings?: Record<string, unknown>;
 }
 
 /**

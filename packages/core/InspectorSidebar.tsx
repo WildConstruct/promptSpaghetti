@@ -76,8 +76,8 @@ export const InspectorSidebar: React.FC<InspectorSidebarProps> = ({ node, schema
       }
     } else if (maybeShape) {
       shape = maybeShape as Record<string, ZodTypeAny>;
-    } else if ((schema as any)._def?.shape) {
-      const s = (schema as any)._def.shape;
+    } else if ((schema as unknown)._def?.shape) {
+      const s = (schema as unknown)._def.shape;
       shape = typeof s === 'function' ? s() : s;
     }
   }
@@ -87,25 +87,24 @@ export const InspectorSidebar: React.FC<InspectorSidebarProps> = ({ node, schema
       <h3 style={{ marginTop: 0 }}>{node.data?.label || node.type} Properties</h3>
       <form>
         {Object.entries(shape).map(([key, zodType]) => {
-          const value = node.data?.[key] ?? '';
           // Render basic input for string/number; customize per type as needed
           return (
             <div key={key} style={{ marginBottom: 12 }}>
               <label htmlFor={`field-${key}`} style={{ display: 'block', fontWeight: 500, marginBottom: 4 }}>{key}</label>
               <input
                 id={`field-${key}`}
-                type={(zodType as any)._def?.typeName === 'ZodNumber' ? 'number' : 'text'}
+                type={(zodType as unknown)._def?.typeName === 'ZodNumber' ? 'number' : 'text'}
                 value={
-                  ((): any => {
+                  ((): unknown => {
                     const v = values[key];
                     if (v === undefined || v === null) {
-                      return (zodType as any)._def?.typeName === 'ZodNumber' ? 0 : '';
+                      return (zodType as unknown)._def?.typeName === 'ZodNumber' ? 0 : '';
                     }
-                    return v as any;
+                    return v as unknown;
                   })()
                 }
                 onChange={e => {
-                  const isNumber = zodType instanceof z.ZodNumber || (zodType as any)._def?.typeName === 'ZodNumber';
+                  const isNumber = zodType instanceof z.ZodNumber || (zodType as unknown)._def?.typeName === 'ZodNumber';
                   updateField(key, isNumber ? Number(e.target.value) : e.target.value);
                 }}
                 style={{ width: '100%', padding: 6, border: fieldErrors[key] ? '1px solid #f00' : '1px solid #ccc', borderRadius: 4 }}

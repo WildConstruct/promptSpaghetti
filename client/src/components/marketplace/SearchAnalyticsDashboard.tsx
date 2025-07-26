@@ -1,5 +1,5 @@
 // Epic 16 Story 16.1 - Search Analytics Dashboard
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   LineChart,
   Line,
@@ -17,21 +17,22 @@ import {
 } from 'recharts';
 import { API_URL } from '../../config/environment';
 
-interface SearchAnalytics {
-  period_start: Date;
-  period_end: Date;
-  total_searches: number;
-  unique_users: number;
-  top_queries: Array<{ query: string; count: number; avg_results: number }>;
-  popular_filters: Array<{ filter: string; value: string; count: number }>;
-  zero_result_queries: Array<{ query: string; count: number }>;
-  search_trends: Array<{ date: string; searches: number; unique_users: number }>;
-  conversion_metrics: {
-    search_to_view: number;
-    search_to_purchase: number;
-    avg_time_to_action: number;
-  };
-}
+// Analytics interface for search data structure - commented out as unused
+// interface SearchAnalytics {
+//   period_start: Date;
+//   period_end: Date;
+//   total_searches: number;
+//   unique_users: number;
+//   top_queries: Array<{ query: string; count: number; avg_results: number }>;
+//   popular_filters: Array<{ filter: string; value: string; count: number }>;
+//   zero_result_queries: Array<{ query: string; count: number }>;
+//   search_trends: Array<{ date: string; searches: number; unique_users: number }>;
+//   conversion_metrics: {
+//     search_to_view: number;
+//     search_to_purchase: number;
+//     avg_time_to_action: number;
+//   };
+// }
 
 interface SearchInsights {
   trending_topics: string[];
@@ -49,8 +50,8 @@ interface PopularTerm {
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 
-export   const [insights, setInsights] = useState<SearchInsights | null>(null);
-  const [popularTerms, setPopularTerms] = useState<PopularTerm[]>([]);
+export   const [popularTerms, setPopularTerms] = useState<PopularTerm[]>([]);
+  const [analytics, setAnalytics] = useState<Record<string, unknown> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [timeframe, setTimeframe] = useState<'day' | 'week' | 'month'>('week');
@@ -67,7 +68,7 @@ export   const [insights, setInsights] = useState<SearchInsights | null>(null);
     };
   };
 
-  const fetchAnalytics = async () => {
+  const fetchAnalytics = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -102,11 +103,11 @@ export   const [insights, setInsights] = useState<SearchInsights | null>(null);
     } finally {
       setLoading(false);
     }
-  };
+  }, [timeframe, dateRange]);
 
   useEffect(() => {
     fetchAnalytics();
-  }, [timeframe, dateRange]);
+  }, [fetchAnalytics]);
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
@@ -292,7 +293,7 @@ export   const [insights, setInsights] = useState<SearchInsights | null>(null);
           <div className="insight-card">
             <h3>Trending Topics 🔥</h3>
             <div className="trending-list">
-              {insights?.trending_topics.slice(0, 8).map((topic, index) => (
+              {insights?.trending_topics.slice(0, 8).map((topic /*, index*/) => ( // Commented out unused index
                 <div key={topic} className="trending-item">
                   <span className="topic">{topic}</span>
                 </div>
@@ -304,9 +305,12 @@ export   const [insights, setInsights] = useState<SearchInsights | null>(null);
           <div className="insight-card">
             <h3>Zero Result Opportunities 💡</h3>
             <div className="opportunity-list">
-              {insights?.zero_result_opportunities.slice(0, 8).map((query, index) => (
+              {insights?.zero_result_opportunities.slice(
+                0,
+                8
+              ).map((query /*, index*/) => ( // Commented out unused index
                 <div key={query} className="opportunity-item">
-                  <span className="query">"{query}"</span>
+                  <span className="query">&quot;{query}&quot;</span>
                   <span className="suggestion">Consider creating templates for this query</span>
                 </div>
               ))}
@@ -317,9 +321,9 @@ export   const [insights, setInsights] = useState<SearchInsights | null>(null);
           <div className="insight-card">
             <h3>Queries with No Results</h3>
             <div className="zero-results-list">
-              {analytics?.zero_result_queries.slice(0, 8).map((item, index) => (
+              {analytics?.zero_result_queries.slice(0, 8).map((item /*, index*/) => ( // Commented out unused index
                 <div key={item.query} className="zero-result-item">
-                  <span className="query">"{item.query}"</span>
+                  <span className="query">&quot;{item.query}&quot;</span>
                   <span className="count">{item.count} searches</span>
                 </div>
               ))}
@@ -328,7 +332,7 @@ export   const [insights, setInsights] = useState<SearchInsights | null>(null);
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .search-analytics-dashboard {
           padding: 20px;
           max-width: 1400px;

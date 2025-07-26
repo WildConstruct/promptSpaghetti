@@ -22,11 +22,11 @@ import {
   BackoffStrategy
 } from './RateLimitingService';
 import {
-  DataClassificationLevel,
   DataOperation,
   SubjectAttributes,
   ObjectAttributes
 } from './DataClassificationAccessControl';
+import { DataClassificationLevel } from '../types/DataClassification';
 
 // Extended endpoint categories for data operations
 export enum DataEndpointCategory {
@@ -220,8 +220,7 @@ export class DataRetrievalRateLimit extends EventEmitter {
     operation: DataOperation,
     requestDetails: DataRequestDetails
   ): Promise<DataRetrievalDecision> {
-    const startTime = Date.now();
-
+    
     try {
       // Check for exemptions first
       const exemption = await this.checkExemptions(subject, object, operation);
@@ -370,16 +369,16 @@ export class DataRetrievalRateLimit extends EventEmitter {
     
     // Check multiple rate limit scopes
     const checks = await Promise.all([
-      this.rateLimitingService.checkLimit(subject.userId, endpoint),
-      this.rateLimitingService.checkLimit(subject.location.country, endpoint),
-      this.rateLimitingService.checkLimit(subject.device.deviceId, endpoint)
+      this.rateLimitingService.checkRateLimit(subject.userId, endpoint),
+      this.rateLimitingService.checkRateLimit(subject.location.country, endpoint),
+      this.rateLimitingService.checkRateLimit(subject.device.deviceId, endpoint)
     ]);
 
     const blocked = checks.find(check => check.result === RateLimitResult.BLOCKED);
     if (blocked) {
       return {
         result: RateLimitResult.BLOCKED,
-        reason: `Rate limit exceeded: ${blocked.reason}`,
+        reason: `Rate limit exceeded for ${blocked.endpoint}`,
         retryAfter: blocked.retryAfter
       };
     }
@@ -589,8 +588,8 @@ export class DataRetrievalRateLimit extends EventEmitter {
 
   private getDefaultLimits(): DataRetrievalLimits {
     return {
-      classification: 'INTERNAL',
-      operation: 'read',
+      classification: DataClassificationLevel.INTERNAL,
+      operation: 'READ',
       limits: {
         requestsPerMinute: 60,
         requestsPerHour: 1000,
@@ -620,13 +619,34 @@ export class DataRetrievalRateLimit extends EventEmitter {
   private initializeMetrics(): void { /* Implementation */ }
   private loadExemptions(): void { /* Implementation */ }
   private startPeriodicTasks(): void { /* Implementation */ }
-  private recordAccess(subject: any, object: any, operation: any, details: any, success: boolean, rateLimited: boolean, reason: string): void { /* Implementation */ }
-  private createDecision(decision: string, reason: string, exemptionId?: string, retryAfter?: number, warnings?: string[]): DataRetrievalDecision { return {} as any; }
-  private checkExemptions(subject: any, object: any, operation: any): Promise<DataAccessExemption | null> { return Promise.resolve(null); }
-  private updateUserQuota(userId: string, details: any): Promise<void> { return Promise.resolve(); }
+  private recordAccess(
+    subject: unknown,
+    object: unknown,
+    operation: unknown,
+    details: unknown,
+    success: boolean,
+    rateLimited: boolean,
+    reason: string
+  ): void { /* Implementation */ }
+  private createDecision(
+    decision: string,
+    reason: string,
+    exemptionId?: string,
+    retryAfter?: number,
+    warnings?: string[]
+  ): DataRetrievalDecision { return {} as any; }
+  private checkExemptions(
+    subject: unknown,
+    object: unknown,
+    operation: unknown
+  ): Promise<DataAccessExemption | null> { return Promise.resolve(null); }
+  private updateUserQuota(userId: string, details: unknown): Promise<void> { return Promise.resolve(); }
   private getEndpointFromOperation(operation: DataOperation): string { return 'data_access'; }
   private getTypicalRequestSize(history: DataAccessAttempt[]): number { return 1048576; }
-  private isClassificationEscalation(recent: DataClassificationLevel[], current: DataClassificationLevel): boolean { return false; }
+  private isClassificationEscalation(
+    recent: DataClassificationLevel[],
+    current: DataClassificationLevel
+  ): boolean { return false; }
   private calculateAnomalyScore(history: DataAccessAttempt[]): number { return 0; }
   private initializeUserQuota(userId: string): void { /* Implementation */ }
   private getSecondsUntilMidnight(): number { return 86400; }

@@ -290,7 +290,7 @@ export const RealTimePreviewIntegration: React.FC<RealTimePreviewIntegrationProp
         }}
       />
 
-      <style jsx>{`
+      <style>{`
         .real-time-preview-integration {
           position: relative;
           min-height: 60px;

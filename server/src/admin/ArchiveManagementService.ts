@@ -70,7 +70,7 @@ export interface ArchiveRecord {
   businessCriticality: BusinessCriticality;
   complianceRequirements: string[];
   dataClassification: DataClassification;
-  customMetadata: Record<string, any>;
+  customMetadata: Record<string, unknown>;
   
   // Audit information
   createdBy: string;
@@ -106,7 +106,7 @@ export interface SourceMetadata {
   operationType?: string;
   
   // Custom source metadata
-  customFields: Record<string, any>;
+  customFields: Record<string, unknown>;
 }
 
 export interface RetentionPolicy {
@@ -128,7 +128,7 @@ export interface StorageTransition {
 export interface TransitionCondition {
   type: 'access_frequency' | 'size' | 'age' | 'custom';
   operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte';
-  value: any;
+  value: unknown;
 }
 
 export interface NotificationSettings {
@@ -141,7 +141,7 @@ export interface NotificationSettings {
 export interface RetentionException {
   condition: string; // JSON logic expression
   action: 'extend' | 'preserve' | 'accelerate';
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
 }
 
 export enum ArchiveType {
@@ -302,7 +302,7 @@ export interface ArchiveJob {
   completedAt?: Date;
   
   // Results
-  result?: any;
+  result?: unknown;
   errors?: string[];
   warnings?: string[];
   
@@ -877,7 +877,7 @@ export class ArchiveManagementService extends EventEmitter {
     return `restore_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
   
-  private getDefaultRetentionPolicy(category: ArchiveCategory, type: ArchiveType): RetentionPolicy {
+  private getDefaultRetentionPolicy(_category: ArchiveCategory, _type: ArchiveType): RetentionPolicy {
     // Implementation would return appropriate default policy based on category and type
     return {
       id: 'default',
@@ -910,11 +910,11 @@ export class ArchiveManagementService extends EventEmitter {
   
   // Placeholder methods that would be fully implemented
   
-  private async storeArchiveRecord(archive: ArchiveRecord): Promise<void> {
+  private async storeArchiveRecord(_archive: ArchiveRecord): Promise<void> {
     // Implementation would store in database
   }
   
-  private async createArchiveJob(archive: ArchiveRecord, priority: number): Promise<ArchiveJob> {
+  private async createArchiveJob(_archive: ArchiveRecord, _priority: number): Promise<ArchiveJob> {
     // Implementation would create archive job
     return {} as ArchiveJob;
   }

@@ -99,8 +99,10 @@ const adminSections = [
   }
 ];
 
-export   const [alertCounts, setAlertCounts] = useState<AlertCount>(createEmptyAlertCount());
+const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onSectionChange }) => {
+  const [alertCounts, setAlertCounts] = useState<AlertCount>(createEmptyAlertCount());
   const [lastAlertUpdate, setLastAlertUpdate] = useState<Date>(new Date());
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
 
@@ -263,7 +265,7 @@ export   const [alertCounts, setAlertCounts] = useState<AlertCount>(createEmptyA
             
             // Mock section-specific alert counts (in real implementation, this would be calculated)
             const getSectionAlertCounts = (sectionId: string): AlertCount => {
-              const mockSectionAlerts = {
+              const mockSectionAlerts: Record<string, AlertCount> = {
                 'feature-toggles': { critical: 1, high: 2, medium: 3, low: 1, info: 0 },
                 'users': { critical: 0, high: 1, medium: 2, low: 0, info: 1 },
                 'content': { critical: 1, high: 1, medium: 1, low: 1, info: 0 },
@@ -389,3 +391,5 @@ export   const [alertCounts, setAlertCounts] = useState<AlertCount>(createEmptyA
     </div>
   );
 };
+
+export default AdminLayout;

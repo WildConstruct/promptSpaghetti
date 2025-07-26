@@ -42,7 +42,7 @@ export declare class ValidationIndicators {
     /**
      * Generate auto-fix preview
      */
-    generateAutoFixPreview(suggestion: unknown, currentResults: ValidationResult[]): AutoFixPreview;
+    generateAutoFixPreview(suggestion: any, currentResults: ValidationResult[]): AutoFixPreview;
     /**
      * Add validation indicator listener
      */
@@ -146,7 +146,7 @@ export interface PlatformComparisonView {
     graphId: string;
     timestamp: Date;
     platforms: PlatformComparison[];
-    crossPlatformIssues: unknown[];
+    crossPlatformIssues: any[];
     overallCompatibility: number;
     bestPlatform: Platform | null;
     recommendations: string[];
@@ -167,7 +167,7 @@ export interface PlatformComparison {
 }
 export interface AutoFixPreview {
     id: string;
-    suggestion: unknown;
+    suggestion: any;
     currentIssues: ValidationResult[];
     expectedChanges: string[];
     risks: string[];
@@ -176,4 +176,4 @@ export interface AutoFixPreview {
     preview: string;
     warnings: string[];
 }
-export type ValidationIndicatorListener = (event: string, data: unknown) => void;
+export type ValidationIndicatorListener = (event: string, data: any) => void;

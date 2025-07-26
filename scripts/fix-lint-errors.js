@@ -14,7 +14,7 @@ const fixes = [
   {
     name: 'Remove unused imports',
     pattern: /^import.*from.*;\s*$/gm,
-    fix: (content) => {
+    fix: (content: string) => {
       // This is a simplified version - in practice you'd want a more sophisticated approach
       return content.replace(/^import\s+{\s*}\s+from\s+.*;\s*$/gm, '');
     }
@@ -22,10 +22,10 @@ const fixes = [
   {
     name: 'Fix unused variables',
     pattern: /^(\s*)(const|let|var)\s+([a-zA-Z_$][a-zA-Z0-9_$]*)\s*=/gm,
-    fix: (content) => {
+    fix: (content: string) => {
       return content.replace(
         /^(\s*)(const|let|var)\s+([a-zA-Z_$][a-zA-Z0-9_$]*)\s*=\s*[^;]*;\s*$/gm,
-        (match, indent, keyword, varName) => {
+        (match: string, indent: string, keyword: string, varName: string) => {
           // Check if variable is used later in the file
           const usageRegex = new RegExp(`\\b${varName}\\b`, 'g');
           const matches = content.match(usageRegex) || [];
@@ -41,7 +41,7 @@ const fixes = [
   {
     name: 'Fix console.log statements',
     pattern: /console\.log\(/g,
-    fix: (content) => {
+    fix: (content: string) => {
       // Only warn about console.log, don't remove them entirely
       return content; // Keep as-is, our improved ESLint config allows console.log
     }
@@ -55,7 +55,7 @@ const commonProblematicFiles = [
   'src/run-qa-agent.js'
 ];
 
-function fixFile(filePath) {
+function fixFile(filePath: string): boolean {
   if (!fs.existsSync(filePath)) {
     return false;
   }
@@ -91,7 +91,7 @@ function fixFile(filePath) {
   }
 }
 
-function runAutoFix() {
+function runAutoFix(): void {
   console.log('🎯 Running ESLint auto-fix on staged files...\n');
   
   try {

@@ -25,7 +25,7 @@ import { StatusBar } from './components/StatusBar';
 import { RestorePrompt } from './components/RestorePrompt';
 import { EncryptionState, EncryptionAlgorithm } from './components/EncryptionStatus';
 import { nodeSchemas } from './nodeSchemas';
-import { Palette, NodeMeta } from './Palette';
+import { NodeMeta } from './Palette';
 import { TabbedPalette } from './palette/TabbedPalette';
 import { useGraphStore } from './graphStore';
 import { PreviewModal } from './PreviewModal';
@@ -61,7 +61,7 @@ import { ValidationError } from './validation';
 import { SmoothInspectorPanel } from './components/Inspector/SmoothInspectorPanel';
 import { ProfessionalSpinner } from './components/LoadingStates/ProfessionalSpinner';
 import { SmoothNodeWrapper } from './components/Nodes/SmoothNodeWrapper';
-import { useCanvasOptimization, CanvasOptimizer } from './utils/canvasOptimization';
+import { useCanvasOptimization } from './utils/canvasOptimization';
 import { globalAnimationManager } from './utils/smoothAnimations';
 import { DemoModeManager } from './components/Demo/DemoModeManager';
 import { DemoPerformanceTester } from './components/Demo/DemoPerformanceTester';
@@ -296,7 +296,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
     currentProject, 
     hasUnsavedChanges, 
     newProject,
-    markProjectModified,
+    // markProjectModified,
     saveAsTemplate,
     applyTemplate
   } = useGraphStore();
@@ -478,7 +478,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
   );
 
   // Handle node drag from palette
-  const handlePaletteDragStart = (_nodeId: string) => {
+  const handlePaletteDragStart = () => {
     // No-op: drag data set in Palette, handled on drop
   };
 
@@ -751,22 +751,22 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
       // Add to recent projects if we have project info
       if (result.projectName && result.metadata) {
         try {
-          const { RecentProjectsManager } = require('./managers/RecentProjectsManager');
-          const graphData = useGraphStore.getState().getGraphData();
-          
-          // Generate thumbnail
-          const thumbnail = RecentProjectsManager.generateThumbnail(graphData.nodes, graphData.edges);
-          
-          // Calculate approximate file size
-          const projectData = JSON.stringify({ graph: graphData, metadata: result.metadata });
-          const fileSize = new Blob([projectData]).size;
-          
-          RecentProjectsManager.addRecentProject({
-            name: result.projectName,
-            metadata: result.metadata,
-            thumbnail,
-            fileSize
-          });
+          // const { RecentProjectsManager } = require('./managers/RecentProjectsManager');
+          // const graphData = useGraphStore.getState().getGraphData();
+          // 
+          // // Generate thumbnail
+          // const thumbnail = RecentProjectsManager.generateThumbnail(graphData.nodes, graphData.edges);
+          // 
+          // // Calculate approximate file size
+          // const projectData = JSON.stringify({ graph: graphData, metadata: result.metadata });
+          // const fileSize = new Blob([projectData]).size;
+          // 
+          // RecentProjectsManager.addRecentProject({
+          //   name: result.projectName,
+          //   metadata: result.metadata,
+          //   thumbnail,
+          //   fileSize
+          // });
         } catch (error) {
           console.warn('Failed to add project to recent list:', error);
         }
@@ -794,21 +794,21 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
       // Add to recent projects if we have project info
       if (result.projectName && result.metadata) {
         try {
-          const { RecentProjectsManager } = require('./managers/RecentProjectsManager');
-          
-          // Generate thumbnail
-          const thumbnail = RecentProjectsManager.generateThumbnail(graphData.nodes, graphData.edges);
-          
-          // Calculate approximate file size
-          const projectData = JSON.stringify({ graph: graphData, metadata: result.metadata });
-          const fileSize = new Blob([projectData]).size;
-          
-          RecentProjectsManager.addRecentProject({
-            name: result.projectName,
-            metadata: result.metadata,
-            thumbnail,
-            fileSize
-          });
+          // const { RecentProjectsManager } = require('./managers/RecentProjectsManager');
+          // 
+          // // Generate thumbnail
+          // const thumbnail = RecentProjectsManager.generateThumbnail(graphData.nodes, graphData.edges);
+          // 
+          // // Calculate approximate file size
+          // const projectData = JSON.stringify({ graph: graphData, metadata: result.metadata });
+          // const fileSize = new Blob([projectData]).size;
+          // 
+          // RecentProjectsManager.addRecentProject({
+          //   name: result.projectName,
+          //   metadata: result.metadata,
+          //   thumbnail,
+          //   fileSize
+          // });
         } catch (error) {
           console.warn('Failed to add project to recent list:', error);
         }
@@ -1001,7 +1001,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
               onConnect={onConnect}
               onNodeClick={onNodeClick}
               fitView
-              style={{ background: '#1a202c', height: '100%' }}
+              style={{ background: 'var(--color-bg-primary, #2c2c2c)', height: '100%' }}
               nodeTypes={nodeTypes}
               onDrop={handleDrop}
               onDragOver={handleDragOver}
@@ -1195,75 +1195,140 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
           </div>
         </div>
       
-        {/* Professional CSS Transitions and Animations */}
+        {/* Professional CSS Transitions and Animations - Enhanced */}
         <style>{`
+        /* Professional Node Styling */
         .react-flow__node {
-          transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
-                     box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
-                     opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
-                     filter 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+          background: linear-gradient(
+            145deg,
+            var(--color-bg-tertiary,
+            #404040
+          ), var(--color-bg-secondary, #383838)) !important;
+          border: 1px solid var(--color-ui-border, #4a4a4a) !important;
+          border-radius: 8px !important;
+          box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.4)) !important;
+          color: var(--color-text-primary, #e5e7eb) !important;
+          transition: all var(--transition-normal, 0.25s cubic-bezier(0.4, 0, 0.2, 1)) !important;
+          backdrop-filter: blur(8px) !important;
         }
         
         .react-flow__node:hover {
-          transform: translateY(-2px) scale(1.02);
-          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
-          filter: brightness(1.05);
+          transform: translateY(-3px) scale(1.03) !important;
+          box-shadow: var(--shadow-xl, 0 20px 25px rgba(0, 0, 0, 0.6)) !important;
+          background: linear-gradient(
+            145deg,
+            var(--color-bg-quaternary,
+            #4a4a4a
+          ), var(--color-bg-tertiary, #404040)) !important;
+          border-color: var(--color-accent-orange, #ff7800) !important;
         }
         
         .react-flow__node.selected {
-          box-shadow: 0 8px 32px rgba(255, 124, 0, 0.3), 
-                     0 0 0 2px #ff7c00;
+          box-shadow: var(--shadow-lg, 0 10px 15px rgba(0, 0, 0, 0.5)), 
+                     0 0 0 3px var(--color-accent-orange, #ff7800),
+                     0 0 20px rgba(255, 120, 0, 0.4) !important;
+          border-color: var(--color-accent-orange, #ff7800) !important;
+          background: linear-gradient(
+            145deg,
+            var(--color-bg-quaternary,
+            #4a4a4a
+          ), var(--color-bg-tertiary, #404040)) !important;
         }
         
+        /* Professional Edge Styling */
         .react-flow__edge path {
-          transition: stroke 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                     stroke-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                     filter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          stroke: var(--color-ui-border-light, #525252) !important;
+          stroke-width: 2px !important;
+          transition: all var(--transition-normal, 0.25s cubic-bezier(0.4, 0, 0.2, 1)) !important;
         }
         
         .react-flow__edge:hover path {
-          stroke: #ff7c00 !important;
-          stroke-width: 3 !important;
-          filter: drop-shadow(0 0 8px rgba(255, 124, 0, 0.4));
+          stroke: var(--color-accent-orange, #ff7800) !important;
+          stroke-width: 4px !important;
+          filter: drop-shadow(0 0 12px rgba(255, 120, 0, 0.6)) !important;
         }
         
+        .react-flow__edge.selected path {
+          stroke: var(--color-accent-orange, #ff7800) !important;
+          stroke-width: 3px !important;
+          filter: drop-shadow(0 0 8px rgba(255, 120, 0, 0.4)) !important;
+        }
+        
+        /* Professional Handle Styling */
         .react-flow__handle {
-          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+          background: var(--color-bg-secondary, #383838) !important;
+          border: 2px solid var(--color-ui-border, #4a4a4a) !important;
+          width: 12px !important;
+          height: 12px !important;
+          transition: all var(--transition-fast, 0.15s cubic-bezier(0.4, 0, 0.2, 1)) !important;
         }
         
         .react-flow__handle:hover {
-          transform: scale(1.4);
-          box-shadow: 0 0 16px rgba(255, 124, 0, 0.6);
-          background: #ff7c00 !important;
-          border-color: #ff7c00 !important;
+          transform: scale(1.6) !important;
+          box-shadow: 0 0 20px rgba(255, 120, 0, 0.8) !important;
+          background: var(--color-accent-orange, #ff7800) !important;
+          border-color: var(--color-accent-orange, #ff7800) !important;
         }
         
+        .react-flow__handle.connectable {
+          background: var(--color-accent-blue, #0ea5e9) !important;
+        }
+        
+        /* Professional Connection Line */
         .react-flow__connection-line {
-          stroke: #ff7c00 !important;
-          stroke-width: 3 !important;
-          filter: drop-shadow(0 0 6px rgba(255, 124, 0, 0.3));
+          stroke: var(--color-accent-orange, #ff7800) !important;
+          stroke-width: 4px !important;
+          filter: drop-shadow(0 0 8px rgba(255, 120, 0, 0.4)) !important;
         }
         
+        /* Professional Controls */
         .react-flow__controls button {
-          background: rgba(31, 41, 55, 0.95) !important;
-          border: 1px solid rgba(55, 65, 81, 0.6) !important;
-          color: #e5e7eb !important;
-          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+          background: linear-gradient(
+            145deg,
+            var(--color-bg-tertiary,
+            #404040
+          ), var(--color-bg-secondary, #383838)) !important;
+          border: 1px solid var(--color-ui-border, #4a4a4a) !important;
+          color: var(--color-text-primary, #e5e7eb) !important;
+          transition: all var(--transition-normal, 0.25s cubic-bezier(0.4, 0, 0.2, 1)) !important;
           backdrop-filter: blur(8px) !important;
+          border-radius: 6px !important;
+          box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.3)) !important;
         }
         
         .react-flow__controls button:hover {
-          background: rgba(255, 124, 0, 0.1) !important;
-          border-color: #ff7c00 !important;
-          box-shadow: 0 0 12px rgba(255, 124, 0, 0.3) !important;
+          background: linear-gradient(
+            145deg,
+            var(--color-bg-quaternary,
+            #4a4a4a
+          ), var(--color-bg-tertiary, #404040)) !important;
+          border-color: var(--color-accent-orange, #ff7800) !important;
+          box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.4)), 
+                     0 0 16px rgba(255, 120, 0, 0.3) !important;
           transform: scale(1.05) !important;
         }
         
+        /* Professional Minimap */
         .react-flow__minimap {
-          background: rgba(31, 41, 55, 0.95) !important;
-          border: 1px solid rgba(55, 65, 81, 0.6) !important;
-          backdrop-filter: blur(8px) !important;
+          background: linear-gradient(
+            145deg,
+            var(--color-bg-secondary,
+            #383838
+          ), var(--color-bg-primary, #2c2c2c)) !important;
+          border: 1px solid var(--color-ui-border, #4a4a4a) !important;
+          backdrop-filter: blur(12px) !important;
           border-radius: 8px !important;
+          box-shadow: var(--shadow-lg, 0 10px 15px rgba(0, 0, 0, 0.5)) !important;
+        }
+        
+        .react-flow__minimap-node {
+          fill: var(--color-accent-orange, #ff7800) !important;
+          opacity: 0.8 !important;
+        }
+        
+        /* Professional Background */
+        .react-flow__background {
+          background: var(--color-bg-primary, #2c2c2c) !important;
         }
         
         @keyframes glowPulse {

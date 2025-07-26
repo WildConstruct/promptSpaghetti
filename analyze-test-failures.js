@@ -40,7 +40,7 @@ const failureDetails = [];
 // Split into test blocks
 const testBlocks = testOutput.split(/FAIL|PASS/).filter(block => block.trim().length > 0);
 
-testBlocks.forEach(block => {
+testBlocks.forEach((block: string) => {
   if (block.includes('Unable to find an element')) {
     failurePatterns['Missing elements']++;
     failureDetails.push({ type: 'Missing elements', detail: block.substring(0, 200) });
@@ -72,7 +72,7 @@ testBlocks.forEach(block => {
 });
 
 console.log(`\n📈 Test Failure Pattern Analysis:`);
-Object.entries(failurePatterns).forEach(([pattern, count]) => {
+Object.entries(failurePatterns).forEach(([pattern, count]: [string, number]) => {
   if (count > 0) {
     console.log(`   • ${pattern}: ${count} occurrences`);
   }
@@ -81,14 +81,14 @@ Object.entries(failurePatterns).forEach(([pattern, count]) => {
 // Show top 3 most common failure types with examples
 const sortedPatterns = Object.entries(failurePatterns)
   .filter(([, count]) => count > 0)
-  .sort(([, a], [, b]) => b - a)
+  .sort(([, a], [, b]: [string, number]) => b - a)
   .slice(0, 3);
 
 console.log(`\n🔍 Top 3 Failure Types:`);
-sortedPatterns.forEach(([pattern, count]) => {
+sortedPatterns.forEach(([pattern, count]: [string, number]) => {
   console.log(`\n   ${pattern} (${count} occurrences):`);
   const examples = failureDetails.filter(f => f.type === pattern).slice(0, 2);
-  examples.forEach(example => {
+  examples.forEach((example: any) => {
     console.log(`     - ${example.detail.replace(/\n/g, ' ').trim()}...`);
   });
 });
@@ -96,7 +96,7 @@ sortedPatterns.forEach(([pattern, count]) => {
 // Extract specific test file failures
 const failedFiles = [];
 const lines = testOutput.split('\n');
-lines.forEach(line => {
+lines.forEach((line: string) => {
   if (line.includes('FAIL') && line.includes('.test.')) {
     const match = line.match(/FAIL (.+\.test\.[tj]sx?)/);
     if (match) {
@@ -106,7 +106,7 @@ lines.forEach(line => {
 });
 
 console.log(`\n📁 Failed Test Files (${failedFiles.length}):`);
-failedFiles.slice(0, 10).forEach(file => {
+failedFiles.slice(0, 10).forEach((file: string) => {
   console.log(`   • ${file}`);
 });
 

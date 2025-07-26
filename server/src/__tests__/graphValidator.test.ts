@@ -268,19 +268,19 @@ describe('Graph Validator', () => {
   
   describe('Edge cases', () => {
     it('should handle null or undefined graphs gracefully', () => {
-      // @ts-ignore - intentionally passing invalid type for testing
+      // @ts-expect-error - intentionally passing invalid type for testing
       const result = validateGraph(null);
       expect(result.valid).toBe(false);
       expect(result.errors[0].code).toBe('INVALID_STRUCTURE');
       
-      // @ts-ignore - intentionally passing invalid type for testing
+      // @ts-expect-error - intentionally passing invalid type for testing
       const result2 = validateGraph(undefined);
       expect(result2.valid).toBe(false);
       expect(result2.errors[0].code).toBe('INVALID_STRUCTURE');
     });
     
     it('should handle malformed graph objects', () => {
-      // @ts-ignore - intentionally passing invalid type for testing
+      // @ts-expect-error - intentionally passing invalid type for testing
       const result = validateGraph({ notNodes: [] });
       expect(result.valid).toBe(false);
       expect(result.errors[0].code).toBe('INVALID_STRUCTURE');
@@ -292,7 +292,7 @@ describe('Graph Validator', () => {
       // Test missing templateId in Include node
       const invalidResult = validateGraph({
         nodes: [
-          // @ts-ignore - intentionally missing required field
+          // @ts-expect-error - intentionally missing required field
           { id: 'include1', type: 'Include', inputs: [] },
           { id: 'output1', type: 'Output', inputs: ['include1'] }
         ]
@@ -317,7 +317,7 @@ describe('Graph Validator', () => {
       const invalidResult = validateGraph({
         nodes: [
           { id: 'set1', type: 'SetVariable', key: 'testVar', inputs: [] },
-          // @ts-ignore - intentionally missing required field
+          // @ts-expect-error - intentionally missing required field
           { id: 'get1', type: 'GetVariable' },
           { id: 'output1', type: 'Output', inputs: ['get1'] }
         ]

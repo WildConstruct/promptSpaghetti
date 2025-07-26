@@ -8,7 +8,13 @@
 
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { z } from 'zod';
-import { UploaderService, UploadType, UploadCategory, SecurityLevel, StorageBackend } from '../admin/UploaderArchitecture';
+import { 
+  UploaderService,
+  /* UploadType,
+  UploadCategory,
+  */ SecurityLevel,
+  StorageBackend
+} from '../admin/UploaderArchitecture';
 import { pipeline } from 'stream/promises';
 import { createHash } from 'crypto';
 import { Readable } from 'stream';
@@ -64,7 +70,7 @@ const InitiateUploadSchema = z.object({
   
   // Custom metadata
   tags: z.array(z.string()).max(50).default([]),
-  customFields: z.record(z.any()).default({})
+  customFields: z.record(z.unknown()).default({})
 });
 
 const UploadChunkSchema = z.object({
@@ -108,7 +114,7 @@ const ProcessingJobControlSchema = z.object({
 const BulkOperationSchema = z.object({
   uploadIds: z.array(z.string().uuid()).min(1).max(100),
   operation: z.enum(['delete', 'reprocess', 'change_category', 'update_metadata', 'move_storage']),
-  parameters: z.record(z.any()).optional(),
+  parameters: z.record(z.unknown()).optional(),
   reason: z.string().min(5).max(500)
 });
 
@@ -136,13 +142,13 @@ export async function uploaderRoutes(
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const uploadData = InitiateUploadSchema.parse(request.body);
-      const user = (request.user as any);
+      const user = (request.user as unknown);
 
       const uploadRequest = await uploaderService.initiateUpload(
         uploadData.filename,
         uploadData.fileSize,
         uploadData.mimeType,
-        user.id,
+(user as any).id,
         {
           maxChunkSize: uploadData.maxChunkSize,
           allowResume: uploadData.allowResume,
@@ -336,8 +342,8 @@ export async function uploaderRoutes(
       }
 
       // Check permission to access this upload
-      const user = (request.user as any);
-      if (uploadRequest.uploadedBy !== user.id && !user.isSuperAdmin) {
+      const user = (request.user as unknown);
+      if (uploadRequest.uploadedBy !== (user as any).id && !(user as any).isSuperAdmin) {
         return reply.code(403).send({
           success: false,
           error: 'Access denied'
@@ -345,7 +351,7 @@ export async function uploaderRoutes(
       }
 
       const progress = await uploaderService.getUploadProgress(uploadId);
-      const responseData: any = {
+      const responseData: unknown = {
         upload: {
           id: uploadRequest.id,
           filename: uploadRequest.filename,
@@ -405,11 +411,11 @@ export async function uploaderRoutes(
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const query = UploadQuerySchema.parse(request.body);
-      const user = (request.user as any);
+      const user = (request.user as unknown);
 
       // Restrict query to user's uploads unless they're an admin
-      if (!user.isSuperAdmin) {
-        query.uploadedBy = user.id;
+      if (!(user as any).isSuperAdmin) {
+        query.uploadedBy = (user as any).id;
       }
 
       const result = await uploaderService.queryUploads(query);
@@ -465,9 +471,9 @@ export async function uploaderRoutes(
     try {
       const { uploadId } = UploadIdSchema.parse(request.params);
       const { reason } = request.body as { reason?: string };
-      const user = (request.user as any);
+      const user = (request.user as unknown);
 
-      await uploaderService.cancelUpload(uploadId, user.id, reason);
+      await uploaderService.cancelUpload(uploadId, (user as any).id, reason);
 
       return reply.send({
         success: true,
@@ -504,13 +510,13 @@ export async function uploaderRoutes(
     try {
       const { uploadId, jobId } = request.params;
       const controlData = ProcessingJobControlSchema.parse(request.body);
-      const user = (request.user as any);
+      const user = (request.user as unknown);
 
       const result = await uploaderService.controlProcessingJob(
         uploadId,
         jobId,
         controlData.action,
-        user.id,
+(user as any).id,
         controlData.reason
       );
 
@@ -558,9 +564,9 @@ export async function uploaderRoutes(
     try {
       const { uploadId } = UploadIdSchema.parse(request.params);
       const { variant } = request.query as { variant?: string };
-      const user = (request.user as any);
+      const user = (request.user as unknown);
 
-      const downloadInfo = await uploaderService.getDownloadInfo(uploadId, variant, user.id);
+      const downloadInfo = await uploaderService.getDownloadInfo(uploadId, variant, (user as any).id);
 
       if (!downloadInfo) {
         return reply.code(404).send({
@@ -606,12 +612,12 @@ export async function uploaderRoutes(
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const bulkOperation = BulkOperationSchema.parse(request.body);
-      const user = (request.user as any);
+      const user = (request.user as unknown);
 
       const result = await uploaderService.performBulkOperation(
         bulkOperation.uploadIds,
         bulkOperation.operation,
-        user.id,
+(user as any).id,
         bulkOperation.parameters,
         bulkOperation.reason
       );

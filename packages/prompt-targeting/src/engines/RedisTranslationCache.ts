@@ -35,9 +35,9 @@ export interface RedisCacheConfig {
  */
 export class RedisTranslationCache implements TranslationCache {
   private client: RedisClientType;
-  private config: Required<RedisCacheConfig>;
+  private config: Required<Omit<RedisCacheConfig, 'password'>> & { password?: string };
   private connected: boolean = false;
-  private stats = {
+  private metrics = {
     hits: 0,
     misses: 0,
     sets: 0,
@@ -100,7 +100,7 @@ export class RedisTranslationCache implements TranslationCache {
    */
   public async get(key: string): Promise<PlatformPrompt | null> {
     if (!this.connected) {
-      this.stats.misses++;
+      this.metrics.misses++;
       return null;
     }
 
@@ -109,16 +109,16 @@ export class RedisTranslationCache implements TranslationCache {
       const value = await this.client.get(fullKey);
       
       if (value === null) {
-        this.stats.misses++;
+        this.metrics.misses++;
         return null;
       }
 
-      this.stats.hits++;
+      this.metrics.hits++;
       const parsed = await this.deserializeValue(value);
       this.logger.log(`Cache hit for key: ${key}`);
       return parsed;
     } catch (error) {
-      this.stats.errors++;
+      this.metrics.errors++;
       this.logger.error(`Cache get error for key ${key}:`, error);
       return null;
     }
@@ -139,10 +139,10 @@ export class RedisTranslationCache implements TranslationCache {
 
       await this.client.setEx(fullKey, expiration, serialized);
       
-      this.stats.sets++;
+      this.metrics.sets++;
       this.logger.log(`Cached translation for key: ${key} (TTL: ${expiration}s)`);
     } catch (error) {
-      this.stats.errors++;
+      this.metrics.errors++;
       this.logger.error(`Cache set error for key ${key}:`, error);
     }
   }
@@ -160,7 +160,7 @@ export class RedisTranslationCache implements TranslationCache {
       const exists = await this.client.exists(fullKey);
       return exists === 1;
     } catch (error) {
-      this.stats.errors++;
+      this.metrics.errors++;
       this.logger.error(`Cache exists check error for key ${key}:`, error);
       return false;
     }
@@ -178,10 +178,10 @@ export class RedisTranslationCache implements TranslationCache {
       const fullKey = this.buildKey(key);
       await this.client.del(fullKey);
       
-      this.stats.deletes++;
+      this.metrics.deletes++;
       this.logger.log(`Deleted cache entry for key: ${key}`);
     } catch (error) {
-      this.stats.errors++;
+      this.metrics.errors++;
       this.logger.error(`Cache delete error for key ${key}:`, error);
     }
   }
@@ -203,7 +203,7 @@ export class RedisTranslationCache implements TranslationCache {
         this.logger.log(`Cleared ${keys.length} cache entries`);
       }
     } catch (error) {
-      this.stats.errors++;
+      this.metrics.errors++;
       this.logger.error('Cache clear error:', error);
     }
   }
@@ -229,12 +229,12 @@ export class RedisTranslationCache implements TranslationCache {
       }
     }
 
-    const totalRequests = this.stats.hits + this.stats.misses;
-    const hitRate = totalRequests > 0 ? this.stats.hits / totalRequests : 0;
+    const totalRequests = this.metrics.hits + this.metrics.misses;
+    const hitRate = totalRequests > 0 ? this.metrics.hits / totalRequests : 0;
 
     return {
-      hits: this.stats.hits,
-      misses: this.stats.misses,
+      hits: this.metrics.hits,
+      misses: this.metrics.misses,
       size,
       hitRate
     };
@@ -284,9 +284,9 @@ export class RedisTranslationCache implements TranslationCache {
 
     return {
       ...basicStats,
-      sets: this.stats.sets,
-      deletes: this.stats.deletes,
-      errors: this.stats.errors,
+      sets: this.metrics.sets,
+      deletes: this.metrics.deletes,
+      errors: this.metrics.errors,
       connected: this.connected,
       ...redisInfo
     };
@@ -304,7 +304,7 @@ export class RedisTranslationCache implements TranslationCache {
       const fullKey = this.buildKey(key);
       await this.client.expire(fullKey, ttl);
     } catch (error) {
-      this.stats.errors++;
+      this.metrics.errors++;
       this.logger.error(`Cache expire error for key ${key}:`, error);
     }
   }
@@ -321,7 +321,7 @@ export class RedisTranslationCache implements TranslationCache {
       const fullKey = this.buildKey(key);
       return await this.client.ttl(fullKey);
     } catch (error) {
-      this.stats.errors++;
+      this.metrics.errors++;
       this.logger.error(`Cache TTL error for key ${key}:`, error);
       return -1;
     }

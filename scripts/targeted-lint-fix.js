@@ -39,7 +39,7 @@ const priorityDirs = [
   'packages/core/__tests__/'
 ];
 
-async function fixRule(rule, directory) {
+async function fixRule(rule: any, directory: string): Promise<any> {
   console.log(`🔧 Fixing ${rule.name} in ${directory}`);
   
   try {
@@ -83,7 +83,7 @@ async function fixRule(rule, directory) {
   }
 }
 
-async function main() {
+async function main(): Promise<void> {
   console.log('🎯 Targeted Linting Fix - Auto-fixable Rules Only');
   console.log('🔧 Focusing on easily fixable formatting issues\n');
   

@@ -111,7 +111,6 @@ export function createSequencePattern(type, config = {}) {
         case 'weighted':
             return new WeightedPattern(config);
         default:
-            const _exhaustive = type;
             throw new Error(`Unknown sequence pattern type: ${type}`);
     }
 }
@@ -307,17 +306,13 @@ export function createSequentialNode(id, sequence, patternType = 'linear', patte
 /**
  * Utility functions for common sequential patterns
  */
-export const SequentialPresets = {
-    /** Simple linear sequence */
-    linear: (_sequence) => createSequencePattern('linear'),
-    /** Infinite cycling sequence */
-    cycle: (_sequence) => createSequencePattern('cyclical'),
-    /** Random selection with repeats */
-    random: (allowRepeats = true) => createSequencePattern('random', { allowRepeats }),
-    /** Random selection without repeats until exhausted */
-    shuffle: () => createSequencePattern('random', { allowRepeats: false }),
-    /** Weighted selection */
-    weighted: (weights) => createSequencePattern('weighted', { weights }),
-    /** Equal probability weighted selection */
-    uniform: (length) => createSequencePattern('weighted', { weights: new Array(length).fill(1) })
+export const SequentialUtils = {
+    createLinearPattern: () => createSequencePattern('linear'),
+    createCyclicalPattern: () => createSequencePattern('cyclical'),
+    createRandomPattern: () => createSequencePattern('random'),
+    createWeightedPattern: (weights) => createSequencePattern('weighted', { weights }),
+    // Reset utilities
+    resetSequenceState: (node, ctx) => {
+        node.setState(ctx, { index: 0, history: [] });
+    }
 };

@@ -2,3 +2,25 @@
 > @prompt-spaghetti/graph-core@0.1.0 typecheck /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/graph-core
 > tsc --noEmit
 
+src/crdt.ts(29,49): error TS2344: Type 'unknown' does not satisfy the constraint 'AbstractType<any>'.
+src/crdt.ts(93,13): error TS18046: 'edge' is of type 'unknown'.
+src/crdt.ts(93,39): error TS18046: 'edge' is of type 'unknown'.
+src/crdt.ts(166,13): error TS18046: 'nodeData' is of type 'unknown'.
+src/crdt.ts(167,15): error TS18046: 'nodeData' is of type 'unknown'.
+src/crdt.ts(168,19): error TS18046: 'nodeData' is of type 'unknown'.
+src/crdt.ts(169,15): error TS18046: 'nodeData' is of type 'unknown'.
+src/crdt.ts(170,17): error TS18046: 'nodeData' is of type 'unknown'.
+src/crdt.ts(177,13): error TS18046: 'edgeData' is of type 'unknown'.
+src/crdt.ts(178,17): error TS18046: 'edgeData' is of type 'unknown'.
+src/crdt.ts(179,17): error TS18046: 'edgeData' is of type 'unknown'.
+src/crdt.ts(180,23): error TS18046: 'edgeData' is of type 'unknown'.
+src/crdt.ts(181,23): error TS18046: 'edgeData' is of type 'unknown'.
+src/crdt.ts(189,24): error TS2339: Property 'id' does not exist on type '{}'.
+src/crdt.ts(193,31): error TS2339: Property 'version' does not exist on type '{}'.
+src/crdt.ts(194,40): error TS2339: Property 'created' does not exist on type '{}'.
+src/crdt.ts(195,41): error TS2339: Property 'modified' does not exist on type '{}'.
+src/crdt.ts(196,30): error TS2339: Property 'author' does not exist on type '{}'.
+src/crdt.ts(197,32): error TS2339: Property 'platform' does not exist on type '{}'.
+src/crdt.ts(199,26): error TS2339: Property 'seed' does not exist on type '{}'.
+src/crdt.ts(266,39): error TS2344: Type 'unknown' does not satisfy the constraint 'AbstractType<any>'.
+ ELIFECYCLE  Command failed with exit code 1.

@@ -322,8 +322,8 @@ const ComplianceReportingDashboard: React.FC = () => {
       setFrameworks(mockFrameworks);
       setViolations(mockViolations);
       setMetrics(mockMetrics);
-      setAuditLogs(mockAuditLogs);
-      setRemediationActions([]);
+      _setAuditLogs(mockAuditLogs);
+      _setRemediationActions([]);
 
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load compliance data');
@@ -485,7 +485,7 @@ const ComplianceReportingDashboard: React.FC = () => {
             </button>
             
             <button
-              onClick={() => setShowCreateReport(true)}
+              onClick={() => _setShowCreateReport(true)}
               className="btn btn-primary"
             >
               <Download className="w-4 h-4 mr-2" />

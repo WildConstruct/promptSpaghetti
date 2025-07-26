@@ -417,7 +417,7 @@ export class GraphCRDT {
       }
 
       const updatedEdge = { ...existingEdge };
-      (updatedEdge as any)[operation.property] = operation.newValue;
+      (updatedEdge as Record<string, unknown>)[operation.property] = operation.newValue;
       updatedEdge.metadata.version += 1;
       updatedEdge.metadata.lastModified = new Date(operation.timestamp).toISOString();
       updatedEdge.metadata.modifiedBy = operation.userId;
@@ -626,7 +626,7 @@ export class GraphCRDT {
     this.nodes.forEach((nodeCRDT) => {
       const node: Node = {
         id: nodeCRDT.id,
-        type: nodeCRDT.type as any,
+        type: nodeCRDT.type as Node['type'],
         inputs: nodeCRDT.inputs,
         ...nodeCRDT.data
       };

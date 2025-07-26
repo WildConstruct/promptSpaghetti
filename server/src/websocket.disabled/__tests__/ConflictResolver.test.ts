@@ -72,8 +72,10 @@ describe('ConflictResolver', () => {
       const result = resolver.processOperation(operation2);
 
       expect(result).toBeDefined();
-      expect(result?.conflict.type).toBe(ConflictType.NODE_POSITION);
-      expect(result?.conflict.operations).toHaveLength(2);
+      if (result) {
+        expect(result.conflict.type).toBe(ConflictType.NODE_POSITION);
+        expect(result.conflict.operations).toHaveLength(2);
+      }
     });
 
     it('should detect property conflict', () => {
@@ -105,7 +107,9 @@ describe('ConflictResolver', () => {
       const result = resolver.processOperation(operation2);
 
       expect(result).toBeDefined();
-      expect(result?.conflict.type).toBe(ConflictType.NODE_PROPERTIES);
+      if (result) {
+        expect(result.conflict.type).toBe(ConflictType.NODE_PROPERTIES);
+      }
     });
 
     it('should not detect conflict for different nodes', () => {
@@ -490,7 +494,12 @@ describe('ConflictResolver', () => {
 
   describe('event emissions', () => {
     it('should emit conflict detected event', (done) => {
+      const timeout = setTimeout(() => {
+        done(new Error('Test timed out waiting for conflict_detected event'));
+      }, 5000);
+      
       resolver.on('conflict_detected', (conflict) => {
+        clearTimeout(timeout);
         expect(conflict.type).toBe(ConflictType.NODE_PROPERTIES);
         expect(conflict.operations).toHaveLength(2);
         done();
@@ -525,7 +534,12 @@ describe('ConflictResolver', () => {
     });
 
     it('should emit conflict auto-resolved event', (done) => {
+      const timeout = setTimeout(() => {
+        done(new Error('Test timed out waiting for conflict_auto_resolved event'));
+      }, 5000);
+      
       resolver.on('conflict_auto_resolved', (resolution) => {
+        clearTimeout(timeout);
         expect(resolution.resolvedValue).toBe('Second');
         expect(resolution.requiresUserInput).toBe(false);
         done();

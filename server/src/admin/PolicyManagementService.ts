@@ -36,7 +36,7 @@ export interface PolicyViolation {
   entityId: string;
   violationType: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
-  evidence: any;
+  evidence: unknown;
   detectedAt: Date;
   status: 'pending' | 'reviewed' | 'dismissed' | 'enforced';
   reviewedBy?: string;
@@ -54,7 +54,7 @@ export interface AdminEnforcementRequest {
   severity: 'low' | 'medium' | 'high' | 'critical';
   requestedBy: string;
   requestedAt: Date;
-  evidence?: any;
+  evidence?: unknown;
   expiresAt?: Date;
   status: 'pending' | 'approved' | 'rejected' | 'executed';
   approvedBy?: string;
@@ -149,7 +149,7 @@ export class PolicyManagementService {
       FROM policy_templates
       WHERE 1=1
     `;
-    const params: any[] = [];
+    const params: unknown[] = [];
 
     if (category) {
       params.push(category);
@@ -279,7 +279,7 @@ export class PolicyManagementService {
       FROM policy_violations
       WHERE 1=1
     `;
-    const params: any[] = [];
+    const params: unknown[] = [];
 
     if (status) {
       params.push(status);
@@ -559,7 +559,7 @@ export class PolicyManagementService {
     return [];
   }
 
-  private async scanPolicyViolations(policy: EnforcementPolicy, options: any): Promise<PolicyViolation[]> {
+  private async scanPolicyViolations(policy: EnforcementPolicy, options: unknown): Promise<PolicyViolation[]> {
     // Implementation would scan for violations based on policy rules
     // This is a placeholder that would integrate with trust scoring and detection logic
     return [];

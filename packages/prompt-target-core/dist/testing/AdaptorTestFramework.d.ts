@@ -7,7 +7,7 @@ export declare class AdaptorTestFramework {
     private logger;
     private metrics;
     private testResults;
-    constructor(logger: unknown, metrics: unknown);
+    constructor(logger: any, metrics: any);
     /**
      * Run comprehensive test suite for an adaptor
      */

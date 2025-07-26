@@ -12,7 +12,7 @@ export const useHelpSystem = () => {
     }
     return context;
 };
-export const HelpProvider = ({ children, customHelpContent = [], enableOnboarding = true, enableHelpHints = true }: any) => {
+export const HelpProvider = ({ children, customHelpContent = [], enableOnboarding = true, enableHelpHints = true }) => {
     // Core state
     const [helpContent, setHelpContent] = useState([
         ...BUILT_IN_HELP_CONTENT,
@@ -53,10 +53,10 @@ export const HelpProvider = ({ children, customHelpContent = [], enableOnboardin
         saveState();
     }, [onboardingComplete, showHelpHints, onboardingStep]);
     // Content management functions
-    const getHelpContent = (id: string) => {
+    const getHelpContent = (id) => {
         return helpContent.find(content => content.id === id);
     };
-    const addHelpContent = React.useCallback((content: any) => {
+    const addHelpContent = React.useCallback((content) => {
         setHelpContent(prev => {
             // Check if content already exists
             const existingIndex = prev.findIndex(c => c.id === content.id);
@@ -72,10 +72,10 @@ export const HelpProvider = ({ children, customHelpContent = [], enableOnboardin
             }
         });
     }, []);
-    const updateHelpContent = React.useCallback((id: string, updates: any) => {
+    const updateHelpContent = React.useCallback((id, updates) => {
         setHelpContent(prev => prev.map(content => content.id === id ? { ...content, ...updates } : content));
     }, []);
-    const removeHelpContent = React.useCallback((id: string) => {
+    const removeHelpContent = React.useCallback((id) => {
         setHelpContent(prev => prev.filter(content => content.id !== id));
     }, []);
     // Onboarding functions
@@ -143,42 +143,40 @@ export const HelpProvider = ({ children, customHelpContent = [], enableOnboardin
     return (_jsx(HelpContext.Provider, { value: contextValue, children: children }));
 };
 // Hook for easy help content registration
-export const useHelpContentRegistration = () => {
-    const { addHelpContent, updateHelpContent, removeHelpContent } = useHelpSystem();
-    // Register help content for a component
-    const registerHelpContent = (content: any) => {
-        if (Array.isArray(content)) {
-            content.forEach(addHelpContent);
-        }
-        else {
-            addHelpContent(content);
-        }
-    };
-    // Register help content with automatic cleanup
-    const useHelpContent = (content: any) => {
-        React.useEffect(() => {
-            registerHelpContent(content);
-            // Cleanup function to remove content when component unmounts
-            return () => {
-                if (Array.isArray(content)) {
-                    content.forEach(c => removeHelpContent(c.id));
-                }
-                else {
-                    removeHelpContent(content.id);
-                }
-            };
-        }, []);
-    };
-    return {
-        registerHelpContent,
-        useHelpContent,
-        updateHelpContent,
-        removeHelpContent
-    };
+export 
+// Register help content for a component
+const registerHelpContent = (content) => {
+    if (Array.isArray(content)) {
+        content.forEach(addHelpContent);
+    }
+    else {
+        addHelpContent(content);
+    }
 };
+// Register help content with automatic cleanup
+const useHelpContent = (content) => {
+    React.useEffect(() => {
+        registerHelpContent(content);
+        // Cleanup function to remove content when component unmounts
+        return () => {
+            if (Array.isArray(content)) {
+                content.forEach(c => removeHelpContent(c.id));
+            }
+            else {
+                removeHelpContent(content.id);
+            }
+        };
+    }, []);
+};
+return {
+    registerHelpContent,
+    useHelpContent,
+    updateHelpContent,
+    removeHelpContent
+};
+;
 // Specialized hooks for common help scenarios
-export const useFieldHelp = (fieldId: string, helpContent: any) => {
-    const { addHelpContent, getHelpContent } = useHelpSystem();
+export const useFieldHelp = (fieldId, helpContent, addHelpContent, getHelpContent) => {
     // Stabilize helpContent object to prevent infinite loops
     const stableHelpContent = React.useMemo(() => helpContent, [
         helpContent.title,
@@ -200,8 +198,7 @@ export const useFieldHelp = (fieldId: string, helpContent: any) => {
     }, [fieldId, stableHelpContent, addHelpContent]);
     return getHelpContent(fieldId);
 };
-export const useOnboardingHelp = () => {
-    const { onboardingEnabled, onboardingStep, onboardingComplete, helpContent, nextOnboardingStep, previousOnboardingStep, skipOnboarding, completeOnboarding, startOnboarding } = useHelpSystem();
+export const useOnboardingHelp = (helpContent, currentStep, setCurrentStep) => {
     const onboardingSteps = helpContent
         .filter(content => content.category === 'onboarding')
         .sort((a, b) => (a.priority === 'high' ? -1 : 1));
@@ -221,8 +218,7 @@ export const useOnboardingHelp = () => {
     };
 };
 // Component for managing help system settings
-export const HelpSystemSettings = ({ className = '' }: any) => {
-    const { onboardingComplete, showHelpHints, startOnboarding, toggleHelpHints, resetHelpSystem } = useHelpSystem();
+export const HelpSystemSettings = ({ className }) => {
     return (_jsxs("div", { className: `help-system-settings ${className}`, style: {
             background: '#2d3748',
             border: '1px solid #4a5568',

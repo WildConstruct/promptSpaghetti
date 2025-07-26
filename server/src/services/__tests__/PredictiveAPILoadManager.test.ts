@@ -130,7 +130,7 @@ describe('PredictiveAPILoadManager', () => {
     // Mock system metrics
     mockPerformanceMonitor.getSystemMetrics.mockResolvedValue({
       performance: {
-        nodeExecutionTime: { name: 'node.execution.time', type: 'histogram', value: 150, timestamp: Date.now( as unknown), labels: {}, tags: [], buckets: [], percentiles: [], min: 0, max: 0, mean: 0, stdDev: 0 },
+        nodeExecutionTime: { name: 'node.execution.time', type: 'histogram', value: 150, timestamp: Date.now( as unknown as unknown), labels: {}, tags: [], buckets: [], percentiles: [], min: 0, max: 0, mean: 0, stdDev: 0 },
         memoryUsage: { name: 'memory.usage', type: 'gauge', value: 70, timestamp: Date.now(), labels: {}, tags: [] },
         cacheHitRate: { name: 'cache.hit.rate', type: 'counter', value: 85, timestamp: Date.now(), labels: {}, tags: [] },
         errorRate: { name: 'error.rate', type: 'counter', value: 2, timestamp: Date.now(), labels: {}, tags: [] }
@@ -546,7 +546,7 @@ describe('PredictiveAPILoadManager', () => {
     });
 
     it('should handle missing system metrics gracefully', async () => {
-      mockPerformanceMonitor.getSystemMetrics.mockResolvedValue(null as any as unknown);
+      mockPerformanceMonitor.getSystemMetrics.mockResolvedValue(null as any as unknown as unknown as unknown);
 
       await expect(predictiveLoadManager.executePredictiveLoadManagement())
         .rejects.toThrow();

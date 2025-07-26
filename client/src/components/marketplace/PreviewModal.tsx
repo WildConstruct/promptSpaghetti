@@ -1,5 +1,5 @@
 // Epic 16 Marketplace - Preview Modal Component
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import { Badge } from '../common/Badge';
 import './PreviewModal.css';
@@ -50,9 +50,9 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
 
   useEffect(() => {
     loadPreviewMetadata();
-  }, [templateId]);
+  }, [loadPreviewMetadata]);
 
-  const loadPreviewMetadata = async () => {
+  const loadPreviewMetadata = useCallback(async () => {
     try {
       const response = await fetch(`/api/marketplace/templates/${templateId}/preview-metadata`);
       if (response.ok) {
@@ -63,9 +63,11 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
         setError('Failed to load preview information');
       }
     } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      console.debug('Preview metadata error:', err);
       setError('Failed to load preview information');
     }
-  };
+  }, [templateId]);
 
   const generatePreview = async () => {
     if (!metadata) return;
@@ -96,6 +98,8 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
         setError(errorData.error || 'Failed to generate preview');
       }
     } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      console.debug('Preview generation error:', err);
       setError('Failed to generate preview');
     } finally {
       setLoading(false);
@@ -324,7 +328,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                   </div>
                 ) : (
                   <div className="no-preview">
-                    <p>Click "Generate Preview" to see how this template works.</p>
+                    <p>Click &quot;Generate Preview&quot; to see how this template works.</p>
                   </div>
                 )}
               </section>

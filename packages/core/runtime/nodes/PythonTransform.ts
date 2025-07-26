@@ -182,7 +182,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
   /**
    * Set output helper
    */
-  private setOutput(outputId: string, value: Error, context: AdvancedExecutionContext): void {
+  private setOutput(outputId: string, value: unknown, context: AdvancedExecutionContext): void {
     // Store output in context for later retrieval
     if (!context.outputs) {
       context.outputs = {};
@@ -335,11 +335,12 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
    */
   private logSecurityEvents(events: unknown[], ______context: AdvancedExecutionContext): void {
     for (const event of events) {
+      const eventObj = event as any;
       console.warn(`Python security event in node ${this.id}:`, {
-        level: event.level,
-        type: event.type,
-        message: event.message,
-        timestamp: event.timestamp,
+        level: eventObj?.level,
+        type: eventObj?.type,
+        message: eventObj?.message,
+        timestamp: eventObj?.timestamp,
         nodeId: this.id
       });
     }
@@ -445,7 +446,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
     averageExecutionTime: number;
     securityViolations: number;
   } {
-    const state = this.getState(context);
+    const state = this.getState(context) as any;
     const executions = state?.executions || [];
     
     if (executions.length === 0) {
@@ -457,9 +458,12 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
       };
     }
 
-    const successful = executions.filter((e: Error) => e.success).length;
-    const totalTime = executions.reduce((sum: number, e: Error) => sum + (e.executionTime || 0), 0);
-    const totalViolations = executions.reduce((sum: number, e: Error) => sum + (e.securityViolations || 0), 0);
+    const successful = executions.filter((e: unknown) => (e as any).success).length;
+    const totalTime = executions.reduce((sum: number, e: unknown) => sum + ((e as any).executionTime || 0), 0);
+    const totalViolations = executions.reduce(
+      (sum: number,
+      e: unknown
+    ) => sum + ((e as any).securityViolations || 0), 0);
 
     return {
       executionsRun: executions.length,
@@ -472,8 +476,13 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
   /**
    * Store execution metadata for statistics
    */
-  protected storeExecutionMetadata(context: AdvancedExecutionContext, success: boolean, executionTime: number, securityViolations: number): void {
-    const state = this.getState(context) || {};
+  protected storeExecutionMetadata(
+    context: AdvancedExecutionContext,
+    success: boolean,
+    executionTime: number,
+    securityViolations: number
+  ): void {
+    const state = (this.getState(context) as any) || {};
     if (!state.executions) {
       state.executions = [];
     }

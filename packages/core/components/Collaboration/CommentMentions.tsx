@@ -18,7 +18,15 @@ interface CommentMentionsProps {
   maxResults?: number;
 }
 
-export   const [loading, setLoading] = useState(false);
+const CommentMentions: React.FC<CommentMentionsProps> = ({ 
+  workspaceId, 
+  query, 
+  onSelect, 
+  onClose, 
+  maxResults = 10 
+}) => {
+  const [users, setUsers] = useState<MentionUser[]>([]);
+  const [loading, setLoading] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   // Fetch users matching the query
@@ -203,3 +211,5 @@ export   const [loading, setLoading] = useState(false);
     </div>
   );
 };
+
+export default CommentMentions;

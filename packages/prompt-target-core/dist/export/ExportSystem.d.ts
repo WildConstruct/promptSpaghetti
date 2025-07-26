@@ -23,7 +23,7 @@ export interface ExportOptions {
     customFields?: string[];
     templateId?: string;
     batchSize?: number;
-    metadata?: Record<string, unknown>;
+    metadata?: Record<string, any>;
 }
 /**
  * Export request
@@ -55,7 +55,7 @@ export interface ExportResult {
     downloadCount: number;
     error?: string;
     progress?: number;
-    metadata?: Record<string, unknown>;
+    metadata?: Record<string, any>;
 }
 /**
  * Export template for reusable configurations

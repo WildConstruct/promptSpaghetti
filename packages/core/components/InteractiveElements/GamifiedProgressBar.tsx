@@ -402,7 +402,10 @@ export const GamifiedProgressBar: React.FC<GamifiedProgressBarProps> = ({
             <div
               className="bg-yellow-400 h-1 rounded-full transition-all duration-300"
               style={{
-                width: `${Math.max(0, (currentValue - (completedMilestones[completedMilestones.length - 1]?.value || config.min_value)) / (nextMilestone.value - (completedMilestones[completedMilestones.length - 1]?.value || config.min_value)) * 100)}%`
+                width: `${Math.max(
+                  0,
+                  (currentValue - (completedMilestones[completedMilestones.length - 1]?.value || config.min_value
+                )) / (nextMilestone.value - (completedMilestones[completedMilestones.length - 1]?.value || config.min_value)) * 100)}%`
               }}
             />
           </div>
@@ -439,7 +442,7 @@ export const GamifiedProgressBar: React.FC<GamifiedProgressBarProps> = ({
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         @keyframes scale-in {
           0% {
             transform: scale(0.8);

@@ -8,7 +8,7 @@
  */
 
 import React, { useState, useMemo } from 'react';
-import { useSearch, SearchResult } from './SearchContext';
+import { useSearch } from './SearchContext';
 
 interface SearchResultsProps<T = unknown> {
   renderItem?: (item: T, index: number) => React.ReactNode;
@@ -37,7 +37,7 @@ export const SearchResults = <T = unknown,>({
     results,
     isLoading,
     error,
-    query,
+    // query, // Commented out unused variable
     isQueryEmpty
   } = useSearch();
 

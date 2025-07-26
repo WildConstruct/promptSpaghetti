@@ -6,7 +6,7 @@
  * community engagement, and knowledge base usage metrics.
  */
 import { z } from 'zod';
-import { MetricType, TimeRange, AnalyticsEvent, AnalyticsQuery } from '../../server/src/marketplace/analytics.types';
+import { MetricType, TimeRange, AnalyticsEvent, AnalyticsQuery } from '../../../server/src/marketplace/analytics.types';
 import { SkillLevel, SkillDomain, UserSkillProfile } from '../community/SkillLevelTagging';
 export declare enum LearningMetricType {
     TUTORIAL_START = "tutorial_start",
@@ -663,26 +663,24 @@ export declare const LearningAnalyticsEventSchema: z.ZodObject<{
     learning_context: z.ZodObject<{
         content_type: z.ZodNativeEnum<typeof ContentType>;
         content_id: z.ZodString;
-        skill_domain: z.ZodOptional<z.ZodNativeEnum<any>>;
-        skill_level: z.ZodOptional<z.ZodNativeEnum<any>>;
+        skill_domain: z.ZodOptional<z.ZodEnum<["programming", "web-development", "mobile-development", "data-science", "devops", "design", "business", "marketing", "writing", "tools", "soft-skills", "project-management", "security", "database", "ai-ml", "quality-assurance", "blockchain", "game-development"]>>;
+        skill_level: z.ZodOptional<z.ZodEnum<["beginner", "intermediate", "advanced", "expert"]>>;
         learning_objective: z.ZodOptional<z.ZodString>;
         session_id: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        [x: string]: any;
-        content_type?: unknown;
-        content_id?: unknown;
-        skill_domain?: unknown;
-        skill_level?: unknown;
-        learning_objective?: unknown;
-        session_id?: unknown;
+        content_id: string;
+        content_type: ContentType;
+        session_id?: string | undefined;
+        skill_domain?: "security" | "writing" | "database" | "business" | "marketing" | "tools" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development" | undefined;
+        skill_level?: "advanced" | "expert" | "intermediate" | "beginner" | undefined;
+        learning_objective?: string | undefined;
     }, {
-        [x: string]: any;
-        content_type?: unknown;
-        content_id?: unknown;
-        skill_domain?: unknown;
-        skill_level?: unknown;
-        learning_objective?: unknown;
-        session_id?: unknown;
+        content_id: string;
+        content_type: ContentType;
+        session_id?: string | undefined;
+        skill_domain?: "security" | "writing" | "database" | "business" | "marketing" | "tools" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development" | undefined;
+        skill_level?: "advanced" | "expert" | "intermediate" | "beginner" | undefined;
+        learning_objective?: string | undefined;
     }>;
     user_context: z.ZodObject<{
         user_role: z.ZodString;
@@ -724,13 +722,12 @@ export declare const LearningAnalyticsEventSchema: z.ZodObject<{
     }>;
 }, "strip", z.ZodTypeAny, {
     learning_context: {
-        [x: string]: any;
-        content_type?: unknown;
-        content_id?: unknown;
-        skill_domain?: unknown;
-        skill_level?: unknown;
-        learning_objective?: unknown;
-        session_id?: unknown;
+        content_id: string;
+        content_type: ContentType;
+        session_id?: string | undefined;
+        skill_domain?: "security" | "writing" | "database" | "business" | "marketing" | "tools" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development" | undefined;
+        skill_level?: "advanced" | "expert" | "intermediate" | "beginner" | undefined;
+        learning_objective?: string | undefined;
     };
     user_context: {
         user_role: string;
@@ -748,13 +745,12 @@ export declare const LearningAnalyticsEventSchema: z.ZodObject<{
     };
 }, {
     learning_context: {
-        [x: string]: any;
-        content_type?: unknown;
-        content_id?: unknown;
-        skill_domain?: unknown;
-        skill_level?: unknown;
-        learning_objective?: unknown;
-        session_id?: unknown;
+        content_id: string;
+        content_type: ContentType;
+        session_id?: string | undefined;
+        skill_domain?: "security" | "writing" | "database" | "business" | "marketing" | "tools" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development" | undefined;
+        skill_level?: "advanced" | "expert" | "intermediate" | "beginner" | undefined;
+        learning_objective?: string | undefined;
     };
     user_context: {
         user_role: string;
@@ -773,23 +769,23 @@ export declare const LearningAnalyticsEventSchema: z.ZodObject<{
 }>;
 export declare const LearningAnalyticsQuerySchema: z.ZodObject<{
     learning_filters: z.ZodOptional<z.ZodObject<{
-        skill_domains: z.ZodOptional<z.ZodArray<z.ZodNativeEnum<any>, "many">>;
-        skill_levels: z.ZodOptional<z.ZodArray<z.ZodNativeEnum<any>, "many">>;
+        skill_domains: z.ZodOptional<z.ZodArray<z.ZodEnum<["programming", "web-development", "mobile-development", "data-science", "devops", "design", "business", "marketing", "writing", "tools", "soft-skills", "project-management", "security", "database", "ai-ml", "quality-assurance", "blockchain", "game-development"]>, "many">>;
+        skill_levels: z.ZodOptional<z.ZodArray<z.ZodEnum<["beginner", "intermediate", "advanced", "expert"]>, "many">>;
         content_types: z.ZodOptional<z.ZodArray<z.ZodNativeEnum<typeof ContentType>, "many">>;
         learning_objectives: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         user_segments: z.ZodOptional<z.ZodArray<z.ZodNativeEnum<typeof LearningAnalyticsSegment>, "many">>;
     }, "strip", z.ZodTypeAny, {
-        skill_domains?: any[] | undefined;
-        skill_levels?: any[] | undefined;
+        user_segments?: LearningAnalyticsSegment[] | undefined;
+        skill_domains?: ("security" | "writing" | "database" | "business" | "marketing" | "tools" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development")[] | undefined;
+        skill_levels?: ("advanced" | "expert" | "intermediate" | "beginner")[] | undefined;
         content_types?: ContentType[] | undefined;
         learning_objectives?: string[] | undefined;
-        user_segments?: LearningAnalyticsSegment[] | undefined;
     }, {
-        skill_domains?: any[] | undefined;
-        skill_levels?: any[] | undefined;
+        user_segments?: LearningAnalyticsSegment[] | undefined;
+        skill_domains?: ("security" | "writing" | "database" | "business" | "marketing" | "tools" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development")[] | undefined;
+        skill_levels?: ("advanced" | "expert" | "intermediate" | "beginner")[] | undefined;
         content_types?: ContentType[] | undefined;
         learning_objectives?: string[] | undefined;
-        user_segments?: LearningAnalyticsSegment[] | undefined;
     }>>;
     performance_filters: z.ZodOptional<z.ZodObject<{
         min_completion_rate: z.ZodOptional<z.ZodNumber>;
@@ -824,11 +820,11 @@ export declare const LearningAnalyticsQuerySchema: z.ZodObject<{
     }>>;
 }, "strip", z.ZodTypeAny, {
     learning_filters?: {
-        skill_domains?: any[] | undefined;
-        skill_levels?: any[] | undefined;
+        user_segments?: LearningAnalyticsSegment[] | undefined;
+        skill_domains?: ("security" | "writing" | "database" | "business" | "marketing" | "tools" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development")[] | undefined;
+        skill_levels?: ("advanced" | "expert" | "intermediate" | "beginner")[] | undefined;
         content_types?: ContentType[] | undefined;
         learning_objectives?: string[] | undefined;
-        user_segments?: LearningAnalyticsSegment[] | undefined;
     } | undefined;
     performance_filters?: {
         min_completion_rate?: number | undefined;
@@ -841,11 +837,11 @@ export declare const LearningAnalyticsQuerySchema: z.ZodObject<{
     } | undefined;
 }, {
     learning_filters?: {
-        skill_domains?: any[] | undefined;
-        skill_levels?: any[] | undefined;
+        user_segments?: LearningAnalyticsSegment[] | undefined;
+        skill_domains?: ("security" | "writing" | "database" | "business" | "marketing" | "tools" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development")[] | undefined;
+        skill_levels?: ("advanced" | "expert" | "intermediate" | "beginner")[] | undefined;
         content_types?: ContentType[] | undefined;
         learning_objectives?: string[] | undefined;
-        user_segments?: LearningAnalyticsSegment[] | undefined;
     } | undefined;
     performance_filters?: {
         min_completion_rate?: number | undefined;

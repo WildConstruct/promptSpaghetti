@@ -18,12 +18,10 @@ import {
   MenuItem as MenuItemComponent,
   ListItemIcon,
   ListItemText,
-  Alert,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  Tooltip,
   Grid,
   Card,
   CardContent,
@@ -39,7 +37,6 @@ import {
 } from '@mui/material';
 import {
   Add as AddIcon,
-  FilterList as FilterIcon,
   MoreVert as MoreVertIcon,
   Schedule as ScheduleIcon,
   PlayArrow as PlayArrowIcon,
@@ -47,15 +44,12 @@ import {
   Stop as StopIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
-  Visibility as VisibilityIcon,
-  Warning as WarningIcon,
   CheckCircle as CheckCircleIcon,
   Error as ErrorIcon,
   Pending as PendingIcon,
   History as HistoryIcon,
   CalendarToday as CalendarIcon,
   Timeline as TimelineIcon,
-  Assessment as AssessmentIcon
 } from '@mui/icons-material';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -108,8 +102,7 @@ const VIEW_MODES = [
   { value: 'timeline', label: 'Timeline', icon: TimelineIcon }
 ];
 
-export   const [filteredSchedules, setFilteredSchedules] = useState<Schedule[]>([]);
-  const [loading, setLoading] = useState(true);
+export   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'table' | 'calendar' | 'timeline'>('table');
   
   // Filters
@@ -144,7 +137,7 @@ export   const [filteredSchedules, setFilteredSchedules] = useState<Schedule[]>(
   // Apply filters
   useEffect(() => {
     applyFilters();
-  }, [schedules, statusFilter, typeFilter, searchTerm, dateRangeStart, dateRangeEnd, applyFilters]);
+  }, [statusFilter, typeFilter, searchTerm, dateRangeStart, dateRangeEnd, applyFilters]);
 
   const loadSchedules = async () => {
     setLoading(true);
@@ -240,7 +233,7 @@ export   const [filteredSchedules, setFilteredSchedules] = useState<Schedule[]>(
 
     setFilteredSchedules(filtered);
     setPage(0); // Reset to first page when filters change
-  }, [schedules, statusFilter, typeFilter, searchTerm, dateRangeStart, dateRangeEnd, toggleId]);
+  }, [statusFilter, typeFilter, searchTerm, dateRangeStart, dateRangeEnd, toggleId]);
 
   const handleCreateSchedule = () => {
     setEditingSchedule(null);
@@ -259,10 +252,12 @@ export   const [filteredSchedules, setFilteredSchedules] = useState<Schedule[]>(
         // Update existing schedule
         // TODO: Replace with actual API call
         // await updateSchedule(editingSchedule.id, formData);
+        console.log('Updating schedule:', editingSchedule.id, formData);
       } else {
         // Create new schedule
         // TODO: Replace with actual API call
         // await createSchedule(formData);
+        console.log('Creating schedule:', formData);
       }
       
       await loadSchedules();
@@ -303,6 +298,7 @@ export   const [filteredSchedules, setFilteredSchedules] = useState<Schedule[]>(
     try {
       // TODO: Replace with actual API call
       // await performBulkAction(action, selectedSchedules);
+      console.log('Performing bulk action:', action, 'on schedules:', selectedSchedules);
       await loadSchedules();
       setSelectedSchedules([]);
       onScheduleChange?.();
@@ -316,6 +312,7 @@ export   const [filteredSchedules, setFilteredSchedules] = useState<Schedule[]>(
     try {
       // TODO: Replace with actual API call
       // await executeSchedule(schedule.id);
+      console.log('Executing schedule:', schedule.id);
       await loadSchedules();
       onScheduleChange?.();
     } catch (error) {
@@ -787,7 +784,7 @@ export   const [filteredSchedules, setFilteredSchedules] = useState<Schedule[]>(
           <DialogTitle>Delete Schedule</DialogTitle>
           <DialogContent>
             <Typography>
-              Are you sure you want to delete the schedule "{scheduleToDelete?.name}"?
+              Are you sure you want to delete the schedule &ldquo;{scheduleToDelete?.name}&rdquo;?
               This action cannot be undone.
             </Typography>
           </DialogContent>

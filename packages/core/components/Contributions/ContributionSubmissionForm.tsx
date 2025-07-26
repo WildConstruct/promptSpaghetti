@@ -577,7 +577,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .contribution-submission-form {
           padding: 24px;
           max-height: 80vh;

@@ -87,7 +87,7 @@ export const NUMERIC_LIMITS = {
 /**
  * Validates numeric input for safety
  */
-function validateNumericInput(value: Error, functionName: string): number {
+function validateNumericInput(value: unknown, functionName: string): number {
   // Type check
   if (typeof value !== 'number') {
     const error = `Math.${functionName} expects a number, got ${typeof value}`;
@@ -439,7 +439,7 @@ export function isInSafeRange(value: number): boolean {
 /**
  * Utility to safely coerce a value to number
  */
-export function safeNumberCoercion(value: Error): number {
+export function safeNumberCoercion(value: unknown): number {
   // Strict number check
   if (typeof value === 'number') {
     return validateNumericInput(value, 'coercion');

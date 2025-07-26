@@ -110,9 +110,9 @@ export declare const AuditEventSchema: z.ZodObject<{
     endpoint?: string | undefined;
     user_id?: string | undefined;
     session_id?: string | undefined;
-    subcategory?: string | undefined;
-    ip_address?: string | undefined;
     user_agent?: string | undefined;
+    ip_address?: string | undefined;
+    subcategory?: string | undefined;
     geo_location?: {
         region: string;
         country: string;
@@ -150,9 +150,9 @@ export declare const AuditEventSchema: z.ZodObject<{
     endpoint?: string | undefined;
     user_id?: string | undefined;
     session_id?: string | undefined;
-    subcategory?: string | undefined;
-    ip_address?: string | undefined;
     user_agent?: string | undefined;
+    ip_address?: string | undefined;
+    subcategory?: string | undefined;
     geo_location?: {
         region: string;
         country: string;
@@ -193,9 +193,9 @@ export declare const AuditQuerySchema: z.ZodObject<{
     end_date?: Date | undefined;
     user_id?: string | undefined;
     severities?: AuditSeverity[] | undefined;
+    ip_address?: string | undefined;
     compliance_frameworks?: ComplianceFramework[] | undefined;
     statuses?: AuditStatus[] | undefined;
-    ip_address?: string | undefined;
     event_types?: AuditEventType[] | undefined;
     search_text?: string | undefined;
     min_risk_score?: number | undefined;
@@ -207,9 +207,9 @@ export declare const AuditQuerySchema: z.ZodObject<{
     end_date?: Date | undefined;
     user_id?: string | undefined;
     severities?: AuditSeverity[] | undefined;
+    ip_address?: string | undefined;
     compliance_frameworks?: ComplianceFramework[] | undefined;
     statuses?: AuditStatus[] | undefined;
-    ip_address?: string | undefined;
     event_types?: AuditEventType[] | undefined;
     search_text?: string | undefined;
     min_risk_score?: number | undefined;
@@ -247,9 +247,9 @@ export declare const AuditAnalyticsSchema: z.ZodObject<{
         end_date?: Date | undefined;
         user_id?: string | undefined;
         severities?: AuditSeverity[] | undefined;
+        ip_address?: string | undefined;
         compliance_frameworks?: ComplianceFramework[] | undefined;
         statuses?: AuditStatus[] | undefined;
-        ip_address?: string | undefined;
         event_types?: AuditEventType[] | undefined;
         search_text?: string | undefined;
         min_risk_score?: number | undefined;
@@ -261,9 +261,9 @@ export declare const AuditAnalyticsSchema: z.ZodObject<{
         end_date?: Date | undefined;
         user_id?: string | undefined;
         severities?: AuditSeverity[] | undefined;
+        ip_address?: string | undefined;
         compliance_frameworks?: ComplianceFramework[] | undefined;
         statuses?: AuditStatus[] | undefined;
-        ip_address?: string | undefined;
         event_types?: AuditEventType[] | undefined;
         search_text?: string | undefined;
         min_risk_score?: number | undefined;
@@ -283,9 +283,9 @@ export declare const AuditAnalyticsSchema: z.ZodObject<{
         end_date?: Date | undefined;
         user_id?: string | undefined;
         severities?: AuditSeverity[] | undefined;
+        ip_address?: string | undefined;
         compliance_frameworks?: ComplianceFramework[] | undefined;
         statuses?: AuditStatus[] | undefined;
-        ip_address?: string | undefined;
         event_types?: AuditEventType[] | undefined;
         search_text?: string | undefined;
         min_risk_score?: number | undefined;
@@ -302,9 +302,9 @@ export declare const AuditAnalyticsSchema: z.ZodObject<{
         end_date?: Date | undefined;
         user_id?: string | undefined;
         severities?: AuditSeverity[] | undefined;
+        ip_address?: string | undefined;
         compliance_frameworks?: ComplianceFramework[] | undefined;
         statuses?: AuditStatus[] | undefined;
-        ip_address?: string | undefined;
         event_types?: AuditEventType[] | undefined;
         search_text?: string | undefined;
         min_risk_score?: number | undefined;
@@ -422,9 +422,9 @@ export declare     description: string;
     endpoint?: string | undefined;
     user_id?: string | undefined;
     session_id?: string | undefined;
-    subcategory?: string | undefined;
-    ip_address?: string | undefined;
     user_agent?: string | undefined;
+    ip_address?: string | undefined;
+    subcategory?: string | undefined;
     geo_location?: {
         region: string;
         country: string;

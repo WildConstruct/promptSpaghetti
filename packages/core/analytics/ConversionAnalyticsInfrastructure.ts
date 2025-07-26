@@ -576,9 +576,9 @@ export class ConversionMetricsCalculator {
     });
   }
 
-  private getFieldValue(event: FlexibleConversionEvent, field: string): any {
+  private getFieldValue(event: FlexibleConversionEvent, field: string): unknown {
     const fieldParts = field.split('.');
-    let value: any = event;
+    let value: unknown = event;
     
     for (const part of fieldParts) {
       value = value?.[part];
@@ -588,7 +588,7 @@ export class ConversionMetricsCalculator {
     return value;
   }
 
-  private evaluateFilter(value: any, filter: ConversionFilter): boolean {
+  private evaluateFilter(value: unknown, filter: ConversionFilter): boolean {
     switch (filter.operator) {
       case 'equals':
         return value === filter.value;
@@ -706,7 +706,7 @@ export class ConversionMetricsCalculator {
     return groups;
   }
 
-  private extractDimensionValue(event: FlexibleConversionEvent, dimension: ConversionGroupBy): any {
+  private extractDimensionValue(event: FlexibleConversionEvent, dimension: ConversionGroupBy): unknown {
     switch (dimension) {
       case 'funnel_step':
         return event.funnelContext.stepId;
@@ -991,9 +991,9 @@ class ValidationStage implements ProcessingStage {
     };
   }
   
-  private getFieldValue(event: FlexibleConversionEvent, field: string): any {
+  private getFieldValue(event: FlexibleConversionEvent, field: string): unknown {
     const fieldParts = field.split('.');
-    let value: any = event;
+    let value: unknown = event;
     
     for (const part of fieldParts) {
       value = value?.[part];
@@ -1149,8 +1149,7 @@ class ConversionAnalyticsAPI {
 }
 
 // Factory function
-export     api: AnalyticsAPIConfig;
-    processing: ProcessingConfig;
+export     processing: ProcessingConfig;
   }
 ): ConversionAnalyticsInfrastructure => {
   return new ConversionAnalyticsInfrastructure(epic1Analytics, config);

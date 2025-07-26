@@ -1,13 +1,13 @@
 // Epic 16 Story 16.2 - Comprehensive Creator Dashboard
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   LineChart,
   Line,
   BarChart,
   Bar,
-  PieChart,
-  Pie,
-  Cell,
+  // PieChart,
+  // Pie,
+  // Cell,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -83,15 +83,15 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
 
   const navigate = useNavigate();
 
-  const getAuthHeaders = () => {
+  const getAuthHeaders = useCallback(() => {
     const token = localStorage.getItem('auth_token');
     return {
       'Content-Type': 'application/json',
       ...(token && { 'Authorization': `Bearer ${token}` })
     };
-  };
+  }, []);
 
-  const fetchCreatorData = async () => {
+  const fetchCreatorData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -131,11 +131,11 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
     } finally {
       setLoading(false);
     }
-  };
+  }, [dateRange, getAuthHeaders]);
 
   useEffect(() => {
     fetchCreatorData();
-  }, [dateRange]);
+  }, [dateRange, fetchCreatorData]);
 
   const formatCurrency = (cents: number) => `$${(cents / 100).toFixed(2)}`;
   const formatNumber = (num: number) => {
@@ -422,7 +422,7 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
                   <input 
                     type="number" 
                     value={(monetization?.payout_threshold_cents || 5000) / 100}
-                    onChange={(e) => {/* Handle threshold change */}}
+                    onChange={() => {/* Handle threshold change */}}
                     placeholder="50.00"
                   />
                   <span>USD</span>
@@ -555,7 +555,7 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
         )}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .creator-dashboard {
           max-width: 1400px;
           margin: 0 auto;

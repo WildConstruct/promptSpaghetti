@@ -15,7 +15,7 @@ const fs = require('fs');
 // CLI Argument Parsing
 // =============================================================================
 
-function parseArguments() {
+function parseArguments(): any {
   const args = process.argv.slice(2);
   const options = {
     categories: [],
@@ -148,7 +148,7 @@ function parseArguments() {
 // Help Documentation
 // =============================================================================
 
-function displayHelp() {
+function displayHelp(): void {
   const helpText = `
 🔍 Epic 16 Prerequisites Checker
 
@@ -227,7 +227,7 @@ For more information, see: docs/epic16details.md
 // Configuration Management
 // =============================================================================
 
-function loadEnvironmentDefaults() {
+function loadEnvironmentDefaults(): any {
   // Load common defaults from environment
   const defaults = {};
   
@@ -245,7 +245,7 @@ function loadEnvironmentDefaults() {
   return defaults;
 }
 
-function validateOptions(options) {
+function validateOptions(options: any): void {
   const errors = [];
   
   // Validate format
@@ -290,7 +290,7 @@ function validateOptions(options) {
 // Main Execution
 // =============================================================================
 
-async function main() {
+async function main(): Promise<void> {
   try {
     // Parse command line arguments
     const rawOptions = parseArguments();

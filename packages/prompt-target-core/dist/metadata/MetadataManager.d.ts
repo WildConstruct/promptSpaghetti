@@ -15,7 +15,7 @@ export interface MetadataField {
     name: string;
     type: 'string' | 'number' | 'boolean' | 'date' | 'array' | 'object' | 'enum';
     required?: boolean;
-    default?: unknown;
+    default?: any;
     description?: string;
     options?: string[];
     min?: number;
@@ -30,7 +30,7 @@ export interface MetadataField {
  */
 export interface MetadataValidation {
     rules: ValidationRule[];
-    customValidators?: Record<string, (value: unknown, metadata: GenerationMetadata) => boolean>;
+    customValidators?: Record<string, (value: any, metadata: GenerationMetadata) => boolean>;
 }
 /**
  * Validation rule
@@ -38,7 +38,7 @@ export interface MetadataValidation {
 export interface ValidationRule {
     field: string;
     rule: 'required' | 'min' | 'max' | 'pattern' | 'enum' | 'custom';
-    value?: unknown;
+    value?: any;
     message: string;
     severity: 'error' | 'warning' | 'info';
 }
@@ -53,7 +53,7 @@ export interface GenerationMetadata {
     created: Date;
     modified: Date;
     prompt: string;
-    parameters: Record<string, unknown>;
+    parameters: Record<string, any>;
     seed?: number;
     quality?: number;
     confidence?: number;
@@ -83,7 +83,7 @@ export interface GenerationMetadata {
     notes?: string;
     isFavorite: boolean;
     isPublic: boolean;
-    [key: string]: unknown;
+    [key: string]: any;
 }
 /**
  * Metadata extraction result
@@ -100,7 +100,7 @@ export interface ExtractionResult {
 export interface MetadataSearchOptions {
     query?: string;
     fields?: string[];
-    filters?: Record<string, unknown>;
+    filters?: Record<string, any>;
     sortBy?: string;
     sortOrder?: 'asc' | 'desc';
     limit?: number;
@@ -113,7 +113,7 @@ export interface MetadataSearchOptions {
 export interface MetadataSearchResult {
     items: GenerationMetadata[];
     total: number;
-    aggregations?: Record<string, unknown>;
+    aggregations?: Record<string, any>;
     suggestions?: string[];
 }
 /**
@@ -179,7 +179,7 @@ export declare class MetadataManager {
     /**
      * Extract metadata from generation result
      */
-    extractMetadata(result: unknown, platform: Platform, baseMetadata?: Partial<GenerationMetadata>): ExtractionResult;
+    extractMetadata(result: any, platform: Platform, baseMetadata?: Partial<GenerationMetadata>): ExtractionResult;
     /**
      * Search metadata
      */

@@ -693,7 +693,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
       {/* Create Operation Modal */}
       {isCreating && renderCreateOperation()}
 
-      <style jsx>{`
+      <style>{`
         .bulk-update-dashboard {
           max-width: 1400px;
           margin: 0 auto;
@@ -1184,7 +1184,7 @@ const OperationCard: React.FC<OperationCardProps> = ({
         </div>
       </CardContent>
 
-      <style jsx>{`
+      <style>{`
         .operation-card {
           transition: box-shadow 0.2s ease;
         }
@@ -1290,7 +1290,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ template, onUse, onEdit, on
         </div>
       </CardContent>
 
-      <style jsx>{`
+      <style>{`
         .template-header {
           display: flex;
           justify-content: space-between;
@@ -1449,7 +1449,7 @@ const OperationDetailModal: React.FC<OperationDetailModalProps> = ({
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .modal-overlay {
           position: fixed;
           inset: 0;

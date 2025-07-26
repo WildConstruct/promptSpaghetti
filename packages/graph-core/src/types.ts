@@ -25,24 +25,19 @@ export const NodeTypeEnum = z.enum([
 export type NodeType = z.infer<typeof NodeTypeEnum>;
 
 // Base node schema for cross-platform compatibility
-export const BaseNodeSchema = z.object({
-  id: z.string(),
-  type: NodeTypeEnum,
-  inputs: z.array(z.string()).optional() // ids of upstream nodes (ordered)
-});
-
+export 
 // Execution context for deterministic graph execution
 export interface ExecutionContext {
-  variables: Record<string, any>;
+  variables: Record<string, unknown>;
   seed: string | number;
-  [key: string]: any; // Allow for extensions
+  [key: string]: unknown; // Allow for extensions
 }
 
 // Advanced execution context for Epic 7 compatibility
 export interface AdvancedExecutionContext extends ExecutionContext {
-  nodeStates: Map<string, any>;
+  nodeStates: Map<string, unknown>;
   evaluationDepth: number;
-  performanceCache: Map<string, any>;
+  performanceCache: Map<string, unknown>;
   executionTrace: string[];
 }
 
@@ -60,7 +55,7 @@ export interface GraphNode {
   id: string;
   type: NodeType;
   position?: { x: number; y: number }; // Optional for non-UI contexts
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   inputs?: string[]; // Input node IDs
 }
 

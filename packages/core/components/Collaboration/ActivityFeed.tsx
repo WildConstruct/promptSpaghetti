@@ -79,8 +79,7 @@ const ACTIVITY_COLORS: Record<ActivityEventType, string> = {
   'collaboration_ended': 'text-gray-500'
 };
 
-export   const [typeFilter, setTypeFilter] = useState<ActivityEventType | 'all'>('all');
-  const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month' | 'all'>('all');
+export   const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month' | 'all'>('all');
   const [actorFilter, setActorFilter] = useState<string>('all');
 
   const {

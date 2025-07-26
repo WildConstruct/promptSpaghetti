@@ -11,7 +11,7 @@ import {
   AdaptorConfig,
   TranslationContext,
   AdaptorError,
-  ValidationError,
+  ValidationException,
   TranslationError
 } from '../types';
 import { BaseAdaptor } from './BaseAdaptor';
@@ -88,6 +88,7 @@ export interface AdvancedAdaptorConfig extends AdaptorConfig {
 export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
   protected eventEmitter: EventEmitter;
   protected pipeline: PipelineStage[];
+  protected advancedConfig: AdvancedAdaptorConfig = {};
   protected stats: {
     translations: number;
     validations: number;
@@ -114,6 +115,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
    * Enhanced transform with full pipeline execution
    */
   public async transform(graph: any, config?: AdvancedAdaptorConfig): Promise<PlatformPrompt> {
+    this.advancedConfig = config || {};
     const context = this.createTranslationContext(graph, config);
     const startTime = Date.now();
 
@@ -209,7 +211,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
       return finalResult;
     } catch (error) {
       this.stats.errors++;
-      throw new ValidationError(
+      throw new ValidationException(
         `Enhanced validation failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
         [],
         'ENHANCED_VALIDATION_FAILED'
@@ -270,7 +272,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
           if (!validation.valid) {
             return {
               success: false,
-              error: new ValidationError('Graph validation failed', validation.errors),
+              error: new ValidationException('Graph validation failed', validation.errors),
               data: validation,
               duration: Date.now() - startTime
             };
@@ -410,8 +412,9 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
     data: any,
     context: TranslationContext
   ): Promise<PipelineStageResult> {
-    const maxAttempts = context.config?.pipeline?.retries?.maxAttempts || 1;
-    const backoffMs = context.config?.pipeline?.retries?.backoffMs || 100;
+    const retries = context.config?.pipeline?.retries;
+    const maxAttempts = (typeof retries === 'object' && retries !== null) ? (retries.maxAttempts || 1) : (typeof retries === 'number' ? retries : 1);
+    const backoffMs = (typeof retries === 'object' && retries !== null) ? (retries.backoffMs || 100) : 100;
     
     let lastError: Error | undefined;
     
@@ -426,7 +429,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
         lastError = result.error;
         
         // Check if error is retryable
-        if (attempt < maxAttempts && this.isRetryableError(result.error, context)) {
+        if (attempt < maxAttempts && result.error && this.isRetryableError(result.error, context)) {
           await this.delay(backoffMs * attempt);
           continue;
         }
@@ -470,13 +473,18 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
    * Check if error is retryable
    */
   protected isRetryableError(error: Error, context: TranslationContext): boolean {
-    const retryableErrors = context.config?.pipeline?.retries?.retryableErrors || [
+    const retries = context.config?.pipeline?.retries;
+    const retryableErrors = (typeof retries === 'object' && retries !== null) ? (retries.retryableErrors || [
+      'NETWORK_ERROR',
+      'TIMEOUT_ERROR',
+      'RATE_LIMIT_ERROR'
+    ]) : [
       'NETWORK_ERROR',
       'TIMEOUT_ERROR',
       'RATE_LIMIT_ERROR'
     ];
     
-    return retryableErrors.some(code => error.message.includes(code));
+    return retryableErrors.some((code: string) => error.message.includes(code));
   }
 
   /**
@@ -499,16 +507,14 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
     return {
       ...result,
       metadata: {
+        ...result.metadata,
         sourceHash,
         timestamp: new Date(),
         qualityScore: result.metadata?.qualityScore || 0.8,
         optimizations,
-        ...result.metadata,
         pipeline: {
-          adaptorId: this.id,
-          adaptorVersion: this.version,
-          sessionId: context.metadata.sessionId,
-          stages: this.pipeline.length
+          stages: this.pipeline.map(stage => stage.name),
+          version: this.version
         }
       }
     };
@@ -693,7 +699,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
    * Emit event if monitoring is enabled
    */
   protected emitEvent(event: string, ...args: any[]): void {
-    if (this.config.monitoring?.enableEvents !== false) {
+    if (this.advancedConfig.monitoring?.enableEvents !== false) {
       this.eventEmitter.emit(event, ...args);
     }
   }

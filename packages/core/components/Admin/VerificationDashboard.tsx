@@ -465,7 +465,7 @@ const VerificationDashboard: React.FC<VerificationDashboardProps> = ({
         </TabsContent>
       </Tabs>
 
-      <style jsx>{`
+      <style>{`
         .verification-dashboard {
           max-width: 1400px;
           margin: 0 auto;

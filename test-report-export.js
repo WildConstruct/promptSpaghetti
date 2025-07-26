@@ -97,7 +97,7 @@ class ReportExportTester {
   /**
    * Run all export system tests
    */
-  async runAllTests() {
+  async runAllTests(): Promise<any> {
     console.log('🚀 Starting Report Export System Tests');
     console.log('=====================================\n');
 
@@ -154,7 +154,7 @@ class ReportExportTester {
   /**
    * Setup test environment
    */
-  async setupTestEnvironment() {
+  async setupTestEnvironment(): Promise<void> {
     console.log('🔧 Setting up test environment...');
 
     // Create output directory
@@ -182,7 +182,7 @@ class ReportExportTester {
   /**
    * Test API endpoints
    */
-  async testAPIEndpoints() {
+  async testAPIEndpoints(): Promise<void> {
     console.log('📡 Testing API Endpoints...');
 
     const endpoints = [
@@ -222,7 +222,7 @@ class ReportExportTester {
   /**
    * Test export formats
    */
-  async testExportFormats() {
+  async testExportFormats(): Promise<void> {
     console.log('📄 Testing Export Formats...');
 
     for (const format of TEST_CONFIG.export.formats) {
@@ -278,7 +278,7 @@ class ReportExportTester {
   /**
    * Test delivery methods
    */
-  async testDeliveryMethods() {
+  async testDeliveryMethods(): Promise<void> {
     console.log('🚚 Testing Delivery Methods...');
 
     for (const delivery of TEST_CONFIG.export.deliveryMethods) {
@@ -345,7 +345,7 @@ class ReportExportTester {
   /**
    * Test export options and configuration
    */
-  async testExportOptions() {
+  async testExportOptions(): Promise<void> {
     console.log('⚙️  Testing Export Options...');
 
     const optionsTests = [
@@ -404,7 +404,7 @@ class ReportExportTester {
   /**
    * Test bulk export
    */
-  async testBulkExport() {
+  async testBulkExport(): Promise<void> {
     console.log('📦 Testing Bulk Export...');
 
     const testResult = await this.runTest(
@@ -467,7 +467,7 @@ class ReportExportTester {
   /**
    * Test scheduled exports
    */
-  async testScheduledExports() {
+  async testScheduledExports(): Promise<void> {
     console.log('⏰ Testing Scheduled Exports...');
 
     const testResult = await this.runTest(
@@ -529,7 +529,7 @@ class ReportExportTester {
   /**
    * Test history and statistics
    */
-  async testHistoryAndStatistics() {
+  async testHistoryAndStatistics(): Promise<void> {
     console.log('📊 Testing History and Statistics...');
 
     const tests = [
@@ -582,7 +582,7 @@ class ReportExportTester {
   /**
    * Test preview functionality
    */
-  async testPreviewFunctionality() {
+  async testPreviewFunctionality(): Promise<void> {
     console.log('👁️  Testing Preview Functionality...');
 
     const previewFormats = ['html', 'csv', 'json', 'xml'];
@@ -629,7 +629,7 @@ class ReportExportTester {
   /**
    * Run individual test with error handling
    */
-  async runTest(testName, testFunction) {
+  async runTest(testName: string, testFunction: () => Promise<any>): Promise<any> {
     const startTime = Date.now();
     
     try {
@@ -676,7 +676,7 @@ class ReportExportTester {
   /**
    * Generate comprehensive test report
    */
-  async generateTestReport() {
+  async generateTestReport(): Promise<void> {
     const report = {
       testSuite: 'Report Export System',
       executionTime: this.results.endTime - this.results.startTime,
@@ -708,7 +708,7 @@ class ReportExportTester {
   /**
    * Generate HTML test report
    */
-  generateHTMLReport(report) {
+  generateHTMLReport(report: any): string {
     return `
 <!DOCTYPE html>
 <html>
@@ -785,7 +785,7 @@ class ReportExportTester {
   /**
    * Display test summary
    */
-  displayTestSummary() {
+  displayTestSummary(): void {
     const duration = Math.round((this.results.endTime - this.results.startTime) / 1000);
     const successRate = this.results.summary.total > 0 
       ? Math.round((this.results.summary.passed / this.results.summary.total) * 100) 
@@ -816,7 +816,7 @@ class ReportExportTester {
 /**
  * Main execution
  */
-async function runExportSystemTests() {
+async function runExportSystemTests(): Promise<void> {
   const tester = new ReportExportTester();
   
   try {

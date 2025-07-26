@@ -59,7 +59,7 @@ class TestDataCleanup {
     };
   }
 
-  log(message, level = 'info') {
+  log(message: string, level: string = 'info'): void {
     const timestamp = new Date().toISOString();
     const colors = {
       info: chalk.blue,
@@ -72,7 +72,7 @@ class TestDataCleanup {
     console.log(`[${timestamp}] ${colors[level] || chalk.white}${message}${chalk.reset('')}`);
   }
 
-  async run(options = {}) {
+  async run(options: any = {}): Promise<void> {
     this.log('Starting test data cleanup...', 'header');
     
     try {
@@ -123,7 +123,7 @@ class TestDataCleanup {
     }
   }
 
-  async createBackup() {
+  async createBackup(): Promise<void> {
     this.log('Creating backup before cleanup...', 'info');
     
     const backupDir = path.join(this.projectRoot, 'backups', 'test-data');
@@ -145,7 +145,7 @@ class TestDataCleanup {
     this.log(`Backup manifest created: ${manifestPath}`, 'success');
   }
 
-  async cleanTemporaryFiles(dryRun, maxAge) {
+  async cleanTemporaryFiles(dryRun: boolean, maxAge: number): Promise<void> {
     this.log('Cleaning temporary files...', 'info');
     
     const tempDirs = ['temp', '.tmp', 'tmp'];
@@ -179,7 +179,7 @@ class TestDataCleanup {
     }
   }
 
-  async cleanTestDatabases(dryRun, maxAge) {
+  async cleanTestDatabases(dryRun: boolean, maxAge: number): Promise<void> {
     this.log('Cleaning test databases...', 'info');
     
     const dbPatterns = [
@@ -203,7 +203,7 @@ class TestDataCleanup {
     }
   }
 
-  async cleanTestSnapshots(dryRun, maxAge) {
+  async cleanTestSnapshots(dryRun: boolean, maxAge: number): Promise<void> {
     this.log('Cleaning test snapshots...', 'info');
     
     const snapshotPatterns = [
@@ -226,7 +226,7 @@ class TestDataCleanup {
     }
   }
 
-  async cleanCoverageReports(dryRun, maxAge) {
+  async cleanCoverageReports(dryRun: boolean, maxAge: number): Promise<void> {
     this.log('Cleaning coverage reports...', 'info');
     
     const coverageDir = path.join(this.projectRoot, 'coverage');
@@ -260,7 +260,7 @@ class TestDataCleanup {
     }
   }
 
-  async cleanBrowserTestResults(dryRun, maxAge) {
+  async cleanBrowserTestResults(dryRun: boolean, maxAge: number): Promise<void> {
     this.log('Cleaning browser test results...', 'info');
     
     const browserDirs = [
@@ -281,7 +281,7 @@ class TestDataCleanup {
     }
   }
 
-  async cleanLogFiles(dryRun, maxAge) {
+  async cleanLogFiles(dryRun: boolean, maxAge: number): Promise<void> {
     this.log('Cleaning log files...', 'info');
     
     const logPatterns = [
@@ -306,7 +306,7 @@ class TestDataCleanup {
     }
   }
 
-  async aggressiveCleanup(dryRun) {
+  async aggressiveCleanup(dryRun: boolean): Promise<void> {
     this.log('Performing aggressive cleanup...', 'warning');
     
     // Clean all node_modules in test directories
@@ -326,7 +326,7 @@ class TestDataCleanup {
     await this.cleanLargeTestFiles(dryRun);
   }
 
-  async cleanLargeTestFiles(dryRun) {
+  async cleanLargeTestFiles(dryRun: boolean): Promise<void> {
     const maxSize = this.cleanupConfig.sizeThresholds.maxFileSize * 1024 * 1024; // MB to bytes
     
     const searchDirs = ['test-data', 'tests', 'coverage'];
@@ -339,7 +339,7 @@ class TestDataCleanup {
     }
   }
 
-  async findAndRemoveLargeFiles(directory, maxSize, dryRun) {
+  async findAndRemoveLargeFiles(directory: string, maxSize: number, dryRun: boolean): Promise<void> {
     try {
       const entries = await fs.readdir(directory, { withFileTypes: true });
       
@@ -361,7 +361,7 @@ class TestDataCleanup {
     }
   }
 
-  async cleanEmptyDirectories(dryRun) {
+  async cleanEmptyDirectories(dryRun: boolean): Promise<void> {
     this.log('Cleaning empty directories...', 'info');
     
     const cleanupDirs = this.cleanupConfig.directories.map(dir => 
@@ -375,7 +375,7 @@ class TestDataCleanup {
     }
   }
 
-  async removeEmptyDirectories(directory, dryRun) {
+  async removeEmptyDirectories(directory: string, dryRun: boolean): Promise<void> {
     try {
       const entries = await fs.readdir(directory);
       
@@ -398,7 +398,7 @@ class TestDataCleanup {
     }
   }
 
-  async cleanDirectory(directory, options) {
+  async cleanDirectory(directory: string, options: any): Promise<void> {
     const { maxAge, patterns = [], dryRun, type = 'directory' } = options;
     const cutoffDate = new Date(Date.now() - (maxAge * 24 * 60 * 60 * 1000));
     
@@ -428,7 +428,7 @@ class TestDataCleanup {
     }
   }
 
-  async cleanFilesInDirectory(directory, patterns, maxAge, dryRun) {
+  async cleanFilesInDirectory(directory: string, patterns: RegExp[], maxAge: number, dryRun: boolean): Promise<void> {
     const cutoffDate = new Date(Date.now() - (maxAge * 24 * 60 * 60 * 1000));
     
     try {
@@ -456,7 +456,7 @@ class TestDataCleanup {
     }
   }
 
-  async removeFile(filePath, dryRun, type = 'file') {
+  async removeFile(filePath: string, dryRun: boolean, type: string = 'file'): Promise<void> {
     try {
       const stats = await fs.stat(filePath);
       const sizeMB = (stats.size / 1024 / 1024).toFixed(2);
@@ -475,7 +475,7 @@ class TestDataCleanup {
     }
   }
 
-  async removeDirectory(dirPath, dryRun, type = 'directory') {
+  async removeDirectory(dirPath: string, dryRun: boolean, type: string = 'directory'): Promise<void> {
     try {
       if (dryRun) {
         this.log(`Would remove ${type}: ${dirPath}`, 'warning');
@@ -490,7 +490,7 @@ class TestDataCleanup {
     }
   }
 
-  async exists(path) {
+  async exists(path: string): Promise<boolean> {
     try {
       await fs.access(path);
       return true;
@@ -499,7 +499,7 @@ class TestDataCleanup {
     }
   }
 
-  generateReport(dryRun) {
+  generateReport(dryRun: boolean): void {
     this.log('\n📊 Cleanup Report:', 'header');
     
     const mode = dryRun ? 'DRY RUN' : 'ACTUAL CLEANUP';
@@ -520,7 +520,7 @@ class TestDataCleanup {
     }
   }
 
-  async runCleanupSchedule() {
+  async runCleanupSchedule(): Promise<void> {
     this.log('Running scheduled cleanup tasks...', 'header');
     
     const schedules = [
@@ -561,7 +561,7 @@ if (require.main === module) {
     schedule: args.includes('--schedule')
   };
   
-  async function main() {
+  async function main(): Promise<void> {
     try {
       if (options.schedule) {
         await cleanup.runCleanupSchedule();

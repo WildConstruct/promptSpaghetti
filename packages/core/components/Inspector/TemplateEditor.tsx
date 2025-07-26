@@ -30,8 +30,7 @@ export interface TemplateEditorProps {
   className?: string;
 }
 
-export   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [suggestionIndex, setSuggestionIndex] = useState(-1);
+export   const [suggestionIndex, setSuggestionIndex] = useState(-1);
   const [cursorPosition, setCursorPosition] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   
@@ -665,7 +664,7 @@ export   const [showSuggestions, setShowSuggestions] = useState(false);
       )}
       
       {/* CSS Styles */}
-      <style jsx>{`
+      <style>{`
         .template-variable {
           background: rgba(66, 153, 225, 0.2);
           color: #63b3ed;

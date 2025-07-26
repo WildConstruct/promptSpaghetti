@@ -74,15 +74,15 @@ describe('Epic 24.2 - PluginLoader Unit Tests', () => {
     mockCacheDir = '/tmp/plugin-cache';
     
     // Mock filesystem operations
-    mockFs.readFile.mockResolvedValue(Buffer.from(mockPluginCode as unknown as unknown as unknown));
-    mockFs.readdir.mockResolvedValue(['plugin1', 'plugin2'] as any as unknown as unknown as unknown);
+    mockFs.readFile.mockResolvedValue(Buffer.from(mockPluginCode as unknown as unknown));
+    mockFs.readdir.mockResolvedValue(['plugin1', 'plugin2'] as any as unknown as unknown);
     mockFs.stat.mockResolvedValue({ 
-      isDirectory: ( as unknown) => true, 
+      isDirectory: ( as unknown as unknown) => true, 
       isFile: () => false 
     } as any);
-    mockFs.mkdir.mockResolvedValue(undefined as unknown as unknown as unknown);
-    mockFs.writeFile.mockResolvedValue(undefined as unknown as unknown as unknown);
-    mockFs.access.mockResolvedValue(undefined as unknown as unknown as unknown);
+    mockFs.mkdir.mockResolvedValue(undefined as unknown as unknown);
+    mockFs.writeFile.mockResolvedValue(undefined as unknown as unknown);
+    mockFs.access.mockResolvedValue(undefined as unknown as unknown);
 
     // Initialize PluginLoader (mock implementation for now)
     pluginLoader = {
@@ -212,10 +212,10 @@ describe('Epic 24.2 - PluginLoader Unit Tests', () => {
   describe('2. Plugin Lifecycle Management', () => {
     beforeEach(() => {
       // Setup plugin in loaded state
-      pluginLoader.getPluginStatus.mockReturnValue('loaded' as unknown as unknown as unknown);
+      pluginLoader.getPluginStatus.mockReturnValue('loaded' as unknown as unknown as unknown as unknown as unknown);
       pluginLoader.listPlugins.mockReturnValue([
         { ...mockPluginManifest, status: 'loaded' }
-      ] as unknown as unknown as unknown);
+      ] as unknown as unknown as unknown as unknown as unknown);
     });
 
     it('should activate loaded plugin successfully', async () => {
@@ -231,7 +231,7 @@ describe('Epic 24.2 - PluginLoader Unit Tests', () => {
     });
 
     it('should deactivate active plugin successfully', async () => {
-      pluginLoader.getPluginStatus.mockReturnValue('active' as unknown as unknown as unknown);
+      pluginLoader.getPluginStatus.mockReturnValue('active' as unknown as unknown as unknown as unknown as unknown);
       pluginLoader.deactivatePlugin.mockResolvedValueOnce(true);
 
       const result = await pluginLoader.deactivatePlugin('test-plugin');

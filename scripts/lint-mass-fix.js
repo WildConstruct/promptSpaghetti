@@ -27,7 +27,7 @@ const phases = [
   }
 ];
 
-async function runPhase(phase) {
+async function runPhase(phase: any): Promise<boolean> {
   console.log(`\n🚀 ${phase.name}`);
   console.log(`📝 ${phase.description}`);
   
@@ -48,7 +48,7 @@ async function runPhase(phase) {
   }
 }
 
-async function main() {
+async function main(): Promise<void> {
   console.log('🎯 Starting Mass Linting Fix Process');
   console.log('📋 This will systematically fix linting issues in phases\n');
 

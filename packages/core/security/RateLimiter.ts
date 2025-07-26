@@ -632,8 +632,12 @@ export class RateLimitUtils {
   /**
    * Create rate limiter from preset
    */
-  static fromPreset(preset: keyof typeof RateLimitPresets, customConfig?: Partial<RateLimitConfig>): RateLimiter {
-    const presetConfig = RateLimitPresets[preset]();
+  static fromPreset(preset: string, customConfig?: Partial<RateLimitConfig>): RateLimiter {
+    const presetMethod = (RateLimitPresets as any)[preset];
+    if (typeof presetMethod !== 'function') {
+      throw new Error(`Unknown preset: ${preset}`);
+    }
+    const presetConfig = presetMethod();
     const finalConfig = { ...presetConfig, ...customConfig };
     return new RateLimiter(finalConfig);
   }

@@ -55,6 +55,7 @@ interface OAuthProviderButtonsProps {
 export const OAuthProviderButtons: React.FC<OAuthProviderButtonsProps> = ({
   mode = 'login',
   onError,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onSuccess,
   className = ''
 }) => {

@@ -58,13 +58,12 @@ interface CorrectionsState {
   ) => Promise<{ success: boolean; importedCount?: number; error?: string }>;
 }
 
-export           
-          set((state) => ({
+export           set((state) => ({
             rules: [...state.rules, newRule].sort((a, b) => a.priority - b.priority)
           }));
         },
         
-        updateRule: (id, updates) => {
+        updateRule: (id: string, updates: Partial<CorrectionRule>) => {
           set((state) => ({
             rules: state.rules.map((rule) =>
               rule.id === id
@@ -74,13 +73,13 @@ export
           }));
         },
         
-        deleteRule: (id) => {
+        deleteRule: (id: string) => {
           set((state) => ({
             rules: state.rules.filter((rule) => rule.id !== id)
           }));
         },
         
-        toggleRule: (id) => {
+        toggleRule: (id: string) => {
           set((state) => ({
             rules: state.rules.map((rule) =>
               rule.id === id
@@ -90,7 +89,7 @@ export
           }));
         },
         
-        reorderRules: (fromIndex, toIndex) => {
+        reorderRules: (fromIndex: number, toIndex: number) => {
           set((state) => {
             const newRules = [...state.rules];
             const [movedRule] = newRules.splice(fromIndex, 1);

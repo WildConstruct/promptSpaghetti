@@ -11,8 +11,8 @@
 import React, { useState } from 'react';
 import { 
   ToggleLeft, ToggleRight, Percent, Shield, AlertTriangle, 
-  Settings, Clock, Zap, Target, TrendingUp, Activity,
-  RefreshCw, Pause, Play, StopCircle, CheckCircle
+  Settings, Zap, TrendingUp, Activity,
+  RefreshCw, Pause, Play, CheckCircle
 } from 'lucide-react';
 
 interface FeatureToggle {

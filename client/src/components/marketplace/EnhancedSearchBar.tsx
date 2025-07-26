@@ -11,37 +11,33 @@ interface EnhancedSearchBarProps {
   className?: string;
 }
 
-export   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
+export   const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
   const { getSearchSuggestions } = useMarketplace();
 
-  // Debounced suggestion fetching
-  const debouncedGetSuggestions = useCallback(
-    debounce(async (query: string) => {
-      if (query.length < 2) {
-        setSuggestions([]);
-        setShowSuggestions(false);
-        return;
-      }
+  // Suggestion fetching function
+  const getSuggestions = useCallback(async (query: string) => {
+    if (query.length < 2) {
+      setSuggestions([]);
+      setShowSuggestions(false);
+      return;
+    }
 
-      setLoading(true);
-      try {
-        const newSuggestions = await getSearchSuggestions(query);
-        setSuggestions(newSuggestions);
-        setShowSuggestions(newSuggestions.length > 0);
-      } catch (error) {
-        console.error('Failed to fetch suggestions:', error);
-        setSuggestions([]);
-        setShowSuggestions(false);
-      } finally {
-        setLoading(false);
-      }
-    }, 300),
-    [getSearchSuggestions]
-  );
+    setLoading(true);
+    try {
+      const newSuggestions = await getSearchSuggestions(query);
+      setSuggestions(newSuggestions);
+      setShowSuggestions(newSuggestions.length > 0);
+    } catch (error) {
+      console.error('Failed to fetch suggestions:', error);
+      setSuggestions([]);
+      setShowSuggestions(false);
+    } finally {
+      setLoading(false);
+    }
+  }, [getSearchSuggestions]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -59,9 +55,14 @@ export   const [showSuggestions, setShowSuggestions] = useState(false);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Debounced effect for suggestion fetching
   useEffect(() => {
-    debouncedGetSuggestions(value);
-  }, [value, debouncedGetSuggestions]);
+    const timeoutId = setTimeout(() => {
+      getSuggestions(value);
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [value, getSuggestions]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -252,14 +253,14 @@ export   const [showSuggestions, setShowSuggestions] = useState(false);
   );
 };
 
-// Debounce utility function
-function debounce<T extends (...args: unknown[]) => unknown>(
-  func: T,
-  wait: number
-): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout;
-  return (...args: Parameters<T>) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), wait);
-  };
-}
+// Debounce utility function - commented out as unused
+// function debounce<T extends (...args: unknown[]) => unknown>(
+//   func: T,
+//   wait: number
+// ): (...args: Parameters<T>) => void {
+//   let timeout: NodeJS.Timeout;
+//   return (...args: Parameters<T>) => {
+//     clearTimeout(timeout);
+//     timeout = setTimeout(() => func(...args), wait);
+//   };
+// }

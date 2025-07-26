@@ -678,9 +678,7 @@ const DATA_SENSITIVITY_GUIDELINES = {
 export {
   DataSensitivityUtils,
   DATA_SENSITIVITY_DEFINITIONS,
-  DATA_SENSITIVITY_GUIDELINES,
-  type DataHandlingRequirements,
-  type DataElementClassification
+  DATA_SENSITIVITY_GUIDELINES
 };
 
 export default DataSensitivityUtils;

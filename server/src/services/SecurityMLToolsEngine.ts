@@ -493,7 +493,7 @@ export class SecurityMLToolsEngine extends EventEmitter {
   async generateSecurityPredictions(
     predictionType: SecurityPrediction['prediction_type'],
     timeHorizon: number = 24,
-    contextData: any = {}
+    contextData: Record<string, unknown> = {}
   ): Promise<SecurityPrediction[]> {
     try {
       const relevantModels = Array.from(this.mlModels.values()).filter(model => 

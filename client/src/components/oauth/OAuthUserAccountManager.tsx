@@ -8,7 +8,7 @@
  * Part of Epic 19.5 - OAuth Implementation & Framework
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 
 // Types and interfaces
@@ -71,14 +71,14 @@ interface ProviderScope {
   category: 'profile' | 'email' | 'calendar' | 'files' | 'repositories' | 'custom';
 }
 
-interface LinkingResult {
-  success: boolean;
-  accountId?: string;
-  error?: string;
-  warnings?: string[];
-  requiresConsent?: boolean;
-  consentUrl?: string;
-}
+/* interface LinkingResult {
+   success: boolean;
+   accountId?: string; */
+//   error?: string;
+//   warnings?: string[];
+//   requiresConsent?: boolean;
+//   consentUrl?: string;
+// }
 
 export const OAuthUserAccountManager: React.FC = () => {
   // State management
@@ -93,16 +93,16 @@ export const OAuthUserAccountManager: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Auth store for API calls
-  const { authenticatedFetch, user: _user } = useAuthStore();
+  const { authenticatedFetch, user: _user } = useAuthStore(); // eslint-disable-line @typescript-eslint/no-unused-vars
 
   // Load data on mount
   useEffect(() => {
     loadLinkedAccounts();
     loadAvailableProviders();
-  }, []);
+  }, [loadLinkedAccounts, loadAvailableProviders]);
 
   // API functions
-  const loadLinkedAccounts = async () => {
+  const loadLinkedAccounts = useCallback(async () => {
     try {
       const response = await authenticatedFetch('/auth/oauth/accounts');
       const data = await response.json();
@@ -117,9 +117,9 @@ export const OAuthUserAccountManager: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [authenticatedFetch]);
 
-  const loadAvailableProviders = async () => {
+  const loadAvailableProviders = useCallback(async () => {
     try {
       const response = await authenticatedFetch('/auth/oauth/providers');
       const data = await response.json();
@@ -129,7 +129,7 @@ export const OAuthUserAccountManager: React.FC = () => {
     } catch (err) {
       console.error('Failed to load available providers:', err);
     }
-  };
+  }, [authenticatedFetch]);
 
   const initiateOAuthLink = async (providerId: string) => {
     setLinking(prev => ({ ...prev, [providerId]: true }));

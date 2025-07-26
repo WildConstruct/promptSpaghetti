@@ -20,7 +20,6 @@ import {
   Warning as WarningIcon,
   Error as ErrorIcon,
   Info as InfoIcon,
-  CheckCircle as CheckCircleIcon,
   ExpandMore as ExpandMoreIcon,
   AutoFixHigh as AutoFixHighIcon,
   ManualMode as ManualModeIcon,
@@ -64,31 +63,8 @@ const SEVERITY_CONFIG = {
   }
 };
 
-const RESOLUTION_CONFIG = {
-  skip: {
-    icon: BlockIcon,
-    color: 'warning' as const,
-    label: 'Skip Execution',
-    description: 'Schedule will be skipped if conflicts are detected at execution time'
-  },
-  override: {
-    icon: ManualModeIcon,
-    color: 'error' as const,
-    label: 'Override Conflicts',
-    description: 'Schedule will execute anyway, potentially overriding conflicting schedules'
-  },
-  merge: {
-    icon: AutoFixHighIcon,
-    color: 'success' as const,
-    label: 'Merge Changes',
-    description: 'System will attempt to merge changes from conflicting schedules'
-  }
-};
 
-export   }
-
-  const resolutionConfig = RESOLUTION_CONFIG[resolution];
-
+export 
   const conflictsByType = conflicts.reduce((acc, conflict) => {
     if (!acc[conflict.severity]) {
       acc[conflict.severity] = [];

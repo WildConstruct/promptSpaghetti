@@ -243,7 +243,7 @@ describe('Compression System Tests', () => {
     afterEach(() => {
       // Clean up test files
       [testFilePath, compressedFilePath].forEach(path => {
-        try { unlinkSync(path); } catch {}
+        try { unlinkSync(path); } catch { /* ignore cleanup errors */ }
       });
     });
     
@@ -307,7 +307,7 @@ describe('Compression System Tests', () => {
       // Clean up
       files.forEach(file => {
         unlinkSync(file);
-        try { unlinkSync(file + '.gz'); } catch {}
+        try { unlinkSync(file + '.gz'); } catch { /* ignore cleanup errors */ }
       });
     });
     

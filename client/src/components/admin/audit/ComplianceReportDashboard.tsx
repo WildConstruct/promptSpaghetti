@@ -13,7 +13,6 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  TextField,
   Table,
   TableBody,
   TableCell,
@@ -30,10 +29,6 @@ import {
   Chip,
   Alert,
   LinearProgress,
-  Stepper,
-  Step,
-  StepLabel,
-  StepContent,
   List,
   ListItem,
   ListItemIcon,
@@ -49,12 +44,10 @@ import {
   Warning as WarningIcon,
   CheckCircle as CheckCircleIcon,
   Error as ErrorIcon,
-  Schedule as ScheduleIcon,
   Download as DownloadIcon,
   Create as CreateIcon,
   Refresh as RefreshIcon,
   Timeline as TimelineIcon,
-  Description as DescriptionIcon,
   Verified as VerifiedIcon
 } from '@mui/icons-material';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
@@ -137,7 +130,7 @@ const VIOLATION_SEVERITIES = {
   critical: { color: 'error', icon: SecurityIcon }
 };
 
-export   const [_templates, setTemplates] = useState<ReportTemplate[]>([]);
+export   const [, setTemplates] = useState<ReportTemplate[]>([]);
   const [metrics, setMetrics] = useState<ComplianceMetrics | null>(null);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
@@ -158,11 +151,6 @@ export   const [_templates, setTemplates] = useState<ReportTemplate[]>([]);
   const [selectedReport, setSelectedReport] = useState<ComplianceReport | null>(null);
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
 
-  useEffect(() => {
-    loadReports();
-    loadTemplates();
-    loadMetrics();
-  }, [loadReports, loadTemplates, loadMetrics]);
 
   const loadReports = useCallback(async () => {
     setLoading(true);
@@ -315,14 +303,15 @@ export   const [_templates, setTemplates] = useState<ReportTemplate[]>([]);
     } finally {
       setLoading(false);
     }
-  }, [newReport, loadReports]);
+  }, [loadReports]);
 
   const handleViewReport = useCallback((report: ComplianceReport) => {
     setSelectedReport(report);
     setDetailsDialogOpen(true);
   }, []);
 
-  const handleDownloadReport = useCallback(async (reportId: string, format: string) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleDownloadReport = useCallback(async (_reportId: string, _format: string) => {
     try {
       // Mock download
     } catch (error) {
@@ -335,6 +324,12 @@ export   const [_templates, setTemplates] = useState<ReportTemplate[]>([]);
     if (score >= 75) return 'warning';
     return 'error';
   }, []);
+
+  useEffect(() => {
+    loadReports();
+    loadTemplates();
+    loadMetrics();
+  }, [loadReports, loadTemplates, loadMetrics]);
 
   const renderMetricsCards = () => {
     if (!metrics) return null;
@@ -447,7 +442,7 @@ export   const [_templates, setTemplates] = useState<ReportTemplate[]>([]);
           <TableBody>
             {reports
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((report) => {
+              .map((report: ComplianceReport) => {
                 const reportType = REPORT_TYPES.find(rt => rt.value === report.reportType);
                 const standard = COMPLIANCE_STANDARDS.find(cs => cs.value === report.standard);
                 
@@ -540,8 +535,8 @@ export   const [_templates, setTemplates] = useState<ReportTemplate[]>([]);
         count={reports.length}
         rowsPerPage={rowsPerPage}
         page={page}
-        onPageChange={(_, newPage) => setPage(newPage)}
-        onRowsPerPageChange={(e) => {
+        onPageChange={(_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => setPage(newPage)}
+        onRowsPerPageChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           setRowsPerPage(parseInt(e.target.value, 10));
           setPage(0);
         }}

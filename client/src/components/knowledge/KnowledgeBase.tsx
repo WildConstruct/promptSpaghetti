@@ -87,8 +87,7 @@ const DIFFICULTY_LABELS = {
   expert: 'Expert'
 };
 
-export   const [articles, setArticles] = useState<KnowledgeArticle[]>([]);
-  const [tutorials, setTutorials] = useState<Tutorial[]>([]);
+export   const [tutorials, setTutorials] = useState<Tutorial[]>([]);
   const [caseStudies, setCaseStudies] = useState<CaseStudy[]>([]);
   const [searchResults, setSearchResults] = useState<(KnowledgeArticle | Tutorial | CaseStudy)[]>([]);
   const [loading, setLoading] = useState(true);
@@ -232,7 +231,7 @@ export   const [articles, setArticles] = useState<KnowledgeArticle[]>([]);
 
   useEffect(() => {
     fetchKnowledgeContent();
-  }, []);
+  }, [fetchKnowledgeContent]);
 
   const renderArticleCard = (article: KnowledgeArticle) => (
     <div key={article.id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6">

@@ -17,7 +17,7 @@ export interface MetricData {
   unit: string;
   timestamp: Date;
   tags: Record<string, string>;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface EventData {
@@ -25,7 +25,7 @@ export interface EventData {
   type: string;
   category: string;
   action: string;
-  properties: Record<string, any>;
+  properties: Record<string, unknown>;
   timestamp: Date;
   userId?: string;
   sessionId?: string;
@@ -40,7 +40,7 @@ export interface PerformanceMetric {
   component: string;
   operation: string;
   timestamp: Date;
-  context: Record<string, any>;
+  context: Record<string, unknown>;
 }
 
 export interface UserBehaviorData {
@@ -51,7 +51,7 @@ export interface UserBehaviorData {
     target: string;
     timestamp: Date;
     duration?: number;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   }>;
   sessionStart: Date;
   sessionEnd?: Date;
@@ -205,8 +205,8 @@ export class AnalyticsDataGenerator {
     return events.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
   }
 
-  private generateEventProperties(eventType: { category: string; action: string; source: string }): Record<string, any> {
-    const properties: Record<string, any> = {
+  private generateEventProperties(eventType: { category: string; action: string; source: string }): Record<string, unknown> {
+    const properties: Record<string, unknown> = {
       source: eventType.source,
       timestamp: new Date().toISOString(),
       session_duration: Math.floor(this.rng() * 3600) + 300 // 5 minutes to 1 hour

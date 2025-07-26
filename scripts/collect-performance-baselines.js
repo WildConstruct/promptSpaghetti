@@ -21,7 +21,7 @@ class PerformanceBaselineCollectionScript {
     }
   }
 
-  log(level, message) {
+  log(level: string, message: string): void {
     const colors = {
       info: '\x1b[36m',     // Cyan
       success: '\x1b[32m',  // Green  
@@ -33,7 +33,7 @@ class PerformanceBaselineCollectionScript {
     console.log(`${colors[level]}${message}${colors.reset}`);
   }
 
-  async simulateBaselineCollection() {
+  async simulateBaselineCollection(): Promise<void> {
     this.log('info', '🔧 Starting Performance Baseline Collection');
     this.log('info', '=' .repeat(60));
 
@@ -49,7 +49,7 @@ class PerformanceBaselineCollectionScript {
     this.log('success', '✅ Performance baseline collection completed!');
   }
 
-  async collectSimulatedBaselines() {
+  async collectSimulatedBaselines(): Promise<any> {
     this.log('info', '\n📊 Collecting Performance Baselines...');
     
     const baselines = {
@@ -158,7 +158,7 @@ class PerformanceBaselineCollectionScript {
     return baselines;
   }
 
-  simulateMeasurements(values, description) {
+  simulateMeasurements(values: number[], description: string): any {
     this.log('info', `  📈 Measuring: ${description}`);
     
     values.forEach((value, index) => {
@@ -181,7 +181,7 @@ class PerformanceBaselineCollectionScript {
     }));
   }
 
-  generateBaselineReport(baselines) {
+  generateBaselineReport(baselines: any[]): any {
     this.log('info', '\n📋 Generating Baseline Report...');
 
     const report = {

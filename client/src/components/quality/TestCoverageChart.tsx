@@ -20,7 +20,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
+  // Legend, // Commented out unused import
   ResponsiveContainer
 } from 'recharts';
 import {

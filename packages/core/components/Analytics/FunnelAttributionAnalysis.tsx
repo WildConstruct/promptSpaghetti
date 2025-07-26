@@ -479,18 +479,8 @@ export interface AttributionAnalysisExportData {
 }
 
 // Default configuration
-const defaultAttributionConfig: AttributionConfiguration = {
-  models: ['first_touch', 'last_touch', 'linear', 'time_decay', 'position_based'],
-  touchpointWindow: 30,
-  conversionWindow: 7,
-  crossDeviceTracking: true,
-  excludeDirectTraffic: false,
-  minimumEngagement: 5, // 5 seconds
-  customAttribution: []
-};
 
-export   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export   const [error, setError] = useState<string | null>(null);
   const [selectedModel, setSelectedModel] = useState<AttributionModel>('linear');
   const [activeTab, setActiveTab] = useState<'channels' | 'journeys' | 'models' | 'insights'>('channels');
   const [selectedChannel, setSelectedChannel] = useState<string | null>(null);

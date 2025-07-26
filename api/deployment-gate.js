@@ -40,7 +40,7 @@ const ENVIRONMENT_APPROVAL_RULES = {
 };
 
 // Auto-approval logic based on conditions
-async function checkAutoApprovalEligibility(deployment, environment) {
+async function checkAutoApprovalEligibility(deployment: any, environment: string): Promise<any> {
   const rules = ENVIRONMENT_APPROVAL_RULES[environment];
   if (!rules || !rules.auto_approval_conditions) {
     return { eligible: false, reason: 'No auto-approval rules defined' };
@@ -176,7 +176,7 @@ async function checkAutoApprovalEligibility(deployment, environment) {
 }
 
 // Get approval status from database with comprehensive error handling
-async function getApprovalStatus(deploymentId, environment) {
+async function getApprovalStatus(deploymentId: string, environment: string): Promise<any> {
   if (!deploymentId) {
     throw new Error('deploymentId is required for approval status check');
   }
@@ -264,7 +264,7 @@ async function getApprovalStatus(deploymentId, environment) {
 }
 
 // Helper functions for auto-approval checks
-async function getTestCoverage(_sha) {
+async function getTestCoverage(_sha: string): Promise<number> {
   try {
     // In a real implementation, this would query CI/CD results or coverage reports
     // For now, return a mock value based on environment
@@ -277,7 +277,7 @@ async function getTestCoverage(_sha) {
   }
 }
 
-async function getSecurityScanStatus(_sha) {
+async function getSecurityScanStatus(_sha: string): Promise<string> {
   try {
     // In a real implementation, this would check security scan results
     // For now, return 'passed' for most cases
@@ -288,7 +288,7 @@ async function getSecurityScanStatus(_sha) {
   }
 }
 
-async function checkPerformanceRegression(_sha) {
+async function checkPerformanceRegression(_sha: string): Promise<boolean> {
   try {
     // In a real implementation, this would compare performance metrics
     // For now, return false (no regression)
@@ -299,7 +299,7 @@ async function checkPerformanceRegression(_sha) {
   }
 }
 
-async function checkBreakingChanges(_sha) {
+async function checkBreakingChanges(_sha: string): Promise<boolean> {
   try {
     // In a real implementation, this would analyze API changes, schema changes, etc.
     // For now, return false (no breaking changes)
@@ -311,7 +311,7 @@ async function checkBreakingChanges(_sha) {
 }
 
 // Create automatic approval for eligible deployments with validation
-async function createAutoApproval(deploymentId, environment, autoApprovalCheck) {
+async function createAutoApproval(deploymentId: string, environment: string, autoApprovalCheck: any): Promise<any> {
   if (!deploymentId) {
     throw new Error('deploymentId is required for auto-approval creation');
   }
@@ -402,7 +402,7 @@ async function createAutoApproval(deploymentId, environment, autoApprovalCheck) 
 }
 
 // Main handler
-export default async function handler(req, res) {
+export default async function handler(req: any, res: any): Promise<void> {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');

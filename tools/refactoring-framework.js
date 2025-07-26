@@ -74,7 +74,7 @@ class RefactoringFramework {
     ];
   }
 
-  async run() {
+  async run(): Promise<void> {
     console.log('🔧 Starting Automated Refactoring Framework');
     console.log('=====================================');
     
@@ -120,7 +120,7 @@ class RefactoringFramework {
     }
   }
 
-  async analyzeLegacyCode() {
+  async analyzeLegacyCode(): Promise<any> {
     const results = {
       jsFiles: [],
       duplicates: [],
@@ -168,7 +168,7 @@ class RefactoringFramework {
     return results;
   }
 
-  shouldConvertToTypeScript(content, filePath) {
+  shouldConvertToTypeScript(content: string, filePath: string): boolean {
     // Skip certain files that should remain as JS
     const jsOnlyFiles = [
       'jest.config.js',
@@ -196,7 +196,7 @@ class RefactoringFramework {
     return tsPatterns.some(pattern => pattern.test(content));
   }
 
-  async migrateJavaScriptToTypeScript(jsFiles) {
+  async migrateJavaScriptToTypeScript(jsFiles: string[]): Promise<void> {
     for (const jsFile of jsFiles) {
       try {
         const content = await fs.readFile(jsFile, 'utf8');
@@ -229,7 +229,7 @@ class RefactoringFramework {
     }
   }
 
-  addTypeScriptHeader(content) {
+  addTypeScriptHeader(content: string): string {
     // Add basic TypeScript improvements
     let enhanced = content;
     
@@ -241,7 +241,7 @@ class RefactoringFramework {
     return enhanced;
   }
 
-  addReactImports(content) {
+  addReactImports(content: string): string {
     // Ensure React import for TSX files
     if (!content.includes('import React') && !content.includes('import * as React')) {
       return 'import React from \'react\';\n' + content;
@@ -249,7 +249,7 @@ class RefactoringFramework {
     return content;
   }
 
-  async modernizeImports() {
+  async modernizeImports(): Promise<void> {
     const tsFiles = await this.findFiles('**/*.ts', this.excludePatterns);
     const tsxFiles = await this.findFiles('**/*.tsx', this.excludePatterns);
     const allFiles = [...tsFiles, ...tsxFiles];
@@ -294,7 +294,7 @@ class RefactoringFramework {
     }
   }
 
-  organizeImports(content) {
+  organizeImports(content: string): string {
     const lines = content.split('\n');
     const imports = [];
     const otherLines = [];
@@ -326,7 +326,7 @@ class RefactoringFramework {
     return [...imports, '', ...otherLines].join('\n');
   }
 
-  async findDuplicateCode() {
+  async findDuplicateCode(): Promise<any[]> {
     // Simple duplicate detection based on function signatures and similar code blocks
     const duplicates = [];
     const codeBlocks = new Map();
@@ -358,7 +358,7 @@ class RefactoringFramework {
     return duplicates;
   }
 
-  extractFunctions(content) {
+  extractFunctions(content: string): string[] {
     const functions = [];
     
     // Extract function declarations
@@ -377,7 +377,7 @@ class RefactoringFramework {
     return functions;
   }
 
-  normalizeFunction(func) {
+  normalizeFunction(func: string): string {
     // Remove whitespace and comments for comparison
     return func
       .replace(/\s+/g, ' ')
@@ -386,7 +386,7 @@ class RefactoringFramework {
       .trim();
   }
 
-  async removeDuplicateCode() {
+  async removeDuplicateCode(): Promise<void> {
     const duplicates = await this.findDuplicateCode();
     
     for (const duplicate of duplicates.slice(0, 5)) { // Limit to 5 for safety
@@ -397,7 +397,7 @@ class RefactoringFramework {
     }
   }
 
-  async findSecurityIssues() {
+  async findSecurityIssues(): Promise<any[]> {
     const securityIssues = [];
     const files = await this.findFiles('**/*.{ts,tsx,js,jsx}', this.excludePatterns);
     
@@ -422,7 +422,7 @@ class RefactoringFramework {
     return securityIssues;
   }
 
-  async applySecurityFixes() {
+  async applySecurityFixes(): Promise<void> {
     const issues = await this.findSecurityIssues();
     
     for (const issue of issues) {
@@ -442,7 +442,7 @@ class RefactoringFramework {
     }
   }
 
-  async findOutdatedConfigs() {
+  async findOutdatedConfigs(): Promise<string[]> {
     const configs = [];
     
     // Find configuration files that need updating
@@ -467,7 +467,7 @@ class RefactoringFramework {
     return configs;
   }
 
-  async findOutdatedTestFiles() {
+  async findOutdatedTestFiles(): Promise<string[]> {
     const testFiles = await this.findFiles('**/*.test.{js,ts,tsx}', this.excludePatterns);
     const outdated = [];
     
@@ -489,7 +489,7 @@ class RefactoringFramework {
     return outdated;
   }
 
-  async updateTestConfigurations() {
+  async updateTestConfigurations(): Promise<void> {
     const testFiles = await this.findOutdatedTestFiles();
     
     for (const file of testFiles.slice(0, 3)) { // Limit for safety
@@ -513,7 +513,7 @@ class RefactoringFramework {
     }
   }
 
-  async modernizeConfigurations() {
+  async modernizeConfigurations(): Promise<void> {
     const configs = await this.findOutdatedConfigs();
     
     for (const config of configs) {
@@ -530,7 +530,7 @@ class RefactoringFramework {
     }
   }
 
-  async modernizePackageJson(filePath) {
+  async modernizePackageJson(filePath: string): Promise<void> {
     const content = JSON.parse(await fs.readFile(filePath, 'utf8'));
     
     let modified = false;
@@ -568,7 +568,7 @@ class RefactoringFramework {
     }
   }
 
-  async modernizeTsConfig(filePath) {
+  async modernizeTsConfig(filePath: string): Promise<void> {
     const content = JSON.parse(await fs.readFile(filePath, 'utf8'));
     let modified = false;
     
@@ -599,7 +599,7 @@ class RefactoringFramework {
     }
   }
 
-  async generateReport() {
+  async generateReport(): Promise<void> {
     const report = {
       timestamp: new Date().toISOString(),
       summary: this.stats,
@@ -627,7 +627,7 @@ class RefactoringFramework {
     console.log('📋 Refactoring report saved to refactoring-report.json');
   }
 
-  printStats() {
+  printStats(): void {
     console.log('\n📊 Refactoring Statistics:');
     console.log('========================');
     console.log(`JS to TS converted: ${this.stats.jsToTsConverted} files`);
@@ -638,7 +638,7 @@ class RefactoringFramework {
     console.log(`Duplicates identified: ${this.stats.duplicatesRemoved} patterns`);
   }
 
-  async findFiles(pattern, excludePatterns = []) {
+  async findFiles(pattern: string, excludePatterns: string[] = []): Promise<string[]> {
     try {
       const { glob } = await import('glob');
       return glob(pattern, {
@@ -651,11 +651,11 @@ class RefactoringFramework {
     }
   }
 
-  async findFilesFallback(pattern, excludePatterns) {
+  async findFilesFallback(pattern: string, excludePatterns: string[]): Promise<string[]> {
     // Simple fallback implementation
     const files = [];
     
-    async function walkDir(dir) {
+    async function walkDir(dir: string): Promise<void> {
       try {
         const entries = await fs.readdir(dir, { withFileTypes: true });
         

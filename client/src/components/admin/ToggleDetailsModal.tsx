@@ -75,7 +75,14 @@ interface ToggleDetails {
   };
 }
 
-export   const [loading, setLoading] = useState(false);
+export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({
+  isOpen,
+  onClose,
+  toggleId,
+  onEdit
+}) => {
+  const [toggle, setToggle] = useState<ToggleDetails | null>(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<
     'overview' | 'config' | 'audit' | 'dependencies' | 'targeting'
@@ -367,7 +374,7 @@ export   const [loading, setLoading] = useState(false);
                       <h3>Scoping Rules</h3>
                       {toggle.scopes.length > 0 ? (
                         <div className="scopes-list">
-                          {toggle.scopes.map((scope, _index) => (
+                          {toggle.scopes.map((scope) => (
                             <div key={scope.id} className="scope-item">
                               <div className="scope-header">
                                 <span className="scope-priority">Priority {scope.priority}</span>
@@ -629,3 +636,5 @@ export   const [loading, setLoading] = useState(false);
     </div>
   );
 };
+
+export default ToggleDetailsModal;

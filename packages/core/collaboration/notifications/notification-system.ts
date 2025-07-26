@@ -6,7 +6,7 @@ import {
   ResourceId,
   NotificationType,
   Notification,
-  ActivityType 
+  // ActivityType // Unused import 
 } from '../types/workspace';
 import { WorkspaceDAO } from '../dao/workspace-dao';
 
@@ -458,8 +458,8 @@ The Team`
     notification: Notification,
     userId: UserId,
     channel: string,
-    template: unknown,
-    context: NotificationContext
+    _template: unknown, // Unused parameter
+    _context: NotificationContext // Unused parameter
   ): Promise<void> {
     const delivery: NotificationDelivery = {
       id: `${notification.id}_${channel}_${Date.now()}`,
@@ -547,7 +547,7 @@ The Team`
     // This would send HTTP POST to configured webhook URL
   }
 
-  private renderTemplate(template: string, context: NotificationContext, userId: UserId): string {
+  private renderTemplate(template: string, context: NotificationContext, _userId: UserId): string { // Unused parameter
     // Simple template rendering - in production, use a proper template engine
     let rendered = template;
     

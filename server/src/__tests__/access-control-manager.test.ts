@@ -25,8 +25,8 @@ describe('AccessControlManager', () => {
 
   beforeEach(() => {
     mockDb = new DatabaseService({} as any) as jest.Mocked<DatabaseService>;
-    mockRedis = new RedisService() as jest.Mocked<RedisService>;
-    mockAudit = new AuditService() as jest.Mocked<AuditService>;
+    mockRedis = new RedisService({} as any) as jest.Mocked<RedisService>;
+    mockAudit = new AuditService({} as any, mockDb) as jest.Mocked<AuditService>;
 
     // Mock database responses
     mockDb.query = jest.fn<unknown[], unknown>();

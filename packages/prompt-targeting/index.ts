@@ -47,16 +47,17 @@ export type {
 
 // UI Components (React)
 export { ConfigurationPanel } from './src/ui/components/ConfigurationPanel';
-export { 
-  useConfiguration,
-  ConfigurationProvider,
-  useConfigurationContext,
-  withConfiguration
-} from './src/ui/hooks/useConfiguration';
-export type { 
-  UseConfigurationReturn,
-  UseConfigurationOptions
-} from './src/ui/hooks/useConfiguration';
+// TODO: Implement useConfiguration hooks
+// export { 
+//   useConfiguration,
+//   ConfigurationProvider,
+//   useConfigurationContext,
+//   withConfiguration
+// } from './src/ui/hooks/useConfiguration';
+// export type { 
+//   UseConfigurationReturn,
+//   UseConfigurationOptions
+// } from './src/ui/hooks/useConfiguration';
 
 // Convenience factory functions
 export { 

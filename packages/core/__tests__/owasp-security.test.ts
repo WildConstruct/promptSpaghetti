@@ -107,12 +107,7 @@ describe('OWASP Security Test Suite', () => {
       });
       
       // These comparison methods could be vulnerable to timing attacks
-      const timingAttackVectors = [
-        'password === userInput',  // Direct comparison
-        'password == userInput',   // Loose comparison
-        'password.length'          // Length disclosure
-      ];
-      
+            
       // In a real implementation, we'd want constant-time comparison
       // For now, we just ensure no function access that could leak timing
       expect(() => {
@@ -253,7 +248,7 @@ describe('OWASP Security Test Suite', () => {
       
       try {
         SafeExpressionEvaluator.evaluate('nonexistent.property.deep', context);
-      } catch (error: any) {
+      } catch (error: Error) {
         // Error should not expose internal details
         expect(error.message).not.toContain('at Object.evaluate');
         expect(error.stack).toBeDefined(); // Stack trace is available for debugging

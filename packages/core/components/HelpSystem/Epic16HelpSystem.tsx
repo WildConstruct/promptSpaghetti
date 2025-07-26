@@ -255,7 +255,7 @@ export const Epic16HelpSystem: React.FC<Epic16HelpSystemProps> = ({
         )}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .epic16-help-system {
           position: relative;
         }

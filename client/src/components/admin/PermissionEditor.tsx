@@ -235,7 +235,7 @@ export const PermissionEditor: React.FC<PermissionEditorProps> = ({
   onCancel,
   className = ''
 }) => {
-  const { user: _currentUser } = useAuthStore();
+  useAuthStore(); // Hook for potential future use
   const [state, setState] = useState<PermissionEditorState>({
     availablePermissions: mockPermissions,
     availableRoles: mockRoles,

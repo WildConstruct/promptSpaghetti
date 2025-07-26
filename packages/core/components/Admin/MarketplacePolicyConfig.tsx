@@ -543,7 +543,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
         </Card>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .marketplace-policy-config {
           max-width: 1400px;
           margin: 0 auto;

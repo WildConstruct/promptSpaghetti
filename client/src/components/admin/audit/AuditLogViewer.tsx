@@ -127,8 +127,7 @@ const EVENT_CATEGORIES = [
 ];
 
 const SEVERITIES = ['low', 'medium', 'high', 'critical'];
-// const OUTCOMES = ['success', 'failure', 'partial'];
-
+// 
 const SEVERITY_CONFIG = {
   low: { color: 'info', icon: InfoIcon },
   medium: { color: 'warning', icon: WarningIcon },
@@ -142,9 +141,7 @@ const OUTCOME_CONFIG = {
   partial: { color: 'warning', icon: WarningIcon }
 };
 
-export const AuditLogViewer: React.FC = () => {
-  const [events, setEvents] = useState<AuditEvent[]>([]);
-  const [statistics, setStatistics] = useState<AuditStatistics | null>(null);
+export   const [statistics, setStatistics] = useState<AuditStatistics | null>(null);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
@@ -318,9 +315,7 @@ export const AuditLogViewer: React.FC = () => {
     });
   };
 
-  // const formatDuration = (ms?: number): string => {
-  //   if (!ms) return 'N/A';
-  //   if (ms < 1000) return `${ms}ms`;
+  //   //   if (ms < 1000) return `${ms}ms`;
   //   if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;
   //   return `${(ms / 60000).toFixed(1)}m`;
   // };
@@ -417,7 +412,7 @@ export const AuditLogViewer: React.FC = () => {
             fullWidth
             label="Search events"
             value={filters.searchTerm}
-            onChange={(e) => handleFilterChange('searchTerm', e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFilterChange('searchTerm', e.target.value)}
             InputProps={{
               startAdornment: <SearchIcon sx={{ mr: 1, color: 'action.active' }} />
             }}
@@ -431,9 +426,9 @@ export const AuditLogViewer: React.FC = () => {
             <Select
               multiple
               value={filters.categories}
-              onChange={(e) => handleFilterChange('categories', e.target.value)}
+              onChange={(e: React.ChangeEvent<{ value: unknown }>) => handleFilterChange('categories', e.target.value)}
               label="Category"
-              renderValue={(selected) => (
+              renderValue={(selected: unknown) => (
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                   {(selected as string[]).map((value) => (
                     <Chip key={value} label={value} size="small" />
@@ -456,9 +451,9 @@ export const AuditLogViewer: React.FC = () => {
             <Select
               multiple
               value={filters.severities}
-              onChange={(e) => handleFilterChange('severities', e.target.value)}
+              onChange={(e: React.ChangeEvent<{ value: unknown }>) => handleFilterChange('severities', e.target.value)}
               label="Severity"
-              renderValue={(selected) => (
+              renderValue={(selected: unknown) => (
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                   {(selected as string[]).map((value) => (
                     <Chip key={value} label={value} size="small" />
@@ -480,7 +475,7 @@ export const AuditLogViewer: React.FC = () => {
             <DateTimePicker
               label="Start Date"
               value={filters.startDate}
-              onChange={(date) => handleFilterChange('startDate', date)}
+              onChange={(date: Date | null) => handleFilterChange('startDate', date)}
               slotProps={{
                 textField: { size: 'small', fullWidth: true }
               }}
@@ -493,7 +488,7 @@ export const AuditLogViewer: React.FC = () => {
             <DateTimePicker
               label="End Date"
               value={filters.endDate}
-              onChange={(date) => handleFilterChange('endDate', date)}
+              onChange={(date: Date | null) => handleFilterChange('endDate', date)}
               slotProps={{
                 textField: { size: 'small', fullWidth: true }
               }}
@@ -519,7 +514,7 @@ export const AuditLogViewer: React.FC = () => {
         </Button>
         <Button
           size="small"
-          onClick={(e) => setExportMenuAnchor(e.currentTarget)}
+          onClick={(e: React.MouseEvent<HTMLButtonElement>) => setExportMenuAnchor(e.currentTarget)}
           startIcon={<DownloadIcon />}
         >
           Export
@@ -649,8 +644,8 @@ export const AuditLogViewer: React.FC = () => {
         count={totalEvents}
         rowsPerPage={rowsPerPage}
         page={page}
-        onPageChange={(_, newPage) => setPage(newPage)}
-        onRowsPerPageChange={(e) => {
+        onPageChange={(_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => setPage(newPage)}
+        onRowsPerPageChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           setRowsPerPage(parseInt(e.target.value, 10));
           setPage(0);
         }}

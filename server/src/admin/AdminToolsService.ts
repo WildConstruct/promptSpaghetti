@@ -22,6 +22,7 @@ import { TemporaryPermissionsService } from '../auth/services/TemporaryPermissio
 import { DirectPermissionService } from '../auth/services/DirectPermissionService';
 import { SystemDiagnostics, SystemHealthReport } from './SystemDiagnostics';
 import { HealthCheckFramework } from './HealthCheckFramework';
+import crypto from 'crypto';
 
 export interface AdminDashboardData {
   systemHealth: {
@@ -67,7 +68,7 @@ export interface SecurityAlert {
   resolved: boolean;
   resolvedBy?: string;
   resolvedAt?: Date;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface AdminActivity {
@@ -80,7 +81,7 @@ export interface AdminActivity {
   ipAddress: string;
   userAgent: string;
   result: 'success' | 'failure' | 'partial';
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
 }
 
 export interface MaintenanceTask {
@@ -106,7 +107,7 @@ export interface UserManagementAction {
 
 export interface SystemConfiguration {
   category: string;
-  settings: Record<string, any>;
+  settings: Record<string, unknown>;
   lastModified: Date;
   modifiedBy: string;
   version: number;
@@ -116,7 +117,7 @@ export interface SystemConfiguration {
 export interface BulkUserOperation {
   operation: 'activate' | 'deactivate' | 'suspend' | 'grant_role' | 'revoke_role' | 'send_notification';
   userIds: string[];
-  parameters?: Record<string, any>;
+  parameters?: Record<string, unknown>;
   reason: string;
   scheduledAt?: Date;
 }
@@ -373,7 +374,7 @@ export class AdminToolsService {
         break;
           
       case 'reset_password':
-        const resetToken = require('crypto').randomBytes(32).toString('hex');
+        const resetToken = crypto.randomBytes(32).toString('hex');
         const resetExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
         await this.dbService.query(
           'UPDATE users SET password_reset_token = $1, password_reset_expires = $2, updated_at = NOW() WHERE id = $3',
@@ -450,7 +451,7 @@ export class AdminToolsService {
    */
   async updateSystemConfiguration(
     category: string,
-    settings: Record<string, any>,
+    settings: Record<string, unknown>,
     adminId: string,
     description?: string,
     context: { ipAddress?: string; userAgent?: string } = {}
@@ -554,7 +555,7 @@ export class AdminToolsService {
     adminId: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<MaintenanceTask> {
-    const taskId = require('crypto').randomUUID();
+    const taskId = crypto.randomUUID();
     const now = new Date();
 
     try {
@@ -701,7 +702,7 @@ export class AdminToolsService {
     return result.rows.map(this.mapSecurityAlert);
   }
 
-  private async getRecentAdminActivities(adminId: string): Promise<AdminActivity[]> {
+  private async getRecentAdminActivities(_adminId: string): Promise<AdminActivity[]> {
     const result = await this.dbService.query(`
       SELECT 
         al.id, al.user_id, u.email, al.action, al.resource_type as target,

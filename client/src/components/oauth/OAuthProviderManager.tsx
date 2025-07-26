@@ -8,7 +8,7 @@
  * Part of Epic 19.5 - OAuth Implementation & Framework
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 
 // Types and interfaces
@@ -84,7 +84,7 @@ export const OAuthProviderManager: React.FC = () => {
   // State management
   const [providers, setProviders] = useState<OAuthProvider[]>([]);
   const [selectedProvider, setSelectedProvider] = useState<OAuthProvider | null>(null);
-  const [_showAddProvider, setShowAddProvider] = useState(false);
+  const [, setShowAddProvider] = useState(false);
   const [showTestResults, setShowTestResults] = useState(false);
   const [testResults, setTestResults] = useState<Record<string, ProviderTestResult>>({});
   const [loading, setLoading] = useState(false);
@@ -97,10 +97,10 @@ export const OAuthProviderManager: React.FC = () => {
   // Load providers on mount
   useEffect(() => {
     loadProviders();
-  }, []);
+  }, [loadProviders]);
 
   // API functions
-  const loadProviders = async () => {
+  const loadProviders = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -117,7 +117,7 @@ export const OAuthProviderManager: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [authenticatedFetch]);
 
   const testProvider = async (providerId: string) => {
     setTesting(prev => ({ ...prev, [providerId]: true }));

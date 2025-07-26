@@ -918,7 +918,7 @@ export function graphToSceneAwareBundle(
 /**
  * Convert a node to its corresponding grammar rule in the GeneratorBundle format
  */
-function convertNodeToRule(node: Node, nodeMap: Map<string, Node>): any {
+function convertNodeToRule(node: Node, nodeMap: Map<string, Node>): Record<string, unknown> {
   switch (node.type) {
   case 'WeightedChoice':
     // Convert to weighted array rule
@@ -967,7 +967,7 @@ function convertNodeToRule(node: Node, nodeMap: Map<string, Node>): any {
  * @param bundle The bundle to validate
  * @returns True if valid, false otherwise
  */
-export function validateGeneratorBundle(bundle: any): boolean {
+export function validateGeneratorBundle(bundle: Record<string, unknown>): boolean {
   try {
     GeneratorBundleSchema.parse(bundle);
     return true;
@@ -1041,7 +1041,7 @@ export function bundleToGraph(bundle: GeneratorBundle): Graph {
 /**
  * Converts a grammar rule to a node in the graph
  */
-function convertRuleToNode(id: string, rule: any): Node | null {
+function convertRuleToNode(id: string, rule: Record<string, unknown>): Node | null {
   // Handle weighted array rule (WeightedChoice)
   if (Array.isArray(rule) && rule.length > 0 && typeof rule[0] === 'object' && 'text' in rule[0]) {
     return {
@@ -1108,7 +1108,7 @@ function convertRuleToNode(id: string, rule: any): Node | null {
 /**
  * Find references to other nodes in a rule
  */
-function findNodeReferences(rule: any): string[] {
+function findNodeReferences(rule: Record<string, unknown>): string[] {
   const refs: string[] = [];
   
   // Handle sequential rule
@@ -1175,14 +1175,14 @@ function ensureOutputNode(graph: Graph, entryPointId: string): void {
  */
 export interface ExportRequest {
   format: string;
-  data: any;
-  options: any;
+  data: Record<string, unknown>;
+  options: Record<string, unknown>;
   filename: string;
 }
 
 export interface ExportResult {
   type: 'text' | 'binary';
-  data: any;
+  data: Record<string, unknown>;
   mimeType: string;
   shouldDownload?: boolean;
 }
@@ -1239,7 +1239,7 @@ export async function exportResults(request: ExportRequest): Promise<ExportResul
 }
 
 // Fountain Script Export
-function exportFountainScript(data: any, options: any): ExportResult {
+function exportFountainScript(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
   const { results } = data;
   
   let fountainContent = `Title: Generated Script
@@ -1250,7 +1250,7 @@ FADE IN:
 
 `;
 
-  results.forEach((result: any, index: number) => {
+  results.forEach((result: { output?: string; seed?: number }, index: number) => {
     if (result.output) {
       fountainContent += `INT. SCENE ${index + 1} - DAY\n\n`;
       fountainContent += `${result.output}\n\n`;
@@ -1272,7 +1272,7 @@ FADE IN:
 }
 
 // Final Draft Export
-function exportFinalDraftScript(data: any, options: any): ExportResult {
+function exportFinalDraftScript(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
   const { results } = data;
   
   // Simplified Final Draft XML structure
@@ -1281,7 +1281,7 @@ function exportFinalDraftScript(data: any, options: any): ExportResult {
   <Content>
 `;
 
-  results.forEach((result: any, index: number) => {
+  (results as Array<{ output?: string }>).forEach((result: { output?: string }, index: number) => {
     if (result.output) {
       fdxContent += `    <Paragraph Type="Scene Heading">
       <Text>INT. SCENE ${index + 1} - DAY</Text>
@@ -1312,7 +1312,7 @@ function exportFinalDraftScript(data: any, options: any): ExportResult {
 }
 
 // ControlNet JSON Export
-function exportControlNetJSON(data: any, options: any): ExportResult {
+function exportControlNetJSON(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
   const { results, vfxData } = data;
   
   const controlNetData = {
@@ -1354,7 +1354,7 @@ function exportControlNetJSON(data: any, options: any): ExportResult {
 }
 
 // Stable Diffusion Bundle Export
-function exportStableDiffusionBundle(data: any, options: any): ExportResult {
+function exportStableDiffusionBundle(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
   // This would create a ZIP bundle with multiple files
   // For now, return JSON structure that client can handle
   const bundleData = {
@@ -1382,7 +1382,7 @@ function exportStableDiffusionBundle(data: any, options: any): ExportResult {
 }
 
 // Scene Data Export
-function exportSceneData(data: any, options: any): ExportResult {
+function exportSceneData(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
   const sceneData = {
     version: '1.0.0',
     format: 'scene-data',
@@ -1413,7 +1413,7 @@ function exportSceneData(data: any, options: any): ExportResult {
 }
 
 // CSV Analysis Export
-function exportCSVAnalysis(data: any, options: any): ExportResult {
+function exportCSVAnalysis(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
   let csvContent = 'Seed,Output,Word Count,Character Count,Execution Time (ms)\n';
   
   data.results.forEach((result: any) => {
@@ -1434,7 +1434,7 @@ function exportCSVAnalysis(data: any, options: any): ExportResult {
 }
 
 // Complete JSON Export
-function exportCompleteJSON(data: any, options: any): ExportResult {
+function exportCompleteJSON(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
   const completeData = {
     ...data,
     exportOptions: options,
@@ -1451,7 +1451,7 @@ function exportCompleteJSON(data: any, options: any): ExportResult {
 }
 
 // Professional Report Export (would generate PDF in real implementation)
-function exportProfessionalReport(data: any, options: any): ExportResult {
+function exportProfessionalReport(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
   // For now, return structured data that client can format
   const reportData = {
     type: 'professional-report',
@@ -1459,10 +1459,10 @@ function exportProfessionalReport(data: any, options: any): ExportResult {
     generatedAt: new Date().toISOString(),
     summary: {
       totalResults: data.results.length,
-      averageWordCount: data.results.reduce((sum: number, r: any) => 
+      averageWordCount: data.results.reduce((sum: number, r: unknown) => 
         sum + (r.output ? r.output.split(/\s+/).length : 0), 0) / data.results.length,
       executionStats: {
-        totalTime: data.results.reduce((sum: number, r: any) => sum + (r.executionTimeMs || 0), 0),
+        totalTime: data.results.reduce((sum: number, r: unknown) => sum + ((r as any).executionTimeMs || 0), 0),
         averageTime: data.results.reduce(
           (sum: number,
           r: any
@@ -1485,7 +1485,7 @@ function exportProfessionalReport(data: any, options: any): ExportResult {
 }
 
 // Creative Brief Export (would generate DOCX in real implementation)
-function exportCreativeBrief(data: any, options: any): ExportResult {
+function exportCreativeBrief(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
   const briefData = {
     type: 'creative-brief',
     title: 'Creative Brief - Generated Content',
@@ -1517,7 +1517,12 @@ function exportCreativeBrief(data: any, options: any): ExportResult {
 /**
  * Epic 8.6 Task 7: Hybrid Prompting Export - Combines MARS, Zada, and VFX approaches
  */
-async function exportHybridPrompting(data: any, options: any): Promise<ExportResult> {
+async function exportHybridPrompting(
+  data: Record<string,
+  unknown>,
+  options: Record<string,
+  unknown>
+): Promise<ExportResult> {
   const hybridService = new HybridPromptExportService();
   
   try {
@@ -1611,7 +1616,12 @@ async function exportHybridPrompting(data: any, options: any): Promise<ExportRes
 /**
  * Epic 8.6 Task 7: MARS Framework Export - VFX Professional Format
  */
-async function exportMARSFramework(data: any, options: any): Promise<ExportResult> {
+async function exportMARSFramework(
+  data: Record<string,
+  unknown>,
+  options: Record<string,
+  unknown>
+): Promise<ExportResult> {
   const hybridService = new HybridPromptExportService();
   
   try {
@@ -1729,7 +1739,12 @@ async function exportMARSFramework(data: any, options: any): Promise<ExportResul
 /**
  * Epic 8.6 Task 7: Zada Natural Language Export - Director-Friendly Format
  */
-async function exportZadaNaturalLanguage(data: any, options: any): Promise<ExportResult> {
+async function exportZadaNaturalLanguage(
+  data: Record<string,
+  unknown>,
+  options: Record<string,
+  unknown>
+): Promise<ExportResult> {
   const hybridService = new HybridPromptExportService();
   
   try {
@@ -1881,7 +1896,12 @@ Generated by Wild Construct Prompt System | ${new Date().toLocaleDateString()}
 /**
  * Export graph in sharing format with all annotations
  */
-async function exportSharedGraph(data: any, options: any): Promise<ExportResult> {
+async function exportSharedGraph(
+  data: Record<string,
+  unknown>,
+  options: Record<string,
+  unknown>
+): Promise<ExportResult> {
   const graphSharingService = new GraphSharingService();
   
   try {
@@ -1994,7 +2014,12 @@ async function exportSharedGraph(data: any, options: any): Promise<ExportResult>
 /**
  * Export in collaboration format with version control
  */
-async function exportCollaborationFormat(data: any, options: any): Promise<ExportResult> {
+async function exportCollaborationFormat(
+  data: Record<string,
+  unknown>,
+  options: Record<string,
+  unknown>
+): Promise<ExportResult> {
   const graphSharingService = new GraphSharingService();
   
   try {
@@ -2095,7 +2120,7 @@ async function exportCollaborationFormat(data: any, options: any): Promise<Expor
 /**
  * Extract connection labels from edges
  */
-function extractConnectionLabels(edges: any[]): any[] {
+function extractConnectionLabels(edges: Array<Record<string, unknown>>): Array<Record<string, unknown>> {
   return edges
     .filter(edge => edge.label && edge.label.trim().length > 0)
     .map(edge => ({
@@ -2113,7 +2138,7 @@ function extractConnectionLabels(edges: any[]): any[] {
 /**
  * Extract node labels and annotations
  */
-function extractNodeLabels(nodes: any[]): any[] {
+function extractNodeLabels(nodes: Array<Record<string, unknown>>): Array<Record<string, unknown>> {
   return nodes.map(node => ({
     nodeId: node.id,
     label: node.data?.label,

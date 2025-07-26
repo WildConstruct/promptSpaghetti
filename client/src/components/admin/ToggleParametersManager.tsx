@@ -12,7 +12,6 @@ import {
   Settings,
   Percent,
   Calendar,
-  Users,
   Target,
   Plus,
   Minus,
@@ -20,9 +19,6 @@ import {
   Filter,
   AlertTriangle,
   Save,
-  RotateCcw,
-  Copy,
-  Download,
   Eye,
   EyeOff,
   Play,
@@ -106,7 +102,7 @@ interface SegmentationParams {
 }
 
 export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({
-  toggleId,
+  toggleId: _toggleId, // eslint-disable-line @typescript-eslint/no-unused-vars
   toggleType,
   currentValue,
   onParametersChange,
@@ -129,7 +125,7 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({
 
     try {
       switch (toggleType) {
-      case ToggleType.PERCENTAGE_ROLLOUT:
+      case ToggleType.PERCENTAGE_ROLLOUT: {
         const percentageParams = params as PercentageRolloutParams;
         if (percentageParams.percentage < 0 || percentageParams.percentage > 100) {
           errors.push('Percentage must be between 0 and 100');
@@ -142,8 +138,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({
           }
         }
         break;
+      }
 
-      case ToggleType.MULTIVARIATE:
+      case ToggleType.MULTIVARIATE: {
         const multivariateParams = params as MultivariateParams;
         const totalPercentage = multivariateParams.variants?.reduce(
           (sum,
@@ -158,8 +155,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({
           isValid = false;
         }
         break;
+      }
 
-      case ToggleType.SCHEDULED:
+      case ToggleType.SCHEDULED: {
         const scheduledParams = params as ScheduledParams;
         if (scheduledParams.enabled && scheduledParams.startTime && scheduledParams.endTime) {
           if (new Date(scheduledParams.startTime) >= new Date(scheduledParams.endTime)) {
@@ -168,8 +166,9 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({
           }
         }
         break;
+      }
 
-      case ToggleType.SEGMENTATION:
+      case ToggleType.SEGMENTATION: {
         const segmentationParams = params as SegmentationParams;
         if (!segmentationParams.rules?.length) {
           errors.push('At least one segmentation rule is required');
@@ -177,7 +176,8 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({
         }
         break;
       }
-    } catch (error) {
+      }
+    } catch {
       errors.push('Invalid parameter configuration');
       isValid = false;
     }

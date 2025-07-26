@@ -23,57 +23,11 @@ export {
 } from './CollaborativeSync';
 
 // Default Configuration
-export const defaultMutationEngineConfig = {
-  // History management
-  historyLimit: 100,
-  enableUndo: true,
-  enableRedo: true,
-  
-  // Validation settings
-  validation: {
-    strictMode: true,
-    allowDangerousOperations: false,
-    customValidators: [],
-    enableSchemaValidation: true,
-    enableStructuralValidation: true,
-    enableSemanticValidation: false
-  },
-  
-  // Conflict resolution
-  conflictResolution: {
-    strategy: 'OPERATIONAL_TRANSFORM' as const,
-    autoResolve: true,
-    maxConflictAge: 5000,
-    enableOperationalTransform: true,
-    conflictDetectionSensitivity: 'medium' as const
-  },
-  
-  // Batch operations
-  batchAtomicity: 'all_or_nothing' as const,
-  maxBatchSize: 50,
-  
-  // Performance settings
-  enableSnapshots: true,
-  snapshotInterval: 10,
-  enableCompression: false,
-  
-  // Collaborative features
-  enableCollaboration: false,
-  syncDelay: 100,
-  maxCollaborators: 10,
-  
-  // Debug and monitoring
-  enableLogging: false,
-  enableMetrics: false,
-  logLevel: 'info' as const
-};
-
+export 
 // Utility Functions
 export const createOperationId = (): string => {
   return `op-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 };
-
-export };
 
 export const calculateChecksum = (state: { nodes: any[]; edges: any[] }): string => {
   const stateString = JSON.stringify(state);
@@ -102,14 +56,8 @@ export   position: { x: number; y: number },
   };
 };
 
-export };
-
-export };
-
 // Validation Helpers
-export };
-
-export };
+// (Validation helper functions would be exported here)
 
 // Error Types for Better Error Handling
 export class MutationEngineError extends Error {

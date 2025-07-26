@@ -12,9 +12,9 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Search, Filter, UserPlus, Download, RefreshCw, 
-  MoreVertical, User, Shield, Clock, CheckSquare,
-  Square, ChevronLeft, ChevronRight, Grid, List,
-  Settings, Activity, Users, MapPin, Calendar
+  MoreVertical, User, Shield, Clock,
+  ChevronLeft, ChevronRight, Grid, List,
+  Users, MapPin
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 
@@ -62,7 +62,8 @@ interface UserManagementState {
 
 const UserManagementDashboard: React.FC = () => {
   const navigate = useNavigate();
-  const { user: _currentUser } = useAuthStore();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { user: currentUser } = useAuthStore();
   
   // State management
   const [state, setState] = useState<UserManagementState>({
@@ -86,8 +87,8 @@ const UserManagementDashboard: React.FC = () => {
     showAdvancedFilters: false
   });
 
-  // Mock data for demonstration
-  const mockUsers: User[] = [
+  // Mock data for demonstration - wrapped in useMemo to prevent recreation
+  const mockUsers: User[] = useMemo(() => [
     {
       id: 'user-1',
       name: 'John Smith',
@@ -167,7 +168,7 @@ const UserManagementDashboard: React.FC = () => {
       permissions: ['qa'],
       teams: ['Engineering', 'QA']
     }
-  ];
+  ], []); // Empty dependency array since this is static mock data
 
   // Load users data
   useEffect(() => {
@@ -181,7 +182,7 @@ const UserManagementDashboard: React.FC = () => {
           users: mockUsers, 
           loading: false 
         }));
-      } catch (error) {
+      } catch {
         setState(prev => ({ 
           ...prev, 
           error: 'Failed to load users', 
@@ -191,7 +192,7 @@ const UserManagementDashboard: React.FC = () => {
     };
 
     loadUsers();
-  }, []);
+  }, [mockUsers]);
 
   // Filter and sort users
   const filteredAndSortedUsers = useMemo(() => {

@@ -58,7 +58,7 @@ export const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
     }
   }, [mode, token, validateToken]);
 
-  const validateForm = () => {
+  const validateForm = useCallback(() => {
     setErrors({});
     
     try {
@@ -83,7 +83,7 @@ export const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
       }
       return false;
     }
-  };
+  }, [mode, formData]);
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
@@ -183,7 +183,7 @@ export const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
           </form>
         </div>
 
-        <style jsx>{`
+        <style>{`
           .password-reset-form {
             max-width: 400px;
             margin: 0 auto;
@@ -447,7 +447,7 @@ export const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
         </form>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .password-reset-form {
           max-width: 400px;
           margin: 0 auto;

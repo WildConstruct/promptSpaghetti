@@ -8,7 +8,7 @@
  * Part of Epic 19.5 - OAuth Implementation & Framework
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 
 // Types and interfaces
@@ -118,7 +118,9 @@ export const OAuthConfigurationInterface: React.FC = () => {
   // State management
   const [selectedProvider, setSelectedProvider] = useState<string>('');
   const [configuration, setConfiguration] = useState<Partial<OAuthConfiguration>>({});
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_providers, _setProviders] = useState<OAuthProvider[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_configurations, setConfigurations] = useState<OAuthConfiguration[]>([]);
   const [securityAssessment, setSecurityAssessment] = useState<SecurityAssessment | null>(null);
   const [validation, setValidation] = useState<ValidationResult | null>(null);
@@ -179,7 +181,7 @@ export const OAuthConfigurationInterface: React.FC = () => {
   // Load existing configurations on mount
   useEffect(() => {
     loadConfigurations();
-  }, []);
+  }, [loadConfigurations]);
 
   // Initialize default configuration when provider is selected
   useEffect(() => {
@@ -189,10 +191,10 @@ export const OAuthConfigurationInterface: React.FC = () => {
         initializeConfiguration(provider);
       }
     }
-  }, [selectedProvider]);
+  }, [selectedProvider, availableProviders]);
 
   // API functions
-  const loadConfigurations = async () => {
+  const loadConfigurations = useCallback(async () => {
     setLoading(true);
     try {
       const response = await authenticatedFetch('/api/oauth-guidance/configurations');
@@ -205,7 +207,7 @@ export const OAuthConfigurationInterface: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [authenticatedFetch]);
 
   const initializeConfiguration = (provider: OAuthProvider) => {
     const defaultConfig: Partial<OAuthConfiguration> = {
@@ -244,7 +246,7 @@ export const OAuthConfigurationInterface: React.FC = () => {
       });
       const data = await response.json();
       return data.data.validation;
-    } catch (error) {
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
       return {
         valid: false,
         errors: [{ field: 'general', message: 'Validation failed', code: 'VALIDATION_ERROR' }],
@@ -262,7 +264,7 @@ export const OAuthConfigurationInterface: React.FC = () => {
       });
       const data = await response.json();
       return data.data.assessment;
-    } catch (error) {
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
       return {
         score: 0,
         level: 'low',
@@ -287,7 +289,7 @@ export const OAuthConfigurationInterface: React.FC = () => {
       });
       const data = await response.json();
       return data.success;
-    } catch (error) {
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
       return false;
     } finally {
       setTesting(false);

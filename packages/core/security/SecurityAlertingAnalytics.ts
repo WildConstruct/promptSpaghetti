@@ -52,7 +52,9 @@
 
 import { EventEmitter } from 'events';
 import {
-  DataClassificationLevel,
+  DataClassificationLevel
+} from '../types/DataClassification';
+import {
   DataOperation
 } from './DataClassificationAccessControl';
 import { SecurityAlert } from './CentralizedAccessControlService';
@@ -895,7 +897,7 @@ export class SecurityAlertingAnalytics extends EventEmitter {
       attribution: [],
       predictions: [],
       contextualData: {
-        industryTrends: [],
+        industryThrends: [],
         geopoliticalFactors: [],
         vulnerabilityCorrelations: [],
         seasonalPatterns: [],

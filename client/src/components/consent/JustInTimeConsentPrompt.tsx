@@ -7,12 +7,10 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   ConsentType,
-  ActivePrompt,
-  JustInTimePromptConfig,
-  JustInTimeAppearance
+  ActivePrompt
 } from '../../types/consent';
 import { useConsent } from '../../hooks/useConsent';
 import './JustInTimeConsentPrompt.css';
@@ -58,9 +56,9 @@ export const JustInTimeConsentPrompt: React.FC<JustInTimeConsentPromptProps> = (
         clearTimeout(autoHideTimer.current);
       }
     };
-  }, []);
+  }, [appearance.style, behavior.autoHideAfter, handleDismiss, positionPrompt, prompt.position]);
 
-  const positionPrompt = () => {
+  const positionPrompt = useCallback(() => {
     if (!promptRef.current || !prompt.position) return;
     
     const promptElement = promptRef.current;
@@ -83,7 +81,7 @@ export const JustInTimeConsentPrompt: React.FC<JustInTimeConsentPromptProps> = (
     if (rect.bottom > viewportHeight) {
       promptElement.style.top = `${y - rect.height}px`;
     }
-  };
+  }, [prompt.position]);
 
   const handleGrant = async () => {
     setIsLoading(true);
@@ -120,17 +118,17 @@ export const JustInTimeConsentPrompt: React.FC<JustInTimeConsentPromptProps> = (
     }
   };
 
-  const handleDismiss = () => {
+  const handleDismiss = useCallback(() => {
     if (behavior.allowDismiss) {
       onDismiss(prompt.id);
       handleClose();
     }
-  };
+  }, [behavior.allowDismiss, onDismiss, prompt.id, handleClose]);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setIsVisible(false);
     onClose?.();
-  };
+  }, [onClose]);
 
   if (!isVisible) {
     return null;

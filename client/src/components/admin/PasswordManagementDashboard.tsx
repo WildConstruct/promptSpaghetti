@@ -85,8 +85,8 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   const [securityEvents, setSecurityEvents] = useState<SecurityEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [_selectedPolicy, setSelectedPolicy] = useState<PasswordPolicy | null>(null);
-  const [_showPolicyModal, setShowPolicyModal] = useState(false);
+  const [, setSelectedPolicy] = useState<PasswordPolicy | null>(null);
+  const [, setShowPolicyModal] = useState(false);
 
   // Permission checks
   const canManagePolicies = ['super_admin', 'admin'].includes(userRole);
@@ -99,7 +99,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
 
     try {
       // Simulate API calls - replace with actual endpoints
-      const [_statsResponse, _policiesResponse, _eventsResponse] = await Promise.all([
+      const [,,] = await Promise.all([
         fetch('/api/admin/password-management/stats'),
         fetch('/api/admin/password-management/policies'),
         fetch('/api/admin/password-management/security-events?limit=20')

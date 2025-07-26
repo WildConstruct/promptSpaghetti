@@ -406,10 +406,10 @@ export declare const UserAttributesSchema: z.ZodObject<{
     browser?: string | undefined;
     language?: string | undefined;
     userAgent?: string | undefined;
-    timezone?: string | undefined;
     organizationId?: string | undefined;
     paymentMethod?: string | undefined;
     city?: string | undefined;
+    timezone?: string | undefined;
     parentOrganizationId?: string | undefined;
     locale?: string | undefined;
     operatingSystem?: string | undefined;
@@ -459,10 +459,10 @@ export declare const UserAttributesSchema: z.ZodObject<{
     browser?: string | undefined;
     language?: string | undefined;
     userAgent?: string | undefined;
-    timezone?: string | undefined;
     organizationId?: string | undefined;
     paymentMethod?: string | undefined;
     city?: string | undefined;
+    timezone?: string | undefined;
     parentOrganizationId?: string | undefined;
     locale?: string | undefined;
     operatingSystem?: string | undefined;
@@ -511,11 +511,11 @@ export declare const SegmentConditionSchema: z.ZodObject<{
     value?: any;
     comparison?: "relative" | "absolute" | "percentile" | undefined;
     threshold?: number | undefined;
+    aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
     timeWindow?: {
         value: number;
         unit: "days" | "minutes" | "hours" | "weeks" | "months";
     } | undefined;
-    aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
     logicalOperator?: "AND" | "OR" | "NOT" | undefined;
     lastEvaluated?: Date | undefined;
 }, {
@@ -529,11 +529,11 @@ export declare const SegmentConditionSchema: z.ZodObject<{
     weight?: number | undefined;
     comparison?: "relative" | "absolute" | "percentile" | undefined;
     threshold?: number | undefined;
+    aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
     timeWindow?: {
         value: number;
         unit: "days" | "minutes" | "hours" | "weeks" | "months";
     } | undefined;
-    aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
     logicalOperator?: "AND" | "OR" | "NOT" | undefined;
     lastEvaluated?: Date | undefined;
     evaluationCount?: number | undefined;
@@ -582,11 +582,11 @@ export declare const UserSegmentSchema: z.ZodObject<{
         value?: any;
         comparison?: "relative" | "absolute" | "percentile" | undefined;
         threshold?: number | undefined;
+        aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
         timeWindow?: {
             value: number;
             unit: "days" | "minutes" | "hours" | "weeks" | "months";
         } | undefined;
-        aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
         logicalOperator?: "AND" | "OR" | "NOT" | undefined;
         lastEvaluated?: Date | undefined;
     }, {
@@ -600,11 +600,11 @@ export declare const UserSegmentSchema: z.ZodObject<{
         weight?: number | undefined;
         comparison?: "relative" | "absolute" | "percentile" | undefined;
         threshold?: number | undefined;
+        aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
         timeWindow?: {
             value: number;
             unit: "days" | "minutes" | "hours" | "weeks" | "months";
         } | undefined;
-        aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
         logicalOperator?: "AND" | "OR" | "NOT" | undefined;
         lastEvaluated?: Date | undefined;
         evaluationCount?: number | undefined;
@@ -771,11 +771,11 @@ export declare const UserSegmentSchema: z.ZodObject<{
         value?: any;
         comparison?: "relative" | "absolute" | "percentile" | undefined;
         threshold?: number | undefined;
+        aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
         timeWindow?: {
             value: number;
             unit: "days" | "minutes" | "hours" | "weeks" | "months";
         } | undefined;
-        aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
         logicalOperator?: "AND" | "OR" | "NOT" | undefined;
         lastEvaluated?: Date | undefined;
     }[];
@@ -789,11 +789,6 @@ export declare const UserSegmentSchema: z.ZodObject<{
         actionable: boolean;
     }[];
     createdBy: string;
-    validationRules: {
-        description: string;
-        rule: string;
-        isRequired: boolean;
-    }[];
     qualityScore: number;
     userCount: number;
     joinLogic: "complex" | "all" | "any";
@@ -816,9 +811,17 @@ export declare const UserSegmentSchema: z.ZodObject<{
         syncStatus: "pending" | "failed" | "synced" | "syncing";
         lastSync?: Date | undefined;
     }>;
+    validationRules: {
+        description: string;
+        rule: string;
+        isRequired: boolean;
+    }[];
     childSegmentIds: string[];
     description?: string | undefined;
     icon?: string | undefined;
+    churnRate?: number | undefined;
+    averageLifetimeValue?: number | undefined;
+    conversionRate?: number | undefined;
     schedule?: {
         activeDays: number[];
         activeHours: {
@@ -829,9 +832,6 @@ export declare const UserSegmentSchema: z.ZodObject<{
         startDate?: Date | undefined;
         endDate?: Date | undefined;
     } | undefined;
-    churnRate?: number | undefined;
-    averageLifetimeValue?: number | undefined;
-    conversionRate?: number | undefined;
     engagementScore?: number | undefined;
     lastEvaluated?: Date | undefined;
     complexLogicExpression?: string | undefined;
@@ -861,11 +861,11 @@ export declare const UserSegmentSchema: z.ZodObject<{
         weight?: number | undefined;
         comparison?: "relative" | "absolute" | "percentile" | undefined;
         threshold?: number | undefined;
+        aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
         timeWindow?: {
             value: number;
             unit: "days" | "minutes" | "hours" | "weeks" | "months";
         } | undefined;
-        aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
         logicalOperator?: "AND" | "OR" | "NOT" | undefined;
         lastEvaluated?: Date | undefined;
         evaluationCount?: number | undefined;
@@ -881,11 +881,6 @@ export declare const UserSegmentSchema: z.ZodObject<{
         actionable: boolean;
     }[];
     createdBy: string;
-    validationRules: {
-        description: string;
-        rule: string;
-        isRequired?: boolean | undefined;
-    }[];
     userCount: number;
     userCountHistory: {
         date: Date;
@@ -901,10 +896,18 @@ export declare const UserSegmentSchema: z.ZodObject<{
         lastSync?: Date | undefined;
         syncStatus?: "pending" | "failed" | "synced" | "syncing" | undefined;
     }>;
+    validationRules: {
+        description: string;
+        rule: string;
+        isRequired?: boolean | undefined;
+    }[];
     childSegmentIds: string[];
     description?: string | undefined;
     isActive?: boolean | undefined;
     icon?: string | undefined;
+    churnRate?: number | undefined;
+    averageLifetimeValue?: number | undefined;
+    conversionRate?: number | undefined;
     schedule?: {
         activeDays: number[];
         activeHours: {
@@ -915,9 +918,6 @@ export declare const UserSegmentSchema: z.ZodObject<{
         startDate?: Date | undefined;
         endDate?: Date | undefined;
     } | undefined;
-    churnRate?: number | undefined;
-    averageLifetimeValue?: number | undefined;
-    conversionRate?: number | undefined;
     qualityScore?: number | undefined;
     engagementScore?: number | undefined;
     lastEvaluated?: Date | undefined;
@@ -1070,10 +1070,10 @@ declare const _default: {
         browser?: string | undefined;
         language?: string | undefined;
         userAgent?: string | undefined;
-        timezone?: string | undefined;
         organizationId?: string | undefined;
         paymentMethod?: string | undefined;
         city?: string | undefined;
+        timezone?: string | undefined;
         parentOrganizationId?: string | undefined;
         locale?: string | undefined;
         operatingSystem?: string | undefined;
@@ -1123,10 +1123,10 @@ declare const _default: {
         browser?: string | undefined;
         language?: string | undefined;
         userAgent?: string | undefined;
-        timezone?: string | undefined;
         organizationId?: string | undefined;
         paymentMethod?: string | undefined;
         city?: string | undefined;
+        timezone?: string | undefined;
         parentOrganizationId?: string | undefined;
         locale?: string | undefined;
         operatingSystem?: string | undefined;
@@ -1175,11 +1175,11 @@ declare const _default: {
         value?: any;
         comparison?: "relative" | "absolute" | "percentile" | undefined;
         threshold?: number | undefined;
+        aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
         timeWindow?: {
             value: number;
             unit: "days" | "minutes" | "hours" | "weeks" | "months";
         } | undefined;
-        aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
         logicalOperator?: "AND" | "OR" | "NOT" | undefined;
         lastEvaluated?: Date | undefined;
     }, {
@@ -1193,11 +1193,11 @@ declare const _default: {
         weight?: number | undefined;
         comparison?: "relative" | "absolute" | "percentile" | undefined;
         threshold?: number | undefined;
+        aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
         timeWindow?: {
             value: number;
             unit: "days" | "minutes" | "hours" | "weeks" | "months";
         } | undefined;
-        aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
         logicalOperator?: "AND" | "OR" | "NOT" | undefined;
         lastEvaluated?: Date | undefined;
         evaluationCount?: number | undefined;
@@ -1246,11 +1246,11 @@ declare const _default: {
             value?: any;
             comparison?: "relative" | "absolute" | "percentile" | undefined;
             threshold?: number | undefined;
+            aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
             timeWindow?: {
                 value: number;
                 unit: "days" | "minutes" | "hours" | "weeks" | "months";
             } | undefined;
-            aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
             logicalOperator?: "AND" | "OR" | "NOT" | undefined;
             lastEvaluated?: Date | undefined;
         }, {
@@ -1264,11 +1264,11 @@ declare const _default: {
             weight?: number | undefined;
             comparison?: "relative" | "absolute" | "percentile" | undefined;
             threshold?: number | undefined;
+            aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
             timeWindow?: {
                 value: number;
                 unit: "days" | "minutes" | "hours" | "weeks" | "months";
             } | undefined;
-            aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
             logicalOperator?: "AND" | "OR" | "NOT" | undefined;
             lastEvaluated?: Date | undefined;
             evaluationCount?: number | undefined;
@@ -1435,11 +1435,11 @@ declare const _default: {
             value?: any;
             comparison?: "relative" | "absolute" | "percentile" | undefined;
             threshold?: number | undefined;
+            aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
             timeWindow?: {
                 value: number;
                 unit: "days" | "minutes" | "hours" | "weeks" | "months";
             } | undefined;
-            aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
             logicalOperator?: "AND" | "OR" | "NOT" | undefined;
             lastEvaluated?: Date | undefined;
         }[];
@@ -1453,11 +1453,6 @@ declare const _default: {
             actionable: boolean;
         }[];
         createdBy: string;
-        validationRules: {
-            description: string;
-            rule: string;
-            isRequired: boolean;
-        }[];
         qualityScore: number;
         userCount: number;
         joinLogic: "complex" | "all" | "any";
@@ -1480,9 +1475,17 @@ declare const _default: {
             syncStatus: "pending" | "failed" | "synced" | "syncing";
             lastSync?: Date | undefined;
         }>;
+        validationRules: {
+            description: string;
+            rule: string;
+            isRequired: boolean;
+        }[];
         childSegmentIds: string[];
         description?: string | undefined;
         icon?: string | undefined;
+        churnRate?: number | undefined;
+        averageLifetimeValue?: number | undefined;
+        conversionRate?: number | undefined;
         schedule?: {
             activeDays: number[];
             activeHours: {
@@ -1493,9 +1496,6 @@ declare const _default: {
             startDate?: Date | undefined;
             endDate?: Date | undefined;
         } | undefined;
-        churnRate?: number | undefined;
-        averageLifetimeValue?: number | undefined;
-        conversionRate?: number | undefined;
         engagementScore?: number | undefined;
         lastEvaluated?: Date | undefined;
         complexLogicExpression?: string | undefined;
@@ -1525,11 +1525,11 @@ declare const _default: {
             weight?: number | undefined;
             comparison?: "relative" | "absolute" | "percentile" | undefined;
             threshold?: number | undefined;
+            aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
             timeWindow?: {
                 value: number;
                 unit: "days" | "minutes" | "hours" | "weeks" | "months";
             } | undefined;
-            aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct" | undefined;
             logicalOperator?: "AND" | "OR" | "NOT" | undefined;
             lastEvaluated?: Date | undefined;
             evaluationCount?: number | undefined;
@@ -1545,11 +1545,6 @@ declare const _default: {
             actionable: boolean;
         }[];
         createdBy: string;
-        validationRules: {
-            description: string;
-            rule: string;
-            isRequired?: boolean | undefined;
-        }[];
         userCount: number;
         userCountHistory: {
             date: Date;
@@ -1565,10 +1560,18 @@ declare const _default: {
             lastSync?: Date | undefined;
             syncStatus?: "pending" | "failed" | "synced" | "syncing" | undefined;
         }>;
+        validationRules: {
+            description: string;
+            rule: string;
+            isRequired?: boolean | undefined;
+        }[];
         childSegmentIds: string[];
         description?: string | undefined;
         isActive?: boolean | undefined;
         icon?: string | undefined;
+        churnRate?: number | undefined;
+        averageLifetimeValue?: number | undefined;
+        conversionRate?: number | undefined;
         schedule?: {
             activeDays: number[];
             activeHours: {
@@ -1579,9 +1582,6 @@ declare const _default: {
             startDate?: Date | undefined;
             endDate?: Date | undefined;
         } | undefined;
-        churnRate?: number | undefined;
-        averageLifetimeValue?: number | undefined;
-        conversionRate?: number | undefined;
         qualityScore?: number | undefined;
         engagementScore?: number | undefined;
         lastEvaluated?: Date | undefined;

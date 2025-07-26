@@ -216,6 +216,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({
   };
 
   // User Status Row Component
+  // eslint-disable-next-line react/prop-types
   const UserStatusRow: React.FC<{ user: UserStatusInfo }> = ({ user }) => {
     const isSelected = selectedUserIds.includes(user.userId);
     
@@ -689,6 +690,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({
           </thead>
           <tbody>
             {users.map(user => (
+              // eslint-disable-next-line react/prop-types
               <UserStatusRow key={user.userId} user={user} />
             ))}
           </tbody>

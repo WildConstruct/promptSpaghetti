@@ -59,7 +59,7 @@ const EXCEPTIONS = new Set([
   'ctx', 'req', 'res', 'err', 'cb', 'fn', 'db'
 ]);
 
-function checkNamingConventions(filePath) {
+function checkNamingConventions(filePath: string): any[] {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
     const violations = [];
@@ -153,11 +153,11 @@ function checkNamingConventions(filePath) {
   }
 }
 
-function getLineNumber(content, index) {
+function getLineNumber(content: string, index: number): number {
   return content.substring(0, index).split('\n').length;
 }
 
-function main() {
+function main(): void {
   const filePaths = process.argv.slice(2);
   let totalViolations = 0;
   let hasErrors = false;

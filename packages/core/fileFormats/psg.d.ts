@@ -82,8 +82,8 @@ export declare const EditorSettingsSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     autoSave: boolean;
     theme: "light" | "dark";
-    snapToGrid: boolean;
     showNodeIcons: boolean;
+    snapToGrid: boolean;
     autoSaveInterval: number;
     gridVisible: boolean;
     miniMapVisible: boolean;
@@ -91,8 +91,8 @@ export declare const EditorSettingsSchema: z.ZodObject<{
 }, {
     autoSave?: boolean | undefined;
     theme?: "light" | "dark" | undefined;
-    snapToGrid?: boolean | undefined;
     showNodeIcons?: boolean | undefined;
+    snapToGrid?: boolean | undefined;
     autoSaveInterval?: number | undefined;
     gridVisible?: boolean | undefined;
     miniMapVisible?: boolean | undefined;
@@ -209,8 +209,8 @@ export declare const PSGFileSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         autoSave: boolean;
         theme: "light" | "dark";
-        snapToGrid: boolean;
         showNodeIcons: boolean;
+        snapToGrid: boolean;
         autoSaveInterval: number;
         gridVisible: boolean;
         miniMapVisible: boolean;
@@ -218,8 +218,8 @@ export declare const PSGFileSchema: z.ZodObject<{
     }, {
         autoSave?: boolean | undefined;
         theme?: "light" | "dark" | undefined;
-        snapToGrid?: boolean | undefined;
         showNodeIcons?: boolean | undefined;
+        snapToGrid?: boolean | undefined;
         autoSaveInterval?: number | undefined;
         gridVisible?: boolean | undefined;
         miniMapVisible?: boolean | undefined;
@@ -273,8 +273,8 @@ export declare const PSGFileSchema: z.ZodObject<{
     settings: {
         autoSave: boolean;
         theme: "light" | "dark";
-        snapToGrid: boolean;
         showNodeIcons: boolean;
+        snapToGrid: boolean;
         autoSaveInterval: number;
         gridVisible: boolean;
         miniMapVisible: boolean;
@@ -334,8 +334,8 @@ export declare const PSGFileSchema: z.ZodObject<{
     settings?: {
         autoSave?: boolean | undefined;
         theme?: "light" | "dark" | undefined;
-        snapToGrid?: boolean | undefined;
         showNodeIcons?: boolean | undefined;
+        snapToGrid?: boolean | undefined;
         autoSaveInterval?: number | undefined;
         gridVisible?: boolean | undefined;
         miniMapVisible?: boolean | undefined;

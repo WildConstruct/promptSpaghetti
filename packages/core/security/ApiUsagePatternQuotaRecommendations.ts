@@ -86,7 +86,7 @@ export interface AdjustmentCondition {
   conditionType: ConditionType;
   field: string;
   operator: string;
-  value: any;
+  value: unknown;
   weight: number;
 }
 
@@ -103,7 +103,7 @@ export enum ConditionType {
 
 export interface AdjustmentAction {
   actionType: AdjustmentActionType;
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
   duration: number; // minutes, 0 for permanent
   priority: number;
 }
@@ -181,7 +181,7 @@ export interface TierFeature {
   featureId: string;
   featureName: string;
   enabled: boolean;
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
 }
 
 export interface AbuseDetectionConfig {
@@ -232,7 +232,7 @@ export interface AbuseResponseAction {
   actionId: string;
   severity: AbuseSeverity;
   actionType: AbuseActionType;
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
   autoExecute: boolean;
   escalation: boolean;
 }
@@ -297,7 +297,7 @@ export enum AlertMetricType {
 export interface NotificationChannel {
   channelId: string;
   channelType: NotificationChannelType;
-  configuration: Record<string, any>;
+  configuration: Record<string, unknown>;
   enabled: boolean;
 }
 
@@ -434,7 +434,7 @@ export interface ActionItem {
   itemId: string;
   description: string;
   actionType: string;
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
   estimatedTime: number; // minutes
   dependencies: string[];
 }
@@ -630,7 +630,7 @@ export enum AbuseType {
 export interface AbuseEvidence {
   evidenceType: EvidenceType;
   description: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   strength: number; // 0-1
   timestamp: Date;
 }
@@ -657,7 +657,7 @@ export interface ResponseAction {
   actionType: AbuseActionType;
   appliedAt: Date;
   duration: number; // minutes
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
   effectiveness: number; // 0-1
   status: ActionStatus;
 }
@@ -2241,7 +2241,7 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
           actionId: `action_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
           actionType: config.actionType,
           appliedAt: new Date(),
-          duration: config.parameters.duration || 60,
+          duration: typeof config.parameters.duration === 'number' ? config.parameters.duration : 60,
           parameters: config.parameters,
           effectiveness: 0,
           status: ActionStatus.PENDING
@@ -2310,9 +2310,6 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
     });
   }
 
-  private monitorRecommendationImpact(recommendationId: string): void {
-    // Implementation for monitoring recommendation impact
-  }
 
   private calculateActualImpact(
     recommendation: QuotaRecommendation,
@@ -2368,7 +2365,7 @@ interface AbuseRuleResult {
   detected: boolean;
   strength: number;
   description: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
 }
 
 interface OptimizationResult {
@@ -2384,7 +2381,7 @@ interface OptimizationAction {
   actionId: string;
   actionType: string;
   affectedUsers: string[];
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
 }
 
 // ==========================================

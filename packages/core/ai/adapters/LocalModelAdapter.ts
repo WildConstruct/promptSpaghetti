@@ -66,7 +66,7 @@ export interface LocalModelResponse {
 
 export class LocalModelAdapter extends BaseAIModel {
   private config: LocalModelConfig;
-  private modelInfo: any = null;
+  private modelInfo: unknown = null;
 
   constructor(id: string, config: LocalModelConfig) {
     const metadata: ModelMetadata = {
@@ -137,7 +137,7 @@ export class LocalModelAdapter extends BaseAIModel {
     }
   }
 
-  async process(input: any, options?: LocalRequestOptions): Promise<any> {
+  async process(input: unknown, options?: LocalRequestOptions): Promise<unknown> {
     try {
       if (this._status !== AIModelStatus.READY) {
         throw new ModelUnavailableError(this._id);
@@ -166,7 +166,7 @@ export class LocalModelAdapter extends BaseAIModel {
     this._requestQueue = [];
   }
 
-  async estimate(input: any, options?: LocalRequestOptions): Promise<CostEstimate> {
+  async estimate(input: unknown, options?: LocalRequestOptions): Promise<CostEstimate> {
     // Local models have no cost, but we can estimate resource usage
     const messages = this._convertToMessages(input, options?.system_prompt);
             

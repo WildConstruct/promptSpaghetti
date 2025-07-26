@@ -24,8 +24,7 @@ import {
   Add as AddIcon,
   Delete as DeleteIcon,
   Settings as SettingsIcon,
-  TrendingUp as TrendingUpIcon,
-  Code as CodeIcon
+  TrendingUp as TrendingUpIcon
 } from '@mui/icons-material';
 
 export interface ActionConfig {
@@ -85,14 +84,7 @@ const COMMON_ATTRIBUTES = [
   { value: 'custom.attribute', label: 'Custom Attribute', type: 'string' }
 ];
 
-export const ActionConfigEditor: React.FC<ActionConfigEditorProps> = ({
-  action,
-  value,
-  onChange,
-  error
-}) => {
-  const [config, setConfig] = useState<ActionConfig>(value);
-  const [showAdvanced, setShowAdvanced] = useState(false);
+export   const [showAdvanced, setShowAdvanced] = useState(false);
 
   useEffect(() => {
     setConfig(value);

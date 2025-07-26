@@ -72,7 +72,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
       component_health: {
         security_analytics_service: {
           status: 'healthy',
-          last_check: Date.now( as unknown),
+          last_check: Date.now( as unknown as unknown),
           response_time_ms: 50,
           error_rate: 0.01,
           availability_percent: 99.9
@@ -107,7 +107,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
       backup_success_rate: 95,
       disaster_recovery_readiness: 90,
       incident_count_last_24h: 1
-    } as unknown);
+    } as unknown as unknown as unknown);
 
     mockReliabilityEngineer.getCircuitBreakerStatus = jest.fn<unknown[], unknown>().mockReturnValue(new Map([
       ['security_analytics_service', {
@@ -117,7 +117,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
         next_attempt_time: 0,
         success_count: 100,
         total_requests: 100,
-        last_state_change: Date.now( as unknown) - 3600000
+        last_state_change: Date.now( as unknown as unknown) - 3600000
       }],
       ['optimization_service', {
         state: 'closed',
@@ -130,14 +130,14 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
       }]
     ]));
 
-    mockReliabilityEngineer.getActiveIncidents = jest.fn<unknown[], unknown>().mockReturnValue([] as unknown);
+    mockReliabilityEngineer.getActiveIncidents = jest.fn<unknown[], unknown>().mockReturnValue([] as unknown as unknown as unknown);
     mockReliabilityEngineer.getDisasterRecoveryPlans = jest.fn<unknown[], unknown>().mockReturnValue([
       {
         id: 'security_analytics_failure',
         name: 'Security Analytics Service Failure Recovery',
         priority: 'critical',
         success_rate: 95,
-        last_tested: Date.now( as unknown) - 86400000 // 1 day ago
+        last_tested: Date.now( as unknown as unknown) - 86400000 // 1 day ago
       }
     ]);
 
@@ -145,28 +145,28 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
     mockReliabilityEngineer.emit = jest.fn<unknown[], unknown>();
 
     // Mock analytics collector
-    mockAnalyticsCollector.track = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
+    mockAnalyticsCollector.track = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown);
     mockAnalyticsCollector.on = jest.fn<unknown[], unknown>();
 
     // Mock analytics DAO
-    mockAnalyticsDAO.insertEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
+    mockAnalyticsDAO.insertEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown);
 
     // Mock performance monitoring service
-    mockPerformanceMonitoringService.recordMetric = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
+    mockPerformanceMonitoringService.recordMetric = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown);
 
     // Mock health check framework
-    mockHealthCheckFramework.registerHealthCheck = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
+    mockHealthCheckFramework.registerHealthCheck = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown);
     mockHealthCheckFramework.executeHealthCheck = jest.fn<unknown[], unknown>().mockResolvedValue({
       healthy: true,
       details: { status: 'healthy' }
-    } as unknown);
+    } as unknown as unknown as unknown);
     mockHealthCheckFramework.on = jest.fn<unknown[], unknown>();
 
     // Mock diagnostic service
-    mockDiagnosticService.registerDiagnostic = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
+    mockDiagnosticService.registerDiagnostic = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown);
 
     // Mock Epic17 performance monitor
-    mockEpic17PerformanceMonitor.recordAdminOperation = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
+    mockEpic17PerformanceMonitor.recordAdminOperation = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown);
 
     // Test configuration
     testConfig = {

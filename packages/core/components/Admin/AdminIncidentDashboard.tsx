@@ -16,37 +16,33 @@ import {
   Shield,
   Settings,
   Users,
-  Database,
-  Zap,
   Clock,
   CheckCircle,
   XCircle,
   Play,
   Pause,
-  RotateCcw,
   ArrowUp,
   ArrowDown,
   Bell,
   TrendingUp,
-  Eye,
   RefreshCw,
-  Filter,
-  Download,
-  ChevronRight,
+  Filter as _Filter,
+  Download as _Download,
+  ChevronRight as _ChevronRight,
   AlertCircle,
-  Info
+  Info as _Info
 } from 'lucide-react';
 import {
-  Epic17IncidentPlaybook,
+  Epic17IncidentPlaybook as _Epic17IncidentPlaybook,
   PlaybookCategory,
   Epic17System,
   PlaybookExecutionResult,
-  PlaybookExecutionContext,
+  PlaybookExecutionContext as _PlaybookExecutionContext,
   BusinessImpact,
   UserImpact,
-  HealthCheckTrigger,
-  AlertTrigger,
-  MetricThreshold
+  HealthCheckTrigger as _HealthCheckTrigger,
+  AlertTrigger as _AlertTrigger,
+  MetricThreshold as _MetricThreshold
 } from '../../types/Epic17IncidentPlaybooks';
 import { ActionSeverity } from '../../types/EnforcementTypes';
 
@@ -513,7 +509,7 @@ const OverviewTab: React.FC<{
   dashboardState: DashboardState;
   onPlaybookExecute: (playbookId: string, options: ExecutionOptions) => Promise<void>;
   onIncidentCreate: (incident: IncidentCreationData) => Promise<void>;
-}> = ({ dashboardState, onPlaybookExecute, onIncidentCreate }) => {
+}> = ({ dashboardState, onPlaybookExecute: _onPlaybookExecute, onIncidentCreate: _onIncidentCreate }) => {
   return (
     <div className="overview-tab">
       {/* Critical Alerts Section */}
@@ -753,7 +749,7 @@ const MetricCard: React.FC<{
 const IncidentsTab: React.FC<{
   incidents: ActiveIncident[];
   onIncidentCreate: (incident: IncidentCreationData) => Promise<void>;
-}> = ({ incidents, onIncidentCreate }) => {
+}> = ({ incidents, onIncidentCreate: _onIncidentCreate }) => {
   return (
     <div className="incidents-tab">
       <div className="tab-header">
@@ -772,7 +768,7 @@ const IncidentsTab: React.FC<{
 const PlaybooksTab: React.FC<{
   executions: PlaybookExecution[];
   onPlaybookExecute: (playbookId: string, options: ExecutionOptions) => Promise<void>;
-}> = ({ executions, onPlaybookExecute }) => {
+}> = ({ executions, onPlaybookExecute: _onPlaybookExecute }) => {
   return (
     <div className="playbooks-tab">
       <div className="tab-header">
@@ -812,7 +808,7 @@ const SystemsTab: React.FC<{
 const AnalyticsTab: React.FC<{
   performanceMetrics: PerformanceMetrics;
   recentActivity: ActivityLog[];
-}> = ({ performanceMetrics, recentActivity }) => {
+}> = ({ performanceMetrics, recentActivity: _recentActivity }) => {
   return (
     <div className="analytics-tab">
       <div className="tab-header">

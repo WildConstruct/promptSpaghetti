@@ -42,9 +42,7 @@ const COUNTRIES = [
   // Add more countries as needed
 ];
 
-export const VerificationForm: React.FC<VerificationFormProps> = ({ onSubmit, onError, initialData, isEditing = false }) => {
-  const [requestedLevel, setRequestedLevel] = useState<VerificationLevel>('basic');
-  const [formData, setFormData] = useState<VerificationInformation>({
+export   const [formData, setFormData] = useState<VerificationInformation>({
     personal_info: {
       full_name: initialData?.personal_info?.full_name || '',
       email: initialData?.personal_info?.email || '',
@@ -389,7 +387,7 @@ export const VerificationForm: React.FC<VerificationFormProps> = ({ onSubmit, on
         </button>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .verification-form {
           max-width: 800px;
           margin: 0 auto;

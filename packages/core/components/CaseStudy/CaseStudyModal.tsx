@@ -508,7 +508,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
         )}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .case-study-modal-overlay {
           position: fixed;
           top: 0;

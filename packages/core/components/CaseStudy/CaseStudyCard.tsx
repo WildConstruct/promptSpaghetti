@@ -370,7 +370,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .case-study-card {
           position: relative;
           background: #ffffff;

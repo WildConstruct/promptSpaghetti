@@ -134,10 +134,10 @@ describe('VarianceAnalysisService', () => {
         createMockResult(2, 'This is a medium length sentence with some complexity, punctuation, and structure.'),
         createMockResult(
           3,
-          'A very long and elaborate sentence that contains multiple clauses,
-          extensive detail,
-          sophisticated vocabulary,
-          and complex grammatical structures that demonstrate significant variation in writing style and approach!'
+          'A very long and elaborate sentence that contains multiple clauses, ' +
+          'extensive detail, ' +
+          'sophisticated vocabulary, ' +
+          'and complex grammatical structures that demonstrate significant variation in writing style and approach!'
         )
       ];
 

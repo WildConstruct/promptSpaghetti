@@ -24,7 +24,7 @@ console.log(`📁 Found ${filesWithUserEvent.length} files with missing userEven
 
 let filesProcessed = 0;
 
-filesWithUserEvent.forEach(filePath => {
+filesWithUserEvent.forEach((filePath: string) => {
   try {
     if (!fs.existsSync(filePath)) {
       console.log(`⚠️  File not found: ${filePath}`);

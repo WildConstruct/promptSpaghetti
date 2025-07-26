@@ -144,7 +144,7 @@ export const OAuthSecurityDashboard: React.FC = () => {
     }, 30000); // Refresh every 30 seconds
 
     return () => clearInterval(interval);
-  }, [autoRefresh, timeRange]);
+  }, [autoRefresh, loadDashboardData]);
 
   // Load data on mount and time range change
   useEffect(() => {
@@ -170,47 +170,47 @@ export const OAuthSecurityDashboard: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [loading, timeRange]);
+  }, [loading, loadAuditLogs, loadComplianceStatus, loadSecurityEvents, loadSecurityMetrics, loadThreatDetection]);
 
-  const loadSecurityMetrics = async () => {
+  const loadSecurityMetrics = useCallback(async () => {
     const response = await authenticatedFetch(`/api/oauth-security/metrics?timeRange=${timeRange}`);
     const data = await response.json();
     if (data.success) {
       setMetrics(data.data.metrics);
     }
-  };
+  }, [authenticatedFetch, timeRange]);
 
-  const loadSecurityEvents = async () => {
+  const loadSecurityEvents = useCallback(async () => {
     const response = await authenticatedFetch(`/api/oauth-security/events?timeRange=${timeRange}&limit=50`);
     const data = await response.json();
     if (data.success) {
       setSecurityEvents(data.data.events || []);
     }
-  };
+  }, [authenticatedFetch, timeRange]);
 
-  const loadComplianceStatus = async () => {
+  const loadComplianceStatus = useCallback(async () => {
     const response = await authenticatedFetch('/api/oauth-security/compliance');
     const data = await response.json();
     if (data.success) {
       setComplianceStatus(data.data.compliance || []);
     }
-  };
+  }, [authenticatedFetch]);
 
-  const loadThreatDetection = async () => {
+  const loadThreatDetection = useCallback(async () => {
     const response = await authenticatedFetch(`/api/oauth-security/threats?timeRange=${timeRange}&limit=20`);
     const data = await response.json();
     if (data.success) {
       setThreats(data.data.threats || []);
     }
-  };
+  }, [authenticatedFetch, timeRange]);
 
-  const loadAuditLogs = async () => {
+  const loadAuditLogs = useCallback(async () => {
     const response = await authenticatedFetch(`/api/oauth-security/audit-logs?timeRange=${timeRange}&limit=100`);
     const data = await response.json();
     if (data.success) {
       setAuditLogs(data.data.logs || []);
     }
-  };
+  }, [authenticatedFetch, timeRange]);
 
   // Computed values
   const securityScore = useMemo(() => {

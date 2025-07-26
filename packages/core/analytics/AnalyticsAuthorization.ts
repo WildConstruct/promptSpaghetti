@@ -99,9 +99,9 @@ export interface AuthorizationResult {
  */
 export class AnalyticsAuthorizationService {
   private policies: Map<string, AuthorizationPolicy> = new Map();
-  private authService: any; // Integration with AuthenticationService from Story 1.2
+  private authService: unknown; // Integration with AuthenticationService from Story 1.2
 
-  constructor(authService?: any) {
+  constructor(authService?: unknown) {
     this.authService = authService;
     this.initializeDefaultPolicies();
   }
@@ -386,7 +386,7 @@ export class AnalyticsAuthorizationService {
   private async applyPolicies(
     event: Partial<UnifiedAnalyticsEvent>,
     authContext: AuthContext,
-    action: 'publish' | 'view'
+    // action: 'publish' | 'view'
   ): Promise<AuthorizationResult> {
     const appliedRules: string[] = [];
     let finalResult: AuthorizationResult = { allowed: false };
@@ -519,7 +519,7 @@ export class AnalyticsAuthorizationService {
   /**
    * Redact sensitive field from event
    */
-  private redactField(event: any, fieldPath: string): void {
+  private redactField(event: Record<string, unknown>, fieldPath: string): void {
     const parts = fieldPath.split('.');
     let current = event;
 
@@ -537,7 +537,12 @@ export class AnalyticsAuthorizationService {
   /**
    * Filter event fields
    */
-  private filterFields(event: any, fields: string[], mode: 'allow' | 'deny'): any {
+  private filterFields(
+    event: Record<string,
+    unknown>,
+    fields: string[],
+    mode: 'allow' | 'deny'
+  ): Record<string, unknown> {
     // Simplified implementation - in practice would need more sophisticated field filtering
     if (mode === 'deny') {
       const filtered = { ...event };
@@ -580,10 +585,10 @@ export class AnalyticsAuthorizationService {
   /**
    * Validate auth context
    */
-  validateAuthContext(authContext: any): AuthContext | null {
+  validateAuthContext(authContext: unknown): AuthContext | null {
     try {
       return AuthContextSchema.parse(authContext);
-    } catch (error) {
+    } catch {
       return null;
     }
   }

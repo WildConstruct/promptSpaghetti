@@ -458,44 +458,9 @@ export interface AnomalyDetectionExportData {
 }
 
 // Default configuration
-const defaultDetectionConfig: AnomalyDetectionConfig = {
-  algorithms: ['statistical_zscore', 'isolation_forest', 'prophet_decomposition'],
-  sensitivityLevel: 'medium',
-  minimumConfidence: 0.7,
-  lookbackPeriods: 14,
-  seasonalityDetection: true,
-  trendAnalysis: true,
-  segmentAnalysis: true,
-  cohortAnalysis: true,
-  customRules: []
-};
 
-const defaultAlertConfig: AlertConfiguration = {
-  channels: ['dashboard', 'email'],
-  escalationRules: [
-    { severity: 'critical', escalationDelay: 15, escalationChain: ['ops', 'management'], maxEscalations: 3 },
-    { severity: 'high', escalationDelay: 30, escalationChain: ['ops'], maxEscalations: 2 },
-    { severity: 'medium', escalationDelay: 60, escalationChain: ['ops'], maxEscalations: 1 }
-  ],
-  suppressionRules: [],
-  throttling: {
-    enabled: true,
-    maxAlertsPerHour: 10,
-    maxAlertsPerDay: 50,
-    cooldownPeriod: 300
-  },
-  severity: {
-    critical: { enabled: true, channels: ['dashboard', 'email', 'sms', 'pagerduty'], immediateAlert: true, escalationEnabled: true },
-    high: { enabled: true, channels: ['dashboard', 'email', 'slack'], immediateAlert: true, escalationEnabled: true },
-    medium: { enabled: true, channels: ['dashboard', 'email'], immediateAlert: false, escalationEnabled: false },
-    low: { enabled: true, channels: ['dashboard'], immediateAlert: false, escalationEnabled: false },
-    info: { enabled: false, channels: ['dashboard'], immediateAlert: false, escalationEnabled: false }
-  },
-  recipients: []
-};
 
-export   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export   const [error, setError] = useState<string | null>(null);
   const [selectedAnomaly, setSelectedAnomaly] = useState<DetectedAnomaly | null>(null);
   const [activeTab, setActiveTab] = useState<'current' | 'historical' | 'predicted' | 'alerts'>('current');
   const [filterSeverity, setFilterSeverity] = useState<AnomalySeverity | 'all'>('all');

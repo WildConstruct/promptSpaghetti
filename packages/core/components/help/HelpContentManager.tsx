@@ -235,19 +235,6 @@ export
 
 // Specialized hooks for common help scenarios
 export   
-  // Stabilize helpContent object to prevent infinite loops
-  const stableHelpContent = React.useMemo(() => helpContent, [
-    helpContent.title,
-    helpContent.description,
-    helpContent.category,
-    helpContent.trigger,
-    helpContent.position,
-    JSON.stringify(helpContent.showOnDisclosureLevel),
-    JSON.stringify(helpContent.examples),
-    helpContent.shortcut,
-    helpContent.priority
-  ]);
-  
   React.useEffect(() => {
     const content: HelpContent = {
       ...stableHelpContent,
@@ -264,11 +251,11 @@ export
     .filter(content => content.category === 'onboarding')
     .sort((a, b) => (a.priority === 'high' ? -1 : 1));
   
-  const currentStep = onboardingSteps[onboardingStep];
+  const currentStepData = onboardingSteps[onboardingStep];
   
   return {
     isOnboardingActive: onboardingEnabled && !onboardingComplete,
-    currentStep,
+    currentStep: currentStepData,
     currentStepIndex: onboardingStep,
     totalSteps: onboardingSteps.length,
     allSteps: onboardingSteps,

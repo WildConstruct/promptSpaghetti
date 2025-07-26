@@ -1,6 +1,6 @@
 // Epic 17.1.5 - Schedule Editor Component
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -16,22 +16,16 @@ import {
   Switch,
   Box,
   Typography,
-  Divider,
   Alert,
   Chip,
   Grid,
-  Paper,
-  IconButton,
-  Tooltip
+  Paper
 } from '@mui/material';
 import {
   Schedule as ScheduleIcon,
   AccessTime as TimeIcon,
   Repeat as RepeatIcon,
-  Warning as WarningIcon,
-  Info as InfoIcon,
-  Delete as DeleteIcon,
-  Add as AddIcon
+  Warning as WarningIcon
 } from '@mui/icons-material';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -116,30 +110,7 @@ const CONFLICT_RESOLUTIONS = [
   { value: 'merge', label: 'Merge', description: 'Try to merge with conflicting schedules' }
 ];
 
-export const ScheduleEditor: React.FC<ScheduleEditorProps> = ({
-  open,
-  onClose,
-  onSave,
-  initialData = {},
-  toggleId,
-  toggleName,
-  existingSchedules = []
-}) => {
-  const [formData, setFormData] = useState<ScheduleFormData>({
-    toggleId,
-    name: '',
-    description: '',
-    type: 'one_time',
-    action: 'enable',
-    startTime: new Date(Date.now() + 60 * 60 * 1000), // 1 hour from now
-    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    actionConfig: {},
-    priority: 0,
-    conflictResolution: 'skip',
-    enabled: true,
-    ...initialData
-  });
-
+export 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [conflicts, setConflicts] = useState<Array<{ description: string; severity: string }>>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -156,9 +127,9 @@ export const ScheduleEditor: React.FC<ScheduleEditorProps> = ({
     if (formData.startTime && formData.action) {
       checkConflicts();
     }
-  }, [formData.startTime, formData.endTime, formData.action, formData.type]);
+  }, [formData.startTime, formData.endTime, formData.action, formData.type, checkConflicts]);
 
-  const checkConflicts = () => {
+  const checkConflicts = useCallback(() => {
     const potentialConflicts = [];
 
     for (const existing of existingSchedules) {
@@ -191,7 +162,7 @@ export const ScheduleEditor: React.FC<ScheduleEditorProps> = ({
     }
 
     setConflicts(potentialConflicts);
-  };
+  }, [existingSchedules, formData, setConflicts]);
 
   const checkTimeOverlap = (start1: Date, end1: Date | undefined, start2: Date, end2: Date | undefined): boolean => {
     const effectiveEnd1 = end1 || new Date(start1.getTime() + 365 * 24 * 60 * 60 * 1000);

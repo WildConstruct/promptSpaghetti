@@ -175,7 +175,7 @@ export const VerificationRequestForm: React.FC<VerificationRequestFormProps> = (
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .verification-request-form {
           max-width: 800px;
           margin: 0 auto;
@@ -478,7 +478,7 @@ const EmailVerificationStep: React.FC<{
         {isSubmitting ? 'Sending...' : 'Send Verification Email'}
       </button>
 
-      <style jsx>{`
+      <style>{`
         .form-group {
           margin-bottom: 20px;
         }
@@ -551,7 +551,7 @@ const PhoneVerificationStep: React.FC<{
         {isSubmitting ? 'Sending...' : 'Send Verification SMS'}
       </button>
 
-      <style jsx>{`
+      <style>{`
         .form-group {
           margin-bottom: 20px;
         }

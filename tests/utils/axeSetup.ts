@@ -91,7 +91,7 @@ export class AccessibilityTester {
     
     // Configure rule exclusions if specified
     if (options?.skipRules) {
-      const ruleConfig: any = {};
+      const ruleConfig: Record<string, { enabled: boolean }> = {};
       options.skipRules.forEach(rule => {
         ruleConfig[rule] = { enabled: false };
       });
@@ -107,7 +107,7 @@ export class AccessibilityTester {
     // Filter by impact level if specified
     if (options?.includedImpacts) {
       results.violations = results.violations.filter(violation =>
-        options.includedImpacts!.includes(violation.impact as any)
+        options.includedImpacts!.includes(violation.impact as 'minor' | 'moderate' | 'serious' | 'critical')
       );
     }
     
@@ -217,9 +217,9 @@ export class AccessibilityTester {
    * Generate accessibility report
    */
   static async generateReport(component: ReactElement): Promise<{
-    violations: any[];
-    passes: any[];
-    incomplete: any[];
+    violations: unknown[];
+    passes: unknown[];
+    incomplete: unknown[];
     summary: {
       violationCount: number;
       passCount: number;
@@ -247,16 +247,7 @@ export class AccessibilityTester {
 }
 
 // Predefined test suites for common scenarios
-export const AccessibilityTestSuites = {
-  
-  /**
-   * Basic accessibility test suite
-   */
-  basic: async (component: ReactElement) => {
-    await AccessibilityTester.testComponent(component, {
-      includedImpacts: ['serious', 'critical']
-    });
-  },
+export   },
   
   /**
    * Comprehensive accessibility test suite
@@ -342,8 +333,7 @@ export const AccessibilityTestSuites = {
 export { axe };
 
 // Helper function for quick component testing
-export const testAccessibility = AccessibilityTester.testComponent;
-
+export 
 // Export test matchers for TypeScript
 declare global {
   namespace jest {
@@ -354,33 +344,4 @@ declare global {
 }
 
 // Export common accessibility test patterns
-export const A11Y_PATTERNS = {
-  REQUIRED_ARIA_ATTRIBUTES: {
-    button: ['aria-label'],
-    dialog: ['aria-labelledby', 'aria-modal'],
-    progressbar: ['aria-valuenow', 'aria-valuemin', 'aria-valuemax'],
-    tab: ['aria-selected'],
-    tabpanel: ['aria-labelledby'],
-    textbox: ['aria-label', 'aria-labelledby'],
-    listbox: ['aria-label', 'aria-labelledby'],
-    option: ['aria-selected']
-  },
-  
-  KEYBOARD_INTERACTIONS: {
-    ESCAPE: 'Escape',
-    ENTER: 'Enter',
-    SPACE: ' ',
-    TAB: 'Tab',
-    ARROW_UP: 'ArrowUp',
-    ARROW_DOWN: 'ArrowDown',
-    ARROW_LEFT: 'ArrowLeft',
-    ARROW_RIGHT: 'ArrowRight'
-  },
-  
-  CONTRAST_RATIOS: {
-    WCAG_AA_NORMAL: 4.5,
-    WCAG_AA_LARGE: 3.0,
-    WCAG_AAA_NORMAL: 7.0,
-    WCAG_AAA_LARGE: 4.5
-  }
-};
+export };

@@ -1108,8 +1108,8 @@ export interface EnhancedComplianceDashboard extends ComplianceDashboard {
  * Enhanced Compliance Monitor with Baseline Tracking Integration
  */
 export class EnhancedComplianceMonitor extends ComplianceMonitor {
-  private baselineTracker: any; // Will be imported dynamically
-  private historicalAnalyzer: any; // Will be imported dynamically
+  private baselineTracker: unknown; // Will be imported dynamically
+  private historicalAnalyzer: unknown; // Will be imported dynamically
 
   constructor() {
     super();
@@ -1169,13 +1169,13 @@ export class EnhancedComplianceMonitor extends ComplianceMonitor {
       const baselineTracking = {
         overallBaselineHealth: baselineDashboard.overallHealthScore,
         baselinesMet: Object.values(baselineDashboard.frameworkHealth)
-          .reduce((sum: number, fh: any) => sum + fh.baselinesMet, 0),
+          .reduce((sum: number, fh: unknown) => sum + (fh as any).baselinesMet, 0),
         totalBaselines: Object.values(baselineDashboard.frameworkHealth)
-          .reduce((sum: number, fh: any) => sum + fh.baselinesTracked, 0),
+          .reduce((sum: number, fh: unknown) => sum + (fh as any).baselinesTracked, 0),
         criticalDeviations: Object.values(baselineDashboard.frameworkHealth)
-          .reduce((sum: number, fh: any) => sum + fh.criticalDeviations, 0),
+          .reduce((sum: number, fh: unknown) => sum + (fh as any).criticalDeviations, 0),
         frameworkBaselines: Object.entries(baselineDashboard.frameworkHealth)
-          .reduce((acc: any, [framework, data]: [string, any]) => {
+          .reduce((acc: unknown, [framework, data]: [string, unknown]) => {
             acc[framework] = {
               baselinesMet: data.baselinesMet,
               totalBaselines: data.baselinesTracked,
@@ -1249,7 +1249,7 @@ export class EnhancedComplianceMonitor extends ComplianceMonitor {
     framework: 'GDPR' | 'CCPA' | 'SOC2' | 'ISO27001' | 'MPA' | 'INTERNAL',
     metricName: string,
     actualValue: number,
-    context?: Record<string, any>
+    context?: Record<string, unknown>
   ): Promise<void> {
     if (!this.baselineTracker) return;
 
@@ -1329,8 +1329,8 @@ export class EnhancedComplianceMonitor extends ComplianceMonitor {
     }
   }
 
-  private async calculateAuditReadiness(baselineDashboard: any): Promise<EnhancedComplianceDashboard['auditReadiness']> {
-    const frameworkReadiness: Record<string, any> = {};
+  private async calculateAuditReadiness(baselineDashboard: unknown): Promise<EnhancedComplianceDashboard['auditReadiness']> {
+    const frameworkReadiness: Record<string, unknown> = {};
     const frameworks = ['GDPR', 'SOC2', 'MPA', 'INTERNAL'];
 
     let overallReadinessTotal = 0;
@@ -1376,7 +1376,7 @@ export class EnhancedComplianceMonitor extends ComplianceMonitor {
     };
   }
 
-  private identifyMissingEvidence(framework: string, frameworkHealth: any): string[] {
+  private identifyMissingEvidence(framework: string, frameworkHealth: unknown): string[] {
     const missingEvidence: string[] = [];
 
     if (frameworkHealth.score < 90) {
@@ -1420,4 +1420,4 @@ export class EnhancedComplianceMonitor extends ComplianceMonitor {
 }
 
 // Export singleton instance
-export export const enhancedComplianceMonitor = new EnhancedComplianceMonitor();
+export const enhancedComplianceMonitor = new EnhancedComplianceMonitor();

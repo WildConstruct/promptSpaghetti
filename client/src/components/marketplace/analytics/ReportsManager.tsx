@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { CustomReport } from '../../../types/analytics';
 import { ReportBuilder } from './ReportBuilder';
 import { ReportCard } from './ReportCard';
@@ -27,7 +27,7 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   // Load reports
-  const loadReports = async () => {
+  const loadReports = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -40,12 +40,12 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [creatorId]);
 
   // Load reports on mount
   useEffect(() => {
     loadReports();
-  }, [creatorId]);
+  }, [loadReports]);
 
   // Handle report save
   const handleReportSave = (report: CustomReport) => {

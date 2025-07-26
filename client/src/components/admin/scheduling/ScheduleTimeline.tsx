@@ -5,17 +5,13 @@ import {
   Box,
   Paper,
   Typography,
-  Button,
   Tooltip,
   Chip,
-  Card,
-  CardContent,
   IconButton,
   FormControl,
   InputLabel,
   Select,
-  MenuItem,
-  Zoom
+  MenuItem
 } from '@mui/material';
 import {
   ZoomIn as ZoomInIcon,
@@ -73,12 +69,19 @@ const TIME_RANGES = [
   { value: '90d', label: '90 Days', hours: 24 * 90 }
 ];
 
-export   const [zoomLevel, setZoomLevel] = useState(1);
+export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({ schedules, onScheduleClick }) => {
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [timeRange, setTimeRange] = useState<TimeRange>('24h');
 
   const timeRangeConfig = TIME_RANGES.find(tr => tr.value === timeRange)!;
-  const now = new Date();
-  const startTime = new Date(now.getTime() - (timeRangeConfig.hours / 2) * 60 * 60 * 1000);
-  const endTime = new Date(now.getTime() + (timeRangeConfig.hours / 2) * 60 * 60 * 1000);
+  
+  const { startTime, endTime } = useMemo(() => {
+    const now = new Date();
+    return {
+      startTime: new Date(now.getTime() - (timeRangeConfig.hours / 2) * 60 * 60 * 1000),
+      endTime: new Date(now.getTime() + (timeRangeConfig.hours / 2) * 60 * 60 * 1000)
+    };
+  }, [timeRangeConfig.hours]);
 
   // Filter schedules to show only those within the time range
   const visibleSchedules = useMemo(() => {
@@ -93,7 +96,10 @@ export   const [zoomLevel, setZoomLevel] = useState(1);
   }, [schedules, startTime, endTime]);
 
   // Group schedules by time slots for better visualization
-      const slotDuration = timeRangeConfig.hours * 60 * 60 * 1000 / 24; // 24 slots
+  // TODO: Consider using timeSlots for grouped visualization in future
+  /*
+  const timeSlots = useMemo(() => {
+    const slotDuration = timeRangeConfig.hours * 60 * 60 * 1000 / 24; // 24 slots
     const slots: Array<{ start: Date; end: Date; schedules: Schedule[] }> = [];
 
     for (let i = 0; i < 24; i++) {
@@ -113,7 +119,8 @@ export   const [zoomLevel, setZoomLevel] = useState(1);
     }
 
     return slots;
-  }, [visibleSchedules, startTime, timeRangeConfig.hours]);
+  }, [visibleSchedules, startTime, endTime, timeRangeConfig.hours]);
+  */
 
   const getTimelinePosition = (date: Date): number => {
     const totalDuration = endTime.getTime() - startTime.getTime();
@@ -202,7 +209,7 @@ export   const [zoomLevel, setZoomLevel] = useState(1);
     return markers;
   };
 
-  const renderScheduleBar = (schedule: Schedule, _index: number) => {
+  const renderScheduleBar = (schedule: Schedule) => {
     const scheduleTime = schedule.nextExecution || schedule.startTime;
     const position = getTimelinePosition(scheduleTime);
     const width = getScheduleWidth(schedule);
@@ -472,3 +479,5 @@ export   const [zoomLevel, setZoomLevel] = useState(1);
     </Box>
   );
 };
+
+export default ScheduleTimeline;

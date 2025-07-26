@@ -7,7 +7,7 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { 
   useJustInTimeConsentContext, 
   useConsentPrompt
@@ -20,8 +20,6 @@ interface AnalyticsDashboardProps {
   data?: unknown[];
 }
 
-const AnalyticsDashboardBase: React.FC<AnalyticsDashboardProps> = ({ data = [] }) => {
-  const { hasConsent } = useConsent();
   const { promptForConsent } = useConsentPrompt();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -65,9 +63,7 @@ const AnalyticsDashboardBase: React.FC<AnalyticsDashboardProps> = ({ data = [] }
 };
 
 // Example 2: Newsletter Signup - requires marketing consent
-export const NewsletterSignup: React.FC = () => {
-  const { hasConsent } = useConsent();
-  const [email, setEmail] = useState('');
+export   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -123,9 +119,7 @@ export const NewsletterSignup: React.FC = () => {
 };
 
 // Example 3: Social Share Button - requires social media consent
-export const SocialShareButton: React.FC<{ url: string; title: string }> = ({ url, title }) => {
-  const { hasConsent } = useConsent();
-  const { triggerPromptForElement } = useJustInTimeConsentContext();
+export   const { triggerPromptForElement } = useJustInTimeConsentContext();
   const [isSharing, setIsSharing] = useState(false);
 
   const handleShare = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -175,13 +169,11 @@ export const SocialShareButton: React.FC<{ url: string; title: string }> = ({ ur
 };
 
 // Example 4: Personalized Recommendations - requires personalization consent
-export const PersonalizedRecommendations: React.FC = () => {
-  const { hasConsent } = useConsent();
-  const { promptForConsent } = useConsentPrompt();
+export   const { promptForConsent } = useConsentPrompt();
   const [recommendations, setRecommendations] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const loadPersonalizedContent = async () => {
+  const loadPersonalizedContent = useCallback(async () => {
     if (!hasConsent(ConsentType.PERSONALIZATION)) {
       setIsLoading(true);
       const consentGranted = await promptForConsent('recommendations', 'view');
@@ -196,11 +188,11 @@ export const PersonalizedRecommendations: React.FC = () => {
     
     // Load personalized recommendations
     setRecommendations(['Personalized Item 1', 'Your Favorite Item', 'Recommended for You']);
-  };
+  }, [hasConsent, promptForConsent]);
 
   React.useEffect(() => {
     loadPersonalizedContent();
-  }, []);
+  }, [loadPersonalizedContent]);
 
   return (
     <div className="recommendations">
@@ -238,9 +230,7 @@ export const PersonalizedRecommendations: React.FC = () => {
 };
 
 // Example 5: Feature with Blocking Consent (must have consent to use)
-export const AdvancedAnalyticsFeature: React.FC = () => {
-  const { hasConsent } = useConsent();
-  const { promptForConsent } = useConsentPrompt();
+export   const { promptForConsent } = useConsentPrompt();
   const [isUnlocking, setIsUnlocking] = useState(false);
 
   const unlockFeature = async () => {
@@ -279,65 +269,4 @@ export const AdvancedAnalyticsFeature: React.FC = () => {
 };
 
 // Example usage in main app component
-export const ConsentAwareApp: React.FC = () => {
-  return (
-    <div className="app">
-      <h1>Just-in-Time Consent Demo</h1>
-      
-      <section>
-        <AnalyticsDashboardBase />
-      </section>
-      
-      <section>
-        <NewsletterSignup />
-      </section>
-      
-      <section>
-        <SocialShareButton 
-          url="https://example.com" 
-          title="Check this out!" 
-        />
-      </section>
-      
-      <section>
-        <PersonalizedRecommendations />
-      </section>
-      
-      <section>
-        <AdvancedAnalyticsFeature />
-      </section>
-      
-      {/* Examples of declarative consent attributes */}
-      <section>
-        <h3>Declarative Consent Examples</h3>
-        
-        <a 
-          href="/analytics" 
-          data-consent-feature="analytics_dashboard"
-          data-consent-action="navigate"
-        >
-          View Analytics (auto-prompt)
-        </a>
-        
-        <button
-          data-consent-feature="marketing_newsletter"
-          data-consent-action="click"
-        >
-          Subscribe to Newsletter (auto-prompt)
-        </button>
-        
-        <div 
-          data-consent-feature="personalization_features"
-          data-consent-action="view"
-          style={{ 
-            padding: '10px', 
-            border: '1px dashed #ccc', 
-            cursor: 'pointer' 
-          }}
-        >
-          Click me for personalization prompt
-        </div>
-      </section>
-    </div>
-  );
-};
+export };

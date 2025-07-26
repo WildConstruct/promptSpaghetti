@@ -588,7 +588,7 @@ export class DeviceFingerprintingService {
     eventType: string,
     severity: 'low' | 'medium' | 'high',
     description: string,
-    contextData?: any
+    contextData?: Record<string, unknown>
   ): Promise<void> {
     await this.db.query(`
       INSERT INTO device_security_events (

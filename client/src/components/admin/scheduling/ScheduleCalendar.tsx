@@ -69,9 +69,9 @@ const MONTHS = [
   'July', 'August', 'September', 'October', 'November', 'December'
 ];
 
-export   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const [popoverSchedules, setPopoverSchedules] = useState<Schedule[]>([]);
+export   const [popoverSchedules, setPopoverSchedules] = useState<Schedule[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   // Get first day of the month and calculate calendar grid
   const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);

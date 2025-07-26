@@ -15,9 +15,9 @@ import {
   Eye, 
   EyeOff, 
   Shield,
-  Lock,
-  Zap,
-  Clock
+  // Lock, // Unused
+  Zap
+  // Clock // Unused
 } from 'lucide-react';
 
 export interface PasswordPolicy {
@@ -114,7 +114,7 @@ export function PasswordValidator({
   className = ''
 }: PasswordValidatorProps) {
   const [showPasswordVisible, setShowPasswordVisible] = useState(showPassword);
-  const policy = { ...DEFAULT_POLICY, ...customPolicy };
+  const policy = useMemo(() => ({ ...DEFAULT_POLICY, ...customPolicy }), [customPolicy]);
 
   const validationResult = useMemo(() => {
     return validatePassword(password, policy, userContext);

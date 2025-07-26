@@ -22,7 +22,7 @@ class ExtensionScaffolder {
     this.templates = this.loadTemplates();
   }
 
-  async createExtension(name, type, options = {}) {
+  async createExtension(name: string, type: string, options: any = {}): Promise<string> {
     console.log(`🚀 Creating ${EXTENSION_TYPES[type]}: ${name}`);
     
     // Validate inputs
@@ -51,7 +51,7 @@ class ExtensionScaffolder {
     return projectDir;
   }
 
-  validateInputs(name, type) {
+  validateInputs(name: string, type: string): void {
     if (!name || typeof name !== 'string') {
       throw new Error('Extension name is required');
     }
@@ -65,7 +65,7 @@ class ExtensionScaffolder {
     }
   }
 
-  createProjectDirectory(name) {
+  createProjectDirectory(name: string): string {
     const projectDir = path.resolve(process.cwd(), name);
     
     if (fs.existsSync(projectDir)) {
@@ -76,7 +76,7 @@ class ExtensionScaffolder {
     return projectDir;
   }
 
-  async generateFromTemplate(projectDir, type, variables) {
+  async generateFromTemplate(projectDir: string, type: string, variables: any): Promise<void> {
     const template = this.templates[type];
     
     for (const [filePath, content] of Object.entries(template)) {
@@ -96,7 +96,7 @@ class ExtensionScaffolder {
     }
   }
 
-  processTemplate(content, variables) {
+  processTemplate(content: string, variables: any): string {
     let processed = content;
     
     for (const [key, value] of Object.entries(variables)) {
@@ -107,7 +107,7 @@ class ExtensionScaffolder {
     return processed;
   }
 
-  initializeNpmProject(projectDir, name, type) {
+  initializeNpmProject(projectDir: string, name: string, type: string): void {
     const packageJson = {
       name: name,
       version: '1.0.0',
@@ -145,7 +145,7 @@ class ExtensionScaffolder {
     );
   }
 
-  installDependencies(projectDir, type) {
+  installDependencies(projectDir: string, type: string): void {
     console.log('📦 Installing dependencies...');
     
     try {
@@ -158,7 +158,7 @@ class ExtensionScaffolder {
     }
   }
 
-  loadTemplates() {
+  loadTemplates(): any {
     return {
       node: this.getNodeExtensionTemplate(),
       ui: this.getUIExtensionTemplate(),
@@ -167,7 +167,7 @@ class ExtensionScaffolder {
     };
   }
 
-  getNodeExtensionTemplate() {
+  getNodeExtensionTemplate(): any {
     return {
       'manifest.json': JSON.stringify({
         manifest_version: '1.0',
@@ -382,7 +382,7 @@ Describe how to use your extension here.
     };
   }
 
-  getUIExtensionTemplate() {
+  getUIExtensionTemplate(): any {
     return {
       'manifest.json': JSON.stringify({
         manifest_version: '1.0',
@@ -565,7 +565,7 @@ npm run dev
     };
   }
 
-  getTransformExtensionTemplate() {
+  getTransformExtensionTemplate(): any {
     return {
       'manifest.json': JSON.stringify({
         manifest_version: '1.0',
@@ -685,7 +685,7 @@ const result = await extension.transform(inputData, options);
     };
   }
 
-  getStorageExtensionTemplate() {
+  getStorageExtensionTemplate(): any {
     return {
       'manifest.json': JSON.stringify({
         manifest_version: '1.0',
@@ -839,7 +839,7 @@ Configure your storage connection settings in the extension configuration.
 }
 
 // CLI Implementation
-function main() {
+function main(): void {
   const args = process.argv.slice(2);
   
   if (args.length === 0) {
@@ -866,7 +866,7 @@ function main() {
   }
 }
 
-function handleCreate(args) {
+function handleCreate(args: string[]): void {
   if (args.length < 2) {
     console.error('Usage: create-prompt-extension create <name> <type> [options]');
     process.exit(1);
@@ -883,14 +883,14 @@ function handleCreate(args) {
   }
 }
 
-function listExtensionTypes() {
+function listExtensionTypes(): void {
   console.log('Available extension types:');
   for (const [type, description] of Object.entries(EXTENSION_TYPES)) {
     console.log(`  ${type.padEnd(10)} - ${description}`);
   }
 }
 
-function showUsage() {
+function showUsage(): void {
   console.log(`
 🚀 PromptSpaghetti Extension Scaffolder
 

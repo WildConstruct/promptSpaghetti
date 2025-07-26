@@ -117,7 +117,6 @@ export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({
     exportHistory,
     scheduledExports,
     exportFormats,
-    exportReport,
     testExport,
     loadExportHistory,
     loadScheduledExports,
@@ -143,13 +142,13 @@ export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({
     loadInitialData();
   }, [loadInitialData]);
 
-  const loadStatistics = async () => {
+  const loadStatistics = useCallback(async () => {
     const stats = await getExportStatistics();
     setStatistics(stats);
-  };
+  }, [getExportStatistics]);
 
   // Handle quick export with sample data
-  const handleQuickExport = (_format: 'pdf' | 'excel' | 'csv' | 'json') => {
+  const handleQuickExport = () => {
     const reportData = customReportData || generateSampleReportData();
     setCurrentReportData(reportData);
     setExportModalOpen(true);
@@ -183,7 +182,7 @@ export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({
         {showQuickExport && (
           <div className="flex gap-2">
             <Button
-              onClick={() => handleQuickExport('pdf')}
+              onClick={() => handleQuickExport()}
               disabled={isExporting}
             >
               <FileExport className="w-4 h-4 mr-2" />
@@ -295,7 +294,7 @@ export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({
                     <p className="text-muted-foreground">No recent exports</p>
                     <Button 
                       className="mt-4"
-                      onClick={() => handleQuickExport('pdf')}
+                      onClick={() => handleQuickExport()}
                     >
                       Create Your First Export
                     </Button>
@@ -387,7 +386,7 @@ export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Quick Export Buttons */}
             <Card className="cursor-pointer hover:shadow-md transition-shadow"
-              onClick={() => handleQuickExport('pdf')}>
+              onClick={() => handleQuickExport()}>
               <CardContent className="p-6 text-center">
                 <FileText className="w-8 h-8 mx-auto mb-3 text-red-500" />
                 <h3 className="font-semibold">Export as PDF</h3>
@@ -398,7 +397,7 @@ export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({
             </Card>
 
             <Card className="cursor-pointer hover:shadow-md transition-shadow"
-              onClick={() => handleQuickExport('excel')}>
+              onClick={() => handleQuickExport()}>
               <CardContent className="p-6 text-center">
                 <BarChart3 className="w-8 h-8 mx-auto mb-3 text-green-500" />
                 <h3 className="font-semibold">Export as Excel</h3>
@@ -409,7 +408,7 @@ export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({
             </Card>
 
             <Card className="cursor-pointer hover:shadow-md transition-shadow"
-              onClick={() => handleQuickExport('csv')}>
+              onClick={() => handleQuickExport()}>
               <CardContent className="p-6 text-center">
                 <FileExport className="w-8 h-8 mx-auto mb-3 text-blue-500" />
                 <h3 className="font-semibold">Export as CSV</h3>
@@ -420,7 +419,7 @@ export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({
             </Card>
 
             <Card className="cursor-pointer hover:shadow-md transition-shadow"
-              onClick={() => handleQuickExport('json')}>
+              onClick={() => handleQuickExport()}>
               <CardContent className="p-6 text-center">
                 <Settings className="w-8 h-8 mx-auto mb-3 text-purple-500" />
                 <h3 className="font-semibold">Export as JSON</h3>

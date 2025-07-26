@@ -175,7 +175,7 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
         <div className="conflict-assignments">
           <h5>Conflicting Assignments:</h5>
           <div className="assignment-list">
-            {conflict.conflictingAssignments.map(assignmentId => (
+            {conflict.conflictingAssignments.map((assignmentId: string) => (
               <div key={assignmentId} className="assignment-ref">
                 <code>{assignmentId}</code>
               </div>
@@ -210,7 +210,7 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
                 })}
               >
                 <option value="">Choose assignment...</option>
-                {conflict.conflictingAssignments.map(assignmentId => (
+                {conflict.conflictingAssignments.map((assignmentId: string) => (
                   <option key={assignmentId} value={assignmentId}>
                     {assignmentId}
                   </option>
@@ -282,7 +282,7 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
             <div className="conflict-detail-section">
               <h4>Conflicting Assignments</h4>
               <div className="assignment-details">
-                {selectedConflict.conflictingAssignments.map(assignmentId => (
+                {selectedConflict.conflictingAssignments.map((assignmentId: string) => (
                   <div key={assignmentId} className="assignment-detail">
                     <code>{assignmentId}</code>
                     {/* In a real implementation, you would fetch and display full assignment details */}

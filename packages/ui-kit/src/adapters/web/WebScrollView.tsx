@@ -85,7 +85,7 @@ export const WebScrollView = forwardRef<HTMLDivElement, WebScrollViewProps>(({
       </div>
       
       {/* Custom scrollbar styles */}
-      <style jsx>{`
+      <style>{`
         .web-scroll-view::-webkit-scrollbar {
           width: ${showsVerticalScrollIndicator ? '8px' : '0px'};
           height: ${showsHorizontalScrollIndicator ? '8px' : '0px'};

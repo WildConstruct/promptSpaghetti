@@ -21,15 +21,12 @@ import {
   Shield, 
   Award, 
   Eye, 
-  EyeOff, 
-  Settings, 
   Palette, 
   Monitor,
   Smartphone,
   Tablet,
   Crown,
   CheckCircle,
-  Star,
   AlertTriangle,
   Refresh,
   Save,
@@ -114,7 +111,7 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
   });
 
   // Load preview data
-  const loadPreviewData = async () => {
+  const loadPreviewData = async (): Promise<void> => {
     try {
       setLoading(true);
       // Get sample users with different trust levels for preview
@@ -122,14 +119,17 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
       const result = await response.json();
       
       if (result.success) {
-        const mappedData = result.data.map((user: unknown) => ({
-          userId: user.userId,
-          username: user.username,
-          trustScore: user.overallTrustScore,
-          reputationLevel: user.reputationLevel,
-          verificationLevel: user.verification?.verificationLevel || 'unverified',
+        const mappedData = result.data.map((user: Record<string, unknown>): TrustDisplayPreview => ({
+          userId: (user.userId as string) || '',
+          username: (user.username as string) || '',
+          trustScore: (user.overallTrustScore as number) || 0,
+          reputationLevel: (user.reputationLevel as string) || 'bronze',
+          verificationLevel: (
+            (user.verification as Record<string,
+            unknown>
+          )?.verificationLevel as string) || 'unverified',
           badges: [], // Would be populated from user reputation data
-          flagged: user.adminNotes?.flagged || false
+          flagged: ((user.adminNotes as Record<string, unknown>)?.flagged as boolean) || false
         }));
         setPreviewData(mappedData);
       }
@@ -142,7 +142,7 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
   };
 
   // Save configuration
-  const saveConfiguration = async () => {
+  const saveConfiguration = async (): Promise<void> => {
     try {
       setLoading(true);
       const response = await fetch('/api/admin/verification-display/config', {
@@ -164,7 +164,7 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
   };
 
   // Export configuration
-  const exportConfiguration = () => {
+  const exportConfiguration = (): void => {
     const configString = JSON.stringify(config, null, 2);
     const blob = new Blob([configString], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -184,7 +184,8 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
 
   // Mock trust indicator component based on configuration
   const TrustIndicatorPreview: React.FC<{ user: TrustDisplayPreview; size: string }> = ({ user, size }) => {
-    const getTrustIcon = (level: string) => {
+    // eslint-disable-next-line react/prop-types
+    const getTrustIcon = (level: string): JSX.Element => {
       switch (level) {
       case 'diamond': return <Crown className="w-4 h-4 text-purple-600" />;
       case 'platinum': return <Award className="w-4 h-4 text-blue-600" />;
@@ -195,7 +196,7 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
       }
     };
 
-    const getTrustColor = (level: string) => {
+    const getTrustColor = (level: string): string => {
       switch (level) {
       case 'diamond': return 'border-purple-300 bg-purple-50';
       case 'platinum': return 'border-blue-300 bg-blue-50';
@@ -332,8 +333,8 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                   <label className="font-medium">Badge Style</label>
                   <Select 
                     value={config.badgeStyle} 
-                    onValueChange={(value: Error) => 
-                      setConfig(prev => ({ ...prev, badgeStyle: value }))
+                    onValueChange={(value: string) => 
+                      setConfig(prev => ({ ...prev, badgeStyle: value as 'compact' | 'detailed' | 'minimal' }))
                     }
                   >
                     <SelectTrigger>
@@ -351,8 +352,8 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                   <label className="font-medium">Trust Indicator Size</label>
                   <Select 
                     value={config.trustIndicatorSize} 
-                    onValueChange={(value: Error) => 
-                      setConfig(prev => ({ ...prev, trustIndicatorSize: value }))
+                    onValueChange={(value: string) => 
+                      setConfig(prev => ({ ...prev, trustIndicatorSize: value as 'small' | 'medium' | 'large' }))
                     }
                   >
                     <SelectTrigger>
@@ -370,8 +371,8 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                   <label className="font-medium">Color Scheme</label>
                   <Select 
                     value={config.colorScheme} 
-                    onValueChange={(value: Error) => 
-                      setConfig(prev => ({ ...prev, colorScheme: value }))
+                    onValueChange={(value: string) => 
+                      setConfig(prev => ({ ...prev, colorScheme: value as 'default' | 'professional' | 'vibrant' }))
                     }
                   >
                     <SelectTrigger>
@@ -577,6 +578,7 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                         'grid-cols-3'
                   }`}>
                     {previewData.map((user) => (
+                      /* eslint-disable-next-line react/prop-types */
                       <TrustIndicatorPreview 
                         key={user.userId} 
                         user={user} 
@@ -618,3 +620,5 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
     </Card>
   );
 };
+
+export { VerificationDisplayManager as default };

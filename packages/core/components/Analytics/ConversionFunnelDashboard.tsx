@@ -211,7 +211,7 @@ export const ConversionFunnelDashboard: React.FC<ConversionFunnelDashboardProps>
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .conversion-funnel-dashboard {
           display: flex;
           flex-direction: column;

@@ -48,8 +48,8 @@ interface TemplateStats {
 
 interface TemplateCustomization {
   templateId: string;
-  parameters: Record<string, any>;
-  customFields: Record<string, any>;
+  parameters: Record<string, unknown>;
+  customFields: Record<string, unknown>;
   previewData?: unknown;
 }
 
@@ -162,9 +162,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
   }, [templates, filter]);
 
   // Template creation handler
-      try {
-      const newTemplate = await createTemplate(templateData);
-      setTemplates(prev => [...prev, newTemplate]);
+        setTemplates(prev => [...prev, newTemplate]);
       setIsCreating(false);
       setError(null);
     } catch (err) {
@@ -175,9 +173,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
   }, [createTemplate]);
 
   // Template update handler
-      try {
-      const updatedTemplate = await updateTemplate(templateId, updates);
-      setTemplates(prev => prev.map(t => t.id === templateId ? updatedTemplate : t));
+        setTemplates(prev => prev.map(t => t.id === templateId ? updatedTemplate : t));
       setIsEditing(false);
       setEditingTemplate(null);
       setError(null);
@@ -343,7 +339,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
           ].map(tab => (
             <button
               key={tab.key}
-              onClick={() => setActiveTab(tab.key as any)}
+              onClick={() => setActiveTab(tab.key as 'browse' | 'create' | 'shared' | 'collaborate')}
               style={{
                 padding: '8px 16px',
                 background: activeTab === tab.key ? '#3b82f6' : 'transparent',
@@ -423,7 +419,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
               {['grid', 'list', 'table'].map(mode => (
                 <button
                   key={mode}
-                  onClick={() => setViewMode(mode as any)}
+                  onClick={() => setViewMode(mode as 'grid' | 'list' | 'table')}
                   style={{
                     padding: '6px 10px',
                     background: viewMode === mode ? '#e2e8f0' : 'transparent',
@@ -443,8 +439,8 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
               value={`${sortBy}-${sortOrder}`}
               onChange={(e) => {
                 const [by, order] = e.target.value.split('-');
-                setSortBy(by as any);
-                setSortOrder(order as any);
+                setSortBy(by as 'name' | 'created' | 'usage' | 'rating');
+                setSortOrder(order as 'asc' | 'desc');
               }}
               style={{
                 padding: '8px 12px',

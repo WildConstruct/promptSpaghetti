@@ -13,7 +13,7 @@ const axios = require('axios');
 
 const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:8000';
 
-async function demoModelEvaluationTriggering() {
+async function demoModelEvaluationTriggering(): Promise<void> {
   console.log('🚀 Model Evaluation CI Triggering Demo');
   console.log('=====================================\n');
 
@@ -180,7 +180,7 @@ async function demoModelEvaluationTriggering() {
 }
 
 // Example of how the GitHub Actions workflow is triggered
-function showWorkflowTriggerExample() {
+function showWorkflowTriggerExample(): void {
   console.log('\n📋 Example GitHub Actions Trigger Command:');
   console.log('==========================================');
   console.log();

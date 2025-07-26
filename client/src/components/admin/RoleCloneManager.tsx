@@ -202,7 +202,7 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({
   onClose,
   className = ''
 }) => {
-  const { user: _currentUser } = useAuthStore();
+  useAuthStore(); // Hook for potential future use
   const [state, setState] = useState<RoleCloneState>({
     availableRoles: mockRoles,
     availablePermissions: mockPermissions,

@@ -15,22 +15,22 @@ export declare export declare const ProjectMetadataSchema: z.ZodObject<{
     tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
     fileFormatVersion: z.ZodDefault<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    name: string;
-    version: string;
     createdAt: string;
-    lastModified: string;
+    name: string;
     tags: string[];
+    version: string;
+    lastModified: string;
     fileFormatVersion: string;
     description?: string | undefined;
     author?: string | undefined;
 }, {
-    name: string;
     createdAt: string;
+    name: string;
     lastModified: string;
     description?: string | undefined;
+    tags?: string[] | undefined;
     version?: string | undefined;
     author?: string | undefined;
-    tags?: string[] | undefined;
     fileFormatVersion?: string | undefined;
 }>;
 export declare const ProjectSettingsSchema: z.ZodObject<{
@@ -48,7 +48,7 @@ export declare const ProjectSettingsSchema: z.ZodObject<{
     maxBackups: number;
     gridSnapping: boolean;
     gridSize: number;
-    theme: "light" | "dark" | "auto";
+    theme: "auto" | "light" | "dark";
     showMinimap: boolean;
     autoLayout: boolean;
 }, {
@@ -57,7 +57,7 @@ export declare const ProjectSettingsSchema: z.ZodObject<{
     maxBackups?: number | undefined;
     gridSnapping?: boolean | undefined;
     gridSize?: number | undefined;
-    theme?: "light" | "dark" | "auto" | undefined;
+    theme?: "auto" | "light" | "dark" | undefined;
     showMinimap?: boolean | undefined;
     autoLayout?: boolean | undefined;
 }>;
@@ -90,11 +90,11 @@ export declare const CollaborationDataSchema: z.ZodObject<{
         timestamp: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         id: string;
-        content: string;
         position: {
             x: number;
             y: number;
         };
+        content: string;
         size: {
             width: number;
             height: number;
@@ -104,11 +104,11 @@ export declare const CollaborationDataSchema: z.ZodObject<{
         author?: string | undefined;
     }, {
         id: string;
-        content: string;
         position: {
             x: number;
             y: number;
         };
+        content: string;
         size: {
             width: number;
             height: number;
@@ -146,8 +146,8 @@ export declare const CollaborationDataSchema: z.ZodObject<{
             color: z.ZodString;
             collapsed: z.ZodDefault<z.ZodBoolean>;
         }, "strip", z.ZodTypeAny, {
-            name: string;
             id: string;
+            name: string;
             position: {
                 x: number;
                 y: number;
@@ -160,8 +160,8 @@ export declare const CollaborationDataSchema: z.ZodObject<{
             nodeIds: string[];
             collapsed: boolean;
         }, {
-            name: string;
             id: string;
+            name: string;
             position: {
                 x: number;
                 y: number;
@@ -178,8 +178,8 @@ export declare const CollaborationDataSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         nodeLabels: Record<string, string>;
         regionGroups: {
-            name: string;
             id: string;
+            name: string;
             position: {
                 x: number;
                 y: number;
@@ -196,8 +196,8 @@ export declare const CollaborationDataSchema: z.ZodObject<{
     }, {
         nodeLabels?: Record<string, string> | undefined;
         regionGroups?: {
-            name: string;
             id: string;
+            name: string;
             position: {
                 x: number;
                 y: number;
@@ -215,11 +215,11 @@ export declare const CollaborationDataSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     stickyNotes: {
         id: string;
-        content: string;
         position: {
             x: number;
             y: number;
         };
+        content: string;
         size: {
             width: number;
             height: number;
@@ -231,8 +231,8 @@ export declare const CollaborationDataSchema: z.ZodObject<{
     annotations: {
         nodeLabels: Record<string, string>;
         regionGroups: {
-            name: string;
             id: string;
+            name: string;
             position: {
                 x: number;
                 y: number;
@@ -250,11 +250,11 @@ export declare const CollaborationDataSchema: z.ZodObject<{
 }, {
     stickyNotes?: {
         id: string;
-        content: string;
         position: {
             x: number;
             y: number;
         };
+        content: string;
         size: {
             width: number;
             height: number;
@@ -266,8 +266,8 @@ export declare const CollaborationDataSchema: z.ZodObject<{
     annotations?: {
         nodeLabels?: Record<string, string> | undefined;
         regionGroups?: {
-            name: string;
             id: string;
+            name: string;
             position: {
                 x: number;
                 y: number;
@@ -296,22 +296,22 @@ export declare const PsgFileSchema: z.ZodObject<{
         tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
         fileFormatVersion: z.ZodDefault<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        name: string;
-        version: string;
         createdAt: string;
-        lastModified: string;
+        name: string;
         tags: string[];
+        version: string;
+        lastModified: string;
         fileFormatVersion: string;
         description?: string | undefined;
         author?: string | undefined;
     }, {
-        name: string;
         createdAt: string;
+        name: string;
         lastModified: string;
         description?: string | undefined;
+        tags?: string[] | undefined;
         version?: string | undefined;
         author?: string | undefined;
-        tags?: string[] | undefined;
         fileFormatVersion?: string | undefined;
     }>;
     settings: z.ZodObject<{
@@ -329,7 +329,7 @@ export declare const PsgFileSchema: z.ZodObject<{
         maxBackups: number;
         gridSnapping: boolean;
         gridSize: number;
-        theme: "light" | "dark" | "auto";
+        theme: "auto" | "light" | "dark";
         showMinimap: boolean;
         autoLayout: boolean;
     }, {
@@ -338,7 +338,7 @@ export declare const PsgFileSchema: z.ZodObject<{
         maxBackups?: number | undefined;
         gridSnapping?: boolean | undefined;
         gridSize?: number | undefined;
-        theme?: "light" | "dark" | "auto" | undefined;
+        theme?: "auto" | "light" | "dark" | undefined;
         showMinimap?: boolean | undefined;
         autoLayout?: boolean | undefined;
     }>;
@@ -361,7 +361,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }, {
                 name: string;
@@ -369,7 +369,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }>, "many">>;
         } & {
@@ -385,8 +385,8 @@ export declare const PsgFileSchema: z.ZodObject<{
                 weight: number;
             }>, "many">;
         }, "strip", z.ZodTypeAny, {
-            type: "WeightedChoice";
             id: string;
+            type: "WeightedChoice";
             choices: {
                 value: string;
                 weight: number;
@@ -399,12 +399,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         }, {
-            type: "WeightedChoice";
             id: string;
+            type: "WeightedChoice";
             choices: {
                 value: string;
                 weight: number;
@@ -417,7 +417,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         }>, z.ZodObject<{
@@ -438,7 +438,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }, {
                 name: string;
@@ -446,14 +446,14 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }>, "many">>;
         } & {
             type: z.ZodLiteral<"Concat">;
         }, "strip", z.ZodTypeAny, {
-            type: "Concat";
             id: string;
+            type: "Concat";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -462,12 +462,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         }, {
-            type: "Concat";
             id: string;
+            type: "Concat";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -476,7 +476,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         }>, z.ZodObject<{
@@ -497,7 +497,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }, {
                 name: string;
@@ -505,14 +505,14 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }>, "many">>;
         } & {
             type: z.ZodLiteral<"Output">;
         }, "strip", z.ZodTypeAny, {
-            type: "Output";
             id: string;
+            type: "Output";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -521,12 +521,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         }, {
-            type: "Output";
             id: string;
+            type: "Output";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -535,7 +535,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         }>, z.ZodObject<{
@@ -556,7 +556,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }, {
                 name: string;
@@ -564,16 +564,16 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }>, "many">>;
         } & {
             type: z.ZodLiteral<"Include">;
             name: z.ZodEffects<z.ZodString, string, string>;
         }, "strip", z.ZodTypeAny, {
+            id: string;
             name: string;
             type: "Include";
-            id: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -582,13 +582,13 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         }, {
+            id: string;
             name: string;
             type: "Include";
-            id: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -597,7 +597,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         }>, z.ZodObject<{
@@ -618,7 +618,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }, {
                 name: string;
@@ -626,7 +626,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }>, "many">>;
         } & {
@@ -634,8 +634,8 @@ export declare const PsgFileSchema: z.ZodObject<{
             key: z.ZodEffects<z.ZodString, string, string>;
             value: z.ZodUnion<[z.ZodEffects<z.ZodString, string, string>, z.ZodEffects<z.ZodNumber, number, number>, z.ZodBoolean, z.ZodEffects<z.ZodArray<z.ZodString, "many">, string[], string[]>, z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodString>, Record<string, string>, Record<string, string>>, z.ZodNull, z.ZodUndefined]>;
         }, "strip", z.ZodTypeAny, {
-            type: "SetVariable";
             id: string;
+            type: "SetVariable";
             key: string;
             value?: string | number | boolean | string[] | Record<string, string> | null | undefined;
             inputs?: string[] | undefined;
@@ -646,12 +646,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         }, {
-            type: "SetVariable";
             id: string;
+            type: "SetVariable";
             key: string;
             value?: string | number | boolean | string[] | Record<string, string> | null | undefined;
             inputs?: string[] | undefined;
@@ -662,7 +662,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         }>, z.ZodObject<{
@@ -683,7 +683,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }, {
                 name: string;
@@ -691,15 +691,15 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }>, "many">>;
         } & {
             type: z.ZodLiteral<"GetVariable">;
             key: z.ZodEffects<z.ZodString, string, string>;
         }, "strip", z.ZodTypeAny, {
-            type: "GetVariable";
             id: string;
+            type: "GetVariable";
             key: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
@@ -709,12 +709,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         }, {
-            type: "GetVariable";
             id: string;
+            type: "GetVariable";
             key: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
@@ -724,7 +724,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         }>, z.ZodObject<{
@@ -745,7 +745,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }, {
                 name: string;
@@ -753,7 +753,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }>, "many">>;
         } & {
@@ -775,18 +775,18 @@ export declare const PsgFileSchema: z.ZodObject<{
                 minWeight: z.ZodOptional<z.ZodNumber>;
             }, "strip", z.ZodTypeAny, {
                 type: "custom" | "linear" | "exponential" | "gaussian";
-                parameters?: Record<string, number> | undefined;
                 normalize?: boolean | undefined;
+                parameters?: Record<string, number> | undefined;
                 minWeight?: number | undefined;
             }, {
                 type: "custom" | "linear" | "exponential" | "gaussian";
-                parameters?: Record<string, number> | undefined;
                 normalize?: boolean | undefined;
+                parameters?: Record<string, number> | undefined;
                 minWeight?: number | undefined;
             }>>;
         }, "strip", z.ZodTypeAny, {
-            type: "WeightedAdvanced";
             id: string;
+            type: "WeightedAdvanced";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -795,7 +795,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             choices?: {
@@ -804,13 +804,13 @@ export declare const PsgFileSchema: z.ZodObject<{
             }[] | undefined;
             distributionConfig?: {
                 type: "custom" | "linear" | "exponential" | "gaussian";
-                parameters?: Record<string, number> | undefined;
                 normalize?: boolean | undefined;
+                parameters?: Record<string, number> | undefined;
                 minWeight?: number | undefined;
             } | undefined;
         }, {
-            type: "WeightedAdvanced";
             id: string;
+            type: "WeightedAdvanced";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -819,7 +819,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             choices?: {
@@ -828,8 +828,8 @@ export declare const PsgFileSchema: z.ZodObject<{
             }[] | undefined;
             distributionConfig?: {
                 type: "custom" | "linear" | "exponential" | "gaussian";
-                parameters?: Record<string, number> | undefined;
                 normalize?: boolean | undefined;
+                parameters?: Record<string, number> | undefined;
                 minWeight?: number | undefined;
             } | undefined;
         }>, z.ZodObject<{
@@ -850,7 +850,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }, {
                 name: string;
@@ -858,7 +858,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }>, "many">>;
         } & {
@@ -891,8 +891,8 @@ export declare const PsgFileSchema: z.ZodObject<{
                 customFunctions?: Record<string, string | number | boolean | string[] | Record<string, string> | null | undefined> | undefined;
             }>>;
         }, "strip", z.ZodTypeAny, {
-            type: "Conditional";
             id: string;
+            type: "Conditional";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -901,7 +901,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             branches?: {
@@ -916,8 +916,8 @@ export declare const PsgFileSchema: z.ZodObject<{
                 customFunctions?: Record<string, string | number | boolean | string[] | Record<string, string> | null | undefined> | undefined;
             } | undefined;
         }, {
-            type: "Conditional";
             id: string;
+            type: "Conditional";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -926,7 +926,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             branches?: {
@@ -958,7 +958,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }, {
                 name: string;
@@ -966,7 +966,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }>, "many">>;
         } & {
@@ -1003,8 +1003,8 @@ export declare const PsgFileSchema: z.ZodObject<{
                 } | undefined;
             }>>;
         }, "strip", z.ZodTypeAny, {
-            type: "Sequential";
             id: string;
+            type: "Sequential";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1013,7 +1013,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             sequence?: string[] | undefined;
@@ -1026,8 +1026,8 @@ export declare const PsgFileSchema: z.ZodObject<{
                 } | undefined;
             } | undefined;
         }, {
-            type: "Sequential";
             id: string;
+            type: "Sequential";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1036,7 +1036,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             sequence?: string[] | undefined;
@@ -1066,7 +1066,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }, {
                 name: string;
@@ -1074,7 +1074,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }>, "many">>;
         } & {
@@ -1102,8 +1102,8 @@ export declare const PsgFileSchema: z.ZodObject<{
                 detectLoops?: boolean | undefined;
             }>>;
         }, "strip", z.ZodTypeAny, {
-            type: "Markov";
             id: string;
+            type: "Markov";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1112,7 +1112,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             states?: string[] | undefined;
@@ -1126,8 +1126,8 @@ export declare const PsgFileSchema: z.ZodObject<{
                 detectLoops?: boolean | undefined;
             } | undefined;
         }, {
-            type: "Markov";
             id: string;
+            type: "Markov";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1136,7 +1136,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             states?: string[] | undefined;
@@ -1167,7 +1167,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }, {
                 name: string;
@@ -1175,7 +1175,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }>, "many">>;
         } & {
@@ -1207,9 +1207,9 @@ export declare const PsgFileSchema: z.ZodObject<{
                 fallbackBehavior?: "error" | "skip" | "default" | undefined;
             }>>;
         }, "strip", z.ZodTypeAny, {
+            id: string;
             code: string;
             type: "PythonTransform";
-            id: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1218,7 +1218,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             timeout?: number | undefined;
@@ -1233,9 +1233,9 @@ export declare const PsgFileSchema: z.ZodObject<{
                 fallbackBehavior?: "error" | "skip" | "default" | undefined;
             } | undefined;
         }, {
+            id: string;
             code: string;
             type: "PythonTransform";
-            id: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1244,7 +1244,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             timeout?: number | undefined;
@@ -1262,8 +1262,8 @@ export declare const PsgFileSchema: z.ZodObject<{
         seed: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
     }, "strip", z.ZodTypeAny, {
         nodes: ({
-            type: "WeightedChoice";
             id: string;
+            type: "WeightedChoice";
             choices: {
                 value: string;
                 weight: number;
@@ -1276,12 +1276,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
+            id: string;
             type: "Concat";
-            id: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1290,12 +1290,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
+            id: string;
             type: "Output";
-            id: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1304,13 +1304,13 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
+            id: string;
             name: string;
             type: "Include";
-            id: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1319,12 +1319,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
-            type: "SetVariable";
             id: string;
+            type: "SetVariable";
             key: string;
             value?: string | number | boolean | string[] | Record<string, string> | null | undefined;
             inputs?: string[] | undefined;
@@ -1335,12 +1335,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
-            type: "GetVariable";
             id: string;
+            type: "GetVariable";
             key: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
@@ -1350,12 +1350,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
-            type: "WeightedAdvanced";
             id: string;
+            type: "WeightedAdvanced";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1364,7 +1364,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             choices?: {
@@ -1373,13 +1373,13 @@ export declare const PsgFileSchema: z.ZodObject<{
             }[] | undefined;
             distributionConfig?: {
                 type: "custom" | "linear" | "exponential" | "gaussian";
-                parameters?: Record<string, number> | undefined;
                 normalize?: boolean | undefined;
+                parameters?: Record<string, number> | undefined;
                 minWeight?: number | undefined;
             } | undefined;
         } | {
-            type: "Conditional";
             id: string;
+            type: "Conditional";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1388,7 +1388,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             branches?: {
@@ -1403,8 +1403,8 @@ export declare const PsgFileSchema: z.ZodObject<{
                 customFunctions?: Record<string, string | number | boolean | string[] | Record<string, string> | null | undefined> | undefined;
             } | undefined;
         } | {
-            type: "Sequential";
             id: string;
+            type: "Sequential";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1413,7 +1413,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             sequence?: string[] | undefined;
@@ -1426,8 +1426,8 @@ export declare const PsgFileSchema: z.ZodObject<{
                 } | undefined;
             } | undefined;
         } | {
-            type: "Markov";
             id: string;
+            type: "Markov";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1436,7 +1436,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             states?: string[] | undefined;
@@ -1450,9 +1450,9 @@ export declare const PsgFileSchema: z.ZodObject<{
                 detectLoops?: boolean | undefined;
             } | undefined;
         } | {
+            id: string;
             code: string;
             type: "PythonTransform";
-            id: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1461,7 +1461,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             timeout?: number | undefined;
@@ -1479,8 +1479,8 @@ export declare const PsgFileSchema: z.ZodObject<{
         seed?: string | number | undefined;
     }, {
         nodes: ({
-            type: "WeightedChoice";
             id: string;
+            type: "WeightedChoice";
             choices: {
                 value: string;
                 weight: number;
@@ -1493,12 +1493,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
+            id: string;
             type: "Concat";
-            id: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1507,12 +1507,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
+            id: string;
             type: "Output";
-            id: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1521,13 +1521,13 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
+            id: string;
             name: string;
             type: "Include";
-            id: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1536,12 +1536,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
-            type: "SetVariable";
             id: string;
+            type: "SetVariable";
             key: string;
             value?: string | number | boolean | string[] | Record<string, string> | null | undefined;
             inputs?: string[] | undefined;
@@ -1552,12 +1552,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
-            type: "GetVariable";
             id: string;
+            type: "GetVariable";
             key: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
@@ -1567,12 +1567,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
-            type: "WeightedAdvanced";
             id: string;
+            type: "WeightedAdvanced";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1581,7 +1581,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             choices?: {
@@ -1590,13 +1590,13 @@ export declare const PsgFileSchema: z.ZodObject<{
             }[] | undefined;
             distributionConfig?: {
                 type: "custom" | "linear" | "exponential" | "gaussian";
-                parameters?: Record<string, number> | undefined;
                 normalize?: boolean | undefined;
+                parameters?: Record<string, number> | undefined;
                 minWeight?: number | undefined;
             } | undefined;
         } | {
-            type: "Conditional";
             id: string;
+            type: "Conditional";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1605,7 +1605,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             branches?: {
@@ -1620,8 +1620,8 @@ export declare const PsgFileSchema: z.ZodObject<{
                 customFunctions?: Record<string, string | number | boolean | string[] | Record<string, string> | null | undefined> | undefined;
             } | undefined;
         } | {
-            type: "Sequential";
             id: string;
+            type: "Sequential";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1630,7 +1630,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             sequence?: string[] | undefined;
@@ -1643,8 +1643,8 @@ export declare const PsgFileSchema: z.ZodObject<{
                 } | undefined;
             } | undefined;
         } | {
-            type: "Markov";
             id: string;
+            type: "Markov";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1653,7 +1653,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             states?: string[] | undefined;
@@ -1667,9 +1667,9 @@ export declare const PsgFileSchema: z.ZodObject<{
                 detectLoops?: boolean | undefined;
             } | undefined;
         } | {
+            id: string;
             code: string;
             type: "PythonTransform";
-            id: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1678,7 +1678,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             timeout?: number | undefined;
@@ -1724,11 +1724,11 @@ export declare const PsgFileSchema: z.ZodObject<{
             timestamp: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             id: string;
-            content: string;
             position: {
                 x: number;
                 y: number;
             };
+            content: string;
             size: {
                 width: number;
                 height: number;
@@ -1738,11 +1738,11 @@ export declare const PsgFileSchema: z.ZodObject<{
             author?: string | undefined;
         }, {
             id: string;
-            content: string;
             position: {
                 x: number;
                 y: number;
             };
+            content: string;
             size: {
                 width: number;
                 height: number;
@@ -1780,8 +1780,8 @@ export declare const PsgFileSchema: z.ZodObject<{
                 color: z.ZodString;
                 collapsed: z.ZodDefault<z.ZodBoolean>;
             }, "strip", z.ZodTypeAny, {
-                name: string;
                 id: string;
+                name: string;
                 position: {
                     x: number;
                     y: number;
@@ -1794,8 +1794,8 @@ export declare const PsgFileSchema: z.ZodObject<{
                 nodeIds: string[];
                 collapsed: boolean;
             }, {
-                name: string;
                 id: string;
+                name: string;
                 position: {
                     x: number;
                     y: number;
@@ -1812,8 +1812,8 @@ export declare const PsgFileSchema: z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             nodeLabels: Record<string, string>;
             regionGroups: {
-                name: string;
                 id: string;
+                name: string;
                 position: {
                     x: number;
                     y: number;
@@ -1830,8 +1830,8 @@ export declare const PsgFileSchema: z.ZodObject<{
         }, {
             nodeLabels?: Record<string, string> | undefined;
             regionGroups?: {
-                name: string;
                 id: string;
+                name: string;
                 position: {
                     x: number;
                     y: number;
@@ -1849,11 +1849,11 @@ export declare const PsgFileSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         stickyNotes: {
             id: string;
-            content: string;
             position: {
                 x: number;
                 y: number;
             };
+            content: string;
             size: {
                 width: number;
                 height: number;
@@ -1865,8 +1865,8 @@ export declare const PsgFileSchema: z.ZodObject<{
         annotations: {
             nodeLabels: Record<string, string>;
             regionGroups: {
-                name: string;
                 id: string;
+                name: string;
                 position: {
                     x: number;
                     y: number;
@@ -1884,11 +1884,11 @@ export declare const PsgFileSchema: z.ZodObject<{
     }, {
         stickyNotes?: {
             id: string;
-            content: string;
             position: {
                 x: number;
                 y: number;
             };
+            content: string;
             size: {
                 width: number;
                 height: number;
@@ -1900,8 +1900,8 @@ export declare const PsgFileSchema: z.ZodObject<{
         annotations?: {
             nodeLabels?: Record<string, string> | undefined;
             regionGroups?: {
-                name: string;
                 id: string;
+                name: string;
                 position: {
                     x: number;
                     y: number;
@@ -1924,11 +1924,11 @@ export declare const PsgFileSchema: z.ZodObject<{
     fileType: "psg";
     formatVersion: string;
     metadata: {
-        name: string;
-        version: string;
         createdAt: string;
-        lastModified: string;
+        name: string;
         tags: string[];
+        version: string;
+        lastModified: string;
         fileFormatVersion: string;
         description?: string | undefined;
         author?: string | undefined;
@@ -1939,14 +1939,14 @@ export declare const PsgFileSchema: z.ZodObject<{
         maxBackups: number;
         gridSnapping: boolean;
         gridSize: number;
-        theme: "light" | "dark" | "auto";
+        theme: "auto" | "light" | "dark";
         showMinimap: boolean;
         autoLayout: boolean;
     };
     graph: {
         nodes: ({
-            type: "WeightedChoice";
             id: string;
+            type: "WeightedChoice";
             choices: {
                 value: string;
                 weight: number;
@@ -1959,12 +1959,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
+            id: string;
             type: "Concat";
-            id: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1973,12 +1973,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
+            id: string;
             type: "Output";
-            id: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -1987,13 +1987,13 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
+            id: string;
             name: string;
             type: "Include";
-            id: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -2002,12 +2002,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
-            type: "SetVariable";
             id: string;
+            type: "SetVariable";
             key: string;
             value?: string | number | boolean | string[] | Record<string, string> | null | undefined;
             inputs?: string[] | undefined;
@@ -2018,12 +2018,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
-            type: "GetVariable";
             id: string;
+            type: "GetVariable";
             key: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
@@ -2033,12 +2033,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
-            type: "WeightedAdvanced";
             id: string;
+            type: "WeightedAdvanced";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -2047,7 +2047,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             choices?: {
@@ -2056,13 +2056,13 @@ export declare const PsgFileSchema: z.ZodObject<{
             }[] | undefined;
             distributionConfig?: {
                 type: "custom" | "linear" | "exponential" | "gaussian";
-                parameters?: Record<string, number> | undefined;
                 normalize?: boolean | undefined;
+                parameters?: Record<string, number> | undefined;
                 minWeight?: number | undefined;
             } | undefined;
         } | {
-            type: "Conditional";
             id: string;
+            type: "Conditional";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -2071,7 +2071,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             branches?: {
@@ -2086,8 +2086,8 @@ export declare const PsgFileSchema: z.ZodObject<{
                 customFunctions?: Record<string, string | number | boolean | string[] | Record<string, string> | null | undefined> | undefined;
             } | undefined;
         } | {
-            type: "Sequential";
             id: string;
+            type: "Sequential";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -2096,7 +2096,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             sequence?: string[] | undefined;
@@ -2109,8 +2109,8 @@ export declare const PsgFileSchema: z.ZodObject<{
                 } | undefined;
             } | undefined;
         } | {
-            type: "Markov";
             id: string;
+            type: "Markov";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -2119,7 +2119,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             states?: string[] | undefined;
@@ -2133,9 +2133,9 @@ export declare const PsgFileSchema: z.ZodObject<{
                 detectLoops?: boolean | undefined;
             } | undefined;
         } | {
+            id: string;
             code: string;
             type: "PythonTransform";
-            id: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -2144,7 +2144,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             timeout?: number | undefined;
@@ -2165,11 +2165,11 @@ export declare const PsgFileSchema: z.ZodObject<{
     collaboration?: {
         stickyNotes: {
             id: string;
-            content: string;
             position: {
                 x: number;
                 y: number;
             };
+            content: string;
             size: {
                 width: number;
                 height: number;
@@ -2181,8 +2181,8 @@ export declare const PsgFileSchema: z.ZodObject<{
         annotations: {
             nodeLabels: Record<string, string>;
             regionGroups: {
-                name: string;
                 id: string;
+                name: string;
                 position: {
                     x: number;
                     y: number;
@@ -2204,13 +2204,13 @@ export declare const PsgFileSchema: z.ZodObject<{
     fileType: "psg";
     formatVersion: string;
     metadata: {
-        name: string;
         createdAt: string;
+        name: string;
         lastModified: string;
         description?: string | undefined;
+        tags?: string[] | undefined;
         version?: string | undefined;
         author?: string | undefined;
-        tags?: string[] | undefined;
         fileFormatVersion?: string | undefined;
     };
     settings: {
@@ -2219,14 +2219,14 @@ export declare const PsgFileSchema: z.ZodObject<{
         maxBackups?: number | undefined;
         gridSnapping?: boolean | undefined;
         gridSize?: number | undefined;
-        theme?: "light" | "dark" | "auto" | undefined;
+        theme?: "auto" | "light" | "dark" | undefined;
         showMinimap?: boolean | undefined;
         autoLayout?: boolean | undefined;
     };
     graph: {
         nodes: ({
-            type: "WeightedChoice";
             id: string;
+            type: "WeightedChoice";
             choices: {
                 value: string;
                 weight: number;
@@ -2239,12 +2239,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
+            id: string;
             type: "Concat";
-            id: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -2253,12 +2253,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
+            id: string;
             type: "Output";
-            id: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -2267,13 +2267,13 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
+            id: string;
             name: string;
             type: "Include";
-            id: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -2282,12 +2282,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
-            type: "SetVariable";
             id: string;
+            type: "SetVariable";
             key: string;
             value?: string | number | boolean | string[] | Record<string, string> | null | undefined;
             inputs?: string[] | undefined;
@@ -2298,12 +2298,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
-            type: "GetVariable";
             id: string;
+            type: "GetVariable";
             key: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
@@ -2313,12 +2313,12 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
         } | {
-            type: "WeightedAdvanced";
             id: string;
+            type: "WeightedAdvanced";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -2327,7 +2327,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             choices?: {
@@ -2336,13 +2336,13 @@ export declare const PsgFileSchema: z.ZodObject<{
             }[] | undefined;
             distributionConfig?: {
                 type: "custom" | "linear" | "exponential" | "gaussian";
-                parameters?: Record<string, number> | undefined;
                 normalize?: boolean | undefined;
+                parameters?: Record<string, number> | undefined;
                 minWeight?: number | undefined;
             } | undefined;
         } | {
-            type: "Conditional";
             id: string;
+            type: "Conditional";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -2351,7 +2351,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             branches?: {
@@ -2366,8 +2366,8 @@ export declare const PsgFileSchema: z.ZodObject<{
                 customFunctions?: Record<string, string | number | boolean | string[] | Record<string, string> | null | undefined> | undefined;
             } | undefined;
         } | {
-            type: "Sequential";
             id: string;
+            type: "Sequential";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -2376,7 +2376,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             sequence?: string[] | undefined;
@@ -2389,8 +2389,8 @@ export declare const PsgFileSchema: z.ZodObject<{
                 } | undefined;
             } | undefined;
         } | {
-            type: "Markov";
             id: string;
+            type: "Markov";
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -2399,7 +2399,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             states?: string[] | undefined;
@@ -2413,9 +2413,9 @@ export declare const PsgFileSchema: z.ZodObject<{
                 detectLoops?: boolean | undefined;
             } | undefined;
         } | {
+            id: string;
             code: string;
             type: "PythonTransform";
-            id: string;
             inputs?: string[] | undefined;
             template?: string | undefined;
             extractedVariables?: {
@@ -2424,7 +2424,7 @@ export declare const PsgFileSchema: z.ZodObject<{
                 startIndex: number;
                 endIndex: number;
                 isValid: boolean;
-                inferredType?: "string" | "number" | "boolean" | "object" | "auto" | "array" | undefined;
+                inferredType?: "string" | "number" | "boolean" | "object" | "array" | "auto" | undefined;
                 defaultValue?: string | undefined;
             }[] | undefined;
             timeout?: number | undefined;
@@ -2445,11 +2445,11 @@ export declare const PsgFileSchema: z.ZodObject<{
     collaboration?: {
         stickyNotes?: {
             id: string;
-            content: string;
             position: {
                 x: number;
                 y: number;
             };
+            content: string;
             size: {
                 width: number;
                 height: number;
@@ -2461,8 +2461,8 @@ export declare const PsgFileSchema: z.ZodObject<{
         annotations?: {
             nodeLabels?: Record<string, string> | undefined;
             regionGroups?: {
-                name: string;
                 id: string;
+                name: string;
                 position: {
                     x: number;
                     y: number;

@@ -15,8 +15,8 @@ export declare class WebAdapter implements PlatformAdapter {
     handleHover: (callback: () => void) => {
         onMouseEnter: () => void;
     };
-    createStyleSheet: (styles: unknown) => unknown;
-    resolveStyle: (style: unknown) => unknown;
+    createStyleSheet: (styles: any) => any;
+    resolveStyle: (style: any) => any;
     openUrl: (url: string) => void;
     goBack: () => void;
     getStorageItem: (key: string) => Promise<string | null>;
@@ -42,7 +42,7 @@ export declare class WebAdapter implements PlatformAdapter {
     }) => {
         duration: number;
         easing: string;
-        fill: "forwards" | "backwards" | "both";
+        fill: "backwards" | "both" | "forwards";
     };
     ScrollView: string;
     SafeAreaView: string;

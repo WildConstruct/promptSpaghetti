@@ -1,6 +1,4 @@
 /**
-import { Shield } from 'lucide-react';
-
  * Admin Alert Panel Component
  * 
  * Epic 17.1.2 - Admin Dashboard UI
@@ -14,7 +12,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   ChevronDown, ChevronUp, AlertTriangle, User, 
   ExternalLink, RefreshCw, Settings, Shield,
-  Zap, CheckCircle
+  Zap, CheckCircle, Info
 } from 'lucide-react';
 import AlertIndicatorBadge, { AlertCount, AlertSeverity } from './AlertIndicatorBadge';
 import AlertStatusIndicator from './AlertStatusIndicator';
@@ -101,7 +99,7 @@ const AdminAlertPanel: React.FC<AdminAlertPanelProps> = ({
   };
 
   const getStatusIcon = (status: string) => {
-    const icons = {
+    const icons: Record<string, typeof AlertTriangle> = {
       active: AlertTriangle,
       acknowledged: CheckCircle,
       resolved: CheckCircle

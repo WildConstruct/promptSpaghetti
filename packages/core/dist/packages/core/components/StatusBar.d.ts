@@ -1,0 +1,41 @@
+import React from 'react';
+import { ValidationError } from '../validation';
+import { EncryptionState } from './EncryptionStatus';
+import { ConnectionState } from '../websocket/WebSocketClient';
+import { RecentProjectEntry } from '../managers/RecentProjectsManager';
+interface StatusBarProps {
+    statusMessage: string;
+    errors: ValidationError[];
+    onPreview: () => void;
+    onSaveJson: () => void;
+    onExportBundle?: () => void;
+    onSaveProject?: () => void;
+    onLoadProject?: () => void;
+    onLoadRecentProject?: (entry: RecentProjectEntry) => void;
+    onNewProject?: () => void;
+    hasUnsavedChanges?: boolean;
+    currentProjectName?: string;
+    onCorrections?: () => void;
+    correctionsEnabled?: boolean;
+    correctionsOpen?: boolean;
+    onStats?: () => void;
+    statsOpen?: boolean;
+    onExtensions?: () => void;
+    extensionsOpen?: boolean;
+    connectionState?: ConnectionState;
+    queuedMessages?: number;
+    onClearQueue?: () => void;
+    onReconnect?: () => void;
+    onDisconnect?: () => void;
+    encryptionState?: EncryptionState;
+    onEncrypt?: () => void;
+    onDecrypt?: () => void;
+    onChangeAlgorithm?: (algorithm: string) => void;
+    onOptimization?: () => void;
+    optimizationEnabled?: boolean;
+    onSaveTemplate?: () => void;
+    onBrowseTemplates?: () => void;
+}
+export declare const StatusBar: React.FC<StatusBarProps>;
+export {};
+//# sourceMappingURL=StatusBar.d.ts.map

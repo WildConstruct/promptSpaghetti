@@ -222,9 +222,7 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
     };
   }, [visualizationData, theme]);
 
-  
-    const distribution = visualizationData.distributionData.threatLevelDistribution;
-    
+      
     return {
       labels: Object.keys(distribution),
       datasets: [{

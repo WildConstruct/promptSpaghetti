@@ -2,8 +2,7 @@ import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import {
   useCorrectionsStore,
   CorrectionRule,
-  DEFAULT_CORRECTION_RULES,
-  useCorrectionsEnabled
+  DEFAULT_CORRECTION_RULES
 } from './correctionsStore';
 import { WorkflowManager } from './components/WorkflowManager';
 import { NotificationSystem } from './components/NotificationSystem';
@@ -18,19 +17,7 @@ type FilterType = 'all' | 'active' | 'inactive' | 'regex' | 'text' | 'draft' | '
 type SortType = 'name' | 'priority' | 'created' | 'updated' | 'usage';
 type ViewMode = 'list' | 'grid' | 'compact';
 
-export   const {
-    rules,
-    addRule,
-    updateRule,
-    deleteRule,
-    toggleRule,
-    clearAllRules,
-    applyCorrections,
-    getDraftRules,
-    exportRules,
-    importRules
-  } = useCorrectionsStore();
-
+export 
   // UI State
   const [editingRule, setEditingRule] = useState<CorrectionRule | null>(null);
   const [selectedRules, setSelectedRules] = useState<Set<string>>(new Set());

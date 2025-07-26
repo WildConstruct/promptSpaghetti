@@ -8,14 +8,14 @@ export declare const SeedSettingsSchema: z.ZodObject<{
     history: z.ZodDefault<z.ZodArray<z.ZodNumber, "many">>;
     autoGenerate: z.ZodDefault<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    enabled: boolean;
     history: number[];
+    enabled: boolean;
     autoGenerate: boolean;
     value?: number | undefined;
 }, {
-    enabled?: boolean | undefined;
-    value?: number | undefined;
     history?: number[] | undefined;
+    value?: number | undefined;
+    enabled?: boolean | undefined;
     autoGenerate?: boolean | undefined;
 }>;
 /**
@@ -30,31 +30,31 @@ export declare const TemperatureSettingsSchema: z.ZodObject<{
         value: z.ZodNumber;
         description: z.ZodString;
     }, "strip", z.ZodTypeAny, {
-        value: number;
         name: string;
         description: string;
+        value: number;
     }, {
-        value: number;
         name: string;
         description: string;
+        value: number;
     }>, "many">>;
 }, "strip", z.ZodTypeAny, {
-    enabled: boolean;
     value: number;
+    enabled: boolean;
     showIndicator: boolean;
     presets: {
-        value: number;
         name: string;
         description: string;
+        value: number;
     }[];
 }, {
-    enabled?: boolean | undefined;
     value?: number | undefined;
+    enabled?: boolean | undefined;
     showIndicator?: boolean | undefined;
     presets?: {
-        value: number;
         name: string;
         description: string;
+        value: number;
     }[] | undefined;
 }>;
 /**
@@ -83,16 +83,16 @@ export declare const BatchSettingsSchema: z.ZodObject<{
     includeMetadata: z.ZodDefault<z.ZodBoolean>;
     autoDownload: z.ZodDefault<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    batchSize: number;
-    outputFormat: "individual" | "combined" | "csv" | "json";
-    namingPattern: string;
     includeMetadata: boolean;
+    batchSize: number;
+    outputFormat: "json" | "csv" | "individual" | "combined";
+    namingPattern: string;
     autoDownload: boolean;
 }, {
-    batchSize?: number | undefined;
-    outputFormat?: "individual" | "combined" | "csv" | "json" | undefined;
-    namingPattern?: string | undefined;
     includeMetadata?: boolean | undefined;
+    batchSize?: number | undefined;
+    outputFormat?: "json" | "csv" | "individual" | "combined" | undefined;
+    namingPattern?: string | undefined;
     autoDownload?: boolean | undefined;
 }>;
 /**
@@ -104,13 +104,13 @@ export declare const PerformanceSettingsSchema: z.ZodObject<{
     showMemoryUsage: z.ZodDefault<z.ZodBoolean>;
     logExecutionSteps: z.ZodDefault<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    showExecutionTimes: boolean;
     enableCaching: boolean;
+    showExecutionTimes: boolean;
     showMemoryUsage: boolean;
     logExecutionSteps: boolean;
 }, {
-    showExecutionTimes?: boolean | undefined;
     enableCaching?: boolean | undefined;
+    showExecutionTimes?: boolean | undefined;
     showMemoryUsage?: boolean | undefined;
     logExecutionSteps?: boolean | undefined;
 }>;
@@ -146,14 +146,14 @@ export declare const AdvancedSettingsSchema: z.ZodObject<{
         history: z.ZodDefault<z.ZodArray<z.ZodNumber, "many">>;
         autoGenerate: z.ZodDefault<z.ZodBoolean>;
     }, "strip", z.ZodTypeAny, {
-        enabled: boolean;
         history: number[];
+        enabled: boolean;
         autoGenerate: boolean;
         value?: number | undefined;
     }, {
-        enabled?: boolean | undefined;
-        value?: number | undefined;
         history?: number[] | undefined;
+        value?: number | undefined;
+        enabled?: boolean | undefined;
         autoGenerate?: boolean | undefined;
     }>;
     temperature: z.ZodObject<{
@@ -165,31 +165,31 @@ export declare const AdvancedSettingsSchema: z.ZodObject<{
             value: z.ZodNumber;
             description: z.ZodString;
         }, "strip", z.ZodTypeAny, {
-            value: number;
             name: string;
             description: string;
+            value: number;
         }, {
-            value: number;
             name: string;
             description: string;
+            value: number;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
-        enabled: boolean;
         value: number;
+        enabled: boolean;
         showIndicator: boolean;
         presets: {
-            value: number;
             name: string;
             description: string;
+            value: number;
         }[];
     }, {
-        enabled?: boolean | undefined;
         value?: number | undefined;
+        enabled?: boolean | undefined;
         showIndicator?: boolean | undefined;
         presets?: {
-            value: number;
             name: string;
             description: string;
+            value: number;
         }[] | undefined;
     }>;
     runCount: z.ZodObject<{
@@ -212,16 +212,16 @@ export declare const AdvancedSettingsSchema: z.ZodObject<{
         includeMetadata: z.ZodDefault<z.ZodBoolean>;
         autoDownload: z.ZodDefault<z.ZodBoolean>;
     }, "strip", z.ZodTypeAny, {
-        batchSize: number;
-        outputFormat: "individual" | "combined" | "csv" | "json";
-        namingPattern: string;
         includeMetadata: boolean;
+        batchSize: number;
+        outputFormat: "json" | "csv" | "individual" | "combined";
+        namingPattern: string;
         autoDownload: boolean;
     }, {
-        batchSize?: number | undefined;
-        outputFormat?: "individual" | "combined" | "csv" | "json" | undefined;
-        namingPattern?: string | undefined;
         includeMetadata?: boolean | undefined;
+        batchSize?: number | undefined;
+        outputFormat?: "json" | "csv" | "individual" | "combined" | undefined;
+        namingPattern?: string | undefined;
         autoDownload?: boolean | undefined;
     }>;
     performance: z.ZodObject<{
@@ -230,13 +230,13 @@ export declare const AdvancedSettingsSchema: z.ZodObject<{
         showMemoryUsage: z.ZodDefault<z.ZodBoolean>;
         logExecutionSteps: z.ZodDefault<z.ZodBoolean>;
     }, "strip", z.ZodTypeAny, {
-        showExecutionTimes: boolean;
         enableCaching: boolean;
+        showExecutionTimes: boolean;
         showMemoryUsage: boolean;
         logExecutionSteps: boolean;
     }, {
-        showExecutionTimes?: boolean | undefined;
         enableCaching?: boolean | undefined;
+        showExecutionTimes?: boolean | undefined;
         showMemoryUsage?: boolean | undefined;
         logExecutionSteps?: boolean | undefined;
     }>;
@@ -263,39 +263,35 @@ export declare const AdvancedSettingsSchema: z.ZodObject<{
     lastModified: z.ZodOptional<z.ZodString>;
     userId: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
+    performance: {
+        enableCaching: boolean;
+        showExecutionTimes: boolean;
+        showMemoryUsage: boolean;
+        logExecutionSteps: boolean;
+    };
     seed: {
-        enabled: boolean;
         history: number[];
+        enabled: boolean;
         autoGenerate: boolean;
         value?: number | undefined;
     };
+    version: string;
     temperature: {
-        enabled: boolean;
         value: number;
+        enabled: boolean;
         showIndicator: boolean;
         presets: {
-            value: number;
             name: string;
             description: string;
+            value: number;
         }[];
     };
-    runCount: {
-        value: number;
-        presets: number[];
-        showPerformanceWarning: boolean;
-    };
     batch: {
-        batchSize: number;
-        outputFormat: "individual" | "combined" | "csv" | "json";
-        namingPattern: string;
         includeMetadata: boolean;
+        batchSize: number;
+        outputFormat: "json" | "csv" | "individual" | "combined";
+        namingPattern: string;
         autoDownload: boolean;
-    };
-    performance: {
-        showExecutionTimes: boolean;
-        enableCaching: boolean;
-        showMemoryUsage: boolean;
-        logExecutionSteps: boolean;
     };
     ui: {
         theme: "auto" | "light" | "dark";
@@ -304,43 +300,42 @@ export declare const AdvancedSettingsSchema: z.ZodObject<{
         reduceAnimations: boolean;
         highContrast: boolean;
     };
-    version: string;
+    runCount: {
+        value: number;
+        presets: number[];
+        showPerformanceWarning: boolean;
+    };
     lastModified?: string | undefined;
     userId?: string | undefined;
 }, {
+    performance: {
+        enableCaching?: boolean | undefined;
+        showExecutionTimes?: boolean | undefined;
+        showMemoryUsage?: boolean | undefined;
+        logExecutionSteps?: boolean | undefined;
+    };
     seed: {
-        enabled?: boolean | undefined;
-        value?: number | undefined;
         history?: number[] | undefined;
+        value?: number | undefined;
+        enabled?: boolean | undefined;
         autoGenerate?: boolean | undefined;
     };
     temperature: {
-        enabled?: boolean | undefined;
         value?: number | undefined;
+        enabled?: boolean | undefined;
         showIndicator?: boolean | undefined;
         presets?: {
-            value: number;
             name: string;
             description: string;
+            value: number;
         }[] | undefined;
     };
-    runCount: {
-        value?: number | undefined;
-        presets?: number[] | undefined;
-        showPerformanceWarning?: boolean | undefined;
-    };
     batch: {
-        batchSize?: number | undefined;
-        outputFormat?: "individual" | "combined" | "csv" | "json" | undefined;
-        namingPattern?: string | undefined;
         includeMetadata?: boolean | undefined;
+        batchSize?: number | undefined;
+        outputFormat?: "json" | "csv" | "individual" | "combined" | undefined;
+        namingPattern?: string | undefined;
         autoDownload?: boolean | undefined;
-    };
-    performance: {
-        showExecutionTimes?: boolean | undefined;
-        enableCaching?: boolean | undefined;
-        showMemoryUsage?: boolean | undefined;
-        logExecutionSteps?: boolean | undefined;
     };
     ui: {
         theme?: "auto" | "light" | "dark" | undefined;
@@ -348,6 +343,11 @@ export declare const AdvancedSettingsSchema: z.ZodObject<{
         enableKeyboardShortcuts?: boolean | undefined;
         reduceAnimations?: boolean | undefined;
         highContrast?: boolean | undefined;
+    };
+    runCount: {
+        value?: number | undefined;
+        presets?: number[] | undefined;
+        showPerformanceWarning?: boolean | undefined;
     };
     version?: string | undefined;
     lastModified?: string | undefined;
@@ -365,21 +365,21 @@ export declare const SettingsGroupSchema: z.ZodObject<{
     collapsible: z.ZodDefault<z.ZodBoolean>;
     defaultExpanded: z.ZodDefault<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    name: string;
     id: string;
-    order: number;
-    collapsible: boolean;
+    name: string;
     defaultExpanded: boolean;
+    collapsible: boolean;
+    order: number;
     description?: string | undefined;
     icon?: string | undefined;
 }, {
-    name: string;
     id: string;
+    name: string;
     description?: string | undefined;
     icon?: string | undefined;
-    order?: number | undefined;
-    collapsible?: boolean | undefined;
     defaultExpanded?: boolean | undefined;
+    collapsible?: boolean | undefined;
+    order?: number | undefined;
 }>;
 /**
  * Individual setting item configuration
@@ -403,35 +403,35 @@ export declare const SettingItemSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     type: "string" | "number" | "boolean" | "select" | "slider" | "multiselect";
     key: string;
-    groupId: string;
     label: string;
-    disabled: boolean;
     advanced: boolean;
+    disabled: boolean;
+    groupId: string;
+    description?: string | undefined;
     options?: unknown[] | undefined;
     validation?: unknown;
-    description?: string | undefined;
+    placeholder?: string | undefined;
     defaultValue?: unknown;
     min?: number | undefined;
     max?: number | undefined;
     step?: number | undefined;
-    placeholder?: string | undefined;
     helpText?: string | undefined;
 }, {
     type: "string" | "number" | "boolean" | "select" | "slider" | "multiselect";
     key: string;
-    groupId: string;
     label: string;
+    groupId: string;
+    description?: string | undefined;
     options?: unknown[] | undefined;
     validation?: unknown;
-    description?: string | undefined;
+    placeholder?: string | undefined;
     defaultValue?: unknown;
+    advanced?: boolean | undefined;
+    disabled?: boolean | undefined;
     min?: number | undefined;
     max?: number | undefined;
     step?: number | undefined;
-    placeholder?: string | undefined;
     helpText?: string | undefined;
-    disabled?: boolean | undefined;
-    advanced?: boolean | undefined;
 }>;
 export type SeedSettings = z.infer<typeof SeedSettingsSchema>;
 export type TemperatureSettings = z.infer<typeof TemperatureSettingsSchema>;

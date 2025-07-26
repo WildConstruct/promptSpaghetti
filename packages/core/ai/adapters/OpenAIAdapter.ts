@@ -5,7 +5,18 @@
  * Concrete implementation of BaseAIModel for OpenAI GPT models
  */
 
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelMetadata, ModelCapabilities, CostEstimate, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
+import { 
+  BaseAIModel,
+  AIModelType,
+  AIModelProvider,
+  AIModelStatus,
+  ModelMetadata,
+  ModelCapabilities,
+  CostEstimate,
+  ModelInitializationError,
+  ModelProcessingError,
+  ModelUnavailableError
+} from '../BaseAIModel';
 
 export interface OpenAIConfig {
   apiKey: string;
@@ -26,7 +37,7 @@ export interface OpenAIRequestOptions {
   stream?: boolean;
   seed?: number;
   response_format?: { type: 'text' | 'json_object' };
-  tools?: any[];
+  tools?: unknown[];
   tool_choice?: string | object;
 }
 
@@ -34,7 +45,7 @@ export interface ChatMessage {
   role: 'system' | 'user' | 'assistant' | 'tool';
   content: string;
   name?: string;
-  tool_calls?: any[];
+  tool_calls?: unknown[];
   tool_call_id?: string;
 }
 
@@ -120,7 +131,7 @@ export class OpenAIAdapter extends BaseAIModel {
     }
   }
 
-  async process(input: any, options?: OpenAIRequestOptions): Promise<any> {
+  async process(input: unknown, options?: OpenAIRequestOptions): Promise<unknown> {
     try {
       if (this._status !== AIModelStatus.READY) {
         throw new ModelUnavailableError(this._id);

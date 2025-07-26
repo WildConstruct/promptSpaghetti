@@ -292,10 +292,7 @@ export
 };
 
 // Helper hook for managing authentication redirects
-export 
-  const redirectToLogin = useCallback((returnUrl?: string) => {
-    const loginUrl = '/auth/login';
-    const url = returnUrl ? `${loginUrl}?returnUrl=${encodeURIComponent(returnUrl)}` : loginUrl;
+export     const url = returnUrl ? `${loginUrl}?returnUrl=${encodeURIComponent(returnUrl)}` : loginUrl;
     window.location.href = url;
   }, []);
 
@@ -308,11 +305,29 @@ export
     const returnUrl = urlParams.get('returnUrl');
     
     if (returnUrl) {
-      window.location.href = decodeURIComponent(returnUrl);
+      // SECURITY FIX: Validate returnUrl to prevent open redirect attacks
+      try {
+        const decodedUrl = decodeURIComponent(returnUrl);
+        const url = new URL(decodedUrl, window.location.origin);
+        
+        // Only allow same-origin URLs to prevent open redirects
+        if (url.origin === window.location.origin) {
+          window.location.href = decodedUrl;
+        } else {
+          console.warn('Blocked redirect to external URL:', decodedUrl);
+          redirectToDashboard();
+        }
+      } catch {
+        console.warn('Invalid return URL blocked:', returnUrl);
+        redirectToDashboard();
+      }
     } else {
       redirectToDashboard();
     }
   }, [redirectToDashboard]);
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { user, isLoading, isAuthenticated } = useAuth();
 
   return {
     redirectToLogin,

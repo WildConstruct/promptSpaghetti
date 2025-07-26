@@ -32,7 +32,7 @@ interface MemoryTestResult {
   gcEfficiency: number; // 0-1, higher is better
   memoryPressureEvents: number;
   passed: boolean;
-  details: any;
+  details: unknown;
 }
 
 interface MemoryThresholds {
@@ -76,9 +76,8 @@ class MemoryOptimizationTester {
     } else {
       // Try to trigger GC indirectly
       const largeArray = new Array(1000000).fill(Math.random());
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const temp = largeArray.map(x => x * 2);
-      // Let temp go out of scope
+      const _temp = largeArray.map(x => x * 2);
+      // Let _temp go out of scope
     }
     
     // Wait a bit for GC to complete

@@ -67,9 +67,9 @@ const SearchSystemInternal = <T = unknown,>({
 }: Omit<UnifiedSearchSystemProps<T>, 'children'>) => {
   const {
     query,
-    results,
-    isLoading,
-    error,
+    // results, // Commented out unused variable
+    // isLoading, // Commented out unused variable
+    // error, // Commented out unused variable
     setResults,
     setLoading,
     setError,

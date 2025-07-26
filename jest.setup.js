@@ -1,5 +1,11 @@
 require('@testing-library/jest-dom');
 
+// Set up environment variables for testing
+process.env.NODE_ENV = 'test';
+process.env.JWT_SECRET = 'test-secret-key-for-jest-testing-only-not-production';
+process.env.SESSION_SECRET = 'test-session-secret-for-jest-testing-only';
+process.env.DATABASE_URL = 'sqlite://test.db';
+
 // Increase default Jest timeout for async-heavy tests
 jest.setTimeout(15000);
 
@@ -123,7 +129,7 @@ if (!global.URL.createObjectURL) {
 // Mock window.matchMedia for React components that use theme detection
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: jest.fn().mockImplementation(query => ({
+  value: jest.fn().mockImplementation((query) => ({
     matches: false,
     media: query,
     onchange: null,

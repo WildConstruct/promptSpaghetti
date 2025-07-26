@@ -25,22 +25,17 @@ export declare export interface HelpProviderProps {
     enableHelpHints?: boolean;
 }
 export declare const HelpProvider: React.FC<HelpProviderProps>;
-export declare const useHelpContentRegistration: () => {
-    registerHelpContent: (content: HelpContent | HelpContent[]) => void;
-    useHelpContent: (content: HelpContent | HelpContent[]) => void;
-    updateHelpContent: (id: string, updates: Partial<HelpContent>) => void;
-    removeHelpContent: (id: string) => void;
-};
-export declare export declare     currentStep: HelpContent;
-    currentStepIndex: number;
+export declare const registerHelpContent: (content: HelpContent | HelpContent[]) => void;
+export declare export declare     currentStep: number;
+    currentStepIndex: any;
     totalSteps: number;
     allSteps: HelpContent[];
-    nextStep: () => void;
-    previousStep: () => void;
-    skipOnboarding: () => void;
-    completeOnboarding: () => void;
-    startOnboarding: () => void;
-    isComplete: boolean;
+    nextStep: any;
+    previousStep: any;
+    skipOnboarding: any;
+    completeOnboarding: any;
+    startOnboarding: any;
+    isComplete: any;
 };
 export declare const HelpSystemSettings: React.FC<{
     className?: string;

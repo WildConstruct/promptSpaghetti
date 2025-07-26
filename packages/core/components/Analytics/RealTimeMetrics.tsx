@@ -155,7 +155,7 @@ export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ metrics, loadi
         </Card>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .real-time-metrics {
           margin-bottom: 2rem;
         }

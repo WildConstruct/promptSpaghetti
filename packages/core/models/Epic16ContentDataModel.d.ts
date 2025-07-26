@@ -142,8 +142,8 @@ export declare const UserProfileSchema: z.ZodObject<{
         showPurchases?: boolean | undefined;
     } | undefined;
     website?: string | undefined;
-    avatar?: string | undefined;
     helpfulVotes?: number | undefined;
+    avatar?: string | undefined;
     bio?: string | undefined;
     badges?: string[] | undefined;
     templatesCreated?: number | undefined;
@@ -242,10 +242,10 @@ export declare const TemplateSchema: z.ZodObject<{
     seoKeywords: string[];
     versionCount: number;
     subcategory?: string | undefined;
+    publishedAt?: Date | undefined;
     thumbnailUrl?: string | undefined;
     featuredAt?: Date | undefined;
     metaDescription?: string | undefined;
-    publishedAt?: Date | undefined;
     currentVersionId?: string | undefined;
     shortDescription?: string | undefined;
     estimatedTokens?: number | undefined;
@@ -275,10 +275,10 @@ export declare const TemplateSchema: z.ZodObject<{
     featured?: boolean | undefined;
     currency?: string | undefined;
     subcategory?: string | undefined;
+    publishedAt?: Date | undefined;
     thumbnailUrl?: string | undefined;
     featuredAt?: Date | undefined;
     metaDescription?: string | undefined;
-    publishedAt?: Date | undefined;
     currentVersionId?: string | undefined;
     isAiGenerated?: boolean | undefined;
     shortDescription?: string | undefined;
@@ -656,14 +656,14 @@ export declare const ForumPostSchema: z.ZodObject<{
     tags: string[];
     content: string;
     title: string;
-    isLocked: boolean;
     bookmarks: number;
+    authorId: string;
+    isLocked: boolean;
     views: number;
     likes: number;
     shares: number;
     slug: string;
     allowComments: boolean;
-    authorId: string;
     isPinned: boolean;
     replies: number;
     attachments: {
@@ -698,12 +698,12 @@ export declare const ForumPostSchema: z.ZodObject<{
     tags: string[];
     content: string;
     title: string;
-    slug: string;
     authorId: string;
+    slug: string;
     lastActivity: Date;
-    isLocked?: boolean | undefined;
     parentId?: string | undefined;
     bookmarks?: number | undefined;
+    isLocked?: boolean | undefined;
     views?: number | undefined;
     likes?: number | undefined;
     shares?: number | undefined;
@@ -749,13 +749,13 @@ export declare const KnowledgeArticleSchema: z.ZodObject<{
         level: z.ZodNumber;
         anchor: z.ZodString;
     }, "strip", z.ZodTypeAny, {
-        anchor: string;
         id: string;
+        anchor: string;
         title: string;
         level: number;
     }, {
-        anchor: string;
         id: string;
+        anchor: string;
         title: string;
         level: number;
     }>, "many">>;
@@ -789,22 +789,22 @@ export declare const KnowledgeArticleSchema: z.ZodObject<{
     difficulty: "advanced" | "intermediate" | "beginner";
     bookmarks: number;
     keywords: string[];
+    authorId: string;
     featured: boolean;
     views: number;
     likes: number;
     helpfulVotes: number;
     slug: string;
-    authorId: string;
     relatedTemplateIds: string[];
     relatedArticleIds: string[];
     subcategory?: string | undefined;
-    metaDescription?: string | undefined;
     publishedAt?: Date | undefined;
+    metaDescription?: string | undefined;
     excerpt?: string | undefined;
     contentHtml?: string | undefined;
     tableOfContents?: {
-        anchor: string;
         id: string;
+        anchor: string;
         title: string;
         level: number;
     }[] | undefined;
@@ -820,24 +820,24 @@ export declare const KnowledgeArticleSchema: z.ZodObject<{
     content: string;
     title: string;
     difficulty: "advanced" | "intermediate" | "beginner";
-    slug: string;
     authorId: string;
+    slug: string;
     version?: string | undefined;
     bookmarks?: number | undefined;
     keywords?: string[] | undefined;
     featured?: boolean | undefined;
     views?: number | undefined;
-    subcategory?: string | undefined;
     likes?: number | undefined;
+    subcategory?: string | undefined;
+    publishedAt?: Date | undefined;
     helpfulVotes?: number | undefined;
     metaDescription?: string | undefined;
-    publishedAt?: Date | undefined;
     excerpt?: string | undefined;
     contentHtml?: string | undefined;
     relatedTemplateIds?: string[] | undefined;
     tableOfContents?: {
-        anchor: string;
         id: string;
+        anchor: string;
         title: string;
         level: number;
     }[] | undefined;
@@ -947,6 +947,7 @@ export declare const TutorialSchema: z.ZodObject<{
         estimatedDuration?: number | undefined;
     }[];
     difficulty: "advanced" | "intermediate" | "beginner";
+    authorId: string;
     assets: {
         name: string;
         url: string;
@@ -955,7 +956,6 @@ export declare const TutorialSchema: z.ZodObject<{
     featured: boolean;
     views: number;
     prerequisites: string[];
-    authorId: string;
     estimatedDuration: number;
     ratingCount: number;
     learningOutcomes: string[];
@@ -965,8 +965,8 @@ export declare const TutorialSchema: z.ZodObject<{
     completions: number;
     averageRating?: number | undefined;
     videoUrl?: string | undefined;
-    thumbnailUrl?: string | undefined;
     publishedAt?: Date | undefined;
+    thumbnailUrl?: string | undefined;
     shortDescription?: string | undefined;
 }, {
     id: string;
@@ -1001,8 +1001,8 @@ export declare const TutorialSchema: z.ZodObject<{
     views?: number | undefined;
     videoUrl?: string | undefined;
     prerequisites?: string[] | undefined;
-    thumbnailUrl?: string | undefined;
     publishedAt?: Date | undefined;
+    thumbnailUrl?: string | undefined;
     shortDescription?: string | undefined;
     ratingCount?: number | undefined;
     learningOutcomes?: string[] | undefined;
@@ -1106,12 +1106,12 @@ export declare const ContentAnalyticsSchema: z.ZodObject<{
     id: string;
     date: Date;
     bookmarks: number;
+    comments: number;
     contentType: ContentType;
     bounceRate: number;
     views: number;
     previews: number;
     conversionRate: number;
-    comments: number;
     likes: number;
     shares: number;
     contentId: string;
@@ -1130,11 +1130,11 @@ export declare const ContentAnalyticsSchema: z.ZodObject<{
     contentType: ContentType;
     contentId: string;
     bookmarks?: number | undefined;
+    comments?: number | undefined;
     bounceRate?: number | undefined;
     views?: number | undefined;
     previews?: number | undefined;
     conversionRate?: number | undefined;
-    comments?: number | undefined;
     likes?: number | undefined;
     shares?: number | undefined;
     uniqueViews?: number | undefined;
@@ -1280,12 +1280,12 @@ export declare const CollectionSchema: z.ZodObject<{
     }[];
     isPublic: boolean;
     views: number;
+    likes: number;
     collaborators: {
         userId: string;
         role: "admin" | "editor" | "viewer";
         addedAt: Date;
     }[];
-    likes: number;
     ownerId: string;
     isFeatured: boolean;
     allowCollaborators: boolean;
@@ -1311,13 +1311,13 @@ export declare const CollectionSchema: z.ZodObject<{
     }[] | undefined;
     isPublic?: boolean | undefined;
     views?: number | undefined;
-    thumbnailUrl?: string | undefined;
+    likes?: number | undefined;
     collaborators?: {
         userId: string;
         role: "admin" | "editor" | "viewer";
         addedAt: Date;
     }[] | undefined;
-    likes?: number | undefined;
+    thumbnailUrl?: string | undefined;
     isFeatured?: boolean | undefined;
     allowCollaborators?: boolean | undefined;
     followers?: number | undefined;
@@ -1472,8 +1472,8 @@ export declare const Epic16ContentSchemas: {
             showPurchases?: boolean | undefined;
         } | undefined;
         website?: string | undefined;
-        avatar?: string | undefined;
         helpfulVotes?: number | undefined;
+        avatar?: string | undefined;
         bio?: string | undefined;
         badges?: string[] | undefined;
         templatesCreated?: number | undefined;
@@ -1571,10 +1571,10 @@ export declare const Epic16ContentSchemas: {
         seoKeywords: string[];
         versionCount: number;
         subcategory?: string | undefined;
+        publishedAt?: Date | undefined;
         thumbnailUrl?: string | undefined;
         featuredAt?: Date | undefined;
         metaDescription?: string | undefined;
-        publishedAt?: Date | undefined;
         currentVersionId?: string | undefined;
         shortDescription?: string | undefined;
         estimatedTokens?: number | undefined;
@@ -1604,10 +1604,10 @@ export declare const Epic16ContentSchemas: {
         featured?: boolean | undefined;
         currency?: string | undefined;
         subcategory?: string | undefined;
+        publishedAt?: Date | undefined;
         thumbnailUrl?: string | undefined;
         featuredAt?: Date | undefined;
         metaDescription?: string | undefined;
-        publishedAt?: Date | undefined;
         currentVersionId?: string | undefined;
         isAiGenerated?: boolean | undefined;
         shortDescription?: string | undefined;
@@ -1981,14 +1981,14 @@ export declare const Epic16ContentSchemas: {
         tags: string[];
         content: string;
         title: string;
-        isLocked: boolean;
         bookmarks: number;
+        authorId: string;
+        isLocked: boolean;
         views: number;
         likes: number;
         shares: number;
         slug: string;
         allowComments: boolean;
-        authorId: string;
         isPinned: boolean;
         replies: number;
         attachments: {
@@ -2023,12 +2023,12 @@ export declare const Epic16ContentSchemas: {
         tags: string[];
         content: string;
         title: string;
-        slug: string;
         authorId: string;
+        slug: string;
         lastActivity: Date;
-        isLocked?: boolean | undefined;
         parentId?: string | undefined;
         bookmarks?: number | undefined;
+        isLocked?: boolean | undefined;
         views?: number | undefined;
         likes?: number | undefined;
         shares?: number | undefined;
@@ -2073,13 +2073,13 @@ export declare const Epic16ContentSchemas: {
             level: z.ZodNumber;
             anchor: z.ZodString;
         }, "strip", z.ZodTypeAny, {
-            anchor: string;
             id: string;
+            anchor: string;
             title: string;
             level: number;
         }, {
-            anchor: string;
             id: string;
+            anchor: string;
             title: string;
             level: number;
         }>, "many">>;
@@ -2113,22 +2113,22 @@ export declare const Epic16ContentSchemas: {
         difficulty: "advanced" | "intermediate" | "beginner";
         bookmarks: number;
         keywords: string[];
+        authorId: string;
         featured: boolean;
         views: number;
         likes: number;
         helpfulVotes: number;
         slug: string;
-        authorId: string;
         relatedTemplateIds: string[];
         relatedArticleIds: string[];
         subcategory?: string | undefined;
-        metaDescription?: string | undefined;
         publishedAt?: Date | undefined;
+        metaDescription?: string | undefined;
         excerpt?: string | undefined;
         contentHtml?: string | undefined;
         tableOfContents?: {
-            anchor: string;
             id: string;
+            anchor: string;
             title: string;
             level: number;
         }[] | undefined;
@@ -2144,24 +2144,24 @@ export declare const Epic16ContentSchemas: {
         content: string;
         title: string;
         difficulty: "advanced" | "intermediate" | "beginner";
-        slug: string;
         authorId: string;
+        slug: string;
         version?: string | undefined;
         bookmarks?: number | undefined;
         keywords?: string[] | undefined;
         featured?: boolean | undefined;
         views?: number | undefined;
-        subcategory?: string | undefined;
         likes?: number | undefined;
+        subcategory?: string | undefined;
+        publishedAt?: Date | undefined;
         helpfulVotes?: number | undefined;
         metaDescription?: string | undefined;
-        publishedAt?: Date | undefined;
         excerpt?: string | undefined;
         contentHtml?: string | undefined;
         relatedTemplateIds?: string[] | undefined;
         tableOfContents?: {
-            anchor: string;
             id: string;
+            anchor: string;
             title: string;
             level: number;
         }[] | undefined;
@@ -2270,6 +2270,7 @@ export declare const Epic16ContentSchemas: {
             estimatedDuration?: number | undefined;
         }[];
         difficulty: "advanced" | "intermediate" | "beginner";
+        authorId: string;
         assets: {
             name: string;
             url: string;
@@ -2278,7 +2279,6 @@ export declare const Epic16ContentSchemas: {
         featured: boolean;
         views: number;
         prerequisites: string[];
-        authorId: string;
         estimatedDuration: number;
         ratingCount: number;
         learningOutcomes: string[];
@@ -2288,8 +2288,8 @@ export declare const Epic16ContentSchemas: {
         completions: number;
         averageRating?: number | undefined;
         videoUrl?: string | undefined;
-        thumbnailUrl?: string | undefined;
         publishedAt?: Date | undefined;
+        thumbnailUrl?: string | undefined;
         shortDescription?: string | undefined;
     }, {
         id: string;
@@ -2324,8 +2324,8 @@ export declare const Epic16ContentSchemas: {
         views?: number | undefined;
         videoUrl?: string | undefined;
         prerequisites?: string[] | undefined;
-        thumbnailUrl?: string | undefined;
         publishedAt?: Date | undefined;
+        thumbnailUrl?: string | undefined;
         shortDescription?: string | undefined;
         ratingCount?: number | undefined;
         learningOutcomes?: string[] | undefined;
@@ -2427,12 +2427,12 @@ export declare const Epic16ContentSchemas: {
         id: string;
         date: Date;
         bookmarks: number;
+        comments: number;
         contentType: ContentType;
         bounceRate: number;
         views: number;
         previews: number;
         conversionRate: number;
-        comments: number;
         likes: number;
         shares: number;
         contentId: string;
@@ -2451,11 +2451,11 @@ export declare const Epic16ContentSchemas: {
         contentType: ContentType;
         contentId: string;
         bookmarks?: number | undefined;
+        comments?: number | undefined;
         bounceRate?: number | undefined;
         views?: number | undefined;
         previews?: number | undefined;
         conversionRate?: number | undefined;
-        comments?: number | undefined;
         likes?: number | undefined;
         shares?: number | undefined;
         uniqueViews?: number | undefined;
@@ -2599,12 +2599,12 @@ export declare const Epic16ContentSchemas: {
         }[];
         isPublic: boolean;
         views: number;
+        likes: number;
         collaborators: {
             userId: string;
             role: "admin" | "editor" | "viewer";
             addedAt: Date;
         }[];
-        likes: number;
         ownerId: string;
         isFeatured: boolean;
         allowCollaborators: boolean;
@@ -2630,13 +2630,13 @@ export declare const Epic16ContentSchemas: {
         }[] | undefined;
         isPublic?: boolean | undefined;
         views?: number | undefined;
-        thumbnailUrl?: string | undefined;
+        likes?: number | undefined;
         collaborators?: {
             userId: string;
             role: "admin" | "editor" | "viewer";
             addedAt: Date;
         }[] | undefined;
-        likes?: number | undefined;
+        thumbnailUrl?: string | undefined;
         isFeatured?: boolean | undefined;
         allowCollaborators?: boolean | undefined;
         followers?: number | undefined;

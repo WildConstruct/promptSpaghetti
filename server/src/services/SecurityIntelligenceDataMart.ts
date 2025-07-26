@@ -520,9 +520,9 @@ export class SecurityIntelligenceDataMart extends EventEmitter {
   private config: SecurityDataMartConfig;
   private schema: DataMartSchema;
   private initialized: boolean = false;
-  private connectionPool: any = null;
-  private dataQualityMetrics: any = {};
-  private performanceMetrics: any = {};
+  private connectionPool: unknown = null;
+  private dataQualityMetrics: Record<string, unknown> = {};
+  private performanceMetrics: Record<string, unknown> = {};
 
   constructor(config: SecurityDataMartConfig) {
     super();

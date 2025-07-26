@@ -81,7 +81,7 @@ export class MidjourneyAdaptor extends BaseAdaptor implements TextToImageAdaptor
       defaultAspectRatio: '1:1',
       defaultQuality: 1,
       defaultStylize: 100,
-      ...this.config.midjourney
+      ...(this.config.midjourney || {})
     };
   }
 
@@ -433,8 +433,9 @@ export class MidjourneyAdaptor extends BaseAdaptor implements TextToImageAdaptor
    */
   private extractAspectRatio(graph: any, config?: AdaptorConfig): string | null {
     // Check config first
-    if (config?.platformOverrides?.midjourney?.aspect) {
-      return config.platformOverrides.midjourney.aspect as string;
+    const midjourneyOverrides = config?.platformOverrides?.midjourney as any;
+    if (midjourneyOverrides?.aspect) {
+      return midjourneyOverrides.aspect as string;
     }
 
     // Check graph nodes
@@ -482,11 +483,13 @@ export class MidjourneyAdaptor extends BaseAdaptor implements TextToImageAdaptor
   /**
    * Validate aspect ratio format
    */
-  private isValidAspectRatio(ratio: string): boolean {
-    const capabilities = this.capabilities();
-    return capabilities.then(cap => 
-      cap.supportedAspectRatios?.includes(ratio) || false
-    ).catch(() => false);
+  private async isValidAspectRatio(ratio: string): Promise<boolean> {
+    try {
+      const capabilities = await this.capabilities();
+      return capabilities.supportedAspectRatios?.includes(ratio) || false;
+    } catch {
+      return false;
+    }
   }
 
   /**

@@ -6,7 +6,7 @@ export type Platform = 'web' | 'mobile' | 'desktop';
 
 export interface AnalyticsEvent {
   name: string;
-  properties: Record<string, any>;
+  properties: Record<string, unknown>;
   timestamp: Date;
   platform: Platform;
   userId?: string;

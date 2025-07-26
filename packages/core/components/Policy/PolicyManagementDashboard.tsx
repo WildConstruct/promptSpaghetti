@@ -143,18 +143,12 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
     }
   };
 
-  const __handleCreatePolicy = async () => {
-    try {
-      setIsCreatingPolicy(false);
-    } catch (err) {
+      } catch (err) {
       console.error('Failed to create policy:', err);
     }
   };
 
-  const __handleUpdatePolicy = async () => {
-    try {
-      setIsEditingPolicy(false);
-      setSelectedPolicy(null);
+        setSelectedPolicy(null);
     } catch (err) {
       console.error('Failed to update policy:', err);
     }
@@ -593,7 +587,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .policy-management-dashboard {
           max-width: 1400px;
           margin: 0 auto;

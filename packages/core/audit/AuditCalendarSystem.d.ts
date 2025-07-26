@@ -409,15 +409,15 @@ export declare const CalendarViewConfigSchema: z.ZodObject<{
         color_by: z.ZodDefault<z.ZodEnum<["priority", "status", "activity_type", "assignee"]>>;
         group_by: z.ZodDefault<z.ZodEnum<["none", "assignee", "activity_type", "compliance_framework"]>>;
     }, "strip", z.ZodTypeAny, {
+        group_by: "none" | "assignee" | "activity_type" | "compliance_framework";
         show_completed: boolean;
         show_cancelled: boolean;
         color_by: "priority" | "status" | "assignee" | "activity_type";
-        group_by: "none" | "assignee" | "activity_type" | "compliance_framework";
     }, {
+        group_by?: "none" | "assignee" | "activity_type" | "compliance_framework" | undefined;
         show_completed?: boolean | undefined;
         show_cancelled?: boolean | undefined;
         color_by?: "priority" | "status" | "assignee" | "activity_type" | undefined;
-        group_by?: "none" | "assignee" | "activity_type" | "compliance_framework" | undefined;
     }>>;
 }, "strip", z.ZodTypeAny, {
     start_date: Date;
@@ -432,10 +432,10 @@ export declare const CalendarViewConfigSchema: z.ZodObject<{
         mandatory_only?: boolean | undefined;
     } | undefined;
     display_options?: {
+        group_by: "none" | "assignee" | "activity_type" | "compliance_framework";
         show_completed: boolean;
         show_cancelled: boolean;
         color_by: "priority" | "status" | "assignee" | "activity_type";
-        group_by: "none" | "assignee" | "activity_type" | "compliance_framework";
     } | undefined;
 }, {
     start_date: Date;
@@ -450,10 +450,10 @@ export declare const CalendarViewConfigSchema: z.ZodObject<{
         mandatory_only?: boolean | undefined;
     } | undefined;
     display_options?: {
+        group_by?: "none" | "assignee" | "activity_type" | "compliance_framework" | undefined;
         show_completed?: boolean | undefined;
         show_cancelled?: boolean | undefined;
         color_by?: "priority" | "status" | "assignee" | "activity_type" | undefined;
-        group_by?: "none" | "assignee" | "activity_type" | "compliance_framework" | undefined;
     } | undefined;
 }>;
 export type CalendarViewConfig = z.infer<typeof CalendarViewConfigSchema>;

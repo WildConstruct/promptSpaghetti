@@ -101,7 +101,10 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
     }
   };
 
-  const handleAssignReview = async (reviewerId: string, reviewType: 'quick_review' | 'comprehensive_review' | 'specialist_review') => {
+  const handleAssignReview = async (
+    reviewerId: string,
+    reviewType: 'quick_review' | 'comprehensive_review' | 'specialist_review'
+  ) => {
     try {
       const updatedWorkflow = await qualityService.assignEditorialReview(contentId, versionId, reviewerId, {
         review_type: reviewType
@@ -733,7 +736,7 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
         )}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .quality-assessment-dashboard {
           background: #ffffff;
           border: 1px solid #e5e7eb;

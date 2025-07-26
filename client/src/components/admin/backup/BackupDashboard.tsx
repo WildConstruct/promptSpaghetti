@@ -12,39 +12,21 @@ import { Badge } from '../../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../ui/Tabs';
 import { 
   Database,
-  Save,
   Download,
-  Upload,
   RefreshCw,
   Settings,
   Clock,
   Shield,
-  CheckCircle,
-  AlertTriangle,
-  XCircle,
   Calendar,
   HardDrive,
   Activity,
   TrendingUp,
-  BarChart3,
   Eye,
   Play,
-  Pause,
   Plus,
   Edit,
-  Trash2,
-  Copy,
   Archive,
-  CloudUpload,
-  Server,
-  Timer,
-  Users,
-  Lock,
-  Key,
-  FileText,
-  Search,
-  Filter,
-  MoreHorizontal
+  Timer
 } from 'lucide-react';
 
 // Types extending Epic 19 backup infrastructure for admin use
@@ -186,6 +168,7 @@ const BackupDashboard: React.FC = () => {
   const [configurations, setConfigurations] = useState<AdminBackupConfiguration[]>([]);
   const [executions, setExecutions] = useState<BackupExecution[]>([]);
   const [metrics, setMetrics] = useState<BackupMetrics | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_selectedConfig, _setSelectedConfig] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
@@ -197,7 +180,7 @@ const BackupDashboard: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const loadBackupData = async () => {
+  const loadBackupData = async (): Promise<void> => {
     setLoading(true);
     try {
       const [configsRes, executionsRes, metricsRes] = await Promise.all([
@@ -221,7 +204,7 @@ const BackupDashboard: React.FC = () => {
     setLoading(false);
   };
 
-  const handleRunBackup = async (configId: string) => {
+  const handleRunBackup = async (configId: string): Promise<void> => {
     try {
       const response = await fetch(`/api/admin/backup/configurations/${configId}/run`, {
         method: 'POST',
@@ -236,7 +219,7 @@ const BackupDashboard: React.FC = () => {
     }
   };
 
-  const handleToggleConfiguration = async (configId: string, enabled: boolean) => {
+  const handleToggleConfiguration = async (configId: string, enabled: boolean): Promise<void> => {
     try {
       const response = await fetch(`/api/admin/backup/configurations/${configId}`, {
         method: 'PUT',
@@ -259,7 +242,7 @@ const BackupDashboard: React.FC = () => {
     }
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: string): string => {
     const colors = {
       completed: 'bg-green-100 text-green-800',
       running: 'bg-blue-100 text-blue-800',
@@ -270,7 +253,7 @@ const BackupDashboard: React.FC = () => {
     return colors[status as keyof typeof colors] || colors.pending;
   };
 
-  const formatBytes = (bytes: number) => {
+  const formatBytes = (bytes: number): string => {
     if (bytes === 0) return '0 B';
     const k = 1024;
     const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
@@ -278,7 +261,7 @@ const BackupDashboard: React.FC = () => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
-  const formatDuration = (seconds: number) => {
+  const formatDuration = (seconds: number): string => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
@@ -288,7 +271,7 @@ const BackupDashboard: React.FC = () => {
     return `${secs}s`;
   };
 
-  const renderOverviewTab = () => (
+  const renderOverviewTab = (): JSX.Element => (
     <div className="overview-content">
       {/* Health Status Cards */}
       <div className="status-cards">
@@ -430,7 +413,7 @@ const BackupDashboard: React.FC = () => {
     </div>
   );
 
-  const renderConfigurationsTab = () => (
+  const renderConfigurationsTab = (): JSX.Element => (
     <div className="configurations-content">
       <div className="configurations-header">
         <div className="header-actions">
@@ -527,7 +510,7 @@ const BackupDashboard: React.FC = () => {
     </div>
   );
 
-  const renderExecutionsTab = () => (
+  const renderExecutionsTab = (): JSX.Element => (
     <div className="executions-content">
       <Card>
         <CardHeader>
@@ -624,8 +607,20 @@ const BackupDashboard: React.FC = () => {
   );
 
   return (
-    <div className="backup-dashboard">
-      <div className="dashboard-header">
+    <div style={{
+      maxWidth: '1400px',
+      margin: '0 auto',
+      padding: '24px',
+      background: '#f8fafc',
+      minHeight: '100vh'
+    }}>
+      <div style={{
+        background: 'white',
+        borderRadius: '12px',
+        padding: '24px',
+        marginBottom: '24px',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+      }}>
         <div className="header-content">
           <div className="title-section">
             <Database className="w-8 h-8 text-blue-600" />
@@ -657,319 +652,6 @@ const BackupDashboard: React.FC = () => {
         </TabsContent>
       </Tabs>
 
-      <style jsx>{`
-        .backup-dashboard {
-          max-width: 1400px;
-          margin: 0 auto;
-          padding: 24px;
-          background: #f8fafc;
-          min-height: 100vh;
-        }
-
-        .dashboard-header {
-          background: white;
-          border-radius: 12px;
-          padding: 24px;
-          margin-bottom: 24px;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .header-content {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-        }
-
-        .title-section {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-        }
-
-        .dashboard-tabs {
-          background: white;
-          border-radius: 12px;
-          padding: 24px;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Overview Tab Styles */
-        .overview-content {
-          space-y: 24px;
-        }
-
-        .status-cards {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-          gap: 16px;
-          margin-bottom: 24px;
-        }
-
-        .status-card {
-          border: 1px solid #e5e7eb;
-        }
-
-        .health-status, .upcoming-backups {
-          margin-bottom: 24px;
-          border: 1px solid #e5e7eb;
-        }
-
-        .backup-schedule-list {
-          space-y: 12px;
-        }
-
-        .backup-schedule-item {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 12px;
-          background: #f9fafb;
-          border-radius: 8px;
-        }
-
-        .backup-info h4 {
-          font-weight: 600;
-          color: #1f2937;
-          margin: 0 0 4px 0;
-        }
-
-        .backup-time {
-          font-size: 14px;
-          color: #6b7280;
-          margin: 0;
-        }
-
-        .backup-duration {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-        }
-
-        /* Configurations Tab Styles */
-        .configurations-content {
-          space-y: 24px;
-        }
-
-        .configurations-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 24px;
-        }
-
-        .header-actions {
-          display: flex;
-          gap: 12px;
-        }
-
-        .configurations-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-          gap: 16px;
-        }
-
-        .config-card {
-          border: 1px solid #e5e7eb;
-          transition: all 0.2s;
-        }
-
-        .config-card:hover {
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-          transform: translateY(-1px);
-        }
-
-        .config-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-        }
-
-        .config-title {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
-
-        .config-actions {
-          display: flex;
-          gap: 8px;
-        }
-
-        .config-details {
-          space-y: 8px;
-          margin-bottom: 16px;
-        }
-
-        .detail-item {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-
-        .config-toggle {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          padding-top: 16px;
-          border-top: 1px solid #f3f4f6;
-        }
-
-        .toggle-switch {
-          position: relative;
-          display: inline-block;
-          width: 44px;
-          height: 24px;
-        }
-
-        .toggle-switch input {
-          opacity: 0;
-          width: 0;
-          height: 0;
-        }
-
-        .toggle-slider {
-          position: absolute;
-          cursor: pointer;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-color: #ccc;
-          transition: .4s;
-          border-radius: 24px;
-        }
-
-        .toggle-slider:before {
-          position: absolute;
-          content: "";
-          height: 18px;
-          width: 18px;
-          left: 3px;
-          bottom: 3px;
-          background-color: white;
-          transition: .4s;
-          border-radius: 50%;
-        }
-
-        input:checked + .toggle-slider {
-          background-color: #10b981;
-        }
-
-        input:checked + .toggle-slider:before {
-          transform: translateX(20px);
-        }
-
-        .toggle-label {
-          font-size: 14px;
-          color: #374151;
-        }
-
-        /* Executions Tab Styles */
-        .executions-content {
-          space-y: 24px;
-        }
-
-        .executions-table {
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          overflow: hidden;
-        }
-
-        .table-header {
-          display: grid;
-          grid-template-columns: 2fr 1fr 1.5fr 1fr 1fr 1fr;
-          gap: 16px;
-          padding: 12px 16px;
-          background: #f9fafb;
-          border-bottom: 1px solid #e5e7eb;
-          font-weight: 600;
-          font-size: 14px;
-          color: #374151;
-        }
-
-        .table-row {
-          display: grid;
-          grid-template-columns: 2fr 1fr 1.5fr 1fr 1fr 1fr;
-          gap: 16px;
-          padding: 12px 16px;
-          border-bottom: 1px solid #f3f4f6;
-          align-items: center;
-        }
-
-        .table-row:hover {
-          background: #f9fafb;
-        }
-
-        .table-cell {
-          font-size: 14px;
-          color: #374151;
-        }
-
-        .execution-config {
-          display: flex;
-          flex-direction: column;
-        }
-
-        .config-name {
-          font-weight: 600;
-          color: #1f2937;
-        }
-
-        .progress-bar {
-          width: 100%;
-          height: 4px;
-          background: #e5e7eb;
-          border-radius: 2px;
-          overflow: hidden;
-          margin-top: 4px;
-        }
-
-        .progress-fill {
-          height: 100%;
-          background: #3b82f6;
-          transition: width 0.3s;
-        }
-
-        .action-buttons {
-          display: flex;
-          gap: 8px;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-          .backup-dashboard {
-            padding: 16px;
-          }
-
-          .status-cards {
-            grid-template-columns: 1fr;
-          }
-
-          .configurations-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .config-header {
-            flex-direction: column;
-            gap: 12px;
-            align-items: stretch;
-          }
-
-          .config-actions {
-            justify-content: stretch;
-          }
-
-          .table-header, .table-row {
-            grid-template-columns: 1fr;
-            gap: 8px;
-          }
-
-          .header-cell::before {
-            content: attr(data-label) ': ';
-            font-weight: 600;
-          }
-        }
-      `}</style>
     </div>
   );
 };

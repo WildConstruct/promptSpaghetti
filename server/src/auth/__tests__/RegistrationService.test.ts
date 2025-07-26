@@ -67,7 +67,7 @@ describe('RegistrationService', () => {
       mockRateLimitService.checkIPRateLimit.mockResolvedValue({
         allowed: true,
         remaining: 4,
-        resetTime: new Date( as unknown),
+        resetTime: new Date( as unknown as unknown),
         totalRequests: 1
       });
 
@@ -90,7 +90,7 @@ describe('RegistrationService', () => {
         emailVerificationExpires: new Date(Date.now() + 24 * 60 * 60 * 1000)
       };
 
-      mockUserService.createUser.mockResolvedValue(mockUser as unknown as unknown);
+      mockUserService.createUser.mockResolvedValue(mockUser as unknown as unknown as unknown as unknown);
       mockEmailService.sendEmailVerification.mockResolvedValue();
       mockAuditService.logEvent.mockResolvedValue();
       mockDbService.query.mockResolvedValue(
@@ -98,8 +98,7 @@ describe('RegistrationService', () => {
         command: '',
         rowCount: 0,
         oid: 0,
-        fields: [] } as any as unknown
-       as unknown);
+        fields: [] } as any as unknown as unknown);
 
       // Mock the trackRegistrationEvent method
       jest.spyOn(registrationService as any, 'trackRegistrationEvent').mockResolvedValue(undefined as unknown as unknown);
@@ -110,7 +109,7 @@ describe('RegistrationService', () => {
         createdAt: mockUser.createdAt,
         roles: ['user'],
         permissions: ['graphs:create:own']
-      } as unknown as unknown);
+      } as unknown as unknown as unknown as unknown);
 
       // Execute
       const result = await registrationService.registerUser(validRegistrationRequest, validContext);
@@ -142,7 +141,7 @@ describe('RegistrationService', () => {
       mockRateLimitService.checkIPRateLimit.mockResolvedValue({
         allowed: false,
         remaining: 0,
-        resetTime: new Date( as unknown),
+        resetTime: new Date( as unknown as unknown),
         totalRequests: 6
       });
 
@@ -200,7 +199,7 @@ describe('RegistrationService', () => {
       mockRateLimitService.checkIPRateLimit.mockResolvedValue({
         allowed: true,
         remaining: 4,
-        resetTime: new Date( as unknown),
+        resetTime: new Date( as unknown as unknown),
         totalRequests: 1
       });
 
@@ -225,12 +224,12 @@ describe('RegistrationService', () => {
 
       mockDbService.transaction.mockImplementation(async (callback) => {
         const mockClient = {
-          query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [], command: '', rowCount: 0, oid: 0, fields: [] } as any as unknown as unknown)
+          query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [], command: '', rowCount: 0, oid: 0, fields: [] } as any as unknown as unknown as unknown as unknown)
         };
         return callback(mockClient as any);
       });
 
-      mockUserService.createUser.mockResolvedValue(mockUser as unknown as unknown);
+      mockUserService.createUser.mockResolvedValue(mockUser as unknown as unknown as unknown as unknown);
       mockEmailService.sendEmailVerification.mockResolvedValue();
       mockAuditService.logEvent.mockResolvedValue();
 
@@ -242,7 +241,7 @@ describe('RegistrationService', () => {
         createdAt: mockUser.createdAt,
         roles: ['user'],
         permissions: ['graphs:create:own']
-      } as unknown as unknown);
+      } as unknown as unknown as unknown as unknown);
 
       // Execute
       const result = await registrationService.registerUser(requestWithInvitation, validContext);
@@ -261,7 +260,7 @@ describe('RegistrationService', () => {
       mockRateLimitService.checkIPRateLimit.mockResolvedValue({
         allowed: true,
         remaining: 4,
-        resetTime: new Date( as unknown),
+        resetTime: new Date( as unknown as unknown),
         totalRequests: 1
       });
 
@@ -277,7 +276,7 @@ describe('RegistrationService', () => {
         }],
         warnings: [],
         suggestions: []
-      } as unknown as unknown);
+      } as unknown as unknown as unknown as unknown);
 
       await expect(
         registrationService.registerUser(invalidEmailRequest, validContext)
@@ -292,7 +291,7 @@ describe('RegistrationService', () => {
         password: 'SecurePassword123!'
       };
 
-      mockUserService.getUserByEmail.mockResolvedValue(null as unknown as unknown);
+      mockUserService.getUserByEmail.mockResolvedValue(null as unknown as unknown as unknown as unknown);
 
       const result = await registrationService.validateRegistration(invalidRequest);
 
@@ -329,7 +328,7 @@ describe('RegistrationService', () => {
         emailVerificationExpires: null
       };
 
-      mockUserService.getUserByEmail.mockResolvedValue(existingUser as unknown as unknown);
+      mockUserService.getUserByEmail.mockResolvedValue(existingUser as unknown as unknown as unknown as unknown);
 
       const result = await registrationService.validateRegistration(existingUserRequest);
 
@@ -351,7 +350,7 @@ describe('RegistrationService', () => {
         password: 'weak'
       };
 
-      mockUserService.getUserByEmail.mockResolvedValue(null as unknown as unknown);
+      mockUserService.getUserByEmail.mockResolvedValue(null as unknown as unknown as unknown as unknown);
 
       const result = await registrationService.validateRegistration(weakPasswordRequest);
 
@@ -365,7 +364,7 @@ describe('RegistrationService', () => {
         password: 'SecurePassword123!'
       };
 
-      mockUserService.getUserByEmail.mockResolvedValue(null as unknown as unknown);
+      mockUserService.getUserByEmail.mockResolvedValue(null as unknown as unknown as unknown as unknown);
 
       const result = await registrationService.validateRegistration(typoRequest);
 
@@ -397,11 +396,11 @@ describe('RegistrationService', () => {
       mockRateLimitService.checkIPRateLimit.mockResolvedValue({
         allowed: true,
         remaining: 4,
-        resetTime: new Date( as unknown),
+        resetTime: new Date( as unknown as unknown),
         totalRequests: 1
       });
 
-      mockUserService.getUserByEmail.mockResolvedValue(mockUser as unknown as unknown);
+      mockUserService.getUserByEmail.mockResolvedValue(mockUser as unknown as unknown as unknown as unknown);
       mockEmailService.sendEmailVerification.mockResolvedValue();
       mockAuditService.logEvent.mockResolvedValue();
       jest.spyOn(registrationService as any, 'sendEmailVerification').mockResolvedValue(undefined as unknown as unknown);
@@ -439,11 +438,11 @@ describe('RegistrationService', () => {
       mockRateLimitService.checkIPRateLimit.mockResolvedValue({
         allowed: true,
         remaining: 4,
-        resetTime: new Date( as unknown),
+        resetTime: new Date( as unknown as unknown),
         totalRequests: 1
       });
 
-      mockUserService.getUserByEmail.mockResolvedValue(mockUser as unknown as unknown);
+      mockUserService.getUserByEmail.mockResolvedValue(mockUser as unknown as unknown as unknown as unknown);
 
       await expect(
         registrationService.resendEmailVerification('test@example.com', {

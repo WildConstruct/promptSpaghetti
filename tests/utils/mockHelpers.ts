@@ -6,20 +6,12 @@
 import { jest } from '@jest/globals';
 
 // React Flow Mock Utilities
-export 
-// API Mock Utilities  
-export const createMockApiResponse = (data: unknown, status = 200) => ({
-  ok: status >= 200 && status < 300,
-  status,
-  statusText: status === 200 ? 'OK' : 'Error',
-  json: jest.fn<unknown[], unknown>().mockResolvedValue(data as unknown as unknown),
-  text: jest.fn<unknown[], unknown>().mockResolvedValue(JSON.stringify(data as unknown as unknown)),
-  headers: new Headers()
-});
+// (React Flow mocks would go here if needed)
 
+// API Mock Utilities  
+export 
 // Local Storage Mock
-export   
-  return {
+export   return {
     getItem: jest.fn((key: string) => storage.get(key) || null),
     setItem: jest.fn((key: string, value: string) => {
       storage.set(key, value);
@@ -73,7 +65,8 @@ export
 };
 
 // Performance Mock
-export 
+// (Performance mocks would go here if needed)
+
 // Intersection Observer Mock
 export   const mockUnobserve = jest.fn<unknown[], unknown>();
   const mockDisconnect = jest.fn<unknown[], unknown>();
@@ -122,7 +115,8 @@ export
 };
 
 // Canvas Context Mock
-export 
+export };
+
 // Date Mock Utilities
 export const mockDate = (isoDate: string) => {
   const mockDate = new Date(isoDate);
@@ -157,8 +151,7 @@ export const mockDate = (isoDate: string) => {
 };
 
 // Timer Mock Utilities
-export   
-  return {
+export   return {
     advanceByTime: (ms: number) => jest.advanceTimersByTime(ms),
     runAllTimers: () => jest.runAllTimers(),
     runOnlyPendingTimers: () => jest.runOnlyPendingTimers(),
@@ -175,8 +168,7 @@ export   Math.random = jest.fn(() => seed);
 };
 
 // Console Mock for Testing Console Output
-export   
-  console.log = jest.fn<unknown[], unknown>();
+export   console.log = jest.fn<unknown[], unknown>();
   console.error = jest.fn<unknown[], unknown>();
   console.warn = jest.fn<unknown[], unknown>();
   console.info = jest.fn<unknown[], unknown>();
@@ -193,10 +185,7 @@ export
 };
 
 // Fetch Mock
-export   const fetchMock = jest.fn<unknown[], unknown>().mockResolvedValue(
-    createMockApiResponse(mockResponse as unknown as unknown)
-  );
-  
+export   
   global.fetch = fetchMock;
   
   return {
@@ -208,26 +197,14 @@ export   const fetchMock = jest.fn<unknown[], unknown>().mockResolvedValue(
 };
 
 // Event Mock Utilities
-export const createMockEvent = (type: string, properties = {}) => ({
-  type,
-  bubbles: false,
-  cancelable: false,
-  composed: false,
-  currentTarget: null,
-  target: null,
-  timeStamp: Date.now(),
-  preventDefault: jest.fn<unknown[], unknown>(),
-  stopPropagation: jest.fn<unknown[], unknown>(),
-  stopImmediatePropagation: jest.fn<unknown[], unknown>(),
-  ...properties
-});
-
+export 
 // Mouse Event Mock
 export 
 // Keyboard Event Mock
 export 
 // Media Query Mock
-export 
+export   
+  window.matchMedia = jest.fn<unknown[], unknown>().mockImplementation(() => mockMatch);
   window.matchMedia = jest.fn<unknown[], unknown>().mockImplementation(() => mockMatch);
   
   return mockMatch;

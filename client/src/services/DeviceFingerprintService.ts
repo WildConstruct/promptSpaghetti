@@ -480,7 +480,8 @@ export class DeviceFingerprintService {
       const h = document.getElementsByTagName('body')[0];
       const s = document.createElement('span');
       s.style.fontSize = testSize;
-      s.innerHTML = testString;
+      // SECURITY FIX: Use textContent instead of innerHTML to prevent XSS
+      s.textContent = testString;
       const defaultWidth: Record<string, number> = {};
       const defaultHeight: Record<string, number> = {};
       
@@ -829,7 +830,8 @@ export class DeviceFingerprintService {
   private async detectAdBlocker(): Promise<boolean> {
     return new Promise((resolve) => {
       const testAd = document.createElement('div');
-      testAd.innerHTML = '&nbsp;';
+      // SECURITY FIX: Use textContent instead of innerHTML to prevent XSS
+      testAd.textContent = '\u00A0'; // Non-breaking space
       testAd.className = 'adsbox pub_300x250 pub_300x250m pub_728x90 text-ad textAd text_ad text_ads text-ads text-ad-links';
       testAd.style.width = '1px';
       testAd.style.height = '1px';

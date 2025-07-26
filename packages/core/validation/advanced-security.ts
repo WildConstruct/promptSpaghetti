@@ -347,9 +347,7 @@ export interface SecurityMetrics {
 export const advancedSecurityAnalyzer = new AdvancedSecurityAnalyzer();
 
 // Enhanced validation functions that use advanced analysis
-export       return advancedSecurityAnalyzer.validateAdvancedSecurity(input);
-    };
-  },
+export   },
   
   /**
    * Enhanced expression validation

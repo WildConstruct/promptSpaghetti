@@ -27,7 +27,7 @@ class PerformanceTestRunner {
   /**
    * Parse command line arguments
    */
-  parseArgs() {
+  parseArgs(): any {
     const args = process.argv.slice(2);
     const options = {
       suite: 'comprehensive',
@@ -151,7 +151,7 @@ Environment Variables:
   /**
    * Run integrated performance test suite
    */
-  async runIntegratedSuite(options) {
+  async runIntegratedSuite(options: any): Promise<void> {
     console.log('🎯 Running Integrated Performance Test Suite');
     console.log('=' .repeat(60));
     
@@ -170,7 +170,7 @@ Environment Variables:
   /**
    * Run load testing scenarios
    */
-  async runLoadTests(options) {
+  async runLoadTests(options: any): Promise<void> {
     console.log('📊 Running Load Testing Scenarios');
     console.log('=' .repeat(60));
     
@@ -203,7 +203,7 @@ Environment Variables:
   /**
    * Run main performance test runner
    */
-  async runMainPerformanceRunner(options) {
+  async runMainPerformanceRunner(options: any): Promise<void> {
     console.log('🎯 Running Main Performance Test Runner');
     console.log('=' .repeat(60));
     
@@ -221,7 +221,7 @@ Environment Variables:
   /**
    * Run TypeScript script using ts-node
    */
-  async runTypeScriptScript(scriptPath, args = [], env = {}) {
+  async runTypeScriptScript(scriptPath: string, args: string[] = [], env: any = {}): Promise<any> {
     return new Promise((resolve, reject) => {
       const fullEnv = { ...process.env, ...env };
       
@@ -265,7 +265,7 @@ Environment Variables:
   /**
    * Run Node.js script
    */
-  async runNodeScript(scriptPath, args = []) {
+  async runNodeScript(scriptPath: string, args: string[] = []): Promise<any> {
     return new Promise((resolve, reject) => {
       const child = spawn('node', [scriptPath, ...args], {
         stdio: this.verbose ? 'inherit' : 'pipe'
@@ -302,7 +302,7 @@ Environment Variables:
   /**
    * Setup output directory
    */
-  async setupOutputDirectory(outputDir) {
+  async setupOutputDirectory(outputDir: string): Promise<void> {
     try {
       await fs.mkdir(outputDir, { recursive: true });
       await fs.mkdir(path.join(outputDir, 'load-tests'), { recursive: true });
@@ -316,7 +316,7 @@ Environment Variables:
   /**
    * Generate summary report
    */
-  async generateSummaryReport(results, options) {
+  async generateSummaryReport(results: any[], options: any): Promise<void> {
     if (!options.reports) return;
     
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
@@ -349,7 +349,7 @@ Environment Variables:
   /**
    * Main execution method
    */
-  async run() {
+  async run(): Promise<void> {
     const options = this.parseArgs();
     
     if (options.help) {

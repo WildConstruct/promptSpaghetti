@@ -67,11 +67,11 @@ export declare const BaseFeedbackSchema: z.ZodObject<{
     category: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
     content: string;
     metadata: Record<string, unknown>;
+    authorId: string;
+    authorName: string;
     visibility: "private" | "public" | "moderated";
     targetType: "template" | "user" | "platform" | "contribution";
     helpfulVotes: number;
-    authorId: string;
-    authorName: string;
     replies: number;
     attachments: {
         id: string;
@@ -98,9 +98,9 @@ export declare const BaseFeedbackSchema: z.ZodObject<{
     updatedAt: Date;
     type: "rating" | "comment" | "suggestion" | "review" | "report" | "feature_request" | "bug_report";
     content: string;
-    targetType: "template" | "user" | "platform" | "contribution";
     authorId: string;
     authorName: string;
+    targetType: "template" | "user" | "platform" | "contribution";
     targetId: string;
     status?: "pending" | "approved" | "rejected" | "resolved" | "archived" | "flagged" | undefined;
     category?: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality" | undefined;
@@ -209,11 +209,11 @@ export declare const ReviewFeedbackSchema: z.ZodObject<{
     content: string;
     metadata: Record<string, unknown>;
     rating: number;
+    authorId: string;
+    authorName: string;
     visibility: "private" | "public" | "moderated";
     targetType: "template" | "user" | "platform" | "contribution";
     helpfulVotes: number;
-    authorId: string;
-    authorName: string;
     replies: number;
     attachments: {
         id: string;
@@ -253,9 +253,9 @@ export declare const ReviewFeedbackSchema: z.ZodObject<{
     type: "review";
     content: string;
     rating: number;
-    targetType: "template" | "user" | "platform" | "contribution";
     authorId: string;
     authorName: string;
+    targetType: "template" | "user" | "platform" | "contribution";
     targetId: string;
     status?: "pending" | "approved" | "rejected" | "resolved" | "archived" | "flagged" | undefined;
     category?: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality" | undefined;
@@ -371,9 +371,11 @@ export declare const ReportFeedbackSchema: z.ZodObject<{
     category: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
     content: string;
     metadata: Record<string, unknown>;
-    visibility: "private" | "public" | "moderated";
     severity: "low" | "medium" | "high" | "critical";
+    authorId: string;
+    authorName: string;
     reason: "other" | "inappropriate_content" | "copyright_violation" | "spam" | "low_quality" | "offensive_language" | "misleading_information" | "duplicate_content" | "terms_violation";
+    visibility: "private" | "public" | "moderated";
     targetType: "template" | "user" | "platform" | "contribution";
     evidence: {
         type: "text" | "video" | "url" | "screenshot";
@@ -381,8 +383,6 @@ export declare const ReportFeedbackSchema: z.ZodObject<{
         description?: string | undefined;
     }[];
     helpfulVotes: number;
-    authorId: string;
-    authorName: string;
     replies: number;
     attachments: {
         id: string;
@@ -413,18 +413,18 @@ export declare const ReportFeedbackSchema: z.ZodObject<{
     updatedAt: Date;
     type: "report";
     content: string;
-    reason: "other" | "inappropriate_content" | "copyright_violation" | "spam" | "low_quality" | "offensive_language" | "misleading_information" | "duplicate_content" | "terms_violation";
-    targetType: "template" | "user" | "platform" | "contribution";
     authorId: string;
     authorName: string;
+    reason: "other" | "inappropriate_content" | "copyright_violation" | "spam" | "low_quality" | "offensive_language" | "misleading_information" | "duplicate_content" | "terms_violation";
+    targetType: "template" | "user" | "platform" | "contribution";
     targetId: string;
     status?: "pending" | "approved" | "rejected" | "resolved" | "archived" | "flagged" | undefined;
     category?: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality" | undefined;
     metadata?: Record<string, unknown> | undefined;
     title?: string | undefined;
     rating?: number | undefined;
-    visibility?: "private" | "public" | "moderated" | undefined;
     severity?: "low" | "medium" | "high" | "critical" | undefined;
+    visibility?: "private" | "public" | "moderated" | undefined;
     evidence?: {
         type: "text" | "video" | "url" | "screenshot";
         content: string;
@@ -538,12 +538,12 @@ export declare const BugReportFeedbackSchema: z.ZodObject<{
     category: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
     content: string;
     metadata: Record<string, unknown>;
-    visibility: "private" | "public" | "moderated";
     severity: "low" | "medium" | "high" | "critical";
-    targetType: "template" | "user" | "platform" | "contribution";
-    helpfulVotes: number;
     authorId: string;
     authorName: string;
+    visibility: "private" | "public" | "moderated";
+    targetType: "template" | "user" | "platform" | "contribution";
+    helpfulVotes: number;
     replies: number;
     attachments: {
         id: string;
@@ -584,9 +584,9 @@ export declare const BugReportFeedbackSchema: z.ZodObject<{
     updatedAt: Date;
     type: "bug_report";
     content: string;
-    targetType: "template" | "user" | "platform" | "contribution";
     authorId: string;
     authorName: string;
+    targetType: "template" | "user" | "platform" | "contribution";
     targetId: string;
     priority?: "low" | "medium" | "high" | "urgent" | undefined;
     status?: "pending" | "approved" | "rejected" | "resolved" | "archived" | "flagged" | undefined;
@@ -594,7 +594,6 @@ export declare const BugReportFeedbackSchema: z.ZodObject<{
     metadata?: Record<string, unknown> | undefined;
     title?: string | undefined;
     rating?: number | undefined;
-    visibility?: "private" | "public" | "moderated" | undefined;
     environment?: {
         version?: string | undefined;
         browser?: string | undefined;
@@ -602,6 +601,7 @@ export declare const BugReportFeedbackSchema: z.ZodObject<{
         device?: string | undefined;
     } | undefined;
     severity?: "low" | "medium" | "high" | "critical" | undefined;
+    visibility?: "private" | "public" | "moderated" | undefined;
     helpfulVotes?: number | undefined;
     rejectionReason?: string | undefined;
     resolvedAt?: Date | undefined;
@@ -696,13 +696,13 @@ export declare const SuggestionFeedbackSchema: z.ZodObject<{
     category: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
     content: string;
     metadata: Record<string, unknown>;
-    visibility: "private" | "public" | "moderated";
     alternatives: string[];
+    authorId: string;
+    authorName: string;
+    visibility: "private" | "public" | "moderated";
     impact: "low" | "medium" | "high";
     targetType: "template" | "user" | "platform" | "contribution";
     helpfulVotes: number;
-    authorId: string;
-    authorName: string;
     replies: number;
     attachments: {
         id: string;
@@ -736,17 +736,17 @@ export declare const SuggestionFeedbackSchema: z.ZodObject<{
     updatedAt: Date;
     type: "suggestion";
     content: string;
-    targetType: "template" | "user" | "platform" | "contribution";
     authorId: string;
     authorName: string;
+    targetType: "template" | "user" | "platform" | "contribution";
     targetId: string;
     status?: "pending" | "approved" | "rejected" | "resolved" | "archived" | "flagged" | undefined;
     category?: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality" | undefined;
     metadata?: Record<string, unknown> | undefined;
     title?: string | undefined;
     rating?: number | undefined;
-    visibility?: "private" | "public" | "moderated" | undefined;
     alternatives?: string[] | undefined;
+    visibility?: "private" | "public" | "moderated" | undefined;
     impact?: "low" | "medium" | "high" | undefined;
     helpfulVotes?: number | undefined;
     rejectionReason?: string | undefined;
@@ -916,9 +916,9 @@ export declare const FeedbackReplySchema: z.ZodObject<{
     updatedAt: Date;
     status: "hidden" | "visible" | "deleted";
     content: string;
-    likes: number;
     authorId: string;
     authorName: string;
+    likes: number;
     attachments: {
         id: string;
         filename: string;
@@ -1062,10 +1062,10 @@ export declare const FeedbackFilterSchema: z.ZodObject<{
     status?: "pending" | "approved" | "rejected" | "resolved" | "archived" | "flagged" | undefined;
     type?: "rating" | "comment" | "suggestion" | "review" | "report" | "feature_request" | "bug_report" | undefined;
     category?: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality" | undefined;
+    authorId?: string | undefined;
     targetType?: "template" | "user" | "platform" | "contribution" | undefined;
     createdAfter?: Date | undefined;
     createdBefore?: Date | undefined;
-    authorId?: string | undefined;
     targetId?: string | undefined;
     minRating?: number | undefined;
     verifiedOnly?: boolean | undefined;
@@ -1080,10 +1080,10 @@ export declare const FeedbackFilterSchema: z.ZodObject<{
     offset?: number | undefined;
     sortBy?: "rating" | "created_at" | "updated_at" | "helpful_votes" | undefined;
     sortOrder?: "asc" | "desc" | undefined;
+    authorId?: string | undefined;
     targetType?: "template" | "user" | "platform" | "contribution" | undefined;
     createdAfter?: Date | undefined;
     createdBefore?: Date | undefined;
-    authorId?: string | undefined;
     targetId?: string | undefined;
     minRating?: number | undefined;
     verifiedOnly?: boolean | undefined;

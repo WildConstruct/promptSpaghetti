@@ -198,7 +198,11 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
     total: contributions.length,
     drafts: contributions.filter(c => c.status === 'draft').length,
     published: contributions.filter(c => c.status === 'published').length,
-    underReview: contributions.filter(c => ['submitted', 'under_review', 'revision_requested'].includes(c.status)).length,
+    underReview: contributions.filter(
+      c => ['submitted',
+      'under_review',
+      'revision_requested'].includes(c.status
+    )).length,
     totalViews: contributions.reduce((sum, c) => sum + c.views, 0),
     totalLikes: contributions.reduce((sum, c) => sum + c.likes, 0),
     avgQualityScore: contributions.length > 0 
@@ -424,7 +428,7 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .contribution-dashboard {
           padding: 24px;
           max-width: 1400px;

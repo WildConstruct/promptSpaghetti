@@ -478,7 +478,7 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({
         {renderRiskAnalysis()}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .verification-analytics {
           max-width: 1400px;
           margin: 0 auto;

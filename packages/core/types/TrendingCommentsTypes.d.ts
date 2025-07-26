@@ -464,7 +464,7 @@ export declare const TrendingResultsSchema: z.ZodObject<{
     };
     resourceId: string;
     resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
-    period: "30d" | "7d" | "1h" | "6h" | "24h" | "all_time";
+    period: "30d" | "all_time" | "7d" | "1h" | "6h" | "24h";
     generatedAt: Date;
     totalComments: number;
     algorithmUsed: string;
@@ -494,7 +494,7 @@ export declare const TrendingResultsSchema: z.ZodObject<{
     };
     resourceId: string;
     resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
-    period: "30d" | "7d" | "1h" | "6h" | "24h" | "all_time";
+    period: "30d" | "all_time" | "7d" | "1h" | "6h" | "24h";
     generatedAt: Date;
     algorithmUsed: string;
     trendingComments: any[];
@@ -881,7 +881,7 @@ export declare const GetTrendingCommentsRequestSchema: z.ZodObject<{
     sortOrder: "oldest" | "recent" | "trending" | "top_rated" | "controversial";
     resourceId: string;
     resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
-    period: "30d" | "7d" | "1h" | "6h" | "24h" | "all_time";
+    period: "30d" | "all_time" | "7d" | "1h" | "6h" | "24h";
     includeReplies: boolean;
     userId?: string | undefined;
     language?: string | undefined;
@@ -894,7 +894,7 @@ export declare const GetTrendingCommentsRequestSchema: z.ZodObject<{
     offset?: number | undefined;
     sortOrder?: "oldest" | "recent" | "trending" | "top_rated" | "controversial" | undefined;
     language?: string | undefined;
-    period?: "30d" | "7d" | "1h" | "6h" | "24h" | "all_time" | undefined;
+    period?: "30d" | "all_time" | "7d" | "1h" | "6h" | "24h" | undefined;
     includeReplies?: boolean | undefined;
     minScore?: number | undefined;
 }>;
@@ -999,7 +999,7 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
         };
         resourceId: string;
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
-        period: "30d" | "7d" | "1h" | "6h" | "24h" | "all_time";
+        period: "30d" | "all_time" | "7d" | "1h" | "6h" | "24h";
         generatedAt: Date;
         totalComments: number;
         algorithmUsed: string;
@@ -1029,7 +1029,7 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
         };
         resourceId: string;
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
-        period: "30d" | "7d" | "1h" | "6h" | "24h" | "all_time";
+        period: "30d" | "all_time" | "7d" | "1h" | "6h" | "24h";
         generatedAt: Date;
         algorithmUsed: string;
         trendingComments: any[];
@@ -1103,7 +1103,7 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
         };
         resourceId: string;
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
-        period: "30d" | "7d" | "1h" | "6h" | "24h" | "all_time";
+        period: "30d" | "all_time" | "7d" | "1h" | "6h" | "24h";
         generatedAt: Date;
         totalComments: number;
         algorithmUsed: string;
@@ -1148,7 +1148,7 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
         };
         resourceId: string;
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
-        period: "30d" | "7d" | "1h" | "6h" | "24h" | "all_time";
+        period: "30d" | "all_time" | "7d" | "1h" | "6h" | "24h";
         generatedAt: Date;
         algorithmUsed: string;
         trendingComments: any[];

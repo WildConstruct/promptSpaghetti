@@ -301,7 +301,7 @@ export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({
         </CardContent>
       </Card>
 
-      <style jsx>{`
+      <style>{`
         .director-analytics-view {
           display: flex;
           flex-direction: column;

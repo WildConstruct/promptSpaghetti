@@ -8,7 +8,7 @@
  * Task: T-1752989143998-297
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ConsentCategory, ConsentOption, ConsentPreference } from '../../types/consent';
 
 interface GranularConsentInterfaceProps {
@@ -26,16 +26,7 @@ interface CategoryState {
   someEnabled: boolean;
 }
 
-export const GranularConsentInterface: React.FC<GranularConsentInterfaceProps> = ({ 
-  userId, 
-  onSave, 
-  onCancel, 
-  initialPreferences = [], 
-  readOnly = false, 
-  complianceMode = 'GDPR' 
-}) => {
-  const [preferences, setPreferences] = useState<ConsentPreference[]>(initialPreferences);
-  const [categories, setCategories] = useState<ConsentCategory[]>([]);
+export   const [categories, setCategories] = useState<ConsentCategory[]>([]);
   const [categoryStates, setCategoryStates] = useState<Record<string, CategoryState>>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -44,13 +35,13 @@ export const GranularConsentInterface: React.FC<GranularConsentInterfaceProps> =
 
   useEffect(() => {
     loadConsentCategories();
-  }, [complianceMode]);
+  }, [complianceMode, loadConsentCategories]);
 
   useEffect(() => {
     updateCategoryStates();
-  }, [preferences, categories]);
+  }, [preferences, categories, updateCategoryStates]);
 
-  const loadConsentCategories = async () => {
+  const loadConsentCategories = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/consent/categories?compliance=${complianceMode}`);
@@ -80,9 +71,9 @@ export const GranularConsentInterface: React.FC<GranularConsentInterfaceProps> =
     } finally {
       setLoading(false);
     }
-  };
+  }, [complianceMode, userId, preferences]);
 
-  const updateCategoryStates = () => {
+  const updateCategoryStates = useCallback(() => {
     const newStates: Record<string, CategoryState> = {};
     
     categories.forEach(category => {
@@ -98,7 +89,7 @@ export const GranularConsentInterface: React.FC<GranularConsentInterfaceProps> =
     });
     
     setCategoryStates(newStates);
-  };
+  }, [categories, preferences, categoryStates]);
 
   const handleOptionChange = (optionId: string, categoryId: string, granted: boolean) => {
     if (readOnly) return;

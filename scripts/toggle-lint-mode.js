@@ -10,7 +10,7 @@ const mode = process.argv[2] || 'auto';
 
 console.log('🔧 Lint Mode Switcher\n');
 
-function switchToMode(targetMode) {
+function switchToMode(targetMode: string): void {
   const eslintConfig = targetMode === 'strict' ? '.eslintrc.js' : '.eslintrc.improved.js';
   const lintStagedConfig = targetMode === 'strict' ? '.lintstagedrc.js' : '.lintstagedrc.improved.js';
   const preCommitHook = targetMode === 'strict' ? '.husky/pre-commit' : '.husky/pre-commit.improved';
@@ -65,7 +65,7 @@ function switchToMode(targetMode) {
   }
 }
 
-function getCurrentMode() {
+function getCurrentMode(): string {
   if (!fs.existsSync('.eslintrc.active.js')) {
     return 'none';
   }
@@ -83,7 +83,7 @@ function getCurrentMode() {
   }
 }
 
-function showStatus() {
+function showStatus(): void {
   const current = getCurrentMode();
   console.log('📊 Current lint mode status:\n');
   

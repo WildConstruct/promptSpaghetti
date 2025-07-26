@@ -13,7 +13,7 @@ console.log('🔌 Plugin Loader with Version & Dependency Resolution Demo');
 console.log('=========================================================\n');
 
 // Simulate plugin loader functionality since we're in a demo environment
-function demoPluginLoader() {
+function demoPluginLoader(): void {
   console.log('📦 Plugin Loader Architecture Overview');
   console.log('=====================================');
   console.log();
@@ -293,7 +293,7 @@ module.exports = {
 }
 
 // Example plugin manifest for reference
-function showExamplePluginManifest() {
+function showExamplePluginManifest(): void {
   console.log('\n📋 Example Plugin Manifest (plugin.json)');
   console.log('========================================');
   

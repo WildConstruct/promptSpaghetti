@@ -619,7 +619,7 @@ const SubmissionQueueDashboard: React.FC = () => {
         </TabsContent>
       </Tabs>
 
-      <style jsx>{`
+      <style>{`
         .submission-queue-dashboard {
           max-width: 1400px;
           margin: 0 auto;

@@ -5,7 +5,18 @@
  * Flexible adapter for custom AI model endpoints following REST conventions
  */
 
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelMetadata, ModelCapabilities, CostEstimate, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
+import { 
+  BaseAIModel,
+  AIModelType,
+  AIModelProvider,
+  AIModelStatus,
+  ModelMetadata,
+  ModelCapabilities,
+  CostEstimate,
+  ModelInitializationError,
+  ModelProcessingError,
+  ModelUnavailableError
+} from '../BaseAIModel';
 
 export interface HTTPConfig {
   baseURL: string;
@@ -23,7 +34,7 @@ export interface HTTPRequestOptions {
   headers?: Record<string, string>;
   timeout?: number;
   retries?: number;
-  parameters?: Record<string, any>;
+  parameters?: Record<string, unknown>;
 }
 
 export interface HTTPRequestMapping {
@@ -37,7 +48,7 @@ export interface HTTPRequestMapping {
 
 export interface GenericHTTPResponse {
   status: number;
-  data: any;
+  data: unknown;
   headers: Record<string, string>;
   usage?: {
     input_tokens?: number;
@@ -115,7 +126,7 @@ export class GenericHTTPAdapter extends BaseAIModel {
     }
   }
 
-  async process(input: any, options?: HTTPRequestOptions): Promise<any> {
+  async process(input: unknown, options?: HTTPRequestOptions): Promise<unknown> {
     try {
       if (this._status !== AIModelStatus.READY) {
         throw new ModelUnavailableError(this._id);
@@ -190,7 +201,11 @@ export class GenericHTTPAdapter extends BaseAIModel {
     }
   }
 
-  private async _makeRequest(endpoint: string, payload: any, options?: HTTPRequestOptions): Promise<GenericHTTPResponse> {
+  private async _makeRequest(
+    endpoint: string,
+    payload: any,
+    options?: HTTPRequestOptions
+  ): Promise<GenericHTTPResponse> {
     const url = `${this.config.baseURL}${endpoint}`;
     const method = options?.method || 'POST';
     

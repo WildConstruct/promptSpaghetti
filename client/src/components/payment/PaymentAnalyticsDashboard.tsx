@@ -5,7 +5,7 @@
  * Main dashboard component for payment provider performance and analytics
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { PaymentProvider, PaymentMethodType } from '../../../../server/src/marketplace/transaction.types';
 import { RevenueTimeRange } from '../../types/revenue';
 import { usePaymentAnalytics } from '../../hooks/usePaymentAnalytics';
@@ -350,7 +350,7 @@ export const PaymentAnalyticsDashboard: React.FC<PaymentAnalyticsDashboardProps>
 const PaymentOverviewPanel: React.FC<{
   metrics: PaymentProviderMetrics;
   timeRange: RevenueTimeRange;
-}> = ({ metrics, timeRange }) => (
+}> = ({ metrics }) => (
   <div className="payment-overview-panel">
     <div className="overview-charts">
       <div className="chart-container">
@@ -387,7 +387,7 @@ const PaymentOverviewPanel: React.FC<{
 const PaymentMethodsPanel: React.FC<{
   methods: PaymentMethodMetrics[];
   provider: PaymentProvider;
-}> = ({ methods, provider }) => (
+}> = ({ methods }) => (
   <div className="payment-methods-panel">
     <div className="methods-grid">
       {methods.map(method => (
@@ -430,7 +430,7 @@ const PaymentMethodsPanel: React.FC<{
 const PaymentFailuresPanel: React.FC<{
   failures: PaymentFailureAnalysis[];
   provider: PaymentProvider;
-}> = ({ failures, provider }) => (
+}> = ({ failures }) => (
   <div className="payment-failures-panel">
     <div className="failures-list">
       {failures.map(failure => (

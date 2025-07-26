@@ -48,7 +48,7 @@ export class OpenAIAdaptor extends BaseAdaptor implements TextToTextAdaptor {
       apiKey: process.env.OPENAI_API_KEY,
       organization: process.env.OPENAI_ORGANIZATION,
       baseURL: process.env.OPENAI_BASE_URL,
-      ...this.config.openai
+      ...(this.config.openai || {})
     };
 
     if (!this.openaiConfig.apiKey) {
@@ -138,7 +138,10 @@ export class OpenAIAdaptor extends BaseAdaptor implements TextToTextAdaptor {
     if (estimatedTokens > modelCapabilities.maxTokens * 0.8) {
       warnings.push({
         code: 'CONTENT_TOO_LONG',
-        message: `Content may exceed model context limit (estimated: ${estimatedTokens} tokens, limit: ${modelCapabilities.maxTokens})`,
+        message: `Content may exceed model context limit (
+          estimated: ${estimatedTokens} tokens,
+          limit: ${modelCapabilities.maxTokens}
+        )`,
         optimization: 'Consider breaking content into smaller chunks'
       });
     }

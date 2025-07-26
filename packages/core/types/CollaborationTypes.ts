@@ -265,5 +265,4 @@ export interface StickyNoteContextMenuOptions {
 // Predefined color schemes for sticky notes
 export 
 // Default sticky note configuration
-export 
 export } as const;

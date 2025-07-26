@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import 'reactflow/dist/style.css';
 import './randomizer.css';
+import './professional-theme.css';
 
 import EnhancedGraphEditor from './components/EnhancedGraphEditor';
 

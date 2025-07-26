@@ -37,7 +37,7 @@ interface Token {
  * AST Node types
  */
 type ASTNode = 
-  | { type: 'Literal'; value: Error }
+  | { type: 'Literal'; value: number | string | boolean | null }
   | { type: 'Identifier'; name: string }
   | { type: 'BinaryExpression'; operator: string; left: ASTNode; right: ASTNode }
   | { type: 'UnaryExpression'; operator: string; argument: ASTNode }
@@ -629,7 +629,7 @@ export class SafeExpressionEvaluator {
       return callee(...args);
       
     default:
-      throw new Error(`Unknown AST node type: ${(node as unknown).type}`);
+      throw new Error(`Unknown AST node type: ${(node as any)?.type || 'undefined'}`);
     }
   }
 

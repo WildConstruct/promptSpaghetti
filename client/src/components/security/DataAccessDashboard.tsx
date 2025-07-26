@@ -1,7 +1,7 @@
 // Data Access Dashboard - Epic 19.4
 // User interface for managing data access permissions and requests
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './DataAccessDashboard.css';
 
 // Types
@@ -45,16 +45,16 @@ interface AccessRequest {
   expiresAt?: Date;
 }
 
-interface AccessPermissions {
-  allowed: boolean;
-  reason: string;
-  classification: string;
-  accessLevel: string;
-  requiredPermissions: string[];
-  actualPermissions: string[];
-  restrictions: AccessRestriction[];
-  auditId: string;
-}
+// interface AccessPermissions { // Commented out unused interface
+//   allowed: boolean;
+//   reason: string;
+//   classification: string;
+//   accessLevel: string;
+//   requiredPermissions: string[];
+//   actualPermissions: string[];
+//   restrictions: AccessRestriction[];
+//   auditId: string;
+// }
 
 interface DataAccessDashboardProps {
   userId: string;
@@ -90,7 +90,7 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
   });
 
   // API helpers
-  const apiRequest = async (endpoint: string, options: RequestInit = {}) => {
+  const apiRequest = useCallback(async (endpoint: string, options: RequestInit = {}) => {
     const token = localStorage.getItem('authToken'); // Adjust based on your auth system
     const response = await fetch(`${apiBaseUrl}${endpoint}`, {
       ...options,
@@ -107,10 +107,10 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
     }
 
     return response.json();
-  };
+  }, [apiBaseUrl]);
 
   // Load data
-  const loadGrants = async () => {
+  const loadGrants = useCallback(async () => {
     try {
       setLoading(true);
       const response = await apiRequest(`/data-access/grants/${userId}`);
@@ -120,9 +120,9 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId, apiRequest]);
 
-  const loadHistory = async () => {
+  const loadHistory = useCallback(async () => {
     try {
       setLoading(true);
       const queryParams = new URLSearchParams({
@@ -141,7 +141,7 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId, historyFilter, apiRequest]);
 
   // Submit access request
   const submitAccessRequest = async () => {
@@ -171,15 +171,15 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
     }
   };
 
-  // Check specific resource access
-        if (!response.ok) throw new Error('Failed to check access');
-      const data = await response.json();
-      return data as AccessPermissions;
-    } catch (err) {
-      console.error('Failed to check resource access:', err);
-      return null;
-    }
-  };
+  // Check specific resource access - commented out as unused
+  //   //     if (!response.ok) throw new Error('Failed to check access');
+  //     const data = await response.json();
+  //     return data as AccessPermissions;
+  //   } catch (err) {
+  //     console.error('Failed to check resource access:', err);
+  //     return null;
+  //   }
+  // };
 
   // Effects
   useEffect(() => {
@@ -188,7 +188,7 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
     } else if (activeTab === 'history') {
       loadHistory();
     }
-  }, [activeTab, historyFilter]);
+  }, [activeTab, historyFilter, loadGrants, loadHistory]);
 
   // Render helpers
   const formatDate = (date: Date | string) => {

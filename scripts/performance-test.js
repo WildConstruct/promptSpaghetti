@@ -21,11 +21,11 @@ class PerformanceProfiler {
     };
   }
 
-  startTiming(name) {
+  startTiming(name: string): void {
     performance.mark(`${name}-start`);
   }
 
-  endTiming(name) {
+  endTiming(name: string): number {
     performance.mark(`${name}-end`);
     performance.measure(name, `${name}-start`, `${name}-end`);
     
@@ -36,7 +36,7 @@ class PerformanceProfiler {
     return duration;
   }
 
-  recordMetric(name, value) {
+  recordMetric(name: string, value: number): void {
     if (!this.metrics.has(name)) {
       this.metrics.set(name, {
         name,
@@ -54,11 +54,11 @@ class PerformanceProfiler {
     metric.average = metric.values.reduce((a, b) => a + b, 0) / metric.values.length;
   }
 
-  getMetrics() {
+  getMetrics(): any[] {
     return Array.from(this.metrics.values());
   }
 
-  async runBundleAnalysis() {
+  async runBundleAnalysis(): Promise<any> {
     console.log('🔍 Running bundle analysis...');
     
     try {
@@ -95,7 +95,7 @@ class PerformanceProfiler {
     }
   }
 
-  calculateDirectorySize(dirPath) {
+  calculateDirectorySize(dirPath: string): number {
     let totalSize = 0;
     
     if (!fs.existsSync(dirPath)) {
@@ -104,7 +104,7 @@ class PerformanceProfiler {
     
     const files = fs.readdirSync(dirPath);
     
-    for (const file of files) {
+    for (const file of (files as string[])) {
       const filePath = path.join(dirPath, file);
       const stats = fs.statSync(filePath);
       
@@ -118,7 +118,7 @@ class PerformanceProfiler {
     return totalSize;
   }
 
-  async runDependencyAnalysis() {
+  async runDependencyAnalysis(): Promise<any> {
     console.log('📦 Running dependency analysis...');
     
     try {
@@ -151,7 +151,7 @@ class PerformanceProfiler {
     }
   }
 
-  async runTestPerformance() {
+  async runTestPerformance(): Promise<any> {
     console.log('🧪 Running test performance analysis...');
     
     try {
@@ -194,7 +194,7 @@ class PerformanceProfiler {
     }
   }
 
-  async runLintAnalysis() {
+  async runLintAnalysis(): Promise<any> {
     console.log('🔍 Running lint analysis...');
     
     try {
@@ -220,7 +220,7 @@ class PerformanceProfiler {
       let totalErrors = 0;
       let totalWarnings = 0;
       
-      lintResults.forEach(result => {
+      lintResults.forEach((result: any) => {
         totalErrors += result.errorCount;
         totalWarnings += result.warningCount;
       });
@@ -243,13 +243,13 @@ class PerformanceProfiler {
     }
   }
 
-  async runMemoryAnalysis() {
+  async runMemoryAnalysis(): Promise<any> {
     console.log('🧠 Running memory analysis...');
     
     const memStart = process.memoryUsage();
     
     // Simulate memory-intensive operations
-    const largeArray = new Array(1000000).fill(0).map((_, i) => ({ id: i, data: `item-${i}` }));
+    const largeArray = new Array(1000000).fill(0).map((_, i: number) => ({ id: i, data: `item-${i}` }));
     
     // Measure memory after allocation
     const memDuring = process.memoryUsage();
@@ -276,7 +276,7 @@ class PerformanceProfiler {
     return { memStart, memDuring, memAfter };
   }
 
-  generateReport() {
+  generateReport(): any {
     const report = {
       timestamp: new Date().toISOString(),
       metrics: this.getMetrics(),
@@ -292,7 +292,7 @@ class PerformanceProfiler {
     return report;
   }
 
-  calculateOverallScore() {
+  calculateOverallScore(): number {
     let score = 100;
     
     // Deduct points for performance issues
@@ -317,7 +317,7 @@ class PerformanceProfiler {
     return Math.max(0, score);
   }
 
-  async saveReport(report) {
+  async saveReport(report: any): Promise<void> {
     const reportPath = path.join(process.cwd(), 'docs', 'performance-report.json');
     fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
     
@@ -330,7 +330,7 @@ class PerformanceProfiler {
     console.log(`📋 Human-readable report saved to: ${humanReportPath}`);
   }
 
-  generateHumanReport(report) {
+  generateHumanReport(report: any): string {
     return `# Performance Analysis Report
 
 **Generated**: ${report.timestamp}
@@ -368,7 +368,7 @@ ${this.generateRecommendations(report)}
 
 ## Detailed Metrics
 
-${report.metrics.map(metric => 
+${report.metrics.map((metric: any) => 
     `### ${metric.name}
 - Average: ${metric.average.toFixed(2)}ms
 - Min: ${metric.min.toFixed(2)}ms
@@ -378,7 +378,7 @@ ${report.metrics.map(metric =>
 `;
   }
 
-  generateRecommendations(report) {
+  generateRecommendations(report: any): string {
     const recommendations = [];
     
     if (report.results.frontend.bundleSize > 500 * 1024) {
@@ -413,7 +413,7 @@ ${report.metrics.map(metric =>
   }
 }
 
-async function main() {
+async function main(): Promise<void> {
   console.log('🚀 Starting Epic 18.1.4 Performance Analysis...\n');
   
   const profiler = new PerformanceProfiler();

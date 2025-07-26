@@ -446,7 +446,7 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .policy-analytics-dashboard {
           max-width: 1400px;
           margin: 0 auto;

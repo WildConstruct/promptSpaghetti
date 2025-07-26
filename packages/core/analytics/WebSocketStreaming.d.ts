@@ -48,51 +48,51 @@ export declare const SubscriptionConfigSchema: z.ZodObject<{
         userId: z.ZodOptional<z.ZodString>;
         organizationId: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        types?: string[] | undefined;
-        categories?: string[] | undefined;
-        sources?: string[] | undefined;
-        severities?: string[] | undefined;
         userId?: string | undefined;
+        categories?: string[] | undefined;
         organizationId?: string | undefined;
+        types?: string[] | undefined;
+        severities?: string[] | undefined;
+        sources?: string[] | undefined;
     }, {
-        types?: string[] | undefined;
-        categories?: string[] | undefined;
-        sources?: string[] | undefined;
-        severities?: string[] | undefined;
         userId?: string | undefined;
+        categories?: string[] | undefined;
         organizationId?: string | undefined;
+        types?: string[] | undefined;
+        severities?: string[] | undefined;
+        sources?: string[] | undefined;
     }>>;
     batchSize: z.ZodDefault<z.ZodNumber>;
     batchTimeoutMs: z.ZodDefault<z.ZodNumber>;
     includeMetadata: z.ZodDefault<z.ZodBoolean>;
     maxQueueSize: z.ZodDefault<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
-    subscriptionId: string;
-    batchSize: number;
-    batchTimeoutMs: number;
     includeMetadata: boolean;
+    batchSize: number;
+    subscriptionId: string;
+    batchTimeoutMs: number;
     maxQueueSize: number;
     filter?: {
-        types?: string[] | undefined;
-        categories?: string[] | undefined;
-        sources?: string[] | undefined;
-        severities?: string[] | undefined;
         userId?: string | undefined;
+        categories?: string[] | undefined;
         organizationId?: string | undefined;
+        types?: string[] | undefined;
+        severities?: string[] | undefined;
+        sources?: string[] | undefined;
     } | undefined;
 }, {
     subscriptionId: string;
     filter?: {
-        types?: string[] | undefined;
-        categories?: string[] | undefined;
-        sources?: string[] | undefined;
-        severities?: string[] | undefined;
         userId?: string | undefined;
+        categories?: string[] | undefined;
         organizationId?: string | undefined;
+        types?: string[] | undefined;
+        severities?: string[] | undefined;
+        sources?: string[] | undefined;
     } | undefined;
+    includeMetadata?: boolean | undefined;
     batchSize?: number | undefined;
     batchTimeoutMs?: number | undefined;
-    includeMetadata?: boolean | undefined;
     maxQueueSize?: number | undefined;
 }>;
 export type SubscriptionConfig = z.infer<typeof SubscriptionConfigSchema>;

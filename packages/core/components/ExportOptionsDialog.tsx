@@ -24,30 +24,6 @@ interface ExportOptionsDialogProps {
 
 const exportService = new ResultExportService();
 
-export   const [options, setOptions] = useState<ResultExportOptions>({
-    format: 'json-simple',
-    includeMetadata: true,
-    includeExecutionPaths: false,
-    includeDebugInfo: false,
-    filmOptions: {
-      includeDirectorNotes: true,
-      sceneNumbering: true,
-      shotBreakdown: false,
-      timingNotes: false
-    },
-    vfxOptions: {
-      controlNetCompatible: true,
-      sceneDataIntegration: false,
-      cameraMetadata: false,
-      lightingData: false
-    },
-    analysisOptions: {
-      varianceAnalysis: true,
-      performanceBreakdown: true,
-      creativityMetrics: false,
-      comparisonMatrix: false
-    }
-  });
   const [isExporting, setIsExporting] = useState(false);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
 

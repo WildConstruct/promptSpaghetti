@@ -54,12 +54,12 @@ export const QualityMetricsOverview: React.FC<QualityMetricsOverviewProps> = ({
     return 'text-red-600';
   };
   
-  // Helper function to get progress color
-      if (score >= 80) return 'bg-blue-500';
-    if (score >= 70) return 'bg-yellow-500';
-    if (score >= 60) return 'bg-orange-500';
-    return 'bg-red-500';
-  };
+  // Helper function to get progress color - commented out as unused
+  //   //   if (score >= 80) return 'bg-blue-500';
+  //   if (score >= 70) return 'bg-yellow-500';
+  //   if (score >= 60) return 'bg-orange-500';
+  //   return 'bg-red-500';
+  // };
   
   // Helper function to get status badge variant
   const getStatusVariant = (score: number): 'default' | 'secondary' | 'destructive' | 'outline' => {

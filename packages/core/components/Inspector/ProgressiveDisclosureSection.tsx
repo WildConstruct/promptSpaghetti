@@ -246,7 +246,7 @@ const ProgressiveDisclosureSection: React.FC<ProgressiveDisclosureSectionProps> 
       )}
       
       {/* CSS Animation */}
-      <style jsx>{`
+      <style>{`
         @keyframes fadeIn {
           from {
             opacity: 0;

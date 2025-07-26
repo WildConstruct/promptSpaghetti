@@ -54,7 +54,7 @@ export interface NodeAddOperation extends BaseMutationOperation {
   nodeId: string;
   nodeType: z.infer<typeof NodeTypeEnum>;
   position: { x: number; y: number };
-  initialData?: Record<string, any>;
+  initialData?: Record<string, unknown>;
   parentId?: string;
   priority?: OperationPriority;
 }
@@ -99,7 +99,7 @@ export interface GraphEdge {
   sourcePort?: string;
   targetPort?: string;
   type: 'data' | 'control' | 'conditional';
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 /**
@@ -113,7 +113,7 @@ export interface EdgeAddOperation extends BaseMutationOperation {
   sourcePort?: string;
   targetPort?: string;
   edgeType: 'data' | 'control' | 'conditional';
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   priority?: OperationPriority;
 }
 

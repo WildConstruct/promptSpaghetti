@@ -443,10 +443,12 @@ export const useRateLimitingMetrics = ({
 // Utility Hook for Widget Data
 // ========================================
 
-export   const [isLoading, setIsLoading] = useState<boolean>(true);
+export function useRateLimitingMetricsWidget(widgetId: string, metricsHook: unknown) {
+  const [widgetData, setWidgetData] = useState<unknown>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const widget = metricsHook.widgets.find(w => w.widgetId === widgetId);
+    const widget = (metricsHook as any).widgets.find(w => w.widgetId === widgetId);
     if (!widget) {
       setWidgetData(null);
       setIsLoading(false);

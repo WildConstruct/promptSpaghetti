@@ -587,7 +587,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .trust-score-manager {
           max-width: 1400px;
           margin: 0 auto;

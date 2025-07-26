@@ -233,18 +233,25 @@ export interface OperationContext {
   timestamp: Date;
   source: string;
   requestId: string;
+  correlationId?: string;
+  userRole?: string;
+  systemId?: string;
+  ipAddress?: string;
+  userAgent?: string;
+  requestedAt?: Date;
+  emergencyAccess?: boolean;
 }
 
 /**
  * Classification Service Interface
  */
 export interface ClassificationService {
-  classifyData(data: any, context: ClassificationContext): Promise<DataClassification>;
+  classifyData(data: unknown, context: ClassificationContext): Promise<DataClassification>;
   validateClassification(classification: DataClassification): Promise<ValidationResult>;
   getHandlingRequirements(classification: DataClassificationLevel): HandlingRequirements;
   auditClassificationAccess(userId: string, dataId: string, operation: string): Promise<void>;
   updateClassification(id: string, updates: Partial<DataClassification>): Promise<DataClassification>;
-  bulkClassify(dataElements: any[], context: ClassificationContext): Promise<DataClassification[]>;
+  bulkClassify(dataElements: unknown[], context: ClassificationContext): Promise<DataClassification[]>;
 }
 
 /**

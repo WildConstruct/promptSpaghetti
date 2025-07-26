@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import HoverPreview from '../HoverPreview';
 import { projectManager } from '../../../projectManager';
@@ -10,14 +10,14 @@ import { projectManager } from '../../../projectManager';
 // Mock the projectManager
 jest.mock('../../../projectManager', () => ({
   projectManager: {
-    generateThumbnail: jest.fn()
+    generateThumbnail: jest.fn<unknown[], unknown>()
   }
 }));
 
 const mockProjectManager = projectManager as jest.Mocked<typeof projectManager>;
 
 // Mock getBoundingClientRect for positioning tests
-const mockGetBoundingClientRect = jest.fn();
+const mockGetBoundingClientRect = jest.fn<unknown[], unknown>();
 Element.prototype.getBoundingClientRect = mockGetBoundingClientRect;
 
 describe('HoverPreview Component', () => {
@@ -43,8 +43,8 @@ describe('HoverPreview Component', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.useFakeTimers();
-    mockProjectManager.generateThumbnail.mockResolvedValue(mockThumbnail);
+    jest.useFakeTimers('legacy');
+    mockProjectManager.generateThumbnail.mockResolvedValue(mockThumbnail as unknown as unknown);
     
     // Mock getBoundingClientRect to return predictable values
     mockGetBoundingClientRect.mockReturnValue({
@@ -56,7 +56,7 @@ describe('HoverPreview Component', () => {
       height: 50,
       x: 100,
       y: 200
-    });
+    } as unknown as unknown);
 
     // Mock window dimensions
     Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: 1024 });
@@ -106,9 +106,10 @@ describe('HoverPreview Component', () => {
       // Advance timer by delay amount
       jest.advanceTimersByTime(500);
       
+      // Use act to ensure React updates are flushed
       await waitFor(() => {
         expect(screen.getByText('Hover Test File')).toBeInTheDocument();
-      });
+      }, { timeout: 1000 });
     });
 
     it('cancels preview if mouse leaves before delay', async () => {
@@ -247,7 +248,7 @@ describe('HoverPreview Component', () => {
         height: 50,
         x: 900,
         y: 200
-      });
+      } as unknown as unknown);
 
       render(
         <HoverPreview file={mockFile} delay={100}>
@@ -278,7 +279,7 @@ describe('HoverPreview Component', () => {
         height: 50,
         x: 100,
         y: 700
-      });
+      } as unknown as unknown);
 
       render(
         <HoverPreview file={mockFile} delay={100}>

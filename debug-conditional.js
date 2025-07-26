@@ -6,7 +6,7 @@ try {
   const expression = 'score > 70';
   
   const paramNames = Object.keys(context);
-  const paramValues = paramNames.map(name => context[name]);
+  const paramValues = paramNames.map((name: string) => context[name]);
   
   console.log('Param names:', paramNames);
   console.log('Param values:', paramValues);

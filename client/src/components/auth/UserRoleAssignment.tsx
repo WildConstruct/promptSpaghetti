@@ -1,7 +1,7 @@
 // Epic 11.3 User Role Assignment Component
 // Interface for assigning and managing user roles with organization and team context
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Search, Plus, X, Calendar, Users, Shield, AlertCircle } from 'lucide-react';
 
 interface User {
@@ -47,7 +47,7 @@ export const UserRoleAssignment: React.FC = () => {
   const [userRoles, setUserRoles] = useState<UserRole[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [roleFilter, _setRoleFilter] = useState('');
+  const [roleFilter] = useState('');
   const [showAssignModal, setShowAssignModal] = useState(false);
   
   // Assignment form state
@@ -61,9 +61,9 @@ export const UserRoleAssignment: React.FC = () => {
   useEffect(() => {
     loadUsers();
     loadRoles();
-  }, []);
+  }, [loadUsers, loadRoles]);
 
-  const loadUsers = async () => {
+  const loadUsers = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch('/api/auth/users?' + new URLSearchParams({
@@ -82,9 +82,9 @@ export const UserRoleAssignment: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchQuery]);
 
-  const loadRoles = async () => {
+  const loadRoles = useCallback(async () => {
     try {
       const response = await fetch('/api/auth/rbac/roles?' + new URLSearchParams({
         ...(roleFilter && { scope: roleFilter })
@@ -99,7 +99,7 @@ export const UserRoleAssignment: React.FC = () => {
     } catch (error) {
       console.error('Failed to load roles:', error);
     }
-  };
+  }, [roleFilter]);
 
   const loadUserRoles = async (userId: string) => {
     try {
@@ -151,7 +151,7 @@ export const UserRoleAssignment: React.FC = () => {
       if (assignmentContext) {
         try {
           assignmentData.scopeContext = JSON.parse(assignmentContext);
-        } catch (error) {
+        } catch {
           alert('Invalid JSON in scope context');
           return;
         }

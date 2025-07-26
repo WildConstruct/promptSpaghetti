@@ -9,12 +9,7 @@ interface ResponsiveCorrectionsPanelProps {
   onClose: () => void;
 }
 
-export const ResponsiveCorrectionsPanel: React.FC<ResponsiveCorrectionsPanelProps> = ({ 
-  isOpen, 
-  onClose 
-}) => {
-  const isEnabled = useCorrectionsEnabled();
-  const [isMobile, setIsMobile] = useState(false);
+export   const [isMobile, setIsMobile] = useState(false);
   const [showStats, setShowStats] = useState(false);
 
   useEffect(() => {
@@ -30,10 +25,6 @@ export const ResponsiveCorrectionsPanel: React.FC<ResponsiveCorrectionsPanelProp
 
   // Don't render if corrections are not enabled
   if (!isEnabled) return null;
-
-  const handleStatsToggle = () => {
-    setShowStats(!showStats);
-  };
 
   return (
     <>
@@ -60,9 +51,7 @@ export const ResponsiveCorrectionsPanel: React.FC<ResponsiveCorrectionsPanelProp
 };
 
 // Hook for opening the corrections panel with stats
-export const useCorrectionsPanel = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [showStats, setShowStats] = useState(false);
+export   const [showStats, setShowStats] = useState(false);
 
   const openPanel = () => setIsOpen(true);
   const closePanel = () => setIsOpen(false);

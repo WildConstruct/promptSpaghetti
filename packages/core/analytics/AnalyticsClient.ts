@@ -461,4 +461,4 @@ export class AnalyticsClient extends EventEmitter {
 /**
  * Default analytics client instance
  */
-export };
+export });

@@ -14,8 +14,8 @@ import {
   WorkspaceRole,
   ProjectRole,
   ResourceType,
-  ActivityType,
-  NotificationType,
+  // ActivityType, // Unused import
+  // NotificationType, // Unused import
   WorkspaceOperations
 } from '../types/workspace';
 import { DatabaseConnection, QueryBuilder, bindParams } from '../database/connection';
@@ -63,7 +63,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
   }
 
   async updateWorkspace(id: WorkspaceId, data: Partial<Workspace>): Promise<Workspace> {
-    const updateData: Record<string, any> = {};
+    const updateData: Record<string, unknown> = {};
     
     if (data.name !== undefined) updateData.name = data.name;
     if (data.description !== undefined) updateData.description = data.description;
@@ -154,7 +154,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
   }
 
   async updateProject(id: ProjectId, data: Partial<Project>): Promise<Project> {
-    const updateData: Record<string, any> = {};
+    const updateData: Record<string, unknown> = {};
     
     if (data.name !== undefined) updateData.name = data.name;
     if (data.description !== undefined) updateData.description = data.description;
@@ -248,7 +248,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
   }
 
   async updateResource(id: ResourceId, data: Partial<Resource>): Promise<Resource> {
-    const updateData: Record<string, any> = { version: 'version + 1' };
+    const updateData: Record<string, unknown> = { version: 'version + 1' };
     
     if (data.name !== undefined) updateData.name = data.name;
     if (data.type !== undefined) updateData.type = data.type;

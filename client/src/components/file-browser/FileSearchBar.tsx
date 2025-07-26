@@ -8,7 +8,7 @@
  * - Clear and reset functionality
  */
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 export interface FileSearchOptions {
   includeContents: boolean;
@@ -36,7 +36,7 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({
   debounceMs = 300,
   showAdvanced = false,
   onAdvancedSearch,
-  onTagFilter,
+  // onTagFilter, // Commented out unused prop
   className = ''
 }) => {
   const [localValue, setLocalValue] = useState(value);
@@ -99,9 +99,7 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({
     onAdvancedSearch?.(newOptions);
   };
 
-    };
-
-  return (
+    return (
     <div 
       className={`file-search-bar ${className}`}
       style={{

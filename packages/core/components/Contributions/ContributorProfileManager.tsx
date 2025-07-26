@@ -85,8 +85,7 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
     setSaving(true);
     try {
       // Validate with Zod
-      const _____validatedProfile = validateContributorProfile(formData);
-      
+            
       // API call would go here
       const response = await fetch(`/api/marketplace/contributors/${profile.id}`, {
         method: 'PUT',
@@ -624,7 +623,7 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
         )}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .contributor-profile-manager {
           background: #ffffff;
           border: 1px solid #e5e7eb;

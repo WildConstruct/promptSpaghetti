@@ -327,7 +327,7 @@ export class GraphCRDT {
   // Private methods
 
   private setupChangeTracking(): void {
-    const observer = (event: Y.YMapEvent<any>, transaction: Y.Transaction) => {
+    const observer = (event: Y.YMapEvent<any>, _transaction: Y.Transaction) => {
       // Convert single event to array format for compatibility
       const events = [event];
       

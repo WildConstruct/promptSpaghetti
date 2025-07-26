@@ -8,19 +8,24 @@ import {
   ValidationRulesEngine,
   ValidationSeverity,
   ValidationCategory,
-  ValidationEngineConfig
+  ValidationEngineConfig,
+  ValidationContext,
+  ValidationReport
 } from './ValidationRulesEngine';
 
 // Export main validation engine
 export {
   ValidationRulesEngine,
   ValidationSeverity,
-  ValidationCategory,
-  type ValidationRule,
-  type ValidationRuleResult,
-  type ValidationContext,
-  type ValidationReport,
-  type ValidationEngineConfig
+  ValidationCategory
+} from './ValidationRulesEngine';
+
+export type {
+  ValidationRule,
+  ValidationRuleResult,
+  ValidationContext,
+  ValidationReport,
+  ValidationEngineConfig
 } from './ValidationRulesEngine';
 
 // Export additional validation rules
@@ -288,21 +293,7 @@ function estimateTokenCount(graph: any): number {
 /**
  * Validation utility functions
  */
-export const ValidationUtils = {
-  detectPlatformFromGraph,
-  generateBasicCapabilities,
-  calculateBasicComplexity,
-  estimateTokenCount,
-  
-  /**
-   * Check if a validation report indicates the graph is ready for production
-   */
-  isProductionReady(report: ValidationReport): boolean {
-    return report.valid && 
-           report.score >= 80 && 
-           report.summary.critical === 0 && 
-           report.summary.errors === 0;
-  },
+export   },
   
   /**
    * Get the most critical issues from a validation report

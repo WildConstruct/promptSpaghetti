@@ -5,7 +5,18 @@
  * Comprehensive adapter for OpenAI DALL-E 3 image generation
  */
 
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelMetadata, ModelCapabilities, CostEstimate, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
+import { 
+  BaseAIModel,
+  AIModelType,
+  AIModelProvider,
+  AIModelStatus,
+  ModelMetadata,
+  ModelCapabilities,
+  CostEstimate,
+  ModelInitializationError,
+  ModelProcessingError,
+  ModelUnavailableError
+} from '../BaseAIModel';
 
 export interface DALLEConfig {
   apiKey: string;
@@ -148,7 +159,7 @@ export class DALLEAdapter extends BaseAIModel {
     }
   }
 
-  async process(input: any, options?: DALLERequestOptions): Promise<ImageGenerationResult> {
+  async process(input: unknown, options?: DALLERequestOptions): Promise<ImageGenerationResult> {
     try {
       if (this._status !== AIModelStatus.READY) {
         throw new ModelUnavailableError(this._id);
@@ -192,7 +203,7 @@ export class DALLEAdapter extends BaseAIModel {
     this._requestQueue = [];
   }
 
-  async estimate(input: any, options?: DALLERequestOptions): Promise<CostEstimate> {
+  async estimate(input: unknown, options?: DALLERequestOptions): Promise<CostEstimate> {
     const model = options?.model || this._metadata.name;
     const size = options?.size || '1024x1024';
     const quality = options?.quality || 'standard';
@@ -316,7 +327,7 @@ export class DALLEAdapter extends BaseAIModel {
     }
   }
 
-  private async _makeRequest(endpoint: string, payload: any): Promise<DALLEResponse> {
+  private async _makeRequest(endpoint: string, payload: unknown): Promise<DALLEResponse> {
     const url = `${this.apiEndpoint}${endpoint}`;
     
     let lastError: Error | null = null;

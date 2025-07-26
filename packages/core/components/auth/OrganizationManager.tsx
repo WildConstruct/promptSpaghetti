@@ -60,6 +60,13 @@ interface CreateOrganizationData {
   branding?: Record<string, unknown>;
 }
 
+interface OrganizationManagerProps {
+  currentUser?: { id: string; name: string; email: string; role: string };
+  onOrganizationChange?: (org: Organization) => void;
+  onInvitationSent?: (invitation: { id: string; email: string; role: string }) => void;
+  onMembershipUpdated?: (membership: { id: string; userId: string; role: string }) => void;
+}
+
 export   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null);
   const [stats, setStats] = useState<OrganizationStats | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'settings' | 'branding' | 'members' | 'teams'>('overview');

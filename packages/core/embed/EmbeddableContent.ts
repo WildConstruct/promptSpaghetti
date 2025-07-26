@@ -1348,17 +1348,17 @@ export class EmbeddableContent extends EventEmitter {
   private async renderWithData(): Promise<void> { /* Implementation */ }
   private persistState(): void { /* Implementation */ }
 
-  private debounce<T extends (...args: any[]) => any>(func: T, wait: number): T {
+  private debounce<T extends (...args: unknown[]) => unknown>(func: T, wait: number): T {
     let timeout: NodeJS.Timeout;
-    return ((...args: any[]) => {
+    return ((...args: unknown[]) => {
       clearTimeout(timeout);
       timeout = setTimeout(() => func.apply(this, args), wait);
     }) as T;
   }
 
-  private throttle<T extends (...args: any[]) => any>(func: T, limit: number): T {
+  private throttle<T extends (...args: unknown[]) => unknown>(func: T, limit: number): T {
     let inThrottle: boolean;
-    return ((...args: any[]) => {
+    return ((...args: unknown[]) => {
       if (!inThrottle) {
         func.apply(this, args);
         inThrottle = true;

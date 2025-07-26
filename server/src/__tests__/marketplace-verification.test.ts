@@ -26,7 +26,7 @@ describe('Marketplace Verification System', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    (mockPool.connect as jest.Mock).mockResolvedValue(mockClient as unknown as unknown as unknown as unknown as unknown as unknown as unknown);
+    (mockPool.connect as jest.Mock).mockResolvedValue(mockClient as unknown as unknown as unknown as unknown as unknown as unknown as unknown as unknown as unknown);
     
     verificationService = new VerificationProcessService(mockPool);
     documentService = new DocumentVerificationService(mockPool);
@@ -156,26 +156,26 @@ describe('Marketplace Verification System', () => {
         // Mock file system operations
         jest.doMock('fs', () => ({
           promises: {
-            readFile: jest.fn<unknown[], unknown>().mockResolvedValue(Buffer.from('mock-file-content' as unknown as unknown as unknown as unknown as unknown as unknown as unknown))
+            readFile: jest.fn<unknown[], unknown>().mockResolvedValue(Buffer.from('mock-file-content' as unknown as unknown as unknown as unknown as unknown as unknown as unknown as unknown as unknown))
           },
-          existsSync: jest.fn<unknown[], unknown>().mockReturnValue(true as unknown as unknown as unknown as unknown as unknown as unknown as unknown)
+          existsSync: jest.fn<unknown[], unknown>().mockReturnValue(true as unknown as unknown as unknown as unknown as unknown as unknown as unknown as unknown as unknown)
         }));
 
         // Mock sharp for image processing
         jest.doMock('sharp', () => {
           return jest.fn<unknown[], unknown>().mockReturnValue({
-            metadata: jest.fn<unknown[], unknown>( as unknown).mockResolvedValue({
+            metadata: jest.fn<unknown[], unknown>( as unknown as unknown).mockResolvedValue({
               width: 1000,
               height: 800,
               density: 200
-            } as unknown as unknown as unknown),
+            } as unknown as unknown as unknown as unknown as unknown),
             stats: jest.fn<unknown[], unknown>().mockResolvedValue({
               channels: [
                 { std: 10.5 },
                 { std: 11.2 },
                 { std: 9.8 }
               ]
-            } as unknown as unknown as unknown as unknown as unknown as unknown as unknown)
+            } as unknown as unknown as unknown as unknown as unknown as unknown as unknown as unknown as unknown)
           });
         });
 
@@ -205,7 +205,7 @@ describe('Marketplace Verification System', () => {
         jest.spyOn(
           documentService,
           'performOCR'
-        ).mockResolvedValue(mockOCRResult as unknown as unknown as unknown as unknown as unknown as unknown as unknown);
+        ).mockResolvedValue(mockOCRResult as unknown as unknown as unknown as unknown as unknown as unknown as unknown as unknown as unknown);
         mockClient.query.mockResolvedValueOnce({ rows: [] }); // Store analysis
 
         const analysis = await documentService.analyzeDocument(

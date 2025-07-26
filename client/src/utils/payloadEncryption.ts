@@ -103,7 +103,7 @@ export class PayloadEncryptionClient {
    * Note: This is a simplified client-side implementation
    * In production, you would use WebCrypto API with proper key exchange
    */
-  async encryptPayload(data: any, keyId: string = 'client-key'): Promise<EncryptedPayload> {
+  async encryptPayload(data: unknown, keyId: string = 'client-key'): Promise<EncryptedPayload> {
     try {
       // Serialize data
       let serializedData = JSON.stringify(data);
@@ -267,7 +267,7 @@ export class PayloadEncryptionClient {
    */
   async encryptedPost(
     url: string, 
-    data: any, 
+    data: unknown, 
     authToken?: string,
     options: RequestInit = {}
   ): Promise<Response> {
@@ -297,7 +297,7 @@ export async function encryptedFetch(
 
 export async function encryptedPost(
   url: string, 
-  data: any, 
+  data: unknown, 
   authToken?: string
 ): Promise<Response> {
   return payloadEncryption.encryptedPost(url, data, authToken);

@@ -51,7 +51,6 @@ export declare const useRateLimitingMetrics: (
   throttlingEngine,
   options }: MetricsServiceConfig
 ) => MetricsHookReturn;
-export declare     isLoading: boolean;
-};
+export declare const isLoading: boolean, setIsLoading: import("react").Dispatch<import("react").SetStateAction<boolean>>;
 export default useRateLimitingMetrics;
 //# sourceMappingURL=useRateLimitingMetrics.d.ts.map

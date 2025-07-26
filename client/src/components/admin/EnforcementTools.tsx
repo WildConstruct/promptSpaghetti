@@ -151,7 +151,8 @@ export interface EnforcementToolsProps {
   className?: string;
 }
 
-export   const [error, setError] = useState<string | null>(null);
+export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className }) => {
+  const [error, setError] = useState<string | null>(null);
   
   // Data state
   const [stats, setStats] = useState<EnforcementStats | null>(null);
@@ -912,3 +913,5 @@ export   const [error, setError] = useState<string | null>(null);
     </Card>
   );
 };
+
+export default EnforcementTools;

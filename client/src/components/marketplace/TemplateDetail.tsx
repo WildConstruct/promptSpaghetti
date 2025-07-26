@@ -1,5 +1,5 @@
 // Epic 16 Marketplace - Template Detail Page Component
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { StarRating } from './StarRating';
 import { PriceDisplay } from './PriceDisplay';
 import { Badge } from '../common/Badge';
@@ -41,13 +41,14 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({
   const [showPurchase, setShowPurchase] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'reviews' | 'versions'>('overview');
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { getTemplate, _previewTemplate, _purchaseTemplate } = useMarketplace();
 
   useEffect(() => {
     loadTemplateData();
-  }, [templateId]);
+  }, [loadTemplateData]);
 
-  const loadTemplateData = async () => {
+  const loadTemplateData = useCallback(async () => {
     setLoading(true);
     setError(null);
     
@@ -75,7 +76,7 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [templateId, getTemplate]);
 
   const handlePreview = () => {
     setShowPreview(true);

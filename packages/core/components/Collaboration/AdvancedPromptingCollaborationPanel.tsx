@@ -27,6 +27,7 @@ interface AdvancedPromptingCollaborationPanelProps {
 }
 
 const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborationPanelProps> = ({ 
+  collaborationService,
   currentUser,
   onMARSRegionCreate, 
   onZadaPatternCreate,

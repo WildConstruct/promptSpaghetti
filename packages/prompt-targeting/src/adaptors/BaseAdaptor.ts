@@ -10,7 +10,7 @@ import {
   PlatformPrompt,
   AdaptorConfig,
   AdaptorError,
-  ValidationError,
+  ValidationException,
   TranslationError
 } from '../types';
 import { createHash } from 'crypto';
@@ -84,7 +84,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
       // Combine results
       return this.combineValidationResults(baseValidation, platformValidation);
     } catch (error) {
-      throw new ValidationError(
+      throw new ValidationException(
         `Validation failed for adaptor ${this.id}: ${error instanceof Error ? error.message : 'Unknown error'}`,
         [],
         'VALIDATION_FAILED'
@@ -102,7 +102,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
       // Validate first
       const validation = await this.validate(graph, config);
       if (!validation.valid) {
-        throw new ValidationError(
+        throw new ValidationException(
           'Graph validation failed before transformation',
           validation.errors,
           'PRE_TRANSFORM_VALIDATION_FAILED'
@@ -123,7 +123,6 @@ export abstract class BaseAdaptor implements ModelAdaptor {
           timestamp: new Date(),
           qualityScore: validation.compatibilityScore,
           optimizations: await this.getAppliedOptimizations(graph, config),
-          ...result.metadata,
           transformTime
         }
       };
@@ -131,7 +130,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
       this.logger.log(`Transform completed for ${this.id} in ${transformTime}ms`);
       return platformPrompt;
     } catch (error) {
-      if (error instanceof ValidationError) {
+      if (error instanceof ValidationException) {
         throw error;
       }
       throw new TranslationError(

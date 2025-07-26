@@ -22,7 +22,7 @@ export declare const tutorialContentSchema: z.ZodObject<{
     tags: string[];
     content: string;
     title: string;
-    difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+    difficulty: "advanced" | "expert" | "intermediate" | "beginner";
     estimatedDuration: number;
     objectives: string[];
     prerequisites?: string[] | undefined;
@@ -32,7 +32,7 @@ export declare const tutorialContentSchema: z.ZodObject<{
     tags: string[];
     content: string;
     title: string;
-    difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+    difficulty: "advanced" | "expert" | "intermediate" | "beginner";
     estimatedDuration: number;
     objectives: string[];
     prerequisites?: string[] | undefined;
@@ -237,7 +237,7 @@ export declare const tutorialSchema: z.ZodObject<{
         tags: string[];
         content: string;
         title: string;
-        difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+        difficulty: "advanced" | "expert" | "intermediate" | "beginner";
         estimatedDuration: number;
         objectives: string[];
         prerequisites?: string[] | undefined;
@@ -247,7 +247,7 @@ export declare const tutorialSchema: z.ZodObject<{
         tags: string[];
         content: string;
         title: string;
-        difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+        difficulty: "advanced" | "expert" | "intermediate" | "beginner";
         estimatedDuration: number;
         objectives: string[];
         prerequisites?: string[] | undefined;
@@ -445,7 +445,7 @@ export declare const tutorialSchema: z.ZodObject<{
         tags: string[];
         content: string;
         title: string;
-        difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+        difficulty: "advanced" | "expert" | "intermediate" | "beginner";
         estimatedDuration: number;
         objectives: string[];
         prerequisites?: string[] | undefined;
@@ -509,7 +509,7 @@ export declare const tutorialSchema: z.ZodObject<{
         tags: string[];
         content: string;
         title: string;
-        difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+        difficulty: "advanced" | "expert" | "intermediate" | "beginner";
         estimatedDuration: number;
         objectives: string[];
         prerequisites?: string[] | undefined;
@@ -605,7 +605,7 @@ export declare const learningPathSchema: z.ZodObject<{
         name: string;
     };
     title: string;
-    difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+    difficulty: "advanced" | "expert" | "intermediate" | "beginner";
     isPublic: boolean;
     estimatedDuration: number;
     tutorialIds: string[];
@@ -621,7 +621,7 @@ export declare const learningPathSchema: z.ZodObject<{
         name: string;
     };
     title: string;
-    difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+    difficulty: "advanced" | "expert" | "intermediate" | "beginner";
     estimatedDuration: number;
     tutorialIds: string[];
     isPublic?: boolean | undefined;
@@ -690,7 +690,7 @@ export declare const schemas: {
             tags: string[];
             content: string;
             title: string;
-            difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+            difficulty: "advanced" | "expert" | "intermediate" | "beginner";
             estimatedDuration: number;
             objectives: string[];
             prerequisites?: string[] | undefined;
@@ -700,7 +700,7 @@ export declare const schemas: {
             tags: string[];
             content: string;
             title: string;
-            difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+            difficulty: "advanced" | "expert" | "intermediate" | "beginner";
             estimatedDuration: number;
             objectives: string[];
             prerequisites?: string[] | undefined;
@@ -898,7 +898,7 @@ export declare const schemas: {
             tags: string[];
             content: string;
             title: string;
-            difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+            difficulty: "advanced" | "expert" | "intermediate" | "beginner";
             estimatedDuration: number;
             objectives: string[];
             prerequisites?: string[] | undefined;
@@ -962,7 +962,7 @@ export declare const schemas: {
             tags: string[];
             content: string;
             title: string;
-            difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+            difficulty: "advanced" | "expert" | "intermediate" | "beginner";
             estimatedDuration: number;
             objectives: string[];
             prerequisites?: string[] | undefined;
@@ -1036,7 +1036,7 @@ export declare const schemas: {
         tags: string[];
         content: string;
         title: string;
-        difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+        difficulty: "advanced" | "expert" | "intermediate" | "beginner";
         estimatedDuration: number;
         objectives: string[];
         prerequisites?: string[] | undefined;
@@ -1046,7 +1046,7 @@ export declare const schemas: {
         tags: string[];
         content: string;
         title: string;
-        difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+        difficulty: "advanced" | "expert" | "intermediate" | "beginner";
         estimatedDuration: number;
         objectives: string[];
         prerequisites?: string[] | undefined;
@@ -1266,7 +1266,7 @@ export declare const schemas: {
             name: string;
         };
         title: string;
-        difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+        difficulty: "advanced" | "expert" | "intermediate" | "beginner";
         isPublic: boolean;
         estimatedDuration: number;
         tutorialIds: string[];
@@ -1282,7 +1282,7 @@ export declare const schemas: {
             name: string;
         };
         title: string;
-        difficulty: "expert" | "advanced" | "intermediate" | "beginner";
+        difficulty: "advanced" | "expert" | "intermediate" | "beginner";
         estimatedDuration: number;
         tutorialIds: string[];
         isPublic?: boolean | undefined;

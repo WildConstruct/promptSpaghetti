@@ -12,15 +12,15 @@ export interface TransformExtension extends BaseExtension {
   
   // Transform registration
   getTransformDefinitions(): TransformDefinition[];
-  createTransformInstance(transformId: string, config: any): DataTransform;
+  createTransformInstance(transformId: string, config: unknown): DataTransform;
   
   // Transform validation
-  validateTransformConfig(transformId: string, config: any): ExtensionValidationResult;
+  validateTransformConfig(transformId: string, config: unknown): ExtensionValidationResult;
   getTransformSchema(transformId: string): z.ZodSchema<any>;
   
   // Transform lifecycle hooks
   onTransformCreated?(transform: DataTransform): void;
-  onTransformExecuted?(transform: DataTransform, input: any, output: any): void;
+  onTransformExecuted?(transform: DataTransform, input: unknown, output: unknown): void;
   onTransformError?(transform: DataTransform, error: Error): void;
   
   // Pipeline support
@@ -36,19 +36,19 @@ export interface DataTransform {
   readonly version: string;
   
   // Transform execution
-  transform(input: any, context: TransformContext): Promise<any> | any;
+  transform(input: unknown, context: TransformContext): Promise<unknown> | unknown;
   
   // Validation
-  validateInput(input: any): ExtensionValidationResult;
-  validateOutput(output: any): ExtensionValidationResult;
+  validateInput(input: unknown): ExtensionValidationResult;
+  validateOutput(output: unknown): ExtensionValidationResult;
   
   // Schema access
   getInputSchema(): z.ZodSchema<any>;
   getOutputSchema(): z.ZodSchema<any>;
   
   // Configuration
-  getConfiguration(): any;
-  setConfiguration(config: any): void;
+  getConfiguration(): unknown;
+  setConfiguration(config: unknown): void;
   
   // Metadata
   getMetadata(): TransformMetadata;

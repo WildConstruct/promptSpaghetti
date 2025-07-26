@@ -37,7 +37,7 @@ export interface Category {
   
   // Properties and configuration
   metadata: CategoryMetadata;
-  properties: Record<string, any>;
+  properties: Record<string, unknown>;
   configuration: CategoryConfiguration;
   
   // Status and lifecycle
@@ -170,7 +170,7 @@ export interface CategoryMetadata {
   externalUrl?: string;
   
   // Custom fields
-  customFields: Record<string, any>;
+  customFields: Record<string, unknown>;
 }
 
 export interface CategoryConfiguration {
@@ -192,13 +192,13 @@ export interface CategoryConfiguration {
   displaySettings: CategoryDisplaySettings;
   
   // Integration settings
-  integrationConfig: Record<string, any>;
+  integrationConfig: Record<string, unknown>;
 }
 
 export interface CategoryValidationRule {
   field: string;
   rule: 'required' | 'unique' | 'format' | 'range' | 'custom';
-  value?: any;
+  value?: unknown;
   message: string;
   severity: 'error' | 'warning' | 'info';
 }
@@ -240,8 +240,8 @@ export interface CategoryVersion {
 
 export interface CategoryChange {
   field: string;
-  oldValue: any;
-  newValue: any;
+  oldValue: unknown;
+  newValue: unknown;
   changeType: 'created' | 'updated' | 'deleted' | 'moved' | 'renamed';
 }
 
@@ -334,7 +334,7 @@ export interface CategoryQuery {
 export interface CategoryOperation {
   operation: CategoryOperationType;
   categoryId: string;
-  data?: any;
+  data?: unknown;
   options?: {
     validateRules?: boolean;
     notifyUsers?: boolean;
@@ -382,7 +382,7 @@ export interface CategoryTransformRule {
   sourceField: string;
   targetField: string;
   transformation: 'direct' | 'map' | 'calculate' | 'validate';
-  options?: any;
+  options?: unknown;
 }
 
 export interface CategoryPermission {
@@ -460,7 +460,7 @@ export interface CategoryRelationship {
   relationshipType: CategoryRelationshipType;
   strength: number; // 0-1, strength of relationship
   bidirectional: boolean;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdBy: string;
   createdAt: Date;
 }

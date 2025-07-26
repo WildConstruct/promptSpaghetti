@@ -1,12 +1,12 @@
 // Epic 19.4 - Incident Response Panel Component
 // Task: T-1752989145014 - Create frontend components for Security Monitoring & Incident Response
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   AlertTriangle,
   Clock,
   User,
-  MessageCircle,
+  // MessageCircle, // Commented out unused import
   CheckCircle,
   XCircle,
   Play,
@@ -75,7 +75,13 @@ interface IncidentResponsePanelProps {
   onClose?: () => void;
 }
 
-export   const [isLoading, setIsLoading] = useState(true);
+const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({ 
+  incidentId, 
+  onIncidentUpdate, 
+  // onClose // Commented out unused prop
+}) => {
+  const [incident, setIncident] = useState<SecurityIncident | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'overview' | 'timeline' | 'evidence' | 'actions'>('overview');
   const [newNote, setNewNote] = useState('');
   const [newAction, setNewAction] = useState({ title: '', description: '', assigned_to: '', due_date: '' });
@@ -83,9 +89,9 @@ export   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     loadIncident();
-  }, [incidentId]);
+  }, [incidentId, loadIncident]);
 
-  const loadIncident = async () => {
+  const loadIncident = useCallback(async () => {
     setIsLoading(true);
     
     // Mock data - replace with actual API call
@@ -177,7 +183,7 @@ export   const [isLoading, setIsLoading] = useState(true);
       setIncident(mockIncident);
       setIsLoading(false);
     }, 800);
-  };
+  }, [incidentId]);
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -590,3 +596,5 @@ export   const [isLoading, setIsLoading] = useState(true);
     </div>
   );
 };
+
+export default IncidentResponsePanel;

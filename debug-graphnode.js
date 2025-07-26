@@ -9,7 +9,7 @@ const testContent = fs.readFileSync('./client/src/components/__tests__/GraphNode
 
 // Find the test that's failing
 const lines = testContent.split('\n');
-const handleTestStartLine = lines.findIndex(line => line.includes('renders input and output handles'));
+const handleTestStartLine = lines.findIndex((line: string) => line.includes('renders input and output handles'));
 
 console.log('\nTest code around the failing test:');
 for (let i = handleTestStartLine; i < handleTestStartLine + 15; i++) {

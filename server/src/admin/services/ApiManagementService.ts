@@ -676,7 +676,7 @@ export class ApiManagementService {
   /**
    * Export API usage data for external analysis
    */
-  async exportUsageData(format: 'json' | 'csv' | 'excel', filters: {
+  async exportUsageData(format: 'json' | 'csv' | 'excel', _filters: { // eslint-disable-line @typescript-eslint/no-unused-vars
     keyIds?: string[];
     startDate?: Date;
     endDate?: Date;

@@ -3,7 +3,7 @@
  * Real-time security status indicators for displaying MFA protection level across the application
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 import { Alert, AlertDescription } from '../ui/Alert';
@@ -15,16 +15,16 @@ import {
   ShieldX,
   AlertTriangle,
   CheckCircle,
-  Clock,
+  // Clock, // Unused
   Settings,
   Zap,
-  Eye,
-  Lock
+  Eye
+  // Lock // Unused
 } from 'lucide-react';
 import type { 
   MFAMethodType, 
-  UserMFAProfile,
-  MFAVerificationResult
+  UserMFAProfile
+  // MFAVerificationResult // Unused
 } from '../../types/MFATypes';
 
 export type MFASecurityLevel = 
@@ -129,13 +129,7 @@ export function MFAStatusIndicator({
     recommendations: []
   });
 
-  useEffect(() => {
-    loadSecurityStatus();
-    const interval = setInterval(loadSecurityStatus, 30000); // Check every 30 seconds
-    return () => clearInterval(interval);
-  }, [userId]);
-
-  const loadSecurityStatus = async () => {
+  const loadSecurityStatus = useCallback(async () => {
     try {
       const [profileResponse, activityResponse] = await Promise.all([
         fetch(`/api/mfa/profile/${userId}`, {
@@ -168,13 +162,21 @@ export function MFAStatusIndicator({
         recommendations
       });
     } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      console.error('MFA status check failed:', error);
       setStatus(prev => ({ 
         ...prev, 
         isLoading: false,
         lastCheck: new Date()
       }));
     }
-  };
+  }, [userId]);
+
+  useEffect(() => {
+    loadSecurityStatus();
+    const interval = setInterval(loadSecurityStatus, 30000); // Check every 30 seconds
+    return () => clearInterval(interval);
+  }, [loadSecurityStatus]);
 
   const calculateSecurityLevel = (profile: UserMFAProfile): MFASecurityLevel => {
     if (!profile.isEnabled) return 'none';

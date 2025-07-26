@@ -32,7 +32,7 @@ describe('SecurityAnalyticsOptimizer', () => {
 
     // Mock analytics service methods
     mockAnalyticsService.getCurrentPerformanceMetrics = jest.fn<unknown[], unknown>().mockResolvedValue({
-      timestamp: Date.now( as unknown),
+      timestamp: Date.now( as unknown as unknown),
       performance_score: 75,
       throughput_events_per_second: 100,
       latency_p95_ms: 500,
@@ -44,10 +44,10 @@ describe('SecurityAnalyticsOptimizer', () => {
       system_availability_percent: 99.5
     });
 
-    mockAnalyticsCollector.track = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
-    mockAnalyticsDAO.insertEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
-    mockDiagnosticService.registerDiagnostic = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
-    mockDiagnosticService.createAlert = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
+    mockAnalyticsCollector.track = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown);
+    mockAnalyticsDAO.insertEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown);
+    mockDiagnosticService.registerDiagnostic = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown);
+    mockDiagnosticService.createAlert = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown);
 
     // Test configuration
     testConfig = {

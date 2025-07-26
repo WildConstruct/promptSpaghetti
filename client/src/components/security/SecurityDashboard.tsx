@@ -45,7 +45,7 @@ interface ThreatMetrics {
 
 export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({
   onIncidentClick,
-  onThreatClick
+  // onThreatClick // Commented out unused prop
 }) => {
   const [metrics, setMetrics] = useState<ThreatMetrics>({
     totalThreats: 0,

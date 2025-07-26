@@ -42,35 +42,44 @@ interface RecentFeedback {
   suggestions: { text: string; user: string; timestamp: Date }[];
 }
 
-interface SatisfactionDashboardData {
-  summary: SatisfactionMetrics;
-  realtime: {
-    todayResponses: number;
-    averageToday: number;
-    hourlyTrend: { hour: number; score: number; responses: number }[];
-  };
-  segments: {
-    userType: { segment: string; satisfaction: number; count: number }[];
-    geography: { region: string; satisfaction: number; count: number }[];
-    tenure: { group: string; satisfaction: number; count: number }[];
-  };
-  features: {
-    topRated: { feature: string; rating: number; responses: number }[];
-    bottomRated: { feature: string; rating: number; responses: number }[];
-    trending: { feature: string; change: number; current: number }[];
-  };
-  alerts: SatisfactionAlert[];
-  recentFeedback: RecentFeedback;
-  timestamp: Date;
-  dataFreshness: number;
-}
+// Currently unused but may be needed for future dashboard integration
+// interface SatisfactionDashboardData {
+//   summary: SatisfactionMetrics;
+//   realtime: {
+//     todayResponses: number;
+//     averageToday: number;
+//     hourlyTrend: { hour: number; score: number; responses: number }[];
+//   };
+//   segments: {
+//     userType: { segment: string; satisfaction: number; count: number }[];
+//     geography: { region: string; satisfaction: number; count: number }[];
+//     tenure: { group: string; satisfaction: number; count: number }[];
+//   };
+//   features: {
+//     topRated: { feature: string; rating: number; responses: number }[];
+//     bottomRated: { feature: string; rating: number; responses: number }[];
+//     trending: { feature: string; change: number; current: number }[];
+//   };
+//   alerts: SatisfactionAlert[];
+//   recentFeedback: RecentFeedback;
+//   timestamp: Date;
+//   dataFreshness: number;
+// }
 
 interface SatisfactionSurveyWidgetProps {
   className?: string;
   refreshInterval?: number;
 }
 
-export   const [error, setError] = useState<string | null>(null);
+export     realtime: Record<string, unknown>;
+    segments: Record<string, unknown>;
+    features: Record<string, unknown>;
+    alerts: SatisfactionAlert[];
+    recentFeedback: RecentFeedback;
+    dataFreshness: number;
+  } | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
 
   // Fetch dashboard data

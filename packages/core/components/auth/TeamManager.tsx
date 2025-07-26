@@ -56,9 +56,13 @@ interface CreateTeamData {
 
 interface TeamManagerProps {
   organizationId: string;
+  currentUser?: { id: string; name: string; email: string; role: string };
+  onTeamChange?: (team: Team) => void;
+  onMembershipUpdated?: (membership: { id: string; userId: string; teamId: string; role: string }) => void;
 }
 
-export   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
+export   const [organizations, setOrganizations] = useState<any[]>([]);
+  const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [activeTab, setActiveTab] = useState<'overview' | 'members' | 'settings'>('overview');
   const [showCreateForm, setShowCreateForm] = useState(false);

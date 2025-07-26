@@ -132,7 +132,7 @@ export interface GraphState {
   getTemplateCompatibleData: () => GraphData;
 }
 
-export       if (!nodeToClone) return state;
+export           if (!nodeToClone) return state;
       
       const newNode = {
         ...nodeToClone,
@@ -147,10 +147,10 @@ export       if (!nodeToClone) return state;
         }
       };
       
-      return { nodes: [...state.nodes, newNode], hasUnsavedChanges: true };
-    }),
+          return { nodes: [...state.nodes, newNode], hasUnsavedChanges: true };
+        }),
   
-  deleteNode: (nodeId) =>
+      deleteNode: (nodeId: string) =>
     set((state) => ({
       nodes: state.nodes.filter((n) => n.id !== nodeId),
       edges: state.edges.filter((e) => e.source !== nodeId && e.target !== nodeId),
@@ -158,7 +158,7 @@ export       if (!nodeToClone) return state;
     })),
   
   // Sticky notes operations (Epic 8.7)
-  setStickyNotes: (notes) =>
+  setStickyNotes: (notes: StickyNote[]) =>
     set((state) => ({
       stickyNotes: notes,
       annotations: {
@@ -172,7 +172,7 @@ export       if (!nodeToClone) return state;
       hasUnsavedChanges: true
     })),
     
-  addStickyNote: (note) =>
+  addStickyNote: (note: StickyNote) =>
     set((state) => ({
       stickyNotes: [...state.stickyNotes, note],
       annotations: {
@@ -186,7 +186,7 @@ export       if (!nodeToClone) return state;
       hasUnsavedChanges: true
     })),
     
-  updateStickyNote: (noteId, updates) =>
+  updateStickyNote: (noteId: string, updates: Partial<StickyNote>) =>
     set((state) => {
       const updatedNotes = state.stickyNotes.map(note =>
         note.id === noteId ? { ...note, ...updates } : note
@@ -205,7 +205,7 @@ export       if (!nodeToClone) return state;
       };
     }),
     
-  deleteStickyNote: (noteId) =>
+  deleteStickyNote: (noteId: string) =>
     set((state) => {
       const filteredNotes = state.stickyNotes.filter(note => note.id !== noteId);
       return {
@@ -223,7 +223,7 @@ export       if (!nodeToClone) return state;
     }),
   
   // Node labels operations (Epic 8.7 Task 2)
-  setNodeLabelConfigs: (configs) =>
+  setNodeLabelConfigs: (configs: Record<string, any>) =>
     set((state) => ({
       annotations: {
         ...state.annotations,
@@ -236,7 +236,7 @@ export       if (!nodeToClone) return state;
       hasUnsavedChanges: true
     })),
 
-  addNodeLabelConfig: (config) =>
+  addNodeLabelConfig: (config: NodeLabelConfig) =>
     set((state) => ({
       annotations: {
         ...state.annotations,
@@ -252,7 +252,7 @@ export       if (!nodeToClone) return state;
       hasUnsavedChanges: true
     })),
 
-  updateNodeLabelConfig: (labelId, updates) =>
+  updateNodeLabelConfig: (labelId: string, updates: Partial<NodeLabelConfig>) =>
     set((state) => {
       const existingConfig = state.annotations.nodeLabelConfigs[labelId];
       if (!existingConfig) return state;
@@ -277,7 +277,7 @@ export       if (!nodeToClone) return state;
       };
     }),
 
-  deleteNodeLabelConfig: (labelId) =>
+  deleteNodeLabelConfig: (labelId: string) =>
     set((state) => {
       const { [labelId]: deleted, ...remainingConfigs } = state.annotations.nodeLabelConfigs;
       return {
@@ -293,7 +293,7 @@ export       if (!nodeToClone) return state;
       };
     }),
 
-  setLabelPreferences: (preferences) =>
+  setLabelPreferences: (preferences: NodeLabelPreferences) =>
     set((state) => ({
       annotations: {
         ...state.annotations,
@@ -310,7 +310,7 @@ export       if (!nodeToClone) return state;
     })),
   
   // Region groups operations (Epic 8.7 Task 3)
-  setRegionGroups: (groups) =>
+  setRegionGroups: (groups: RegionGroup[]) =>
     set((state) => ({
       annotations: {
         ...state.annotations,
@@ -323,7 +323,7 @@ export       if (!nodeToClone) return state;
       hasUnsavedChanges: true
     })),
 
-  addRegionGroup: (group) =>
+  addRegionGroup: (group: RegionGroup) =>
     set((state) => ({
       annotations: {
         ...state.annotations,
@@ -358,7 +358,7 @@ export       if (!nodeToClone) return state;
       };
     }),
 
-  deleteRegionGroup: (groupId) =>
+  deleteRegionGroup: (groupId: string) =>
     set((state) => ({
       annotations: {
         ...state.annotations,
@@ -371,7 +371,7 @@ export       if (!nodeToClone) return state;
       hasUnsavedChanges: true
     })),
 
-  setRegionGroupPreferences: (preferences) =>
+  setRegionGroupPreferences: (preferences: RegionGroupPreferences) =>
     set((state) => ({
       annotations: {
         ...state.annotations,
@@ -388,7 +388,7 @@ export       if (!nodeToClone) return state;
     })),
 
   // Connection annotations operations (Epic 8.7 Task 4)
-  setConnectionLabels: (labels) =>
+  setConnectionLabels: (labels: ConnectionLabel[]) =>
     set((state) => ({
       annotations: {
         ...state.annotations,
@@ -473,7 +473,7 @@ export       if (!nodeToClone) return state;
       hasUnsavedChanges: true
     })),
 
-  updateConnectionAnnotation: (annotationId, updates) =>
+  updateConnectionAnnotation: (annotationId: string, updates: Partial<ConnectionAnnotation>) =>
     set((state) => {
       const updatedAnnotations = (state.annotations.connectionAnnotations || []).map(annotation =>
         annotation.id === annotationId ? { ...annotation, ...updates } : annotation
@@ -491,7 +491,7 @@ export       if (!nodeToClone) return state;
       };
     }),
 
-  removeConnectionAnnotation: (annotationId) =>
+  removeConnectionAnnotation: (annotationId: string) =>
     set((state) => ({
       annotations: {
         ...state.annotations,
@@ -506,7 +506,7 @@ export       if (!nodeToClone) return state;
       hasUnsavedChanges: true
     })),
 
-  setConnectionAnnotationPreferences: (preferences) =>
+  setConnectionAnnotationPreferences: (preferences: ConnectionAnnotationPreferences) =>
     set((state) => ({
       connectionAnnotationPreferences: {
         ...state.connectionAnnotationPreferences,
@@ -839,4 +839,6 @@ export       if (!nodeToClone) return state;
       }
     };
   }
-}));
+    })
+  )
+);

@@ -9,7 +9,7 @@ console.log('File exists:', require('fs').existsSync(mockPath));
 const mockContent = require('fs').readFileSync(mockPath, 'utf-8');
 console.log('\nHandle component definition in mock:');
 const lines = mockContent.split('\n');
-const handleStartLine = lines.findIndex(line => line.includes('export const Handle'));
+const handleStartLine = lines.findIndex((line: string) => line.includes('export const Handle'));
 for (let i = handleStartLine; i < handleStartLine + 10; i++) {
   if (lines[i]) {
     console.log(`${i + 1}: ${lines[i]}`);

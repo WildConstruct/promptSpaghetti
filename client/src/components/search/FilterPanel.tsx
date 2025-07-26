@@ -65,11 +65,11 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
     query,
     addFilter,
     removeFilter,
-    updateFilter,
-    setFilters,
+    // updateFilter, // Commented out unused variable
+    // setFilters, // Commented out unused variable
     addSort,
     removeSort,
-    setSorts,
+    // setSorts, // Commented out unused variable
     hasActiveFilters,
     hasActiveSorts,
     resetQuery
@@ -130,7 +130,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
   // Handle filter value change based on field type
   const handleFilterValueChange = useCallback((value: Error, field: string, operator: FilterOperator) => {
-    const _fieldConfig = getFieldConfig(field);
+    // const fieldConfig = getFieldConfig(field); // Commented out unused variable
     
     if (operator === 'between' || operator === 'in') {
       if (typeof value === 'string') {
@@ -142,7 +142,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
     } else {
       setNewFilter(prev => ({ ...prev, value }));
     }
-  }, [getFieldConfig]);
+  }, []);
 
   // Render filter value input based on field type and operator
   const renderFilterValueInput = useCallback((

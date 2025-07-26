@@ -397,7 +397,7 @@ const MonitoringPanel: React.FC<{
   providerMetrics: PaymentProviderMetrics[];
   methodMetrics: PaymentMethodMetrics[];
   failureAnalysis: PaymentFailureAnalysis[];
-}> = ({ providerMetrics, methodMetrics, failureAnalysis }) => {
+}> = ({ providerMetrics }) => {
   const [alertThresholds, setAlertThresholds] = useState({
     successRate: 90,
     processingTime: 1000,
@@ -538,7 +538,7 @@ const RoutingRuleCreator: React.FC<{
   onSave: (rule: Omit<PaymentRoutingRule, 'id' | 'createdAt' | 'lastModified'>) => void;
   onCancel: () => void;
   providerMetrics: PaymentProviderMetrics[];
-}> = ({ onSave, onCancel, providerMetrics }) => {
+}> = ({ onSave, onCancel }) => {
   const [rule, setRule] = useState({
     name: '',
     description: '',
@@ -622,7 +622,8 @@ function generateRecommendations(
         id: `success_rate_${provider.provider}`,
         type: 'provider',
         title: `Improve ${provider.provider} Success Rate`,
-        description: `${provider.provider} has a success rate of ${provider.successRate.toFixed(1)}%, which is below the recommended 95% threshold. Consider implementing retry logic and payment method fallbacks.`,
+        description: `${provider.provider} has a success rate of ${provider.successRate.toFixed(1)}%, ` +
+          `which is below the recommended 95% threshold. Consider implementing retry logic and payment method fallbacks.`,
         impact: provider.successRate < 90 ? 'high' : 'medium',
         effort: 'medium',
         priority: 10 - index,

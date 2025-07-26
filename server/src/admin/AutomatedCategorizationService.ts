@@ -49,7 +49,7 @@ export interface CategorizationRequest {
   requestId: string;
   itemId: string;
   itemType: CategorizationType;
-  itemData: Record<string, any>;
+  itemData: Record<string, unknown>;
   requestedBy: string;
   requestedAt: Date;
   priority: 'low' | 'medium' | 'high' | 'critical';
@@ -91,7 +91,7 @@ export interface CategorizationResult {
   
   // Additional data
   tags: string[];
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
   reasoningChain: ReasoningStep[];
 }
 
@@ -102,7 +102,7 @@ export interface CategorizationContext {
   departmentId?: string;
   projectId?: string;
   source: string;
-  sourceMetadata?: Record<string, any>;
+  sourceMetadata?: Record<string, unknown>;
   businessContext?: string;
   technicalContext?: string;
   geographicalContext?: {
@@ -130,7 +130,7 @@ export interface AutoAssignment {
   assignmentReason: string;
   confidence: number;
   conditions?: AssignmentCondition[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface AssignmentCondition {
@@ -144,11 +144,11 @@ export interface ReasoningStep {
   stepId: string;
   stepType: 'rule_evaluation' | 'ml_inference' | 'data_analysis' | 'validation';
   description: string;
-  input: Record<string, any>;
-  output: Record<string, any>;
+  input: Record<string, unknown>;
+  output: Record<string, unknown>;
   confidence: number;
   processingTime: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface CategorizationRule {
@@ -202,8 +202,8 @@ export interface RuleCondition {
 
 export interface RuleAction {
   actionType: 'categorize' | 'assign' | 'flag' | 'escalate' | 'notify';
-  parameters: Record<string, any>;
-  conditions?: Record<string, any>;
+  parameters: Record<string, unknown>;
+  conditions?: Record<string, unknown>;
 }
 
 export interface CategoryDefinition {
@@ -240,7 +240,7 @@ export interface CategoryDefinition {
   
   // ML Training
   trainingExamples: Array<{
-    itemData: Record<string, any>;
+    itemData: Record<string, unknown>;
     confidence: number;
     verified: boolean;
   }>;
@@ -306,7 +306,7 @@ export class AutomatedCategorizationService extends EventEmitter {
   async categorizeItem(
     itemId: string,
     itemType: CategorizationType,
-    itemData: Record<string, any>,
+    itemData: Record<string, unknown>,
     requestedBy: string,
     options: {
       priority?: 'low' | 'medium' | 'high' | 'critical';
@@ -999,7 +999,10 @@ export class AutomatedCategorizationService extends EventEmitter {
       .sort((a, b) => b.priority - a.priority);
   }
 
-  private async evaluateRule(rule: CategorizationRule, request: CategorizationRequest): Promise<{ matches: boolean; confidence: number }> {
+  private async evaluateRule(
+    rule: CategorizationRule,
+    request: CategorizationRequest
+  ): Promise<{ matches: boolean; confidence: number }> {
     // Simplified rule evaluation - would implement comprehensive logic
     const triggerMatches = rule.triggers.length === 0 || rule.triggers.some(trigger => {
       const fieldValue = request.itemData[trigger.field];
@@ -1092,7 +1095,10 @@ export class AutomatedCategorizationService extends EventEmitter {
            result.securityFlags.length > 0;
   }
 
-  private async generateAutoAssignments(result: CategorizationResult, request: CategorizationRequest): Promise<AutoAssignment[]> {
+  private async generateAutoAssignments(
+    result: CategorizationResult,
+    request: CategorizationRequest
+  ): Promise<AutoAssignment[]> {
     const assignments: AutoAssignment[] = [];
     
     // Add category-based assignments
@@ -1104,7 +1110,10 @@ export class AutomatedCategorizationService extends EventEmitter {
     return assignments;
   }
 
-  private assessRiskLevel(result: CategorizationResult, request: CategorizationRequest): 'low' | 'medium' | 'high' | 'critical' {
+  private assessRiskLevel(
+    result: CategorizationResult,
+    request: CategorizationRequest
+  ): 'low' | 'medium' | 'high' | 'critical' {
     if (result.securityFlags.length > 0) return 'critical';
     if (result.confidence < 50) return 'high';
     if (request.itemType === CategorizationType.API_KEY) return 'medium';

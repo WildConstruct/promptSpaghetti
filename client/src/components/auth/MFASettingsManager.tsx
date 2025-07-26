@@ -3,7 +3,7 @@
  * Comprehensive interface for managing existing MFA methods, viewing security status, and modifying settings
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Alert, AlertDescription } from '../ui/Alert';
@@ -15,11 +15,9 @@ import {
   Smartphone, 
   Mail, 
   MessageSquare, 
-  Settings, 
   Plus,
   Trash2,
   Edit,
-  Download,
   AlertTriangle,
   CheckCircle,
   Clock,
@@ -96,11 +94,7 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
     generatingBackupCodes: false
   });
 
-  useEffect(() => {
-    loadMFAData();
-  }, [userId]);
-
-  const loadMFAData = async () => {
+  const loadMFAData = useCallback(async () => {
     setState(prev => ({ ...prev, isLoading: true, error: null }));
 
     try {
@@ -127,7 +121,11 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
         isLoading: false
       }));
     }
-  };
+  }, [userId, onMethodChange]);
+
+  useEffect(() => {
+    loadMFAData();
+  }, [loadMFAData]);
 
   const toggleMethodStatus = async (configId: string, newStatus: MFAMethodStatus) => {
     try {
@@ -222,6 +220,7 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
     URL.revokeObjectURL(url);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleEnrollmentComplete = (_methodType: MFAMethodType, _configId: string) => {
     setState(prev => ({ ...prev, showEnrollment: false }));
     loadMFAData();

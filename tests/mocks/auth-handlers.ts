@@ -39,8 +39,9 @@ mockUsers.set('admin@example.com', {
   updatedAt: new Date()
 });
 
-export 
-      if (!email || !password) {
+export     const { email, password } = req.body as { email: string; password: string };
+    
+    if (!email || !password) {
         return res(
           ctx.status(400),
           ctx.json({

@@ -120,7 +120,7 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({
       } else {
         onError?.(data.error || 'Failed to load recovery points');
       }
-    } catch (error) {
+    } catch {
       onError?.('Failed to load recovery points');
     } finally {
       setLoading(false);
@@ -199,7 +199,7 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({
       } else {
         onError?.(data.error || 'Failed to generate preview');
       }
-    } catch (error) {
+    } catch {
       onError?.('Failed to generate preview');
     } finally {
       setLoading(false);
@@ -247,7 +247,7 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({
       } else {
         onError?.(data.error || 'Failed to start restore');
       }
-    } catch (error) {
+    } catch {
       onError?.('Failed to start restore operation');
     } finally {
       setLoading(false);

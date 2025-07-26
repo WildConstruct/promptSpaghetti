@@ -11,10 +11,10 @@ import { join } from 'path';
  * Manages isolated test environments and cleanup
  */
 export class TestEnvironmentManager {
-  private static environments: Map<string, any> = new Map();
+  private static environments: Map<string, Record<string, unknown>> = new Map();
   private static cleanup: Map<string, () => Promise<void>> = new Map();
 
-  static async setupEnvironment(name: string, config: Record<string, any>): Promise<void> {
+  static async setupEnvironment(name: string, config: Record<string, unknown>): Promise<void> {
     this.environments.set(name, config);
     
     // Setup environment variables
@@ -23,7 +23,7 @@ export class TestEnvironmentManager {
     }
   }
 
-  static async createEnvironment(name: string, config: Record<string, any>): Promise<any> {
+  static async createEnvironment(name: string, config: Record<string, unknown>): Promise<Record<string, unknown>> {
     // Create comprehensive environment object with mocks and fixtures
     const environment = {
       name,
@@ -257,7 +257,7 @@ export class TestAssertionHelpers {
   }
 
   static async expectToThrowAsync(
-    fn: () => Promise<any>,
+    fn: () => Promise<unknown>,
     expectedError?: string | RegExp
   ): Promise<void> {
     let thrown = false;
@@ -410,6 +410,7 @@ export const AsyncTestingUtils = TestAssertionHelpers;
 
 // Make utilities available globally
 declare global {
+  // eslint-disable-next-line no-var
   var testUtils: typeof testUtils;
 }
 

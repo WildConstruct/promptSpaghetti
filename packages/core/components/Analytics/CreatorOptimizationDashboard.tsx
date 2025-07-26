@@ -760,8 +760,7 @@ export interface CreatorOptimizationExportData {
   exportTimestamp: number;
 }
 
-export   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export   const [error, setError] = useState<string | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [activeMode, setActiveMode] = useState<CreatorDashboardMode>(dashboardMode);
 
@@ -1441,10 +1440,7 @@ export   const [loading, setLoading] = useState(true);
   }, [onActionTaken]);
 
   // Handle goal setting
-  
-    if (onGoalSet) {
-      onGoalSet(goal);
-    }
+      }
   }, [onGoalSet]);
 
   // Initial data load

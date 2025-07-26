@@ -34,7 +34,7 @@ export interface SearchFacet {
 }
 
 export interface FacetOption {
-  value: any;
+  value: unknown;
   label: string;
   count: number;
   selected: boolean;
@@ -86,7 +86,7 @@ export interface FacetMetadata {
   dependencies?: string[];
   conditionalDisplay?: {
     field: string;
-    value: any;
+    value: unknown;
   };
   analytics: {
     totalSelections: number;
@@ -108,8 +108,8 @@ export interface SearchFilter {
   facetId: string;
   field: string;
   operator: 'equals' | 'not_equals' | 'contains' | 'starts_with' | 'ends_with' | 'greater' | 'less' | 'between' | 'in' | 'not_in';
-  value: any;
-  values?: any[];
+  value: unknown;
+  values?: unknown[];
   boost?: number;
 }
 
@@ -207,7 +207,7 @@ export interface SearchAggregation {
 }
 
 export interface AggregationBucket {
-  key: any;
+  key: unknown;
   count: number;
   subAggregations?: SearchAggregation[];
 }
@@ -642,7 +642,7 @@ export class FacetedSearchSystem<T = any> extends EventEmitter {
   async updateFacetSelection(
     indexName: string, 
     facetId: string, 
-    value: any, 
+    value: unknown, 
     selected: boolean
   ): Promise<void> {
     const index = this.indexes.get(indexName);
@@ -855,7 +855,7 @@ export class FacetedSearchSystem<T = any> extends EventEmitter {
     };
   }
 
-  private parseQueryText(text: string): any {
+  private parseQueryText(text: string): unknown {
     // Simple query parsing - in practice, you'd use a proper query parser
     const tokens = text.toLowerCase().split(/\s+/).filter(t => t.length > 0);
     
@@ -879,7 +879,7 @@ export class FacetedSearchSystem<T = any> extends EventEmitter {
     return phrases;
   }
 
-  private extractOperators(text: string): any {
+  private extractOperators(text: string): unknown {
     // Extract boolean operators, field queries, etc.
     return {
       hasAnd: text.includes(' AND '),
@@ -904,7 +904,7 @@ export class FacetedSearchSystem<T = any> extends EventEmitter {
     return fieldQueries;
   }
 
-  private processFilter(filter: SearchFilter): any {
+  private processFilter(filter: SearchFilter): unknown {
     return {
       ...filter,
       processed: true,
@@ -912,7 +912,7 @@ export class FacetedSearchSystem<T = any> extends EventEmitter {
     };
   }
 
-  private normalizeFilterValue(value: any, operator: string): any {
+  private normalizeFilterValue(value: unknown, operator: string): unknown {
     switch (operator) {
     case 'contains':
     case 'starts_with':

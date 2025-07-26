@@ -1,5 +1,5 @@
 // Epic 16.2.2 Version History Component
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import './VersionHistory.css';
 
@@ -83,9 +83,9 @@ export const VersionHistory: React.FC = () => {
     if (templateId) {
       fetchVersions();
     }
-  }, [templateId, filter]);
+  }, [templateId, filter, fetchVersions]);
 
-  const fetchVersions = async () => {
+  const fetchVersions = useCallback(async () => {
     try {
       setIsLoading(true);
       const params = new URLSearchParams();
@@ -118,7 +118,7 @@ export const VersionHistory: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [templateId, filter]);
 
   const handleVersionSelect = (versionId: string) => {
     if (selectedVersions.includes(versionId)) {

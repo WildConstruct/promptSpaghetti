@@ -831,7 +831,7 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({
         </TabsContent>
       </Tabs>
 
-      <style jsx>{`
+      <style>{`
         .unified-review-interface {
           max-width: 1200px;
           margin: 0 auto;

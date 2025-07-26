@@ -30,7 +30,7 @@ export interface ModelRegistration {
   id: string;
   provider: AIModelProvider;
   modelName: string;
-  config: any;
+  config: unknown;
   metadata?: Partial<ModelMetadata>;
   capabilities?: Partial<ModelCapabilities>;
   requestMapping?: HTTPRequestMapping;
@@ -303,7 +303,7 @@ export class AIModelFactory implements IAIModelFactory {
     }
   }
 
-  async getModelHealth(modelId: string): Promise<any> {
+  async getModelHealth(modelId: string): Promise<unknown> {
     const model = await this.getModel(modelId);
     if (!model) {
       throw new Error(`Model not found: ${modelId}`);
@@ -353,7 +353,7 @@ export class AIModelFactory implements IAIModelFactory {
   }
 
   // Statistics and monitoring
-  getStatistics(): any {
+  getStatistics(): unknown {
     const totalModels = this.modelInstances.size;
     const totalRegistrations = this.registeredModels.size;
     const providerCounts: Record<string, number> = {};
@@ -372,7 +372,7 @@ export class AIModelFactory implements IAIModelFactory {
   }
 
   // Private utility methods
-  private _log(level: string, message: string, ...args: any[]): void {
+  private _log(level: string, message: string, ...args: unknown[]): void {
     if (!this.factoryConfig.enableLogging) {
       return;
     }
@@ -383,7 +383,7 @@ export class AIModelFactory implements IAIModelFactory {
 
     if (messageLevelIndex >= currentLevelIndex) {
       const timestamp = new Date().toISOString();
-      (console as any)[level](`[${timestamp}] [AIModelFactory] ${message}`, ...args);
+      (console as unknown)[level](`[${timestamp}] [AIModelFactory] ${message}`, ...args);
     }
   }
 }

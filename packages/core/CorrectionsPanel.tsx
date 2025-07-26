@@ -11,9 +11,7 @@ interface CorrectionsPanelProps {
   onClose: () => void;
 }
 
-export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onClose }) => {
-  const isEnabled = useCorrectionsEnabled();
-  const {
+export   const {
     rules,
     addRule,
     updateRule,
@@ -195,7 +193,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
             </div>
           </div>
 
-          {rules.map((rule, _index) => (
+          {rules.map((rule) => (
             <div
               key={rule.id}
               style={{

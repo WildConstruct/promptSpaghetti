@@ -89,6 +89,7 @@ export class AdvancedExecutionContextImpl {
     nodeStates;
     evaluationDepth;
     cache;
+    prng;
     executionMeta;
     inputs;
     outputs;
@@ -98,8 +99,10 @@ export class AdvancedExecutionContextImpl {
         this.nodeStates = new Map();
         this.evaluationDepth = 0;
         this.cache = new Map();
+        this.prng = seedrandom(String(seed));
         this.executionMeta = {
             startTime: performance.now(),
+            executionId: `exec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
             nodeExecutionOrder: [],
             performanceMetrics: new Map()
         };
@@ -107,8 +110,8 @@ export class AdvancedExecutionContextImpl {
         this.outputs = {};
     }
 }
-// Export the implementation class
-export { AdvancedExecutionContextImpl as AdvancedExecutionContext };
+// Export the implementation class 
+// Note: Interface AdvancedExecutionContext is already exported above
 /**
  * Utility functions for working with advanced execution contexts
  */
@@ -122,6 +125,7 @@ export class AdvancedExecutionUtils {
             nodeStates: new Map(),
             evaluationDepth: 0,
             cache: new Map(),
+            prng: seedrandom(String(basicCtx.seed)),
             executionMeta: {
                 startTime: performance.now(),
                 executionId: `exec_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,

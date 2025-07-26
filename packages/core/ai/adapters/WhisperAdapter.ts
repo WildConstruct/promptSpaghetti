@@ -170,7 +170,10 @@ export class WhisperAdapter extends BaseAIModel {
     }
   }
 
-  async process(input: any, options?: WhisperRequestOptions): Promise<WhisperTranscriptionResult> {
+  async process(
+    input: File | Blob | ArrayBuffer | { file?: File | Blob | ArrayBuffer; audio?: File | Blob | ArrayBuffer; data?: File | Blob | ArrayBuffer },
+    options?: WhisperRequestOptions
+  ): Promise<WhisperTranscriptionResult> {
     try {
       if (this._status !== AIModelStatus.READY) {
         throw new ModelUnavailableError(this._id);
@@ -231,7 +234,10 @@ export class WhisperAdapter extends BaseAIModel {
     this._requestQueue = [];
   }
 
-  async estimate(input: any, options?: WhisperRequestOptions): Promise<CostEstimate> {
+  async estimate(
+    input: File | Blob | ArrayBuffer | { file?: File | Blob | ArrayBuffer; audio?: File | Blob | ArrayBuffer; data?: File | Blob | ArrayBuffer },
+    options?: WhisperRequestOptions
+  ): Promise<CostEstimate> {
     const audioFile = this._extractAudioFile(input);
     let audioDuration = 0;
     
@@ -448,7 +454,7 @@ export class WhisperAdapter extends BaseAIModel {
     return new Blob([buffer], { type: 'audio/wav' });
   }
 
-  private _extractAudioFile(input: any): File | Blob | ArrayBuffer | null {
+  private _extractAudioFile(input: File | Blob | ArrayBuffer | { file?: File | Blob | ArrayBuffer; audio?: File | Blob | ArrayBuffer; data?: File | Blob | ArrayBuffer }): File | Blob | ArrayBuffer | null {
     if (input instanceof File || input instanceof Blob || input instanceof ArrayBuffer) {
       return input;
     }
@@ -477,9 +483,8 @@ export class WhisperAdapter extends BaseAIModel {
     if ((file instanceof File || file instanceof Blob) && file.type) {
       if (!this.supportedFormats.includes(file.type)) {
         throw new Error(
-          `Unsupported audio format: ${file.type}. Supported formats: ${this.supportedFormats.join(',
-          '
-        )}`);
+          `Unsupported audio format: ${file.type}. Supported formats: ${this.supportedFormats.join(', ')}`
+        );
       }
     }
   }

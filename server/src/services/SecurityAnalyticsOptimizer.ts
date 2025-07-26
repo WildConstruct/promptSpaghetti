@@ -944,9 +944,10 @@ export class SecurityAnalyticsOptimizer extends EventEmitter {
     
     if (securityValidation.recommendation === 'review_required') {
       throw new Error(
-        `Optimization requires manual review due to security concerns: ${securityValidation.security_warnings.join(',
-        '
-      )}`);
+        `Optimization requires manual review due to security concerns: ${securityValidation.security_warnings.join(
+          ',
+          '
+        )}`);
     }
 
     const optimizationId = `opt_${Date.now()}`;
@@ -1151,7 +1152,7 @@ export class SecurityAnalyticsOptimizer extends EventEmitter {
     this.cache = new Map();
   }
 
-  public cacheGet(key: string): any | null {
+  public cacheGet(key: string): unknown | null {
     const entry = this.cache.get(key);
     if (!entry) return null;
 

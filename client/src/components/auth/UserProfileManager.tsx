@@ -1,7 +1,7 @@
 // Epic 11.2 User Profile Manager Component
 // Comprehensive user profile management with inline editing
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 
 interface UserProfile {
@@ -61,13 +61,7 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
     { code: 'zh-CN', name: '中文' }
   ];
 
-  useEffect(() => {
-    if (user) {
-      fetchProfile();
-    }
-  }, [user]);
-
-  const fetchProfile = async () => {
+  const fetchProfile = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch('/api/auth/profile', {
@@ -91,7 +85,13 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [showCompleteness]);
+
+  useEffect(() => {
+    if (user) {
+      fetchProfile();
+    }
+  }, [user, fetchProfile]);
 
   const updateProfile = async (updates: Partial<UserProfile>) => {
     try {

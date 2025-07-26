@@ -5,7 +5,7 @@ import { AdaptorTestResults } from './AdaptorTestFramework.js';
  */
 export declare class DocumentationGenerator {
     private logger;
-    constructor(logger: unknown);
+    constructor(logger: any);
     /**
      * Generate comprehensive documentation for an adaptor
      */
@@ -218,9 +218,9 @@ export interface TestDocumentationSection {
         score: number;
         description: string;
     };
-    compliance: unknown;
-    performance: unknown;
-    functionality: unknown;
+    compliance: any;
+    performance: any;
+    functionality: any;
 }
 export interface CustomSection {
     title: string;

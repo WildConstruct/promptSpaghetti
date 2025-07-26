@@ -693,7 +693,7 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .marketplace-help-overlay {
           position: relative;
           pointer-events: none;

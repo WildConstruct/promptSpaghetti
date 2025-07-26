@@ -18,7 +18,7 @@ export interface PolicyTemplateCreateRequest {
   description: string;
   category: 'trust_score' | 'fraud_detection' | 'content_quality' | 'user_behavior' | 'transaction_monitoring';
   severity: 'low' | 'medium' | 'high' | 'critical';
-  defaultConfig: any;
+  defaultConfig: Record<string, unknown>;
 }
 
 export interface ViolationReviewRequest {
@@ -37,7 +37,7 @@ export interface EnforcementRequestCreate {
   actionType: 'suspend' | 'restrict' | 'flag' | 'require_verification' | 'block_transaction' | 'quarantine_template';
   reason: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
-  evidence?: any;
+  evidence?: Record<string, unknown>;
   expiresAt?: string;
 }
 
@@ -70,7 +70,7 @@ export class AdminEnforcementController {
    */
   async getPolicyTemplates(request: FastifyRequest, reply: FastifyReply) {
     try {
-      const query = request.query as any;
+      const query = request.query as unknown;
       const options = {
         category: query.category,
         isSystemTemplate: query.isSystemTemplate === 'true' ? true : query.isSystemTemplate === 'false' ? false : undefined,
@@ -141,7 +141,7 @@ export class AdminEnforcementController {
   async createPolicyFromTemplate(request: FastifyRequest, reply: FastifyReply) {
     try {
       const { templateId } = request.params as { templateId: string };
-      const body = request.body as { overrides?: any };
+      const body = request.body as { overrides?: Record<string, unknown> };
 
       const policy = await this.policyService.createPolicyFromTemplate(
         templateId,
@@ -170,7 +170,7 @@ export class AdminEnforcementController {
    */
   async getViolations(request: FastifyRequest, reply: FastifyReply) {
     try {
-      const query = request.query as any;
+      const query = request.query as unknown;
       const options = {
         status: query.status,
         entityType: query.entityType,
@@ -234,7 +234,7 @@ export class AdminEnforcementController {
     try {
       const { violationId } = request.params as { violationId: string };
       const body = request.body as ViolationReviewRequest;
-      const adminUser = (request as any).user; // Assuming auth middleware adds user info
+      const adminUser = (request as unknown).user; // Assuming auth middleware adds user info
 
       if (!body.decision || !['dismiss', 'enforce'].includes(body.decision)) {
         return reply.code(400).send({
@@ -274,7 +274,7 @@ export class AdminEnforcementController {
   async createEnforcementRequest(request: FastifyRequest, reply: FastifyReply) {
     try {
       const body = request.body as EnforcementRequestCreate;
-      const adminUser = (request as any).user;
+      const adminUser = (request as unknown).user;
 
       // Validate required fields
       if (!body.entityType || !body.entityId || !body.actionType || !body.reason || !body.severity) {
@@ -315,7 +315,7 @@ export class AdminEnforcementController {
     try {
       const { requestId } = request.params as { requestId: string };
       const body = request.body as EnforcementRequestProcess;
-      const adminUser = (request as any).user;
+      const adminUser = (request as unknown).user;
 
       if (!body.decision || !['approve', 'reject'].includes(body.decision)) {
         return reply.code(400).send({
@@ -393,7 +393,7 @@ export class AdminEnforcementController {
         entityType: 'user' | 'template' | 'transaction';
         entityId: string;
       };
-      const query = request.query as any;
+      const query = request.query as unknown;
 
       const actions = await this.automatedEnforcement.getEnforcementActions(
         entityType,
@@ -483,7 +483,15 @@ export class AdminEnforcementController {
   /**
    * Register all routes with Fastify instance
    */
-  static registerRoutes(fastify: any, controller: AdminEnforcementController) {
+  static registerRoutes(
+    fastify: { post: (path: string,
+    handler: (request: FastifyRequest,
+    reply: FastifyReply
+  ) => Promise<void>) => void; get: (
+    path: string,
+    handler: (request: FastifyRequest,
+    reply: FastifyReply
+  ) => Promise<void>) => void; put: (path: string, handler: (request: FastifyRequest, reply: FastifyReply) => Promise<void>) => void }, controller: AdminEnforcementController) {
     // Policy Templates
     fastify.get('/admin/enforcement/templates', controller.getPolicyTemplates.bind(controller));
     fastify.post('/admin/enforcement/templates', controller.createPolicyTemplate.bind(controller));

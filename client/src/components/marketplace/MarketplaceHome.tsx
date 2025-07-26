@@ -1,5 +1,5 @@
 // Epic 16 Marketplace - Home Page Component
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { EnhancedSearchBar } from './EnhancedSearchBar';
 import { TemplateCard } from './TemplateCard';
 import { CategoryNav } from './CategoryNav';
@@ -46,14 +46,14 @@ export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = ''
     loadCategories();
     loadFeaturedTemplates();
     handleSearch();
-  }, []);
+  }, [loadCategories, loadFeaturedTemplates, handleSearch]);
 
   useEffect(() => {
     // Trigger search when filters change
     handleSearch();
-  }, [searchQuery, selectedCategory, sortBy, priceFilter, advancedFilters]);
+  }, [handleSearch]);
 
-  const handleSearch = () => {
+  const handleSearch = useCallback(() => {
     const filters = {
       query: searchQuery || undefined,
       categories: selectedCategory ? [selectedCategory] : 
@@ -70,7 +70,7 @@ export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = ''
     };
 
     searchTemplates(filters);
-  };
+  }, [searchQuery, selectedCategory, advancedFilters, sortBy, priceFilter, searchTemplates]);
 
   const handleCategorySelect = (categoryId: string | null) => {
     setSelectedCategory(categoryId);

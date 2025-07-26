@@ -1430,9 +1430,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
               LogLevel.WARN,
               step.id,
               undefined,
-              `Step dependencies not met: ${step.depends_on.join(',
-              '
-            )}`);
+              `Step dependencies not met: ${step.depends_on.join(', ')}`);
             continue;
           }
         }

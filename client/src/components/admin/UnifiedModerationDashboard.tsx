@@ -27,6 +27,7 @@ interface UnifiedModerationDashboardProps {
 export const UnifiedModerationDashboardComponent: React.FC<UnifiedModerationDashboardProps> = ({
   moderatorId,
   permissions,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigate
 }) => {
   // State management
@@ -34,6 +35,7 @@ export const UnifiedModerationDashboardComponent: React.FC<UnifiedModerationDash
   const [overview, setOverview] = useState<DashboardOverview | null>(null);
   const [workloads, setWorkloads] = useState<ModerationWorkload[]>([]);
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_searchResults, setSearchResults] = useState<unknown[]>([]);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   
@@ -45,10 +47,12 @@ export const UnifiedModerationDashboardComponent: React.FC<UnifiedModerationDash
   const [autoRefresh, setAutoRefresh] = useState(true);
 
   // Search and filter state
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_searchQuery, setSearchQuery] = useState<AdvancedSearchQuery>({});
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_showAdvancedSearch, _setShowAdvancedSearch] = useState(false);
 
-  const loadInitialData = useCallback(async (dashboardService: UnifiedModerationDashboard) => {
+  const loadInitialData = useCallback(async (dashboardService: UnifiedModerationDashboard): Promise<void> => {
     setLoading(true);
     setError(null);
 
@@ -84,7 +88,7 @@ export const UnifiedModerationDashboardComponent: React.FC<UnifiedModerationDash
     loadInitialData(dashboardService);
   }, [moderatorId, autoRefresh, loadInitialData]);
 
-  const refreshData = useCallback(async () => {
+  const refreshData = useCallback(async (): Promise<void> => {
     if (!dashboard) return;
 
     try {
@@ -106,20 +110,22 @@ export const UnifiedModerationDashboardComponent: React.FC<UnifiedModerationDash
     return () => clearInterval(interval);
   }, [dashboard, autoRefresh, refreshData]);
 
-      
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        
     setLoading(true);
     try {
       const results = await dashboard.advancedSearch(query, moderatorId);
       setSearchResults(results.items);
       setSearchQuery(query);
     } catch (err) {
-      setError(`Search failed: ${err.message}`);
+      setError(`Search failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
       setLoading(false);
     }
-  };
+  }, [dashboard, moderatorId]);
 
-      
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        
     setLoading(true);
     try {
       const bulkAction: BulkModerationAction = {
@@ -137,13 +143,13 @@ export const UnifiedModerationDashboardComponent: React.FC<UnifiedModerationDash
       await refreshData();
       
     } catch (err) {
-      setError(`Bulk action failed: ${err.message}`);
+      setError(`Bulk action failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
       setLoading(false);
     }
-  };
+  }, [dashboard, selectedItems, moderatorId, refreshData]);
 
-  const handleWorkloadDistribution = async (type: 'urgent' | 'balanced' | 'expertise') => {
+  const handleWorkloadDistribution = async (type: 'urgent' | 'balanced' | 'expertise'): Promise<void> => {
     if (!dashboard || selectedItems.length === 0) return;
 
     setLoading(true);
@@ -154,14 +160,14 @@ export const UnifiedModerationDashboardComponent: React.FC<UnifiedModerationDash
       setSelectedItems([]);
       await refreshData();
     } catch (err) {
-      setError(`Workload distribution failed: ${err.message}`);
+      setError(`Workload distribution failed: ${(err as Error).message}`);
     } finally {
       setLoading(false);
     }
   };
 
   // Computed values
-  const hasPermission = useCallback((permission: string) => {
+  const hasPermission = useCallback((permission: string): boolean => {
     return permissions.includes(permission) || permissions.includes('moderation:admin');
   }, [permissions]);
 

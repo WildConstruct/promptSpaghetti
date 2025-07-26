@@ -15,13 +15,13 @@ interface ModerationItem {
   metadata?: Record<string, unknown>;
 }
 
-interface ModerationAction {
-  id: string;
-  action: 'approve' | 'reject' | 'flag' | 'delete' | 'warn';
-  reason: string;
-  moderatorId: string;
-  timestamp: Date;
-}
+// interface ModerationAction { // Commented out unused interface
+//   id: string;
+//   action: 'approve' | 'reject' | 'flag' | 'delete' | 'warn';
+//   reason: string;
+//   moderatorId: string;
+//   timestamp: Date;
+// }
 
 interface ModerationManagementProps {
   items: ModerationItem[];

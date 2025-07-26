@@ -11,39 +11,7 @@ export { ConflictResolver } from './ConflictResolver';
 export { OperationHistory } from './OperationHistory';
 import { GraphMutationEngine } from './GraphMutationEngine';
 export { CollaborativeSync, SimpleWebSocketService, type WebSocketService } from './CollaborativeSync';
-export declare const defaultMutationEngineConfig: {
-    historyLimit: number;
-    enableUndo: boolean;
-    enableRedo: boolean;
-    validation: {
-        strictMode: boolean;
-        allowDangerousOperations: boolean;
-        customValidators: never[];
-        enableSchemaValidation: boolean;
-        enableStructuralValidation: boolean;
-        enableSemanticValidation: boolean;
-    };
-    conflictResolution: {
-        strategy: "OPERATIONAL_TRANSFORM";
-        autoResolve: boolean;
-        maxConflictAge: number;
-        enableOperationalTransform: boolean;
-        conflictDetectionSensitivity: "medium";
-    };
-    batchAtomicity: "all_or_nothing";
-    maxBatchSize: number;
-    enableSnapshots: boolean;
-    snapshotInterval: number;
-    enableCompression: boolean;
-    enableCollaboration: boolean;
-    syncDelay: number;
-    maxCollaborators: number;
-    enableLogging: boolean;
-    enableMetrics: boolean;
-    logLevel: "info";
-};
-export declare const createOperationId: () => string;
-export declare export declare export declare export declare export declare export declare export declare export declare class MutationEngineError extends Error {
+export declare export declare export declare export declare class MutationEngineError extends Error {
     operation?: any | undefined;
     validationErrors?: any[] | undefined;
     constructor(message: string, operation?: any | undefined, validationErrors?: any[] | undefined);

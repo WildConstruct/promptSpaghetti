@@ -36,7 +36,7 @@ class StateTransitionTestRunner {
     };
   }
 
-  log(message, level = 'info') {
+  log(message: string, level: string = 'info'): void {
     const timestamp = new Date().toISOString();
     const colors = {
       info: chalk.blue,
@@ -49,7 +49,7 @@ class StateTransitionTestRunner {
     console.log(`[${timestamp}] ${colors[level] || chalk.white}${message}${chalk.reset('')}`);
   }
 
-  async run(options = {}) {
+  async run(options: any = {}): Promise<void> {
     this.log('🧪 Starting State Transition Tests...', 'header');
     
     const config = { ...this.testConfig, ...options };
@@ -92,7 +92,7 @@ class StateTransitionTestRunner {
     }
   }
 
-  async setupTestEnvironment() {
+  async setupTestEnvironment(): Promise<void> {
     this.log('Setting up test environment...', 'info');
     
     // Create report directories
@@ -109,7 +109,7 @@ class StateTransitionTestRunner {
     await this.verifyDependencies();
   }
 
-  async discoverTestFiles() {
+  async discoverTestFiles(): Promise<string[]> {
     const testFiles = [];
     
     try {
@@ -135,7 +135,7 @@ class StateTransitionTestRunner {
     return testFiles.sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  async validateTestEnvironment() {
+  async validateTestEnvironment(): Promise<void> {
     this.log('Validating test environment...', 'info');
     
     // Check if Jest is available
@@ -166,7 +166,7 @@ class StateTransitionTestRunner {
     this.log('✅ Environment validation passed', 'success');
   }
 
-  async runTestsInParallel(testFiles, config) {
+  async runTestsInParallel(testFiles: string[], config: any): Promise<void> {
     this.log('Running tests in parallel...', 'info');
     
     const maxConcurrency = Math.min(testFiles.length, 4); // Limit concurrency
@@ -180,7 +180,7 @@ class StateTransitionTestRunner {
     }
   }
 
-  async runTestsSequentially(testFiles, config) {
+  async runTestsSequentially(testFiles: string[], config: any): Promise<void> {
     this.log('Running tests sequentially...', 'info');
     
     for (const testFile of testFiles) {

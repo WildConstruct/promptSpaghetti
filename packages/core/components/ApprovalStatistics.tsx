@@ -12,7 +12,6 @@ import {
   TrendingDownIcon,
   UserGroupIcon,
   DocumentTextIcon,
-  CalendarIcon,
   ArrowPathIcon
 } from '@heroicons/react/24/outline';
 
@@ -100,10 +99,7 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
     return `${Math.round(value)}%`;
   };
 
-  const _____getStatusColor = (status: string) => {
-    switch (status) {
-    case 'pending': return 'bg-yellow-100 text-yellow-800';
-    case 'in_review': return 'bg-blue-100 text-blue-800';
+      case 'in_review': return 'bg-blue-100 text-blue-800';
     case 'approved': return 'bg-green-100 text-green-800';
     case 'rejected': return 'bg-red-100 text-red-800';
     case 'expired': return 'bg-gray-100 text-gray-800';
@@ -121,10 +117,7 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
     }
   };
 
-  const _____getTrendIcon = (current: number, previous: number) => {
-    if (current > previous) {
-      return <TrendingUpIcon className="h-4 w-4 text-green-500" />;
-    } else if (current < previous) {
+      } else if (current < previous) {
       return <TrendingDownIcon className="h-4 w-4 text-red-500" />;
     }
     return <div className="h-4 w-4" />;

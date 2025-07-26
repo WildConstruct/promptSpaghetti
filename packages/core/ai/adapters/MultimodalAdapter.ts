@@ -691,8 +691,7 @@ export class MultimodalAdapter extends BaseAIModel {
             type: 'base64',
             media_type: 'image/jpeg',
             data: typeof input.content === 'string' ? input.content.replace(
-              /^data:image\/[^;]+;base64,
-              /,
+              /^data:image\/[^;]+;base64,/,
               ''
             ) : 'placeholder'
           }
@@ -730,8 +729,7 @@ export class MultimodalAdapter extends BaseAIModel {
           inline_data: {
             mime_type: 'image/jpeg',
             data: typeof input.content === 'string' ? input.content.replace(
-              /^data:image\/[^;]+;base64,
-              /,
+              /^data:image\/[^;]+;base64,/,
               ''
             ) : 'placeholder'
           }
@@ -811,7 +809,7 @@ export class MultimodalAdapter extends BaseAIModel {
   }
 
   private _processProviderResponse(
-    response: any,
+    response: { choices?: { message?: { content?: string } }[]; usage?: { total_tokens?: number; prompt_tokens?: number; completion_tokens?: number } },
     inputs: MultimodalInput[],
     options: Omit<MultimodalRequestOptions,
     'inputs'>
@@ -872,7 +870,24 @@ export class MultimodalAdapter extends BaseAIModel {
     };
   }
 
-  private _parseMultimodalResponse(content: string, inputs: MultimodalInput[]): any {
+  private _parseMultimodalResponse(content: string, inputs: MultimodalInput[]): {
+    summary: string;
+    insights: string[];
+    content_analysis: Array<{
+      content_type: string;
+      confidence: number;
+      detected_elements: string[];
+      relationships: string[];
+      metadata: { input_index: number };
+    }>;
+    connections: string[];
+    extracted_data: {
+      text_content: string[];
+      entities: string[];
+      emotions: string[];
+      topics: string[];
+    };
+  } {
     // Advanced parsing of multimodal response
     // This would typically use NLP techniques or structured prompting
     

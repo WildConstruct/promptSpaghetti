@@ -33,7 +33,7 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
       apiKey: process.env.OPENAI_API_KEY,
       organization: process.env.OPENAI_ORGANIZATION,
       baseURL: process.env.OPENAI_BASE_URL,
-      ...this.config.openai
+      ...(this.config.openai || {})
     };
 
     if (!this.openaiConfig.apiKey) {
@@ -623,7 +623,7 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
   // Helper methods
   private setupEventListeners(): void {
     this.on('pipeline:stage', (stage: string, result: any) => {
-      if (this.config.monitoring?.enableTiming) {
+      if (this.advancedConfig.monitoring?.enableTiming) {
         this.logger.log(`Stage ${stage} completed in ${result.duration}ms`);
       }
     });

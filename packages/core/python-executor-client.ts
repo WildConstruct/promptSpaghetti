@@ -119,17 +119,18 @@ export class PythonExecutorClient {
       });
 
       const responseData = await response.json();
-      const result: PythonExecutionResult = responseData || {
+      const result: PythonExecutionResult = (responseData as PythonExecutionResult) || {
         success: false,
         execution_time: 0,
-        memory_used: 0,
-        peak_memory: 0,
-        output: '',
-        error: 'No response data',
-        request_id: requestId,
-        timestamp: new Date().toISOString(),
-        python_version: '',
-        exit_code: 1
+        memory_used: '0B',
+        peak_memory: '0B',
+        cpu_usage: 0,
+        warnings: [],
+        modules_imported: [],
+        cache_hit: false,
+        security_events: [],
+        sandbox_violations: 0,
+        error_message: 'No response data'
       };
 
       // Log metrics if enabled
@@ -200,7 +201,7 @@ export class PythonExecutorClient {
       });
 
       const healthData = await response.json();
-      return healthData || {
+      return (healthData as { status: string; version: string; uptime: number; }) || {
         status: 'unknown',
         version: '0.0.0',
         uptime: 0

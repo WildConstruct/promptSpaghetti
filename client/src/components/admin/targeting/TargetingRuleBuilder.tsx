@@ -9,9 +9,7 @@ import {
   Filter,
   Code,
   Info,
-  AlertCircle,
-  Check,
-  X
+  Check
 } from 'lucide-react';
 import { Badge } from '../../common/Badge';
 
@@ -71,6 +69,7 @@ const OPERATORS = {
 export   const [testResult, setTestResult] = useState<{ matches: boolean; userCount: number } | null>(null);
   const [testing, setTesting] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [rules, setRules] = useState<TargetingRule[]>(initialRules);
 
   const generateRuleId = () => `rule_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 

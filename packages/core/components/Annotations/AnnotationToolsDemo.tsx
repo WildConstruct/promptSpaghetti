@@ -393,7 +393,10 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
   }, [nodeAnnotations, drawingAnnotations, regionAnnotations]);
 
   // Annotation handlers
-  const handleNodeAnnotationCreate = useCallback((annotation: Omit<NodeAnnotation, 'id' | 'timestamp' | 'lastModified' | 'replies'>) => {
+  const handleNodeAnnotationCreate = useCallback(
+    (annotation: Omit<NodeAnnotation,
+    'id' | 'timestamp' | 'lastModified' | 'replies'>
+  ) => {
     const newAnnotation: NodeAnnotation = {
       ...annotation,
       id: `node-ann-${Date.now()}`,
@@ -418,7 +421,11 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
     setNodeAnnotations(prev => prev.filter(ann => ann.id !== annotationId));
   }, []);
 
-  const handleReplyCreate = useCallback((annotationId: string, reply: Omit<NodeAnnotation['replies'][0], 'id' | 'timestamp' | 'reactions'>) => {
+  const handleReplyCreate = useCallback(
+    (annotationId: string,
+    reply: Omit<NodeAnnotation['replies'][0],
+    'id' | 'timestamp' | 'reactions'>
+  ) => {
     const newReply = {
       ...reply,
       id: `reply-${Date.now()}`,
@@ -873,7 +880,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({
         </CardContent>
       </Card>
 
-      <style jsx>{`
+      <style>{`
         .annotation-tools-demo {
           max-width: 1400px;
           margin: 0 auto;

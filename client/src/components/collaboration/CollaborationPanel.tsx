@@ -29,7 +29,8 @@ interface CollaborationPanelProps {
 }
 
 export const CollaborationPanel: React.FC<CollaborationPanelProps> = ({
-  projectId,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  projectId: _,
   currentUserId,
   users,
   activities,

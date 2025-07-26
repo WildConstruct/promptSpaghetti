@@ -7,7 +7,7 @@
  */
 
 import { testDataGenerator, TestScenario } from '../utils/TestDataGenerator';
-import { testReliability, retry, waitFor } from '../utils/TestReliabilityFramework';
+import { retry } from '../utils/TestReliabilityFramework';
 
 export interface EdgeCaseTest {
   name: string;
@@ -212,7 +212,7 @@ export class EdgeCaseTestSuite {
             });
             
             // Simulate multiple concurrent login attempts
-            const promises = Array.from({ length: 5 }, async (_, i) => {
+            const promises = Array.from({ length: 5 }, async () => {
               return await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

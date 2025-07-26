@@ -274,7 +274,7 @@ export class GraphCRDT {
     }
     // Private methods
     setupChangeTracking() {
-        const observer = (event, transaction) => {
+        const observer = (event, _transaction) => {
             // Convert single event to array format for compatibility
             const events = [event];
             // Notify all change listeners
@@ -339,3 +339,4 @@ export function mergeGraphs(graphs) {
     crdt.destroy();
     return merged;
 }
+//# sourceMappingURL=crdt.js.map

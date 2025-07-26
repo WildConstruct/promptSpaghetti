@@ -51,8 +51,8 @@ const defaultProps = {
 describe('TemplateCustomizationDialog', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockUseExport.updateTemplate.mockResolvedValue(mockTemplate as unknown);
-    mockUseExport.previewTemplate.mockResolvedValue({ preview: 'sample output' } as unknown);
+    mockUseExport.updateTemplate.mockResolvedValue(mockTemplate as unknown as unknown as unknown);
+    mockUseExport.previewTemplate.mockResolvedValue({ preview: 'sample output' } as unknown as unknown as unknown);
   });
 
   describe('Basic Rendering', () => {

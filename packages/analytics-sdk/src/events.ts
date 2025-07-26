@@ -20,7 +20,7 @@ export type EventName = typeof Events[keyof typeof Events];
 
 export function createEvent(
   name: EventName, 
-  properties: Record<string, any> = {}
+  properties: Record<string, unknown> = {}
 ): Omit<AnalyticsEvent, 'timestamp' | 'platform'> {
   return {
     name,

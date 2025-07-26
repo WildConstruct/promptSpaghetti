@@ -385,7 +385,17 @@ class CircuitBreakerState {
  */
 export function retryable(options: RetryOptions = {}) {
   return function (target: Record<string, unknown>, propertyKey: string, descriptor: PropertyDescriptor) {
+    if (!descriptor) {
+      console.warn(`@retryable decorator: PropertyDescriptor is undefined for ${propertyKey}`);
+      return descriptor;
+    }
+    
     const originalMethod = descriptor.value;
+    
+    if (typeof originalMethod !== 'function') {
+      console.warn(`@retryable decorator: ${propertyKey} is not a function`);
+      return descriptor;
+    }
     
     descriptor.value = async function (...args: unknown[]) {
       return RetryUtils.execute(() => originalMethod.apply(this, args), options);
@@ -397,7 +407,17 @@ export function retryable(options: RetryOptions = {}) {
 
 export function retryableDatabase(options: Partial<RetryOptions> = {}) {
   return function (target: Record<string, unknown>, propertyKey: string, descriptor: PropertyDescriptor) {
+    if (!descriptor) {
+      console.warn(`@retryableDatabase decorator: PropertyDescriptor is undefined for ${propertyKey}`);
+      return descriptor;
+    }
+    
     const originalMethod = descriptor.value;
+    
+    if (typeof originalMethod !== 'function') {
+      console.warn(`@retryableDatabase decorator: ${propertyKey} is not a function`);
+      return descriptor;
+    }
     
     descriptor.value = async function (...args: unknown[]) {
       return RetryUtils.executeDatabase(() => originalMethod.apply(this, args), options);
@@ -409,7 +429,17 @@ export function retryableDatabase(options: Partial<RetryOptions> = {}) {
 
 export function retryableHttp(options: Partial<RetryOptions> = {}) {
   return function (target: Record<string, unknown>, propertyKey: string, descriptor: PropertyDescriptor) {
+    if (!descriptor) {
+      console.warn(`@retryableHttp decorator: PropertyDescriptor is undefined for ${propertyKey}`);
+      return descriptor;
+    }
+    
     const originalMethod = descriptor.value;
+    
+    if (typeof originalMethod !== 'function') {
+      console.warn(`@retryableHttp decorator: ${propertyKey} is not a function`);
+      return descriptor;
+    }
     
     descriptor.value = async function (...args: unknown[]) {
       return RetryUtils.executeHttp(() => originalMethod.apply(this, args), options);

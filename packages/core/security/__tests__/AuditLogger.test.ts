@@ -41,11 +41,16 @@ describe('AuditLogger', () => {
   describe('Basic Logging', () => {
     it('should log data access operations', async () => {
       const context: OperationContext = {
+        operation: 'read',
         userId: 'user123',
-        userRole: 'analyst',
-        purpose: 'data analysis',
-        ipAddress: '192.168.1.1',
         sessionId: 'session123',
+        purpose: 'data analysis',
+        environment: 'test',
+        timestamp: new Date(),
+        source: 'test-suite',
+        requestId: 'req-123',
+        userRole: 'analyst',
+        ipAddress: '192.168.1.1',
         requestedAt: new Date()
       };
       
@@ -475,9 +480,9 @@ describe('AuditLogger', () => {
     it('should emit error events on write failure', async () => {
       const errorBackend = {
         write: jest.fn<unknown[], unknown>().mockRejectedValue(new Error('Write failed')),
-        query: jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown as unknown as unknown),
-        delete: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown),
-        rotate: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown)
+        query: jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown as unknown),
+        delete: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown),
+        rotate: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown)
       };
       
       const errorLogger = new AuditLogger({
@@ -537,10 +542,10 @@ describe('AuditLogger', () => {
   describe('Storage Backend', () => {
     it('should support custom storage backends', async () => {
       const customBackend = {
-        write: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown),
-        query: jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown as unknown as unknown),
-        delete: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown),
-        rotate: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown)
+        write: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown),
+        query: jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown as unknown),
+        delete: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown),
+        rotate: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown)
       };
       
       const customLogger = new AuditLogger({

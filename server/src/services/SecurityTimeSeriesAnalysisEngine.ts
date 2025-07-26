@@ -599,10 +599,10 @@ export class SecurityTimeSeriesAnalysisEngine extends EventEmitter {
   private correlations: Map<string, TimeSeriesCorrelation> = new Map();
   private analysisHistory: Map<string, TimeSeriesAnalysisResult> = new Map();
   
-  private analysisModels: any = {};
-  private forecastingModels: any = {};
-  private anomalyDetectors: any = {};
-  private correlationAnalyzers: any = {};
+  private analysisModels: Record<string, unknown> = {};
+  private forecastingModels: Record<string, unknown> = {};
+  private anomalyDetectors: Record<string, unknown> = {};
+  private correlationAnalyzers: Record<string, unknown> = {};
   
   private isInitialized: boolean = false;
   private isShutdown: boolean = false;

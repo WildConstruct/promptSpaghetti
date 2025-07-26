@@ -22,7 +22,7 @@ import {
   RiskLevel,
   UpdatePriority,
   VersionStatus
-} from '../../../server/src/services/PolicyUpdateWorkflowService.ts';
+} from '../../../server/src/services/PolicyUpdateWorkflowService';
 
 // Re-export for tests
 export {
@@ -872,7 +872,10 @@ export class PolicyPreviewStagingService extends EventEmitter {
     };
   }
 
-  private async executeValidation(preview: PolicyPreview, validationType: ValidationType): Promise<PreviewValidationResult> {
+  private async executeValidation(
+    preview: PolicyPreview,
+    validationType: ValidationType
+  ): Promise<PreviewValidationResult> {
     const validationId = this.generateValidationId();
     
     // Implementation would run specific validation based on type
@@ -967,14 +970,21 @@ export class PolicyPreviewStagingService extends EventEmitter {
         triggerValue = deployment.metrics.errorRates;
         break;
       case RollbackTriggerType.PERFORMANCE_DEGRADATION:
-        triggerValue = deployment.metrics.pageLoadTimes.reduce((a, b) => a + b, 0) / deployment.metrics.pageLoadTimes.length;
+        triggerValue = deployment.metrics.pageLoadTimes.reduce(
+          (a,
+          b
+        ) => a + b, 0) / deployment.metrics.pageLoadTimes.length;
         break;
         // Add other trigger types
       }
 
       if (triggerValue > trigger.threshold) {
         if (deployment.autoRollbackEnabled) {
-          await this.rollbackStagingDeployment(deployment.deploymentId, `Auto-rollback triggered: ${trigger.description}`, 'system');
+          await this.rollbackStagingDeployment(
+            deployment.deploymentId,
+            `Auto-rollback triggered: ${trigger.description}`,
+            'system'
+          );
         } else {
           this.emit('rollbackTriggerActivated', {
             deploymentId: deployment.deploymentId,
@@ -1036,14 +1046,21 @@ export class PolicyPreviewStagingService extends EventEmitter {
   private async runAccessibilityValidation(preview: PolicyPreview): Promise<ValidationFinding[]> { return []; }
   private generateRecommendations(findings: ValidationFinding[]): string[] { return []; }
   private async generateSimulationScenarios(preview: PolicyPreview): Promise<SimulationScenario[]> { return []; }
-  private async analyzePolicyDifferences(baseVersion: string, compareVersion: string, policyId: string): Promise<PolicyDifference[]> { return []; }
+  private async analyzePolicyDifferences(
+    baseVersion: string,
+    compareVersion: string,
+    policyId: string
+  ): Promise<PolicyDifference[]> { return []; }
   private async analyzeComparisonImpact(differences: PolicyDifference[]): Promise<ComparisonImpactAnalysis> { return {} as any; }
   private async assessUserImpact(differences: PolicyDifference[]): Promise<UserImpactAssessment> { return {} as any; }
   private async compareCompliance(differences: PolicyDifference[]): Promise<ComplianceComparison> { return {} as any; }
   private async getUserSegment(userId: string): Promise<string> { return 'general'; }
   private async aggregateAnalytics(preview: PolicyPreview): Promise<PreviewAnalytics> { return {} as any; }
   private async validateProductionReadiness(preview: PolicyPreview): Promise<{ ready: boolean; reasons: string[] }> { return { ready: true, reasons: [] }; }
-  private async createProductionVersion(preview: PolicyPreview, options: any): Promise<string> { return `v${Date.now()}`; }
+  private async createProductionVersion(
+    preview: PolicyPreview,
+    options: any
+  ): Promise<string> { return `v${Date.now()}`; }
   private async cleanupStagingDeployments(preview: PolicyPreview): Promise<void> { /* Implementation */ }
   private async executeRollback(deployment: StagingDeployment): Promise<void> { /* Implementation */ }
   private startPeriodicTasks(): void { /* Implementation for cleanup, monitoring, etc. */ }

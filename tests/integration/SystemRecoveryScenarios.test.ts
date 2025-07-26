@@ -23,6 +23,8 @@ describe('System Recovery and Resilience Scenarios', () => {
   let testEnv: unknown;
 
   beforeEach(async () => {
+    jest.clearAllMocks();
+    jest.useFakeTimers('legacy');
     testEnv = await TestEnvironmentManager.createEnvironment('recovery-scenarios', {
       seed: 'recovery-test',
       mockWebSocket: true,
@@ -31,6 +33,7 @@ describe('System Recovery and Resilience Scenarios', () => {
   });
 
   afterEach(async () => {
+    jest.useRealTimers();
     await TestEnvironmentManager.cleanupAll();
   });
 
@@ -67,7 +70,7 @@ describe('System Recovery and Resilience Scenarios', () => {
             reconnectAttempts++;
             return Promise.resolve();
           })
-        } as any;
+        } as WebSocket & { reconnect: () => Promise<void> };
 
         const request = {
           headers: { 'user-agent': 'test-agent' },
@@ -83,7 +86,8 @@ describe('System Recovery and Resilience Scenarios', () => {
         // Simulate the client-side reconnection logic that would happen in a real scenario
         const simulateReconnection = async () => {
           for (let attempt = 1; attempt <= config.maxReconnectAttempts; attempt++) {
-            await AsyncTestingUtils.delay(config.reconnectInterval);
+            // Use fake timers for tests to prevent timeouts
+            jest.advanceTimersByTime(config.reconnectInterval);
             reconnectAttempts++;
             
             // In a real scenario, this would be a new WebSocket connection
@@ -149,7 +153,7 @@ describe('System Recovery and Resilience Scenarios', () => {
           } catch (error) {
             // Calculate expected delay for exponential backoff
             const expectedDelay = config.reconnectInterval * Math.pow(2, attempt - 1);
-            await AsyncTestingUtils.delay(expectedDelay);
+            jest.advanceTimersByTime(expectedDelay);
           }
         }
 
@@ -339,7 +343,7 @@ describe('System Recovery and Resilience Scenarios', () => {
         
         // Simulate corrupted state data
         mockStorage.getItem = jest.fn<unknown[], unknown>().mockReturnValue(
-          '{"corrupted": "json"}' // Invalid JSON (missing quotes around json value as unknown)
+          '{"corrupted": "json"}' // Invalid JSON (missing quotes around json value as unknown as unknown as unknown)
         );
 
         const graph: Graph = {

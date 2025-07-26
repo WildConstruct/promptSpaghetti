@@ -13,7 +13,7 @@ console.log('🎯 React Hooks Cleanup Script');
 console.log('🔧 Fixing missing dependencies and hook violations\n');
 
 // Get current hook violations
-function getHookViolations() {
+function getHookViolations(): string[] {
   try {
     const output = execSync('pnpm lint 2>&1 | grep "react-hooks"', { encoding: 'utf8' });
     return output.split('\n').filter(line => line.trim());
@@ -23,13 +23,13 @@ function getHookViolations() {
 }
 
 // Extract file path from lint output
-function extractFilePath(lintLine) {
+function extractFilePath(lintLine: string): string | null {
   const match = lintLine.match(/^(.+?):\d+:\d+/);
   return match ? match[1].trim() : null;
 }
 
 // Common hook fixes
-function fixHookViolations(content, filePath) {
+function fixHookViolations(content: string, filePath: string): { content: string; changes: number } {
   let fixed = content;
   let changes = 0;
 
@@ -71,7 +71,7 @@ function fixHookViolations(content, filePath) {
 }
 
 // Process a single file
-async function processFile(filePath) {
+async function processFile(filePath: string): Promise<number> {
   try {
     if (!fs.existsSync(filePath)) return 0;
     
@@ -109,7 +109,7 @@ async function processFile(filePath) {
 }
 
 // Main execution
-async function main() {
+async function main(): Promise<void> {
   console.log('📊 Getting baseline hook violations...');
   const initialViolations = getHookViolations();
   console.log(`📈 Found ${initialViolations.length} hook violations\n`);

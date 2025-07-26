@@ -6,7 +6,7 @@
  * and building trust through verified achievements.
  */
 
-import { identityValidationService } from '../auth/IdentityValidation';
+import { identityValidationService, IdentityValidationType } from '../auth/IdentityValidation';
 import { marketplaceMetrics } from '../analytics/MarketplaceMetrics';
 import { conversionTracker } from '../analytics/ConversionTracker';
 
@@ -533,7 +533,7 @@ export class BadgeSystem {
 
   private checkVerificationCriteria(metric: string, userId: string): boolean {
     const validationSummary = identityValidationService.getUserValidationSummary(userId);
-    return validationSummary.completedValidations.includes(metric);
+    return validationSummary.completedValidations.includes(metric as IdentityValidationType);
   }
 
   private getStatisticValue(metric: string, userProgress: UserBadgeProgress): number {

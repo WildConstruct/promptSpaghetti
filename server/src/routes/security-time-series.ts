@@ -23,7 +23,7 @@ import { SecurityPatternRecognitionEngine } from '../services/SecurityPatternRec
 // Global time series analysis engine instance
 let timeSeriesEngine: SecurityTimeSeriesAnalysisEngine | null = null;
 
-interface APIResponse<T = any> {
+interface APIResponse<T = unknown> {
   success: boolean;
   data?: T;
   error?: string;
@@ -40,7 +40,7 @@ interface AnalyzeTimeSeriesRequest {
       timestamp: number;
       value: number;
       confidence?: number;
-      metadata?: any;
+      metadata?: Record<string, unknown>;
     }[];
     metadata?: {
       data_frequency: string;

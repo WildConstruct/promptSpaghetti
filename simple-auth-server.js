@@ -31,7 +31,7 @@ const users = [
 ];
 
 // Mock JWT token creation
-const createMockToken = (user) => {
+const createMockToken = (user: any): string => {
   return Buffer.from(JSON.stringify({ 
     userId: user.id, 
     email: user.email,
@@ -41,10 +41,10 @@ const createMockToken = (user) => {
 };
 
 // Parse JSON body
-const parseJSON = (req) => {
+const parseJSON = (req: any): Promise<any> => {
   return new Promise((resolve, reject) => {
     let body = '';
-    req.on('data', chunk => {
+    req.on('data', (chunk: any) => {
       body += chunk.toString();
     });
     req.on('end', () => {
@@ -58,7 +58,7 @@ const parseJSON = (req) => {
 };
 
 // Send JSON response
-const sendJSON = (res, statusCode, data) => {
+const sendJSON = (res: any, statusCode: number, data: any): void => {
   res.writeHead(statusCode, {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
@@ -69,7 +69,7 @@ const sendJSON = (res, statusCode, data) => {
 };
 
 // Create server
-const server = http.createServer(async (req, res) => {
+const server = http.createServer(async (req: any, res: any) => {
   const { pathname, method } = url.parse(req.url, true);
   
   // Handle CORS preflight
@@ -89,7 +89,7 @@ const server = http.createServer(async (req, res) => {
       const { email, password } = await parseJSON(req);
       console.log('🔐 Login request:', { email });
       
-      const user = users.find(u => u.email === email && u.password === password);
+      const user = users.find((u: any) => u.email === email && u.password === password);
       
       if (!user) {
         return sendJSON(res, 401, { message: 'Invalid email or password' });
@@ -118,7 +118,7 @@ const server = http.createServer(async (req, res) => {
       const { email, password, firstName, lastName } = await parseJSON(req);
       console.log('📝 Register request:', { email });
       
-      if (users.find(u => u.email === email)) {
+      if (users.find((u: any) => u.email === email)) {
         return sendJSON(res, 400, { message: 'User with this email already exists' });
       }
       
@@ -159,7 +159,7 @@ const server = http.createServer(async (req, res) => {
         const token = authHeader.substring(7);
         const payload = JSON.parse(Buffer.from(token, 'base64').toString());
         
-        const user = users.find(u => u.id === payload.userId);
+        const user = users.find((u: any) => u.id === payload.userId);
         if (!user) {
           return sendJSON(res, 401, { message: 'Invalid token' });
         }

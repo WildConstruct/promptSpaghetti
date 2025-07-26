@@ -1,6 +1,6 @@
 import { graphToBundle } from '../server/src/exporter.js';
 
-export default async function handler(req, res) {
+export default async function handler(req: any, res: any): Promise<void> {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');

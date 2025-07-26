@@ -26,7 +26,7 @@ class CodeQualityAnalyzer {
     };
   }
 
-  loadConfig() {
+  loadConfig(): any {
     try {
       const configPath = path.join(__dirname, '../code-quality-config.json');
       return JSON.parse(fs.readFileSync(configPath, 'utf8'));
@@ -36,7 +36,7 @@ class CodeQualityAnalyzer {
     }
   }
 
-  getDefaultConfig() {
+  getDefaultConfig(): any {
     return {
       qualityGates: {
         complexity: { cyclomaticComplexity: 15, cognitiveComplexity: 15 },
@@ -81,18 +81,18 @@ class CodeQualityAnalyzer {
       );
       
       this.results.eslint = JSON.parse(result);
-      this.results.summary.errors += this.results.eslint.reduce((sum, file) => 
+      this.results.summary.errors += this.results.eslint.reduce((sum: number, file: any) => 
         sum + file.errorCount, 0);
-      this.results.summary.warnings += this.results.eslint.reduce((sum, file) => 
+      this.results.summary.warnings += this.results.eslint.reduce((sum: number, file: any) => 
         sum + file.warningCount, 0);
         
     } catch (error) {
       // ESLint returns non-zero exit code when issues found
       if (error.stdout) {
         this.results.eslint = JSON.parse(error.stdout);
-        this.results.summary.errors += this.results.eslint.reduce((sum, file) => 
+        this.results.summary.errors += this.results.eslint.reduce((sum: number, file: any) => 
           sum + file.errorCount, 0);
-        this.results.summary.warnings += this.results.eslint.reduce((sum, file) => 
+        this.results.summary.warnings += this.results.eslint.reduce((sum: number, file: any) => 
           sum + file.warningCount, 0);
       } else {
         console.warn(chalk.yellow('⚠️  ESLint analysis failed'));
@@ -113,7 +113,7 @@ class CodeQualityAnalyzer {
       };
       
       // Count TypeScript errors
-      const tsErrors = this.results.typescript.errors.filter(line => 
+      const tsErrors = this.results.typescript.errors.filter((line: string) => 
         line.includes('error TS'));
       this.results.summary.errors += tsErrors.length;
     }
@@ -144,7 +144,7 @@ class CodeQualityAnalyzer {
     }
   }
 
-  generateSuggestions() {
+  generateSuggestions(): void {
     const suggestions = [];
     
     // ESLint suggestions
@@ -175,14 +175,14 @@ class CodeQualityAnalyzer {
     this.results.summary.suggestions = suggestions;
   }
 
-  findComplexityIssues() {
+  findComplexityIssues(): any[] {
     if (!this.results.eslint) return [];
     
     const complexityIssues = [];
     const complexityThreshold = this.config.qualityGates.complexity.cyclomaticComplexity;
     
-    this.results.eslint.forEach(file => {
-      file.messages.forEach(message => {
+    this.results.eslint.forEach((file: any) => {
+      file.messages.forEach((message: any) => {
         if (message.ruleId === 'complexity' && message.severity === 1) {
           complexityIssues.push({
             category: 'Complexity',
@@ -200,7 +200,7 @@ class CodeQualityAnalyzer {
     return complexityIssues;
   }
 
-  findSecurityIssues() {
+  findSecurityIssues(): any[] {
     if (!this.results.eslint) return [];
     
     const securityIssues = [];
@@ -208,8 +208,8 @@ class CodeQualityAnalyzer {
       'no-eval', 'no-implied-eval', 'no-new-func', 'no-script-url'
     ];
     
-    this.results.eslint.forEach(file => {
-      file.messages.forEach(message => {
+    this.results.eslint.forEach((file: any) => {
+      file.messages.forEach((message: any) => {
         if (securityRules.includes(message.ruleId)) {
           securityIssues.push({
             category: 'Security',
@@ -227,7 +227,7 @@ class CodeQualityAnalyzer {
     return securityIssues;
   }
 
-  findPerformanceIssues() {
+  findPerformanceIssues(): any[] {
     if (!this.results.eslint) return [];
     
     const performanceIssues = [];
@@ -235,8 +235,8 @@ class CodeQualityAnalyzer {
       'no-loop-func', 'prefer-const', 'no-await-in-loop'
     ];
     
-    this.results.eslint.forEach(file => {
-      file.messages.forEach(message => {
+    this.results.eslint.forEach((file: any) => {
+      file.messages.forEach((message: any) => {
         if (performanceRules.includes(message.ruleId)) {
           performanceIssues.push({
             category: 'Performance',
@@ -254,7 +254,7 @@ class CodeQualityAnalyzer {
     return performanceIssues;
   }
 
-  generateCoverageSuggestions() {
+  generateCoverageSuggestions(): any[] {
     const suggestions = [];
     
     try {
@@ -280,7 +280,7 @@ class CodeQualityAnalyzer {
     return suggestions;
   }
 
-  displayResults() {
+  displayResults(): void {
     console.log(chalk.blue('\n📊 Code Quality Analysis Results\n'));
     console.log('═'.repeat(60));
     
@@ -296,9 +296,9 @@ class CodeQualityAnalyzer {
       console.log('─'.repeat(40));
       
       this.results.summary.suggestions
-        .sort((a, b) => this.getImpactWeight(b.impact) - this.getImpactWeight(a.impact))
+        .sort((a: any, b: any) => this.getImpactWeight(b.impact) - this.getImpactWeight(a.impact))
         .slice(0, 10) // Show top 10 suggestions
-        .forEach((suggestion, index) => {
+        .forEach((suggestion: any, index: number) => {
           const icon = this.getImpactIcon(suggestion.impact);
           const color = this.getSeverityColor(suggestion.severity);
           
@@ -338,17 +338,17 @@ class CodeQualityAnalyzer {
     console.log(chalk.green('✨ Analysis complete! Focus on high-impact improvements first.'));
   }
 
-  getImpactWeight(impact) {
+  getImpactWeight(impact: string): number {
     const weights = { high: 3, medium: 2, low: 1 };
     return weights[impact] || 1;
   }
 
-  getImpactIcon(impact) {
+  getImpactIcon(impact: string): string {
     const icons = { high: '🔥', medium: '⚡', low: '💡' };
     return icons[impact] || '💡';
   }
 
-  getSeverityColor(severity) {
+  getSeverityColor(severity: string): any {
     const colors = {
       error: chalk.red,
       warning: chalk.yellow,

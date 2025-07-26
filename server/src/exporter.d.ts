@@ -1632,7 +1632,7 @@ export declare function graphToSceneAwareBundle(graph: Graph, options: {
  * @param bundle The bundle to validate
  * @returns True if valid, false otherwise
  */
-export declare function validateGeneratorBundle(bundle: any): boolean;
+export declare function validateGeneratorBundle(bundle: Record<string, unknown>): boolean;
 /**
  * Converts a GeneratorBundle back to a Graph format
  * @param bundle GeneratorBundle to convert
@@ -1645,13 +1645,13 @@ export declare function bundleToGraph(bundle: GeneratorBundle): Graph;
  */
 export interface ExportRequest {
     format: string;
-    data: any;
-    options: any;
+    data: Record<string, unknown>;
+    options: Record<string, unknown>;
     filename: string;
 }
 export interface ExportResult {
     type: 'text' | 'binary';
-    data: any;
+    data: Record<string, unknown>;
     mimeType: string;
     shouldDownload?: boolean;
 }

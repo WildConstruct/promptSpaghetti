@@ -127,7 +127,7 @@ const initialState: FileBrowserState = {
 
 export const FileBrowser: React.FC<FileBrowserProps> = ({
   initialPath = '/',
-  onFileSelect,
+  // onFileSelect, // Commented out unused prop
   onFileDoubleClick,
   onSelectionChange,
   showCreateFolder = true,
@@ -136,7 +136,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
   height = 400,
   className = ''
 }) => {
-  const { user: _user, isAuthenticated } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
   const analytics = useFileOperationTracking();
   const [state, setState] = useState<FileBrowserState>({
     ...initialState,
@@ -158,7 +158,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
     if (isAuthenticated) {
       loadDirectory(state.currentPath);
     }
-  }, [isAuthenticated, state.currentPath]);
+  }, [isAuthenticated, state.currentPath, loadDirectory]);
 
   // File operations
   const loadDirectory = useCallback(async (path: string) => {
@@ -286,7 +286,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
     ];
 
     setContextMenu({ x, y, items: menuItems, targetItem: item });
-  }, [onFileDoubleClick]);
+  }, [onFileDoubleClick, analytics, handleDelete, handleDuplicate, handleRename]);
 
   const handleDrop = useCallback(async (dragData: DragDropData) => {
     // Create operation record for tracking
@@ -376,7 +376,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
   }, [analytics, state.currentPath]);
 
   // File operation handlers
-  const handleRename = async (item: FileItem): Promise<void> => {
+  const handleRename = useCallback(async (item: FileItem): Promise<void> => {
     const newName = prompt('Enter new name:', item.name);
     if (newName && newName !== item.name) {
       try {
@@ -400,9 +400,9 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
         console.error('Rename operation failed:', error);
       }
     }
-  };
+  }, [analytics, state.currentPath]);
 
-  const handleDuplicate = async (item: FileItem): Promise<void> => {
+  const handleDuplicate = useCallback(async (item: FileItem): Promise<void> => {
     try {
       // Generate a unique name for the duplicate
       const fileExtension = item.name.includes('.') ? `.${item.name.split('.').pop() ?? ''}` : '';
@@ -429,9 +429,9 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
       alert(`Failed to duplicate file: ${errorMessage}`);
       console.error('Duplicate operation failed:', error);
     }
-  };
+  }, [analytics, state.currentPath]);
 
-  const handleDelete = async (item: FileItem): Promise<void> => {
+  const handleDelete = useCallback(async (item: FileItem): Promise<void> => {
     if (confirm(`Are you sure you want to delete "${item.name}"?`)) {
       try {
         const result = await fileService.deleteFile(item.path);
@@ -454,7 +454,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
         console.error('Delete operation failed:', error);
       }
     }
-  };
+  }, [analytics, state.currentPath]);
 
   const handleShowProperties = async (item: FileItem) => {
     try {
@@ -652,7 +652,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
                 regex.test(node.metadata.description ?? '') ||
                 regex.test(node.metadata.author ?? '')
               );
-            } catch (e) {
+            } catch {
               // Fall back to simple string matching on regex error
               matchesName = getValue(node.name).includes(searchTerm);
               matchesTags = node.tags?.some(tag => getValue(tag).includes(searchTerm)) || false;
@@ -741,16 +741,18 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
         case 'lastModified':
           comparison = a.lastModified.getTime() - b.lastModified.getTime();
           break;
-        case 'size':
+        case 'size': {
           const sizeA = a.type === 'file' ? a.size ?? 0 : 0;
           const sizeB = b.type === 'file' ? b.size ?? 0 : 0;
           comparison = sizeA - sizeB;
           break;
-        case 'type':
+        }
+        case 'type': {
           const extA = a.type === 'file' ? a.extension ?? '' : '';
           const extB = b.type === 'file' ? b.extension ?? '' : '';
           comparison = extA.localeCompare(extB);
           break;
+        }
         default:
           comparison = a.name.localeCompare(b.name);
         }

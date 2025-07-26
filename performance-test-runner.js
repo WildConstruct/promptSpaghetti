@@ -71,7 +71,7 @@ const PERFORMANCE_TEST_CONFIG = {
  * Performance Test Orchestrator
  */
 class PerformanceTestOrchestrator {
-  constructor(config = PERFORMANCE_TEST_CONFIG) {
+  constructor(config: any = PERFORMANCE_TEST_CONFIG) {
     this.config = config;
     this.results = {
       serverMetrics: null,
@@ -86,7 +86,7 @@ class PerformanceTestOrchestrator {
   /**
    * Run comprehensive performance testing
    */
-  async runPerformanceTests() {
+  async runPerformanceTests(): Promise<any> {
     console.log('🚀 Starting Comprehensive Performance Testing');
     console.log('=============================================\n');
 
@@ -144,7 +144,7 @@ class PerformanceTestOrchestrator {
   /**
    * Start server performance profiling
    */
-  async startServerProfiling() {
+  async startServerProfiling(): Promise<any> {
     console.log('📊 Starting server performance profiling...');
 
     try {
@@ -195,7 +195,7 @@ process.on('SIGTERM', async () => {
   /**
    * Stop server performance profiling
    */
-  async stopServerProfiling(profilerProcess) {
+  async stopServerProfiling(profilerProcess: any): Promise<void> {
     if (!profilerProcess) return;
 
     console.log('⏹️  Stopping server performance profiling...');
@@ -218,7 +218,7 @@ process.on('SIGTERM', async () => {
   /**
    * Run staggered load tests
    */
-  async runStaggeredLoadTests() {
+  async runStaggeredLoadTests(): Promise<void> {
     console.log('🎯 Starting staggered load tests...');
 
     const loadTestPromises = this.config.loadTests.map(async (testConfig, index) => {
@@ -258,7 +258,7 @@ process.on('SIGTERM', async () => {
   /**
    * Run individual load test
    */
-  async runLoadTest(testConfig) {
+  async runLoadTest(testConfig: any): Promise<any> {
     const startTime = Date.now();
 
     try {
@@ -293,7 +293,7 @@ process.on('SIGTERM', async () => {
   /**
    * Start client performance profiling
    */
-  async startClientProfiling() {
+  async startClientProfiling(): Promise<any> {
     console.log('🌐 Starting client performance profiling...');
 
     try {
@@ -315,7 +315,7 @@ process.on('SIGTERM', async () => {
   /**
    * Stop client performance profiling
    */
-  async stopClientProfiling(clientProfiler) {
+  async stopClientProfiling(clientProfiler: any): Promise<any> {
     console.log('⏹️  Client profiling configuration saved');
     // Client profiling is managed through the browser
     return clientProfiler;
@@ -324,7 +324,7 @@ process.on('SIGTERM', async () => {
   /**
    * Generate client profiler HTML
    */
-  generateClientProfilerHTML() {
+  generateClientProfilerHTML(): string {
     return `
 <!DOCTYPE html>
 <html lang="en">
@@ -634,7 +634,7 @@ process.on('SIGTERM', async () => {
   /**
    * Perform system health check
    */
-  async performSystemHealthCheck(phase) {
+  async performSystemHealthCheck(phase: string): Promise<void> {
     console.log(`🩺 Performing ${phase} system health check...`);
 
     const healthData = {
@@ -682,7 +682,7 @@ process.on('SIGTERM', async () => {
   /**
    * Generate comprehensive performance analysis report
    */
-  async generateComprehensiveReport() {
+  async generateComprehensiveReport(): Promise<any> {
     console.log('📊 Generating comprehensive performance analysis report...');
 
     const report = {
@@ -716,7 +716,7 @@ process.on('SIGTERM', async () => {
   /**
    * Generate executive summary
    */
-  generateExecutiveSummary() {
+  generateExecutiveSummary(): any {
     const successfulTests = this.results.loadTestResults.filter(t => t.result.success).length;
     const totalTests = this.results.loadTestResults.length;
     const testSuccessRate = totalTests > 0 ? (successfulTests / totalTests) * 100 : 0;
@@ -734,7 +734,7 @@ process.on('SIGTERM', async () => {
   /**
    * Assess system stability
    */
-  assessSystemStability() {
+  assessSystemStability(): string {
     const healthChecks = this.results.systemHealth;
     if (healthChecks.length === 0) return 'unknown';
 
@@ -745,7 +745,7 @@ process.on('SIGTERM', async () => {
   /**
    * Calculate overall performance grade
    */
-  calculateOverallGrade() {
+  calculateOverallGrade(): string {
     // Simplified grading based on test success rate and system stability
     const summary = this.generateExecutiveSummary();
     
@@ -759,7 +759,7 @@ process.on('SIGTERM', async () => {
   /**
    * Aggregate performance metrics
    */
-  async aggregatePerformanceMetrics() {
+  async aggregatePerformanceMetrics(): Promise<any> {
     const metrics = {
       server: await this.loadServerMetrics(),
       client: await this.loadClientMetrics(),
@@ -772,7 +772,7 @@ process.on('SIGTERM', async () => {
   /**
    * Load server metrics from profiles
    */
-  async loadServerMetrics() {
+  async loadServerMetrics(): Promise<any> {
     try {
       const profileDir = path.join(this.config.reporting.outputDir, 'server-profiles');
       const files = await fs.readdir(profileDir);
@@ -799,7 +799,7 @@ process.on('SIGTERM', async () => {
   /**
    * Load client metrics from localStorage
    */
-  async loadClientMetrics() {
+  async loadClientMetrics(): Promise<any> {
     // Client metrics would be retrieved from the browser's localStorage
     // This is a placeholder for the structure
     return {
@@ -810,7 +810,7 @@ process.on('SIGTERM', async () => {
   /**
    * Aggregate load test metrics
    */
-  aggregateLoadTestMetrics() {
+  aggregateLoadTestMetrics(): any {
     const successful = this.results.loadTestResults.filter(t => t.result.success);
     
     if (successful.length === 0) return null;
@@ -829,7 +829,7 @@ process.on('SIGTERM', async () => {
   /**
    * Generate performance recommendations
    */
-  generatePerformanceRecommendations() {
+  generatePerformanceRecommendations(): any[] {
     const recommendations = [];
 
     // Based on test results
@@ -870,7 +870,7 @@ process.on('SIGTERM', async () => {
   /**
    * Generate chart data for visualization
    */
-  generateChartData() {
+  generateChartData(): any {
     return {
       testResults: {
         labels: this.results.loadTestResults.map(t => t.name),
@@ -887,7 +887,7 @@ process.on('SIGTERM', async () => {
   /**
    * Generate HTML report
    */
-  async generateHTMLReport(report) {
+  async generateHTMLReport(report: any): Promise<void> {
     const htmlContent = `
 <!DOCTYPE html>
 <html lang="en">
@@ -975,7 +975,7 @@ process.on('SIGTERM', async () => {
   /**
    * Utility methods
    */
-  async ensureOutputDir() {
+  async ensureOutputDir(): Promise<void> {
     try {
       await fs.access(this.config.reporting.outputDir);
     } catch (error) {
@@ -983,7 +983,7 @@ process.on('SIGTERM', async () => {
     }
   }
 
-  delay(ms) {
+  delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 }
@@ -991,7 +991,7 @@ process.on('SIGTERM', async () => {
 /**
  * Main execution
  */
-async function runPerformanceAnalysis() {
+async function runPerformanceAnalysis(): Promise<any> {
   const orchestrator = new PerformanceTestOrchestrator();
   
   try {

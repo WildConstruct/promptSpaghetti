@@ -71,8 +71,7 @@ interface EnhancedPreviewModalProps {
   maxResults?: number;
 }
 
-export   const [activeTab, setActiveTab] = useState<'results' | 'analysis' | 'visualization'>('results');
-  const [expandedResult, setExpandedResult] = useState<string | null>(null);
+export   const [expandedResult, setExpandedResult] = useState<string | null>(null);
   const [ratingInProgress, setRatingInProgress] = useState<string | null>(null);
   const [noteEditing, setNoteEditing] = useState<string | null>(null);
   const [tempNote, setTempNote] = useState('');

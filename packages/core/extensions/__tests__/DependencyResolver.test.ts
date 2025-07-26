@@ -180,7 +180,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
         });
       });
 
-      dependencyResolver.buildDependencyGraph.mockReturnValue(expectedGraph as unknown as unknown as unknown);
+      dependencyResolver.buildDependencyGraph.mockReturnValue(expectedGraph as unknown as unknown as unknown as unknown as unknown);
 
       const graph = dependencyResolver.buildDependencyGraph(mockPlugins);
       
@@ -247,7 +247,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
 
       dependencyResolver.getInstallationOrder.mockReturnValue([
         'level-1-a', 'level-1-b', 'level-2-a', 'level-3-a'
-      ] as unknown as unknown as unknown);
+      ] as unknown as unknown as unknown as unknown as unknown);
 
       const installOrder = dependencyResolver.getInstallationOrder(complexPlugins);
       
@@ -315,7 +315,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
         }
       };
 
-      dependencyResolver.validateVersionConstraints.mockReturnValue(false as unknown as unknown as unknown);
+      dependencyResolver.validateVersionConstraints.mockReturnValue(false as unknown as unknown as unknown as unknown as unknown);
 
       const result = dependencyResolver.validateVersionConstraints(incompatiblePlugin, mockPlugins);
       
@@ -403,8 +403,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
       dependencyResolver.detectCircularDependencies.mockReturnValue(
         ['plugin-a',
         'plugin-b',
-        'plugin-a'] as unknown as unknown
-       as unknown);
+        'plugin-a'] as unknown as unknown);
 
       const result = dependencyResolver.detectCircularDependencies(circularDeps);
       
@@ -422,7 +421,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
 
       dependencyResolver.detectCircularDependencies.mockReturnValue([
         'plugin-a', 'plugin-b', 'plugin-d', 'plugin-a'
-      ] as unknown as unknown as unknown);
+      ] as unknown as unknown as unknown as unknown as unknown);
 
       const result = dependencyResolver.detectCircularDependencies(complexCircular);
       
@@ -437,7 +436,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
         ['advanced-plugin', ['ui-plugin', 'utils-plugin']]
       ]);
 
-      dependencyResolver.detectCircularDependencies.mockReturnValue(null as unknown as unknown as unknown);
+      dependencyResolver.detectCircularDependencies.mockReturnValue(null as unknown as unknown as unknown as unknown as unknown);
 
       const result = dependencyResolver.detectCircularDependencies(acyclicDeps);
       
@@ -451,8 +450,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
 
       dependencyResolver.detectCircularDependencies.mockReturnValue(
         ['broken-plugin',
-        'broken-plugin'] as unknown as unknown
-       as unknown);
+        'broken-plugin'] as unknown as unknown);
 
       const result = dependencyResolver.detectCircularDependencies(selfReferencingDeps);
       
@@ -479,7 +477,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
         ['shared-lib', '1.2.0'] // Highest version that satisfies both constraints
       ]);
 
-      dependencyResolver.resolveConflicts.mockReturnValue(expectedResolution as unknown as unknown as unknown);
+      dependencyResolver.resolveConflicts.mockReturnValue(expectedResolution as unknown as unknown as unknown as unknown as unknown);
 
       const result = dependencyResolver.resolveConflicts(conflicts);
       
@@ -620,7 +618,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
         'ui-framework', 'data-layer', 'auth-plugin', 'app-plugin'
       ];
 
-      dependencyResolver.getInstallationOrder.mockReturnValue(expectedOrder as unknown as unknown as unknown);
+      dependencyResolver.getInstallationOrder.mockReturnValue(expectedOrder as unknown as unknown as unknown as unknown as unknown);
 
       const result = dependencyResolver.getInstallationOrder(complexPlugins);
       
@@ -720,7 +718,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
     });
 
     it('should handle empty dependency lists', async () => {
-      dependencyResolver.resolveDependencies.mockResolvedValue([] as unknown as unknown as unknown);
+      dependencyResolver.resolveDependencies.mockResolvedValue([] as unknown as unknown as unknown as unknown as unknown);
 
       const result = await dependencyResolver.resolveDependencies([]);
       
@@ -734,7 +732,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
         { id: 'plugin-3', name: 'Plugin 3', version: '1.0.0' } // No dependencies field
       ];
 
-      dependencyResolver.resolveDependencies.mockResolvedValue(independentPlugins as unknown as unknown as unknown);
+      dependencyResolver.resolveDependencies.mockResolvedValue(independentPlugins as unknown as unknown as unknown as unknown as unknown);
 
       const result = await dependencyResolver.resolveDependencies(independentPlugins);
       

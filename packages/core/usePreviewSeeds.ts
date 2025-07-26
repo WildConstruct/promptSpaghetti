@@ -25,7 +25,9 @@ interface PreviewResult {
   lockedNote?: string;
 }
 
-export   const [error, setError] = useState<string | null>(null);
+export function usePreviewSeeds() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [results, setResults] = useState<PreviewResult[]>([]);
   const [aggregateError, setAggregateError] = useState<string | null>(null);
   const [performanceStats, setPerformanceStats] = useState<{

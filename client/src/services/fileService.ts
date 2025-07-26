@@ -36,7 +36,7 @@ export interface FileServiceDependencies {
 export interface FileOperationResponse {
   success: boolean;
   message?: string;
-  data?: any;
+  data?: unknown;
   error?: string;
 }
 
@@ -122,13 +122,16 @@ class FileService {
       return await this.makeRequest<TreeNode[]>(`/api/files/list?path=${encodeURIComponent(path)}`);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      console.error('Failed to list directory:', {
+      this.deps.logger.error('Failed to list directory', {
         error: errorMessage,
         path,
         timestamp: new Date().toISOString()
       });
       // Return mock data for development
-      return this.getMockDirectoryData(path);
+      if (this.deps.config.enableMockFallback) {
+        return this.getMockDirectoryData(path);
+      }
+      throw error;
     }
   }
 
@@ -143,18 +146,21 @@ class FileService {
       });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      console.error('Failed to move file:', {
+      this.deps.logger.error('Failed to move file', {
         error: errorMessage,
         sourcePath,
         targetPath,
         timestamp: new Date().toISOString()
       });
       // Return mock success for development
-      return {
-        success: true,
-        message: `Moved ${sourcePath} to ${targetPath}`,
-        data: { sourcePath, targetPath, operation: 'move' }
-      };
+      if (this.deps.config.enableMockFallback) {
+        return {
+          success: true,
+          message: `Moved ${sourcePath} to ${targetPath}`,
+          data: { sourcePath, targetPath, operation: 'move' }
+        };
+      }
+      throw error;
     }
   }
 
@@ -169,18 +175,21 @@ class FileService {
       });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      console.error('Failed to copy file:', {
+      this.deps.logger.error('Failed to copy file', {
         error: errorMessage,
         sourcePath,
         targetPath,
         timestamp: new Date().toISOString()
       });
       // Return mock success for development
-      return {
-        success: true,
-        message: `Copied ${sourcePath} to ${targetPath}`,
-        data: { sourcePath, targetPath, operation: 'copy' }
-      };
+      if (this.deps.config.enableMockFallback) {
+        return {
+          success: true,
+          message: `Copied ${sourcePath} to ${targetPath}`,
+          data: { sourcePath, targetPath, operation: 'copy' }
+        };
+      }
+      throw error;
     }
   }
 
@@ -194,13 +203,22 @@ class FileService {
         body: JSON.stringify({ path, newName })
       });
     } catch (error) {
-      console.error('Failed to rename file:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      this.deps.logger.error('Failed to rename file', {
+        error: errorMessage,
+        path,
+        newName,
+        timestamp: new Date().toISOString()
+      });
       // Return mock success for development
-      return {
-        success: true,
-        message: `Renamed file to ${newName}`,
-        data: { oldPath: path, newName }
-      };
+      if (this.deps.config.enableMockFallback) {
+        return {
+          success: true,
+          message: `Renamed file to ${newName}`,
+          data: { oldPath: path, newName }
+        };
+      }
+      throw error;
     }
   }
 
@@ -214,13 +232,21 @@ class FileService {
         body: JSON.stringify({ path })
       });
     } catch (error) {
-      console.error('Failed to delete file:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      this.deps.logger.error('Failed to delete file', {
+        error: errorMessage,
+        path,
+        timestamp: new Date().toISOString()
+      });
       // Return mock success for development
-      return {
-        success: true,
-        message: `Deleted ${path}`,
-        data: { path }
-      };
+      if (this.deps.config.enableMockFallback) {
+        return {
+          success: true,
+          message: `Deleted ${path}`,
+          data: { path }
+        };
+      }
+      throw error;
     }
   }
 
@@ -234,13 +260,22 @@ class FileService {
         body: JSON.stringify({ parentPath, folderName })
       });
     } catch (error) {
-      console.error('Failed to create folder:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      this.deps.logger.error('Failed to create folder', {
+        error: errorMessage,
+        parentPath,
+        folderName,
+        timestamp: new Date().toISOString()
+      });
       // Return mock success for development
-      return {
-        success: true,
-        message: `Created folder ${folderName}`,
-        data: { parentPath, folderName, path: `${parentPath}/${folderName}` }
-      };
+      if (this.deps.config.enableMockFallback) {
+        return {
+          success: true,
+          message: `Created folder ${folderName}`,
+          data: { parentPath, folderName, path: `${parentPath}/${folderName}` }
+        };
+      }
+      throw error;
     }
   }
 
@@ -253,10 +288,11 @@ class FileService {
       formData.append('file', file);
       formData.append('parentPath', parentPath);
 
-      const response = await fetch(`${this.baseUrl}/api/files/upload`, {
+      const token = this.deps.authProvider.getToken();
+      const response = await fetch(`${this.deps.config.baseUrl}/api/files/upload`, {
         method: 'POST',
         headers: {
-          'Authorization': useAuthStore.getState().token ? `Bearer ${useAuthStore.getState().token}` : ''
+          'Authorization': token ? `Bearer ${token}` : ''
           // Don't set Content-Type for FormData, let browser set it with boundary
         },
         body: formData
@@ -268,13 +304,23 @@ class FileService {
 
       return await response.json();
     } catch (error) {
-      console.error('Failed to upload file:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      this.deps.logger.error('Failed to upload file', {
+        error: errorMessage,
+        parentPath,
+        fileName: file.name,
+        fileSize: file.size,
+        timestamp: new Date().toISOString()
+      });
       // Return mock success for development
-      return {
-        success: true,
-        message: `Uploaded ${file.name}`,
-        data: { parentPath, fileName: file.name, size: file.size }
-      };
+      if (this.deps.config.enableMockFallback) {
+        return {
+          success: true,
+          message: `Uploaded ${file.name}`,
+          data: { parentPath, fileName: file.name, size: file.size }
+        };
+      }
+      throw error;
     }
   }
 
@@ -285,7 +331,12 @@ class FileService {
     try {
       return await this.makeRequest<TreeNode>(`/api/files/properties?path=${encodeURIComponent(path)}`);
     } catch (error) {
-      console.error('Failed to get file properties:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      this.deps.logger.error('Failed to get file properties', {
+        error: errorMessage,
+        path,
+        timestamp: new Date().toISOString()
+      });
       return null;
     }
   }
@@ -297,7 +348,13 @@ class FileService {
     try {
       return await this.makeRequest<TreeNode[]>(`/api/files/search?q=${encodeURIComponent(query)}&searchIn=${searchIn}`);
     } catch (error) {
-      console.error('Failed to search files:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      this.deps.logger.error('Failed to search files', {
+        error: errorMessage,
+        query,
+        searchIn,
+        timestamp: new Date().toISOString()
+      });
       return [];
     }
   }
@@ -309,7 +366,12 @@ class FileService {
     try {
       return await this.makeRequest<FileStats>(`/api/files/stats?path=${encodeURIComponent(path)}`);
     } catch (error) {
-      console.error('Failed to get file stats:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      this.deps.logger.error('Failed to get file stats', {
+        error: errorMessage,
+        path,
+        timestamp: new Date().toISOString()
+      });
       return {
         totalFiles: 0,
         totalFolders: 0,
@@ -327,7 +389,12 @@ class FileService {
       const response = await this.makeRequest<{ exists: boolean }>(`/api/files/exists?path=${encodeURIComponent(path)}`);
       return response.exists;
     } catch (error) {
-      console.error('Failed to check file existence:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      this.deps.logger.error('Failed to check file existence', {
+        error: errorMessage,
+        path,
+        timestamp: new Date().toISOString()
+      });
       return false;
     }
   }
@@ -346,13 +413,23 @@ class FileService {
         body: JSON.stringify({ operation, paths, targetPath })
       });
     } catch (error) {
-      console.error('Failed to perform batch operation:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      this.deps.logger.error('Failed to perform batch operation', {
+        error: errorMessage,
+        operation,
+        paths,
+        targetPath,
+        timestamp: new Date().toISOString()
+      });
       // Return mock success for each item
-      return paths.map(path => ({
-        success: true,
-        message: `${operation} operation completed for ${path}`,
-        data: { path, operation, targetPath }
-      }));
+      if (this.deps.config.enableMockFallback) {
+        return paths.map(path => ({
+          success: true,
+          message: `${operation} operation completed for ${path}`,
+          data: { path, operation, targetPath }
+        }));
+      }
+      throw error;
     }
   }
 
@@ -477,5 +554,46 @@ class FileService {
   }
 }
 
-// Export singleton instance
-export const fileService = new FileService();
+// Concrete Implementation Classes
+class DefaultHttpClient implements HttpClient {
+  async request<T>(url: string, options: RequestInit = {}): Promise<T> {
+    const response = await fetch(url, options);
+    
+    if (!response.ok) {
+      let errorData = { message: `Request failed with status ${response.status}` };
+      try {
+        errorData = await response.json();
+      } catch {
+        // Use default error data if JSON parsing fails
+      }
+      throw new Error(errorData.message ?? `Request failed with status ${response.status}`);
+    }
+    
+    return await response.json();
+  }
+}
+
+class AuthStoreProvider implements AuthProvider {
+  getToken(): string | null {
+    return useAuthStore.getState().token;
+  }
+}
+
+class ConsoleLogger implements Logger {
+  error(message: string, context?: Record<string, unknown>): void {
+    console.error(`[FileService] ${message}`, context);
+  }
+  
+  info(message: string, context?: Record<string, unknown>): void {
+    console.info(`[FileService] ${message}`, context);
+  }
+  
+  warn(message: string, context?: Record<string, unknown>): void {
+    console.warn(`[FileService] ${message}`, context);
+  }
+}
+
+// Export singleton instance with default dependencies
+export 
+// Export class for custom dependency injection
+export { FileService };

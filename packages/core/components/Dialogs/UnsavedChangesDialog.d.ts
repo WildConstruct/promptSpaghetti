@@ -3,14 +3,6 @@
  * Shows confirmation dialog with Save/Don't Save/Cancel options
  */
 import React from 'react';
-interface UnsavedChangesDialogProps {
-    isOpen: boolean;
-    projectName?: string;
-    onSave: () => void;
-    onDontSave: () => void;
-    onCancel: () => void;
-    actionDescription?: string;
-}
-export declare const UnsavedChangesDialog: React.FC<UnsavedChangesDialogProps>;
-export {};
+export declare const overlayStyle: React.CSSProperties;
+export default UnsavedChangesDialog;
 //# sourceMappingURL=UnsavedChangesDialog.d.ts.map

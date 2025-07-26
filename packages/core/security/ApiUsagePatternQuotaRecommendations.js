@@ -1138,7 +1138,9 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
     generateRecommendationReason(pattern, current, recommended) {
         const reasons = [];
         if (recommended.requestsPerSecond > current.requestsPerSecond) {
-            reasons.push(`Usage pattern shows need for higher base quota (current: ${current.requestsPerSecond}/s, pattern peak: ${pattern.metrics.peakRequestRate})`);
+            reasons.push(`Usage pattern shows need for higher base quota (current: ${current.requestsPerSecond}/s,
+        pattern peak: ${pattern.metrics.peakRequestRate}
+      )`);
         }
         if (recommended.burstAllowance > current.burstAllowance) {
             reasons.push(`High burstiness (${pattern.characteristics.burstiness.toFixed(2)}) requires increased burst allowance`);
@@ -1223,7 +1225,6 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
     calculateFairnessImpact(recommendation, fairnessAnalysis) {
         // Calculate how this recommendation would affect overall fairness
         // Negative values indicate worsening fairness
-        const currentScore = fairnessAnalysis.overallFairnessScore;
         const quotaChange = recommendation.recommendedQuota.requestsPerSecond / recommendation.currentQuota.requestsPerSecond;
         // Large quota increases for already high-quota users worsen fairness
         if (quotaChange > 1.5 && recommendation.currentQuota.requestsPerSecond > 100) {

@@ -219,8 +219,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
 
   const categories = ['Business', 'Events', 'Marketing', 'Creative', 'Educational', 'Technology'];
   const contentTypes = ['Template', 'Asset Pack', 'Component', 'Theme', 'Tool'];
-  const _____languages = ['English', 'Spanish', 'French', 'German', 'Portuguese'];
-  const creatorTiers = ['premium', 'verified', 'community'];
+    const creatorTiers = ['premium', 'verified', 'community'];
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
@@ -824,7 +823,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
         </TabsContent>
       </Tabs>
 
-      <style jsx>{`
+      <style>{`
         .content-selection-criteria {
           max-width: 1400px;
           margin: 0 auto;

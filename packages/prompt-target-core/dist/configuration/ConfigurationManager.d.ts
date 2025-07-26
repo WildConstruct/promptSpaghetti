@@ -10,7 +10,7 @@ export declare class ConfigurationManager {
     private presets;
     private schemas;
     private changeListeners;
-    constructor(logger: unknown, cache: unknown);
+    constructor(logger: any, cache: any);
     /**
      * Register configuration schema for an adaptor
      */
@@ -18,12 +18,7 @@ export declare class ConfigurationManager {
     /**
      * Set configuration for an adaptor with validation
      */
-    setConfiguration(
-      adaptorId: string,
-      config: Record<string,
-      unknown>,
-      options?: SetConfigurationOptions
-    ): Promise<void>;
+    setConfiguration(adaptorId: string, config: Record<string, any>, options?: SetConfigurationOptions): Promise<void>;
     /**
      * Get configuration for an adaptor
      */
@@ -31,14 +26,14 @@ export declare class ConfigurationManager {
     /**
      * Get configuration value with type safety
      */
-    getConfigurationValue<T = unknown>(adaptorId: string, path: string, defaultValue?: T): T | undefined;
+    getConfigurationValue<T = any>(adaptorId: string, path: string, defaultValue?: T): T | undefined;
     /**
      * Update specific configuration values
      */
     updateConfiguration(
       adaptorId: string,
       updates: Record<string,
-      unknown>,
+      any>,
       options?: UpdateConfigurationOptions
     ): Promise<void>;
     /**
@@ -48,7 +43,7 @@ export declare class ConfigurationManager {
     /**
      * Apply configuration preset to an adaptor
      */
-    applyPreset(adaptorId: string, presetId: string, overrides?: Record<string, unknown>): Promise<void>;
+    applyPreset(adaptorId: string, presetId: string, overrides?: Record<string, any>): Promise<void>;
     /**
      * Import configuration from various formats
      */
@@ -64,7 +59,7 @@ export declare class ConfigurationManager {
     /**
      * Validate configuration against schema
      */
-    validateConfiguration(adaptorId: string, config: Record<string, unknown>): ValidationResult;
+    validateConfiguration(adaptorId: string, config: Record<string, any>): ValidationResult;
     /**
      * Get configuration differences between environments
      */
@@ -103,7 +98,7 @@ export declare class ConfigurationManager {
 }
 export interface AdaptorConfiguration {
     adaptorId: string;
-    config: Record<string, unknown>;
+    config: Record<string, any>;
     metadata: ConfigurationMetadata;
     inheritance?: InheritanceInfo;
 }
@@ -116,14 +111,14 @@ export interface ConfigurationMetadata {
 }
 export interface InheritanceInfo {
     parentId: string;
-    overrides: Record<string, unknown>;
+    overrides: Record<string, any>;
 }
 export interface ConfigurationPreset {
     id: string;
     name: string;
     description: string;
     platforms: Platform[];
-    configuration: Record<string, unknown>;
+    configuration: Record<string, any>;
     version?: string;
     environment?: string;
     tags?: string[];
@@ -134,7 +129,7 @@ export interface SetConfigurationOptions {
     source?: string;
     inherit?: {
         parentId: string;
-        overrides?: Record<string, unknown>;
+        overrides?: Record<string, any>;
     };
 }
 export interface UpdateConfigurationOptions {
@@ -179,8 +174,8 @@ export interface ConfigurationDiff {
     toEnvironment: string;
     differences: Array<{
         path: string;
-        fromValue: unknown;
-        toValue: unknown;
+        fromValue: any;
+        toValue: any;
         type: 'added' | 'removed' | 'changed';
     }>;
     summary: string;
@@ -201,6 +196,6 @@ export interface ConfigurationChangeEvent {
 export type ConfigurationChangeListener = (event: ConfigurationChangeEvent) => Promise<void>;
 export declare class ConfigurationError extends Error {
     code: string;
-    details?: Record<string, unknown> | undefined;
-    constructor(message: string, code: string, details?: Record<string, unknown> | undefined);
+    details?: Record<string, any> | undefined;
+    constructor(message: string, code: string, details?: Record<string, any> | undefined);
 }

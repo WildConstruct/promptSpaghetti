@@ -245,6 +245,5 @@ export declare class EnhancedComplianceMonitor extends ComplianceMonitor {
     private identifyMissingEvidence;
     private getNextAuditDate;
 }
-export declare const complianceMonitor: ComplianceMonitor;
 export declare const enhancedComplianceMonitor: EnhancedComplianceMonitor;
 //# sourceMappingURL=ComplianceMonitor.d.ts.map

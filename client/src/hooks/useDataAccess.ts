@@ -128,7 +128,7 @@ export const useDataAccess = (options: UseDataAccessOptions = {}): UseDataAccess
       const response = await apiRequest(`/data-access/grants/${userId}`);
       
       // Parse dates
-      const grantsWithDates = response.grants.map((grant: any) => ({
+      const grantsWithDates = response.grants.map((grant: DataAccessGrant) => ({
         ...grant,
         grantedAt: new Date(grant.grantedAt),
         expiresAt: new Date(grant.expiresAt)
@@ -162,7 +162,7 @@ export const useDataAccess = (options: UseDataAccessOptions = {}): UseDataAccess
       const response = await apiRequest(`/data-access/audit/${userId}?${queryParams}`);
       
       // Parse dates
-      const historyWithDates = response.data.map((event: any) => ({
+      const historyWithDates = response.data.map((event: AccessHistoryEvent) => ({
         ...event,
         timestamp: new Date(event.timestamp)
       }));

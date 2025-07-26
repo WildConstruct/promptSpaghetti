@@ -611,7 +611,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
         </TabsContent>
       </Tabs>
 
-      <style jsx>{`
+      <style>{`
         .badge-showcase {
           max-width: 1200px;
           margin: 0 auto;

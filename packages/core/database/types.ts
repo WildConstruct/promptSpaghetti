@@ -52,7 +52,7 @@ export interface Permission {
   resource: string;
   action: string;
   scope: 'global' | 'organization' | 'team' | 'own';
-  conditions?: Record<string, any>;
+  conditions?: Record<string, unknown>;
   createdAt: Date;
 }
 
@@ -63,13 +63,13 @@ export interface UserRole {
   grantedBy?: string;
   grantedAt: Date;
   expiresAt?: Date;
-  scopeContext?: Record<string, any>;
+  scopeContext?: Record<string, unknown>;
 }
 
 // Database query result types
 export interface QueryOptions {
   select?: string[];
-  where?: Record<string, any>;
+  where?: Record<string, unknown>;
   orderBy?: Record<string, 'asc' | 'desc'>;
   include?: string[];
   distinct?: boolean;
@@ -127,7 +127,7 @@ export interface FullEntity extends BaseEntity, SoftDeletableEntity {}
 export interface SearchOptions {
   query?: string;
   fields?: string[];
-  filters?: Record<string, any>;
+  filters?: Record<string, unknown>;
   fuzzy?: boolean;
   caseSensitive?: boolean;
 }
@@ -140,7 +140,7 @@ export interface FilterOptions {
 }
 
 // Database operation result types
-export interface OperationResult<T = any> {
+export interface OperationResult<T = unknown> {
   success: boolean;
   data?: T;
   error?: string;
@@ -149,7 +149,7 @@ export interface OperationResult<T = any> {
   executionTime?: number;
 }
 
-export interface BulkOperationResult<T = any> {
+export interface BulkOperationResult<T = unknown> {
   success: boolean;
   successCount: number;
   errorCount: number;
@@ -186,12 +186,12 @@ export interface OperationContext {
   entityType: string;
   userId?: string;
   timestamp: Date;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // Helper types for type-safe database queries
 export type Primitive = string | number | boolean | Date | null | undefined;
-export type DatabaseValue = Primitive | Record<string, any> | Array<any>;
+export type DatabaseValue = Primitive | Record<string, unknown> | Array<unknown>;
 export type WhereCondition = Record<string, DatabaseValue>;
 export type UpdateData<T> = Partial<Omit<T, 'id' | 'createdAt' | 'updatedAt'>>;
 export type CreateData<T> = Omit<T, 'id' | 'createdAt' | 'updatedAt'>;

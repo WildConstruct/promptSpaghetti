@@ -32,7 +32,7 @@ class CoverageReportGenerator {
   /**
    * Scan directory for source and test files
    */
-  scanFiles(dir = this.baseDir, excludePaths = ['node_modules', '.git', 'coverage-report', 'dist', 'build']) {
+  scanFiles(dir: string = this.baseDir, excludePaths: string[] = ['node_modules', '.git', 'coverage-report', 'dist', 'build']): void {
     const items = fs.readdirSync(dir);
     
     for (const item of items) {
@@ -67,7 +67,7 @@ class CoverageReportGenerator {
   /**
    * Check if file is a source file
    */
-  isSourceFile(filename) {
+  isSourceFile(filename: string): boolean {
     return /\.(ts|tsx|js|jsx)$/.test(filename) && 
            !/\.test\.(ts|tsx|js|jsx)$/.test(filename) &&
            !/\.spec\.(ts|tsx|js|jsx)$/.test(filename);
@@ -76,14 +76,14 @@ class CoverageReportGenerator {
   /**
    * Check if file is a test file
    */
-  isTestFile(filename) {
+  isTestFile(filename: string): boolean {
     return /\.(test|spec)\.(ts|tsx|js|jsx)$/.test(filename);
   }
 
   /**
    * Match source files with their corresponding tests
    */
-  matchSourceWithTests() {
+  matchSourceWithTests(): void {
     // Map test files to potential source files
     for (const [testPath, testInfo] of this.testFiles) {
       const possibleSourcePaths = this.getPossibleSourcePaths(testPath);
@@ -101,7 +101,7 @@ class CoverageReportGenerator {
   /**
    * Get possible source file paths for a test file
    */
-  getPossibleSourcePaths(testPath) {
+  getPossibleSourcePaths(testPath: string): string[] {
     const possibilities = [];
     
     // Remove .test or .spec from filename
@@ -128,7 +128,7 @@ class CoverageReportGenerator {
   /**
    * Generate coverage statistics by directory
    */
-  generateDirectoryStats() {
+  generateDirectoryStats(): void {
     const dirStats = {};
     
     for (const [sourcePath, sourceInfo] of this.sourceFiles) {
@@ -165,7 +165,7 @@ class CoverageReportGenerator {
   /**
    * Check if a file path is in a critical directory
    */
-  isCriticalPath(filePath) {
+  isCriticalPath(filePath: string): boolean {
     const criticalPaths = [
       'server/src/auth',
       'server/src/middleware',
@@ -183,7 +183,7 @@ class CoverageReportGenerator {
   /**
    * Generate overall summary statistics
    */
-  generateSummary() {
+  generateSummary(): void {
     this.coverageData.summary.totalSourceFiles = this.sourceFiles.size;
     this.coverageData.summary.totalTestFiles = this.testFiles.size;
     

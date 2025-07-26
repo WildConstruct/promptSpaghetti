@@ -87,6 +87,7 @@ export const TemplateSubmissionForm: React.FC<TemplateSubmissionFormProps> = ({
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_isDraft, setIsDraft] = useState(true);
   const [submissionId, setSubmissionId] = useState<string | null>(null);
   const [graphJsonString, setGraphJsonString] = useState('{}');
@@ -194,6 +195,8 @@ export const TemplateSubmissionForm: React.FC<TemplateSubmissionFormProps> = ({
       const parsed = JSON.parse(value);
       handleInputChange('graph_json', parsed);
     } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      console.debug('Invalid JSON input:', error);
       // Invalid JSON, don't update the submission data
     }
   };
@@ -502,7 +505,7 @@ export const TemplateSubmissionForm: React.FC<TemplateSubmissionFormProps> = ({
           rows={10}
           className="code-textarea"
         />
-        <small>Valid JSON representing your template's graph structure</small>
+        <small>Valid JSON representing your template&apos;s graph structure</small>
       </div>
 
       <div className="form-group">

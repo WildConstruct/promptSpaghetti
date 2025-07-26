@@ -9,7 +9,7 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 
 // Create a ticket using the github automation script
-function createTicketViaScript(title, description, priority = 'medium') {
+function createTicketViaScript(title: string, description: string, priority: string = 'medium'): string | null {
   try {
     // Escape quotes in the description
     const escapedTitle = title.replace(/"/g, '\\"');
@@ -171,7 +171,7 @@ const taskSummary = {
 };
 
 // Create description for a task
-function createTaskDescription(title, storyPhase) {
+function createTaskDescription(title: string, storyPhase: string): string {
   return `Task: ${title}
 
 Epic: Authentication Frontend Integration  
@@ -210,7 +210,7 @@ for (const [storyName, tasks] of Object.entries(taskSummary)) {
   console.log(`\n--- ${storyName} ---`);
   console.log(`Creating ${tasks.length} tasks...\n`);
   
-  for (const task of tasks) {
+  for (const task of (tasks as any[])) {
     totalTasks++;
     const description = createTaskDescription(task.title, storyName);
     const ticketId = createTicketViaScript(task.title, description, task.priority);

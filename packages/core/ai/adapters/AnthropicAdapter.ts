@@ -5,7 +5,18 @@
  * Concrete implementation of BaseAIModel for Anthropic Claude models
  */
 
-import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelMetadata, ModelCapabilities, CostEstimate, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
+import { 
+  BaseAIModel,
+  AIModelType,
+  AIModelProvider,
+  AIModelStatus,
+  ModelMetadata,
+  ModelCapabilities,
+  CostEstimate,
+  ModelInitializationError,
+  ModelProcessingError,
+  ModelUnavailableError
+} from '../BaseAIModel';
 
 export interface AnthropicConfig {
   apiKey: string;
@@ -23,7 +34,7 @@ export interface AnthropicRequestOptions {
   stop_sequences?: string[];
   stream?: boolean;
   system?: string;
-  tools?: any[];
+  tools?: unknown[];
   tool_choice?: { type: 'auto' | 'any' | 'tool', name?: string };
 }
 
@@ -120,7 +131,7 @@ export class AnthropicAdapter extends BaseAIModel {
     }
   }
 
-  async process(input: any, options?: AnthropicRequestOptions): Promise<any> {
+  async process(input: unknown, options?: AnthropicRequestOptions): Promise<unknown> {
     try {
       if (this._status !== AIModelStatus.READY) {
         throw new ModelUnavailableError(this._id);
@@ -160,7 +171,7 @@ export class AnthropicAdapter extends BaseAIModel {
     this._requestQueue = [];
   }
 
-  async estimate(input: any, options?: AnthropicRequestOptions): Promise<CostEstimate> {
+  async estimate(input: unknown, options?: AnthropicRequestOptions): Promise<CostEstimate> {
     const messages = this._convertToMessages(input);
     const inputTokens = this._estimateTokenCount(messages);
     const outputTokens = options?.max_tokens || 1000;
@@ -242,7 +253,7 @@ export class AnthropicAdapter extends BaseAIModel {
     }
   }
 
-  private async _makeRequest(endpoint: string, payload: any): Promise<AnthropicResponse> {
+  private async _makeRequest(endpoint: string, payload: unknown): Promise<AnthropicResponse> {
     const url = `${this.apiEndpoint}${endpoint}`;
     
     const response = await fetch(url, {
@@ -263,7 +274,7 @@ export class AnthropicAdapter extends BaseAIModel {
     return response.json();
   }
 
-  private _convertToMessages(input: any): ClaudeMessage[] {
+  private _convertToMessages(input: unknown): ClaudeMessage[] {
     if (typeof input === 'string') {
       return [{ role: 'user', content: input }];
     }
@@ -294,7 +305,7 @@ export class AnthropicAdapter extends BaseAIModel {
     return [{ role: 'user', content: JSON.stringify(input) }];
   }
 
-  private _extractContent(response: AnthropicResponse): any {
+  private _extractContent(response: AnthropicResponse): unknown {
     const textContent = response.content
       .filter(item => item.type === 'text')
       .map(item => item.text)
