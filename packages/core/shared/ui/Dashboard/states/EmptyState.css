@@ -1,0 +1,158 @@
+/**
+ * EmptyState Styles
+ * REFACTOR-003: Dashboard Component Architecture Consolidation
+ */
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  min-height: 200px;
+}
+
+.empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 400px;
+}
+
+.empty-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  background-color: #f3f4f6;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.empty-icon {
+  color: #9ca3af;
+}
+
+.empty-text {
+  margin-bottom: 24px;
+}
+
+.empty-title {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.empty-description {
+  margin: 0;
+  font-size: 16px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.empty-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.empty-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.empty-action-btn.primary {
+  background-color: #3b82f6;
+  color: #ffffff;
+  border-color: #3b82f6;
+}
+
+.empty-action-btn.primary:hover {
+  background-color: #2563eb;
+  border-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.empty-action-btn.secondary {
+  background-color: #ffffff;
+  color: #374151;
+  border-color: #d1d5db;
+}
+
+.empty-action-btn.secondary:hover {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+}
+
+/* ===== VARIANT STYLING ===== */
+.empty-state.search .empty-icon-container {
+  background-color: #eff6ff;
+}
+
+.empty-state.search .empty-icon {
+  color: #3b82f6;
+}
+
+.empty-state.filter .empty-icon-container {
+  background-color: #f0fdf4;
+}
+
+.empty-state.filter .empty-icon {
+  color: #16a34a;
+}
+
+.empty-state.create .empty-icon-container {
+  background-color: #fefce8;
+}
+
+.empty-state.create .empty-icon {
+  color: #ca8a04;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+  .empty-state {
+    padding: 24px 16px;
+    min-height: 160px;
+  }
+  
+  .empty-icon-container {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 16px;
+  }
+  
+  .empty-icon {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .empty-title {
+    font-size: 18px;
+  }
+  
+  .empty-description {
+    font-size: 14px;
+  }
+  
+  .empty-text {
+    margin-bottom: 20px;
+  }
+  
+  .empty-action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

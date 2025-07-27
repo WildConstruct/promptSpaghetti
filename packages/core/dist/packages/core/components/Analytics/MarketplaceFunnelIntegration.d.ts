@@ -454,5 +454,5 @@ export interface MarketplaceIntegrationExportData {
     exportTimestamp: number;
     userContext: MarketplaceContext;
 }
-export declare const MarketplaceFunnelIntegration: React.FC<MarketplaceFunnelIntegrationProps>;
+export declare const error: string, setError: React.Dispatch<React.SetStateAction<string>>;
 //# sourceMappingURL=MarketplaceFunnelIntegration.d.ts.map

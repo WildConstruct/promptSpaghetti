@@ -65,7 +65,14 @@ export const calculateResourceEfficiency = (usage, performance) => {
     const performanceScore = (performance.successRate || 0) * (1 / Math.max((performance.averageResponseTime || 1000) / 1000, 0.1));
     return (memoryEfficiency * 0.3) + (cpuEfficiency * 0.3) + (performanceScore * 0.4);
 };
-export const analyzeOptimizationOpportunities = (cacheMetrics, performanceMetrics, resourceUsage) => {
+cacheMetrics: {
+    hitRate: number;
+    memoryUsage ?  : number;
+}
+performanceMetrics: PerformanceMetrics,
+    resourceUsage;
+ResourceUsage;
+OptimizationCategories => {
     // Cache analysis
     const cacheScore = cacheMetrics.hitRate * 100;
     const cacheRecommendations = [];

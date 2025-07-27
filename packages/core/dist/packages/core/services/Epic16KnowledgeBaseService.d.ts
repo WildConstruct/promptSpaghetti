@@ -418,10 +418,7 @@ export declare class Epic16KnowledgeBaseService extends EventEmitter {
     private analytics;
     private config;
     constructor(config?: Partial<KnowledgeBaseConfig>);
-    createArticle(
-      articleData: Omit<KnowledgeBaseArticle,
-      'id' | 'publishedAt' | 'analytics'>
-    ): Promise<KnowledgeBaseArticle>;
+    createArticle(articleData: Omit<KnowledgeBaseArticle, 'id' | 'publishedAt' | 'analytics'>): Promise<KnowledgeBaseArticle>;
     updateArticle(articleId: string, updates: Partial<KnowledgeBaseArticle>): Promise<KnowledgeBaseArticle | null>;
     deleteArticle(articleId: string): Promise<boolean>;
     getArticle(articleId: string, userId?: string): Promise<KnowledgeBaseArticle | null>;

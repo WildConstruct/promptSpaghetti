@@ -358,7 +358,7 @@ export declare const CaseStudyMediaSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     id?: string;
     description?: string;
-    type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+    type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
     title?: string;
     url?: string;
     duration?: number;
@@ -375,7 +375,7 @@ export declare const CaseStudyMediaSchema: z.ZodObject<{
 }, {
     id?: string;
     description?: string;
-    type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+    type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
     title?: string;
     url?: string;
     duration?: number;
@@ -633,7 +633,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -650,7 +650,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         }, {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -691,7 +691,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -708,7 +708,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         }, {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -749,7 +749,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -766,7 +766,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         }, {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -807,7 +807,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -824,7 +824,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         }, {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -865,7 +865,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -882,7 +882,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         }, {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -901,7 +901,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         featured?: {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -919,7 +919,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         charts?: {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -937,7 +937,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         documents?: {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -955,7 +955,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         screenshots?: {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -973,7 +973,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         videos?: {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -992,7 +992,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         featured?: {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -1010,7 +1010,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         charts?: {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -1028,7 +1028,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         documents?: {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -1046,7 +1046,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         screenshots?: {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -1064,7 +1064,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         videos?: {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -1106,7 +1106,7 @@ export declare const CaseStudySchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         id?: string;
         description?: string;
-        type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+        type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
         title?: string;
         url?: string;
         duration?: number;
@@ -1123,7 +1123,7 @@ export declare const CaseStudySchema: z.ZodObject<{
     }, {
         id?: string;
         description?: string;
-        type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+        type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
         title?: string;
         url?: string;
         duration?: number;
@@ -1692,7 +1692,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         featured?: {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -1710,7 +1710,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         charts?: {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -1728,7 +1728,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         documents?: {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -1746,7 +1746,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         screenshots?: {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -1764,7 +1764,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         videos?: {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -1819,7 +1819,7 @@ export declare const CaseStudySchema: z.ZodObject<{
     featuredImage?: {
         id?: string;
         description?: string;
-        type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+        type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
         title?: string;
         url?: string;
         duration?: number;
@@ -1964,7 +1964,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         featured?: {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -1982,7 +1982,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         charts?: {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -2000,7 +2000,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         documents?: {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -2018,7 +2018,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         screenshots?: {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -2036,7 +2036,7 @@ export declare const CaseStudySchema: z.ZodObject<{
         videos?: {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -2091,7 +2091,7 @@ export declare const CaseStudySchema: z.ZodObject<{
     featuredImage?: {
         id?: string;
         description?: string;
-        type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+        type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
         title?: string;
         url?: string;
         duration?: number;
@@ -2799,7 +2799,7 @@ declare const _default: {
             }, "strip", z.ZodTypeAny, {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -2816,7 +2816,7 @@ declare const _default: {
             }, {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -2857,7 +2857,7 @@ declare const _default: {
             }, "strip", z.ZodTypeAny, {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -2874,7 +2874,7 @@ declare const _default: {
             }, {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -2915,7 +2915,7 @@ declare const _default: {
             }, "strip", z.ZodTypeAny, {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -2932,7 +2932,7 @@ declare const _default: {
             }, {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -2973,7 +2973,7 @@ declare const _default: {
             }, "strip", z.ZodTypeAny, {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -2990,7 +2990,7 @@ declare const _default: {
             }, {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -3031,7 +3031,7 @@ declare const _default: {
             }, "strip", z.ZodTypeAny, {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -3048,7 +3048,7 @@ declare const _default: {
             }, {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -3067,7 +3067,7 @@ declare const _default: {
             featured?: {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -3085,7 +3085,7 @@ declare const _default: {
             charts?: {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -3103,7 +3103,7 @@ declare const _default: {
             documents?: {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -3121,7 +3121,7 @@ declare const _default: {
             screenshots?: {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -3139,7 +3139,7 @@ declare const _default: {
             videos?: {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -3158,7 +3158,7 @@ declare const _default: {
             featured?: {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -3176,7 +3176,7 @@ declare const _default: {
             charts?: {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -3194,7 +3194,7 @@ declare const _default: {
             documents?: {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -3212,7 +3212,7 @@ declare const _default: {
             screenshots?: {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -3230,7 +3230,7 @@ declare const _default: {
             videos?: {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -3272,7 +3272,7 @@ declare const _default: {
         }, "strip", z.ZodTypeAny, {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -3289,7 +3289,7 @@ declare const _default: {
         }, {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -3858,7 +3858,7 @@ declare const _default: {
             featured?: {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -3876,7 +3876,7 @@ declare const _default: {
             charts?: {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -3894,7 +3894,7 @@ declare const _default: {
             documents?: {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -3912,7 +3912,7 @@ declare const _default: {
             screenshots?: {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -3930,7 +3930,7 @@ declare const _default: {
             videos?: {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -3985,7 +3985,7 @@ declare const _default: {
         featuredImage?: {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -4130,7 +4130,7 @@ declare const _default: {
             featured?: {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -4148,7 +4148,7 @@ declare const _default: {
             charts?: {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -4166,7 +4166,7 @@ declare const _default: {
             documents?: {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -4184,7 +4184,7 @@ declare const _default: {
             screenshots?: {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -4202,7 +4202,7 @@ declare const _default: {
             videos?: {
                 id?: string;
                 description?: string;
-                type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+                type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
                 title?: string;
                 url?: string;
                 duration?: number;
@@ -4257,7 +4257,7 @@ declare const _default: {
         featuredImage?: {
             id?: string;
             description?: string;
-            type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+            type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
             title?: string;
             url?: string;
             duration?: number;
@@ -4926,7 +4926,7 @@ declare const _default: {
     }, "strip", z.ZodTypeAny, {
         id?: string;
         description?: string;
-        type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+        type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
         title?: string;
         url?: string;
         duration?: number;
@@ -4943,7 +4943,7 @@ declare const _default: {
     }, {
         id?: string;
         description?: string;
-        type?: "document" | "audio" | "video" | "image" | "screenshot" | "chart" | "infographic";
+        type?: "audio" | "video" | "image" | "document" | "screenshot" | "chart" | "infographic";
         title?: string;
         url?: string;
         duration?: number;

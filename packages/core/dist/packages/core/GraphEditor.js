@@ -861,7 +861,11 @@ const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection }) =>
                                 }, children: isPerformanceGood ? (_jsx(SmoothInspectorPanel, { node: selectedNode, schema: selectedSchema, onChange: handleInspectorChange, onGlobalPreviewRequest: handleGlobalPreviewRequest })) : (_jsx(InspectorPanel, { node: selectedNode, schema: selectedSchema, onChange: handleInspectorChange, onGlobalPreviewRequest: handleGlobalPreviewRequest })) })) })] }), _jsx("style", { children: `
         /* Professional Node Styling */
         .react-flow__node {
-          background: linear-gradient(145deg, var(--color-bg-tertiary, #404040), var(--color-bg-secondary, #383838)) !important;
+          background: linear-gradient(
+            145deg,
+            var(--color-bg-tertiary,
+            #404040
+          ), var(--color-bg-secondary, #383838)) !important;
           border: 1px solid var(--color-ui-border, #4a4a4a) !important;
           border-radius: 8px !important;
           box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.4)) !important;
@@ -873,7 +877,11 @@ const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection }) =>
         .react-flow__node:hover {
           transform: translateY(-3px) scale(1.03) !important;
           box-shadow: var(--shadow-xl, 0 20px 25px rgba(0, 0, 0, 0.6)) !important;
-          background: linear-gradient(145deg, var(--color-bg-quaternary, #4a4a4a), var(--color-bg-tertiary, #404040)) !important;
+          background: linear-gradient(
+            145deg,
+            var(--color-bg-quaternary,
+            #4a4a4a
+          ), var(--color-bg-tertiary, #404040)) !important;
           border-color: var(--color-accent-orange, #ff7800) !important;
         }
         
@@ -882,7 +890,11 @@ const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection }) =>
                      0 0 0 3px var(--color-accent-orange, #ff7800),
                      0 0 20px rgba(255, 120, 0, 0.4) !important;
           border-color: var(--color-accent-orange, #ff7800) !important;
-          background: linear-gradient(145deg, var(--color-bg-quaternary, #4a4a4a), var(--color-bg-tertiary, #404040)) !important;
+          background: linear-gradient(
+            145deg,
+            var(--color-bg-quaternary,
+            #4a4a4a
+          ), var(--color-bg-tertiary, #404040)) !important;
         }
         
         /* Professional Edge Styling */
@@ -933,7 +945,11 @@ const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection }) =>
         
         /* Professional Controls */
         .react-flow__controls button {
-          background: linear-gradient(145deg, var(--color-bg-tertiary, #404040), var(--color-bg-secondary, #383838)) !important;
+          background: linear-gradient(
+            145deg,
+            var(--color-bg-tertiary,
+            #404040
+          ), var(--color-bg-secondary, #383838)) !important;
           border: 1px solid var(--color-ui-border, #4a4a4a) !important;
           color: var(--color-text-primary, #e5e7eb) !important;
           transition: all var(--transition-normal, 0.25s cubic-bezier(0.4, 0, 0.2, 1)) !important;
@@ -943,7 +959,11 @@ const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection }) =>
         }
         
         .react-flow__controls button:hover {
-          background: linear-gradient(145deg, var(--color-bg-quaternary, #4a4a4a), var(--color-bg-tertiary, #404040)) !important;
+          background: linear-gradient(
+            145deg,
+            var(--color-bg-quaternary,
+            #4a4a4a
+          ), var(--color-bg-tertiary, #404040)) !important;
           border-color: var(--color-accent-orange, #ff7800) !important;
           box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.4)), 
                      0 0 16px rgba(255, 120, 0, 0.3) !important;
@@ -952,7 +972,11 @@ const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection }) =>
         
         /* Professional Minimap */
         .react-flow__minimap {
-          background: linear-gradient(145deg, var(--color-bg-secondary, #383838), var(--color-bg-primary, #2c2c2c)) !important;
+          background: linear-gradient(
+            145deg,
+            var(--color-bg-secondary,
+            #383838
+          ), var(--color-bg-primary, #2c2c2c)) !important;
           border: 1px solid var(--color-ui-border, #4a4a4a) !important;
           backdrop-filter: blur(12px) !important;
           border-radius: 8px !important;

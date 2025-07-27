@@ -2,14 +2,7 @@
  * Epic 14 - A/B Testing Framework
  * Core Experiment Engine for managing experiments and assignments
  */
-import { 
-  Experiment,
-  UserAssignment,
-  AssignmentRequest,
-  AssignmentResponse,
-  ABTestingConfig,
-  AllocationServiceConfig
-} from '../types/experiment';
+import { Experiment, UserAssignment, AssignmentRequest, AssignmentResponse, ABTestingConfig, AllocationServiceConfig } from '../types/experiment';
 export interface ExperimentStorage {
     getExperiment(id: string): Promise<Experiment | null>;
     saveExperiment(experiment: Experiment): Promise<void>;
@@ -19,25 +12,14 @@ export interface ExperimentStorage {
 }
 export interface ExperimentMetrics {
     recordAssignment(assignment: UserAssignment): Promise<void>;
-    recordEvent(
-      experimentId: string,
-      variantId: string,
-      eventType: string,
-      data: Record<string,
-      unknown>
-    ): Promise<void>;
+    recordEvent(experimentId: string, variantId: string, eventType: string, data: Record<string, unknown>): Promise<void>;
 }
 export declare class ExperimentEngine {
     private config;
     private allocationConfig;
     private storage;
     private metrics;
-    constructor(
-      config: ABTestingConfig,
-      allocationConfig: AllocationServiceConfig,
-      storage: ExperimentStorage,
-      metrics: ExperimentMetrics
-    );
+    constructor(config: ABTestingConfig, allocationConfig: AllocationServiceConfig, storage: ExperimentStorage, metrics: ExperimentMetrics);
     /**
      * Create a new experiment
      */
@@ -106,10 +88,5 @@ export declare class ExperimentEngine {
 /**
  * Factory function to create experiment engine with default configuration
  */
-export declare function createExperimentEngine(
-  storage: ExperimentStorage,
-  metrics: ExperimentMetrics,
-  config?: Partial<ABTestingConfig>,
-  allocationConfig?: Partial<AllocationServiceConfig>
-): ExperimentEngine;
+export declare function createExperimentEngine(storage: ExperimentStorage, metrics: ExperimentMetrics, config?: Partial<ABTestingConfig>, allocationConfig?: Partial<AllocationServiceConfig>): ExperimentEngine;
 //# sourceMappingURL=ExperimentEngine.d.ts.map

@@ -71,11 +71,7 @@ export declare class OpenAITTSAdapter extends BaseAIModel {
     cleanup(): Promise<void>;
     estimate(input: any, options?: TTSRequestOptions): Promise<CostEstimate>;
     getAvailableVoices(): Promise<VoiceInfo[]>;
-    generateWithCustomVoice(
-      text: string,
-      voiceId: string,
-      options?: Partial<TTSRequestOptions>
-    ): Promise<TTSGenerationResult>;
+    generateWithCustomVoice(text: string, voiceId: string, options?: Partial<TTSRequestOptions>): Promise<TTSGenerationResult>;
     generateSSML(ssmlText: string, voice?: string, options?: Partial<TTSRequestOptions>): Promise<TTSGenerationResult>;
     batchGenerate(texts: string[], options?: TTSRequestOptions): Promise<TTSGenerationResult[]>;
     static getModelCostPerCharacter(model: string): number;

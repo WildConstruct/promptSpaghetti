@@ -196,15 +196,7 @@ export declare class SecurityAlertingWorkflow extends EventEmitter {
     /**
      * Create and process a new security alert
      */
-    createAlert(
-      source: string,
-      severity: AlertSeverity,
-      category: ThreatCategory,
-      title: string,
-      description: string,
-      context?: Partial<SecurityAlert['context']>,
-      sourceData?: Partial<SecurityAlert['sourceData']>
-    ): Promise<string>;
+    createAlert(source: string, severity: AlertSeverity, category: ThreatCategory, title: string, description: string, context?: Partial<SecurityAlert['context']>, sourceData?: Partial<SecurityAlert['sourceData']>): Promise<string>;
     /**
      * Process alert from security insights
      */
@@ -220,13 +212,7 @@ export declare class SecurityAlertingWorkflow extends EventEmitter {
     /**
      * Resolve an alert
      */
-    resolveAlert(
-      alertId: string,
-      resolvedBy: string,
-      solution: string,
-      preventionMeasures?: string[],
-      lessonsLearned?: string[]
-    ): Promise<void>;
+    resolveAlert(alertId: string, resolvedBy: string, solution: string, preventionMeasures?: string[], lessonsLearned?: string[]): Promise<void>;
     /**
      * Get alerts with filtering and pagination
      */
@@ -321,9 +307,6 @@ export declare class SecurityAlertingWorkflow extends EventEmitter {
     private cleanupOldAlerts;
     private setupAnalyticsIntegration;
 }
-export declare function createSecurityAlertingWorkflow(
-  analytics: SecurityEventAnalytics,
-  securityLogger: SecurityLogger
-): SecurityAlertingWorkflow;
+export declare function createSecurityAlertingWorkflow(analytics: SecurityEventAnalytics, securityLogger: SecurityLogger): SecurityAlertingWorkflow;
 export default SecurityAlertingWorkflow;
 //# sourceMappingURL=SecurityAlertingWorkflow.d.ts.map

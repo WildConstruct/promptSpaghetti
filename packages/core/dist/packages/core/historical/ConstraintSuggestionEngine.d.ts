@@ -38,11 +38,7 @@ export declare class ConstraintSuggestionEngine {
     /**
      * Generate suggestions for constraint violations
      */
-    generateSuggestions(
-      validationResult: ConstraintValidationResult,
-      nodes: UTDGNode[],
-      context: SuggestionContext
-    ): ConstraintSuggestion[];
+    generateSuggestions(validationResult: ConstraintValidationResult, nodes: UTDGNode[], context: SuggestionContext): ConstraintSuggestion[];
     /**
      * Generate suggestions for fixing constraint violations
      */

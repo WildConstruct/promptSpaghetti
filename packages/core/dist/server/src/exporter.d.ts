@@ -369,7 +369,7 @@ export declare const SceneDataSchema: z.ZodObject<{
             temperature?: number;
         }>>;
     }, "strip", z.ZodTypeAny, {
-        mood?: "cinematic" | "dramatic" | "bright" | "soft" | "harsh" | "moody" | "ethereal";
+        mood?: "cinematic" | "bright" | "dramatic" | "soft" | "harsh" | "moody" | "ethereal";
         weather?: "clear" | "cloudy" | "overcast" | "foggy" | "rainy" | "stormy" | "snowy";
         timeOfDay?: "dawn" | "morning" | "noon" | "afternoon" | "dusk" | "night" | "golden-hour" | "blue-hour";
         keyLight?: {
@@ -383,7 +383,7 @@ export declare const SceneDataSchema: z.ZodObject<{
             temperature?: number;
         };
     }, {
-        mood?: "cinematic" | "dramatic" | "bright" | "soft" | "harsh" | "moody" | "ethereal";
+        mood?: "cinematic" | "bright" | "dramatic" | "soft" | "harsh" | "moody" | "ethereal";
         weather?: "clear" | "cloudy" | "overcast" | "foggy" | "rainy" | "stormy" | "snowy";
         timeOfDay?: "dawn" | "morning" | "noon" | "afternoon" | "dusk" | "night" | "golden-hour" | "blue-hour";
         keyLight?: {
@@ -460,7 +460,7 @@ export declare const SceneDataSchema: z.ZodObject<{
         windSpeed?: number;
     };
     lighting?: {
-        mood?: "cinematic" | "dramatic" | "bright" | "soft" | "harsh" | "moody" | "ethereal";
+        mood?: "cinematic" | "bright" | "dramatic" | "soft" | "harsh" | "moody" | "ethereal";
         weather?: "clear" | "cloudy" | "overcast" | "foggy" | "rainy" | "stormy" | "snowy";
         timeOfDay?: "dawn" | "morning" | "noon" | "afternoon" | "dusk" | "night" | "golden-hour" | "blue-hour";
         keyLight?: {
@@ -515,7 +515,7 @@ export declare const SceneDataSchema: z.ZodObject<{
         windSpeed?: number;
     };
     lighting?: {
-        mood?: "cinematic" | "dramatic" | "bright" | "soft" | "harsh" | "moody" | "ethereal";
+        mood?: "cinematic" | "bright" | "dramatic" | "soft" | "harsh" | "moody" | "ethereal";
         weather?: "clear" | "cloudy" | "overcast" | "foggy" | "rainy" | "stormy" | "snowy";
         timeOfDay?: "dawn" | "morning" | "noon" | "afternoon" | "dusk" | "night" | "golden-hour" | "blue-hour";
         keyLight?: {
@@ -1072,7 +1072,7 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
                 temperature?: number;
             }>>;
         }, "strip", z.ZodTypeAny, {
-            mood?: "cinematic" | "dramatic" | "bright" | "soft" | "harsh" | "moody" | "ethereal";
+            mood?: "cinematic" | "bright" | "dramatic" | "soft" | "harsh" | "moody" | "ethereal";
             weather?: "clear" | "cloudy" | "overcast" | "foggy" | "rainy" | "stormy" | "snowy";
             timeOfDay?: "dawn" | "morning" | "noon" | "afternoon" | "dusk" | "night" | "golden-hour" | "blue-hour";
             keyLight?: {
@@ -1086,7 +1086,7 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
                 temperature?: number;
             };
         }, {
-            mood?: "cinematic" | "dramatic" | "bright" | "soft" | "harsh" | "moody" | "ethereal";
+            mood?: "cinematic" | "bright" | "dramatic" | "soft" | "harsh" | "moody" | "ethereal";
             weather?: "clear" | "cloudy" | "overcast" | "foggy" | "rainy" | "stormy" | "snowy";
             timeOfDay?: "dawn" | "morning" | "noon" | "afternoon" | "dusk" | "night" | "golden-hour" | "blue-hour";
             keyLight?: {
@@ -1163,7 +1163,7 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
             windSpeed?: number;
         };
         lighting?: {
-            mood?: "cinematic" | "dramatic" | "bright" | "soft" | "harsh" | "moody" | "ethereal";
+            mood?: "cinematic" | "bright" | "dramatic" | "soft" | "harsh" | "moody" | "ethereal";
             weather?: "clear" | "cloudy" | "overcast" | "foggy" | "rainy" | "stormy" | "snowy";
             timeOfDay?: "dawn" | "morning" | "noon" | "afternoon" | "dusk" | "night" | "golden-hour" | "blue-hour";
             keyLight?: {
@@ -1218,7 +1218,7 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
             windSpeed?: number;
         };
         lighting?: {
-            mood?: "cinematic" | "dramatic" | "bright" | "soft" | "harsh" | "moody" | "ethereal";
+            mood?: "cinematic" | "bright" | "dramatic" | "soft" | "harsh" | "moody" | "ethereal";
             weather?: "clear" | "cloudy" | "overcast" | "foggy" | "rainy" | "stormy" | "snowy";
             timeOfDay?: "dawn" | "morning" | "noon" | "afternoon" | "dusk" | "night" | "golden-hour" | "blue-hour";
             keyLight?: {
@@ -1367,7 +1367,7 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
             windSpeed?: number;
         };
         lighting?: {
-            mood?: "cinematic" | "dramatic" | "bright" | "soft" | "harsh" | "moody" | "ethereal";
+            mood?: "cinematic" | "bright" | "dramatic" | "soft" | "harsh" | "moody" | "ethereal";
             weather?: "clear" | "cloudy" | "overcast" | "foggy" | "rainy" | "stormy" | "snowy";
             timeOfDay?: "dawn" | "morning" | "noon" | "afternoon" | "dusk" | "night" | "golden-hour" | "blue-hour";
             keyLight?: {
@@ -1516,7 +1516,7 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
             windSpeed?: number;
         };
         lighting?: {
-            mood?: "cinematic" | "dramatic" | "bright" | "soft" | "harsh" | "moody" | "ethereal";
+            mood?: "cinematic" | "bright" | "dramatic" | "soft" | "harsh" | "moody" | "ethereal";
             weather?: "clear" | "cloudy" | "overcast" | "foggy" | "rainy" | "stormy" | "snowy";
             timeOfDay?: "dawn" | "morning" | "noon" | "afternoon" | "dusk" | "night" | "golden-hour" | "blue-hour";
             keyLight?: {

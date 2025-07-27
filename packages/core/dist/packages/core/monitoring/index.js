@@ -12,23 +12,9 @@ export { PerformanceAnalytics } from './PerformanceAnalytics';
 export { default as SecurityAnalyticsMonitor } from './SecurityAnalyticsMonitor';
 // Epic 1 & Epic 17 Security Integration
 export { default as Epic1Epic17SecurityIntegration } from './Epic1Epic17SecurityIntegration';
-// Import Epic1Epic17SecurityIntegration for local use
-import { Epic1Epic17SecurityIntegration } from './Epic1Epic17SecurityIntegration';
-// Import SecurityAnalyticsMonitor for local use
-import { SecurityAnalyticsMonitor } from './SecurityAnalyticsMonitor';
-// Utility functions for monitoring integration
-export const createIntegratedSecuritySystem = (config, epic1Monitor, epic17Monitor, securityMonitor, alertingSystem) => {
-    return new Epic1Epic17SecurityIntegration(config, {
-        epic1Monitor,
-        epic17Monitor,
-        securityMonitor,
-        alertingSystem
-    });
-};
-export const createSecurityAnalyticsMonitor = (config = {}) => {
-    const defaultConfig = { enabled: true, samplingRate: 0.1 };
-    return new SecurityAnalyticsMonitor({ ...defaultConfig, ...config });
-};
+;
+return new SecurityAnalyticsMonitor({ ...defaultConfig, ...config });
+;
 export const createDefaultSecuritySystemHealth = (systemId, systemType) => ({
     systemId,
     systemType,
@@ -50,19 +36,21 @@ export const createDefaultSecuritySystemHealth = (systemId, systemType) => ({
     lastConfigUpdate: Date.now() - 86400000, // 24 hours ago
     pendingUpdates: 0
 });
-// Helper function to register security systems with the monitor
-export const registerSecuritySystems = (monitor, systems) => {
+systems: Array;
+void ;
+{
     systems.forEach(system => {
         const healthStatus = createDefaultSecuritySystemHealth(system.id, system.type);
         monitor.registerSecuritySystem(healthStatus);
     });
-};
-// Helper function to create integrated dashboard configuration
-export const createDashboardConfig = (integration) => {
-    return integration.getIntegratedDashboardData();
-};
-// Monitoring system health check utility
-export const checkSystemHealth = (integration) => {
+}
+;
+;
+epic17Health: 'healthy' | 'degraded' | 'unhealthy';
+securityHealth: 'healthy' | 'degraded' | 'unhealthy';
+overallHealth: 'healthy' | 'degraded' | 'unhealthy';
+recommendations: string[];
+{
     const dashboardData = integration.getIntegratedDashboardData();
     // Evaluate individual system health
     const epic1Health = dashboardData.performanceOverview.nodeExecutions.failed >
@@ -92,4 +80,5 @@ export const checkSystemHealth = (integration) => {
         overallHealth,
         recommendations
     };
-};
+}
+;

@@ -34,14 +34,7 @@ export declare class AuditIntegration {
     /**
      * Log a data access operation with automatic classification enrichment
      */
-    logDataAccess(
-      context: OperationContext,
-      resourceType: string,
-      resourceId: string,
-      data?: any,
-      metadata?: Record<string,
-      any>
-    ): Promise<void>;
+    logDataAccess(context: OperationContext, resourceType: string, resourceId: string, data?: any, metadata?: Record<string, any>): Promise<void>;
     /**
      * Log an administrative operation
      */

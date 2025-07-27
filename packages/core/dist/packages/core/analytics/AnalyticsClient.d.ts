@@ -87,10 +87,7 @@ export declare class AnalyticsClient extends EventEmitter {
     /**
      * Get time series data
      */
-    getTimeSeries(
-      metric: 'executions' | 'tokens' | 'cost' | 'errors',
-      timeRange: TimeRange
-    ): Promise<AnalyticsResponse>;
+    getTimeSeries(metric: 'executions' | 'tokens' | 'cost' | 'errors', timeRange: TimeRange): Promise<AnalyticsResponse>;
     /**
      * Get heat map data
      */
@@ -172,8 +169,4 @@ export declare class AnalyticsClient extends EventEmitter {
      */
     private setupCacheCleanup;
 }
-/**
- * Default analytics client instance
- */
-export declare const defaultAnalyticsClient: AnalyticsClient;
 //# sourceMappingURL=AnalyticsClient.d.ts.map

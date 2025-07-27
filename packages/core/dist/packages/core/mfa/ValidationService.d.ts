@@ -132,10 +132,6 @@ export declare class ValidationService extends EventEmitter {
     private logValidationAttempt;
     private checkForSuspiciousActivity;
 }
-export declare function createValidationService(
-  storage: VerificationCodeStorage,
-  rateLimiter: RateLimiter,
-  environment?: 'development' | 'production'
-): ValidationService;
+export declare function createValidationService(storage: VerificationCodeStorage, rateLimiter: RateLimiter, environment?: 'development' | 'production'): ValidationService;
 export default ValidationService;
 //# sourceMappingURL=ValidationService.d.ts.map

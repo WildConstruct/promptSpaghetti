@@ -20,12 +20,7 @@
  * @version 1.0.0
  * @since 2024-01-22
  */
-import { 
-  SecurityAlertingConfig,
-  EscalationThresholds,
-  CorrelationRule,
-  ResponseAutomation
-} from '../SecurityAlertingAnalytics';
+import { SecurityAlertingConfig, EscalationThresholds, CorrelationRule, ResponseAutomation } from '../SecurityAlertingAnalytics';
 export interface UseSecurityAlertingConfigOptions {
     configId?: string;
     autoSave?: boolean;
@@ -94,9 +89,6 @@ export interface ConfigRecommendation {
 /**
  * Hook for managing security alerting configuration
  */
-export declare const useSecurityAlertingConfig: (
-  initialConfig?: SecurityAlertingConfig,
-  options?: UseSecurityAlertingConfigOptions
-) => UseSecurityAlertingConfigReturn;
+export declare const useSecurityAlertingConfig: (initialConfig?: SecurityAlertingConfig, options?: UseSecurityAlertingConfigOptions) => UseSecurityAlertingConfigReturn;
 export default useSecurityAlertingConfig;
 //# sourceMappingURL=useSecurityAlertingConfig.d.ts.map

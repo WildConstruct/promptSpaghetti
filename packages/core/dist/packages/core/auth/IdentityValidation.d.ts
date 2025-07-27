@@ -152,12 +152,7 @@ export declare class IdentityValidationService {
     /**
      * Submit identity validation request
      */
-    submitValidationRequest(
-      userId: string,
-      type: IdentityValidationType,
-      data: Partial<IdentityValidationData>,
-      metadata?: Partial<IdentityValidationRequest['metadata']>
-    ): Promise<{
+    submitValidationRequest(userId: string, type: IdentityValidationType, data: Partial<IdentityValidationData>, metadata?: Partial<IdentityValidationRequest['metadata']>): Promise<{
         requestId: string;
         status: ValidationStatus;
     }>;

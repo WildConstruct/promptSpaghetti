@@ -336,16 +336,8 @@ export declare class SecurityQueryPerformanceOptimizer extends EventEmitter {
     private initializeDefaultRules;
     private initializeDefaultCacheConfigurations;
     private startPerformanceMonitoring;
-    profileQuery(
-      queryText: string,
-      queryType: QueryPerformanceProfile['query_type'],
-      executedBy: string
-    ): Promise<string>;
-    executeQuery(
-      profileId: string,
-      executionContext: Partial<QueryExecution['context']>,
-      executedBy: string
-    ): Promise<string>;
+    profileQuery(queryText: string, queryType: QueryPerformanceProfile['query_type'], executedBy: string): Promise<string>;
+    executeQuery(profileId: string, executionContext: Partial<QueryExecution['context']>, executedBy: string): Promise<string>;
     private calculateComplexityScore;
     private estimateDataVolume;
     private extractTimeRange;

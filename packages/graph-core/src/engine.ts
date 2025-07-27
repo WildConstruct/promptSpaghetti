@@ -7,6 +7,8 @@ import { GraphDocument, ExecutionResult, ExecutionContext, GraphNode, RuntimeNod
 import { GraphValidator, ValidationResult } from './validation';
 import seedrandom from 'seedrandom';
 
+// Runtime node implementations moved to bottom of file
+
 // Re-export core runtime nodes
 export * from './runtime';
 
@@ -251,24 +253,26 @@ export class GraphEngine {
   }
 
   private createRuntimeNode(node: GraphNode, inputs: any[], context: ExecutionContext): RuntimeNode {
+    const data = node.data || {};
+    
     switch (node.type) {
     case 'WeightedChoice':
-      return new WeightedChoiceRuntimeNode(node.id, node.data.choices || []);
+      return new WeightedChoiceRuntimeNode(node.id, Array.isArray(data.choices) ? data.choices : []);
       
     case 'Concat':
-      return new ConcatRuntimeNode(node.id, node.data.template, inputs, context);
+      return new ConcatRuntimeNode(node.id, String(data.template || ''), inputs, context);
       
     case 'Output':
-      return new OutputRuntimeNode(node.id, node.data.text, inputs, context);
+      return new OutputRuntimeNode(node.id, String(data.text || ''), inputs, context);
       
     case 'Include':
-      return new IncludeRuntimeNode(node.id, node.data.name || '', node.data.lookup || {});
+      return new IncludeRuntimeNode(node.id, String(data.name || ''), (data.lookup || {}) as Record<string, string>);
       
     case 'SetVariable':
-      return new SetVariableRuntimeNode(node.id, node.data.key || '', node.data.value);
+      return new SetVariableRuntimeNode(node.id, String(data.key || ''), data.value);
       
     case 'GetVariable':
-      return new GetVariableRuntimeNode(node.id, node.data.key || '');
+      return new GetVariableRuntimeNode(node.id, String(data.key || ''));
       
     default:
       throw new Error(`Unsupported node type: ${node.type}`);

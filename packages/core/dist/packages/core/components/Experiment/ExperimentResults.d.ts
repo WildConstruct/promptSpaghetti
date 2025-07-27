@@ -13,6 +13,6 @@ export interface ExperimentResultsProps {
     onImplementWinner: (variantId: string) => Promise<void>;
     className?: string;
 }
-export declare const ExperimentResults: React.FC<ExperimentResultsProps>;
+export declare const ExperimentResults: React.FC<ExperimentResultsProps>, results: any, variants: any;
 export default ExperimentResults;
 //# sourceMappingURL=ExperimentResults.d.ts.map

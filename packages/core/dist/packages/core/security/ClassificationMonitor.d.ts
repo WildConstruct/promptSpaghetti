@@ -16,13 +16,7 @@
  * - Historical data analysis
  */
 import { EventEmitter } from 'events';
-import { 
-  ClassificationLevel,
-  DataCategory,
-  ComplianceFramework,
-  ClassificationResult,
-  DataElement
-} from './DataClassifier';
+import { ClassificationLevel, DataCategory, ComplianceFramework, ClassificationResult, DataElement } from './DataClassifier';
 export declare enum MonitoringEventType {
     CLASSIFICATION_PERFORMED = "classification_performed",
     RULE_TRIGGERED = "rule_triggered",
@@ -147,12 +141,7 @@ export declare class ClassificationMonitor extends EventEmitter {
     /**
      * Record a compliance violation
      */
-    recordComplianceViolation(
-      dataId: string,
-      framework: ComplianceFramework,
-      violation: string,
-      severity?: AlertSeverity
-    ): void;
+    recordComplianceViolation(dataId: string, framework: ComplianceFramework, violation: string, severity?: AlertSeverity): void;
     /**
      * Record a performance warning
      */

@@ -16,7 +16,59 @@ export interface Era {
     description?: string;
     culturalContext?: string[];
 }
-export declare export interface UTDGNode {
+export declare const HISTORICAL_ERAS: {
+    readonly MEDIEVAL_EARLY: {
+        readonly name: "Early Medieval";
+        readonly period: {
+            readonly start: 476;
+            readonly end: 1000;
+        };
+        readonly region: readonly ["Europe"];
+        readonly accuracy: "high";
+        readonly description: "Early medieval period characterized by the fall of Rome and rise of feudalism";
+    };
+    readonly MEDIEVAL_HIGH: {
+        readonly name: "High Medieval";
+        readonly period: {
+            readonly start: 1000;
+            readonly end: 1300;
+        };
+        readonly region: readonly ["Europe"];
+        readonly accuracy: "high";
+        readonly description: "High medieval period of cathedral building, crusades, and scholasticism";
+    };
+    readonly MEDIEVAL_LATE: {
+        readonly name: "Late Medieval";
+        readonly period: {
+            readonly start: 1300;
+            readonly end: 1500;
+        };
+        readonly region: readonly ["Europe"];
+        readonly accuracy: "high";
+        readonly description: "Late medieval period transitioning toward Renaissance";
+    };
+    readonly RENAISSANCE: {
+        readonly name: "Renaissance";
+        readonly period: {
+            readonly start: 1400;
+            readonly end: 1600;
+        };
+        readonly region: readonly ["Europe"];
+        readonly accuracy: "high";
+        readonly description: "Renaissance period of cultural and artistic rebirth";
+    };
+};
+export interface Variation {
+    id: string;
+    type: 'color' | 'texture' | 'pattern' | 'quality' | 'condition';
+    value: string;
+    probability: number;
+    era_specific?: boolean;
+    region_specific?: string[];
+    social_class?: SocialClass[];
+}
+export type SocialClass = 'peasant' | 'artisan' | 'merchant' | 'noble' | 'clergy' | 'royal';
+export interface UTDGNode {
     id: string;
     type: 'material' | 'texture' | 'pattern' | 'style' | 'garment' | 'accessory' | 'tool' | 'decoration';
     content: string;

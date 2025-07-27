@@ -15,13 +15,7 @@
  * - Anomaly detection for device changes
  */
 import { EventEmitter } from 'events';
-import { 
-  DeviceFingerprintingService,
-  DeviceFingerprint,
-  LocationData,
-  RiskLevel,
-  FingerprintContext
-} from './DeviceFingerprintingService';
+import { DeviceFingerprintingService, DeviceFingerprint, LocationData, RiskLevel, FingerprintContext } from './DeviceFingerprintingService';
 export declare enum TrustStatus {
     TRUSTED = "trusted",
     PENDING = "pending",

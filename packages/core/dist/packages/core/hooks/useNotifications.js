@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-export const useNotifications = ({ userId, workspaceId }) => {
+userId: string;
+workspaceId ?  : string;
+UseNotificationsReturn => {
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const [loading, setLoading] = useState(true);

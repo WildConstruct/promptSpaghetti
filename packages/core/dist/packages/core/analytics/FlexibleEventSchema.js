@@ -788,10 +788,5 @@ export class FlexibleEventSchemaManager {
         return this.createConversionEventSchema(); // Simplified for demo
     }
 }
-/**
- * Factory function to create FlexibleEventSchemaManager
- */
-export const createFlexibleEventSchemaManager = (config) => {
-    return new FlexibleEventSchemaManager(config);
-};
+;
 export default FlexibleEventSchemaManager;

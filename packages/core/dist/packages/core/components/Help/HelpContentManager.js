@@ -143,125 +143,105 @@ export const HelpProvider = ({ children, customHelpContent = [], enableOnboardin
     return (_jsx(HelpContext.Provider, { value: contextValue, children: children }));
 };
 // Hook for easy help content registration
-export const useHelpManager = () => {
-    const { addHelpContent, updateHelpContent, removeHelpContent } = useHelpSystem();
-    // Register help content for a component
-    const registerHelpContent = (content) => {
-        if (Array.isArray(content)) {
-            content.forEach(addHelpContent);
-        }
-        else {
-            addHelpContent(content);
-        }
-    };
-    // Register help content with automatic cleanup
-    const useHelpContent = (content) => {
-        React.useEffect(() => {
-            registerHelpContent(content);
-            // Cleanup function to remove content when component unmounts
-            return () => {
-                if (Array.isArray(content)) {
-                    content.forEach(c => removeHelpContent(c.id));
-                }
-                else {
-                    removeHelpContent(content.id);
-                }
-            };
-        }, []);
-    };
-    return {
-        registerHelpContent,
-        useHelpContent,
-        updateHelpContent,
-        removeHelpContent
-    };
-};
-// Specialized hooks for common help scenarios
-export const useFieldHelp = (fieldId, helpContent, addHelpContent, getHelpContent) => {
-    // Stabilize helpContent object to prevent infinite loops
-    const stableHelpContent = React.useMemo(() => helpContent, [
-        helpContent.title,
-        helpContent.description,
-        helpContent.category,
-        helpContent.trigger,
-        helpContent.position,
-        JSON.stringify(helpContent.showOnDisclosureLevel),
-        JSON.stringify(helpContent.examples),
-        helpContent.shortcut,
-        helpContent.priority
-    ]);
-    React.useEffect(() => {
-        const content = {
-            ...stableHelpContent,
-            id: fieldId
-        };
+export 
+// Register help content for a component
+const registerHelpContent = (content) => {
+    if (Array.isArray(content)) {
+        content.forEach(addHelpContent);
+    }
+    else {
         addHelpContent(content);
-    }, [fieldId, stableHelpContent, addHelpContent]);
-    return getHelpContent(fieldId);
+    }
 };
-export const useOnboardingHelp = () => {
-    const { helpContent, onboardingEnabled, onboardingComplete, onboardingStep, nextOnboardingStep, previousOnboardingStep, skipOnboarding, completeOnboarding, startOnboarding } = useHelpSystem();
-    const onboardingSteps = helpContent
-        .filter(content => content.category === 'onboarding')
-        .sort((a, b) => (a.priority === 'high' ? -1 : 1));
-    const currentStepData = onboardingSteps[onboardingStep];
-    return {
-        isOnboardingActive: onboardingEnabled && !onboardingComplete,
-        currentStep: currentStepData,
-        currentStepIndex: onboardingStep,
-        totalSteps: onboardingSteps.length,
-        allSteps: onboardingSteps,
-        nextStep: nextOnboardingStep,
-        previousStep: previousOnboardingStep,
-        skipOnboarding,
-        completeOnboarding,
-        startOnboarding,
-        isComplete: onboardingComplete
+// Register help content with automatic cleanup
+const useHelpContent = (content) => {
+    React.useEffect(() => {
+        registerHelpContent(content);
+        // Cleanup function to remove content when component unmounts
+        return () => {
+            if (Array.isArray(content)) {
+                content.forEach(c => removeHelpContent(c.id));
+            }
+            else {
+                removeHelpContent(content.id);
+            }
+        };
+    }, []);
+};
+return {
+    registerHelpContent,
+    useHelpContent,
+    updateHelpContent,
+    removeHelpContent
+};
+;
+React.useEffect(() => {
+    const content = {
+        ...stableHelpContent,
+        id: fieldId
     };
+    addHelpContent(content);
+}, [fieldId, stableHelpContent, addHelpContent]);
+return getHelpContent(fieldId);
+;
+export const onboardingSteps = helpContent
+    .filter(content => content.category === 'onboarding')
+    .sort((a, b) => (a.priority === 'high' ? -1 : 1));
+const currentStepData = onboardingSteps[onboardingStep];
+return {
+    isOnboardingActive: onboardingEnabled && !onboardingComplete,
+    currentStep: currentStepData,
+    currentStepIndex: onboardingStep,
+    totalSteps: onboardingSteps.length,
+    allSteps: onboardingSteps,
+    nextStep: nextOnboardingStep,
+    previousStep: previousOnboardingStep,
+    skipOnboarding,
+    completeOnboarding,
+    startOnboarding,
+    isComplete: onboardingComplete
 };
-// Component for managing help system settings
-export const HelpSystemSettings = ({ className }) => {
-    const { showHelpHints, onboardingComplete, toggleHelpHints, startOnboarding, resetHelpSystem } = useHelpSystem();
-    return (_jsxs("div", { className: `help-system-settings ${className}`, style: {
-            background: '#2d3748',
-            border: '1px solid #4a5568',
-            borderRadius: 6,
-            padding: 12
-        }, children: [_jsx("h4", { style: {
-                    margin: '0 0 12px 0',
-                    fontSize: 12,
-                    fontWeight: 600,
-                    color: '#e2e8f0'
-                }, children: "Help System Settings" }), _jsxs("div", { style: { display: 'flex', flexDirection: 'column', gap: 8 }, children: [_jsxs("label", { style: {
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 8,
-                            cursor: 'pointer',
-                            fontSize: 11,
-                            color: '#e2e8f0'
-                        }, children: [_jsx("input", { type: "checkbox", checked: showHelpHints, onChange: toggleHelpHints, style: { cursor: 'pointer' } }), "Show help tooltips and hints"] }), _jsxs("div", { style: {
-                            fontSize: 11,
-                            color: '#a0aec0',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 8
-                        }, children: [_jsxs("span", { children: ["Onboarding: ", onboardingComplete ? '✅ Complete' : '🔄 Available'] }), onboardingComplete && (_jsx("button", { onClick: startOnboarding, style: {
-                                    padding: '2px 6px',
-                                    fontSize: 10,
-                                    background: '#4299e1',
-                                    border: 'none',
-                                    borderRadius: 2,
-                                    color: 'white',
-                                    cursor: 'pointer'
-                                }, children: "Restart Tour" }))] }), _jsx("button", { onClick: resetHelpSystem, style: {
-                            padding: '4px 8px',
-                            fontSize: 10,
-                            background: '#e53e3e',
-                            border: 'none',
-                            borderRadius: 3,
-                            color: 'white',
-                            cursor: 'pointer',
-                            alignSelf: 'flex-start'
-                        }, children: "Reset Help System" })] })] }));
-};
+;
+return (_jsxs("div", { className: `help-system-settings ${className}`, style: {
+        background: '#2d3748',
+        border: '1px solid #4a5568',
+        borderRadius: 6,
+        padding: 12
+    }, children: [_jsx("h4", { style: {
+                margin: '0 0 12px 0',
+                fontSize: 12,
+                fontWeight: 600,
+                color: '#e2e8f0'
+            }, children: "Help System Settings" }), _jsxs("div", { style: { display: 'flex', flexDirection: 'column', gap: 8 }, children: [_jsxs("label", { style: {
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 8,
+                        cursor: 'pointer',
+                        fontSize: 11,
+                        color: '#e2e8f0'
+                    }, children: [_jsx("input", { type: "checkbox", checked: showHelpHints, onChange: toggleHelpHints, style: { cursor: 'pointer' } }), "Show help tooltips and hints"] }), _jsxs("div", { style: {
+                        fontSize: 11,
+                        color: '#a0aec0',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 8
+                    }, children: [_jsxs("span", { children: ["Onboarding: ", onboardingComplete ? '✅ Complete' : '🔄 Available'] }), onboardingComplete && (_jsx("button", { onClick: startOnboarding, style: {
+                                padding: '2px 6px',
+                                fontSize: 10,
+                                background: '#4299e1',
+                                border: 'none',
+                                borderRadius: 2,
+                                color: 'white',
+                                cursor: 'pointer'
+                            }, children: "Restart Tour" }))] }), _jsx("button", { onClick: resetHelpSystem, style: {
+                        padding: '4px 8px',
+                        fontSize: 10,
+                        background: '#e53e3e',
+                        border: 'none',
+                        borderRadius: 3,
+                        color: 'white',
+                        cursor: 'pointer',
+                        alignSelf: 'flex-start'
+                    }, children: "Reset Help System" })] })] }));
+;
 export default HelpProvider;

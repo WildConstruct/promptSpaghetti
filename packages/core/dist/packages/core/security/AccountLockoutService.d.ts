@@ -138,12 +138,7 @@ export declare class AccountLockoutService extends EventEmitter {
     /**
      * Create a new account lockout
      */
-    createLockout(
-      userId: string,
-      userEmail: string,
-      reason: LockoutReason,
-      metadata?: Partial<AccountLockout['metadata']>
-    ): Promise<string>;
+    createLockout(userId: string, userEmail: string, reason: LockoutReason, metadata?: Partial<AccountLockout['metadata']>): Promise<string>;
     /**
      * Administrator unlock capability with comprehensive security
      */
@@ -162,13 +157,7 @@ export declare class AccountLockoutService extends EventEmitter {
     /**
      * Approve pending unlock request
      */
-    approveUnlock(
-      lockoutId: string,
-      adminActionId: string,
-      approverId: string,
-      approved: boolean,
-      comments?: string
-    ): Promise<{
+    approveUnlock(lockoutId: string, adminActionId: string, approverId: string, approved: boolean, comments?: string): Promise<{
         success: boolean;
         message: string;
     }>;

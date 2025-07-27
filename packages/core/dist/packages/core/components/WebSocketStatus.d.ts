@@ -11,7 +11,11 @@ export declare const WebSocketStatusIcon: React.FC<{
     connectionState: ConnectionState;
     onClick?: () => void;
 }>;
-export declare     onReconnect?: () => void;
+export declare const WebSocketDetails: React.FC<{
+    connectionState: ConnectionState;
+    queuedMessages?: number;
+    onClearQueue?: () => void;
+    onReconnect?: () => void;
     onDisconnect?: () => void;
 }>;
 export {};

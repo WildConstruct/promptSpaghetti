@@ -141,22 +141,10 @@ export declare class AdvancedPromptingCollaborationService extends EventEmitter 
     private initializeMARSRegionTemplates;
     private initializeZadaPromptPatterns;
     private initializeWorkflowTemplates;
-    createCollaborationSession(
-      title: string,
-      methodology: PromptingMethodology,
-      creatorId: string
-    ): Promise<PromptingMethodologySession>;
+    createCollaborationSession(title: string, methodology: PromptingMethodology, creatorId: string): Promise<PromptingMethodologySession>;
     joinCollaborationSession(sessionId: string, userId: string): Promise<boolean>;
-    createZadaPattern(
-      sessionId: string,
-      userId: string,
-      patternData: Partial<ZadaPromptPattern>
-    ): Promise<ZadaPromptPattern>;
-    createMARSRegion(
-      sessionId: string,
-      userId: string,
-      regionData: Partial<MARSRegionTemplate>
-    ): Promise<MARSRegionTemplate>;
+    createZadaPattern(sessionId: string, userId: string, patternData: Partial<ZadaPromptPattern>): Promise<ZadaPromptPattern>;
+    createMARSRegion(sessionId: string, userId: string, regionData: Partial<MARSRegionTemplate>): Promise<MARSRegionTemplate>;
     generateVFXExport(sessionId: string, userId: string): Promise<any>;
     registerUser(user: FilmIndustryUser): void;
     getUsersByRole(role: FilmIndustryRole): FilmIndustryUser[];

@@ -7,22 +7,5 @@
  * with graph interactions.
  */
 import React from 'react';
-import { StickyNote as StickyNoteType } from '../../types/CollaborationTypes';
-interface StickyNotesLayerProps {
-    notes: StickyNoteType[];
-    onNotesChange: (notes: StickyNoteType[]) => void;
-    canvasSize: {
-        width: number;
-        height: number;
-    };
-    canvasOffset: {
-        x: number;
-        y: number;
-    };
-    zoom: number;
-    author?: string;
-    readOnly?: boolean;
-}
-export declare const StickyNotesLayer: React.FC<StickyNotesLayerProps>;
-export {};
+export declare const layerRef: React.MutableRefObject<HTMLDivElement>;
 //# sourceMappingURL=StickyNotesLayer.d.ts.map

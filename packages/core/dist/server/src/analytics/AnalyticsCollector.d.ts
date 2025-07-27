@@ -178,48 +178,19 @@ export declare class AnalyticsCollector extends EventEmitter {
     /**
      * Record a graph execution completion event
      */
-    recordGraphExecutionComplete(
-      graphId: string,
-      executionTimeMs: number,
-      outputLength: number,
-      nodeCount: number,
-      connectionCount: number
-    ): void;
+    recordGraphExecutionComplete(graphId: string, executionTimeMs: number, outputLength: number, nodeCount: number, connectionCount: number): void;
     /**
      * Record a graph execution error event
      */
-    recordGraphExecutionError(
-      graphId: string,
-      errorMessage: string,
-      nodeCount: number,
-      connectionCount: number,
-      executionTimeMs?: number
-    ): void;
+    recordGraphExecutionError(graphId: string, errorMessage: string, nodeCount: number, connectionCount: number, executionTimeMs?: number): void;
     /**
      * Record a node execution event
      */
-    recordNodeExecution(
-      nodeId: string,
-      nodeType: string,
-      graphId: string,
-      executionTimeMs: number,
-      success: boolean,
-      inputSize?: number,
-      outputSize?: number,
-      errorMessage?: string
-    ): void;
+    recordNodeExecution(nodeId: string, nodeType: string, graphId: string, executionTimeMs: number, success: boolean, inputSize?: number, outputSize?: number, errorMessage?: string): void;
     /**
      * Record token usage event
      */
-    recordTokenUsage(
-      provider: string,
-      model: string,
-      promptTokens: number,
-      completionTokens: number,
-      estimatedCost: number,
-      nodeId: string,
-      graphId: string
-    ): void;
+    recordTokenUsage(provider: string, model: string, promptTokens: number, completionTokens: number, estimatedCost: number, nodeId: string, graphId: string): void;
     /**
      * Record user interaction event
      */
@@ -227,14 +198,7 @@ export declare class AnalyticsCollector extends EventEmitter {
     /**
      * Record performance metric
      */
-    recordPerformanceMetric(
-      metricName: string,
-      metricValue: number,
-      metricUnit: string,
-      component: string,
-      nodeId?: string,
-      graphId?: string
-    ): void;
+    recordPerformanceMetric(metricName: string, metricValue: number, metricUnit: string, component: string, nodeId?: string, graphId?: string): void;
     /**
      * Get analytics data for a time window
      */

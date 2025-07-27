@@ -27,6 +27,6 @@ export interface MultiSelectionManagerProps {
     theme?: 'light' | 'dark' | 'cinema';
     disabled?: boolean;
 }
-export declare const MultiSelectionManager: React.FC<MultiSelectionManagerProps>;
+export declare const MultiSelectionManager: React.FC<MultiSelectionManagerProps>, disabled: any, selectedNodes: any, selectedEdges: any, lastSelectedNode: any, nodes: any, onNodesSelect: any, onSelectionChange: any;
 export default MultiSelectionManager;
 //# sourceMappingURL=MultiSelectionManager.d.ts.map

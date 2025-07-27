@@ -4,16 +4,7 @@
  * Provides easy-to-use React integration for the unified policy management system.
  * Handles policy evaluation, violation monitoring, and compliance tracking.
  */
-import { 
-  PolicyManagement,
-  UnifiedPolicy,
-  PolicyDomain,
-  PolicyType,
-  PolicyStatus,
-  PolicyEvaluationResult,
-  PolicyViolation,
-  ComplianceFramework
-} from '../services/PolicyManagement';
+import { PolicyManagement, UnifiedPolicy, PolicyDomain, PolicyType, PolicyStatus, PolicyEvaluationResult, PolicyViolation, ComplianceFramework } from '../services/PolicyManagement';
 export interface PolicyManagementHookConfig {
     autoEvaluate?: boolean;
     cacheTimeout?: number;
@@ -53,22 +44,12 @@ export declare const usePolicyManagement: (config?: PolicyManagementHookConfig) 
     updatePolicy: (policyId: string, updates: Partial<UnifiedPolicy>, updatedBy: string) => Promise<UnifiedPolicy>;
     deletePolicy: (policyId: string, deletedBy: string) => Promise<void>;
     evaluatePolicies: (evaluationOptions: PolicyEvaluationOptions) => Promise<PolicyEvaluationResult[]>;
-    checkVFXHistoricalAccuracy: (
-      templateId: string,
-      historicalPeriod: string,
-      culturalContext: string,
-      expertReviewed?: boolean
-    ) => Promise<{
+    checkVFXHistoricalAccuracy: (templateId: string, historicalPeriod: string, culturalContext: string, expertReviewed?: boolean) => Promise<{
         allowed: boolean;
         violations: string[];
         reviewRequired: boolean;
     }>;
-    checkDataProtectionCompliance: (
-      userId: string,
-      dataType: string,
-      operation: string,
-      dataClassification: string
-    ) => Promise<{
+    checkDataProtectionCompliance: (userId: string, dataType: string, operation: string, dataClassification: string) => Promise<{
         compliant: boolean;
         frameworks: string[];
         actions: string[];

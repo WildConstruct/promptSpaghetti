@@ -25,6 +25,6 @@ interface NodeLabelsLayerProps {
     };
     zoom?: number;
 }
-export declare const NodeLabelsLayer: React.FC<NodeLabelsLayerProps>;
+export declare const NodeLabelsLayer: React.FC<NodeLabelsLayerProps>, nodes: any;
 export default NodeLabelsLayer;
 //# sourceMappingURL=NodeLabelsLayer.d.ts.map

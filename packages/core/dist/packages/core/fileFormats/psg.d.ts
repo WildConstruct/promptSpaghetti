@@ -416,9 +416,6 @@ export declare function extractPSGFileSummary(psgFile: PSGFile): {
 /**
  * File extension and MIME type constants
  */
-export declare export declare export declare /**
- * Version compatibility checker
- */
 export declare function checkPSGCompatibility(psgFile: PSGFile, currentVersion?: string): {
     compatible: boolean;
     warnings: string[];

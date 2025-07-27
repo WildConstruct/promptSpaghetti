@@ -6,13 +6,7 @@
  *
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-import { 
-  DataClassificationLevel,
-  AccessRequirements,
-  OperationContext,
-  ClassificationAuditEvent,
-  ValidationResult
-} from '../types/DataClassification';
+import { DataClassificationLevel, AccessRequirements, OperationContext, ClassificationAuditEvent, ValidationResult } from '../types/DataClassification';
 export interface AccessControlPolicy {
     id: string;
     name: string;

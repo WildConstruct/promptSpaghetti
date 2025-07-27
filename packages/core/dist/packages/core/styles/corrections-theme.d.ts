@@ -87,12 +87,25 @@ export interface CorrectionsTheme {
         desktop: string;
     };
 }
-export declare }
+export declare const darkTheme: CorrectionsTheme;
+export declare const lightTheme: CorrectionsTheme;
+import React, { ReactNode } from 'react';
+interface CorrectionsThemeContextType {
+    theme: CorrectionsTheme;
+    isDark: boolean;
+    toggleTheme: () => void;
+}
 interface CorrectionsThemeProviderProps {
     children: ReactNode;
     initialTheme?: 'light' | 'dark';
 }
-export declare export declare             color: string;
+export declare const CorrectionsThemeProvider: React.FC<CorrectionsThemeProviderProps>;
+export declare const useCorrectionsTheme: () => CorrectionsThemeContextType;
+export declare const createStyles: (theme: CorrectionsTheme) => {
+    button: {
+        primary: {
+            backgroundColor: string;
+            color: string;
             border: string;
             padding: string;
             borderRadius: string;

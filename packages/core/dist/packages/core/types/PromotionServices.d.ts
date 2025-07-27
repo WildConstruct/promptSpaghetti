@@ -5,28 +5,11 @@
  * Service contracts and API interfaces for promotion management operations
  * including CRUD, eligibility checking, application, and analytics.
  */
-import { 
-  BasePromotion,
-  ContentPromotion,
-  CampaignPromotion,
-  PromotionType,
-  PromotionStatus,
-  PromotionServiceResponse,
-  PromotionEligibilityCheck,
-  PromotionApplicationResult,
-  PromotionSearchCriteria,
-  PromotionSearchResult,
-  PromotionPerformanceMetrics,
-  PromotionRule,
-  PromotionTemplate
-} from './PromotionInterfaces';
+import { BasePromotion, ContentPromotion, CampaignPromotion, PromotionType, PromotionStatus, PromotionServiceResponse, PromotionEligibilityCheck, PromotionApplicationResult, PromotionSearchCriteria, PromotionSearchResult, PromotionPerformanceMetrics, PromotionRule, PromotionTemplate } from './PromotionInterfaces';
 export interface IPromotionService {
     createPromotion(promotionData: CreatePromotionRequest): Promise<PromotionServiceResponse<BasePromotion>>;
     getPromotion(promotionId: string): Promise<PromotionServiceResponse<BasePromotion>>;
-    updatePromotion(
-      promotionId: string,
-      updates: UpdatePromotionRequest
-    ): Promise<PromotionServiceResponse<BasePromotion>>;
+    updatePromotion(promotionId: string, updates: UpdatePromotionRequest): Promise<PromotionServiceResponse<BasePromotion>>;
     deletePromotion(promotionId: string, deletedBy: string): Promise<PromotionServiceResponse<void>>;
     createPromotions(promotions: CreatePromotionRequest[]): Promise<PromotionServiceResponse<BasePromotion[]>>;
     updatePromotions(updates: Array<{
@@ -38,159 +21,69 @@ export interface IPromotionService {
     getActivePromotions(filters?: ActivePromotionFilters): Promise<PromotionServiceResponse<BasePromotion[]>>;
     getPromotionsByType<T extends BasePromotion>(type: PromotionType): Promise<PromotionServiceResponse<T[]>>;
     activatePromotion(promotionId: string, activatedBy: string): Promise<PromotionServiceResponse<BasePromotion>>;
-    pausePromotion(
-      promotionId: string,
-      pausedBy: string,
-      reason?: string
-    ): Promise<PromotionServiceResponse<BasePromotion>>;
-    cancelPromotion(
-      promotionId: string,
-      cancelledBy: string,
-      reason: string
-    ): Promise<PromotionServiceResponse<BasePromotion>>;
+    pausePromotion(promotionId: string, pausedBy: string, reason?: string): Promise<PromotionServiceResponse<BasePromotion>>;
+    cancelPromotion(promotionId: string, cancelledBy: string, reason: string): Promise<PromotionServiceResponse<BasePromotion>>;
     validatePromotion(promotionData: Partial<BasePromotion>): Promise<PromotionServiceResponse<PromotionValidationResult>>;
     checkPromotionConflicts(promotionId: string): Promise<PromotionServiceResponse<PromotionConflictCheck>>;
 }
 export interface IPromotionEligibilityService {
     checkEligibility(request: EligibilityCheckRequest): Promise<PromotionServiceResponse<PromotionEligibilityCheck>>;
     checkMultipleEligibility(request: MultipleEligibilityCheckRequest): Promise<PromotionServiceResponse<PromotionEligibilityCheck[]>>;
-    checkUserPromotionEligibility(
-      userId: string,
-      filters?: EligibilityFilters
-    ): Promise<PromotionServiceResponse<PromotionEligibilityCheck[]>>;
+    checkUserPromotionEligibility(userId: string, filters?: EligibilityFilters): Promise<PromotionServiceResponse<PromotionEligibilityCheck[]>>;
     applyPromotion(request: ApplyPromotionRequest): Promise<PromotionServiceResponse<PromotionApplicationResult>>;
     removePromotion(request: RemovePromotionRequest): Promise<PromotionServiceResponse<PromotionApplicationResult>>;
     findApplicablePromotions(context: PromotionContext): Promise<PromotionServiceResponse<ApplicablePromotionsResult>>;
-    getRecommendedPromotions(
-      userId: string,
-      context?: PromotionContext
-    ): Promise<PromotionServiceResponse<PromotionRecommendation[]>>;
+    getRecommendedPromotions(userId: string, context?: PromotionContext): Promise<PromotionServiceResponse<PromotionRecommendation[]>>;
     evaluateCartPromotions(cartId: string, userId: string): Promise<PromotionServiceResponse<CartPromotionEvaluation>>;
     applyBestPromotions(cartId: string, userId: string): Promise<PromotionServiceResponse<CartPromotionApplication>>;
-    validatePromoCode(
-      promoCode: string,
-      userId: string,
-      context?: PromotionContext
-    ): Promise<PromotionServiceResponse<PromoCodeValidation>>;
-    applyPromoCode(
-      promoCode: string,
-      cartId: string,
-      userId: string
-    ): Promise<PromotionServiceResponse<PromotionApplicationResult>>;
+    validatePromoCode(promoCode: string, userId: string, context?: PromotionContext): Promise<PromotionServiceResponse<PromoCodeValidation>>;
+    applyPromoCode(promoCode: string, cartId: string, userId: string): Promise<PromotionServiceResponse<PromotionApplicationResult>>;
 }
 export interface IContentPromotionService {
     createContentPromotion(promotionData: CreateContentPromotionRequest): Promise<PromotionServiceResponse<ContentPromotion>>;
-    updateContentSelection(
-      promotionId: string,
-      contentIds: string[]
-    ): Promise<PromotionServiceResponse<ContentPromotion>>;
+    updateContentSelection(promotionId: string, contentIds: string[]): Promise<PromotionServiceResponse<ContentPromotion>>;
     refreshContentSelection(promotionId: string): Promise<PromotionServiceResponse<ContentPromotion>>;
-    getPromotedContent(
-      location: string,
-      userId?: string,
-      limit?: number
-    ): Promise<PromotionServiceResponse<PromotedContent[]>>;
+    getPromotedContent(location: string, userId?: string, limit?: number): Promise<PromotionServiceResponse<PromotedContent[]>>;
     getContentByPromotionSlot(slotId: string): Promise<PromotionServiceResponse<PromotedContent[]>>;
     trackContentView(contentId: string, promotionId: string, userId?: string): Promise<PromotionServiceResponse<void>>;
     trackContentClick(contentId: string, promotionId: string, userId?: string): Promise<PromotionServiceResponse<void>>;
-    trackContentConversion(
-      contentId: string,
-      promotionId: string,
-      userId: string,
-      conversionData: ConversionData
-    ): Promise<PromotionServiceResponse<void>>;
-    getContentPromotionAnalytics(
-      promotionId: string,
-      dateRange?: DateRange
-    ): Promise<PromotionServiceResponse<ContentPromotionAnalytics>>;
-    getContentPerformanceReport(
-      contentIds: string[],
-      dateRange?: DateRange
-    ): Promise<PromotionServiceResponse<ContentPerformanceReport>>;
+    trackContentConversion(contentId: string, promotionId: string, userId: string, conversionData: ConversionData): Promise<PromotionServiceResponse<void>>;
+    getContentPromotionAnalytics(promotionId: string, dateRange?: DateRange): Promise<PromotionServiceResponse<ContentPromotionAnalytics>>;
+    getContentPerformanceReport(contentIds: string[], dateRange?: DateRange): Promise<PromotionServiceResponse<ContentPerformanceReport>>;
     createContentABTest(testConfig: ContentABTestConfig): Promise<PromotionServiceResponse<ContentABTest>>;
     getABTestResults(testId: string): Promise<PromotionServiceResponse<ABTestResults>>;
 }
 export interface ICampaignService {
     createCampaign(campaignData: CreateCampaignRequest): Promise<PromotionServiceResponse<CampaignPromotion>>;
     getCampaign(campaignId: string): Promise<PromotionServiceResponse<CampaignPromotion>>;
-    updateCampaign(
-      campaignId: string,
-      updates: UpdateCampaignRequest
-    ): Promise<PromotionServiceResponse<CampaignPromotion>>;
+    updateCampaign(campaignId: string, updates: UpdateCampaignRequest): Promise<PromotionServiceResponse<CampaignPromotion>>;
     deleteCampaign(campaignId: string, deletedBy: string): Promise<PromotionServiceResponse<void>>;
     launchCampaign(campaignId: string, launchedBy: string): Promise<PromotionServiceResponse<CampaignLaunchResult>>;
     pauseCampaign(campaignId: string, pausedBy: string): Promise<PromotionServiceResponse<CampaignPromotion>>;
     resumeCampaign(campaignId: string, resumedBy: string): Promise<PromotionServiceResponse<CampaignPromotion>>;
-    configureChannel(
-      campaignId: string,
-      channelConfig: CampaignChannelConfig
-    ): Promise<PromotionServiceResponse<CampaignPromotion>>;
-    updateChannelBudget(
-      campaignId: string,
-      channel: string,
-      newBudget: number
-    ): Promise<PromotionServiceResponse<CampaignPromotion>>;
-    getCampaignPerformance(
-      campaignId: string,
-      dateRange?: DateRange
-    ): Promise<PromotionServiceResponse<CampaignPerformanceReport>>;
+    configureChannel(campaignId: string, channelConfig: CampaignChannelConfig): Promise<PromotionServiceResponse<CampaignPromotion>>;
+    updateChannelBudget(campaignId: string, channel: string, newBudget: number): Promise<PromotionServiceResponse<CampaignPromotion>>;
+    getCampaignPerformance(campaignId: string, dateRange?: DateRange): Promise<PromotionServiceResponse<CampaignPerformanceReport>>;
     getCampaignROI(campaignId: string): Promise<PromotionServiceResponse<CampaignROIReport>>;
-    updateCampaignBudget(
-      campaignId: string,
-      budgetUpdates: CampaignBudgetUpdate
-    ): Promise<PromotionServiceResponse<CampaignPromotion>>;
-    getCampaignSpending(
-      campaignId: string,
-      dateRange?: DateRange
-    ): Promise<PromotionServiceResponse<CampaignSpendingReport>>;
+    updateCampaignBudget(campaignId: string, budgetUpdates: CampaignBudgetUpdate): Promise<PromotionServiceResponse<CampaignPromotion>>;
+    getCampaignSpending(campaignId: string, dateRange?: DateRange): Promise<PromotionServiceResponse<CampaignSpendingReport>>;
 }
 export interface IPromotionAnalyticsService {
-    getPromotionPerformance(
-      promotionId: string,
-      dateRange?: DateRange
-    ): Promise<PromotionServiceResponse<PromotionPerformanceReport>>;
-    getMultiplePromotionPerformance(
-      promotionIds: string[],
-      dateRange?: DateRange
-    ): Promise<PromotionServiceResponse<PromotionPerformanceReport[]>>;
-    comparePromotions(
-      promotionIds: string[],
-      metrics: string[],
-      dateRange?: DateRange
-    ): Promise<PromotionServiceResponse<PromotionComparisonReport>>;
-    benchmarkPromotion(
-      promotionId: string,
-      benchmarkType: BenchmarkType
-    ): Promise<PromotionServiceResponse<PromotionBenchmarkReport>>;
-    getPromotionRevenue(
-      promotionId: string,
-      dateRange?: DateRange
-    ): Promise<PromotionServiceResponse<RevenueAnalyticsReport>>;
-    getRevenueImpact(
-      promotionIds: string[],
-      dateRange?: DateRange
-    ): Promise<PromotionServiceResponse<RevenueImpactReport>>;
+    getPromotionPerformance(promotionId: string, dateRange?: DateRange): Promise<PromotionServiceResponse<PromotionPerformanceReport>>;
+    getMultiplePromotionPerformance(promotionIds: string[], dateRange?: DateRange): Promise<PromotionServiceResponse<PromotionPerformanceReport[]>>;
+    comparePromotions(promotionIds: string[], metrics: string[], dateRange?: DateRange): Promise<PromotionServiceResponse<PromotionComparisonReport>>;
+    benchmarkPromotion(promotionId: string, benchmarkType: BenchmarkType): Promise<PromotionServiceResponse<PromotionBenchmarkReport>>;
+    getPromotionRevenue(promotionId: string, dateRange?: DateRange): Promise<PromotionServiceResponse<RevenueAnalyticsReport>>;
+    getRevenueImpact(promotionIds: string[], dateRange?: DateRange): Promise<PromotionServiceResponse<RevenueImpactReport>>;
     calculateROI(promotionId: string): Promise<PromotionServiceResponse<ROICalculation>>;
-    getPromotionUserMetrics(
-      promotionId: string,
-      dateRange?: DateRange
-    ): Promise<PromotionServiceResponse<PromotionUserMetrics>>;
+    getPromotionUserMetrics(promotionId: string, dateRange?: DateRange): Promise<PromotionServiceResponse<PromotionUserMetrics>>;
     getUserPromotionHistory(userId: string, limit?: number): Promise<PromotionServiceResponse<UserPromotionHistory[]>>;
-    getPromotionTrends(
-      dateRange: DateRange,
-      groupBy: TrendGrouping
-    ): Promise<PromotionServiceResponse<PromotionTrendReport>>;
-    getSeasonalAnalysis(
-      promotionType?: PromotionType,
-      years?: number
-    ): Promise<PromotionServiceResponse<SeasonalAnalysisReport>>;
+    getPromotionTrends(dateRange: DateRange, groupBy: TrendGrouping): Promise<PromotionServiceResponse<PromotionTrendReport>>;
+    getSeasonalAnalysis(promotionType?: PromotionType, years?: number): Promise<PromotionServiceResponse<SeasonalAnalysisReport>>;
     predictPromotionPerformance(promotionData: PredictionRequest): Promise<PromotionServiceResponse<PerformancePrediction>>;
     getOptimizationRecommendations(promotionId: string): Promise<PromotionServiceResponse<OptimizationRecommendation[]>>;
     getRealtimePromotionStats(promotionId: string): Promise<PromotionServiceResponse<RealtimePromotionStats>>;
-    subscribeToPromotionUpdates(
-      promotionId: string,
-      callback: PromotionUpdateCallback
-    ): Promise<PromotionServiceResponse<SubscriptionHandle>>;
+    subscribeToPromotionUpdates(promotionId: string, callback: PromotionUpdateCallback): Promise<PromotionServiceResponse<SubscriptionHandle>>;
 }
 export interface IPromotionRulesService {
     createRule(ruleData: CreateRuleRequest): Promise<PromotionServiceResponse<PromotionRule>>;
@@ -199,10 +92,7 @@ export interface IPromotionRulesService {
     deleteRule(ruleId: string, deletedBy: string): Promise<PromotionServiceResponse<void>>;
     evaluateRules(context: RuleEvaluationContext): Promise<PromotionServiceResponse<RuleEvaluationResult[]>>;
     executeRule(ruleId: string, context: RuleEvaluationContext): Promise<PromotionServiceResponse<RuleExecutionResult>>;
-    testRule(
-      ruleData: PromotionRule,
-      testContext: RuleEvaluationContext
-    ): Promise<PromotionServiceResponse<RuleTestResult>>;
+    testRule(ruleData: PromotionRule, testContext: RuleEvaluationContext): Promise<PromotionServiceResponse<RuleTestResult>>;
     validateRuleLogic(ruleData: PromotionRule): Promise<PromotionServiceResponse<RuleValidationResult>>;
     getRulePerformance(ruleId: string, dateRange?: DateRange): Promise<PromotionServiceResponse<RulePerformanceReport>>;
     optimizeRules(criteria: RuleOptimizationCriteria): Promise<PromotionServiceResponse<RuleOptimizationResult>>;
@@ -210,23 +100,13 @@ export interface IPromotionRulesService {
 export interface IPromotionTemplateService {
     createTemplate(templateData: CreateTemplateRequest): Promise<PromotionServiceResponse<PromotionTemplate>>;
     getTemplate(templateId: string): Promise<PromotionServiceResponse<PromotionTemplate>>;
-    updateTemplate(
-      templateId: string,
-      updates: UpdateTemplateRequest
-    ): Promise<PromotionServiceResponse<PromotionTemplate>>;
+    updateTemplate(templateId: string, updates: UpdateTemplateRequest): Promise<PromotionServiceResponse<PromotionTemplate>>;
     deleteTemplate(templateId: string, deletedBy: string): Promise<PromotionServiceResponse<void>>;
     getTemplates(filters?: TemplateFilters): Promise<PromotionServiceResponse<PromotionTemplate[]>>;
     getPopularTemplates(limit?: number): Promise<PromotionServiceResponse<PromotionTemplate[]>>;
     getRecommendedTemplates(context: TemplateRecommendationContext): Promise<PromotionServiceResponse<PromotionTemplate[]>>;
-    createPromotionFromTemplate(
-      templateId: string,
-      customizations: TemplateCustomization
-    ): Promise<PromotionServiceResponse<BasePromotion>>;
-    cloneTemplate(
-      templateId: string,
-      newName: string,
-      customizations?: TemplateCustomization
-    ): Promise<PromotionServiceResponse<PromotionTemplate>>;
+    createPromotionFromTemplate(templateId: string, customizations: TemplateCustomization): Promise<PromotionServiceResponse<BasePromotion>>;
+    cloneTemplate(templateId: string, newName: string, customizations?: TemplateCustomization): Promise<PromotionServiceResponse<PromotionTemplate>>;
     getTemplateUsageStats(templateId: string): Promise<PromotionServiceResponse<TemplateUsageStats>>;
     getTemplatePerformance(templateId: string): Promise<PromotionServiceResponse<TemplatePerformanceStats>>;
 }

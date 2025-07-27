@@ -421,11 +421,7 @@ export declare class UserAccessTransparencyService extends EventEmitter {
     /**
      * Submit Data Subject Access Request
      */
-    submitDSAR(
-      userId: string,
-      requestType: DataSubjectAccessRequest['requestType'],
-      details: DSARRequestDetails
-    ): Promise<DataSubjectAccessRequest>;
+    submitDSAR(userId: string, requestType: DataSubjectAccessRequest['requestType'], details: DSARRequestDetails): Promise<DataSubjectAccessRequest>;
     /**
      * Get user's privacy score and recommendations
      */
@@ -445,11 +441,7 @@ export declare class UserAccessTransparencyService extends EventEmitter {
     /**
      * Export user data for portability
      */
-    exportUserData(
-      userId: string,
-      format?: 'JSON' | 'XML' | 'CSV' | 'PDF',
-      categories?: string[]
-    ): Promise<DSARResponse>;
+    exportUserData(userId: string, format?: 'JSON' | 'XML' | 'CSV' | 'PDF', categories?: string[]): Promise<DSARResponse>;
     private buildDataInventory;
     private gatherDataCategories;
     private calculateRetentionSummary;

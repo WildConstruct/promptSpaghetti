@@ -876,5 +876,5 @@ export interface OptimizationSuggestionsExportData {
     exportTimestamp: number;
     configuration: OptimizationConfiguration;
 }
-export declare const AutomatedOptimizationSuggestions: React.FC<AutomatedOptimizationSuggestionsProps>;
+export declare const error: string, setError: React.Dispatch<React.SetStateAction<string>>;
 //# sourceMappingURL=AutomatedOptimizationSuggestions.d.ts.map

@@ -65,13 +65,7 @@ export declare class ParameterManager {
     /**
      * Create new preset from parameters
      */
-    createPreset(
-      name: string,
-      description: string,
-      category: string,
-      parameters: RandomizerParameters,
-      tags?: string[]
-    ): ParameterPreset;
+    createPreset(name: string, description: string, category: string, parameters: RandomizerParameters, tags?: string[]): ParameterPreset;
     /**
      * Update existing preset
      */
@@ -87,12 +81,7 @@ export declare class ParameterManager {
     /**
      * Add to history
      */
-    addToHistory(
-      parameters: RandomizerParameters,
-      success: boolean,
-      generationTime?: number,
-      errorCount?: number
-    ): void;
+    addToHistory(parameters: RandomizerParameters, success: boolean, generationTime?: number, errorCount?: number): void;
     /**
      * Clear history
      */

@@ -128,7 +128,9 @@ export interface ShareTrackingFilters {
     regions: string[];
     devices: string[];
 }
-export declare     aggregateShareData: (shares: ShareRecord[]) => ShareTrackingData;
+export declare const ShareTrackingUtils: {
+    calculateTrend: (current: number, previous: number) => TrendData;
+    aggregateShareData: (shares: ShareRecord[]) => ShareTrackingData;
     formatMetric: (value: number, type: "currency" | "percentage" | "number") => string;
 };
 export declare const ShareTrackingManager: React.FC<ShareTrackingManagerProps>;

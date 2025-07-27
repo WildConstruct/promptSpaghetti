@@ -1173,7 +1173,11 @@ export interface CollaborationMetrics {
         byResourceType: Record<string, number>;
     };
 }
-export declare export declare export declare export declare export declare const ATTRIBUTION_DEFAULTS: {
+export declare const validateCreateAttributionRequest: (request: unknown) => CreateAttributionRequest;
+export declare const validateAttributionFilter: (filter: unknown) => AttributionFilter;
+export declare const validateAttributionStatsRequest: (request: unknown) => AttributionStatsRequest;
+export declare const validateUpdatePrivacySettingsRequest: (request: unknown) => UpdatePrivacySettingsRequest;
+export declare const ATTRIBUTION_DEFAULTS: {
     readonly DEFAULT_RETENTION_DAYS: 365;
     readonly DEFAULT_ANONYMIZE_AFTER_DAYS: 90;
     readonly MIN_CONFIDENCE_SCORE: 0.5;

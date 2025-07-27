@@ -140,13 +140,7 @@ export declare class CrowdGenerationPipeline {
     private clothingGenerator;
     private behaviorEngine;
     private vfxExporter;
-    constructor(
-      historicalDataService: HistoricalDataService,
-      constraintValidator: ConstraintValidator,
-      clothingGenerator: HistoricalClothingGenerator,
-      behaviorEngine: CrowdBehaviorEngine,
-      vfxExporter: VFXExporter
-    );
+    constructor(historicalDataService: HistoricalDataService, constraintValidator: ConstraintValidator, clothingGenerator: HistoricalClothingGenerator, behaviorEngine: CrowdBehaviorEngine, vfxExporter: VFXExporter);
     /**
      * Generate a historically accurate crowd
      */

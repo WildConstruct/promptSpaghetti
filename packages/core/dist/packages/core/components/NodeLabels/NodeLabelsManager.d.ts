@@ -18,6 +18,6 @@ interface NodeLabelsManagerProps {
     onNodeHover?: (nodeId: string | null) => void;
     onNodeFocus?: (nodeId: string | null) => void;
 }
-export declare const NodeLabelsManager: React.FC<NodeLabelsManagerProps>;
+export declare const NodeLabelsManager: React.FC<NodeLabelsManagerProps>, onNodeFocus: any;
 export default NodeLabelsManager;
 //# sourceMappingURL=NodeLabelsManager.d.ts.map

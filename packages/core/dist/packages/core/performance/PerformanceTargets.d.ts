@@ -50,11 +50,7 @@ export declare function getTargetsForUserSegment(segment: PerformanceTargetConfi
 /**
  * Validate if current performance meets targets
  */
-export declare function validatePerformanceTargets(
-  currentMetrics: Record<string,
-  number>,
-  config: PerformanceTargetConfig
-): {
+export declare function validatePerformanceTargets(currentMetrics: Record<string, number>, config: PerformanceTargetConfig): {
     passed: boolean;
     score: number;
     violations: Array<{

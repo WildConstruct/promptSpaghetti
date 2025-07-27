@@ -18,14 +18,7 @@
  * @version 1.0.0
  * @since 2024-01-22
  */
-import { 
-  DashboardConfig,
-  DashboardType,
-  SecurityRole,
-  WidgetDefinition,
-  DashboardTheme,
-  DashboardPermissions
-} from './SecurityDashboardFramework';
+import { DashboardConfig, DashboardType, SecurityRole, WidgetDefinition, DashboardTheme, DashboardPermissions } from './SecurityDashboardFramework';
 export interface DashboardTemplate {
     id: string;
     type: DashboardType;

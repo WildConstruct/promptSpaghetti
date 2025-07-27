@@ -8,23 +8,6 @@ interface WorkflowStateIndicatorProps {
     className?: string;
 }
 export declare const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps>;
-interface WorkflowStateTimelineProps {
-    states: WorkflowStateConfig[];
-    currentState: WorkflowState;
-    completedStates?: WorkflowState[];
-    className?: string;
-}
-export declare const WorkflowStateTimeline: React.FC<WorkflowStateTimelineProps>;
-interface WorkflowStateHistoryProps {
-    history: Array<{
-        state: WorkflowState;
-        stateConfig?: WorkflowStateConfig;
-        timestamp: string;
-        actor?: string;
-        comment?: string;
-    }>;
-    className?: string;
-}
-export declare const WorkflowStateHistory: React.FC<WorkflowStateHistoryProps>;
+export declare const isCurrent: (stateId: WorkflowState) => boolean;
 export {};
 //# sourceMappingURL=WorkflowStateIndicator.d.ts.map

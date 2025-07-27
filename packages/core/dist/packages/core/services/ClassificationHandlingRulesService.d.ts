@@ -6,12 +6,7 @@
  *
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-import { 
-  DataClassificationLevel,
-  HandlingRequirements,
-  OperationContext,
-  ValidationResult
-} from '../types/DataClassification';
+import { DataClassificationLevel, HandlingRequirements, OperationContext, ValidationResult } from '../types/DataClassification';
 export interface HandlingRule {
     id: string;
     name: string;
@@ -69,12 +64,7 @@ export declare class ClassificationHandlingRulesService {
     /**
      * Validate data handling against requirements
      */
-    validateDataHandling(
-      dataId: string,
-      classification: DataClassificationLevel,
-      operation: string,
-      context: OperationContext
-    ): Promise<ValidationResult>;
+    validateDataHandling(dataId: string, classification: DataClassificationLevel, operation: string, context: OperationContext): Promise<ValidationResult>;
     /**
      * Validate storage requirements
      */

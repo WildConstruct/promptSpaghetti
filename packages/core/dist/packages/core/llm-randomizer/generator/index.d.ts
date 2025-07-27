@@ -25,11 +25,7 @@ export declare class RandomizerSystem {
     /**
      * Quick generation with minimal setup
      */
-    quickGenerate(
-      purpose: string,
-      complexity?: ComplexityLevelType,
-      provider?: LLMProviderType
-    ): Promise<WorkflowResult>;
+    quickGenerate(purpose: string, complexity?: ComplexityLevelType, provider?: LLMProviderType): Promise<WorkflowResult>;
     /**
      * Generate with preset
      */

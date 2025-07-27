@@ -314,8 +314,14 @@ export const ApiManagementDashboard: React.FC = () => {
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  
+  const handleUpdateRateLimits = async (keyId: string, limits: any) => {
+    try {
+      const response = await fetch(`/api/admin/api-keys/${keyId}/rate-limits`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(limits)
+      });
+      
       if (!response.ok) {
         throw new Error('Failed to update rate limits');
       }
@@ -327,7 +333,13 @@ export const ApiManagementDashboard: React.FC = () => {
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleBulkOperation = async (operation: string, keyIds: string[]) => {
+    try {
+      const response = await fetch(`/api/admin/api-keys/bulk/${operation}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ keyIds })
+      });
         
       if (!response.ok) {
         throw new Error(`Failed to perform bulk ${operation}`);

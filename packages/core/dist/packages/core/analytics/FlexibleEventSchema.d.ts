@@ -11,14 +11,7 @@
  * - Property relationships and dependencies
  * - Performance-optimized validation pipeline
  */
-import { 
-  FlexibleConversionEvent,
-  PropertySchema,
-  PropertyType,
-  ValidationError,
-  ValidationWarning,
-  ConditionLogic
-} from './ConversionDataModel';
+import { FlexibleConversionEvent, PropertySchema, PropertyType, ValidationError, ValidationWarning, ConditionLogic } from './ConversionDataModel';
 export interface EventSchemaDefinition {
     id: string;
     name: string;
@@ -316,19 +309,11 @@ export declare class FlexibleEventSchemaManager {
     /**
      * Validate event against schema
      */
-    validateEvent(
-      event: FlexibleConversionEvent,
-      schemaId: string,
-      options?: ValidationOptions
-    ): Promise<SchemaValidationResult>;
+    validateEvent(event: FlexibleConversionEvent, schemaId: string, options?: ValidationOptions): Promise<SchemaValidationResult>;
     /**
      * Transform event according to schema
      */
-    transformEvent(
-      event: FlexibleConversionEvent,
-      schemaId: string,
-      stage?: 'pre_validation' | 'post_validation' | 'pre_storage' | 'post_retrieval'
-    ): Promise<FlexibleConversionEvent>;
+    transformEvent(event: FlexibleConversionEvent, schemaId: string, stage?: 'pre_validation' | 'post_validation' | 'pre_storage' | 'post_retrieval'): Promise<FlexibleConversionEvent>;
     /**
      * Get schema by ID
      */
@@ -344,11 +329,7 @@ export declare class FlexibleEventSchemaManager {
     /**
      * Create schema from template
      */
-    createSchemaFromTemplate(
-      templateName: string,
-      schemaId: string,
-      customizations?: Partial<EventSchemaDefinition>
-    ): EventSchemaDefinition;
+    createSchemaFromTemplate(templateName: string, schemaId: string, customizations?: Partial<EventSchemaDefinition>): EventSchemaDefinition;
     private performValidation;
     private validateBaseRequirements;
     private validateProperties;
@@ -392,8 +373,5 @@ export interface ValidationOptions {
     maxValidationTime?: number;
     customContext?: Record<string, unknown>;
 }
-/**
- * Factory function to create FlexibleEventSchemaManager
- */
-export declare export default FlexibleEventSchemaManager;
+export default FlexibleEventSchemaManager;
 //# sourceMappingURL=FlexibleEventSchema.d.ts.map

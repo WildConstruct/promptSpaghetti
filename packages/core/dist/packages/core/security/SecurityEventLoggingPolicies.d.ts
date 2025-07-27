@@ -347,7 +347,10 @@ export declare class SecurityEventLoggingPolicyEngine {
      */
     private generateRecommendations;
 }
-export declare     actions_triggered: string[];
+export declare const securityEventPolicyEngine: SecurityEventLoggingPolicyEngine;
+export declare const processSecurityEvent: (event: SecurityEvent) => {
+    matched_policies: string[];
+    actions_triggered: string[];
     notifications_sent: string[];
     compliance_requirements: ComplianceFramework[];
     escalation_required: boolean;

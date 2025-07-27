@@ -136,7 +136,9 @@ export interface SocialCustomizations {
     schedulingEnabled: boolean;
     analyticsIntegration: boolean;
 }
-export declare     generateDescription: (template: Template, platform: string) => string;
+export declare const ShareContentGenerator: {
+    generateTitle: (template: Template, platform: string) => string;
+    generateDescription: (template: Template, platform: string) => string;
     generateHashtags: (template: Template, platform: string) => string[];
 };
 export declare const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>;

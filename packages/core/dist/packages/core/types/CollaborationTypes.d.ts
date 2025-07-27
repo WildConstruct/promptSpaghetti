@@ -247,17 +247,4 @@ export interface StickyNoteContextMenuOptions {
     onChangeColor?: (color: StickyNoteColor) => void;
     onDuplicate?: () => void;
 }
-export declare const STICKY_NOTE_COLORS: {
-    yellow: string;
-    blue: string;
-    green: string;
-    pink: string;
-    purple: string;
-};
-export declare const DEFAULT_STICKY_NOTE_CONFIG: {
-    readonly color: string;
-    readonly width: 200;
-    readonly height: 150;
-    readonly pinned: false;
-};
 //# sourceMappingURL=CollaborationTypes.d.ts.map

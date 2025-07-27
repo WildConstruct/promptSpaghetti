@@ -10,29 +10,16 @@
  *
  * Provides unified interfaces and orchestration for the complete Epic 16 ecosystem.
  */
-import { 
-  MarketplaceTutorialSystemService,
-  MarketplaceTutorial,
-  TutorialSession,
-  LearningPath,
-  CommunityTutorialSubmission
-} from './MarketplaceTutorialSystem';
+import { MarketplaceTutorialSystemService, MarketplaceTutorial, TutorialSession, LearningPath, CommunityTutorialSubmission } from './MarketplaceTutorialSystem';
 import { LearningAnalyticsServiceImpl } from '../analytics/LearningAnalyticsService';
 import { ContributionManagementService, ContributionSubmission } from './ContributionManagementService';
 import { SkillLevelTaggingService, SkillLevel, SkillDomain, UserSkillProfile } from './SkillLevelTaggingService';
 import { TimeRange } from '../analytics/LearningAnalyticsExtension';
 export interface Epic16UnifiedService {
     discoverPersonalizedTutorials(userId: string, context: LearningContext): Promise<MarketplaceTutorial[]>;
-    startLearningSession(
-      userId: string,
-      contentId: string,
-      options: LearningSessionOptions
-    ): Promise<LearningSessionResult>;
+    startLearningSession(userId: string, contentId: string, options: LearningSessionOptions): Promise<LearningSessionResult>;
     trackLearningProgress(sessionId: string, progressData: LearningProgressData): Promise<LearningProgressResult>;
-    completeLearningExperience(
-      sessionId: string,
-      completionData: LearningCompletionData
-    ): Promise<LearningCompletionResult>;
+    completeLearningExperience(sessionId: string, completionData: LearningCompletionData): Promise<LearningCompletionResult>;
     getLearningInsights(userId: string, timeRange: TimeRange): Promise<PersonalizedLearningInsights>;
     getContentPerformanceInsights(contentId: string, timeRange: TimeRange): Promise<ContentPerformanceInsights>;
     getCommunityEngagementInsights(communityId: string, timeRange: TimeRange): Promise<CommunityEngagementInsights>;
@@ -303,23 +290,11 @@ export declare class Epic16IntegratedService implements Epic16UnifiedService {
     private analyticsService;
     private contributionService;
     private skillService;
-    constructor(
-      tutorialService: MarketplaceTutorialSystemService,
-      analyticsService: LearningAnalyticsServiceImpl,
-      contributionService: ContributionManagementService,
-      skillService: SkillLevelTaggingService
-    );
+    constructor(tutorialService: MarketplaceTutorialSystemService, analyticsService: LearningAnalyticsServiceImpl, contributionService: ContributionManagementService, skillService: SkillLevelTaggingService);
     discoverPersonalizedTutorials(userId: string, context: LearningContext): Promise<MarketplaceTutorial[]>;
-    startLearningSession(
-      userId: string,
-      contentId: string,
-      options: LearningSessionOptions
-    ): Promise<LearningSessionResult>;
+    startLearningSession(userId: string, contentId: string, options: LearningSessionOptions): Promise<LearningSessionResult>;
     trackLearningProgress(sessionId: string, progressData: LearningProgressData): Promise<LearningProgressResult>;
-    completeLearningExperience(
-      sessionId: string,
-      completionData: LearningCompletionData
-    ): Promise<LearningCompletionResult>;
+    completeLearningExperience(sessionId: string, completionData: LearningCompletionData): Promise<LearningCompletionResult>;
     getLearningInsights(userId: string, timeRange: TimeRange): Promise<PersonalizedLearningInsights>;
     getContentPerformanceInsights(contentId: string, timeRange: TimeRange): Promise<ContentPerformanceInsights>;
     getCommunityEngagementInsights(communityId: string, timeRange: TimeRange): Promise<CommunityEngagementInsights>;

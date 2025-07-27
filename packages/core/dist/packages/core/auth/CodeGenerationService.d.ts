@@ -76,11 +76,7 @@ export declare class CodeGenerationService {
     /**
      * Validate a code against stored hash
      */
-    validateCode(
-      inputCode: string,
-      storedData: GeneratedCode,
-      options?: CodeValidationOptions
-    ): Promise<CodeValidationResult>;
+    validateCode(inputCode: string, storedData: GeneratedCode, options?: CodeValidationOptions): Promise<CodeValidationResult>;
     /**
      * Generate TOTP secret with proper formatting
      */

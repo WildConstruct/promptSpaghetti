@@ -69,11 +69,7 @@ export declare class RandomizerWorkflow {
     /**
      * Generate multiple variations with different parameters
      */
-    generateVariations(
-      baseParameters: RandomizerParameters,
-      variationCount?: number,
-      options?: WorkflowOptions
-    ): Promise<WorkflowResult[]>;
+    generateVariations(baseParameters: RandomizerParameters, variationCount?: number, options?: WorkflowOptions): Promise<WorkflowResult[]>;
     /**
      * Create parameter variations for multiple generations
      */

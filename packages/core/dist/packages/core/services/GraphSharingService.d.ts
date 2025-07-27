@@ -237,13 +237,11 @@ export declare class GraphSharingService {
     /**
      * Update sharing permissions
      */
-    updateSharingPermissions(
-      exportId: string,
-      permissions: SharedGraphFormat['metadata']['sharing']['permissions'],
-      collaborators?: SharedGraphFormat['metadata']['sharing']['collaborators']
-    ): boolean;
+    updateSharingPermissions(exportId: string, permissions: SharedGraphFormat['metadata']['sharing']['permissions'], collaborators?: SharedGraphFormat['metadata']['sharing']['collaborators']): boolean;
 }
-export declare export declare const importSharedGraph: (sharedGraph: SharedGraphFormat, options?: any) => Promise<{
+export declare const graphSharingService: GraphSharingService;
+export declare const exportGraphForSharing: (nodes: Node[], edges: AnnotatedEdge[], options?: any) => Promise<SharedGraphFormat>;
+export declare const importSharedGraph: (sharedGraph: SharedGraphFormat, options?: any) => Promise<{
     success: boolean;
     graph?: {
         nodes: Node[];
@@ -253,4 +251,5 @@ export declare export declare const importSharedGraph: (sharedGraph: SharedGraph
     errors?: string[];
     warnings?: string[];
 }>;
-export declare //# sourceMappingURL=GraphSharingService.d.ts.map
+export declare const validateSharedGraphFormat: (sharedGraph: any) => boolean;
+//# sourceMappingURL=GraphSharingService.d.ts.map

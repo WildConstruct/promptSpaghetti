@@ -8,7 +8,6 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * integration with the node system.
  */
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { NodeLabel } from './NodeLabel';
 import { DEFAULT_NODE_LABEL_PREFERENCES } from '../../types/CollaborationTypes';
 export const NodeLabelsLayer = ({ nodes, labelConfigs, onLabelConfigsChange, labelPreferences = DEFAULT_NODE_LABEL_PREFERENCES, selectedNodeId = null, hoveredNodeId = null, focusedNodeId = null, author = 'Anonymous', readOnly = false, canvasOffset = { x: 0, y: 0 }, zoom = 1 }) => {
     const [editingLabelId, setEditingLabelId] = useState(null);
@@ -172,73 +171,78 @@ export const NodeLabelsLayer = ({ nodes, labelConfigs, onLabelConfigsChange, lab
         return () => document.removeEventListener('keydown', handleKeyDown);
     }, [readOnly, selectedNodeId, editingLabelId, getLabelConfigForNode, handleLabelAction, handleQuickLabelCreate]);
     // Get node position for label positioning
-    const getNodePosition = useCallback((nodeId) => {
-        const node = nodes.find(n => n.id === nodeId);
-        if (!node)
-            return { x: 0, y: 0 };
-        return {
-            x: node.position.x,
-            y: node.position.y
-        };
-    }, [nodes]);
-    return (_jsxs("div", { ref: layerRef, "data-testid": "node-labels-layer", style: {
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            pointerEvents: 'none', // Allow graph interactions to pass through
-            zIndex: 1500, // Above sticky notes but below modals
-            overflow: 'visible'
-        }, children: [nodes.map(node => {
-                const labelConfig = getLabelConfigForNode(node.id);
-                // Show label if we have a custom config, or if the node should show its default label
-                const shouldShowLabel = labelConfig || (labelPreferences.defaultDisplayMode === 'always' ||
-                    (labelPreferences.defaultDisplayMode === 'selected' && selectedNodeId === node.id) ||
-                    (labelPreferences.defaultDisplayMode === 'hover' && hoveredNodeId === node.id) ||
-                    (labelPreferences.defaultDisplayMode === 'focus' && focusedNodeId === node.id));
-                if (!shouldShowLabel)
-                    return null;
-                // Use existing config or create a temporary one for built-in labels
-                const effectiveConfig = labelConfig || {
-                    id: `temp-${node.id}`,
-                    nodeId: node.id,
-                    customLabel: '',
-                    displayMode: labelPreferences.defaultDisplayMode,
-                    position: labelPreferences.defaultPosition,
-                    style: labelPreferences.defaultStyle,
-                    showIcon: false,
-                    truncateLength: labelPreferences.maxLabelLength,
-                    author,
-                    timestamp: new Date().toISOString()
-                };
-                return (_jsx("div", { style: {
-                        position: 'absolute',
-                        left: node.position.x,
-                        top: node.position.y,
-                        width: node.width || 180,
-                        height: node.height || 90,
-                        pointerEvents: 'none'
-                    }, onContextMenu: (e) => handleContextMenu(e, node.id), children: _jsx(NodeLabel, { config: effectiveConfig, nodeId: node.id, currentNodeLabel: node.data?.label, onAction: handleLabelAction, displayMode: labelPreferences.defaultDisplayMode, isNodeSelected: selectedNodeId === node.id, isNodeHovered: hoveredNodeId === node.id, isNodeFocused: focusedNodeId === node.id, canEdit: !readOnly && labelPreferences.enableInlineEditing, showTooltip: labelPreferences.showLabelTooltips }) }, `label-container-${node.id}`));
-            }), Object.keys(labelConfigs).length === 0 && !readOnly && (_jsxs("div", { style: {
-                    position: 'fixed',
-                    bottom: '20px',
-                    right: '20px',
-                    background: 'rgba(0, 0, 0, 0.8)',
-                    color: 'white',
-                    padding: '12px 16px',
-                    borderRadius: '8px',
-                    fontSize: '12px',
-                    fontFamily: 'system-ui, -apple-system, sans-serif',
-                    maxWidth: '200px',
-                    pointerEvents: 'all',
-                    zIndex: 2000,
-                    opacity: 0.7,
-                    transition: 'opacity 0.3s ease'
-                }, onMouseEnter: (e) => {
-                    e.currentTarget.style.opacity = '1';
-                }, onMouseLeave: (e) => {
-                    e.currentTarget.style.opacity = '0.7';
-                }, children: [_jsx("div", { style: { fontWeight: 'bold', marginBottom: '4px' }, children: "Node Labels" }), _jsxs("div", { style: { lineHeight: 1.4 }, children: ["\u2022 Press ", _jsx("kbd", { style: { background: 'rgba(255, 255, 255, 0.2)', padding: '2px 4px', borderRadius: '3px' }, children: "L" }), " to label selected node", _jsx("br", {}), "\u2022 Right-click node to add custom label", _jsx("br", {}), "\u2022 Double-click labels to edit"] })] }))] }));
-};
+    if (!node)
+        return { x: 0, y: 0 };
+    return {
+        x: node.position.x,
+        y: node.position.y
+    };
+}, [nodes];
+return (_jsxs("div", { ref: layerRef, "data-testid": "node-labels-layer", style: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'none', // Allow graph interactions to pass through
+        zIndex: 1500, // Above sticky notes but below modals
+        overflow: 'visible'
+    }, children: [nodes.map(node => {
+            const labelConfig = getLabelConfigForNode(node.id);
+            // Show label if we have a custom config, or if the node should show its default label
+            const shouldShowLabel = labelConfig || (labelPreferences.defaultDisplayMode === 'always' ||
+                (labelPreferences.defaultDisplayMode === 'selected' && selectedNodeId === node.id) ||
+                (labelPreferences.defaultDisplayMode === 'hover' && hoveredNodeId === node.id) ||
+                (labelPreferences.defaultDisplayMode === 'focus' && focusedNodeId === node.id));
+            if (!shouldShowLabel)
+                return null;
+            // Use existing config or create a temporary one for built-in labels
+            const effectiveConfig = labelConfig || {
+                id: `temp-${node.id}`,
+                nodeId: node.id,
+                customLabel: '',
+                displayMode: labelPreferences.defaultDisplayMode,
+                position: labelPreferences.defaultPosition,
+                style: labelPreferences.defaultStyle,
+                showIcon: false,
+                truncateLength: labelPreferences.maxLabelLength,
+                author,
+                timestamp: new Date().toISOString()
+            };
+            return (_jsx("div", { style: {
+                    position: 'absolute',
+                    left: node.position.x,
+                    top: node.position.y,
+                    width: node.width || 180,
+                    height: node.height || 90,
+                    pointerEvents: 'none'
+                }, onContextMenu: (e) => handleContextMenu(e, node.id), children: _jsx(NodeLabel, { config: effectiveConfig, nodeId: node.id, currentNodeLabel: node.data?.label, onAction: handleLabelAction, displayMode: labelPreferences.defaultDisplayMode, isNodeSelected: selectedNodeId === node.id, isNodeHovered: hoveredNodeId === node.id, isNodeFocused: focusedNodeId === node.id, canEdit: !readOnly && labelPreferences.enableInlineEditing, showTooltip: labelPreferences.showLabelTooltips }) }, `label-container-${node.id}`));
+        }), Object.keys(labelConfigs).length === 0 && !readOnly && (_jsxs("div", { style: {
+                position: 'fixed',
+                bottom: '20px',
+                right: '20px',
+                background: 'rgba(0, 0, 0, 0.8)',
+                color: 'white',
+                padding: '12px 16px',
+                borderRadius: '8px',
+                fontSize: '12px',
+                fontFamily: 'system-ui, -apple-system, sans-serif',
+                maxWidth: '200px',
+                pointerEvents: 'all',
+                zIndex: 2000,
+                opacity: 0.7,
+                transition: 'opacity 0.3s ease'
+            }, onMouseEnter: (e) => {
+                e.currentTarget.style.opacity = '1';
+            }, onMouseLeave: (e) => {
+                e.currentTarget.style.opacity = '0.7';
+            }, children: [_jsx("div", { style: { fontWeight: 'bold', marginBottom: '4px' }, children: "Node Labels" }), _jsxs("div", { style: { lineHeight: 1.4 }, children: ["\u2022 Press ", _jsx("kbd", { style: { background: 'rgba(,
+                                255: ,
+                                255: ,
+                                255: ,
+                                0.2:  } }), ")', padding: '2px 4px', borderRadius: '3px' }}>L"] }), " to label selected node", _jsx("br", {}), "\u2022 Right-click node to add custom label", _jsx("br", {}), "\u2022 Double-click labels to edit"] }))] }));
+div >
+;
+;
+;
 export default NodeLabelsLayer;

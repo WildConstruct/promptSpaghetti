@@ -1,17 +1,7 @@
 import { Edge, Node } from 'reactflow';
 import { ProjectMetadata, ProjectSettings, SaveProjectOptions } from './projectManager';
 import { Template, TemplateSaveData, TemplateInstantiationOptions, GraphData } from './types/TemplateTypes';
-import { 
-  StickyNote,
-  GraphAnnotations,
-  NodeLabelConfig,
-  NodeLabelPreferences,
-  RegionGroup,
-  RegionGroupPreferences,
-  ConnectionLabel,
-  ConnectionAnnotation,
-  ConnectionAnnotationPreferences
-} from './types/CollaborationTypes';
+import { StickyNote, GraphAnnotations, NodeLabelConfig, NodeLabelPreferences, RegionGroup, RegionGroupPreferences, ConnectionLabel, ConnectionAnnotation, ConnectionAnnotationPreferences } from './types/CollaborationTypes';
 export interface GraphState {
     nodes: Node[];
     edges: Edge[];
@@ -111,5 +101,4 @@ export interface GraphState {
     }>;
     getTemplateCompatibleData: () => GraphData;
 }
-export declare const useGraphStore: import("zustand").UseBoundStore<import("zustand").StoreApi<GraphState>>;
 //# sourceMappingURL=graphStore.d.ts.map

@@ -1015,13 +1015,7 @@ export declare class Epic16LearningPathService extends EventEmitter {
     /**
      * Update user progress
      */
-    updateProgress(
-      userId: string,
-      pathId: string,
-      moduleId: string,
-      activityId?: string,
-      data?: any
-    ): Promise<UserProgress | null>;
+    updateProgress(userId: string, pathId: string, moduleId: string, activityId?: string, data?: any): Promise<UserProgress | null>;
     /**
      * Get user's learning paths
      */

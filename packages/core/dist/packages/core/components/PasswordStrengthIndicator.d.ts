@@ -4,11 +4,7 @@
  * Epic 19: Authentication Enhancement & Security Hardening
  */
 import React from 'react';
-import { 
-  PasswordComplexityValidator,
-  PasswordValidationResult,
-  PasswordValidationContext
-} from '../auth/PasswordComplexityValidator';
+import { PasswordComplexityValidator, PasswordValidationResult, PasswordValidationContext } from '../auth/PasswordComplexityValidator';
 export interface PasswordStrengthIndicatorProps {
     password: string;
     context?: PasswordValidationContext;
@@ -33,11 +29,7 @@ export interface PasswordStrengthDisplayProps {
     theme: 'light' | 'dark';
 }
 export declare const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps>;
-export declare const usePasswordStrength: (
-  password: string,
-  context?: PasswordValidationContext,
-  validator?: PasswordComplexityValidator
-) => {
+export declare const usePasswordStrength: (password: string, context?: PasswordValidationContext, validator?: PasswordComplexityValidator) => {
     result: PasswordValidationResult;
     isValidating: boolean;
     isValid: boolean;

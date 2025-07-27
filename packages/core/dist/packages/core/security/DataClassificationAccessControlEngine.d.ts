@@ -6,16 +6,7 @@
  *
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-import { 
-  AccessRequest,
-  AccessDecision,
-  AccessDecisionEngine,
-  RBACDecision,
-  ABACDecision,
-  RBACModel,
-  ABACModel,
-  ClassificationAccessPolicy
-} from './DataClassificationAccessControl';
+import { AccessRequest, AccessDecision, AccessDecisionEngine, RBACDecision, ABACDecision, RBACModel, ABACModel, ClassificationAccessPolicy } from './DataClassificationAccessControl';
 export declare class DataClassificationAccessControlEngine implements AccessDecisionEngine {
     private rbacModel;
     private abacModel;

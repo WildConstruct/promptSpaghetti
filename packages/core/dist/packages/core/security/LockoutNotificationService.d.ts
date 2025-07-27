@@ -170,13 +170,7 @@ export declare class LockoutNotificationService extends EventEmitter {
     /**
      * Send admin notification for approval required
      */
-    sendAdminNotification(
-      type: NotificationType,
-      lockout: AccountLockout,
-      adminRoles: AdminRole[],
-      details: Record<string,
-      any>
-    ): Promise<string[]>;
+    sendAdminNotification(type: NotificationType, lockout: AccountLockout, adminRoles: AdminRole[], details: Record<string, any>): Promise<string[]>;
     /**
      * Update user notification preferences
      */
@@ -205,12 +199,7 @@ export declare class LockoutNotificationService extends EventEmitter {
     /**
      * Test notification delivery
      */
-    testNotification(
-      recipient: string,
-      channel: NotificationChannel,
-      templateId: string,
-      variables: TemplateVariables
-    ): Promise<string>;
+    testNotification(recipient: string, channel: NotificationChannel, templateId: string, variables: TemplateVariables): Promise<string>;
     /**
      * Get notification statistics
      */

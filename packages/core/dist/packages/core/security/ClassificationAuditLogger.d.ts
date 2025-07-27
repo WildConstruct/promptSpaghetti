@@ -15,13 +15,7 @@
  * - Real-time streaming to external systems
  */
 import { EventEmitter } from 'events';
-import { 
-  ClassificationLevel,
-  DataCategory,
-  ComplianceFramework,
-  ClassificationResult,
-  DataElement
-} from './DataClassifier';
+import { ClassificationLevel, DataCategory, ComplianceFramework, ClassificationResult, DataElement } from './DataClassifier';
 import { AlertSeverity } from './ClassificationMonitor';
 export declare enum AuditEventType {
     CLASSIFICATION_PERFORMED = "classification_performed",
@@ -173,22 +167,11 @@ export declare class ClassificationAuditLogger extends EventEmitter {
     /**
      * Log a classification event
      */
-    logClassification(
-      dataElement: DataElement,
-      result: ClassificationResult,
-      actor: AuditLogEntry['actor'],
-      duration: number
-    ): Promise<string>;
+    logClassification(dataElement: DataElement, result: ClassificationResult, actor: AuditLogEntry['actor'], duration: number): Promise<string>;
     /**
      * Log a classification update
      */
-    logClassificationUpdate(
-      dataId: string,
-      oldLevel: ClassificationLevel,
-      newLevel: ClassificationLevel,
-      reason: string,
-      actor: AuditLogEntry['actor']
-    ): Promise<string>;
+    logClassificationUpdate(dataId: string, oldLevel: ClassificationLevel, newLevel: ClassificationLevel, reason: string, actor: AuditLogEntry['actor']): Promise<string>;
     /**
      * Log a policy violation
      */
@@ -202,13 +185,7 @@ export declare class ClassificationAuditLogger extends EventEmitter {
     /**
      * Log data access event
      */
-    logDataAccess(
-      dataId: string,
-      accessGranted: boolean,
-      reason: string,
-      actor: AuditLogEntry['actor'],
-      classification?: ClassificationResult
-    ): Promise<string>;
+    logDataAccess(dataId: string, accessGranted: boolean, reason: string, actor: AuditLogEntry['actor'], classification?: ClassificationResult): Promise<string>;
     /**
      * Query audit logs
      */

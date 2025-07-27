@@ -172,12 +172,7 @@ export declare class SecureSessionManager extends EventEmitter {
     /**
      * Create a new secure session
      */
-    createSession(
-      userId: string,
-      context: SessionContext,
-      securityLevel?: SessionSecurityLevel,
-      mfaVerified?: boolean
-    ): Promise<{
+    createSession(userId: string, context: SessionContext, securityLevel?: SessionSecurityLevel, mfaVerified?: boolean): Promise<{
         session: SecureSession;
         token: string;
     }>;
@@ -196,11 +191,7 @@ export declare class SecureSessionManager extends EventEmitter {
     /**
      * Terminate all sessions for a user
      */
-    terminateAllUserSessions(
-      userId: string,
-      reason: SessionTerminationReason,
-      excludeSessionId?: string
-    ): Promise<number>;
+    terminateAllUserSessions(userId: string, reason: SessionTerminationReason, excludeSessionId?: string): Promise<number>;
     /**
      * Get session information
      */

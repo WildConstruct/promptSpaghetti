@@ -4,13 +4,7 @@
  *
  * Tracks the execution path of graph processing for visualization
  */
-import { 
-  ExecutionTracker,
-  ExecutionPath,
-  NodeExecutionStep,
-  RandomChoiceInfo,
-  ExecutionPathColor
-} from '../types/ExecutionPath.js';
+import { ExecutionTracker, ExecutionPath, NodeExecutionStep, RandomChoiceInfo, ExecutionPathColor } from '../types/ExecutionPath.js';
 export declare class GraphExecutionTracker implements ExecutionTracker {
     private static instance;
     private activeExecutions;

@@ -13,7 +13,6 @@ import { jsx as _jsx } from "react/jsx-runtime";
 import { useCallback, useState, useEffect } from 'react';
 import { useReactFlow, useViewport } from 'reactflow';
 import { useGraphStore } from '../../graphStore';
-import { NodeLabelsLayer } from '../Annotations/NodeLabelsLayer';
 export const NodeLabelsManager = ({ disabled = false, readonly = false, author = 'Anonymous', selectedNodeId = null, onNodeHover, onNodeFocus }) => {
     const { nodes, annotations, setNodeLabelConfigs } = useGraphStore();
     const reactFlowInstance = useReactFlow();
@@ -30,36 +29,31 @@ export const NodeLabelsManager = ({ disabled = false, readonly = false, author =
         onNodeHover?.(nodeId);
     }, [onNodeHover]);
     // Handle node focus state
-    const handleNodeFocus = useCallback((nodeId) => {
-        onNodeFocus?.(nodeId);
-    }, [onNodeFocus]);
-    // Set up node hover detection
-    useEffect(() => {
-        if (!reactFlowInstance)
-            return;
-        // Set up node event listeners
-        const handleNodeMouseEnter = (event, node) => {
-            handleNodeHover(node.id);
-        };
-        const handleNodeMouseLeave = () => {
-            setHoveredNodeId(null);
-        };
-        // This is a conceptual setup - in practice, we'd need to integrate
-        // with the actual node event system in the GraphEditor
-        // For now, this provides the interface structure
-        return () => {
-            // Cleanup listeners
-        };
-    }, [reactFlowInstance, handleNodeHover]);
-    // Get canvas size and offset from ReactFlow
-    const canvasOffset = {
-        x: viewport.x,
-        y: viewport.y
-    };
-    // Don't render if disabled
-    if (disabled) {
-        return null;
-    }
-    return (_jsx(NodeLabelsLayer, { nodes: nodes, labelConfigs: annotations.nodeLabelConfigs, onLabelConfigsChange: handleLabelConfigsChange, labelPreferences: annotations.labelPreferences, selectedNodeId: selectedNodeId, hoveredNodeId: hoveredNodeId, focusedNodeId: focusedNodeId, author: author, readOnly: readonly, canvasOffset: canvasOffset, zoom: viewport.zoom }));
+}, [onNodeFocus];
+// Set up node hover detection
+useEffect(() => {
+    if (!reactFlowInstance)
+        return;
+    // Set up node event listeners
+});
+;
+// This is a conceptual setup - in practice, we'd need to integrate
+// with the actual node event system in the GraphEditor
+// For now, this provides the interface structure
+return () => {
+    // Cleanup listeners
 };
+[reactFlowInstance, handleNodeHover];
+;
+// Get canvas size and offset from ReactFlow
+const canvasOffset = {
+    x: viewport.x,
+    y: viewport.y
+};
+// Don't render if disabled
+if (disabled) {
+    return null;
+}
+return (_jsx(NodeLabelsLayer, { nodes: nodes, labelConfigs: annotations.nodeLabelConfigs, onLabelConfigsChange: handleLabelConfigsChange, labelPreferences: annotations.labelPreferences, selectedNodeId: selectedNodeId, hoveredNodeId: hoveredNodeId, focusedNodeId: focusedNodeId, author: author, readOnly: readonly, canvasOffset: canvasOffset, zoom: viewport.zoom }));
+;
 export default NodeLabelsManager;

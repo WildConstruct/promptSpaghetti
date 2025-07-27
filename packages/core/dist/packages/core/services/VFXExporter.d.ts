@@ -1,10 +1,4 @@
-import { 
-  VFXExportFormat,
-  VFXExporter,
-  VFXExportOptions,
-  VFXValidationResult,
-  VFXPromptVariant
-} from '../types/VFXExport';
+import { VFXExportFormat, VFXExporter, VFXExportOptions, VFXValidationResult, VFXPromptVariant } from '../types/VFXExport';
 import { Node, Edge } from 'reactflow';
 export declare class WildConstructVFXExporter implements VFXExporter {
     private static instance;
@@ -115,4 +109,6 @@ export declare class WildConstructVFXExporter implements VFXExporter {
      */
     private normalizeWeights;
 }
-export declare export declare //# sourceMappingURL=VFXExporter.d.ts.map
+export declare const vfxExporter: WildConstructVFXExporter;
+export declare const createVFXExport: (graphData: any) => any;
+//# sourceMappingURL=VFXExporter.d.ts.map

@@ -80,22 +80,9 @@ export declare class RunwayMLAdapter extends BaseAIModel {
     process(input: any, options?: RunwayMLRequestOptions): Promise<RunwayMLGenerationResult>;
     cleanup(): Promise<void>;
     estimate(input: any, options?: RunwayMLRequestOptions): Promise<CostEstimate>;
-    generateTextToVideo(
-      prompt: string,
-      duration?: number,
-      options?: Partial<RunwayMLRequestOptions>
-    ): Promise<RunwayMLGenerationResult>;
-    generateImageToVideo(
-      prompt: string,
-      imageData: string,
-      duration?: number,
-      options?: Partial<RunwayMLRequestOptions>
-    ): Promise<RunwayMLGenerationResult>;
-    generateVideoToVideo(
-      prompt: string,
-      videoData: string,
-      options?: Partial<RunwayMLRequestOptions>
-    ): Promise<RunwayMLGenerationResult>;
+    generateTextToVideo(prompt: string, duration?: number, options?: Partial<RunwayMLRequestOptions>): Promise<RunwayMLGenerationResult>;
+    generateImageToVideo(prompt: string, imageData: string, duration?: number, options?: Partial<RunwayMLRequestOptions>): Promise<RunwayMLGenerationResult>;
+    generateVideoToVideo(prompt: string, videoData: string, options?: Partial<RunwayMLRequestOptions>): Promise<RunwayMLGenerationResult>;
     getTaskStatus(taskId: string): Promise<RunwayMLTask>;
     cancelTask(taskId: string): Promise<void>;
     getAvailableModels(): Promise<string[]>;

@@ -323,38 +323,19 @@ export declare class SecurityIncidentResponseService extends EventEmitter {
     private solutions;
     private automationQueue;
     private responseMetrics;
-    constructor(
-      config: IncidentResponseConfig,
-      alertingSystem: CrossSystemAlertingSystem,
-      securityMonitor: SecurityAnalyticsMonitor
-    );
+    constructor(config: IncidentResponseConfig, alertingSystem: CrossSystemAlertingSystem, securityMonitor: SecurityAnalyticsMonitor);
     /**
      * Create a new security incident from security events
      */
-    createIncident(
-      events: SecurityEvent[],
-      severity: SecurityIncident['severity'],
-      category: SecurityIncident['category'],
-      assignedTo?: string
-    ): Promise<string>;
+    createIncident(events: SecurityEvent[], severity: SecurityIncident['severity'], category: SecurityIncident['category'], assignedTo?: string): Promise<string>;
     /**
      * Update incident status and trigger appropriate workflows
      */
-    updateIncidentStatus(
-      incidentId: string,
-      newStatus: SecurityIncident['status'],
-      updatedBy: string,
-      notes?: string
-    ): Promise<boolean>;
+    updateIncidentStatus(incidentId: string, newStatus: SecurityIncident['status'], updatedBy: string, notes?: string): Promise<boolean>;
     /**
      * Add action to incident
      */
-    addIncidentAction(
-      incidentId: string,
-      action: Omit<IncidentAction,
-      'id' | 'createdAt'>,
-      createdBy: string
-    ): Promise<string>;
+    addIncidentAction(incidentId: string, action: Omit<IncidentAction, 'id' | 'createdAt'>, createdBy: string): Promise<string>;
     /**
      * Complete an incident action
      */
@@ -362,12 +343,7 @@ export declare class SecurityIncidentResponseService extends EventEmitter {
     /**
      * Add evidence to incident
      */
-    addEvidence(
-      incidentId: string,
-      evidence: Omit<Evidence,
-      'id' | 'collectedAt' | 'chainOfCustody'>,
-      collectedBy: string
-    ): Promise<string>;
+    addEvidence(incidentId: string, evidence: Omit<Evidence, 'id' | 'collectedAt' | 'chainOfCustody'>, collectedBy: string): Promise<string>;
     /**
      * Execute troubleshooting workflow
      */
@@ -397,10 +373,7 @@ export declare class SecurityIncidentResponseService extends EventEmitter {
     /**
      * Generate incident response report
      */
-    generateIncidentReport(
-      incidentId: string,
-      reportType?: 'executive' | 'technical' | 'compliance' | 'post_incident'
-    ): {
+    generateIncidentReport(incidentId: string, reportType?: 'executive' | 'technical' | 'compliance' | 'post_incident'): {
         incident: SecurityIncident;
         summary: {
             timeToDetection: number;

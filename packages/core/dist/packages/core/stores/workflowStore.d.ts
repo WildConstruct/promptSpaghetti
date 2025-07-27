@@ -101,54 +101,5 @@ export interface StateTransitionResult {
     error?: string;
     workflow_history_id?: string;
 }
-interface WorkflowStore {
-    states: WorkflowState[];
-    transitions: WorkflowTransition[];
-    approvals: WorkflowApproval[];
-    locks: WorkflowLock[];
-    history: WorkflowHistoryEntry[];
-    statistics: WorkflowStatistics | null;
-    loading: boolean;
-    error: string | null;
-    fetchStates: (workspaceId: string) => Promise<void>;
-    createState: (data: Partial<WorkflowState>) => Promise<WorkflowState>;
-    updateState: (id: string, updates: Partial<WorkflowState>) => Promise<WorkflowState>;
-    deleteState: (id: string) => Promise<void>;
-    fetchTransitions: (workspaceId: string, fromStateId?: string) => Promise<void>;
-    createTransition: (data: Partial<WorkflowTransition>) => Promise<WorkflowTransition>;
-    deleteTransition: (id: string) => Promise<void>;
-    transitionResourceState: (resourceId: string, toStateId: string, actorId: string, options?: {
-        comment?: string;
-        metadata?: Record<string, unknown>;
-        force?: boolean;
-        lockDuration?: number;
-    }) => Promise<StateTransitionResult>;
-    fetchApprovals: (workspaceId: string, filters?: Record<string, string>) => Promise<void>;
-    createApproval: (data: Partial<WorkflowApproval>) => Promise<WorkflowApproval>;
-    approveWorkflow: (approvalId: string, approverId: string, comment?: string) => Promise<StateTransitionResult>;
-    rejectWorkflow: (approvalId: string, rejectorId: string, reason: string) => Promise<boolean>;
-    fetchLocks: (workspaceId: string, filters?: Record<string, string>) => Promise<void>;
-    acquireLock: (resourceId: string, userId: string, lockType?: 'edit' | 'state_change' | 'delete' | 'custom', options?: {
-        reason?: string;
-        duration?: number;
-        metadata?: Record<string, unknown>;
-    }) => Promise<WorkflowLock>;
-    releaseLock: (lockId: string, userId: string) => Promise<boolean>;
-    releaseLocksByResource: (resourceId: string, userId: string, lockType?: string) => Promise<number>;
-    fetchHistory: (workspaceId: string, filters?: Record<string, string>) => Promise<void>;
-    fetchStatistics: (workspaceId: string) => Promise<void>;
-    validateStateTransition: (resourceId: string, toStateId: string) => Promise<{
-        valid: boolean;
-        transition?: WorkflowTransition;
-        error?: string;
-    }>;
-    canUserTransitionState: (userId: string, resourceId: string, toStateId: string) => Promise<boolean>;
-    isResourceLocked: (resourceId: string, lockType?: string) => Promise<boolean>;
-    performMaintenance: () => Promise<unknown>;
-    setLoading: (loading: boolean) => void;
-    setError: (error: string | null) => void;
-    clearError: () => void;
-}
-export declare }>;
-export {};
+export declare const states: any;
 //# sourceMappingURL=workflowStore.d.ts.map

@@ -25,11 +25,12 @@ export const NodeTypeEnum = z.enum([
 export type NodeType = z.infer<typeof NodeTypeEnum>;
 
 // Base node schema for cross-platform compatibility
-export 
+
 // Execution context for deterministic graph execution
 export interface ExecutionContext {
   variables: Record<string, unknown>;
   seed: string | number;
+  edges?: Array<{ source: string; target: string; [key: string]: any }>; // Optional edges for dependency resolution
   [key: string]: unknown; // Allow for extensions
 }
 

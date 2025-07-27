@@ -32,48 +32,15 @@ export { default as ConfigurationManager } from './ConfigurationManager';
 export { default as ImageProcessor } from './utils/ImageProcessor';
 // Performance optimization exports
 export * from './performance';
-// Utility functions and helpers
-export const createOpenAIModel = (factory, id, modelName, apiKey) => {
-    return factory.createModel({
-        id,
-        type: 'text',
-        provider: 'openai',
-        modelName,
-        apiKey
-    });
-};
-export const createAnthropicModel = (factory, id, modelName, apiKey) => {
-    return factory.createModel({
-        id,
-        type: 'text',
-        provider: 'anthropic',
-        modelName,
-        apiKey
-    });
-};
-export const createLocalModel = (factory, id, modelName, endpoint) => {
-    return factory.createModel({
-        id,
-        type: 'text',
-        provider: 'local',
-        modelName,
-        endpoint
-    });
-};
-export const createCustomHTTPModel = (id, endpoint, apiKey, requestMapping, factory) => {
-    const registration = {
-        id,
-        provider: 'custom',
-        modelName: 'custom-model',
-        config: { baseURL: endpoint, apiKey },
-        requestMapping
-    };
-    factory.registerModel(registration);
-    return factory.createModel({
-        id,
-        type: 'text',
-        provider: 'custom',
-        endpoint,
-        apiKey
-    });
-};
+;
+;
+;
+factory.registerModel(registration);
+return factory.createModel({
+    id,
+    type: 'text',
+    provider: 'custom',
+    endpoint,
+    apiKey
+});
+;

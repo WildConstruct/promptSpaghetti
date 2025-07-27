@@ -15,10 +15,4 @@ export const EXECUTION_PATH_COLORS = [
     '#EC4899', // Pink
     '#6B7280' // Gray
 ];
-// Default visualization configuration
-export const defaultVisualizationConfig = {
-    showTimeline: true,
-    showConnections: true,
-    showMetrics: true,
-    showDebugInfo: false
-};
+;

@@ -86,17 +86,9 @@ export declare class WhisperAdapter extends BaseAIModel {
         audio?: File | Blob | ArrayBuffer;
         data?: File | Blob | ArrayBuffer;
     }, options?: WhisperRequestOptions): Promise<CostEstimate>;
-    transcribeFile(
-      file: File,
-      language?: string,
-      options?: Partial<WhisperRequestOptions>
-    ): Promise<WhisperTranscriptionResult>;
+    transcribeFile(file: File, language?: string, options?: Partial<WhisperRequestOptions>): Promise<WhisperTranscriptionResult>;
     translateToEnglish(file: File, options?: Partial<WhisperRequestOptions>): Promise<WhisperTranscriptionResult>;
-    transcribeWithTimestamps(
-      file: File,
-      granularity?: 'word' | 'segment' | 'both',
-      options?: Partial<WhisperRequestOptions>
-    ): Promise<WhisperTranscriptionResult>;
+    transcribeWithTimestamps(file: File, granularity?: 'word' | 'segment' | 'both', options?: Partial<WhisperRequestOptions>): Promise<WhisperTranscriptionResult>;
     batchTranscribe(files: File[], options?: WhisperRequestOptions): Promise<WhisperTranscriptionResult[]>;
     getSupportedLanguages(): Promise<string[]>;
     getAudioInfo(file: File | Blob): Promise<AudioFileInfo>;

@@ -134,13 +134,7 @@ export declare class SessionPriorityManager extends EventEmitter {
     /**
      * Register a new session with priority management
      */
-    registerSession(
-      sessionId: string,
-      userId: string,
-      deviceId: string,
-      priority: SessionPriority,
-      factors: PriorityFactors
-    ): {
+    registerSession(sessionId: string, userId: string, deviceId: string, priority: SessionPriority, factors: PriorityFactors): {
         allowed: boolean;
         conflicts?: SessionConflict[];
         evicted?: string[];

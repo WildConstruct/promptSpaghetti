@@ -226,20 +226,10 @@ export interface WorkspaceOperations {
     getResource(id: ResourceId): Promise<Resource | null>;
     updateResource(id: ResourceId, data: Partial<Resource>): Promise<Resource>;
     deleteResource(id: ResourceId): Promise<void>;
-    addWorkspaceMember(
-      workspaceId: WorkspaceId,
-      userId: UserId,
-      role: WorkspaceRole,
-      invitedBy: UserId
-    ): Promise<WorkspaceMember>;
+    addWorkspaceMember(workspaceId: WorkspaceId, userId: UserId, role: WorkspaceRole, invitedBy: UserId): Promise<WorkspaceMember>;
     removeWorkspaceMember(workspaceId: WorkspaceId, userId: UserId): Promise<void>;
     updateWorkspaceMemberRole(workspaceId: WorkspaceId, userId: UserId, role: WorkspaceRole): Promise<WorkspaceMember>;
-    addProjectMember(
-      projectId: ProjectId,
-      userId: UserId,
-      role: ProjectRole,
-      invitedBy: UserId
-    ): Promise<ProjectMember>;
+    addProjectMember(projectId: ProjectId, userId: UserId, role: ProjectRole, invitedBy: UserId): Promise<ProjectMember>;
     removeProjectMember(projectId: ProjectId, userId: UserId): Promise<void>;
     updateProjectMemberRole(projectId: ProjectId, userId: UserId, role: ProjectRole): Promise<ProjectMember>;
     logActivity(event: Omit<ActivityEvent, 'id' | 'created_at'>): Promise<ActivityEvent>;

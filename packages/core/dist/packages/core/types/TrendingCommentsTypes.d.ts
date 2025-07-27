@@ -1164,7 +1164,10 @@ export declare const TrendingCommentsResponseSchema: z.ZodObject<{
 }>;
 export type GetTrendingCommentsRequest = z.infer<typeof GetTrendingCommentsRequestSchema>;
 export type TrendingCommentsResponse = z.infer<typeof TrendingCommentsResponseSchema>;
-export declare export declare export declare export interface TrendingSystemConfig {
+export declare const validateGetTrendingCommentsRequest: (data: unknown) => GetTrendingCommentsRequest;
+export declare const validateTrendingComment: (data: unknown) => TrendingComment;
+export declare const validateCommentScore: (data: unknown) => CommentScore;
+export interface TrendingSystemConfig {
     enabledAlgorithms: string[];
     defaultAlgorithm: string;
     cacheSettings: {

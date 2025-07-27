@@ -223,32 +223,15 @@ export declare class ExemptionManager extends EventEmitter {
     /**
      * Request a new security exemption
      */
-    requestExemption(
-      request: ExemptionRequest,
-      requestorId: string,
-      requestorEmail: string,
-      requestorRole: AdminRole
-    ): Promise<string>;
+    requestExemption(request: ExemptionRequest, requestorId: string, requestorEmail: string, requestorRole: AdminRole): Promise<string>;
     /**
      * Approve a pending exemption request
      */
-    approveExemption(
-      exemptionId: string,
-      approverId: string,
-      approverEmail: string,
-      approverRole: AdminRole,
-      comments?: string
-    ): Promise<boolean>;
+    approveExemption(exemptionId: string, approverId: string, approverEmail: string, approverRole: AdminRole, comments?: string): Promise<boolean>;
     /**
      * Deny a pending exemption request
      */
-    denyExemption(
-      exemptionId: string,
-      approverId: string,
-      approverEmail: string,
-      approverRole: AdminRole,
-      reason: string
-    ): Promise<boolean>;
+    denyExemption(exemptionId: string, approverId: string, approverEmail: string, approverRole: AdminRole, reason: string): Promise<boolean>;
     /**
      * Check if an exemption exists and is active
      */
@@ -260,24 +243,11 @@ export declare class ExemptionManager extends EventEmitter {
     /**
      * Revoke an active exemption
      */
-    revokeExemption(
-      exemptionId: string,
-      revokerId: string,
-      revokerEmail: string,
-      revokerRole: AdminRole,
-      reason: string
-    ): boolean;
+    revokeExemption(exemptionId: string, revokerId: string, revokerEmail: string, revokerRole: AdminRole, reason: string): boolean;
     /**
      * Create emergency exemption with bypass approval
      */
-    createEmergencyExemption(
-      request: ExemptionRequest,
-      requestorId: string,
-      requestorEmail: string,
-      requestorRole: AdminRole,
-      emergencyCode: string,
-      justification: string
-    ): Promise<string>;
+    createEmergencyExemption(request: ExemptionRequest, requestorId: string, requestorEmail: string, requestorRole: AdminRole, emergencyCode: string, justification: string): Promise<string>;
     /**
      * Query exemptions
      */

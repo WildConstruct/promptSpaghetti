@@ -67,12 +67,7 @@ export declare class ConditionalNode extends AdvancedRuntimeNode<string> {
 /**
  * Factory function for creating Conditional nodes
  */
-export declare function createConditionalNode(
-  id: string,
-  branches: ConditionalBranch[],
-  defaultOutput?: string,
-  config?: ConditionalConfig
-): ConditionalNode;
+export declare function createConditionalNode(id: string, branches: ConditionalBranch[], defaultOutput?: string, config?: ConditionalConfig): ConditionalNode;
 /**
  * Common condition patterns for easy setup
  */

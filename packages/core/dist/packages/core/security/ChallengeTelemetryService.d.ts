@@ -233,22 +233,11 @@ export declare class ChallengeTelemetryService extends EventEmitter {
     /**
      * Start tracking a challenge session
      */
-    startChallengeSession(
-      sessionId: string,
-      challengeType: ChallengeType,
-      context: Partial<ChallengeEvent['context']>
-    ): void;
+    startChallengeSession(sessionId: string, challengeType: ChallengeType, context: Partial<ChallengeEvent['context']>): void;
     /**
      * Record challenge completion
      */
-    recordChallengeCompletion(
-      sessionId: string,
-      challengeId: string,
-      outcome: ChallengeOutcome,
-      timeToComplete: number,
-      userBehavior: ChallengeEvent['userBehavior'],
-      fraudIndicators?: Partial<ChallengeEvent['fraudIndicators']>
-    ): void;
+    recordChallengeCompletion(sessionId: string, challengeId: string, outcome: ChallengeOutcome, timeToComplete: number, userBehavior: ChallengeEvent['userBehavior'], fraudIndicators?: Partial<ChallengeEvent['fraudIndicators']>): void;
     /**
      * Get challenge statistics
      */

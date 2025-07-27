@@ -501,13 +501,13 @@ export declare const SegmentConditionSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     id?: string;
     description?: string;
-    isEnabled?: boolean;
     value?: any;
     type?: "custom" | "temporal" | "behavior" | "attribute" | "cohort" | "demographic" | "geographic";
     weight?: number;
-    operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "greater_equal" | "less_equal" | "starts_with" | "ends_with" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
+    operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "starts_with" | "ends_with" | "greater_equal" | "less_equal" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
     field?: string;
     comparison?: "relative" | "absolute" | "percentile";
+    isEnabled?: boolean;
     threshold?: number;
     aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct";
     timeWindow?: {
@@ -521,13 +521,13 @@ export declare const SegmentConditionSchema: z.ZodObject<{
 }, {
     id?: string;
     description?: string;
-    isEnabled?: boolean;
     value?: any;
     type?: "custom" | "temporal" | "behavior" | "attribute" | "cohort" | "demographic" | "geographic";
     weight?: number;
-    operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "greater_equal" | "less_equal" | "starts_with" | "ends_with" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
+    operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "starts_with" | "ends_with" | "greater_equal" | "less_equal" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
     field?: string;
     comparison?: "relative" | "absolute" | "percentile";
+    isEnabled?: boolean;
     threshold?: number;
     aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct";
     timeWindow?: {
@@ -572,13 +572,13 @@ export declare const UserSegmentSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         id?: string;
         description?: string;
-        isEnabled?: boolean;
         value?: any;
         type?: "custom" | "temporal" | "behavior" | "attribute" | "cohort" | "demographic" | "geographic";
         weight?: number;
-        operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "greater_equal" | "less_equal" | "starts_with" | "ends_with" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
+        operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "starts_with" | "ends_with" | "greater_equal" | "less_equal" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
         field?: string;
         comparison?: "relative" | "absolute" | "percentile";
+        isEnabled?: boolean;
         threshold?: number;
         aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct";
         timeWindow?: {
@@ -592,13 +592,13 @@ export declare const UserSegmentSchema: z.ZodObject<{
     }, {
         id?: string;
         description?: string;
-        isEnabled?: boolean;
         value?: any;
         type?: "custom" | "temporal" | "behavior" | "attribute" | "cohort" | "demographic" | "geographic";
         weight?: number;
-        operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "greater_equal" | "less_equal" | "starts_with" | "ends_with" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
+        operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "starts_with" | "ends_with" | "greater_equal" | "less_equal" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
         field?: string;
         comparison?: "relative" | "absolute" | "percentile";
+        isEnabled?: boolean;
         threshold?: number;
         aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct";
         timeWindow?: {
@@ -763,13 +763,13 @@ export declare const UserSegmentSchema: z.ZodObject<{
     conditions?: {
         id?: string;
         description?: string;
-        isEnabled?: boolean;
         value?: any;
         type?: "custom" | "temporal" | "behavior" | "attribute" | "cohort" | "demographic" | "geographic";
         weight?: number;
-        operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "greater_equal" | "less_equal" | "starts_with" | "ends_with" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
+        operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "starts_with" | "ends_with" | "greater_equal" | "less_equal" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
         field?: string;
         comparison?: "relative" | "absolute" | "percentile";
+        isEnabled?: boolean;
         threshold?: number;
         aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct";
         timeWindow?: {
@@ -856,13 +856,13 @@ export declare const UserSegmentSchema: z.ZodObject<{
     conditions?: {
         id?: string;
         description?: string;
-        isEnabled?: boolean;
         value?: any;
         type?: "custom" | "temporal" | "behavior" | "attribute" | "cohort" | "demographic" | "geographic";
         weight?: number;
-        operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "greater_equal" | "less_equal" | "starts_with" | "ends_with" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
+        operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "starts_with" | "ends_with" | "greater_equal" | "less_equal" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
         field?: string;
         comparison?: "relative" | "absolute" | "percentile";
+        isEnabled?: boolean;
         threshold?: number;
         aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct";
         timeWindow?: {
@@ -941,11 +941,7 @@ export declare class SegmentUtils {
     /**
      * Evaluate if a user matches segment conditions
      */
-    static evaluateUserForSegment(
-      userAttributes: UserAttributes,
-      segment: UserSegment,
-      behaviorHistory?: BehaviorEvent[]
-    ): {
+    static evaluateUserForSegment(userAttributes: UserAttributes, segment: UserSegment, behaviorHistory?: BehaviorEvent[]): {
         matches: boolean;
         matchingConditions: string[];
         score: number;
@@ -1165,13 +1161,13 @@ declare const _default: {
     }, "strip", z.ZodTypeAny, {
         id?: string;
         description?: string;
-        isEnabled?: boolean;
         value?: any;
         type?: "custom" | "temporal" | "behavior" | "attribute" | "cohort" | "demographic" | "geographic";
         weight?: number;
-        operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "greater_equal" | "less_equal" | "starts_with" | "ends_with" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
+        operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "starts_with" | "ends_with" | "greater_equal" | "less_equal" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
         field?: string;
         comparison?: "relative" | "absolute" | "percentile";
+        isEnabled?: boolean;
         threshold?: number;
         aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct";
         timeWindow?: {
@@ -1185,13 +1181,13 @@ declare const _default: {
     }, {
         id?: string;
         description?: string;
-        isEnabled?: boolean;
         value?: any;
         type?: "custom" | "temporal" | "behavior" | "attribute" | "cohort" | "demographic" | "geographic";
         weight?: number;
-        operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "greater_equal" | "less_equal" | "starts_with" | "ends_with" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
+        operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "starts_with" | "ends_with" | "greater_equal" | "less_equal" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
         field?: string;
         comparison?: "relative" | "absolute" | "percentile";
+        isEnabled?: boolean;
         threshold?: number;
         aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct";
         timeWindow?: {
@@ -1236,13 +1232,13 @@ declare const _default: {
         }, "strip", z.ZodTypeAny, {
             id?: string;
             description?: string;
-            isEnabled?: boolean;
             value?: any;
             type?: "custom" | "temporal" | "behavior" | "attribute" | "cohort" | "demographic" | "geographic";
             weight?: number;
-            operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "greater_equal" | "less_equal" | "starts_with" | "ends_with" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
+            operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "starts_with" | "ends_with" | "greater_equal" | "less_equal" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
             field?: string;
             comparison?: "relative" | "absolute" | "percentile";
+            isEnabled?: boolean;
             threshold?: number;
             aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct";
             timeWindow?: {
@@ -1256,13 +1252,13 @@ declare const _default: {
         }, {
             id?: string;
             description?: string;
-            isEnabled?: boolean;
             value?: any;
             type?: "custom" | "temporal" | "behavior" | "attribute" | "cohort" | "demographic" | "geographic";
             weight?: number;
-            operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "greater_equal" | "less_equal" | "starts_with" | "ends_with" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
+            operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "starts_with" | "ends_with" | "greater_equal" | "less_equal" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
             field?: string;
             comparison?: "relative" | "absolute" | "percentile";
+            isEnabled?: boolean;
             threshold?: number;
             aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct";
             timeWindow?: {
@@ -1427,13 +1423,13 @@ declare const _default: {
         conditions?: {
             id?: string;
             description?: string;
-            isEnabled?: boolean;
             value?: any;
             type?: "custom" | "temporal" | "behavior" | "attribute" | "cohort" | "demographic" | "geographic";
             weight?: number;
-            operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "greater_equal" | "less_equal" | "starts_with" | "ends_with" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
+            operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "starts_with" | "ends_with" | "greater_equal" | "less_equal" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
             field?: string;
             comparison?: "relative" | "absolute" | "percentile";
+            isEnabled?: boolean;
             threshold?: number;
             aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct";
             timeWindow?: {
@@ -1520,13 +1516,13 @@ declare const _default: {
         conditions?: {
             id?: string;
             description?: string;
-            isEnabled?: boolean;
             value?: any;
             type?: "custom" | "temporal" | "behavior" | "attribute" | "cohort" | "demographic" | "geographic";
             weight?: number;
-            operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "greater_equal" | "less_equal" | "starts_with" | "ends_with" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
+            operator?: "between" | "regex" | "in" | "equals" | "contains" | "exists" | "percentile" | "not_equals" | "greater_than" | "less_than" | "not_contains" | "not_in" | "not_exists" | "starts_with" | "ends_with" | "greater_equal" | "less_equal" | "not_between" | "within_days" | "not_within_days" | "relative_to_now" | "moving_average" | "trend_up" | "trend_down" | "custom_function";
             field?: string;
             comparison?: "relative" | "absolute" | "percentile";
+            isEnabled?: boolean;
             threshold?: number;
             aggregation?: "count" | "min" | "max" | "sum" | "percentile" | "avg" | "distinct";
             timeWindow?: {

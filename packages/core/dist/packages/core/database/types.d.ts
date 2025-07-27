@@ -162,16 +162,6 @@ export type DatabaseValue = Primitive | Record<string, unknown> | Array<unknown>
 export type WhereCondition = Record<string, DatabaseValue>;
 export type UpdateData<T> = Partial<Omit<T, 'id' | 'createdAt' | 'updatedAt'>>;
 export type CreateData<T> = Omit<T, 'id' | 'createdAt' | 'updatedAt'>;
-export declare function createPaginatedResult<T>(
-  data: T[],
-  totalCount: number,
-  options: PaginationOptions
-): PaginatedResult<T>;
-export declare function createOperationResult<T>(
-  success: boolean,
-  data?: T,
-  error?: string,
-  errorCode?: string,
-  executionTime?: number
-): OperationResult<T>;
+export declare function createPaginatedResult<T>(data: T[], totalCount: number, options: PaginationOptions): PaginatedResult<T>;
+export declare function createOperationResult<T>(success: boolean, data?: T, error?: string, errorCode?: string, executionTime?: number): OperationResult<T>;
 //# sourceMappingURL=types.d.ts.map

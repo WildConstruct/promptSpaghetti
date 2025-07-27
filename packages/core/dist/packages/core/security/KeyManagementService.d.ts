@@ -261,11 +261,7 @@ export declare class KeyManagementService extends EventEmitter {
     /**
      * Derive a key from a parent key
      */
-    deriveKey(
-      parentKeyId: string,
-      derivationParams: KeyDerivationParameters,
-      requesterId: string
-    ): Promise<CryptographicKey>;
+    deriveKey(parentKeyId: string, derivationParams: KeyDerivationParameters, requesterId: string): Promise<CryptographicKey>;
     /**
      * Search keys by criteria
      */

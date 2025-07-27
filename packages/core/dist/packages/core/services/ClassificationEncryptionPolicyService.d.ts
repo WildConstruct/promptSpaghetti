@@ -6,12 +6,7 @@
  *
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-import { 
-  DataClassificationLevel,
-  EncryptionRequirements,
-  OperationContext,
-  ValidationResult
-} from '../types/DataClassification';
+import { DataClassificationLevel, EncryptionRequirements, OperationContext, ValidationResult } from '../types/DataClassification';
 export interface EncryptionPolicy {
     id: string;
     name: string;

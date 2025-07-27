@@ -400,7 +400,10 @@ export declare class AuditManagementSystem {
     private deleteEvent;
     private archiveEvent;
 }
-export declare     description?: string;
+export declare const auditManagementSystem: AuditManagementSystem;
+export declare const createAuditEvent: (eventData: Omit<AuditEvent, "id" | "timestamp" | "chain_hash">) => {
+    id?: string;
+    description?: string;
     status?: AuditStatus;
     category?: string;
     tags?: string[];

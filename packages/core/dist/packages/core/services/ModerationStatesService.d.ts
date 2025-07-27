@@ -426,11 +426,7 @@ export declare class ModerationStatesService {
     /**
      * State Management
      */
-    createState(
-      stateData: Omit<ModerationState,
-      'id' | 'createdAt' | 'updatedAt'>,
-      createdBy: string
-    ): Promise<ModerationState>;
+    createState(stateData: Omit<ModerationState, 'id' | 'createdAt' | 'updatedAt'>, createdBy: string): Promise<ModerationState>;
     updateState(stateId: string, updates: Partial<ModerationState>, updatedBy: string): Promise<ModerationState | null>;
     getStates(filter?: {
         type?: ModerationStateType;
@@ -439,19 +435,8 @@ export declare class ModerationStatesService {
     /**
      * Item Management
      */
-    createModerationItem(
-      itemData: Omit<ModerationItem,
-      'id' | 'createdAt' | 'updatedAt' | 'stateHistory' | 'processingMetrics'>,
-      createdBy: string
-    ): Promise<ModerationItem>;
-    transitionItem(
-      itemId: string,
-      toStateId: string,
-      reason: string,
-      triggeredBy: string,
-      metadata?: Record<string,
-      any>
-    ): Promise<boolean>;
+    createModerationItem(itemData: Omit<ModerationItem, 'id' | 'createdAt' | 'updatedAt' | 'stateHistory' | 'processingMetrics'>, createdBy: string): Promise<ModerationItem>;
+    transitionItem(itemId: string, toStateId: string, reason: string, triggeredBy: string, metadata?: Record<string, any>): Promise<boolean>;
     assignReviewer(itemId: string, reviewerId: string, assignedBy: string, dueDate?: Date): Promise<boolean>;
     escalateItem(itemId: string, reason: string, escalatedBy: string): Promise<boolean>;
     /**
@@ -491,12 +476,9 @@ export interface ModerationEvent {
     data: any;
     timestamp: Date;
 }
-export declare export declare const transitionItem: (
-  itemId: string,
-  toStateId: string,
-  reason: string,
-  triggeredBy: string
-) => Promise<boolean>;
+export declare const moderationStatesService: ModerationStatesService;
+export declare const createModerationItem: (itemData: Omit<ModerationItem, "id" | "createdAt" | "updatedAt" | "stateHistory" | "processingMetrics">, createdBy: string) => Promise<ModerationItem>;
+export declare const transitionItem: (itemId: string, toStateId: string, reason: string, triggeredBy: string) => Promise<boolean>;
 export declare const getModerationItems: (filter?: ModerationFilter) => ModerationItem[];
 export declare const getModerationStats: () => ModerationStats;
 //# sourceMappingURL=ModerationStatesService.d.ts.map

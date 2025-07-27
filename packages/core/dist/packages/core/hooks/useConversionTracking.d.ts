@@ -40,12 +40,7 @@ export declare const useConversionTracking: (config?: ConversionTrackingConfig) 
         projectSize: number;
         exportTime: number;
     }) => void;
-    trackBusinessEvent: (
-      eventType: "trial_started" | "subscription_upgraded" | "payment_completed",
-      value: number,
-      metadata?: Record<string,
-      any>
-    ) => void;
+    trackBusinessEvent: (eventType: "trial_started" | "subscription_upgraded" | "payment_completed", value: number, metadata?: Record<string, any>) => void;
     trackTemplateUsage: (templateData: {
         templateId: string;
         templateCategory: string;

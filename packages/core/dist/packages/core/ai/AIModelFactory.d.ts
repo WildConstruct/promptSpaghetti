@@ -4,15 +4,7 @@
  *
  * Factory for creating and managing AI model adapters
  */
-import { 
-  BaseAIModel,
-  AIModelType,
-  AIModelProvider,
-  ModelConfiguration,
-  AIModelFactory as IAIModelFactory,
-  ModelCapabilities,
-  ModelMetadata
-} from './BaseAIModel';
+import { BaseAIModel, AIModelType, AIModelProvider, ModelConfiguration, AIModelFactory as IAIModelFactory, ModelCapabilities, ModelMetadata } from './BaseAIModel';
 import { HTTPRequestMapping } from './adapters/GenericHTTPAdapter';
 export interface FactoryConfig {
     defaultTimeout?: number;

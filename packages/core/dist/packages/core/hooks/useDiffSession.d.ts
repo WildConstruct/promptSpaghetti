@@ -1,9 +1,4 @@
-import { 
-  VisualDiffSession,
-  DetailedComparison,
-  CreateDiffSessionRequest,
-  UpdateDiffSessionRequest
-} from '../types/comparison';
+import { VisualDiffSession, DetailedComparison, CreateDiffSessionRequest, UpdateDiffSessionRequest } from '../types/comparison';
 interface UseDiffSessionResult {
     session: VisualDiffSession | null;
     comparison: DetailedComparison | null;

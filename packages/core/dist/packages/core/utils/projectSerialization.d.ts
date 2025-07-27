@@ -61,12 +61,7 @@ export interface DeserializationResult {
 /**
  * Serializes graph state to .psg format
  */
-export declare function serializeProject(
-  graphState: GraphState,
-  metadata: ProjectMetadata,
-  settings: ProjectSettings,
-  options?: SerializationOptions
-): SerializationResult;
+export declare function serializeProject(graphState: GraphState, metadata: ProjectMetadata, settings: ProjectSettings, options?: SerializationOptions): SerializationResult;
 /**
  * Deserializes .psg file content to graph state
  */

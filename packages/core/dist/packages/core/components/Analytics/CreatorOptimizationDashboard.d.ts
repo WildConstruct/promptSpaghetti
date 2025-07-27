@@ -618,5 +618,5 @@ export interface CreatorOptimizationExportData {
     goalProgress: CreatorGoalProgress[];
     exportTimestamp: number;
 }
-export declare const CreatorOptimizationDashboard: React.FC<CreatorOptimizationDashboardProps>;
+export declare const error: string, setError: React.Dispatch<React.SetStateAction<string>>;
 //# sourceMappingURL=CreatorOptimizationDashboard.d.ts.map

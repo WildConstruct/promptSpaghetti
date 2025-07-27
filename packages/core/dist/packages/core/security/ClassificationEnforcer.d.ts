@@ -10,13 +10,7 @@
  * - Policy enforcement for data handling
  * - Integration with existing security middleware
  */
-import { 
-  DataClassificationLevel,
-  HandlingRequirements,
-  AccessRequirements,
-  OperationContext,
-  ClassificationAuditEvent
-} from '../types/DataClassification';
+import { DataClassificationLevel, HandlingRequirements, AccessRequirements, OperationContext, ClassificationAuditEvent } from '../types/DataClassification';
 /**
  * Enforcement configuration
  */
@@ -77,21 +71,11 @@ export declare class ClassificationEnforcer {
     /**
      * Enforce classification policies for an operation
      */
-    enforceClassification(
-      classification: DataClassificationLevel,
-      operation: OperationContext,
-      currentControls?: string[]
-    ): Promise<EnforcementResult>;
+    enforceClassification(classification: DataClassificationLevel, operation: OperationContext, currentControls?: string[]): Promise<EnforcementResult>;
     /**
      * Make an access control decision
      */
-    makeAccessDecision(
-      userId: string,
-      dataId: string,
-      classification: DataClassificationLevel,
-      operation: string,
-      context: Partial<OperationContext>
-    ): Promise<AccessDecision>;
+    makeAccessDecision(userId: string, dataId: string, classification: DataClassificationLevel, operation: string, context: Partial<OperationContext>): Promise<AccessDecision>;
     /**
      * Validate an operation against classification policies
      */

@@ -39,4 +39,5 @@ export interface PreviewPerformanceStats {
     failureRate: number;
     cacheHitRate?: number;
 }
-export declare //# sourceMappingURL=useEnhancedPreview.d.ts.map
+export declare const useEnhancedPreviewResultManagement: () => any;
+//# sourceMappingURL=useEnhancedPreview.d.ts.map

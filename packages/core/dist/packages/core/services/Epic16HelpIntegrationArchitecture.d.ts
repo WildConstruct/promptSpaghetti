@@ -75,21 +75,11 @@ export declare class Epic16HelpIntegrationArchitecture {
     /**
      * Architecture for seamless transitions between graph editing and marketplace
      */
-    handleSystemTransition(
-      fromContext: 'graph-editor' | 'marketplace',
-      toContext: 'graph-editor' | 'marketplace',
-      userId: string,
-      preserveHelp?: boolean
-    ): Promise<TransitionContext>;
+    handleSystemTransition(fromContext: 'graph-editor' | 'marketplace', toContext: 'graph-editor' | 'marketplace', userId: string, preserveHelp?: boolean): Promise<TransitionContext>;
     /**
      * Integration with Epic 16 support escalation system
      */
-    escalateToSupport(
-      helpSession: HelpSession,
-      escalationReason: string,
-      additionalContext?: Record<string,
-      any>
-    ): Promise<MarketplaceTicket>;
+    escalateToSupport(helpSession: HelpSession, escalationReason: string, additionalContext?: Record<string, any>): Promise<MarketplaceTicket>;
     private setupIntegrationPoints;
     /**
      * Architecture for cross-system help content management

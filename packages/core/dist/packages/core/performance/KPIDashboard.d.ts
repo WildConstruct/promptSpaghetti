@@ -105,11 +105,7 @@ export declare class KPIDashboard extends EventEmitter {
     private reports;
     private config;
     private refreshIntervals;
-    constructor(
-      monitoringService: KPIMonitoringService,
-      baseline: PerformanceBaseline,
-      config?: PerformanceTargetConfig
-    );
+    constructor(monitoringService: KPIMonitoringService, baseline: PerformanceBaseline, config?: PerformanceTargetConfig);
     /**
      * Setup default dashboard layouts
      */

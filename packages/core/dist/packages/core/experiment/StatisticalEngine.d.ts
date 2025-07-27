@@ -31,21 +31,11 @@ export declare class StatisticalEngine {
     /**
      * Perform comprehensive statistical analysis of experiment results
      */
-    analyzeExperimentResults(
-      variants: VariantResults[],
-      metrics: ExperimentMetric[],
-      controlVariantId: string
-    ): ExperimentResults;
+    analyzeExperimentResults(variants: VariantResults[], metrics: ExperimentMetric[], controlVariantId: string): ExperimentResults;
     /**
      * Calculate required sample size for an experiment
      */
-    calculateSampleSize(
-      baselineRate: number,
-      minimumDetectableEffect: number,
-      power?: number,
-      alpha?: number,
-      twoTailed?: boolean
-    ): SampleSizeCalculation;
+    calculateSampleSize(baselineRate: number, minimumDetectableEffect: number, power?: number, alpha?: number, twoTailed?: boolean): SampleSizeCalculation;
     /**
      * Perform t-test for continuous metrics
      */
@@ -53,23 +43,11 @@ export declare class StatisticalEngine {
     /**
      * Perform chi-square test for proportions
      */
-    chiSquareTest(
-      controlSuccesses: number,
-      controlTotal: number,
-      treatmentSuccesses: number,
-      treatmentTotal: number
-    ): StatisticalTestResult;
+    chiSquareTest(controlSuccesses: number, controlTotal: number, treatmentSuccesses: number, treatmentTotal: number): StatisticalTestResult;
     /**
      * Perform Bayesian analysis for conversion rates
      */
-    bayesianAnalysis(
-      controlSuccesses: number,
-      controlTotal: number,
-      treatmentSuccesses: number,
-      treatmentTotal: number,
-      priorAlpha?: number,
-      priorBeta?: number
-    ): BayesianResult;
+    bayesianAnalysis(controlSuccesses: number, controlTotal: number, treatmentSuccesses: number, treatmentTotal: number, priorAlpha?: number, priorBeta?: number): BayesianResult;
     /**
      * Detect winner based on statistical criteria
      */

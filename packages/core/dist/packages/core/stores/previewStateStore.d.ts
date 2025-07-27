@@ -115,13 +115,5 @@ export interface PreviewStateStore {
     getStateSnapshot: () => any;
     restoreFromSnapshot: (snapshot: Record<string, unknown>) => void;
 }
-export declare }, "subscribe"> & {
-    subscribe: {
-        (listener: (selectedState: PreviewStateStore, previousSelectedState: PreviewStateStore) => void): () => void;
-        <U>(selector: (state: PreviewStateStore) => U, listener: (selectedState: U, previousSelectedState: U) => void, options?: {
-            equalityFn?: (a: U, b: U) => boolean;
-            fireImmediately?: boolean;
-        }): () => void;
-    };
-}>;
-export declare export declare export declare export declare //# sourceMappingURL=previewStateStore.d.ts.map
+export declare const usePreviewPerformance: () => any;
+//# sourceMappingURL=previewStateStore.d.ts.map

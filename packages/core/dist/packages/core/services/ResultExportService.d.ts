@@ -57,30 +57,15 @@ export declare class ResultExportService {
     /**
      * Export a single preview result in the specified format
      */
-    exportIndividualResult(
-      result: PreviewResultWithPath,
-      resultIndex: number,
-      totalResults: number,
-      options: ResultExportOptions,
-      sourceGraph?: any
-    ): Promise<ExportResult>;
+    exportIndividualResult(result: PreviewResultWithPath, resultIndex: number, totalResults: number, options: ResultExportOptions, sourceGraph?: any): Promise<ExportResult>;
     /**
      * Export multiple selected results as a batch
      */
-    exportBatchResults(
-      results: PreviewResultWithPath[],
-      selectedIndices: number[],
-      options: ResultExportOptions,
-      sourceGraph?: any
-    ): Promise<ExportResult>;
+    exportBatchResults(results: PreviewResultWithPath[], selectedIndices: number[], options: ResultExportOptions, sourceGraph?: any): Promise<ExportResult>;
     /**
      * Export all results with comparison analysis
      */
-    exportComparison(
-      results: PreviewResultWithPath[],
-      options: ResultExportOptions,
-      sourceGraph?: any
-    ): Promise<ExportResult>;
+    exportComparison(results: PreviewResultWithPath[], options: ResultExportOptions, sourceGraph?: any): Promise<ExportResult>;
     /**
      * Get available export formats with descriptions
      */

@@ -122,5 +122,4 @@ export interface ExecutionVisualizationConfig {
     colorByVariance: boolean;
     showDebugInfo: boolean;
 }
-export declare const defaultVisualizationConfig: ExecutionPathVisualizationConfig;
 //# sourceMappingURL=ExecutionPath.d.ts.map

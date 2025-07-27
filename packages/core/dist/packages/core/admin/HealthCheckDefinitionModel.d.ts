@@ -492,4 +492,5 @@ export interface ValidationResult {
     warnings: string[];
     score: number;
 }
-export declare //# sourceMappingURL=HealthCheckDefinitionModel.d.ts.map
+export declare const apiCheck: HealthCheckDefinition;
+//# sourceMappingURL=HealthCheckDefinitionModel.d.ts.map

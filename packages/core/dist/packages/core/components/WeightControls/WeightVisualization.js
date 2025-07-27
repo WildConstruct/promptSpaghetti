@@ -99,26 +99,19 @@ export const WeightVisualization = (props) => {
         return _jsx(BarGraph, { ...props });
     }
 };
-export const WeightLegend = ({ options, className = '' }) => {
-    return (_jsx("div", { className: `weight-legend ${className}`, style: {
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '4px',
-            fontSize: '12px',
-            color: '#e2e8f0'
-        }, children: options.map((option, index) => {
-            const percentage = totalWeight > 0 ? (option.weight / totalWeight) * 100 : 0;
-            return (_jsxs("div", { style: {
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px'
-                }, children: [_jsx("div", { style: {
-                            width: '12px',
-                            height: '12px',
-                            borderRadius: '2px',
-                            backgroundColor: getOptionColor(index),
-                            flexShrink: 0
-                        } }), _jsx("span", { style: { flex: 1, minWidth: 0 }, children: option.text }), _jsxs("span", { style: { color: '#a0aec0', fontWeight: 'bold' }, children: [Math.round(percentage), "%"] })] }, option.id));
-        }) }));
-};
+return (_jsxs("div", { style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px'
+    }, children: [_jsx("div", { style: {
+                width: '12px',
+                height: '12px',
+                borderRadius: '2px',
+                backgroundColor: getOptionColor(index),
+                flexShrink: 0
+            } }), _jsx("span", { style: { flex: 1, minWidth: 0 }, children: option.text }), _jsxs("span", { style: { color: '#a0aec0', fontWeight: 'bold' }, children: [Math.round(percentage), "%"] })] }, option.id));
+div >
+;
+;
+;
 export default WeightVisualization;

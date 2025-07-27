@@ -31,7 +31,10 @@ export declare const EncryptionStatusIcon: React.FC<{
     encryptionState: EncryptionState;
     onClick?: () => void;
 }>;
-export declare     onDecrypt?: () => void;
+export declare const EncryptionDetails: React.FC<{
+    encryptionState: EncryptionState;
+    onEncrypt?: () => void;
+    onDecrypt?: () => void;
     onChangeAlgorithm?: (algorithm: EncryptionAlgorithm) => void;
 }>;
 export {};

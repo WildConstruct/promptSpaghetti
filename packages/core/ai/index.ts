@@ -110,11 +110,6 @@ export type {
 export * from './performance';
 
 // Utility functions and helpers
-export };
-
-export };
-
-export };
 
 interface HTTPRequestMapping {
   inputPath: string;
@@ -123,7 +118,7 @@ interface HTTPRequestMapping {
   headers?: Record<string, string>;
 }
 
-export   
+export function registerAndCreateModel(factory: any, registration: any, id: string, endpoint: string, apiKey: string) {
   factory.registerModel(registration);
   return factory.createModel({
     id,

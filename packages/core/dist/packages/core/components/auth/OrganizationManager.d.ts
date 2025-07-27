@@ -13,25 +13,6 @@ interface Organization {
     createdAt: Date;
     updatedAt: Date;
 }
-interface OrganizationManagerProps {
-    currentUser?: {
-        id: string;
-        name: string;
-        email: string;
-        role: string;
-    };
-    onOrganizationChange?: (org: Organization) => void;
-    onInvitationSent?: (invitation: {
-        id: string;
-        email: string;
-        role: string;
-    }) => void;
-    onMembershipUpdated?: (membership: {
-        id: string;
-        userId: string;
-        role: string;
-    }) => void;
-}
-export declare const OrganizationManager: React.FC<OrganizationManagerProps>;
+export declare const selectedOrg: Organization, setSelectedOrg: React.Dispatch<React.SetStateAction<Organization>>;
 export {};
 //# sourceMappingURL=OrganizationManager.d.ts.map

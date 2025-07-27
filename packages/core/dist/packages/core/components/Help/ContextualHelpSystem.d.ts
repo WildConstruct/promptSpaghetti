@@ -28,14 +28,5 @@ export interface HelpSystemProps {
     className?: string;
 }
 export declare const ContextualTooltip: React.FC<ContextualTooltipProps>;
-interface ProgressiveOnboardingProps {
-    steps: any[];
-    currentStep: number;
-    onNext: () => void;
-    onPrevious: () => void;
-    onSkip: () => void;
-    onComplete: () => void;
-}
-export declare const ProgressiveOnboarding: React.FC<ProgressiveOnboardingProps>;
 export default ContextualTooltip;
 //# sourceMappingURL=ContextualHelpSystem.d.ts.map

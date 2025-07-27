@@ -5,18 +5,7 @@
  * Provides conflict-free operations with automatic synchronization
  */
 import * as Y from 'yjs';
-import { 
-  MutationOperation,
-  NodeAddOperation,
-  NodeUpdateOperation,
-  NodeRemoveOperation,
-  EdgeAddOperation,
-  EdgeUpdateOperation,
-  EdgeRemoveOperation,
-  ParameterUpdateOperation,
-  GraphEdge,
-  ConflictType
-} from './GraphMutations';
+import { MutationOperation, NodeAddOperation, NodeUpdateOperation, NodeRemoveOperation, EdgeAddOperation, EdgeUpdateOperation, EdgeRemoveOperation, ParameterUpdateOperation, GraphEdge, ConflictType } from './GraphMutations';
 import { Graph } from '../graphSchema';
 /**
  * CRDT representation of a graph node

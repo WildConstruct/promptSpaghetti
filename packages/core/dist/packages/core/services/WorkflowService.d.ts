@@ -1,18 +1,4 @@
-import { 
-  WorkflowConfig,
-  WorkflowInstance,
-  WorkflowTransitionRequest,
-  WorkflowStats,
-  ApprovalRequest,
-  ApprovalResponse,
-  ResourceLock,
-  LockRequest,
-  AuditLogEntry,
-  AuditFilter,
-  WorkflowWebhook,
-  ScheduledExecution,
-  ExecutionResult
-} from '../types/WorkflowTypes';
+import { WorkflowConfig, WorkflowInstance, WorkflowTransitionRequest, WorkflowStats, ApprovalRequest, ApprovalResponse, ResourceLock, LockRequest, AuditLogEntry, AuditFilter, WorkflowWebhook, ScheduledExecution, ExecutionResult } from '../types/WorkflowTypes';
 declare class WorkflowService {
     private baseUrl;
     constructor(baseUrl?: string);
@@ -22,13 +8,7 @@ declare class WorkflowService {
     updateWorkflowConfig(configId: string, updates: Partial<WorkflowConfig>): Promise<WorkflowConfig>;
     deleteWorkflowConfig(configId: string): Promise<void>;
     getWorkflowInstance(resourceId: string, resourceType: string): Promise<WorkflowInstance | null>;
-    createWorkflowInstance(
-      resourceId: string,
-      resourceType: string,
-      configId: string,
-      metadata?: Record<string,
-      any>
-    ): Promise<WorkflowInstance>;
+    createWorkflowInstance(resourceId: string, resourceType: string, configId: string, metadata?: Record<string, any>): Promise<WorkflowInstance>;
     transitionWorkflow(instanceId: string, request: WorkflowTransitionRequest): Promise<WorkflowInstance>;
     getWorkflowStats(workspaceId?: string, configId?: string): Promise<WorkflowStats>;
     getApprovalRequests(workspaceId?: string, userId?: string): Promise<ApprovalRequest[]>;
@@ -49,10 +29,7 @@ declare class WorkflowService {
     updateWebhook(webhookId: string, updates: Partial<WorkflowWebhook>): Promise<WorkflowWebhook>;
     deleteWebhook(webhookId: string): Promise<void>;
     getScheduledExecutions(resourceId?: string, resourceType?: string): Promise<ScheduledExecution[]>;
-    createScheduledExecution(
-      execution: Omit<ScheduledExecution,
-      'id' | 'created_at' | 'updated_at' | 'execution_count' | 'failure_count'>
-    ): Promise<ScheduledExecution>;
+    createScheduledExecution(execution: Omit<ScheduledExecution, 'id' | 'created_at' | 'updated_at' | 'execution_count' | 'failure_count'>): Promise<ScheduledExecution>;
     updateScheduledExecution(executionId: string, updates: Partial<ScheduledExecution>): Promise<ScheduledExecution>;
     deleteScheduledExecution(executionId: string): Promise<void>;
     getExecutionResults(executionId: string): Promise<ExecutionResult[]>;

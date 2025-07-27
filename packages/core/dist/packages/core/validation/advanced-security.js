@@ -281,30 +281,26 @@ export class AdvancedSecurityAnalyzer {
 }
 // Export singleton instance for application use
 export const advancedSecurityAnalyzer = new AdvancedSecurityAnalyzer();
-// Enhanced validation functions that use advanced analysis
-export const enhancedValidation = {
-    enhancedSecurityValidation: (input) => {
-        return advancedSecurityAnalyzer.validateAdvancedSecurity(input);
-    },
-    /**
-     * Enhanced expression validation
-     */
-    enhancedSafeExpression: (maxLength = 500) => {
-        return (expression) => {
-            if (expression.length > maxLength)
-                return false;
-            // Combined traditional and advanced validation
-            if (!SecurityValidation.validateSafeExpression(expression)) {
-                return false;
-            }
-            const analysis = advancedSecurityAnalyzer.analyzeInput(expression);
-            return analysis.isSecure && analysis.riskScore < 0.6; // Stricter for expressions
-        };
-    },
+/**
+ * Enhanced expression validation
+ */
+enhancedSafeExpression: (maxLength = 500) => {
+    return (expression) => {
+        if (expression.length > maxLength)
+            return false;
+        // Combined traditional and advanced validation
+        if (!SecurityValidation.validateSafeExpression(expression)) {
+            return false;
+        }
+        const analysis = advancedSecurityAnalyzer.analyzeInput(expression);
+        return analysis.isSecure && analysis.riskScore < 0.6; // Stricter for expressions
+    };
+},
     /**
      * Get security analysis details
      */
-    getAnalysis: (input) => {
-        return advancedSecurityAnalyzer.analyzeInput(input);
-    }
+    getAnalysis;
+(input) => {
+    return advancedSecurityAnalyzer.analyzeInput(input);
 };
+;

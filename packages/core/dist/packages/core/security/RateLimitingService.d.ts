@@ -141,20 +141,11 @@ export declare class RateLimitingService extends EventEmitter {
     /**
      * Check if request should be allowed based on rate limits
      */
-    checkRateLimit(
-      identifier: string,
-      endpoint: string,
-      metadata?: Partial<RateLimitAttempt['metadata']>
-    ): Promise<RateLimitStatus>;
+    checkRateLimit(identifier: string, endpoint: string, metadata?: Partial<RateLimitAttempt['metadata']>): Promise<RateLimitStatus>;
     /**
      * Record an authentication attempt
      */
-    recordAttempt(
-      identifier: string,
-      endpoint: string,
-      success: boolean,
-      metadata?: Partial<RateLimitAttempt['metadata']>
-    ): void;
+    recordAttempt(identifier: string, endpoint: string, success: boolean, metadata?: Partial<RateLimitAttempt['metadata']>): void;
     /**
      * Add rate limit exemption for identifier
      */

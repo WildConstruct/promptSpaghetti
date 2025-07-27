@@ -441,5 +441,4 @@ export class ExtensionRuntimeTypeChecker {
     }
 }
 // Export singletons
-export const extensionValidator = ExtensionInterfaceValidator.getInstance();
-export const runtimeTypeChecker = ExtensionRuntimeTypeChecker.getInstance();
+export export const runtimeTypeChecker = ExtensionRuntimeTypeChecker.getInstance();

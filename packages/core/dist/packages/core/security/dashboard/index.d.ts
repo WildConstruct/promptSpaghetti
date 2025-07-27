@@ -40,19 +40,11 @@ export declare class SecurityDashboardFactory {
     /**
      * Create a dashboard from template
      */
-    createDashboard(
-      templateId: string,
-      userId: string,
-      overrides?: Partial<DashboardConfig>
-    ): Promise<DashboardConfig | null>;
+    createDashboard(templateId: string, userId: string, overrides?: Partial<DashboardConfig>): Promise<DashboardConfig | null>;
     /**
      * Create a dashboard from preset
      */
-    createDashboardFromPreset(
-      presetId: string,
-      userId: string,
-      overrides?: Partial<DashboardConfig>
-    ): Promise<DashboardConfig | null>;
+    createDashboardFromPreset(presetId: string, userId: string, overrides?: Partial<DashboardConfig>): Promise<DashboardConfig | null>;
     /**
      * Get available dashboards for user
      */

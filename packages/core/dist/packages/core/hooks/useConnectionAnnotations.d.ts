@@ -26,11 +26,7 @@ interface UseConnectionAnnotationsReturn {
     hasLabel: (edgeId: string) => boolean;
     getVisibleLabelsCount: () => number;
 }
-export declare const useConnectionAnnotations: (
-  { edges,
-  onEdgesChange,
-  autoOptimizePositions }: UseConnectionAnnotationsProps
-) => UseConnectionAnnotationsReturn;
+export declare const useConnectionAnnotations: ({ edges, onEdgesChange, autoOptimizePositions }: UseConnectionAnnotationsProps) => UseConnectionAnnotationsReturn;
 export declare const connectionAnnotationPresets: {
     dataFlow: {
         labelStyle: {
@@ -74,10 +70,6 @@ export declare const labelTemplates: {
     config: string;
     data: string;
 };
-export declare const createPresetConnection: (
-  baseEdge: Edge,
-  preset: keyof typeof connectionAnnotationPresets,
-  label: string
-) => AnnotatedEdge;
+export declare const createPresetConnection: (baseEdge: Edge, preset: keyof typeof connectionAnnotationPresets, label: string) => AnnotatedEdge;
 export {};
 //# sourceMappingURL=useConnectionAnnotations.d.ts.map

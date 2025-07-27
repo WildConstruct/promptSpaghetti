@@ -310,6 +310,9 @@ export interface ActivityRetentionPolicy {
     isActive: boolean;
 }
 export type { Activity as MonitoringActivity, ActivityQuery as MonitoringActivityQuery, ActivityQueryResult as MonitoringActivityQueryResult, ActivityMetrics as MonitoringActivityMetrics };
-export declare export declare export declare export declare const ACTIVITY_TYPE_LABELS: Record<ActivityType, string>;
+export declare const DEFAULT_ACTIVITY_RETENTION_DAYS = 90;
+export declare const DEFAULT_ACTIVITY_PAGE_SIZE = 50;
+export declare const MAX_ACTIVITY_PAGE_SIZE = 1000;
+export declare const ACTIVITY_TYPE_LABELS: Record<ActivityType, string>;
 export declare const ACTIVITY_SEVERITY_COLORS: Record<ActivitySeverity, string>;
 //# sourceMappingURL=ActivityDataModel.d.ts.map

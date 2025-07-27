@@ -5,7 +5,52 @@
  * Provides professional animation utilities for 60fps interactions
  */
 import React from 'react';
-export declare     stopAnimation: () => void;
+export declare const easingFunctions: {
+    cinema4d: {
+        ease: string;
+        easeIn: string;
+        easeOut: string;
+        easeInOut: string;
+        professional: string;
+        sharp: string;
+        anticipate: string;
+        bounce: string;
+        substance: string;
+    };
+};
+export declare const animationDurations: {
+    micro: number;
+    fast: number;
+    normal: number;
+    smooth: number;
+    panel: number;
+    complex: number;
+    loading: number;
+};
+export declare const cssAnimationClasses: {
+    nodeCreate: string;
+    nodeDelete: string;
+    nodeHover: string;
+    panelExpand: string;
+    panelCollapse: string;
+    loadingSpinner: string;
+    hoverLift: string;
+};
+/**
+ * Creates smooth animation styles for React components
+ */
+export declare function createAnimationStyle(property: string, duration?: number, easing?: string): React.CSSProperties;
+/**
+ * Creates a comprehensive transition style for multiple properties
+ */
+export declare function createSmoothTransition(properties: string[], duration?: number, easing?: string): React.CSSProperties;
+/**
+ * Animation state management hook
+ */
+export declare function useAnimation(initialState?: boolean): {
+    isAnimating: boolean;
+    startAnimation: (duration?: number) => void;
+    stopAnimation: () => void;
 };
 /**
  * Smooth scroll utilities
@@ -38,7 +83,16 @@ export declare class AnimationManager {
      */
     cleanup(): void;
 }
-export declare         onMouseLeave: () => void;
+export declare const globalAnimationManager: AnimationManager;
+/**
+ * Hook for managing element hover states with smooth transitions
+ */
+export declare function useSmoothHover(duration?: number): {
+    isHovered: boolean;
+    isTransitioning: boolean;
+    hoverProps: {
+        onMouseEnter: () => void;
+        onMouseLeave: () => void;
     };
 };
 /**

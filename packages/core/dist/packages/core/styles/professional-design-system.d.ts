@@ -126,7 +126,22 @@ export interface ProfessionalBorderRadius {
     '2xl': string;
     full: string;
 }
-export declare     '--bg-secondary': string;
+export declare const professionalColors: ProfessionalColorPalette;
+export declare const professionalTypography: ProfessionalTypography;
+export declare const professionalShadows: ProfessionalShadows;
+export declare const professionalSpacing: ProfessionalSpacing;
+export declare const professionalBorderRadius: ProfessionalBorderRadius;
+export interface ProfessionalDesignSystem {
+    colors: ProfessionalColorPalette;
+    typography: ProfessionalTypography;
+    shadows: ProfessionalShadows;
+    spacing: ProfessionalSpacing;
+    borderRadius: ProfessionalBorderRadius;
+}
+export declare const professionalDesignSystem: ProfessionalDesignSystem;
+export declare const generateCSSCustomProperties: (colors?: ProfessionalColorPalette, shadows?: ProfessionalShadows, spacing?: ProfessionalSpacing, borderRadius?: ProfessionalBorderRadius) => {
+    '--bg-primary': string;
+    '--bg-secondary': string;
     '--bg-tertiary': string;
     '--bg-elevated': string;
     '--bg-hover': string;

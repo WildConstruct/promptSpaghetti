@@ -51,10 +51,7 @@ export declare class ReproducibilityValidator {
     /**
      * Comprehensive validation of VFX export reproducibility
      */
-    validateReproducibility(
-      exportData: VFXExportFormat,
-      options?: ReproducibilityValidationOptions
-    ): ReproducibilityValidationReport;
+    validateReproducibility(exportData: VFXExportFormat, options?: ReproducibilityValidationOptions): ReproducibilityValidationReport;
     private validateRandomizationState;
     private validateNodeRngStates;
     private validateNodeConfigurations;

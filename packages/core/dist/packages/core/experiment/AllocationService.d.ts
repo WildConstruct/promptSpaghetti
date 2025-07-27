@@ -2,13 +2,7 @@
  * Epic 14 Story 14.2 - Traffic Allocation & Randomization
  * Service for managing user assignments and traffic allocation
  */
-import { 
-  AssignmentRequest,
-  AssignmentResponse,
-  UserAssignment,
-  Experiment,
-  AllocationServiceConfig
-} from '../types/experiment';
+import { AssignmentRequest, AssignmentResponse, UserAssignment, Experiment, AllocationServiceConfig } from '../types/experiment';
 export interface AllocationCache {
     get(key: string): Promise<string | null>;
     set(key: string, value: string, ttlSeconds: number): Promise<void>;
@@ -29,12 +23,7 @@ export declare class AllocationService {
     private cache;
     private storage;
     private metrics;
-    constructor(
-      config: AllocationServiceConfig,
-      cache: AllocationCache,
-      storage: AssignmentStorage,
-      metrics: AssignmentMetrics
-    );
+    constructor(config: AllocationServiceConfig, cache: AllocationCache, storage: AssignmentStorage, metrics: AssignmentMetrics);
     /**
      * Assign a user to an experiment variant
      */
@@ -42,22 +31,11 @@ export declare class AllocationService {
     /**
      * Get assignments for multiple experiments
      */
-    bulkAssignUser(
-      userId: string,
-      experimentIds: string[],
-      sessionId?: string,
-      debugMode?: boolean
-    ): Promise<Record<string, AssignmentResponse>>;
+    bulkAssignUser(userId: string, experimentIds: string[], sessionId?: string, debugMode?: boolean): Promise<Record<string, AssignmentResponse>>;
     /**
      * Force assign a user to a specific variant (for debugging/testing)
      */
-    forceAssignUser(
-      userId: string,
-      experimentId: string,
-      variantId: string,
-      reason: string,
-      sessionId?: string
-    ): Promise<AssignmentResponse>;
+    forceAssignUser(userId: string, experimentId: string, variantId: string, reason: string, sessionId?: string): Promise<AssignmentResponse>;
     /**
      * Remove user assignment (for opt-out scenarios)
      */
@@ -89,10 +67,5 @@ export declare class AllocationService {
 /**
  * Factory function to create allocation service with Redis cache
  */
-export declare function createAllocationService(
-  config: AllocationServiceConfig,
-  storage: AssignmentStorage,
-  metrics: AssignmentMetrics,
-  cache?: AllocationCache
-): AllocationService;
+export declare function createAllocationService(config: AllocationServiceConfig, storage: AssignmentStorage, metrics: AssignmentMetrics, cache?: AllocationCache): AllocationService;
 //# sourceMappingURL=AllocationService.d.ts.map

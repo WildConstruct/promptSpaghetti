@@ -186,11 +186,7 @@ export declare class CommentModerationService {
     /**
      * Subscribe to real-time moderation updates
      */
-    subscribeToModerationUpdates(
-      subscriberId: string,
-      filters: CommentModerationFilters,
-      callback: (update: any
-    ) => void): Promise<void>;
+    subscribeToModerationUpdates(subscriberId: string, filters: CommentModerationFilters, callback: (update: any) => void): Promise<void>;
     /**
      * Auto-moderate comments based on ML analysis
      */

@@ -589,43 +589,23 @@ export declare class SecurityDisasterRecoveryManager extends EventEmitter {
     /**
      * Create a disaster recovery plan
      */
-    createRecoveryPlan(
-      plan: Omit<DisasterRecoveryPlan,
-      'id' | 'created_at' | 'last_updated' | 'next_review_date' | 'status'>
-    ): Promise<string>;
+    createRecoveryPlan(plan: Omit<DisasterRecoveryPlan, 'id' | 'created_at' | 'last_updated' | 'next_review_date' | 'status'>): Promise<string>;
     /**
      * Create a backup job
      */
-    createBackupJob(
-      job: Omit<BackupJob,
-      'id' | 'created_at' | 'last_updated' | 'last_run' | 'next_run'>
-    ): Promise<string>;
+    createBackupJob(job: Omit<BackupJob, 'id' | 'created_at' | 'last_updated' | 'last_run' | 'next_run'>): Promise<string>;
     /**
      * Execute a backup job manually
      */
-    executeBackupJob(
-      jobId: string,
-      triggeredBy?: 'schedule' | 'manual' | 'event' | 'disaster_recovery'
-    ): Promise<string>;
+    executeBackupJob(jobId: string, triggeredBy?: 'schedule' | 'manual' | 'event' | 'disaster_recovery'): Promise<string>;
     /**
      * Declare a disaster and initiate recovery
      */
-    declareDisaster(
-      planId: string,
-      disasterType: DisasterRecoveryPlan['classification']['disaster_type'],
-      severity: DisasterRecoveryPlan['classification']['severity_level'],
-      description: string,
-      incidentCommander: string
-    ): Promise<string>;
+    declareDisaster(planId: string, disasterType: DisasterRecoveryPlan['classification']['disaster_type'], severity: DisasterRecoveryPlan['classification']['severity_level'], description: string, incidentCommander: string): Promise<string>;
     /**
      * Execute disaster recovery test
      */
-    executeRecoveryTest(
-      planId: string,
-      testType: TestResult['test_type'],
-      scope: Partial<TestResult['scope']>,
-      testLead: string
-    ): Promise<string>;
+    executeRecoveryTest(planId: string, testType: TestResult['test_type'], scope: Partial<TestResult['scope']>, testLead: string): Promise<string>;
     /**
      * Get disaster recovery metrics
      */

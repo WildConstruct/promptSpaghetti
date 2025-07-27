@@ -311,11 +311,7 @@ export declare class SecurityDataIntegrityMonitor extends EventEmitter {
     /**
      * Execute an integrity check
      */
-    executeIntegrityCheck(
-      checkId: string,
-      triggeredBy?: 'schedule' | 'event' | 'manual',
-      correlationId?: string
-    ): Promise<string>;
+    executeIntegrityCheck(checkId: string, triggeredBy?: 'schedule' | 'event' | 'manual', correlationId?: string): Promise<string>;
     /**
      * Get integrity check results
      */
@@ -332,13 +328,7 @@ export declare class SecurityDataIntegrityMonitor extends EventEmitter {
     /**
      * Resolve a finding
      */
-    resolveFinding(
-      findingId: string,
-      resolution: 'resolved' | 'false_positive' | 'accepted_risk',
-      resolvedBy: string,
-      notes?: string,
-      preventiveActions?: string[]
-    ): Promise<boolean>;
+    resolveFinding(findingId: string, resolution: 'resolved' | 'false_positive' | 'accepted_risk', resolvedBy: string, notes?: string, preventiveActions?: string[]): Promise<boolean>;
     /**
      * Trigger automatic remediation for a finding
      */

@@ -220,11 +220,7 @@ export declare class UnifiedEventBus extends EventEmitter {
     /**
      * Migrate analytics data from existing systems
      */
-    migrateFromLegacySystem(
-      systemName: string,
-      events: unknown[],
-      transformer: (legacyEvent: unknown
-    ) => Partial<UnifiedAnalyticsEvent>): Promise<{
+    migrateFromLegacySystem(systemName: string, events: unknown[], transformer: (legacyEvent: unknown) => Partial<UnifiedAnalyticsEvent>): Promise<{
         migrated: number;
         failed: number;
         errors: string[];

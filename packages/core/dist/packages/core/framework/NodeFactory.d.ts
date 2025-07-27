@@ -51,21 +51,11 @@ export declare class NodeFactory {
     private templates;
     private nodeCache;
     private creationHistory;
-    constructor(
-      framework: NodeFramework,
-      validationService: NodeValidationService,
-      config?: Partial<NodeFactoryConfig>
-    );
+    constructor(framework: NodeFramework, validationService: NodeValidationService, config?: Partial<NodeFactoryConfig>);
     /**
      * Create a new node with optional validation and optimization
      */
-    createNode(
-      type: string,
-      id: string,
-      config: AdvancedNodeConfig,
-      data: any,
-      options?: NodeCreationOptions
-    ): Promise<FrameworkNode>;
+    createNode(type: string, id: string, config: AdvancedNodeConfig, data: any, options?: NodeCreationOptions): Promise<FrameworkNode>;
     /**
      * Create node from template
      */

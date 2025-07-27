@@ -253,10 +253,7 @@ export declare class SystemAccessManager {
     /**
      * Access Request Management
      */
-    createAccessRequest(
-      requestData: Omit<AccessRequest,
-      'id' | 'requestedAt' | 'status' | 'auditTrail'>
-    ): Promise<AccessRequest>;
+    createAccessRequest(requestData: Omit<AccessRequest, 'id' | 'requestedAt' | 'status' | 'auditTrail'>): Promise<AccessRequest>;
     approveAccessRequest(requestId: string, approverId: string, comments?: string): Promise<boolean>;
     /**
      * Access Control Queries
@@ -284,12 +281,9 @@ export declare class SystemAccessManager {
     private cleanupExpiredAccess;
     private processExpiredRequests;
 }
-export declare export declare const assignRole: (
-  userId: string,
-  roleId: string,
-  assignedBy: string,
-  options?: any
-) => Promise<boolean>;
+export declare const systemAccessManager: SystemAccessManager;
+export declare const createUser: (userData: Omit<SystemUser, "id" | "createdAt" | "updatedAt">, createdBy: string) => Promise<SystemUser>;
+export declare const assignRole: (userId: string, roleId: string, assignedBy: string, options?: any) => Promise<boolean>;
 export declare const hasPermission: (userId: string, permission: string, resource?: string, action?: string) => boolean;
 export declare const getUsers: (filter?: AccessFilter) => SystemUser[];
 export declare const getAccessStats: () => AccessStats;

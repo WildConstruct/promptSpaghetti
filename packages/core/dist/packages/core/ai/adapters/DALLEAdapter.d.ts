@@ -66,12 +66,7 @@ export declare class DALLEAdapter extends BaseAIModel {
     cleanup(): Promise<void>;
     estimate(input: unknown, options?: DALLERequestOptions): Promise<CostEstimate>;
     generateVariations(imageUrl: string, options?: Partial<DALLERequestOptions>): Promise<ImageGenerationResult>;
-    editImage(
-      imageUrl: string,
-      maskUrl: string,
-      prompt: string,
-      options?: Partial<DALLERequestOptions>
-    ): Promise<ImageGenerationResult>;
+    editImage(imageUrl: string, maskUrl: string, prompt: string, options?: Partial<DALLERequestOptions>): Promise<ImageGenerationResult>;
     static getModelCostPerRequest(modelName: string): number;
     static getModelAverageLatency(modelName: string): number;
     private _testConnection;

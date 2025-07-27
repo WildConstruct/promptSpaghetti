@@ -171,98 +171,96 @@ export const ContextualTooltip = ({ content, children, disabled = false, delay =
                                 ...getArrowStyle(calculatedPosition)
                             } })] }) }))] }));
 };
-export const ProgressiveOnboarding = ({ steps, currentStep, onNext, onPrevious, onSkip, onComplete }) => {
-    const currentContent = steps[currentStep];
-    if (!currentContent)
-        return null;
-    return (_jsxs("div", { style: {
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            zIndex: 2000,
-            background: '#1a202c',
-            border: '2px solid #4299e1',
-            borderRadius: 8,
-            padding: 20,
-            maxWidth: 400,
-            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4)'
-        }, children: [_jsxs("div", { style: {
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: 16
-                }, children: [_jsxs("div", { style: {
+if (!currentContent)
+    return null;
+return (_jsxs("div", { style: {
+        position: 'fixed',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        zIndex: 2000,
+        background: '#1a202c',
+        border: '2px solid #4299e1',
+        borderRadius: 8,
+        padding: 20,
+        maxWidth: 400,
+        boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4)'
+    }, children: [_jsxs("div", { style: {
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: 16
+            }, children: [_jsxs("div", { style: {
+                        fontSize: 12,
+                        color: '#a0aec0'
+                    }, children: ["Step ", currentStep + 1, " of ", steps.length] }), _jsx("div", { style: {
+                        display: 'flex',
+                        gap: 4
+                    }, children: steps.map((_, index) => (_jsx("div", { style: {
+                            width: 8,
+                            height: 8,
+                            borderRadius: '50%',
+                            background: index === currentStep ? '#4299e1' : '#4a5568'
+                        } }, index))) })] }), _jsxs("div", { style: {
+                color: '#e2e8f0',
+                marginBottom: 20
+            }, children: [_jsx("h3", { style: {
+                        fontSize: 16,
+                        fontWeight: 600,
+                        marginBottom: 8,
+                        color: '#4299e1'
+                    }, children: currentContent.title }), _jsx("p", { style: {
+                        fontSize: 14,
+                        lineHeight: 1.5,
+                        marginBottom: 12
+                    }, children: currentContent.description }), currentContent.examples && (_jsx("div", { style: { marginBottom: 12 }, children: currentContent.examples.map((example, index) => (_jsx("div", { style: {
                             fontSize: 12,
-                            color: '#a0aec0'
-                        }, children: ["Step ", currentStep + 1, " of ", steps.length] }), _jsx("div", { style: {
-                            display: 'flex',
-                            gap: 4
-                        }, children: steps.map((_, index) => (_jsx("div", { style: {
-                                width: 8,
-                                height: 8,
-                                borderRadius: '50%',
-                                background: index === currentStep ? '#4299e1' : '#4a5568'
-                            } }, index))) })] }), _jsxs("div", { style: {
-                    color: '#e2e8f0',
-                    marginBottom: 20
-                }, children: [_jsx("h3", { style: {
-                            fontSize: 16,
-                            fontWeight: 600,
-                            marginBottom: 8,
-                            color: '#4299e1'
-                        }, children: currentContent.title }), _jsx("p", { style: {
-                            fontSize: 14,
-                            lineHeight: 1.5,
-                            marginBottom: 12
-                        }, children: currentContent.description }), currentContent.examples && (_jsx("div", { style: { marginBottom: 12 }, children: currentContent.examples.map((example, index) => (_jsx("div", { style: {
-                                fontSize: 12,
-                                color: '#68d391',
-                                fontFamily: 'monospace',
-                                background: 'rgba(72, 187, 120, 0.1)',
-                                padding: '4px 8px',
-                                borderRadius: 4,
-                                marginBottom: 4
-                            }, children: example }, index))) }))] }), _jsxs("div", { style: {
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    gap: 8
-                }, children: [_jsxs("div", { style: { display: 'flex', gap: 8 }, children: [currentStep > 0 && (_jsx("button", { onClick: onPrevious, style: {
-                                    padding: '6px 12px',
-                                    background: '#4a5568',
-                                    border: 'none',
-                                    borderRadius: 4,
-                                    color: '#e2e8f0',
-                                    cursor: 'pointer',
-                                    fontSize: 12
-                                }, children: "\u2190 Previous" })), _jsx("button", { onClick: onSkip, style: {
-                                    padding: '6px 12px',
-                                    background: 'transparent',
-                                    border: '1px solid #4a5568',
-                                    borderRadius: 4,
-                                    color: '#a0aec0',
-                                    cursor: 'pointer',
-                                    fontSize: 12
-                                }, children: "Skip Tour" })] }), _jsx("div", { children: currentStep < steps.length - 1 ? (_jsx("button", { onClick: onNext, style: {
+                            color: '#68d391',
+                            fontFamily: 'monospace',
+                            background: 'rgba(72, 187, 120, 0.1)',
+                            padding: '4px 8px',
+                            borderRadius: 4,
+                            marginBottom: 4
+                        }, children: example }, index))) }))] }), _jsxs("div", { style: {
+                display: 'flex',
+                justifyContent: 'space-between',
+                gap: 8
+            }, children: [_jsxs("div", { style: { display: 'flex', gap: 8 }, children: [currentStep > 0 && (_jsx("button", { onClick: onPrevious, style: {
                                 padding: '6px 12px',
-                                background: '#4299e1',
+                                background: '#4a5568',
                                 border: 'none',
                                 borderRadius: 4,
-                                color: 'white',
+                                color: '#e2e8f0',
                                 cursor: 'pointer',
-                                fontSize: 12,
-                                fontWeight: 600
-                            }, children: "Next \u2192" })) : (_jsx("button", { onClick: onComplete, style: {
+                                fontSize: 12
+                            }, children: "\u2190 Previous" })), _jsx("button", { onClick: onSkip, style: {
                                 padding: '6px 12px',
-                                background: '#38b2ac',
-                                border: 'none',
+                                background: 'transparent',
+                                border: '1px solid #4a5568',
                                 borderRadius: 4,
-                                color: 'white',
+                                color: '#a0aec0',
                                 cursor: 'pointer',
-                                fontSize: 12,
-                                fontWeight: 600
-                            }, children: "Get Started! \uD83D\uDE80" })) })] })] }));
-};
+                                fontSize: 12
+                            }, children: "Skip Tour" })] }), _jsx("div", { children: currentStep < steps.length - 1 ? (_jsx("button", { onClick: onNext, style: {
+                            padding: '6px 12px',
+                            background: '#4299e1',
+                            border: 'none',
+                            borderRadius: 4,
+                            color: 'white',
+                            cursor: 'pointer',
+                            fontSize: 12,
+                            fontWeight: 600
+                        }, children: "Next \u2192" })) : (_jsx("button", { onClick: onComplete, style: {
+                            padding: '6px 12px',
+                            background: '#38b2ac',
+                            border: 'none',
+                            borderRadius: 4,
+                            color: 'white',
+                            cursor: 'pointer',
+                            fontSize: 12,
+                            fontWeight: 600
+                        }, children: "Get Started! \uD83D\uDE80" })) })] })] }));
+;
 // Helper functions
 function getTooltipTransform(position) {
     switch (position) {

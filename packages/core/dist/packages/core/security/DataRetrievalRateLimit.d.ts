@@ -176,12 +176,7 @@ export declare class DataRetrievalRateLimit extends EventEmitter {
     /**
      * Check if data retrieval request is allowed
      */
-    checkDataRetrievalLimit(
-      subject: SubjectAttributes,
-      object: ObjectAttributes,
-      operation: DataOperation,
-      requestDetails: DataRequestDetails
-    ): Promise<DataRetrievalDecision>;
+    checkDataRetrievalLimit(subject: SubjectAttributes, object: ObjectAttributes, operation: DataOperation, requestDetails: DataRequestDetails): Promise<DataRetrievalDecision>;
     /**
      * Get current usage metrics
      */

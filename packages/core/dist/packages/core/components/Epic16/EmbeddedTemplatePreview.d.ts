@@ -84,8 +84,16 @@ export interface PreviewSize {
     icon: React.ComponentType<unknown>;
     description: string;
 }
-export declare }>;
-export declare     previewSize: PreviewSize;
+export declare const PREVIEW_SIZES: PreviewSize[];
+export declare const EmbedCodeGenerator: React.FC<{
+    template: Template;
+    customization: EmbedCustomization;
+    onCustomizationChange: (updates: Partial<EmbedCustomization>) => void;
+}>;
+export declare const EmbedCustomizationPanel: React.FC<{
+    customization: EmbedCustomization;
+    onCustomizationChange: (updates: Partial<EmbedCustomization>) => void;
+    previewSize: PreviewSize;
     onPreviewSizeChange: (size: PreviewSize) => void;
 }>;
 export declare const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps>;

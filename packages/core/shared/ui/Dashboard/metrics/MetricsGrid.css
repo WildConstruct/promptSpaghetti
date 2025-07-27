@@ -1,0 +1,43 @@
+/**
+ * MetricsGrid Styles
+ * REFACTOR-003: Dashboard Component Architecture Consolidation
+ */
+
+/* ===== METRICS GRID ===== */
+.metrics-grid {
+  display: grid;
+  width: 100%;
+}
+
+/* Grid gaps */
+.metrics-grid.gap-small {
+  gap: 12px;
+}
+
+.metrics-grid.gap-medium {
+  gap: 20px;
+}
+
+.metrics-grid.gap-large {
+  gap: 28px;
+}
+
+/* ===== RESPONSIVE BEHAVIOR ===== */
+@media (max-width: 768px) {
+  .metrics-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .metrics-grid.gap-medium,
+  .metrics-grid.gap-large {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .metrics-grid.gap-small,
+  .metrics-grid.gap-medium,
+  .metrics-grid.gap-large {
+    gap: 12px;
+  }
+}

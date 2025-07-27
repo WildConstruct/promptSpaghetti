@@ -428,14 +428,8 @@ export declare class SecurityOptimizationTools extends EventEmitter {
     private recommendationInterval?;
     private validationInterval?;
     constructor();
-    createOptimizationProfile(
-      profile: Omit<OptimizationProfile,
-      'id' | 'created_at' | 'last_updated' | 'last_analyzed' | 'results'>
-    ): Promise<string>;
-    createOptimizationJob(
-      job: Omit<OptimizationJob,
-      'id' | 'created_at' | 'last_updated' | 'execution' | 'results'>
-    ): Promise<string>;
+    createOptimizationProfile(profile: Omit<OptimizationProfile, 'id' | 'created_at' | 'last_updated' | 'last_analyzed' | 'results'>): Promise<string>;
+    createOptimizationJob(job: Omit<OptimizationJob, 'id' | 'created_at' | 'last_updated' | 'execution' | 'results'>): Promise<string>;
     executeOptimizationJob(jobId: string, triggeredBy?: string): Promise<string>;
     private performOptimizationJob;
     private executeJobPhase;

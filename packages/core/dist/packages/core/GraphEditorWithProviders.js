@@ -19,7 +19,6 @@ import { useAutosave } from './hooks/useAutosave';
 import { useNodeUtils } from './hooks/useNodeUtils';
 // Import provider system
 import { EditorProviderWrapper } from './components/EditorProviderWrapper';
-import { createProviderHook } from './hooks/useEditorProviders';
 // Import existing node type definitions and icons
 import { WeightedChoiceIcon, ConcatIcon, OutputIcon, IncludeIcon, SetVariableIcon, GetVariableIcon } from './icons';
 // Node type definitions (same as original GraphEditor)
@@ -394,34 +393,27 @@ const GraphEditorCore = ({ initialNodes, initialEdges, validateConnection, regis
 export const GraphEditorWithProviders = (props) => {
     return (_jsx(ReactFlowProvider, { children: _jsx(GraphEditorWithProvidersInner, { ...props }) }));
 };
-// Example usage and built-in providers
-export const createAnalyticsProviderHook = () => createProviderHook({
-    id: 'analytics',
-    name: 'Analytics Provider',
-    version: '1.0.0',
-    priority: 200,
-    onInit: (context) => {
-        console.log('[Analytics] Editor initialized with', context.nodes.length, 'nodes');
-    },
-    onNodeAdd: (node) => {
-        console.log('[Analytics] Node added:', node.data?.nodeType);
-        // Could send analytics event here
-        return node;
-    },
-    onExecutionError: (error) => {
-        console.error('[Analytics] Execution error:', error.message);
-        // Could send error analytics here
-    },
-    customActions: {
-        getAnalytics: (context) => ({
-            nodeCount: context.nodes.length,
-            edgeCount: context.edges.length,
-            nodeTypes: context.nodes.reduce((acc, node) => {
-                const type = node.data?.nodeType || 'unknown';
-                acc[type] = (acc[type] || 0) + 1;
-                return acc;
-            }, {})
-        })
-    }
-});
+onNodeAdd: (node) => {
+    console.log('[Analytics] Node added:', node.data?.nodeType);
+    // Could send analytics event here
+    return node;
+},
+    onExecutionError;
+(error) => {
+    console.error('[Analytics] Execution error:', error.message);
+    // Could send error analytics here
+},
+    customActions;
+{
+    getAnalytics: (context) => ({
+        nodeCount: context.nodes.length,
+        edgeCount: context.edges.length,
+        nodeTypes: context.nodes.reduce((acc, node) => {
+            const type = node.data?.nodeType || 'unknown';
+            acc[type] = (acc[type] || 0) + 1;
+            return acc;
+        }, {})
+    });
+}
+;
 export default GraphEditorWithProviders;

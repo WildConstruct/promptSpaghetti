@@ -325,72 +325,43 @@ export class HealthCheckDefinitionValidator {
 // ==========================================
 // EXAMPLE DEFINITIONS
 // ==========================================
-export const createDefaultHealthChecks = () => {
-    // Database connectivity check
-    const dbCheck = new HealthCheckDefinitionBuilder('db_connectivity', 'Database Connectivity')
-        .description('Verifies database connection and basic query functionality')
-        .category(HealthCheckCategory.INFRASTRUCTURE)
-        .priority(HealthCheckPriority.CRITICAL)
-        .tags('database', 'connection', 'infrastructure')
-        .databaseQuery({
-        query: 'SELECT 1 as test',
-        timeout: 5000,
-        expectedRowCount: 1
-    })
-        .schedule('*/5 * * * *') // Every 5 minutes
-        .validation({
-        output: {
-            expectedFormat: 'json',
-            successConditions: [
-                { field: 'test', operator: ComparisonOperator.EQUALS, value: 1, description: 'Query returns expected test value' }
-            ],
-            warningConditions: [],
-            errorConditions: []
-        },
-        runtime: {
-            maxExecutionTime: 6000,
-            networkAccessRequired: false,
-            fileSystemAccessRequired: false,
-            privilegedAccessRequired: true
-        }
-    })
-        .build();
-    // API endpoint check
-    const apiCheck = new HealthCheckDefinitionBuilder('api_health', 'API Health Check')
-        .description('Monitors primary API endpoint availability and performance')
-        .category(HealthCheckCategory.INTEGRATION)
-        .priority(HealthCheckPriority.HIGH)
-        .tags('api', 'endpoint', 'availability')
-        .httpEndpoint({
-        url: '/api/health',
-        method: 'GET',
-        expectedStatusCodes: [200],
-        timeout: 10000,
-        responseValidation: {
-            contentType: ['application/json'],
-            jsonPath: [
-                { path: '$.status', expectedValue: 'healthy', required: true },
-                { path: '$.timestamp', expectedType: 'string', required: true }
-            ]
-        }
-    })
-        .schedule('*/2 * * * *') // Every 2 minutes
-        .validation({
-        output: {
-            expectedFormat: 'json',
-            successConditions: [
-                { field: 'status', operator: ComparisonOperator.EQUALS, value: 'healthy', description: 'API reports healthy status' }
-            ],
-            warningConditions: [],
-            errorConditions: []
-        },
-        runtime: {
-            maxExecutionTime: 8000,
-            networkAccessRequired: true,
-            fileSystemAccessRequired: false,
-            privilegedAccessRequired: false
-        }
-    })
-        .build();
-    return [dbCheck, apiCheck];
-};
+export 
+// API endpoint check
+const apiCheck = new HealthCheckDefinitionBuilder('api_health', 'API Health Check')
+    .description('Monitors primary API endpoint availability and performance')
+    .category(HealthCheckCategory.INTEGRATION)
+    .priority(HealthCheckPriority.HIGH)
+    .tags('api', 'endpoint', 'availability')
+    .httpEndpoint({
+    url: '/api/health',
+    method: 'GET',
+    expectedStatusCodes: [200],
+    timeout: 10000,
+    responseValidation: {
+        contentType: ['application/json'],
+        jsonPath: [
+            { path: '$.status', expectedValue: 'healthy', required: true },
+            { path: '$.timestamp', expectedType: 'string', required: true }
+        ]
+    }
+})
+    .schedule('*/2 * * * *') // Every 2 minutes
+    .validation({
+    output: {
+        expectedFormat: 'json',
+        successConditions: [
+            { field: 'status', operator: ComparisonOperator.EQUALS, value: 'healthy', description: 'API reports healthy status' }
+        ],
+        warningConditions: [],
+        errorConditions: []
+    },
+    runtime: {
+        maxExecutionTime: 8000,
+        networkAccessRequired: true,
+        fileSystemAccessRequired: false,
+        privilegedAccessRequired: false
+    }
+})
+    .build();
+return [dbCheck, apiCheck];
+;

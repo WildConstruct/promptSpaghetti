@@ -55,12 +55,5 @@ export interface CommunityComponentEvents {
         outcome: string;
     };
 }
-export declare     calculateOverallScore: (dimensions: Record<string, number>) => number;
-    calculateGrade: (score: number) => "A+" | "A" | "B+" | "B" | "C+" | "C" | "D" | "F";
-    validateWorkflowTransition: (
-      currentStage: WorkflowStage,
-      targetStage: WorkflowStage,
-      userRole: ContentVersionControlMode
-    ) => boolean;
-};
+export declare const bParts: any;
 //# sourceMappingURL=index.d.ts.map

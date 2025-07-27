@@ -1,5 +1,112 @@
 import { z } from 'zod';
-export declare export declare const ParameterPresetSchema: z.ZodObject<{
+export declare const ComplexityLevel: z.ZodEnum<["simple", "moderate", "complex"]>;
+export declare const StylePreference: z.ZodEnum<["creative", "logical", "balanced"]>;
+export declare const LLMProvider: z.ZodEnum<["openai", "claude", "gemini"]>;
+export declare const NodeTypePreference: z.ZodObject<{
+    nodeType: z.ZodString;
+    weight: z.ZodNumber;
+    required: z.ZodDefault<z.ZodBoolean>;
+}, "strip", z.ZodTypeAny, {
+    weight?: number;
+    required?: boolean;
+    nodeType?: string;
+}, {
+    weight?: number;
+    required?: boolean;
+    nodeType?: string;
+}>;
+export declare const RandomizerParametersSchema: z.ZodObject<{
+    purpose: z.ZodString;
+    complexity: z.ZodEnum<["simple", "moderate", "complex"]>;
+    nodeCount: z.ZodNumber;
+    style: z.ZodEnum<["creative", "logical", "balanced"]>;
+    domain: z.ZodOptional<z.ZodString>;
+    userContext: z.ZodOptional<z.ZodString>;
+    nodeTypes: z.ZodDefault<z.ZodArray<z.ZodObject<{
+        nodeType: z.ZodString;
+        weight: z.ZodNumber;
+        required: z.ZodDefault<z.ZodBoolean>;
+    }, "strip", z.ZodTypeAny, {
+        weight?: number;
+        required?: boolean;
+        nodeType?: string;
+    }, {
+        weight?: number;
+        required?: boolean;
+        nodeType?: string;
+    }>, "many">>;
+    specificRequirements: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+    constraints: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+    focusAreas: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+    provider: z.ZodDefault<z.ZodEnum<["openai", "claude", "gemini"]>>;
+    temperature: z.ZodDefault<z.ZodNumber>;
+    maxRetries: z.ZodDefault<z.ZodNumber>;
+    includeMetadata: z.ZodDefault<z.ZodBoolean>;
+    validateOutput: z.ZodDefault<z.ZodBoolean>;
+    enablePreview: z.ZodDefault<z.ZodBoolean>;
+    preferredPatterns: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+    avoidPatterns: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+    qualityLevel: z.ZodDefault<z.ZodEnum<["draft", "standard", "high"]>>;
+    diversityScore: z.ZodDefault<z.ZodNumber>;
+    outputFormat: z.ZodDefault<z.ZodEnum<["graph", "serialized", "both"]>>;
+    includeExplanation: z.ZodDefault<z.ZodBoolean>;
+}, "strip", z.ZodTypeAny, {
+    includeMetadata?: boolean;
+    validateOutput?: boolean;
+    style?: "creative" | "logical" | "balanced";
+    complexity?: "simple" | "complex" | "moderate";
+    nodeTypes?: {
+        weight?: number;
+        required?: boolean;
+        nodeType?: string;
+    }[];
+    constraints?: string[];
+    temperature?: number;
+    nodeCount?: number;
+    outputFormat?: "both" | "graph" | "serialized";
+    maxRetries?: number;
+    purpose?: string;
+    domain?: string;
+    userContext?: string;
+    specificRequirements?: string[];
+    focusAreas?: string[];
+    provider?: "openai" | "claude" | "gemini";
+    enablePreview?: boolean;
+    preferredPatterns?: string[];
+    avoidPatterns?: string[];
+    qualityLevel?: "high" | "standard" | "draft";
+    diversityScore?: number;
+    includeExplanation?: boolean;
+}, {
+    includeMetadata?: boolean;
+    validateOutput?: boolean;
+    style?: "creative" | "logical" | "balanced";
+    complexity?: "simple" | "complex" | "moderate";
+    nodeTypes?: {
+        weight?: number;
+        required?: boolean;
+        nodeType?: string;
+    }[];
+    constraints?: string[];
+    temperature?: number;
+    nodeCount?: number;
+    outputFormat?: "both" | "graph" | "serialized";
+    maxRetries?: number;
+    purpose?: string;
+    domain?: string;
+    userContext?: string;
+    specificRequirements?: string[];
+    focusAreas?: string[];
+    provider?: "openai" | "claude" | "gemini";
+    enablePreview?: boolean;
+    preferredPatterns?: string[];
+    avoidPatterns?: string[];
+    qualityLevel?: "high" | "standard" | "draft";
+    diversityScore?: number;
+    includeExplanation?: boolean;
+}>;
+export type RandomizerParameters = z.infer<typeof RandomizerParametersSchema>;
+export declare const ParameterPresetSchema: z.ZodObject<{
     id: z.ZodString;
     name: z.ZodString;
     description: z.ZodString;

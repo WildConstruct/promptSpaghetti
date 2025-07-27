@@ -286,11 +286,7 @@ export declare class ImprovementSuggestionsSystem extends EventEmitter {
         impactMin?: number;
     }): ImprovementSuggestion[];
     getPersonalizedSuggestions(userId: string, context?: Partial<AnalysisContext>): Promise<ImprovementSuggestion[]>;
-    updateSuggestionStatus(
-      suggestionId: string,
-      status: SuggestionStatus,
-      metadata?: Partial<SuggestionMetadata>
-    ): Promise<void>;
+    updateSuggestionStatus(suggestionId: string, status: SuggestionStatus, metadata?: Partial<SuggestionMetadata>): Promise<void>;
     provideFeedback(suggestionId: string, feedback: {
         rating: number;
         helpful: boolean;

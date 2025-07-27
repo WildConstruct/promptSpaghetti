@@ -43,11 +43,7 @@ export declare class OptimizedSerializer {
     /**
      * Incremental serialization - only serialize changes
      */
-    serializeIncremental(
-      projectData: PSGFile,
-      projectId: string,
-      options?: SerializationOptions
-    ): Promise<SerializationResult & {
+    serializeIncremental(projectData: PSGFile, projectId: string, options?: SerializationOptions): Promise<SerializationResult & {
         isIncremental: boolean;
         deltaSize: number;
     }>;

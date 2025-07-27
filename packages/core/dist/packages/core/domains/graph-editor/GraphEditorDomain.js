@@ -1,0 +1,23 @@
+/**
+ * Graph Editor Domain Interface
+ * REFACTOR-005: Domain-Driven Architecture
+ *
+ * Main interface and export for the graph editor domain
+ */
+// Event constants for cross-domain communication
+export const GRAPH_DOMAIN_EVENTS = {
+    GRAPH_MODIFIED: 'graph:modified',
+    NODE_SELECTED: 'graph:node:selected',
+    NODE_ADDED: 'graph:node:added',
+    NODE_REMOVED: 'graph:node:removed',
+    NODE_UPDATED: 'graph:node:updated',
+    EDGE_ADDED: 'graph:edge:added',
+    EDGE_REMOVED: 'graph:edge:removed',
+    VALIDATION_ERROR: 'graph:validation:error',
+    EXECUTION_STARTED: 'graph:execution:started',
+    EXECUTION_COMPLETED: 'graph:execution:completed',
+    EXECUTION_ERROR: 'graph:execution:error',
+    STATE_SAVED: 'graph:state:saved',
+    STATE_LOADED: 'graph:state:loaded',
+    CONFIG_UPDATED: 'graph:config:updated'
+};

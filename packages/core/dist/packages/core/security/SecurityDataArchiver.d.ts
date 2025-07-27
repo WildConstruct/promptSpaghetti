@@ -378,10 +378,7 @@ export declare class SecurityDataArchiver extends EventEmitter {
     private archiveAndStoreData;
     private verifyDataIntegrity;
     private cleanupAndFinalize;
-    createRetrievalRequest(
-      request: Omit<DataRetrievalRequest,
-      'id' | 'created_at' | 'last_updated' | 'execution' | 'cost_tracking'>
-    ): Promise<string>;
+    createRetrievalRequest(request: Omit<DataRetrievalRequest, 'id' | 'created_at' | 'last_updated' | 'execution' | 'cost_tracking'>): Promise<string>;
     approveRetrievalRequest(requestId: string, approver: string, notes?: string): Promise<void>;
     private queueRetrievalRequest;
     private processRetrievalRequest;

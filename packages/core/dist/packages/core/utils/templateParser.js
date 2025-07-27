@@ -854,60 +854,50 @@ export // Variable categories for UI filtering
 /**
  * Generate smart default values for a template based on its variables
  */
-export const generateSmartDefaults = (template) => {
-    const defaults = {};
-    const parseResult = parseTemplate(template);
-    parseResult.variables
-        .filter(v => v.isValid)
-        .forEach(variable => {
-        if (variable.defaultValue) {
-            defaults[variable.name] = variable.defaultValue;
-        }
-        else {
-            // Fallback to pattern matching
-            const suggestion = COMMON_VARIABLES.find(s => s.name === variable.name);
-            defaults[variable.name] = suggestion ? suggestion.examples[0] : `sample ${variable.name}`;
-        }
-    });
-    return defaults;
-};
-/**
- * Get contextual default values based on node type and template content
- */
-export const getContextualDefaultValue = (name, nodeType) => {
-    if (nodeType === 'output') {
-        if (name.includes('description') || name.includes('summary'))
-            return 'A thrilling tale of discovery and courage';
+export const parseResult = parseTemplate(template);
+parseResult.variables
+    .filter(v => v.isValid)
+    .forEach(variable => {
+    if (variable.defaultValue) {
+        defaults[variable.name] = variable.defaultValue;
     }
-    if (nodeType === 'subject' || nodeType === 'character') {
-        if (name.includes('hero') || name.includes('protagonist'))
-            return 'brave warrior';
-        if (name.includes('villain') || name.includes('antagonist'))
-            return 'dark sorcerer';
-        if (name.includes('companion') || name.includes('sidekick'))
-            return 'loyal friend';
+    else {
+        // Fallback to pattern matching
+        const suggestion = COMMON_VARIABLES.find(s => s.name === variable.name);
+        defaults[variable.name] = suggestion ? suggestion.examples[0] : `sample ${variable.name}`;
     }
-    if (nodeType === 'action') {
-        if (name.includes('movement') || name.includes('motion'))
-            return 'running swiftly';
-        if (name.includes('combat') || name.includes('fight'))
-            return 'fierce battle';
-        if (name.includes('travel') || name.includes('journey'))
-            return 'long voyage';
+});
+return defaults;
+;
+if (nodeType === 'subject' || nodeType === 'character') {
+    if (name.includes('hero') || name.includes('protagonist'))
+        return 'brave warrior';
+    if (name.includes('villain') || name.includes('antagonist'))
+        return 'dark sorcerer';
+    if (name.includes('companion') || name.includes('sidekick'))
+        return 'loyal friend';
+}
+if (nodeType === 'action') {
+    if (name.includes('movement') || name.includes('motion'))
+        return 'running swiftly';
+    if (name.includes('combat') || name.includes('fight'))
+        return 'fierce battle';
+    if (name.includes('travel') || name.includes('journey'))
+        return 'long voyage';
+}
+// Template context analysis
+if (template) {
+    const templateLower = template.toLowerCase();
+    if (templateLower.includes('cinematic') || templateLower.includes('camera')) {
+        if (name.includes('shot') || name.includes('angle'))
+            return 'wide shot';
+        if (name.includes('lighting'))
+            return 'golden hour';
+        if (name.includes('mood'))
+            return 'dramatic';
     }
-    // Template context analysis
-    if (template) {
-        const templateLower = template.toLowerCase();
-        if (templateLower.includes('cinematic') || templateLower.includes('camera')) {
-            if (name.includes('shot') || name.includes('angle'))
-                return 'wide shot';
-            if (name.includes('lighting'))
-                return 'golden hour';
-            if (name.includes('mood'))
-                return 'dramatic';
-        }
-    }
-    // General creative defaults
-    const suggestion = COMMON_VARIABLES.find(s => s.name === name);
-    return suggestion ? suggestion.examples[0] : `sample ${name}`;
-};
+}
+// General creative defaults
+const suggestion = COMMON_VARIABLES.find(s => s.name === name);
+return suggestion ? suggestion.examples[0] : `sample ${name}`;
+;

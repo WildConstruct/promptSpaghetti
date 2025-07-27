@@ -98,12 +98,7 @@ export declare class DataClassificationHelpers {
     /**
      * Assess security for data transfer between systems
      */
-    static assessDataFlowSecurity(
-      sourceLevel: DataSensitivityLevel,
-      targetLevel: DataSensitivityLevel,
-      transferMethod: string,
-      encryptionInPlace: boolean
-    ): DataFlowSecurityAssessment;
+    static assessDataFlowSecurity(sourceLevel: DataSensitivityLevel, targetLevel: DataSensitivityLevel, transferMethod: string, encryptionInPlace: boolean): DataFlowSecurityAssessment;
     /**
      * Generate data handling compliance report
      */
@@ -147,13 +142,7 @@ export declare class DataClassifierIntegration {
     /**
      * Create DataElement from enhanced data with sensitivity
      */
-    static createDataElementFromSensitive(
-      id: string,
-      fieldName: string,
-      value: any,
-      sensitivityLevel: DataSensitivityLevel,
-      source?: string
-    ): EnhancedDataElement;
+    static createDataElementFromSensitive(id: string, fieldName: string, value: any, sensitivityLevel: DataSensitivityLevel, source?: string): EnhancedDataElement;
 }
 export default DataClassificationHelpers;
 //# sourceMappingURL=DataClassificationHelpers.d.ts.map

@@ -3,7 +3,9 @@
  * @param nodeId - The unique ID of the node
  * @param nodeType - The type of node (e.g., 'weighted-choice', 'output', etc.)
  */
-export declare     nodePrefs: any;
+export declare const useNodeDisclosureControl: (nodeId: string, nodeType: string) => {
+    disclosureLevel: any;
+    nodePrefs: any;
     isBasicMode: boolean;
     isAdvancedMode: boolean;
     isDebugMode: boolean;
@@ -17,7 +19,9 @@ export declare     nodePrefs: any;
 /**
  * Hook for components that need to render progressive disclosure sections
  */
-export declare     preferenceInheritance: "global" | "nodeType" | "individual";
+export declare const useDisclosurePreferences: () => {
+    globalDisclosureLevel: any;
+    preferenceInheritance: "global" | "nodeType" | "individual";
     setGlobalLevel: (level: "basic" | "advanced" | "debug") => void;
     setInheritance: (inheritance: "global" | "nodeType" | "individual") => void;
 };

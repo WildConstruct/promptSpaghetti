@@ -26,10 +26,4 @@ export interface ConflictPanelProps {
 }
 export declare const ConflictPanel: React.FC<ConflictPanelProps>;
 export default ConflictPanel;
-interface ConflictNotificationProps {
-    conflict: ConflictData;
-    onResolve: (conflict: ConflictData) => void;
-    onDismiss: () => void;
-}
-export declare const ConflictNotification: React.FC<ConflictNotificationProps>;
 //# sourceMappingURL=ConflictPanel.d.ts.map

@@ -381,11 +381,7 @@ export declare class ExtensionManifestParser {
     /**
      * Validate manifest dependencies
      */
-    validateDependencies(
-      manifest: ExtensionManifest,
-      availableExtensions: Map<string,
-      ExtensionManifest>
-    ): ExtensionValidationResult;
+    validateDependencies(manifest: ExtensionManifest, availableExtensions: Map<string, ExtensionManifest>): ExtensionValidationResult;
     /**
      * Check compatibility with system
      */

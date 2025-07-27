@@ -1,0 +1,57 @@
+/**
+ * TrendIndicator Styles
+ * REFACTOR-003: Dashboard Component Architecture Consolidation
+ */
+
+/* ===== TREND INDICATOR BASE ===== */
+.trend-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ===== TREND SIZES ===== */
+.trend-small {
+  font-size: 11px;
+  gap: 3px;
+}
+
+.trend-medium {
+  font-size: 12px;
+  gap: 4px;
+}
+
+.trend-large {
+  font-size: 14px;
+  gap: 5px;
+}
+
+/* ===== TREND STATES ===== */
+.trend-positive {
+  color: #16a34a;
+}
+
+.trend-negative {
+  color: #dc2626;
+}
+
+.trend-neutral {
+  color: #6b7280;
+}
+
+/* ===== TREND ELEMENTS ===== */
+.trend-icon {
+  flex-shrink: 0;
+}
+
+.trend-value {
+  font-weight: 600;
+}
+
+.trend-period {
+  font-weight: 400;
+  opacity: 0.8;
+  font-size: 0.9em;
+}

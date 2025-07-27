@@ -220,36 +220,15 @@ export declare class ActivityTimelineService {
     /**
      * Track user interaction
      */
-    trackUserInteraction(
-      action: string,
-      element: string,
-      details: Partial<ActivityDetails>,
-      userId: string,
-      context?: Record<string,
-      unknown>
-    ): Promise<ActivityEvent>;
+    trackUserInteraction(action: string, element: string, details: Partial<ActivityDetails>, userId: string, context?: Record<string, unknown>): Promise<ActivityEvent>;
     /**
      * Track performance event
      */
-    trackPerformance(
-      operation: string,
-      duration: number,
-      success: boolean,
-      details?: Partial<ActivityDetails>,
-      userId?: string
-    ): Promise<ActivityEvent>;
+    trackPerformance(operation: string, duration: number, success: boolean, details?: Partial<ActivityDetails>, userId?: string): Promise<ActivityEvent>;
     /**
      * Track collaboration event
      */
-    trackCollaboration(
-      action: string,
-      collaborators: string[],
-      resource: string,
-      details: Partial<ActivityDetails>,
-      userId: string,
-      context?: Record<string,
-      unknown>
-    ): Promise<ActivityEvent>;
+    trackCollaboration(action: string, collaborators: string[], resource: string, details: Partial<ActivityDetails>, userId: string, context?: Record<string, unknown>): Promise<ActivityEvent>;
     /**
      * Get activities with filtering
      */
@@ -305,26 +284,15 @@ export declare class ActivityTimelineService {
     private cleanupOldActivities;
     private processSessionAnalytics;
 }
-export declare export declare const trackGraphOperation: (action: string, details: Partial<ActivityDetails>, userId: string, context?: {
+export declare const activityTimeline: ActivityTimelineService;
+export declare const trackActivity: (event: Partial<ActivityEvent>) => Promise<ActivityEvent>;
+export declare const trackGraphOperation: (action: string, details: Partial<ActivityDetails>, userId: string, context?: {
     workspaceId?: string;
     projectId?: string;
     graphId?: string;
 }) => Promise<ActivityEvent>;
-export declare const trackUserInteraction: (
-  action: string,
-  element: string,
-  details: Partial<ActivityDetails>,
-  userId: string,
-  context?: Record<string,
-  unknown>
-) => Promise<ActivityEvent>;
-export declare const trackPerformance: (
-  operation: string,
-  duration: number,
-  success: boolean,
-  details?: Partial<ActivityDetails>,
-  userId?: string
-) => Promise<ActivityEvent>;
+export declare const trackUserInteraction: (action: string, element: string, details: Partial<ActivityDetails>, userId: string, context?: Record<string, unknown>) => Promise<ActivityEvent>;
+export declare const trackPerformance: (operation: string, duration: number, success: boolean, details?: Partial<ActivityDetails>, userId?: string) => Promise<ActivityEvent>;
 export declare const getActivities: (filter?: ActivityFilter) => ActivityEvent[];
 export declare const getActivityStats: (filter?: ActivityFilter) => ActivityStats;
 export declare const getUserTimeline: (userId: string, filter?: Partial<ActivityFilter>) => ActivityEvent[];

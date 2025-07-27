@@ -79,11 +79,7 @@ export declare class SecureCodeGenerator extends EventEmitter {
     /**
      * Validate a verification code with timing attack protection
      */
-    validateCode(
-      inputCode: string,
-      storedCode: VerificationCodeData,
-      options?: Partial<CodeValidationOptions>
-    ): Promise<ValidationResult>;
+    validateCode(inputCode: string, storedCode: VerificationCodeData, options?: Partial<CodeValidationOptions>): Promise<ValidationResult>;
     /**
      * Generate recovery codes (longer, single-use codes)
      */

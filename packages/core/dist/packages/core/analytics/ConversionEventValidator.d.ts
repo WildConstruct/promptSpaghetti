@@ -189,8 +189,5 @@ export declare class ConversionEventValidator {
      */
     updateDeduplicationConfig(config: Partial<DeduplicationConfig>): void;
 }
-/**
- * Factory function to create ConversionEventValidator
- */
-export declare export default ConversionEventValidator;
+export default ConversionEventValidator;
 //# sourceMappingURL=ConversionEventValidator.d.ts.map

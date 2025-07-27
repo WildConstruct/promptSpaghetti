@@ -20,16 +20,16 @@ export declare function useCollaborativeReactFlow(): {
         edges: FlowEdge[];
     }) => void;
     onPaneClick: () => void;
-    enableCollaboration: (options: import("./GraphCRDTAdapter").CollaborativeGraphOptions) => Promise<void>;
-    disableCollaboration: () => void;
+    enableCollaboration: any;
+    disableCollaboration: any;
     addNodeAtPosition: (node: Node, position: {
         x: number;
         y: number;
     }) => void;
-    isCollaborative: boolean;
-    collaborationEnabled: boolean;
-    connectionStatus: "error" | "disconnected" | "connecting" | "connected";
-    connectedUsers: Map<string, UserPresence>;
+    isCollaborative: any;
+    collaborationEnabled: any;
+    connectionStatus: any;
+    connectedUsers: any;
     getUserCursors: () => {
         userId: string;
         user: UserPresence;
@@ -49,11 +49,5 @@ export declare function useNodeCollaborators(nodeId: string): UserPresence[];
 /**
  * Hook for showing connection status indicator
  */
-export declare function useCollaborationStatus(): {
-    isCollaborative: boolean;
-    connectionStatus: "error" | "disconnected" | "connecting" | "connected";
-    isConnected: boolean;
-    connectedUserCount: number;
-    lastSyncTime: number;
-};
+export declare function useCollaborationStatus(): any;
 //# sourceMappingURL=useCollaborativeReactFlow.d.ts.map

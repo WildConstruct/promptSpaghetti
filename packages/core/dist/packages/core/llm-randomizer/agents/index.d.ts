@@ -27,9 +27,5 @@ export interface UniversalAgentRequest {
 /**
  * Universal generation function that routes to appropriate agent
  */
-export declare function generateGraph(
-  request: UniversalAgentRequest,
-  provider?: 'openai' | 'claude' | 'gemini',
-  config?: Partial<AnyAgentConfig>
-): Promise<AnyGenerationResult>;
+export declare function generateGraph(request: UniversalAgentRequest, provider?: 'openai' | 'claude' | 'gemini', config?: Partial<AnyAgentConfig>): Promise<AnyGenerationResult>;
 //# sourceMappingURL=index.d.ts.map

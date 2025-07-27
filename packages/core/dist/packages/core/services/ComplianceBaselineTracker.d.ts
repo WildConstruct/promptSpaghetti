@@ -80,13 +80,7 @@ export declare class ComplianceBaselineTracker {
     /**
      * Record a new measurement against a baseline
      */
-    recordMeasurement(
-      baselineId: string,
-      actualValue: number,
-      context?: Record<string,
-      any>,
-      notes?: string
-    ): Promise<ComplianceMeasurement>;
+    recordMeasurement(baselineId: string, actualValue: number, context?: Record<string, any>, notes?: string): Promise<ComplianceMeasurement>;
     /**
      * Get baseline trend analysis
      */
@@ -98,18 +92,11 @@ export declare class ComplianceBaselineTracker {
     /**
      * Update baseline target or tolerance
      */
-    updateBaseline(
-      baselineId: string,
-      updates: Partial<Pick<ComplianceBaseline,
-      'targetValue' | 'toleranceThreshold' | 'isActive'>>
-    ): Promise<void>;
+    updateBaseline(baselineId: string, updates: Partial<Pick<ComplianceBaseline, 'targetValue' | 'toleranceThreshold' | 'isActive'>>): Promise<void>;
     /**
      * Create custom baseline
      */
-    createCustomBaseline(
-      baseline: Omit<ComplianceBaseline,
-      'id' | 'baselineEstablishedAt' | 'lastUpdatedAt'>
-    ): Promise<ComplianceBaseline>;
+    createCustomBaseline(baseline: Omit<ComplianceBaseline, 'id' | 'baselineEstablishedAt' | 'lastUpdatedAt'>): Promise<ComplianceBaseline>;
     /**
      * Get all active baselines
      */

@@ -394,7 +394,10 @@ export declare class AuditManagementAPI {
     private summarizeReport;
     private generateTrendAnalysis;
 }
-export declare     event?: AuditEvent;
+export declare const auditManagementAPI: AuditManagementAPI;
+export declare const createAuditEvent: (request: CreateAuditEventRequestType) => Promise<{
+    success: boolean;
+    event?: AuditEvent;
     error?: string;
 }>;
 export declare const queryAuditEvents: (request: AuditQueryRequestType) => Promise<{

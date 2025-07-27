@@ -96,7 +96,18 @@ export interface LearningPathCardProps {
     onClick?: (path: LearningPath) => void;
     onEnroll?: (path: LearningPath) => void;
 }
-export declare     onSelectCategory: (category: ArticleCategory) => void;
+export declare const KnowledgeBaseHero: React.FC<KnowledgeBaseHeroProps>;
+export declare const ArticleCard: React.FC<ArticleCardProps>;
+export declare const CategoryBrowser: React.FC<CategoryBrowserProps>;
+export declare const LearningPathCard: React.FC<LearningPathCardProps>;
+export interface KnowledgeBaseLayoutProps {
+    articles: Article[];
+    categories: ArticleCategory[];
+    learningPaths?: LearningPath[];
+    stats: KnowledgeBaseStats;
+    layout?: 'grid' | 'list' | 'masonry';
+    onSearch: (query: string) => void;
+    onSelectCategory: (category: ArticleCategory) => void;
     onSelectArticle: (article: Article) => void;
     onSelectLearningPath?: (path: LearningPath) => void;
     className?: string;

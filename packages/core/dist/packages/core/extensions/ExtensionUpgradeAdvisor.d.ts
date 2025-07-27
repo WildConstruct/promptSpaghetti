@@ -15,28 +15,15 @@ export declare class ExtensionUpgradeAdvisor {
     /**
      * Get upgrade recommendations for an extension
      */
-    getUpgradeRecommendations(
-      currentExtension: ExtensionManifest,
-      availableVersions: string[],
-      context: UpgradeContext
-    ): UpgradeRecommendation;
+    getUpgradeRecommendations(currentExtension: ExtensionManifest, availableVersions: string[], context: UpgradeContext): UpgradeRecommendation;
     /**
      * Analyze upgrade path for specific target version
      */
-    analyzeUpgradePath(
-      currentExtension: ExtensionManifest,
-      targetVersion: string,
-      availableVersions: string[],
-      context: UpgradeContext
-    ): UpgradeAnalysis;
+    analyzeUpgradePath(currentExtension: ExtensionManifest, targetVersion: string, availableVersions: string[], context: UpgradeContext): UpgradeAnalysis;
     /**
      * Generate migration plan for upgrade
      */
-    generateMigrationPlan(
-      currentExtension: ExtensionManifest,
-      targetVersion: string,
-      context: UpgradeContext
-    ): MigrationPlan;
+    generateMigrationPlan(currentExtension: ExtensionManifest, targetVersion: string, context: UpgradeContext): MigrationPlan;
     /**
      * Check for breaking changes between versions
      */
@@ -44,11 +31,7 @@ export declare class ExtensionUpgradeAdvisor {
     /**
      * Validate upgrade compatibility
      */
-    validateUpgradeCompatibility(
-      currentExtension: ExtensionManifest,
-      targetExtension: ExtensionManifest,
-      context: UpgradeContext
-    ): UpgradeCompatibilityResult;
+    validateUpgradeCompatibility(currentExtension: ExtensionManifest, targetExtension: ExtensionManifest, context: UpgradeContext): UpgradeCompatibilityResult;
     /**
      * Determine upgrade strategy based on context
      */

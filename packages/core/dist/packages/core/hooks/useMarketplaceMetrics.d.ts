@@ -46,14 +46,7 @@ export declare const useMarketplaceMetrics: (config?: MarketplaceMetricsConfig) 
         averageCTR: number;
     };
     refreshData: () => Promise<void>;
-    trackCustomEvent: (
-      eventType: MarketplaceEventType,
-      properties?: Record<string,
-      any>,
-      entityId?: string,
-      entityType?: "template" | "creator" | "category" | "collection",
-      value?: number
-    ) => void;
+    trackCustomEvent: (eventType: MarketplaceEventType, properties?: Record<string, any>, entityId?: string, entityType?: "template" | "creator" | "category" | "collection", value?: number) => void;
     marketplaceMetrics: import("../analytics/MarketplaceMetrics").MarketplaceMetrics;
 };
 export default useMarketplaceMetrics;

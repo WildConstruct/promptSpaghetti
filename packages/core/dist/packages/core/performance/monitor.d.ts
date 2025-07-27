@@ -91,7 +91,9 @@ export declare class PerformanceMonitor {
      */
     createDecorator(metricName: string): (target: any, propertyKey: string, descriptor: PropertyDescriptor) => void;
 }
-export declare export declare function measurePerformance<T>(name: string, fn: () => T): T;
+export declare const performanceMonitor: PerformanceMonitor;
+export declare function Performance(metricName: string): (target: any, propertyKey: string, descriptor: PropertyDescriptor) => void;
+export declare function measurePerformance<T>(name: string, fn: () => T): T;
 export declare function measurePerformanceAsync<T>(name: string, fn: () => Promise<T>): Promise<T>;
 export declare function usePerformanceMonitor(): {
     startTiming: (name: string) => void;

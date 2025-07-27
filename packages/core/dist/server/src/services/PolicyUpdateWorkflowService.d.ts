@@ -377,23 +377,14 @@ export declare class PolicyUpdateWorkflowService {
     /**
      * Process approval decision
      */
-    processApprovalDecision(
-      requestId: string,
-      approverId: string,
-      decision: ApprovalDecision,
-      comments?: string
-    ): Promise<{
+    processApprovalDecision(requestId: string, approverId: string, decision: ApprovalDecision, comments?: string): Promise<{
         workflowComplete: boolean;
         approved: boolean;
     }>;
     /**
      * Deploy approved policy update
      */
-    deployPolicyUpdate(
-      requestId: string,
-      deploymentConfig: Omit<PolicyDeployment,
-      'deploymentId' | 'status' | 'startedAt'>
-    ): Promise<{
+    deployPolicyUpdate(requestId: string, deploymentConfig: Omit<PolicyDeployment, 'deploymentId' | 'status' | 'startedAt'>): Promise<{
         deploymentId: string;
     }>;
     /**

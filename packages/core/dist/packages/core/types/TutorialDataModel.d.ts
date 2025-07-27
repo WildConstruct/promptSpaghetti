@@ -199,11 +199,11 @@ export declare const tutorialCompletionSchema: z.ZodObject<{
     userId?: string;
     rating?: number;
     score?: number;
-    currentStep?: number;
     notes?: string;
     feedback?: string;
     timeSpent?: number;
     completedAt?: Date;
+    currentStep?: number;
     tutorialId?: string;
     startedAt?: Date;
 }, {
@@ -211,11 +211,11 @@ export declare const tutorialCompletionSchema: z.ZodObject<{
     userId?: string;
     rating?: number;
     score?: number;
-    currentStep?: number;
     notes?: string;
     feedback?: string;
     timeSpent?: number;
     completedAt?: Date;
+    currentStep?: number;
     tutorialId?: string;
     startedAt?: Date;
 }>;
@@ -1213,11 +1213,11 @@ export declare const schemas: {
         userId?: string;
         rating?: number;
         score?: number;
-        currentStep?: number;
         notes?: string;
         feedback?: string;
         timeSpent?: number;
         completedAt?: Date;
+        currentStep?: number;
         tutorialId?: string;
         startedAt?: Date;
     }, {
@@ -1225,11 +1225,11 @@ export declare const schemas: {
         userId?: string;
         rating?: number;
         score?: number;
-        currentStep?: number;
         notes?: string;
         feedback?: string;
         timeSpent?: number;
         completedAt?: Date;
+        currentStep?: number;
         tutorialId?: string;
         startedAt?: Date;
     }>;

@@ -12,11 +12,7 @@
  */
 import { Request, Response, NextFunction } from 'express';
 import { type EnforcementResult, type AccessDecision } from './ClassificationEnforcer';
-import { 
-  DataClassificationLevel,
-  type OperationContext,
-  type ClassificationAuditEvent
-} from '../types/DataClassification';
+import { DataClassificationLevel, type OperationContext, type ClassificationAuditEvent } from '../types/DataClassification';
 /**
  * Extended request with classification information
  */

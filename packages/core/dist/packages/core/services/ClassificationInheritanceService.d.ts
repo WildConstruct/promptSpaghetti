@@ -5,12 +5,7 @@
  * Implements inheritance rules for data classification, allowing child elements
  * to inherit classifications from parent elements based on configurable rules
  */
-import { 
-  DataClassification,
-  DataClassificationLevel,
-  ClassificationContext,
-  ValidationResult
-} from '../types/DataClassification';
+import { DataClassification, DataClassificationLevel, ClassificationContext, ValidationResult } from '../types/DataClassification';
 export interface InheritanceRule {
     id: string;
     name: string;

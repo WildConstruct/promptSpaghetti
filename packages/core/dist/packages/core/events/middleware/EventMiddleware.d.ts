@@ -8,37 +8,74 @@ import { BaseEvent, EventMiddleware, EventPriority, EventCategory } from '../Eve
 /**
  * Enhanced logging middleware with different log levels
  */
-export declare /**
+export declare const createLoggingMiddleware: (options?: {
+    logLevel?: "debug" | "info" | "warn" | "error";
+    includeMetadata?: boolean;
+    filterCategories?: EventCategory[];
+    filterPriorities?: EventPriority[];
+}) => EventMiddleware;
+/**
  * Advanced validation middleware
  */
-export declare }) => EventMiddleware;
+export declare const createValidationMiddleware: (options?: {
+    strictMode?: boolean;
+    requiredFields?: string[];
+    customValidators?: Array<(event: BaseEvent) => string | null>;
+}) => EventMiddleware;
 /**
  * Rate limiting middleware with different strategies
  */
-export declare     whitelist?: string[];
+export declare const createRateLimitMiddleware: (options: {
+    maxEventsPerSecond?: number;
+    maxEventsPerMinute?: number;
+    maxEventsPerHour?: number;
+    strategy?: "drop" | "delay" | "error";
+    keyGenerator?: (event: BaseEvent) => string;
+    whitelist?: string[];
 }) => EventMiddleware;
 /**
  * Event transformation middleware
  */
-export declare         transform: (event: BaseEvent) => BaseEvent;
+export declare const createTransformMiddleware: (options: {
+    transforms: Array<{
+        condition: (event: BaseEvent) => boolean;
+        transform: (event: BaseEvent) => BaseEvent;
     }>;
 }) => EventMiddleware;
 /**
  * Security middleware for sensitive data filtering
  */
-export declare /**
+export declare const createSecurityMiddleware: (options?: {
+    sensitiveFields?: string[];
+    maskPattern?: string;
+    logSensitiveAccess?: boolean;
+    allowedSources?: string[];
+}) => EventMiddleware;
+/**
  * Performance monitoring middleware
  */
-export declare /**
+export declare const createPerformanceMiddleware: (options?: {
+    sampleRate?: number;
+    slowEventThreshold?: number;
+    trackMemoryUsage?: boolean;
+}) => EventMiddleware;
+/**
  * Event deduplication middleware
  */
-export declare     windowMs: number;
+export declare const createDeduplicationMiddleware: (options: {
+    keyGenerator: (event: BaseEvent) => string;
+    windowMs: number;
     strategy?: "drop" | "merge" | "latest";
 }) => EventMiddleware;
 /**
  * Circuit breaker middleware
  */
-export declare /**
+export declare const createCircuitBreakerMiddleware: (options: {
+    failureThreshold: number;
+    resetTimeoutMs: number;
+    monitorWindowMs: number;
+}) => EventMiddleware;
+/**
  * Pre-configured middleware collections
  */
 export declare const developmentMiddleware: EventMiddleware[];

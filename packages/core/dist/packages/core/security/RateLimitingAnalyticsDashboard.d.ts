@@ -205,12 +205,7 @@ export declare class RateLimitingAnalyticsDashboard extends EventEmitter {
     private mlUpdateTimer?;
     private historicalData;
     private startTime;
-    constructor(
-      rateLimitingService: RateLimitingService,
-      throttlingEngine?: AdaptiveThrottlingRulesEngine,
-      performanceMetrics?: RateLimitingPerformanceMetrics,
-      config?: Partial<AnalyticsDashboardConfig>
-    );
+    constructor(rateLimitingService: RateLimitingService, throttlingEngine?: AdaptiveThrottlingRulesEngine, performanceMetrics?: RateLimitingPerformanceMetrics, config?: Partial<AnalyticsDashboardConfig>);
     /**
      * Start the analytics processing engine
      */

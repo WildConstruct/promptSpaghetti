@@ -12,14 +12,7 @@
  * - Cross-funnel segment performance analysis
  * - Automated segment lifecycle management
  */
-import { 
-  ConversionCohort,
-  UserSegment,
-  FlexibleConversionEvent,
-  BehaviorPattern,
-  DropOffPoint,
-  FunnelSegmentMetrics
-} from './ConversionDataModel';
+import { ConversionCohort, UserSegment, FlexibleConversionEvent, BehaviorPattern, DropOffPoint, FunnelSegmentMetrics } from './ConversionDataModel';
 export interface CohortAnalysisResult {
     cohortId: string;
     analysisDate: number;
@@ -449,5 +442,6 @@ export interface CrossSegmentRecommendation {
 /**
  * Factory function to create CohortSegmentManager
  */
-export declare export default CohortSegmentManager;
+export declare const createCohortSegmentManager: () => CohortSegmentManager;
+export default CohortSegmentManager;
 //# sourceMappingURL=CohortSegmentManager.d.ts.map

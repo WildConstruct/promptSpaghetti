@@ -16,5 +16,5 @@ export interface TemplateEditorProps {
     maxSuggestions?: number;
     className?: string;
 }
-export declare const TemplateEditor: React.FC<TemplateEditorProps>;
+export declare const suggestionIndex: number, setSuggestionIndex: React.Dispatch<React.SetStateAction<number>>;
 //# sourceMappingURL=TemplateEditor.d.ts.map

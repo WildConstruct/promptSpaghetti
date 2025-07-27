@@ -5,7 +5,9 @@
  * Addresses DEBT-001, DEBT-002, DEBT-003 security vulnerabilities
  */
 import { z } from 'zod';
-export declare /**
+export declare const VARIABLE_NAME_PATTERN: RegExp;
+export declare const VARIABLE_NAME_MAX_LENGTH = 64;
+/**
  * Security validation utilities
  */
 export declare class SecurityValidation {
@@ -44,7 +46,12 @@ export declare class SecurityValidation {
 /**
  * Secure Zod validation schemas
  */
-export declare     /**
+export declare const SecureValidation: {
+    /**
+     * Safe string validation with pattern checking
+     */
+    safeString: (maxLength?: number) => z.ZodEffects<z.ZodString, string, string>;
+    /**
      * Safe expression validation for conditionals
      */
     safeExpression: (maxLength?: number) => z.ZodEffects<z.ZodString, string, string>;
@@ -68,10 +75,7 @@ export declare     /**
     /**
      * Safe object validation
      */
-    safeObject: <T>(
-      valueSchema: z.ZodSchema<T>,
-      maxKeys?: number
-    ) => z.ZodEffects<z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodType<T, z.ZodTypeDef, T>>, Record<string, T>, Record<string, T>>, Record<string, T>, Record<string, T>>;
+    safeObject: <T>(valueSchema: z.ZodSchema<T>, maxKeys?: number) => z.ZodEffects<z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodType<T, z.ZodTypeDef, T>>, Record<string, T>, Record<string, T>>, Record<string, T>, Record<string, T>>;
 };
 /**
  * Security testing utilities

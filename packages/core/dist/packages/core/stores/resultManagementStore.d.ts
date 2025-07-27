@@ -117,7 +117,10 @@ interface ResultManagementState {
     getRecentResults: (limit?: number) => SavedResult[];
     getTopRatedResults: (limit?: number) => SavedResult[];
 }
-export declare         clearStorage: () => void;
+export declare const useResultManagementStore: import("zustand").UseBoundStore<Omit<import("zustand").StoreApi<ResultManagementState>, "persist"> & {
+    persist: {
+        setOptions: (options: Partial<import("zustand/middleware").PersistOptions<ResultManagementState, ResultManagementState>>) => void;
+        clearStorage: () => void;
         rehydrate: () => Promise<void> | void;
         hasHydrated: () => boolean;
         onHydrate: (fn: (state: ResultManagementState) => void) => () => void;

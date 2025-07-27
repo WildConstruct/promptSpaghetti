@@ -6,16 +6,7 @@
  *
  * Task: E16-1753114247020-65B7A3 - Design sharing system
  */
-import { 
-  ShareConfig,
-  ShareAnalyticsEvent,
-  ShareMetrics,
-  CreateShareRequest,
-  ShareResponse,
-  ShareCollection,
-  SocialIntegration,
-  SharePermission
-} from '../types/sharingTypes';
+import { ShareConfig, ShareAnalyticsEvent, ShareMetrics, CreateShareRequest, ShareResponse, ShareCollection, SocialIntegration, SharePermission } from '../types/sharingTypes';
 export declare class SharingService {
     private baseUrl;
     private analyticsEnabled;
@@ -44,11 +35,7 @@ export declare class SharingService {
     /**
      * Track sharing analytics event
      */
-    trackAnalyticsEvent(
-      shareLinkId: string,
-      eventType: ShareAnalyticsEvent['eventType'],
-      contextData?: Partial<ShareAnalyticsEvent>
-    ): Promise<void>;
+    trackAnalyticsEvent(shareLinkId: string, eventType: ShareAnalyticsEvent['eventType'], contextData?: Partial<ShareAnalyticsEvent>): Promise<void>;
     /**
      * Get sharing metrics for a resource
      */
@@ -59,12 +46,7 @@ export declare class SharingService {
     /**
      * Create a collection of shareable resources
      */
-    createShareCollection(
-      name: string,
-      description: string,
-      resourceIds: string[],
-      shareConfig: Partial<CreateShareRequest>
-    ): Promise<ShareCollection>;
+    createShareCollection(name: string, description: string, resourceIds: string[], shareConfig: Partial<CreateShareRequest>): Promise<ShareCollection>;
     /**
      * Update share permissions
      */

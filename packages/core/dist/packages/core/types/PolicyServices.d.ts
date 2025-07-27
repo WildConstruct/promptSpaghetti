@@ -6,27 +6,7 @@
  * Defines contracts for policy CRUD operations, evaluation services,
  * and administrative functions.
  */
-import { 
-  BasePolicy,
-  PolicyType,
-  PolicyStatus,
-  PolicySearchCriteria,
-  PolicySearchResult,
-  PolicyValidationResult,
-  PolicyAssignment,
-  PolicyEvaluation,
-  EvaluationContext,
-  PolicyAnalytics,
-  PolicyTemplate,
-  PolicyExport,
-  PolicyImport,
-  PolicyDiff,
-  AssignmentTargetType,
-  AnalyticsPeriod,
-  ExportFormat,
-  ExportMetadata,
-  ComplianceFramework
-} from './PolicyInterfaces';
+import { BasePolicy, PolicyType, PolicyStatus, PolicySearchCriteria, PolicySearchResult, PolicyValidationResult, PolicyAssignment, PolicyEvaluation, EvaluationContext, PolicyAnalytics, PolicyTemplate, PolicyExport, PolicyImport, PolicyDiff, AssignmentTargetType, AnalyticsPeriod, ExportFormat, ExportMetadata, ComplianceFramework } from './PolicyInterfaces';
 /**
  * Main policy management service interface
  */
@@ -42,10 +22,7 @@ export interface IPolicyService {
     archivePolicy(id: string): Promise<PolicyServiceResponse<BasePolicy>>;
     validatePolicy(policy: Partial<BasePolicy>): Promise<PolicyServiceResponse<PolicyValidationResult>>;
     testPolicy(id: string, testCases: PolicyTestCase[]): Promise<PolicyServiceResponse<PolicyTestResult>>;
-    dryRunPolicy(
-      policy: Partial<BasePolicy>,
-      context: EvaluationContext
-    ): Promise<PolicyServiceResponse<PolicyEvaluation>>;
+    dryRunPolicy(policy: Partial<BasePolicy>, context: EvaluationContext): Promise<PolicyServiceResponse<PolicyEvaluation>>;
     createPolicyVersion(id: string, changes: Partial<BasePolicy>): Promise<PolicyServiceResponse<BasePolicy>>;
     getPolicyVersions(id: string): Promise<PolicyServiceResponse<PolicyVersion[]>>;
     comparePolicyVersions(id: string, version1: string, version2: string): Promise<PolicyServiceResponse<PolicyDiff>>;
@@ -59,10 +36,7 @@ export interface IPolicyService {
  */
 export interface IPolicyEvaluationService {
     evaluatePolicy(policyId: string, context: EvaluationContext): Promise<PolicyServiceResponse<PolicyEvaluation>>;
-    evaluatePolicies(
-      policyIds: string[],
-      context: EvaluationContext
-    ): Promise<PolicyServiceResponse<PolicyEvaluation[]>>;
+    evaluatePolicies(policyIds: string[], context: EvaluationContext): Promise<PolicyServiceResponse<PolicyEvaluation[]>>;
     evaluateForContext(context: EvaluationContext): Promise<PolicyServiceResponse<PolicyEvaluation>>;
     bulkEvaluate(requests: EvaluationRequest[]): Promise<PolicyServiceResponse<PolicyEvaluation[]>>;
     evaluateRealtime(context: EvaluationContext): Promise<PolicyServiceResponse<PolicyEvaluation>>;
@@ -79,27 +53,12 @@ export interface IPolicyAssignmentService {
     getAssignment(id: string): Promise<PolicyServiceResponse<PolicyAssignment>>;
     getAssignments(criteria?: AssignmentSearchCriteria): Promise<PolicyServiceResponse<AssignmentSearchResult>>;
     deleteAssignment(id: string): Promise<PolicyServiceResponse<void>>;
-    getAssignmentsForTarget(
-      targetType: AssignmentTargetType,
-      targetId: string
-    ): Promise<PolicyServiceResponse<PolicyAssignment[]>>;
-    assignPolicyToTarget(
-      policyId: string,
-      targetType: AssignmentTargetType,
-      targetId: string,
-      options?: AssignmentOptions
-    ): Promise<PolicyServiceResponse<PolicyAssignment>>;
-    unassignPolicyFromTarget(
-      policyId: string,
-      targetType: AssignmentTargetType,
-      targetId: string
-    ): Promise<PolicyServiceResponse<void>>;
+    getAssignmentsForTarget(targetType: AssignmentTargetType, targetId: string): Promise<PolicyServiceResponse<PolicyAssignment[]>>;
+    assignPolicyToTarget(policyId: string, targetType: AssignmentTargetType, targetId: string, options?: AssignmentOptions): Promise<PolicyServiceResponse<PolicyAssignment>>;
+    unassignPolicyFromTarget(policyId: string, targetType: AssignmentTargetType, targetId: string): Promise<PolicyServiceResponse<void>>;
     bulkAssign(assignments: CreateAssignmentRequest[]): Promise<PolicyServiceResponse<BulkOperationResult>>;
     bulkUnassign(criteria: AssignmentSearchCriteria): Promise<PolicyServiceResponse<BulkOperationResult>>;
-    resolveAssignmentConflicts(
-      targetType: AssignmentTargetType,
-      targetId: string
-    ): Promise<PolicyServiceResponse<ConflictResolutionResult>>;
+    resolveAssignmentConflicts(targetType: AssignmentTargetType, targetId: string): Promise<PolicyServiceResponse<ConflictResolutionResult>>;
     getInheritanceChain(assignmentId: string): Promise<PolicyServiceResponse<AssignmentInheritanceChain>>;
     validateAssignment(assignment: CreateAssignmentRequest): Promise<PolicyServiceResponse<AssignmentValidationResult>>;
     simulateAssignment(assignment: CreateAssignmentRequest): Promise<PolicyServiceResponse<AssignmentSimulationResult>>;
@@ -108,22 +67,13 @@ export interface IPolicyAssignmentService {
  * Policy analytics service interface
  */
 export interface IPolicyAnalyticsService {
-    generateAnalytics(
-      period: AnalyticsPeriod,
-      criteria?: AnalyticsSearchCriteria
-    ): Promise<PolicyServiceResponse<PolicyAnalytics>>;
+    generateAnalytics(period: AnalyticsPeriod, criteria?: AnalyticsSearchCriteria): Promise<PolicyServiceResponse<PolicyAnalytics>>;
     getUsageAnalytics(policyIds?: string[], period?: AnalyticsPeriod): Promise<PolicyServiceResponse<UsageAnalytics>>;
-    getComplianceAnalytics(
-      frameworks?: ComplianceFramework[],
-      period?: AnalyticsPeriod
-    ): Promise<PolicyServiceResponse<ComplianceAnalytics>>;
+    getComplianceAnalytics(frameworks?: ComplianceFramework[], period?: AnalyticsPeriod): Promise<PolicyServiceResponse<ComplianceAnalytics>>;
     getPerformanceAnalytics(period?: AnalyticsPeriod): Promise<PolicyServiceResponse<PerformanceAnalytics>>;
     getRealTimeMetrics(): Promise<PolicyServiceResponse<RealTimeMetrics>>;
     getSystemHealth(): Promise<PolicyServiceResponse<SystemHealthMetrics>>;
-    generateComplianceReport(
-      frameworks: ComplianceFramework[],
-      format?: ReportFormat
-    ): Promise<PolicyServiceResponse<ComplianceReport>>;
+    generateComplianceReport(frameworks: ComplianceFramework[], format?: ReportFormat): Promise<PolicyServiceResponse<ComplianceReport>>;
     generateUsageReport(period: AnalyticsPeriod, format?: ReportFormat): Promise<PolicyServiceResponse<UsageReport>>;
     generateAuditReport(period: AnalyticsPeriod, format?: ReportFormat): Promise<PolicyServiceResponse<AuditReport>>;
     getInsights(criteria?: InsightCriteria): Promise<PolicyServiceResponse<PolicyInsight[]>>;
@@ -138,10 +88,7 @@ export interface IPolicyTemplateService {
     getTemplate(id: string): Promise<PolicyServiceResponse<PolicyTemplate>>;
     getTemplates(criteria?: TemplateSearchCriteria): Promise<PolicyServiceResponse<TemplateSearchResult>>;
     deleteTemplate(id: string): Promise<PolicyServiceResponse<void>>;
-    createPolicyFromTemplate(
-      templateId: string,
-      customizations: TemplateCustomization
-    ): Promise<PolicyServiceResponse<BasePolicy>>;
+    createPolicyFromTemplate(templateId: string, customizations: TemplateCustomization): Promise<PolicyServiceResponse<BasePolicy>>;
     getTemplateUsage(templateId: string): Promise<PolicyServiceResponse<TemplateUsageStats>>;
     recommendTemplates(context: TemplateRecommendationContext): Promise<PolicyServiceResponse<PolicyTemplate[]>>;
     searchTemplatesByFramework(frameworks: ComplianceFramework[]): Promise<PolicyServiceResponse<PolicyTemplate[]>>;
@@ -152,22 +99,13 @@ export interface IPolicyTemplateService {
  * Policy import/export service interface
  */
 export interface IPolicyImportExportService {
-    exportPolicies(
-      criteria: PolicySearchCriteria,
-      options: ExportOptions
-    ): Promise<PolicyServiceResponse<PolicyExport>>;
-    exportAssignments(
-      criteria: AssignmentSearchCriteria,
-      options: ExportOptions
-    ): Promise<PolicyServiceResponse<PolicyAssignment[]>>;
+    exportPolicies(criteria: PolicySearchCriteria, options: ExportOptions): Promise<PolicyServiceResponse<PolicyExport>>;
+    exportAssignments(criteria: AssignmentSearchCriteria, options: ExportOptions): Promise<PolicyServiceResponse<PolicyAssignment[]>>;
     downloadExport(exportId: string): Promise<PolicyServiceResponse<Blob>>;
     importPolicies(data: ImportData, options: ImportOptions): Promise<PolicyServiceResponse<PolicyImport>>;
     validateImportData(data: ImportData): Promise<PolicyServiceResponse<ImportValidationResult>>;
     getImportStatus(importId: string): Promise<PolicyServiceResponse<PolicyImport>>;
-    scheduleBatchExport(
-      criteria: PolicySearchCriteria,
-      schedule: ExportSchedule
-    ): Promise<PolicyServiceResponse<BatchJob>>;
+    scheduleBatchExport(criteria: PolicySearchCriteria, schedule: ExportSchedule): Promise<PolicyServiceResponse<BatchJob>>;
     scheduleBatchImport(source: ImportSource, schedule: ImportSchedule): Promise<PolicyServiceResponse<BatchJob>>;
 }
 export interface PolicyServiceResponse<T> {

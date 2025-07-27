@@ -12,16 +12,7 @@
  * Task: T-1752989143998-738 - Create centralized access control service
  */
 import { EventEmitter } from 'events';
-import { 
-  AccessRequest,
-  AccessDecision,
-  RBACDecision,
-  ABACDecision,
-  SubjectAttributes,
-  ClassificationAccessPolicy,
-  PolicyObligation,
-  DataOperation
-} from './DataClassificationAccessControl';
+import { AccessRequest, AccessDecision, RBACDecision, ABACDecision, SubjectAttributes, ClassificationAccessPolicy, PolicyObligation, DataOperation } from './DataClassificationAccessControl';
 import { DataClassificationLevel } from '../types/DataClassification';
 import { InheritanceFramework, EffectivePermissions } from './DelegationInheritanceRules';
 import { DataClassifier } from './DataClassifier';
@@ -99,11 +90,7 @@ export declare class CentralizedAccessControlService extends EventEmitter {
     private auditLog;
     private metrics;
     private policies;
-    constructor(
-      config: AccessControlConfig,
-      inheritanceFramework: InheritanceFramework,
-      dataClassifier: DataClassifier
-    );
+    constructor(config: AccessControlConfig, inheritanceFramework: InheritanceFramework, dataClassifier: DataClassifier);
     /**
      * Main access control decision method
      */

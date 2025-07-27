@@ -1149,10 +1149,13 @@ class ConversionAnalyticsAPI {
 }
 
 // Factory function
-export     processing: ProcessingConfig;
+export function createConversionAnalyticsInfrastructure(
+  epic1Analytics: any,
+  config: {
+    processing: ProcessingConfig;
   }
-): ConversionAnalyticsInfrastructure => {
+): ConversionAnalyticsInfrastructure {
   return new ConversionAnalyticsInfrastructure(epic1Analytics, config);
-};
+}
 
 export default ConversionAnalyticsInfrastructure;

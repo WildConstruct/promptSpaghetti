@@ -77,8 +77,5 @@ export declare const defaultGeminiConfig: GeminiAgentConfig;
 /**
  * Utility function to create and use Gemini agent
  */
-export declare function generateGraphWithGemini(
-  request: GeminiGenerationRequest,
-  config?: Partial<GeminiAgentConfig>
-): Promise<GeminiGenerationResult>;
+export declare function generateGraphWithGemini(request: GeminiGenerationRequest, config?: Partial<GeminiAgentConfig>): Promise<GeminiGenerationResult>;
 //# sourceMappingURL=gemini-agent.d.ts.map

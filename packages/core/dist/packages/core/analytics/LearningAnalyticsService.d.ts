@@ -6,34 +6,7 @@
  * analytics infrastructure, providing comprehensive insights into learning effectiveness,
  * community engagement, and knowledge base usage.
  */
-import { 
-  LearningAnalyticsService,
-  LearningAnalyticsEvent,
-  TutorialAnalyticsEvent,
-  KnowledgeBaseAnalyticsEvent,
-  CommunityAnalyticsEvent,
-  LearningEffectivenessMetrics,
-  UserLearningAnalytics,
-  CommunityKnowledgeMetrics,
-  KnowledgeBaseUsageMetrics,
-  LearningTrend,
-  PerformanceAnomaly,
-  PersonalizedInsight,
-  LearningPathAnalytics,
-  SkillDevelopmentROI,
-  CommunityHealthScore,
-  KnowledgeTransferMetrics,
-  RealTimeLearningActivity,
-  RealTimeCommunityEngagement,
-  RealTimeKnowledgeActivity,
-  LearningAnalyticsQuery,
-  AnalyticsCorrelationQuery,
-  CrossPlatformInsights,
-  LearningDataExport,
-  LearningAnalyticsReportConfig,
-  ComprehensiveAnalyticsReport,
-  ContentType
-} from './LearningAnalyticsExtension';
+import { LearningAnalyticsService, LearningAnalyticsEvent, TutorialAnalyticsEvent, KnowledgeBaseAnalyticsEvent, CommunityAnalyticsEvent, LearningEffectivenessMetrics, UserLearningAnalytics, CommunityKnowledgeMetrics, KnowledgeBaseUsageMetrics, LearningTrend, PerformanceAnomaly, PersonalizedInsight, LearningPathAnalytics, SkillDevelopmentROI, CommunityHealthScore, KnowledgeTransferMetrics, RealTimeLearningActivity, RealTimeCommunityEngagement, RealTimeKnowledgeActivity, LearningAnalyticsQuery, AnalyticsCorrelationQuery, CrossPlatformInsights, LearningDataExport, LearningAnalyticsReportConfig, ComprehensiveAnalyticsReport, ContentType } from './LearningAnalyticsExtension';
 import { TimeRange } from '../../../server/src/marketplace/analytics.types';
 import { SkillDomain, SkillAssessmentEngine } from '../community/SkillLevelTagging';
 import { MarketplaceTutorialSystemService } from '../community/MarketplaceTutorialSystem';
@@ -41,25 +14,15 @@ export declare class LearningAnalyticsServiceImpl implements LearningAnalyticsSe
     private apiClient;
     private skillAssessmentEngine;
     private tutorialService;
-    constructor(
-      apiClient: unknown,
-      skillAssessmentEngine: SkillAssessmentEngine,
-      tutorialService: MarketplaceTutorialSystemService
-    );
+    constructor(apiClient: unknown, skillAssessmentEngine: SkillAssessmentEngine, tutorialService: MarketplaceTutorialSystemService);
     trackLearningEvent(event: LearningAnalyticsEvent): Promise<void>;
     trackTutorialEvent(event: TutorialAnalyticsEvent): Promise<void>;
     trackKnowledgeBaseEvent(event: KnowledgeBaseAnalyticsEvent): Promise<void>;
     trackCommunityEvent(event: CommunityAnalyticsEvent): Promise<void>;
-    generateLearningEffectivenessMetrics(
-      contentId: string,
-      timeRange: TimeRange
-    ): Promise<LearningEffectivenessMetrics>;
+    generateLearningEffectivenessMetrics(contentId: string, timeRange: TimeRange): Promise<LearningEffectivenessMetrics>;
     generateUserLearningAnalytics(userId: string, timeRange: TimeRange): Promise<UserLearningAnalytics>;
     generateCommunityKnowledgeMetrics(communityId: string, timeRange: TimeRange): Promise<CommunityKnowledgeMetrics>;
-    generateKnowledgeBaseUsageMetrics(
-      knowledgeBaseId: string,
-      timeRange: TimeRange
-    ): Promise<KnowledgeBaseUsageMetrics>;
+    generateKnowledgeBaseUsageMetrics(knowledgeBaseId: string, timeRange: TimeRange): Promise<KnowledgeBaseUsageMetrics>;
     identifyLearningTrends(timeRange: TimeRange): Promise<LearningTrend[]>;
     detectContentPerformanceAnomalies(contentType: ContentType, threshold: number): Promise<PerformanceAnomaly[]>;
     generatePersonalizedLearningInsights(userId: string): Promise<PersonalizedInsight[]>;

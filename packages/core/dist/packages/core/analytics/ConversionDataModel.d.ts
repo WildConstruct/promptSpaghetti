@@ -653,10 +653,7 @@ export declare class ConversionDataRelationshipManager {
     /**
      * Build enriched conversion event with full entity relationships
      */
-    enrichConversionEvent(
-      baseEvent: EnhancedConversionEvent,
-      includeRelatedData?: boolean
-    ): Promise<FlexibleConversionEvent>;
+    enrichConversionEvent(baseEvent: EnhancedConversionEvent, includeRelatedData?: boolean): Promise<FlexibleConversionEvent>;
     /**
      * Get or create user entity
      */
@@ -685,8 +682,5 @@ export declare class ConversionDataRelationshipManager {
     private getSessionPageViews;
     private categorizeReferrer;
 }
-/**
- * Factory function to create ConversionDataRelationshipManager
- */
-export declare export default ConversionDataRelationshipManager;
+export default ConversionDataRelationshipManager;
 //# sourceMappingURL=ConversionDataModel.d.ts.map

@@ -109,11 +109,6 @@ export declare class PythonTransformNode extends AdvancedRuntimeNode<string> {
     /**
      * Store execution metadata for statistics
      */
-    protected storeExecutionMetadata(
-      context: AdvancedExecutionContext,
-      success: boolean,
-      executionTime: number,
-      securityViolations: number
-    ): void;
+    protected storeExecutionMetadata(context: AdvancedExecutionContext, success: boolean, executionTime: number, securityViolations: number): void;
 }
 //# sourceMappingURL=PythonTransform.d.ts.map

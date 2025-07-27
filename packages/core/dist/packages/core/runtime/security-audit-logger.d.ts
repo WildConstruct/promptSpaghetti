@@ -121,13 +121,7 @@ export declare class SecurityAuditLogger {
     /**
      * Log a security event
      */
-    logEvent(
-      severity: SecuritySeverity,
-      category: SecurityEventCategory,
-      message: string,
-      context?: SecurityEventContext,
-      blocked?: boolean
-    ): string;
+    logEvent(severity: SecuritySeverity, category: SecurityEventCategory, message: string, context?: SecurityEventContext, blocked?: boolean): string;
     /**
      * Log helper methods for common scenarios
      */
@@ -187,9 +181,6 @@ export declare const securityAudit: SecurityAuditLogger;
 /**
  * Decorator for automatic security logging
  */
-export declare function auditSecurityEvent(
-  severity?: SecuritySeverity,
-  category?: SecurityEventCategory
-): MethodDecorator;
+export declare function auditSecurityEvent(severity?: SecuritySeverity, category?: SecurityEventCategory): MethodDecorator;
 export default SecurityAuditLogger;
 //# sourceMappingURL=security-audit-logger.d.ts.map

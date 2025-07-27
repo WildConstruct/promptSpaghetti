@@ -24,12 +24,7 @@ export interface TemplatePreviewConfig {
     showVariableSubstitution: boolean;
     errorOnUndefinedVariables: boolean;
 }
-export declare const useTemplatePreview: (
-  template: string,
-  variableValues?: Record<string,
-  string>,
-  customConfig?: Partial<TemplatePreviewConfig>
-) => {
+export declare const useTemplatePreview: (template: string, variableValues?: Record<string, string>, customConfig?: Partial<TemplatePreviewConfig>) => {
     variants: TemplatePreviewVariant[];
     isGenerating: boolean;
     error: string;

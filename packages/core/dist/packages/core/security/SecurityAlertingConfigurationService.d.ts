@@ -123,11 +123,7 @@ export declare class SecurityAlertingConfigurationService extends EventEmitter {
     /**
      * Save configuration
      */
-    saveConfiguration(
-      configId: string,
-      config: SecurityAlertingConfig,
-      metadata?: Partial<ConfigurationMetadata>
-    ): Promise<boolean>;
+    saveConfiguration(configId: string, config: SecurityAlertingConfig, metadata?: Partial<ConfigurationMetadata>): Promise<boolean>;
     /**
      * Validate configuration
      */

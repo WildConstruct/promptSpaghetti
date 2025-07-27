@@ -13,12 +13,6 @@ interface UseValidationProps {
     highlightEdgeIds?: Set<string>;
     validateConnection?: (edges: Edge[], nodes: Node[]) => ValidationError[];
 }
-export declare const useValidation: (
-  { edges,
-  nodes,
-  highlightNodeIds,
-  highlightEdgeIds,
-  validateConnection: customValidateConnection }: UseValidationProps
-) => UseValidationReturn;
+export declare const useValidation: ({ edges, nodes, highlightNodeIds, highlightEdgeIds, validateConnection: customValidateConnection }: UseValidationProps) => UseValidationReturn;
 export {};
 //# sourceMappingURL=useValidation.d.ts.map

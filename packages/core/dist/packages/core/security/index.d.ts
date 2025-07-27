@@ -49,24 +49,10 @@ export { default as ComplianceMonitor } from '../services/ComplianceMonitor';
 export { default as AdaptiveThrottlingRules } from './AdaptiveThrottlingRules';
 export { default as ComplianceSecurityDashboard } from './dashboard/ComplianceSecurityDashboard';
 export { default as SecurityDashboardWorkflow } from './dashboard/SecurityDashboardWorkflow';
-export declare };
-export declare export declare };
-export declare };
-export declare };
-export declare };
-export declare };
-export declare export declare export declare         critical_count: number;
-        resolved_count: number;
-        avg_response_time: number;
-    };
-    top_threats: Array<{
-        type: string;
-        count: number;
-    }>;
-    affected_systems: Array<{
-        system: string;
-        incident_count: number;
-    }>;
-    recommendations: string[];
+export declare const severityScores: {
+    low: number;
+    medium: number;
+    high: number;
+    critical: number;
 };
 //# sourceMappingURL=index.d.ts.map

@@ -361,15 +361,9 @@ export declare class SecurityCapacityManager extends EventEmitter {
     private activeScaling;
     private cooldownPeriods;
     constructor();
-    createCapacityPlan(
-      plan: Omit<CapacityPlan,
-      'id' | 'created_at' | 'last_updated' | 'last_reviewed' | 'next_review_date'>
-    ): Promise<string>;
+    createCapacityPlan(plan: Omit<CapacityPlan, 'id' | 'created_at' | 'last_updated' | 'last_reviewed' | 'next_review_date'>): Promise<string>;
     private createDefaultScalingPolicies;
-    createScalingPolicy(
-      policy: Omit<ScalingPolicy,
-      'id' | 'created_at' | 'last_triggered' | 'trigger_count'>
-    ): Promise<string>;
+    createScalingPolicy(policy: Omit<ScalingPolicy, 'id' | 'created_at' | 'last_triggered' | 'trigger_count'>): Promise<string>;
     collectCapacityMetrics(service: string): Promise<string>;
     private calculateHealthScore;
     private identifyBottlenecks;

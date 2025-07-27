@@ -20,10 +20,6 @@ const EmailVerificationSchema = z.object({
     code: z.string().regex(/^\d{6}$/), // 6-digit numeric code
     backupCode: z.boolean().optional()
 });
-const EmailAddressUpdateSchema = z.object({
-    configurationId: z.string().uuid(),
-    newEmailAddress: z.string().email().max(320)
-});
 // ========================================
 // Email MFA Provider Implementation
 // ========================================
@@ -394,7 +390,6 @@ export class EmailMFAProvider {
     }
     async updateRateLimit(userId, action) {
         const state = await this.storage.getRateLimitState(userId, action);
-        const _now = new Date();
         if (state) {
             const windowAge = Date.now() - state.windowStart.getTime();
             const windowDuration = MFA_CONSTANTS.EMAIL.RATE_LIMIT_WINDOW * 1000;
@@ -447,10 +442,6 @@ export class EmailMFAProvider {
     // Management Methods
     // ========================================
     async updateEmailAddress(userId, configurationId, newEmailAddress) {
-        const _validated = EmailAddressUpdateSchema.parse({
-            configurationId,
-            newEmailAddress
-        });
         const configuration = await this.storage.getConfigurationById(configurationId);
         if (!configuration || configuration.userId !== userId) {
             throw ErrorFactory.createMFAConfigurationError('invalid_config', undefined, { userId,

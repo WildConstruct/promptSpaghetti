@@ -476,7 +476,7 @@ manuscript illustrations, and documented practices of the time.
     generatePromptSuggestions(scene) {
         return [
             `Write a scene set in ${scene.setting.name} during ${scene.timeContext.season} ${scene.timeContext.timeOfDay}, featuring ${scene.characters.map(c => c.name).join(' and ')}.`,
-            `Describe the sensory experience of ${scene.title}: the ${scene.sensoryDetails.sights.join(', ')}, sounds of ${scene.sensoryDetails.sounds.join(', ')}, and scents of ${scene.sensoryDetails.smells.join(', ')}.`,
+            `Describe the sensory experience of ${scene.title}: the ${scene.sensoryDetails.sights.join(',, ')}, sounds of ${scene.sensoryDetails.sounds.join(', ')}, and scents of ${scene.sensoryDetails.smells.join(', ')}.`,
             `Explore the social dynamics when ${scene.characters[0]?.name} (${scene.characters[0]?.socialClass}) interacts with others in ${scene.setting.name}.`,
             `Create dialogue that reveals the historical context of ${scene.historicalElements.join(' and ')} through character interactions.`,
             `Develop one of these narrative hooks: ${scene.narrativeHooks.join(' OR ')}.`

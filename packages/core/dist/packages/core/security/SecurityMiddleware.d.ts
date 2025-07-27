@@ -47,7 +47,25 @@ export declare function createSecurityMiddleware(config?: Partial<SecurityConfig
 /**
  * Security configuration presets for different environments
  */
-export declare /**
+export declare const SecurityPresets: {
+    /**
+     * Development preset - relaxed security for easier debugging
+     */
+    development: Partial<SecurityConfig>;
+    /**
+     * Production preset - strict security
+     */
+    production: Partial<SecurityConfig>;
+    /**
+     * MFA-specific preset - optimized for authentication flows
+     */
+    mfa: Partial<SecurityConfig>;
+};
+/**
+ * CSP violation report handler
+ */
+export declare function createCSPReportHandler(): (req: Request, res: Response) => void;
+/**
  * Security headers validation utility
  */
 export declare class SecurityHeaderValidator {
@@ -57,7 +75,9 @@ export declare class SecurityHeaderValidator {
         score: number;
     };
 }
-export declare     production: () => (req: Request, res: Response, next: NextFunction) => void;
+export declare const securityMiddleware: {
+    development: () => (req: Request, res: Response, next: NextFunction) => void;
+    production: () => (req: Request, res: Response, next: NextFunction) => void;
     mfa: () => (req: Request, res: Response, next: NextFunction) => void;
     custom: (config: Partial<SecurityConfig>) => (req: Request, res: Response, next: NextFunction) => void;
 };

@@ -149,11 +149,7 @@ export declare class AutomatedModerationService {
     private moderationRules;
     private moderationQueues;
     private cache;
-    constructor(
-      policyCheckersService: PolicyCheckersService,
-      trustScoreService: TrustScoreService,
-      enforcementService: AutomatedEnforcementService
-    );
+    constructor(policyCheckersService: PolicyCheckersService, trustScoreService: TrustScoreService, enforcementService: AutomatedEnforcementService);
     moderateContent(request: ModerationRequest): Promise<ModerationResult>;
     moderateBatch(requests: ModerationRequest[]): Promise<ModerationResult[]>;
     private runPolicyChecks;

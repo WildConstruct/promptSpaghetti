@@ -98,17 +98,8 @@ export declare class StableDiffusionAdapter extends BaseAIModel {
     getAvailableModels(): Promise<ModelInfo[]>;
     getAvailableSamplers(): Promise<string[]>;
     switchModel(modelName: string): Promise<void>;
-    img2img(
-      initImage: string,
-      prompt: string,
-      options?: Partial<StableDiffusionRequestOptions>
-    ): Promise<StableDiffusionGenerationResult>;
-    inpaint(
-      initImage: string,
-      mask: string,
-      prompt: string,
-      options?: Partial<StableDiffusionRequestOptions>
-    ): Promise<StableDiffusionGenerationResult>;
+    img2img(initImage: string, prompt: string, options?: Partial<StableDiffusionRequestOptions>): Promise<StableDiffusionGenerationResult>;
+    inpaint(initImage: string, mask: string, prompt: string, options?: Partial<StableDiffusionRequestOptions>): Promise<StableDiffusionGenerationResult>;
     upscale(image: string, upscaler?: string, scale?: number): Promise<StableDiffusionGenerationResult>;
     static getEstimatedCost(apiType: string): number;
     static getEstimatedLatency(apiType: string): number;

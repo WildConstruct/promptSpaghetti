@@ -5,38 +5,16 @@
  * Service implementation for automated and manual skill level classification,
  * user skill assessment, and learning path optimization.
  */
-import { 
-  SkillLevel,
-  SkillDomain,
-  SkillLevelClassification,
-  ContentSkillTag,
-  UserSkillProfile,
-  LearningGoal,
-  ContentRecommendation,
-  OptimizedLearningPath,
-  ContentSuggestion,
-  CommunitySkillFeedback,
-  ValidationResult,
-  SkillAssessmentEngine
-} from './SkillLevelTagging';
+import { SkillLevel, SkillDomain, SkillLevelClassification, ContentSkillTag, UserSkillProfile, LearningGoal, ContentRecommendation, OptimizedLearningPath, ContentSuggestion, CommunitySkillFeedback, ValidationResult, SkillAssessmentEngine } from './SkillLevelTagging';
 export declare class SkillLevelTaggingService implements SkillAssessmentEngine {
     private apiClient;
     constructor(apiClient: any);
     analyzeContent(content: any): Promise<SkillLevelClassification>;
     classifyDifficulty(content: any, domain: SkillDomain): Promise<SkillLevel>;
-    tagContentWithSkillLevel(
-      contentId: string,
-      skillTag: Omit<ContentSkillTag,
-      'id' | 'tagged_at' | 'last_updated'>
-    ): Promise<ContentSkillTag>;
+    tagContentWithSkillLevel(contentId: string, skillTag: Omit<ContentSkillTag, 'id' | 'tagged_at' | 'last_updated'>): Promise<ContentSkillTag>;
     getContentSkillTags(contentId: string): Promise<ContentSkillTag[]>;
     assessUserSkillLevel(userId: string, domain: SkillDomain): Promise<UserSkillProfile>;
-    updateUserSkillAssessment(
-      userId: string,
-      domain: SkillDomain,
-      newLevel: SkillLevel,
-      evidence: string[]
-    ): Promise<void>;
+    updateUserSkillAssessment(userId: string, domain: SkillDomain, newLevel: SkillLevel, evidence: string[]): Promise<void>;
     recommendContent(userProfile: UserSkillProfile, learningGoals: LearningGoal[]): Promise<ContentRecommendation[]>;
     suggestNextContent(userId: string, currentContent: string): Promise<ContentSuggestion[]>;
     recommendLearningPath(userId: string, targetSkills: Array<{

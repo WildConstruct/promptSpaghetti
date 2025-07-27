@@ -102,9 +102,9 @@ export declare const UserProfileSchema: z.ZodObject<{
     id?: string;
     createdAt?: Date;
     updatedAt?: Date;
-    location?: string;
     userId?: string;
     displayName?: string;
+    location?: string;
     preferences?: {
         emailNotifications?: boolean;
         marketingEmails?: boolean;
@@ -131,9 +131,9 @@ export declare const UserProfileSchema: z.ZodObject<{
     id?: string;
     createdAt?: Date;
     updatedAt?: Date;
-    location?: string;
     userId?: string;
     displayName?: string;
+    location?: string;
     preferences?: {
         emailNotifications?: boolean;
         marketingEmails?: boolean;
@@ -656,9 +656,9 @@ export declare const ForumPostSchema: z.ZodObject<{
     tags?: string[];
     content?: string;
     title?: string;
-    parentId?: string;
     bookmarks?: number;
     authorId?: string;
+    parentId?: string;
     isLocked?: boolean;
     views?: number;
     likes?: number;
@@ -698,9 +698,9 @@ export declare const ForumPostSchema: z.ZodObject<{
     tags?: string[];
     content?: string;
     title?: string;
-    parentId?: string;
     bookmarks?: number;
     authorId?: string;
+    parentId?: string;
     isLocked?: boolean;
     views?: number;
     likes?: number;
@@ -864,11 +864,11 @@ export declare const TutorialSchema: z.ZodObject<{
             type: z.ZodEnum<["video", "article", "template", "download", "external"]>;
         }, "strip", z.ZodTypeAny, {
             name?: string;
-            type?: "external" | "template" | "article" | "video" | "download";
+            type?: "template" | "article" | "video" | "download" | "external";
             url?: string;
         }, {
             name?: string;
-            type?: "external" | "template" | "article" | "video" | "download";
+            type?: "template" | "article" | "video" | "download" | "external";
             url?: string;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
@@ -877,7 +877,7 @@ export declare const TutorialSchema: z.ZodObject<{
         title?: string;
         resources?: {
             name?: string;
-            type?: "external" | "template" | "article" | "video" | "download";
+            type?: "template" | "article" | "video" | "download" | "external";
             url?: string;
         }[];
         order?: number;
@@ -888,7 +888,7 @@ export declare const TutorialSchema: z.ZodObject<{
         title?: string;
         resources?: {
             name?: string;
-            type?: "external" | "template" | "article" | "video" | "download";
+            type?: "template" | "article" | "video" | "download" | "external";
             url?: string;
         }[];
         order?: number;
@@ -934,19 +934,19 @@ export declare const TutorialSchema: z.ZodObject<{
     status?: "draft" | "published" | "archived";
     category?: string;
     title?: string;
+    authorId?: string;
     steps?: {
         id?: string;
         content?: string;
         title?: string;
         resources?: {
             name?: string;
-            type?: "external" | "template" | "article" | "video" | "download";
+            type?: "template" | "article" | "video" | "download" | "external";
             url?: string;
         }[];
         order?: number;
         estimatedDuration?: number;
     }[];
-    authorId?: string;
     assets?: {
         name?: string;
         description?: string;
@@ -976,19 +976,19 @@ export declare const TutorialSchema: z.ZodObject<{
     status?: "draft" | "published" | "archived";
     category?: string;
     title?: string;
+    authorId?: string;
     steps?: {
         id?: string;
         content?: string;
         title?: string;
         resources?: {
             name?: string;
-            type?: "external" | "template" | "article" | "video" | "download";
+            type?: "template" | "article" | "video" | "download" | "external";
             url?: string;
         }[];
         order?: number;
         estimatedDuration?: number;
     }[];
-    authorId?: string;
     assets?: {
         name?: string;
         description?: string;
@@ -1185,9 +1185,9 @@ export declare const SearchQuerySchema: z.ZodObject<{
     sessionId?: string;
     filters?: Record<string, any>;
     userAgent?: string;
-    query?: string;
     responseTime?: number;
     referrer?: string;
+    query?: string;
     normalizedQuery?: string;
     resultsCount?: number;
     clickedResults?: {
@@ -1204,9 +1204,9 @@ export declare const SearchQuerySchema: z.ZodObject<{
     sessionId?: string;
     filters?: Record<string, any>;
     userAgent?: string;
-    query?: string;
     responseTime?: number;
     referrer?: string;
+    query?: string;
     normalizedQuery?: string;
     resultsCount?: number;
     clickedResults?: {
@@ -1432,9 +1432,9 @@ export declare const Epic16ContentSchemas: {
         id?: string;
         createdAt?: Date;
         updatedAt?: Date;
-        location?: string;
         userId?: string;
         displayName?: string;
+        location?: string;
         preferences?: {
             emailNotifications?: boolean;
             marketingEmails?: boolean;
@@ -1461,9 +1461,9 @@ export declare const Epic16ContentSchemas: {
         id?: string;
         createdAt?: Date;
         updatedAt?: Date;
-        location?: string;
         userId?: string;
         displayName?: string;
+        location?: string;
         preferences?: {
             emailNotifications?: boolean;
             marketingEmails?: boolean;
@@ -1981,9 +1981,9 @@ export declare const Epic16ContentSchemas: {
         tags?: string[];
         content?: string;
         title?: string;
-        parentId?: string;
         bookmarks?: number;
         authorId?: string;
+        parentId?: string;
         isLocked?: boolean;
         views?: number;
         likes?: number;
@@ -2023,9 +2023,9 @@ export declare const Epic16ContentSchemas: {
         tags?: string[];
         content?: string;
         title?: string;
-        parentId?: string;
         bookmarks?: number;
         authorId?: string;
+        parentId?: string;
         isLocked?: boolean;
         views?: number;
         likes?: number;
@@ -2187,11 +2187,11 @@ export declare const Epic16ContentSchemas: {
                 type: z.ZodEnum<["video", "article", "template", "download", "external"]>;
             }, "strip", z.ZodTypeAny, {
                 name?: string;
-                type?: "external" | "template" | "article" | "video" | "download";
+                type?: "template" | "article" | "video" | "download" | "external";
                 url?: string;
             }, {
                 name?: string;
-                type?: "external" | "template" | "article" | "video" | "download";
+                type?: "template" | "article" | "video" | "download" | "external";
                 url?: string;
             }>, "many">>;
         }, "strip", z.ZodTypeAny, {
@@ -2200,7 +2200,7 @@ export declare const Epic16ContentSchemas: {
             title?: string;
             resources?: {
                 name?: string;
-                type?: "external" | "template" | "article" | "video" | "download";
+                type?: "template" | "article" | "video" | "download" | "external";
                 url?: string;
             }[];
             order?: number;
@@ -2211,7 +2211,7 @@ export declare const Epic16ContentSchemas: {
             title?: string;
             resources?: {
                 name?: string;
-                type?: "external" | "template" | "article" | "video" | "download";
+                type?: "template" | "article" | "video" | "download" | "external";
                 url?: string;
             }[];
             order?: number;
@@ -2257,19 +2257,19 @@ export declare const Epic16ContentSchemas: {
         status?: "draft" | "published" | "archived";
         category?: string;
         title?: string;
+        authorId?: string;
         steps?: {
             id?: string;
             content?: string;
             title?: string;
             resources?: {
                 name?: string;
-                type?: "external" | "template" | "article" | "video" | "download";
+                type?: "template" | "article" | "video" | "download" | "external";
                 url?: string;
             }[];
             order?: number;
             estimatedDuration?: number;
         }[];
-        authorId?: string;
         assets?: {
             name?: string;
             description?: string;
@@ -2299,19 +2299,19 @@ export declare const Epic16ContentSchemas: {
         status?: "draft" | "published" | "archived";
         category?: string;
         title?: string;
+        authorId?: string;
         steps?: {
             id?: string;
             content?: string;
             title?: string;
             resources?: {
                 name?: string;
-                type?: "external" | "template" | "article" | "video" | "download";
+                type?: "template" | "article" | "video" | "download" | "external";
                 url?: string;
             }[];
             order?: number;
             estimatedDuration?: number;
         }[];
-        authorId?: string;
         assets?: {
             name?: string;
             description?: string;
@@ -2505,9 +2505,9 @@ export declare const Epic16ContentSchemas: {
         sessionId?: string;
         filters?: Record<string, any>;
         userAgent?: string;
-        query?: string;
         responseTime?: number;
         referrer?: string;
+        query?: string;
         normalizedQuery?: string;
         resultsCount?: number;
         clickedResults?: {
@@ -2524,9 +2524,9 @@ export declare const Epic16ContentSchemas: {
         sessionId?: string;
         filters?: Record<string, any>;
         userAgent?: string;
-        query?: string;
         responseTime?: number;
         referrer?: string;
+        query?: string;
         normalizedQuery?: string;
         resultsCount?: number;
         clickedResults?: {
@@ -2691,14 +2691,8 @@ export declare const Epic16ContentSchemas: {
         scheduledFor?: Date;
     }>;
 };
-export declare function validateContentModel<T extends keyof Epic16ContentModel>(
-  type: T,
-  data: unknown
-): Epic16ContentModel[T];
-export declare function isValidContentModel<T extends keyof Epic16ContentModel>(
-  type: T,
-  data: unknown
-): data is Epic16ContentModel[T];
+export declare function validateContentModel<T extends keyof Epic16ContentModel>(type: T, data: unknown): Epic16ContentModel[T];
+export declare function isValidContentModel<T extends keyof Epic16ContentModel>(type: T, data: unknown): data is Epic16ContentModel[T];
 export declare const Epic16Relationships: {
     readonly userToTemplates: "one-to-many";
     readonly templateToVersions: "one-to-many";

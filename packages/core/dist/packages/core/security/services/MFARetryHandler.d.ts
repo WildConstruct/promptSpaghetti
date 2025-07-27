@@ -132,10 +132,7 @@ export declare class MFARetryHandler extends EventEmitter {
     /**
      * Execute an MFA operation with retry and timeout handling
      */
-    executeWithRetry<T>(
-      operation: MFAOperation,
-      operationFn: (
-    ) => Promise<T>, context?: Partial<OperationContext>): Promise<OperationResult<T>>;
+    executeWithRetry<T>(operation: MFAOperation, operationFn: () => Promise<T>, context?: Partial<OperationContext>): Promise<OperationResult<T>>;
     /**
      * Check if an operation should be attempted based on circuit breaker state
      */

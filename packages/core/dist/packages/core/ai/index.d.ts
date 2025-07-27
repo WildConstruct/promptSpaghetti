@@ -41,13 +41,4 @@ export { default as ImageProcessor } from './utils/ImageProcessor';
 export type { ImageMetadata, ImageProcessingOptions, ImageVariationOptions, ImageBatchProcessingOptions } from './utils/ImageProcessor';
 export type { AIModelType, AIModelProvider, AIModelStatus, ModelCapabilities, ModelMetadata, CostEstimate, HealthStatus, AIRequest, AIResponse, ModelConfiguration, AIModelFactory as IAIModelFactory } from './BaseAIModel';
 export * from './performance';
-export declare }, id: string, modelName: string, apiKey: string) => unknown;
-export declare }, id: string, modelName: string, apiKey: string) => unknown;
-export declare }, id: string, modelName: string, endpoint: string) => unknown;
-interface HTTPRequestMapping {
-    inputPath: string;
-    outputPath: string;
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE';
-    headers?: Record<string, string>;
-}
-export declare //# sourceMappingURL=index.d.ts.map
+//# sourceMappingURL=index.d.ts.map

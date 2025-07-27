@@ -48,7 +48,6 @@ export class DataRetrievalRateLimit extends EventEmitter {
      * Check if data retrieval request is allowed
      */
     async checkDataRetrievalLimit(subject, object, operation, requestDetails) {
-        const startTime = Date.now();
         try {
             // Check for exemptions first
             const exemption = await this.checkExemptions(subject, object, operation);

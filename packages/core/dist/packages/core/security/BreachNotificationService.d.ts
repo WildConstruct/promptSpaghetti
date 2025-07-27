@@ -210,12 +210,7 @@ export declare class BreachNotificationService extends EventEmitter {
     /**
      * Send notification to specified recipients
      */
-    sendNotification(
-      incidentId: string,
-      type: NotificationType,
-      recipients: string[],
-      template?: string
-    ): Promise<NotificationRecord[]>;
+    sendNotification(incidentId: string, type: NotificationType, recipients: string[], template?: string): Promise<NotificationRecord[]>;
     /**
      * Generate GDPR notification for supervisory authority
      */

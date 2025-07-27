@@ -85,12 +85,7 @@ export declare class VersionRestoreManager {
     private restoreHistory;
     constructor(apiClient: any, projectId: string, userId: string, versionHistoryManager: any);
     createRestorePreview(snapshotId: string, currentGraphData: any, options?: RestoreOptions): Promise<RestorePreview>;
-    executeRestore(
-      snapshotId: string,
-      options?: RestoreOptions,
-      conflictResolutions?: Record<string,
-      'keep_current' | 'use_restore' | 'merge' | 'custom'>
-    ): Promise<{
+    executeRestore(snapshotId: string, options?: RestoreOptions, conflictResolutions?: Record<string, 'keep_current' | 'use_restore' | 'merge' | 'custom'>): Promise<{
         restoreId: string;
         result: Promise<RestoreResult>;
     }>;

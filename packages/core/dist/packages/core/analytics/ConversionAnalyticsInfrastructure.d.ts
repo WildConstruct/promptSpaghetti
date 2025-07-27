@@ -216,10 +216,7 @@ export declare class ConversionMetricsCalculator {
     private config;
     private metricCache;
     constructor(config: MetricCalculationConfig);
-    calculateMetrics(
-      query: ConversionMetricQuery,
-      events: FlexibleConversionEvent[]
-    ): Promise<ConversionMetricResult[]>;
+    calculateMetrics(query: ConversionMetricQuery, events: FlexibleConversionEvent[]): Promise<ConversionMetricResult[]>;
     private calculateSingleMetric;
     private getMetricCalculator;
     private applyFilters;
@@ -349,5 +346,5 @@ export interface StageProcessingResult {
 export interface MetricCalculator {
     calculate(events: FlexibleConversionEvent[], query: ConversionMetricQuery): Promise<number>;
 }
-export declare export default ConversionAnalyticsInfrastructure;
+export default ConversionAnalyticsInfrastructure;
 //# sourceMappingURL=ConversionAnalyticsInfrastructure.d.ts.map

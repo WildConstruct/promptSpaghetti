@@ -13,35 +13,15 @@ import { AnalyticsService } from '../../marketplace/analytics.service';
 import { ContentQualityMetricsService } from '../../marketplace/ContentQualityMetricsService';
 import { QualityMetricsService } from '../QualityMetricsService';
 import { TimeRange } from '../../marketplace/analytics.types';
-import { 
-  UserTrustScore,
-  TemplateTrustScore,
-  TransactionTrustScore,
-  TrustScoreConfig,
-  TrustScoreAnalytics,
-  TrustFactor,
-  RiskFactor,
-  VerificationStatus
-} from '../../../../packages/core/types/TrustTypes';
-import { 
-  EnforcementAction,
-  ViolationReport,
-  ViolationCategory,
-  ActionSeverity
-} from '../../../../packages/core/types/EnforcementTypes';
+import { UserTrustScore, TemplateTrustScore, TransactionTrustScore, TrustScoreConfig, TrustScoreAnalytics, TrustFactor, RiskFactor, VerificationStatus } from '../../../../packages/core/types/TrustTypes';
+import { EnforcementAction, ViolationReport, ViolationCategory, ActionSeverity } from '../../../../packages/core/types/EnforcementTypes';
 export declare class TrustScoreService {
     private db;
     private analyticsService;
     private contentQualityService;
     private qualityService;
     private config;
-    constructor(
-      database: Database,
-      analyticsService: AnalyticsService,
-      contentQualityService: ContentQualityMetricsService,
-      qualityService: QualityMetricsService,
-      config?: TrustScoreConfig
-    );
+    constructor(database: Database, analyticsService: AnalyticsService, contentQualityService: ContentQualityMetricsService, qualityService: QualityMetricsService, config?: TrustScoreConfig);
     /**
      * Calculate comprehensive trust score for a user
      */
@@ -65,12 +45,7 @@ export declare class TrustScoreService {
     /**
      * Calculate trust score for a transaction
      */
-    calculateTransactionTrustScore(
-      transactionId: string,
-      buyerId: string,
-      sellerId: string,
-      templateId: string
-    ): Promise<TransactionTrustScore>;
+    calculateTransactionTrustScore(transactionId: string, buyerId: string, sellerId: string, templateId: string): Promise<TransactionTrustScore>;
     /**
      * Generate marketplace trust analytics
      */
@@ -204,10 +179,7 @@ export declare class TrustScoreService {
     /**
      * Evaluate if a trust score change should trigger enforcement actions
      */
-    evaluateTrustScoreForEnforcement(
-      trustScore: UserTrustScore | TemplateTrustScore | TransactionTrustScore,
-      entityType: 'user' | 'template' | 'transaction'
-    ): Promise<{
+    evaluateTrustScoreForEnforcement(trustScore: UserTrustScore | TemplateTrustScore | TransactionTrustScore, entityType: 'user' | 'template' | 'transaction'): Promise<{
         shouldTriggerEnforcement: boolean;
         recommendedActions: {
             actionType: string;
@@ -232,12 +204,7 @@ export declare class TrustScoreService {
     /**
      * Update trust score based on enforcement action results
      */
-    updateTrustScoreFromEnforcement(
-      entityType: 'user' | 'template' | 'transaction',
-      entityId: string,
-      action: EnforcementAction,
-      actionResult: 'applied' | 'reversed' | 'modified'
-    ): Promise<void>;
+    updateTrustScoreFromEnforcement(entityType: 'user' | 'template' | 'transaction', entityId: string, action: EnforcementAction, actionResult: 'applied' | 'reversed' | 'modified'): Promise<void>;
     private checkForRapidScoreDecline;
     private mapTrustScoreToSeverity;
     private captureEntitySnapshot;

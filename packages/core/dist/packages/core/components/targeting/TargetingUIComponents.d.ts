@@ -65,35 +65,12 @@ export interface TargetingPreview {
         userType: Record<string, number>;
     };
 }
-interface AudienceSelectorProps {
-    audiences: TargetingAudience[];
-    selectedAudience?: TargetingAudience;
-    onSelect: (audience: TargetingAudience) => void;
-    onCreate?: () => void;
-    onEdit?: (audience: TargetingAudience) => void;
-    onDelete?: (audienceId: string) => void;
-    showAnalytics?: boolean;
-    compact?: boolean;
-}
-export declare     availableFields: Array<{
-        key: string;
-        label: string;
-        type: string;
-        category: string;
-        options?: unknown[];
-    }>;
-    onPreview?: (conditions: TargetingCondition[]) => Promise<TargetingPreview>;
-    showVisualBuilder?: boolean;
-}
-export declare     onRegionsChange: (regions: string[]) => void;
-    onCitiesChange: (cities: string[]) => void;
-    excludeMode?: boolean;
-    onExcludeModeChange?: (exclude: boolean) => void;
-}
-export declare     onUpdateSegment: (id: string, updates: Partial<UserSegment>) => void;
-    onDeleteSegment: (id: string) => void;
-    onDuplicateSegment: (id: string) => void;
-}
-export declare const SegmentManagement: React.FC<SegmentManagementProps>;
+export declare const sortBy: "name" | "updated" | "reach", setSortBy: React.Dispatch<React.SetStateAction<"name" | "updated" | "reach">>;
+export declare const previewLoading: boolean, setPreviewLoading: React.Dispatch<React.SetStateAction<boolean>>;
+export declare const countries: {
+    code: string;
+    name: string;
+    userCount: number;
+}[];
 export { type TargetingCondition, type UserSegment, type TargetingAudience, type TargetingPreview };
 //# sourceMappingURL=TargetingUIComponents.d.ts.map

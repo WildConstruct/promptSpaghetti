@@ -10,13 +10,7 @@
  */
 import { EventEmitter } from 'events';
 import { RateLimitingService, RateLimitStatus, ThreatLevel, BackoffStrategy } from './RateLimitingService';
-import { 
-  AdaptiveThrottlingRulesEngine,
-  ThrottlingContext,
-  ThrottlingResult,
-  ThrottlingMode,
-  SystemCondition
-} from './AdaptiveThrottlingRules';
+import { AdaptiveThrottlingRulesEngine, ThrottlingContext, ThrottlingResult, ThrottlingMode, SystemCondition } from './AdaptiveThrottlingRules';
 export interface IntegrationConfig {
     enableUnifiedProtection: boolean;
     rateLimitingPriority: number;
@@ -141,11 +135,7 @@ export declare class AdaptiveRateLimitingIntegration extends EventEmitter {
     private decisionHistory;
     private learningData;
     private performanceMetrics;
-    constructor(
-      rateLimitingService: RateLimitingService,
-      throttlingEngine: AdaptiveThrottlingRulesEngine,
-      config?: Partial<IntegrationConfig>
-    );
+    constructor(rateLimitingService: RateLimitingService, throttlingEngine: AdaptiveThrottlingRulesEngine, config?: Partial<IntegrationConfig>);
     /**
      * Apply unified protection with both rate limiting and adaptive throttling
      */

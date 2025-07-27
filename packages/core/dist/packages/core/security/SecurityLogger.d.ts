@@ -225,33 +225,15 @@ export declare class SecurityLogger extends EventEmitter {
     /**
      * Log unlock attempt
      */
-    logUnlockAttempt(
-      lockoutId: string,
-      adminId: string,
-      reason: string,
-      outcome: 'success' | 'failure',
-      context?: LogContext
-    ): string;
+    logUnlockAttempt(lockoutId: string, adminId: string, reason: string, outcome: 'success' | 'failure', context?: LogContext): string;
     /**
      * Log emergency unlock event
      */
-    logEmergencyUnlock(
-      lockoutId: string,
-      adminId: string,
-      emergencyCode: string,
-      justification: string,
-      context?: LogContext
-    ): string;
+    logEmergencyUnlock(lockoutId: string, adminId: string, emergencyCode: string, justification: string, context?: LogContext): string;
     /**
      * Log security alert
      */
-    logSecurityAlert(
-      alertType: string,
-      severity: 'low' | 'medium' | 'high' | 'critical',
-      details: Record<string,
-      any>,
-      context?: LogContext
-    ): string;
+    logSecurityAlert(alertType: string, severity: 'low' | 'medium' | 'high' | 'critical', details: Record<string, any>, context?: LogContext): string;
     /**
      * Create audit trail entry
      */
@@ -275,12 +257,7 @@ export declare class SecurityLogger extends EventEmitter {
     /**
      * Export logs for compliance
      */
-    exportLogsForCompliance(
-      framework: ComplianceFramework,
-      startTime: Date,
-      endTime: Date,
-      format?: 'json' | 'csv' | 'xml'
-    ): {
+    exportLogsForCompliance(framework: ComplianceFramework, startTime: Date, endTime: Date, format?: 'json' | 'csv' | 'xml'): {
         data: string;
         metadata: {
             framework: ComplianceFramework;

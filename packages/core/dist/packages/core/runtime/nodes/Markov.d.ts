@@ -99,15 +99,7 @@ export declare class MarkovNode extends AdvancedRuntimeNode<string> {
 /**
  * Factory function for creating Markov nodes
  */
-export declare function createMarkovNode(
-  id: string,
-  states: string[],
-  transitions: Record<string,
-  Record<string,
-  number>>,
-  initialState?: string,
-  config?: MarkovConfig
-): MarkovNode;
+export declare function createMarkovNode(id: string, states: string[], transitions: Record<string, Record<string, number>>, initialState?: string, config?: MarkovConfig): MarkovNode;
 /**
  * Helper function to create transition matrix from simple configuration
  */
@@ -119,7 +111,10 @@ export declare function createTransitionMatrix(config: {
 /**
  * Common Markov chain presets
  */
-export declare     /** Random walk with equal probabilities */
+export declare const MarkovPresets: {
+    /** Simple two-state toggle */
+    readonly toggle: (state1: string, state2: string) => TransitionMatrix;
+    /** Random walk with equal probabilities */
     readonly randomWalk: (states: string[]) => TransitionMatrix;
     /** Linear progression through states */
     readonly linear: (states: string[], cyclic?: boolean) => TransitionMatrix;

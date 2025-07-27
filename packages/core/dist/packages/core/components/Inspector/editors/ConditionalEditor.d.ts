@@ -1,4 +1,3 @@
-import React from 'react';
 import { BaseNodeEditorProps } from '../BaseNodeEditor';
 export interface ConditionalEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
     nodeId: string;
@@ -11,5 +10,5 @@ export interface ConditionalEditorProps extends Omit<BaseNodeEditorProps, 'child
  * - Advanced: Branch management and conditional logic controls
  * - Debug: Technical settings, strict mode, variable access controls
  */
-export declare const ConditionalEditor: React.FC<ConditionalEditorProps>;
+export declare const defaultOutput: string;
 //# sourceMappingURL=ConditionalEditor.d.ts.map

@@ -153,15 +153,7 @@ export declare class AuditLogger extends BrowserEventEmitter {
     /**
      * Log a data access operation
      */
-    logDataAccess(
-      context: OperationContext,
-      resourceType: string,
-      resourceId: string,
-      classification: DataClassificationLevel,
-      success: boolean,
-      metadata?: Record<string,
-      any>
-    ): Promise<void>;
+    logDataAccess(context: OperationContext, resourceType: string, resourceId: string, classification: DataClassificationLevel, success: boolean, metadata?: Record<string, any>): Promise<void>;
     /**
      * Log a generic operation
      */

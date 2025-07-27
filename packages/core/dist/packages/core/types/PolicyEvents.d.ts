@@ -5,13 +5,7 @@
  * Event-driven policy system interfaces for real-time notifications,
  * workflow automation, and system integration.
  */
-import { 
-  BasePolicy,
-  PolicyAssignment,
-  PolicyEvaluation,
-  EvaluationContext,
-  ComplianceFramework
-} from './PolicyInterfaces';
+import { BasePolicy, PolicyAssignment, PolicyEvaluation, EvaluationContext, ComplianceFramework } from './PolicyInterfaces';
 /**
  * Base policy event interface
  */

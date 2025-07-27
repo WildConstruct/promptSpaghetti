@@ -184,13 +184,7 @@ export declare abstract class AdvancedRuntimeNodeWithIO<TOutput = unknown> exten
  * Standard node data serialization helpers
  */
 export declare class SerializationHelpers {
-    static createAdvancedNodeData(
-      id: string,
-      type: string,
-      config: AdvancedNodeConfig,
-      data: Record<string,
-      unknown>
-    ): AdvancedNodeData;
+    static createAdvancedNodeData(id: string, type: string, config: AdvancedNodeConfig, data: Record<string, unknown>): AdvancedNodeData;
     static validateSerializedData(data: AdvancedNodeData): ValidationResult;
 }
 //# sourceMappingURL=advanced.d.ts.map

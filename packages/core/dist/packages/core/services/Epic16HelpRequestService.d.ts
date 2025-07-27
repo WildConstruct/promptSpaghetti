@@ -267,10 +267,7 @@ export declare class Epic16HelpRequestService extends EventEmitter {
     /**
      * Submit a new help request
      */
-    submitHelpRequest(
-      requestData: Omit<HelpRequest,
-      'id' | 'createdAt' | 'updatedAt' | 'sla' | 'analytics' | 'responses' | 'suggestedArticles' | 'routingDecision'>
-    ): Promise<HelpRequest>;
+    submitHelpRequest(requestData: Omit<HelpRequest, 'id' | 'createdAt' | 'updatedAt' | 'sla' | 'analytics' | 'responses' | 'suggestedArticles' | 'routingDecision'>): Promise<HelpRequest>;
     /**
      * Process help request through intelligent pipeline
      */

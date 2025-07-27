@@ -83,20 +83,9 @@ export declare class StableVideoAdapter extends BaseAIModel {
     process(input: any, options?: StableVideoRequestOptions): Promise<StableVideoGenerationResult>;
     cleanup(): Promise<void>;
     estimate(input: any, options?: StableVideoRequestOptions): Promise<CostEstimate>;
-    generateImageToVideo(
-      imageData: string,
-      motionIntensity?: number,
-      numFrames?: number,
-      options?: Partial<StableVideoRequestOptions>
-    ): Promise<StableVideoGenerationResult>;
-    generateVideoLoop(
-      imageData: string,
-      options?: Partial<StableVideoRequestOptions>
-    ): Promise<StableVideoGenerationResult>;
-    generateHighQualityVideo(
-      imageData: string,
-      options?: Partial<StableVideoRequestOptions>
-    ): Promise<StableVideoGenerationResult>;
+    generateImageToVideo(imageData: string, motionIntensity?: number, numFrames?: number, options?: Partial<StableVideoRequestOptions>): Promise<StableVideoGenerationResult>;
+    generateVideoLoop(imageData: string, options?: Partial<StableVideoRequestOptions>): Promise<StableVideoGenerationResult>;
+    generateHighQualityVideo(imageData: string, options?: Partial<StableVideoRequestOptions>): Promise<StableVideoGenerationResult>;
     getAvailableModels(): Promise<SVDModelInfo[]>;
     switchModel(modelName: string): Promise<void>;
     interpolateFrames(frames: string[]): Promise<string[]>;

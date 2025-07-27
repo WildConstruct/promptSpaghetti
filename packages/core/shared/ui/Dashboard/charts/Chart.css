@@ -1,0 +1,347 @@
+/**
+ * Chart Styles
+ * REFACTOR-003: Dashboard Component Architecture Consolidation
+ */
+
+/* ===== CHART CONTAINER ===== */
+.chart {
+  position: relative;
+  background-color: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* ===== CHART VARIANTS ===== */
+.chart-minimal {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+}
+
+.chart-detailed {
+  padding: 24px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* ===== CHART TITLE ===== */
+.chart-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* ===== SVG ELEMENTS ===== */
+.chart-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Grid lines */
+.grid-line {
+  stroke: #f3f4f6;
+  stroke-width: 1;
+  stroke-dasharray: 2,2;
+}
+
+/* Axes */
+.axis-line {
+  stroke: #d1d5db;
+  stroke-width: 2;
+}
+
+.axis-label {
+  fill: #6b7280;
+  font-size: 12px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* ===== LINE CHART ===== */
+.series-line {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke-width 0.2s ease;
+}
+
+.series-line:hover {
+  stroke-width: 4;
+}
+
+.data-point {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.data-point:hover {
+  r: 6;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* ===== BAR CHART ===== */
+.chart-bar {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chart-bar:hover {
+  opacity: 0.8;
+  filter: brightness(1.1);
+}
+
+/* ===== PIE CHART ===== */
+.pie-slice {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  stroke: #ffffff;
+  stroke-width: 2;
+}
+
+.pie-slice:hover {
+  transform-origin: center;
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+/* ===== TOOLTIP ===== */
+.chart-tooltip {
+  position: absolute;
+  background-color: #1f2937;
+  color: #ffffff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 10;
+  transform: translateX(-50%) translateY(-100%);
+  white-space: nowrap;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.chart-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: #1f2937;
+}
+
+.tooltip-series {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.tooltip-label {
+  color: #d1d5db;
+  font-size: 11px;
+}
+
+.tooltip-value {
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+/* ===== LEGEND ===== */
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.legend-label {
+  font-weight: 500;
+}
+
+/* ===== AXIS LABELS ===== */
+.chart-axis-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.x-axis-label {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.y-axis-label {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+/* ===== LOADING STATE ===== */
+.chart-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9fafb;
+}
+
+.chart-loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.loading-shimmer {
+  width: 200px;
+  height: 120px;
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  border-radius: 8px;
+  animation: shimmer 1.5s infinite;
+}
+
+.loading-text {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* ===== ERROR STATE ===== */
+.chart-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fef2f2;
+  border-color: #fecaca;
+}
+
+.chart-error-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.error-icon {
+  font-size: 24px;
+}
+
+.error-text {
+  font-size: 14px;
+  color: #dc2626;
+  text-align: center;
+}
+
+/* ===== EMPTY STATE ===== */
+.chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9fafb;
+}
+
+.chart-empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.empty-icon {
+  font-size: 24px;
+  opacity: 0.5;
+}
+
+.empty-text {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .chart {
+    padding: 16px;
+  }
+  
+  .chart-detailed {
+    padding: 16px;
+  }
+  
+  .chart-legend {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .axis-label {
+    font-size: 10px;
+  }
+  
+  .chart-tooltip {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chart-title {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  
+  .legend-item {
+    font-size: 11px;
+  }
+  
+  .x-axis-label,
+  .y-axis-label {
+    font-size: 12px;
+  }
+}

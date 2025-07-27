@@ -215,7 +215,7 @@ export class SecurityAnomalyDetector extends EventEmitter {
         }
         // Emit anomaly event
         this.emit('anomalyDetected', anomaly);
-        console.log(`🔍 SECURITY ANOMALY: ${anomaly.anomalyType} in ${anomaly.affectedSystems.join(', ')} (confidence: ${anomaly.confidence})`);
+        console.log(`🔍 SECURITY ANOMALY: ${anomaly.anomalyType} in ${anomaly.affectedSystems.join(',, ')} (confidence: ${anomaly.confidence})`);
     }
     async performCorrelationAnalysis(anomaly) {
         const correlatedAnomalies = [];

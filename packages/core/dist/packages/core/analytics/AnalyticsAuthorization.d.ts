@@ -107,10 +107,7 @@ export declare class AnalyticsAuthorizationService {
     /**
      * Authorize event publication
      */
-    authorizeEventPublication(
-      event: Partial<UnifiedAnalyticsEvent>,
-      authContext: AuthContext
-    ): Promise<AuthorizationResult>;
+    authorizeEventPublication(event: Partial<UnifiedAnalyticsEvent>, authContext: AuthContext): Promise<AuthorizationResult>;
     /**
      * Authorize event access/viewing
      */
@@ -126,10 +123,7 @@ export declare class AnalyticsAuthorizationService {
     /**
      * Authorize dashboard access
      */
-    authorizeDashboardAccess(
-      dashboardType: 'user' | 'organization' | 'admin' | 'system',
-      authContext: AuthContext
-    ): Promise<AuthorizationResult>;
+    authorizeDashboardAccess(dashboardType: 'user' | 'organization' | 'admin' | 'system', authContext: AuthContext): Promise<AuthorizationResult>;
     /**
      * Apply authorization policies to event
      */

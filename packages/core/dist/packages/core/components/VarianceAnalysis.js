@@ -9,154 +9,152 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useMemo } from 'react';
 import { varianceAnalysisService } from '../services/VarianceAnalysisService';
 import { professionalColors } from '../styles/professional-design-system';
-export const VarianceAnalysis = ({ results, onSuggestionClick, compact = false }) => {
-    const analysis = useMemo(() => {
-        return varianceAnalysisService.calculateVariance(results);
-    }, [results]);
-    const indicators = useMemo(() => {
-        return varianceAnalysisService.createDiversityIndicators(analysis);
-    }, [analysis]);
-    const varianceInfo = useMemo(() => {
-        return varianceAnalysisService.getVarianceLevelInfo(analysis.overallVariance);
-    }, [analysis.overallVariance]);
-    if (results.length < 2) {
-        return (_jsx("div", { style: {
-                padding: 12,
+[results];
+;
+const indicators = useMemo(() => {
+    return varianceAnalysisService.createDiversityIndicators(analysis);
+}, [analysis]);
+const varianceInfo = useMemo(() => {
+    return varianceAnalysisService.getVarianceLevelInfo(analysis.overallVariance);
+}, [analysis.overallVariance]);
+if (results.length < 2) {
+    return (_jsx("div", { style: {
+            padding: 12,
+            background: '#f8fafc',
+            border: '1px solid #e2e8f0',
+            borderRadius: 6,
+            textAlign: 'center',
+            color: professionalColors.text.secondary,
+            fontSize: 12
+        }, children: "\uD83D\uDCCA Generate more results to analyze creative variance" }));
+}
+if (compact) {
+    return _jsx(CompactVarianceDisplay, { analysis: analysis, varianceInfo: varianceInfo });
+}
+return (_jsxs("div", { style: {
+        background: '#fff',
+        border: '1px solid #e5e7eb',
+        borderRadius: 8,
+        overflow: 'hidden'
+    }, children: [_jsxs("div", { style: {
+                padding: 16,
+                background: varianceInfo.background,
+                border: `1px solid ${varianceInfo.border}`,
+                borderBottom: 'none'
+            }, children: [_jsxs("div", { style: {
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        marginBottom: 8
+                    }, children: [_jsxs("h3", { style: {
+                                margin: 0,
+                                fontSize: 14,
+                                fontWeight: 600,
+                                color: varianceInfo.color,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 8
+                            }, children: [varianceInfo.icon, " Creative Variance Analysis"] }), _jsxs("div", { style: {
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 8
+                            }, children: [_jsxs("span", { style: {
+                                        fontSize: 12,
+                                        fontWeight: 500,
+                                        color: varianceInfo.color,
+                                        textTransform: 'uppercase'
+                                    }, children: [analysis.overallVariance, " Variance"] }), _jsx("div", { style: {
+                                        width: 40,
+                                        height: 6,
+                                        background: '#e5e7eb',
+                                        borderRadius: 3,
+                                        overflow: 'hidden'
+                                    }, children: _jsx("div", { style: {
+                                            width: `${analysis.varianceScore * 100}%`,
+                                            height: '100%',
+                                            background: varianceInfo.color,
+                                            transition: 'width 0.3s ease'
+                                        } }) })] })] }), _jsx("p", { style: {
+                        margin: 0,
+                        fontSize: 11,
+                        color: varianceInfo.color,
+                        lineHeight: 1.4
+                    }, children: varianceInfo.description })] }), _jsxs("div", { style: { padding: 16 }, children: [_jsx("h4", { style: {
+                        margin: '0 0 12px 0',
+                        fontSize: 12,
+                        fontWeight: 600,
+                        color: professionalColors.text.primary
+                    }, children: "\uD83D\uDCC8 Diversity Metrics" }), _jsx("div", { style: {
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+                        gap: 12
+                    }, children: indicators.map((indicator, index) => (_jsx(DiversityMetricCard, { indicator: indicator }, index))) })] }), _jsxs("div", { style: {
+                padding: 16,
                 background: '#f8fafc',
-                border: '1px solid #e2e8f0',
-                borderRadius: 6,
-                textAlign: 'center',
-                color: professionalColors.text.secondary,
-                fontSize: 12
-            }, children: "\uD83D\uDCCA Generate more results to analyze creative variance" }));
-    }
-    if (compact) {
-        return _jsx(CompactVarianceDisplay, { analysis: analysis, varianceInfo: varianceInfo });
-    }
-    return (_jsxs("div", { style: {
-            background: '#fff',
-            border: '1px solid #e5e7eb',
-            borderRadius: 8,
-            overflow: 'hidden'
-        }, children: [_jsxs("div", { style: {
-                    padding: 16,
-                    background: varianceInfo.background,
-                    border: `1px solid ${varianceInfo.border}`,
-                    borderBottom: 'none'
-                }, children: [_jsxs("div", { style: {
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            marginBottom: 8
-                        }, children: [_jsxs("h3", { style: {
-                                    margin: 0,
-                                    fontSize: 14,
-                                    fontWeight: 600,
-                                    color: varianceInfo.color,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: 8
-                                }, children: [varianceInfo.icon, " Creative Variance Analysis"] }), _jsxs("div", { style: {
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: 8
-                                }, children: [_jsxs("span", { style: {
-                                            fontSize: 12,
-                                            fontWeight: 500,
-                                            color: varianceInfo.color,
-                                            textTransform: 'uppercase'
-                                        }, children: [analysis.overallVariance, " Variance"] }), _jsx("div", { style: {
-                                            width: 40,
-                                            height: 6,
-                                            background: '#e5e7eb',
-                                            borderRadius: 3,
-                                            overflow: 'hidden'
-                                        }, children: _jsx("div", { style: {
-                                                width: `${analysis.varianceScore * 100}%`,
-                                                height: '100%',
-                                                background: varianceInfo.color,
-                                                transition: 'width 0.3s ease'
-                                            } }) })] })] }), _jsx("p", { style: {
-                            margin: 0,
-                            fontSize: 11,
-                            color: varianceInfo.color,
-                            lineHeight: 1.4
-                        }, children: varianceInfo.description })] }), _jsxs("div", { style: { padding: 16 }, children: [_jsx("h4", { style: {
-                            margin: '0 0 12px 0',
-                            fontSize: 12,
-                            fontWeight: 600,
-                            color: professionalColors.text.primary
-                        }, children: "\uD83D\uDCC8 Diversity Metrics" }), _jsx("div", { style: {
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-                            gap: 12
-                        }, children: indicators.map((indicator, index) => (_jsx(DiversityMetricCard, { indicator: indicator }, index))) })] }), _jsxs("div", { style: {
-                    padding: 16,
-                    background: '#f8fafc',
-                    borderTop: '1px solid #e5e7eb'
-                }, children: [_jsx("h4", { style: {
-                            margin: '0 0 12px 0',
-                            fontSize: 12,
-                            fontWeight: 600,
-                            color: professionalColors.text.primary
-                        }, children: "\uD83C\uDFA8 Creative Range Summary" }), _jsxs("div", { style: {
-                            display: 'grid',
-                            gridTemplateColumns: '1fr 1fr',
-                            gap: 16
-                        }, children: [_jsxs("div", { children: [_jsxs("div", { style: {
-                                            fontSize: 11,
-                                            fontWeight: 500,
-                                            color: '#6b7280',
-                                            marginBottom: 4
-                                        }, children: ["Unique Elements (", analysis.creativeRange.uniqueElements.length, ")"] }), _jsxs("div", { style: {
-                                            maxHeight: 60,
-                                            overflow: 'hidden',
-                                            fontSize: 10,
-                                            color: '#374151',
-                                            lineHeight: 1.3
-                                        }, children: [analysis.creativeRange.uniqueElements.slice(0, 8).join(', '), analysis.creativeRange.uniqueElements.length > 8 && '...'] })] }), _jsxs("div", { children: [_jsxs("div", { style: {
-                                            fontSize: 11,
-                                            fontWeight: 500,
-                                            color: '#6b7280',
-                                            marginBottom: 4
-                                        }, children: ["Common Elements (", analysis.creativeRange.commonElements.length, ")"] }), _jsxs("div", { style: {
-                                            maxHeight: 60,
-                                            overflow: 'hidden',
-                                            fontSize: 10,
-                                            color: '#374151',
-                                            lineHeight: 1.3
-                                        }, children: [analysis.creativeRange.commonElements.slice(0, 6).join(', '), analysis.creativeRange.commonElements.length > 6 && '...'] })] })] }), _jsxs("div", { style: {
-                            display: 'flex',
-                            gap: 16,
-                            marginTop: 12,
-                            paddingTop: 12,
-                            borderTop: '1px solid #e5e7eb'
-                        }, children: [_jsxs("div", { style: { flex: 1 }, children: [_jsx("div", { style: {
-                                            fontSize: 10,
-                                            color: '#6b7280',
-                                            marginBottom: 2
-                                        }, children: "Repetition Rate" }), _jsxs("div", { style: {
-                                            fontSize: 12,
-                                            fontWeight: 500,
-                                            color: analysis.creativeRange.repetitionRate > 0.7 ? '#ef4444' : '#10b981'
-                                        }, children: [(analysis.creativeRange.repetitionRate * 100).toFixed(1), "%"] })] }), _jsxs("div", { style: { flex: 1 }, children: [_jsx("div", { style: {
-                                            fontSize: 10,
-                                            color: '#6b7280',
-                                            marginBottom: 2
-                                        }, children: "Creativity Score" }), _jsxs("div", { style: {
-                                            fontSize: 12,
-                                            fontWeight: 500,
-                                            color: varianceAnalysisService.getMetricColor(analysis.creativeRange.creativityScore, 0.4, 0.75)
-                                        }, children: [(analysis.creativeRange.creativityScore * 100).toFixed(0), "/100"] })] })] })] }), analysis.suggestions.length > 0 && (_jsxs("div", { style: {
-                    padding: 16,
-                    borderTop: '1px solid #e5e7eb'
-                }, children: [_jsx("h4", { style: {
-                            margin: '0 0 12px 0',
-                            fontSize: 12,
-                            fontWeight: 600,
-                            color: professionalColors.text.primary
-                        }, children: "\uD83D\uDCA1 Optimization Suggestions" }), _jsx("div", { style: { display: 'flex', flexDirection: 'column', gap: 8 }, children: analysis.suggestions.map((suggestion, index) => (_jsx(SuggestionCard, { suggestion: suggestion, onClick: () => onSuggestionClick?.(suggestion) }, index))) })] }))] }));
-};
+                borderTop: '1px solid #e5e7eb'
+            }, children: [_jsx("h4", { style: {
+                        margin: '0 0 12px 0',
+                        fontSize: 12,
+                        fontWeight: 600,
+                        color: professionalColors.text.primary
+                    }, children: "\uD83C\uDFA8 Creative Range Summary" }), _jsxs("div", { style: {
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr',
+                        gap: 16
+                    }, children: [_jsxs("div", { children: [_jsxs("div", { style: {
+                                        fontSize: 11,
+                                        fontWeight: 500,
+                                        color: '#6b7280',
+                                        marginBottom: 4
+                                    }, children: ["Unique Elements (", analysis.creativeRange.uniqueElements.length, ")"] }), _jsxs("div", { style: {
+                                        maxHeight: 60,
+                                        overflow: 'hidden',
+                                        fontSize: 10,
+                                        color: '#374151',
+                                        lineHeight: 1.3
+                                    }, children: [analysis.creativeRange.uniqueElements.slice(0, 8).join(', '), analysis.creativeRange.uniqueElements.length > 8 && '...'] })] }), _jsxs("div", { children: [_jsxs("div", { style: {
+                                        fontSize: 11,
+                                        fontWeight: 500,
+                                        color: '#6b7280',
+                                        marginBottom: 4
+                                    }, children: ["Common Elements (", analysis.creativeRange.commonElements.length, ")"] }), _jsxs("div", { style: {
+                                        maxHeight: 60,
+                                        overflow: 'hidden',
+                                        fontSize: 10,
+                                        color: '#374151',
+                                        lineHeight: 1.3
+                                    }, children: [analysis.creativeRange.commonElements.slice(0, 6).join(', '), analysis.creativeRange.commonElements.length > 6 && '...'] })] })] }), _jsxs("div", { style: {
+                        display: 'flex',
+                        gap: 16,
+                        marginTop: 12,
+                        paddingTop: 12,
+                        borderTop: '1px solid #e5e7eb'
+                    }, children: [_jsxs("div", { style: { flex: 1 }, children: [_jsx("div", { style: {
+                                        fontSize: 10,
+                                        color: '#6b7280',
+                                        marginBottom: 2
+                                    }, children: "Repetition Rate" }), _jsxs("div", { style: {
+                                        fontSize: 12,
+                                        fontWeight: 500,
+                                        color: analysis.creativeRange.repetitionRate > 0.7 ? '#ef4444' : '#10b981'
+                                    }, children: [(analysis.creativeRange.repetitionRate * 100).toFixed(1), "%"] })] }), _jsxs("div", { style: { flex: 1 }, children: [_jsx("div", { style: {
+                                        fontSize: 10,
+                                        color: '#6b7280',
+                                        marginBottom: 2
+                                    }, children: "Creativity Score" }), _jsxs("div", { style: {
+                                        fontSize: 12,
+                                        fontWeight: 500,
+                                        color: varianceAnalysisService.getMetricColor(analysis.creativeRange.creativityScore, 0.4, 0.75)
+                                    }, children: [(analysis.creativeRange.creativityScore * 100).toFixed(0), "/100"] })] })] })] }), analysis.suggestions.length > 0 && (_jsxs("div", { style: {
+                padding: 16,
+                borderTop: '1px solid #e5e7eb'
+            }, children: [_jsx("h4", { style: {
+                        margin: '0 0 12px 0',
+                        fontSize: 12,
+                        fontWeight: 600,
+                        color: professionalColors.text.primary
+                    }, children: "\uD83D\uDCA1 Optimization Suggestions" }), _jsx("div", { style: { display: 'flex', flexDirection: 'column', gap: 8 }, children: analysis.suggestions.map((suggestion, index) => (_jsx(SuggestionCard, { suggestion: suggestion, onClick: () => onSuggestionClick?.(suggestion) }, index))) })] }))] }));
+;
 const CompactVarianceDisplay = ({ analysis, varianceInfo }) => (_jsxs("div", { style: {
         display: 'flex',
         alignItems: 'center',

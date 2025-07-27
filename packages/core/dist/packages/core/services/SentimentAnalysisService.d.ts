@@ -6,14 +6,7 @@
  *
  * Task: E16-1753114247016-0B348A - Create sentiment analysis
  */
-import { 
-  SentimentAnalysis,
-  SentimentAnalytics,
-  SentimentAnalysisConfig,
-  AnalyzeSentimentRequest,
-  SentimentAnalysisResponse,
-  FeedbackSourceType
-} from '../types/SentimentAnalysisTypes';
+import { SentimentAnalysis, SentimentAnalytics, SentimentAnalysisConfig, AnalyzeSentimentRequest, SentimentAnalysisResponse, FeedbackSourceType } from '../types/SentimentAnalysisTypes';
 export declare class SentimentAnalysisService {
     private baseUrl;
     private config;

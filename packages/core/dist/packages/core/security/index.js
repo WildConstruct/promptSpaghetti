@@ -41,47 +41,50 @@ export { default as ComplianceMonitor } from '../services/ComplianceMonitor';
 export { default as AdaptiveThrottlingRules } from './AdaptiveThrottlingRules';
 export { default as ComplianceSecurityDashboard } from './dashboard/ComplianceSecurityDashboard';
 export { default as SecurityDashboardWorkflow } from './dashboard/SecurityDashboardWorkflow';
-// Utility functions for security integration
-export const createSecurityContext = () => ({ initialized: true });
-export const validateSecurityConfig = (config) => true;
-export const initializeSecuritySystem = () => ({ status: 'initialized' });
-export const generateSecurityReport = () => ({ report: 'generated' });
-export const processSecurityEvent = (event) => ({ processed: true });
-export const updateSecurityPolicies = (policies) => ({ updated: true });
-export const monitorSecurityMetrics = () => ({ monitoring: true });
-// Security event severity mapping utilities
-export const mapThreatLevelToSeverity = (threatLevel) => {
-    if (threatLevel >= 6)
-        return 'high';
-    if (threatLevel >= 3)
-        return 'medium';
-    return 'low';
-};
-export const calculateSecurityScore = (event, historicalData) => {
-    let score = 0;
-    // Base severity score
-    const severityScores = { low: 1, medium: 3, high: 6, critical: 10 };
-    score += severityScores[event.severity] || 1;
-    // Impact multipliers
-    if (event.details?.affected_users && event.details.affected_users.length > 0) {
-        score *= 1 + (event.details.affected_users.length / 100);
+if (threatLevel >= 3)
+    return 'medium';
+return 'low';
+;
+export 
+// Base severity score
+const severityScores = { low: 1, medium: 3, high: 6, critical: 10 };
+score += severityScores[event.severity] || 1;
+// Impact multipliers
+if (event.details?.affected_users && event.details.affected_users.length > 0) {
+    score *= 1 + (event.details.affected_users.length / 100);
+}
+if (event.details?.affected_systems && event.details.affected_systems.length > 1) {
+    score *= 1.5;
+}
+// Historical pattern analysis
+if (historicalData) {
+    const recentSimilarEvents = historicalData.filter(e => e.type === event.type &&
+        e.source === event.source &&
+        Date.now() - e.timestamp < 86400000 // Last 24 hours
+    );
+    if (recentSimilarEvents.length > 3) {
+        score *= 2; // Pattern indicates potential attack
     }
-    if (event.details?.affected_systems && event.details.affected_systems.length > 1) {
-        score *= 1.5;
+}
+return Math.min(score, 100); // Cap at 100
+;
+timeRange: {
+    start: number;
+    end: number;
+}
+{
+    summary: {
+        total_events: number;
+        critical_count: number;
+        resolved_count: number;
+        avg_response_time: number;
     }
-    // Historical pattern analysis
-    if (historicalData) {
-        const recentSimilarEvents = historicalData.filter(e => e.type === event.type &&
-            e.source === event.source &&
-            Date.now() - e.timestamp < 86400000 // Last 24 hours
-        );
-        if (recentSimilarEvents.length > 3) {
-            score *= 2; // Pattern indicates potential attack
-        }
-    }
-    return Math.min(score, 100); // Cap at 100
-};
-export const generateSecurityAnalysisReport = (events, timeRange) => {
+    ;
+    top_threats: Array;
+    affected_systems: Array;
+    recommendations: string[];
+}
+{
     const filteredEvents = events.filter(e => e.timestamp >= timeRange.start && e.timestamp <= timeRange.end);
     const criticalEvents = filteredEvents.filter(e => e.severity === 'critical');
     const resolvedEvents = filteredEvents.filter(e => e.status === 'resolved');
@@ -136,4 +139,5 @@ export const generateSecurityAnalysisReport = (events, timeRange) => {
         affected_systems: affectedSystems,
         recommendations
     };
-};
+}
+;

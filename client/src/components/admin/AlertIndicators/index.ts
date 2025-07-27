@@ -41,10 +41,8 @@ export interface AlertItem {
 }
 
 // Utility functions
-export 
-export };
-
-export   if (alertCounts.high > 0) return 'high';
+export const getHighestAlertLevel = (alertCounts: { high: number; medium: number; low: number; info: number }) => {
+  if (alertCounts.high > 0) return 'high';
   if (alertCounts.medium > 0) return 'medium';
   if (alertCounts.low > 0) return 'low';
   if (alertCounts.info > 0) return 'info';

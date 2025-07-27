@@ -4,14 +4,7 @@
  * Provides easy-to-use React integration for the identity validation system.
  * Handles validation requests, status tracking, and trust score management.
  */
-import { 
-  IdentityValidationType,
-  IdentityValidationData,
-  ValidationStatus,
-  TrustScore,
-  ValidationResult,
-  IdentityValidationRequest
-} from '../auth/IdentityValidation';
+import { IdentityValidationType, IdentityValidationData, ValidationStatus, TrustScore, ValidationResult, IdentityValidationRequest } from '../auth/IdentityValidation';
 export interface IdentityValidationHookConfig {
     userId?: string;
     autoLoadUserData?: boolean;

@@ -50,7 +50,13 @@ export declare class WebSocketEventAdapter {
      */
     cleanup(): void;
 }
-export declare     /**
+export declare const webSocketAdapter: WebSocketEventAdapter;
+export declare const webSocketUtils: {
+    /**
+     * Get WebSocket message type for event type
+     */
+    getWebSocketType: (eventType: string) => WSMessageType | null;
+    /**
      * Get event type for WebSocket message type
      */
     getEventType: (wsType: WSMessageType) => string;

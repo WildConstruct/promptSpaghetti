@@ -101,11 +101,7 @@ declare class TemplateParser {
 }
 export declare const templateParser: TemplateParser;
 export declare const parseTemplate: (template: string) => TemplateParseResult;
-export declare const getVariableSuggestions: (
-  partialName?: string,
-  context?: string,
-  includeHistory?: boolean
-) => VariableSuggestion[];
+export declare const getVariableSuggestions: (partialName?: string, context?: string, includeHistory?: boolean) => VariableSuggestion[];
 export declare const substituteVariables: (template: string, values: Record<string, string>) => string;
 export declare const getPreviewWithSamples: (template: string) => {
     preview: string;
@@ -117,8 +113,6 @@ export type VariableCategory = typeof VARIABLE_CATEGORIES[number];
 /**
  * Generate smart default values for a template based on its variables
  */
-export declare /**
- * Get contextual default values based on node type and template content
- */
-export declare export {};
+export declare const parseResult: TemplateParseResult;
+export {};
 //# sourceMappingURL=templateParser.d.ts.map

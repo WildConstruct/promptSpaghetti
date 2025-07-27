@@ -320,18 +320,11 @@ export interface NotificationConfiguration {
     };
 }
 export interface ContributionRepository {
-    submitContribution(
-      submission: Omit<ContributionSubmission,
-      'id' | 'created_at' | 'updated_at'>
-    ): Promise<ContributionSubmission>;
+    submitContribution(submission: Omit<ContributionSubmission, 'id' | 'created_at' | 'updated_at'>): Promise<ContributionSubmission>;
     updateContribution(id: string, updates: Partial<ContributionSubmission>): Promise<ContributionSubmission>;
     getContribution(id: string): Promise<ContributionSubmission>;
     getContributionsByUser(userId: string, status?: ContributionStatus): Promise<ContributionSubmission[]>;
-    advanceWorkflowStage(
-      contributionId: string,
-      newStage: WorkflowStage,
-      notes?: string
-    ): Promise<ContributionWorkflow>;
+    advanceWorkflowStage(contributionId: string, newStage: WorkflowStage, notes?: string): Promise<ContributionWorkflow>;
     assignReviewer(contributionId: string, assignment: ReviewerAssignment): Promise<void>;
     submitReviewFeedback(contributionId: string, feedback: ReviewFeedbackEntry): Promise<void>;
     approveContribution(contributionId: string, approval: ApprovalEntry): Promise<void>;

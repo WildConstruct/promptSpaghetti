@@ -417,10 +417,7 @@ export interface ValidationConfig {
 /**
  * Custom validation function
  */
-export type ValidationFunction = (
-  operation: GraphOperation,
-  state: GraphState
-) => Promise<ValidationError[]> | ValidationError[];
+export type ValidationFunction = (operation: GraphOperation, state: GraphState) => Promise<ValidationError[]> | ValidationError[];
 /**
  * Conflict resolution configuration
  */

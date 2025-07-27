@@ -6,17 +6,7 @@
  * Service for tracking, storing, and querying activity data across the platform.
  * Provides comprehensive activity monitoring with real-time streaming and analytics.
  */
-import { 
-  Activity,
-  ActivityQuery,
-  ActivityQueryResult,
-  ActivityMetrics,
-  ActivityStream,
-  ActivityStreamEvent,
-  ActivityRetentionPolicy,
-  ActivitySeverity,
-  BaseActivity
-} from '../types/ActivityDataModel';
+import { Activity, ActivityQuery, ActivityQueryResult, ActivityMetrics, ActivityStream, ActivityStreamEvent, ActivityRetentionPolicy, ActivitySeverity, BaseActivity } from '../types/ActivityDataModel';
 export interface ActivityStorage {
     create(activity: Activity): Promise<Activity>;
     findById(id: string): Promise<Activity | null>;
@@ -130,6 +120,5 @@ export declare class ActivityTrackingService {
     private getApiCallSeverity;
 }
 export declare function createActivityTrackingService(config: ActivityServiceConfig): ActivityTrackingService;
-export declare const DEFAULT_ACTIVITY_CONFIG: Partial<ActivityServiceConfig>;
 export default ActivityTrackingService;
 //# sourceMappingURL=ActivityTrackingService.d.ts.map

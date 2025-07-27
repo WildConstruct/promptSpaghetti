@@ -628,7 +628,11 @@ export declare class AuditCalendarSystem {
     private getWeekStart;
     private calculateResourceUtilization;
 }
-export declare         title: string;
+export declare const auditCalendarSystem: AuditCalendarSystem;
+export declare const generateCalendarView: (config: CalendarViewConfig) => {
+    events: Array<{
+        id: string;
+        title: string;
         start: Date;
         end: Date;
         type: AuditActivityType;

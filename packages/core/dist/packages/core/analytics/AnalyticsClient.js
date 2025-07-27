@@ -304,11 +304,4 @@ export class AnalyticsClient extends EventEmitter {
         }, this.config.cacheTimeout / 2);
     }
 }
-/**
- * Default analytics client instance
- */
-export const defaultAnalyticsClient = new AnalyticsClient({
-    baseUrl: '/api/analytics',
-    enableBatching: true,
-    flushInterval: 10000
-});
+;

@@ -2518,7 +2518,10 @@ export declare const ShareResponseSchema: z.ZodObject<{
 }>;
 export type CreateShareRequest = z.infer<typeof CreateShareRequestSchema>;
 export type ShareResponse = z.infer<typeof ShareResponseSchema>;
-export declare export declare export declare declare const ShareableResourceTypeSchema: z.ZodEnum<["template", "graph", "collection", "case_study", "tutorial", "marketplace_item"]>;
+export declare const validateCreateShareRequest: (data: unknown) => CreateShareRequest;
+export declare const validateShareConfig: (data: unknown) => ShareConfig;
+export declare const validateShareAnalyticsEvent: (data: unknown) => ShareAnalyticsEvent;
+declare const ShareableResourceTypeSchema: z.ZodEnum<["template", "graph", "collection", "case_study", "tutorial", "marketplace_item"]>;
 declare const ShareTargetSchema: z.ZodEnum<["public", "workspace", "organization", "private", "unlisted"]>;
 declare const ShareFormatSchema: z.ZodEnum<["link", "embed", "export", "clone"]>;
 declare const SocialPlatformSchema: z.ZodEnum<["twitter", "linkedin", "discord", "slack", "teams", "email", "github"]>;

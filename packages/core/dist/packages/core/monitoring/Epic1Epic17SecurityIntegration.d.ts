@@ -6,13 +6,7 @@
  */
 import { EventEmitter } from 'events';
 import { PerformanceMonitor, PerformanceMetrics, AggregatedMetrics } from './PerformanceMonitor';
-import { 
-  Epic17PerformanceMonitor,
-  AdminPerformanceMetric,
-  AdminOperation,
-  SystemIntegration,
-  ComplianceLevel
-} from '../../server/src/monitoring/Epic17PerformanceMonitor';
+import { Epic17PerformanceMonitor, AdminPerformanceMetric, AdminOperation, SystemIntegration, ComplianceLevel } from '../../server/src/monitoring/Epic17PerformanceMonitor';
 import { SecurityAnalyticsMonitor, SecurityAnalyticsMetrics, SecuritySystemHealth } from './SecurityAnalyticsMonitor';
 import { SecurityEvent, CrossSystemAlertingSystem } from '../security/AlertingSystem';
 export interface IntegratedSecurityMetrics {

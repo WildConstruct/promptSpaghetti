@@ -305,17 +305,5 @@ export function createSequentialNode(id, sequence, patternType = 'linear', patte
     const pattern = createSequencePattern(patternType, patternConfig);
     return new SequentialNode(id, sequence, pattern);
 }
-/**
- * Utility functions for common sequential patterns
- */
-export const SequentialUtils = {
-    createLinearPattern: () => createSequencePattern('linear'),
-    createCyclicalPattern: () => createSequencePattern('cyclical'),
-    createRandomPattern: () => createSequencePattern('random'),
-    createWeightedPattern: (weights) => createSequencePattern('weighted', { weights }),
-    // Reset utilities
-    resetSequenceState: (node, ctx) => {
-        // Access setState through public interface
-        node.setState(ctx, { index: 0, history: [] });
-    }
-};
+as;
+const ;

@@ -1,6 +1,2 @@
-import { UseNotificationsReturn } from '../types/NotificationTypes';
-export declare const useNotifications: ({ userId, workspaceId }: {
-    userId: string;
-    workspaceId?: string;
-}) => UseNotificationsReturn;
+export {};
 //# sourceMappingURL=useNotifications.d.ts.map

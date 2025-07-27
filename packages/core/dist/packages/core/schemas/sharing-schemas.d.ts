@@ -98,8 +98,6 @@ export declare const ShareSecurityConfigSchema: z.ZodObject<{
         autoExpire?: boolean;
         dataRetentionDays?: number;
     };
-    encryptionRequired?: boolean;
-    auditingEnabled?: boolean;
     accessControls?: {
         requireAuthentication?: boolean;
         sessionTimeout?: number;
@@ -107,6 +105,8 @@ export declare const ShareSecurityConfigSchema: z.ZodObject<{
         geoRestrictions?: string[];
         maxConcurrentUsers?: number;
     };
+    encryptionRequired?: boolean;
+    auditingEnabled?: boolean;
 }, {
     dataClassification?: "public" | "internal" | "restricted" | "confidential";
     retentionPolicy?: {
@@ -114,8 +114,6 @@ export declare const ShareSecurityConfigSchema: z.ZodObject<{
         autoExpire?: boolean;
         dataRetentionDays?: number;
     };
-    encryptionRequired?: boolean;
-    auditingEnabled?: boolean;
     accessControls?: {
         requireAuthentication?: boolean;
         sessionTimeout?: number;
@@ -123,6 +121,8 @@ export declare const ShareSecurityConfigSchema: z.ZodObject<{
         geoRestrictions?: string[];
         maxConcurrentUsers?: number;
     };
+    encryptionRequired?: boolean;
+    auditingEnabled?: boolean;
 }>;
 export declare const SharingConfigSchema: z.ZodObject<{
     accessLevel: z.ZodEnum<["public", "restricted", "private"]>;
@@ -2038,10 +2038,10 @@ export declare const ShareDownloadSchema: z.ZodObject<{
     errorReason: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     id?: string;
-    success?: boolean;
     format?: string;
     size?: number;
     timestamp?: Date;
+    success?: boolean;
     ipAddress?: string;
     downloadedBy?: {
         id?: string;
@@ -2053,10 +2053,10 @@ export declare const ShareDownloadSchema: z.ZodObject<{
     errorReason?: string;
 }, {
     id?: string;
-    success?: boolean;
     format?: string;
     size?: number;
     timestamp?: Date;
+    success?: boolean;
     ipAddress?: string;
     downloadedBy?: {
         id?: string;
@@ -2293,10 +2293,10 @@ export declare const ShareAnalyticsSchema: z.ZodObject<{
         errorReason: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         id?: string;
-        success?: boolean;
         format?: string;
         size?: number;
         timestamp?: Date;
+        success?: boolean;
         ipAddress?: string;
         downloadedBy?: {
             id?: string;
@@ -2308,10 +2308,10 @@ export declare const ShareAnalyticsSchema: z.ZodObject<{
         errorReason?: string;
     }, {
         id?: string;
-        success?: boolean;
         format?: string;
         size?: number;
         timestamp?: Date;
+        success?: boolean;
         ipAddress?: string;
         downloadedBy?: {
             id?: string;
@@ -2445,10 +2445,10 @@ export declare const ShareAnalyticsSchema: z.ZodObject<{
     }[];
     downloads?: {
         id?: string;
-        success?: boolean;
         format?: string;
         size?: number;
         timestamp?: Date;
+        success?: boolean;
         ipAddress?: string;
         downloadedBy?: {
             id?: string;
@@ -2520,10 +2520,10 @@ export declare const ShareAnalyticsSchema: z.ZodObject<{
     }[];
     downloads?: {
         id?: string;
-        success?: boolean;
         format?: string;
         size?: number;
         timestamp?: Date;
+        success?: boolean;
         ipAddress?: string;
         downloadedBy?: {
             id?: string;
@@ -3488,8 +3488,6 @@ export declare const SharedContentSchema: z.ZodObject<{
             autoExpire?: boolean;
             dataRetentionDays?: number;
         };
-        encryptionRequired?: boolean;
-        auditingEnabled?: boolean;
         accessControls?: {
             requireAuthentication?: boolean;
             sessionTimeout?: number;
@@ -3497,6 +3495,8 @@ export declare const SharedContentSchema: z.ZodObject<{
             geoRestrictions?: string[];
             maxConcurrentUsers?: number;
         };
+        encryptionRequired?: boolean;
+        auditingEnabled?: boolean;
     }, {
         dataClassification?: "public" | "internal" | "restricted" | "confidential";
         retentionPolicy?: {
@@ -3504,8 +3504,6 @@ export declare const SharedContentSchema: z.ZodObject<{
             autoExpire?: boolean;
             dataRetentionDays?: number;
         };
-        encryptionRequired?: boolean;
-        auditingEnabled?: boolean;
         accessControls?: {
             requireAuthentication?: boolean;
             sessionTimeout?: number;
@@ -3513,6 +3511,8 @@ export declare const SharedContentSchema: z.ZodObject<{
             geoRestrictions?: string[];
             maxConcurrentUsers?: number;
         };
+        encryptionRequired?: boolean;
+        auditingEnabled?: boolean;
     }>;
     analytics: z.ZodObject<{
         views: z.ZodDefault<z.ZodArray<z.ZodObject<{
@@ -3648,10 +3648,10 @@ export declare const SharedContentSchema: z.ZodObject<{
             errorReason: z.ZodOptional<z.ZodString>;
         }, "strip", z.ZodTypeAny, {
             id?: string;
-            success?: boolean;
             format?: string;
             size?: number;
             timestamp?: Date;
+            success?: boolean;
             ipAddress?: string;
             downloadedBy?: {
                 id?: string;
@@ -3663,10 +3663,10 @@ export declare const SharedContentSchema: z.ZodObject<{
             errorReason?: string;
         }, {
             id?: string;
-            success?: boolean;
             format?: string;
             size?: number;
             timestamp?: Date;
+            success?: boolean;
             ipAddress?: string;
             downloadedBy?: {
                 id?: string;
@@ -3800,10 +3800,10 @@ export declare const SharedContentSchema: z.ZodObject<{
         }[];
         downloads?: {
             id?: string;
-            success?: boolean;
             format?: string;
             size?: number;
             timestamp?: Date;
+            success?: boolean;
             ipAddress?: string;
             downloadedBy?: {
                 id?: string;
@@ -3875,10 +3875,10 @@ export declare const SharedContentSchema: z.ZodObject<{
         }[];
         downloads?: {
             id?: string;
-            success?: boolean;
             format?: string;
             size?: number;
             timestamp?: Date;
+            success?: boolean;
             ipAddress?: string;
             downloadedBy?: {
                 id?: string;
@@ -4057,8 +4057,6 @@ export declare const SharedContentSchema: z.ZodObject<{
             autoExpire?: boolean;
             dataRetentionDays?: number;
         };
-        encryptionRequired?: boolean;
-        auditingEnabled?: boolean;
         accessControls?: {
             requireAuthentication?: boolean;
             sessionTimeout?: number;
@@ -4066,6 +4064,8 @@ export declare const SharedContentSchema: z.ZodObject<{
             geoRestrictions?: string[];
             maxConcurrentUsers?: number;
         };
+        encryptionRequired?: boolean;
+        auditingEnabled?: boolean;
     };
     analytics?: {
         views?: {
@@ -4094,10 +4094,10 @@ export declare const SharedContentSchema: z.ZodObject<{
         }[];
         downloads?: {
             id?: string;
-            success?: boolean;
             format?: string;
             size?: number;
             timestamp?: Date;
+            success?: boolean;
             ipAddress?: string;
             downloadedBy?: {
                 id?: string;
@@ -4296,8 +4296,6 @@ export declare const SharedContentSchema: z.ZodObject<{
             autoExpire?: boolean;
             dataRetentionDays?: number;
         };
-        encryptionRequired?: boolean;
-        auditingEnabled?: boolean;
         accessControls?: {
             requireAuthentication?: boolean;
             sessionTimeout?: number;
@@ -4305,6 +4303,8 @@ export declare const SharedContentSchema: z.ZodObject<{
             geoRestrictions?: string[];
             maxConcurrentUsers?: number;
         };
+        encryptionRequired?: boolean;
+        auditingEnabled?: boolean;
     };
     analytics?: {
         views?: {
@@ -4333,10 +4333,10 @@ export declare const SharedContentSchema: z.ZodObject<{
         }[];
         downloads?: {
             id?: string;
-            success?: boolean;
             format?: string;
             size?: number;
             timestamp?: Date;
+            success?: boolean;
             ipAddress?: string;
             downloadedBy?: {
                 id?: string;
@@ -4542,8 +4542,6 @@ export declare const CreateShareRequestSchema: z.ZodObject<{
             autoExpire?: boolean;
             dataRetentionDays?: number;
         };
-        encryptionRequired?: boolean;
-        auditingEnabled?: boolean;
         accessControls?: {
             requireAuthentication?: boolean;
             sessionTimeout?: number;
@@ -4551,6 +4549,8 @@ export declare const CreateShareRequestSchema: z.ZodObject<{
             geoRestrictions?: string[];
             maxConcurrentUsers?: number;
         };
+        encryptionRequired?: boolean;
+        auditingEnabled?: boolean;
     }, {
         dataClassification?: "public" | "internal" | "restricted" | "confidential";
         retentionPolicy?: {
@@ -4558,8 +4558,6 @@ export declare const CreateShareRequestSchema: z.ZodObject<{
             autoExpire?: boolean;
             dataRetentionDays?: number;
         };
-        encryptionRequired?: boolean;
-        auditingEnabled?: boolean;
         accessControls?: {
             requireAuthentication?: boolean;
             sessionTimeout?: number;
@@ -4567,6 +4565,8 @@ export declare const CreateShareRequestSchema: z.ZodObject<{
             geoRestrictions?: string[];
             maxConcurrentUsers?: number;
         };
+        encryptionRequired?: boolean;
+        auditingEnabled?: boolean;
     }>>;
     collaborators: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
 }, "strip", z.ZodTypeAny, {
@@ -4579,8 +4579,6 @@ export declare const CreateShareRequestSchema: z.ZodObject<{
             autoExpire?: boolean;
             dataRetentionDays?: number;
         };
-        encryptionRequired?: boolean;
-        auditingEnabled?: boolean;
         accessControls?: {
             requireAuthentication?: boolean;
             sessionTimeout?: number;
@@ -4588,6 +4586,8 @@ export declare const CreateShareRequestSchema: z.ZodObject<{
             geoRestrictions?: string[];
             maxConcurrentUsers?: number;
         };
+        encryptionRequired?: boolean;
+        auditingEnabled?: boolean;
     };
     contentType?: "template" | "bundle" | "graph" | "dataset";
     collaborators?: string[];
@@ -4625,8 +4625,6 @@ export declare const CreateShareRequestSchema: z.ZodObject<{
             autoExpire?: boolean;
             dataRetentionDays?: number;
         };
-        encryptionRequired?: boolean;
-        auditingEnabled?: boolean;
         accessControls?: {
             requireAuthentication?: boolean;
             sessionTimeout?: number;
@@ -4634,6 +4632,8 @@ export declare const CreateShareRequestSchema: z.ZodObject<{
             geoRestrictions?: string[];
             maxConcurrentUsers?: number;
         };
+        encryptionRequired?: boolean;
+        auditingEnabled?: boolean;
     };
     contentType?: "template" | "bundle" | "graph" | "dataset";
     collaborators?: string[];
@@ -4670,15 +4670,15 @@ export declare const CreateShareResponseSchema: z.ZodObject<{
     expiresAt: z.ZodOptional<z.ZodDate>;
     error: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    success?: boolean;
     error?: string;
+    success?: boolean;
     expiresAt?: Date;
     shareUrl?: string;
     shareToken?: string;
     shareId?: string;
 }, {
-    success?: boolean;
     error?: string;
+    success?: boolean;
     expiresAt?: Date;
     shareUrl?: string;
     shareToken?: string;
@@ -4818,8 +4818,6 @@ export declare const UpdateShareRequestSchema: z.ZodObject<{
             autoExpire?: boolean;
             dataRetentionDays?: number;
         };
-        encryptionRequired?: boolean;
-        auditingEnabled?: boolean;
         accessControls?: {
             requireAuthentication?: boolean;
             sessionTimeout?: number;
@@ -4827,6 +4825,8 @@ export declare const UpdateShareRequestSchema: z.ZodObject<{
             geoRestrictions?: string[];
             maxConcurrentUsers?: number;
         };
+        encryptionRequired?: boolean;
+        auditingEnabled?: boolean;
     }, {
         dataClassification?: "public" | "internal" | "restricted" | "confidential";
         retentionPolicy?: {
@@ -4834,8 +4834,6 @@ export declare const UpdateShareRequestSchema: z.ZodObject<{
             autoExpire?: boolean;
             dataRetentionDays?: number;
         };
-        encryptionRequired?: boolean;
-        auditingEnabled?: boolean;
         accessControls?: {
             requireAuthentication?: boolean;
             sessionTimeout?: number;
@@ -4843,6 +4841,8 @@ export declare const UpdateShareRequestSchema: z.ZodObject<{
             geoRestrictions?: string[];
             maxConcurrentUsers?: number;
         };
+        encryptionRequired?: boolean;
+        auditingEnabled?: boolean;
     }>>;
 }, "strip", z.ZodTypeAny, {
     description?: string;
@@ -4854,8 +4854,6 @@ export declare const UpdateShareRequestSchema: z.ZodObject<{
             autoExpire?: boolean;
             dataRetentionDays?: number;
         };
-        encryptionRequired?: boolean;
-        auditingEnabled?: boolean;
         accessControls?: {
             requireAuthentication?: boolean;
             sessionTimeout?: number;
@@ -4863,6 +4861,8 @@ export declare const UpdateShareRequestSchema: z.ZodObject<{
             geoRestrictions?: string[];
             maxConcurrentUsers?: number;
         };
+        encryptionRequired?: boolean;
+        auditingEnabled?: boolean;
     };
     sharing?: {
         permissions?: "view" | "edit" | "admin" | "comment";
@@ -4897,8 +4897,6 @@ export declare const UpdateShareRequestSchema: z.ZodObject<{
             autoExpire?: boolean;
             dataRetentionDays?: number;
         };
-        encryptionRequired?: boolean;
-        auditingEnabled?: boolean;
         accessControls?: {
             requireAuthentication?: boolean;
             sessionTimeout?: number;
@@ -4906,6 +4904,8 @@ export declare const UpdateShareRequestSchema: z.ZodObject<{
             geoRestrictions?: string[];
             maxConcurrentUsers?: number;
         };
+        encryptionRequired?: boolean;
+        auditingEnabled?: boolean;
     };
     sharing?: {
         permissions?: "view" | "edit" | "admin" | "comment";
@@ -5868,8 +5868,6 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 autoExpire?: boolean;
                 dataRetentionDays?: number;
             };
-            encryptionRequired?: boolean;
-            auditingEnabled?: boolean;
             accessControls?: {
                 requireAuthentication?: boolean;
                 sessionTimeout?: number;
@@ -5877,6 +5875,8 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 geoRestrictions?: string[];
                 maxConcurrentUsers?: number;
             };
+            encryptionRequired?: boolean;
+            auditingEnabled?: boolean;
         }, {
             dataClassification?: "public" | "internal" | "restricted" | "confidential";
             retentionPolicy?: {
@@ -5884,8 +5884,6 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 autoExpire?: boolean;
                 dataRetentionDays?: number;
             };
-            encryptionRequired?: boolean;
-            auditingEnabled?: boolean;
             accessControls?: {
                 requireAuthentication?: boolean;
                 sessionTimeout?: number;
@@ -5893,6 +5891,8 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 geoRestrictions?: string[];
                 maxConcurrentUsers?: number;
             };
+            encryptionRequired?: boolean;
+            auditingEnabled?: boolean;
         }>;
         analytics: z.ZodObject<{
             views: z.ZodDefault<z.ZodArray<z.ZodObject<{
@@ -6028,10 +6028,10 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 errorReason: z.ZodOptional<z.ZodString>;
             }, "strip", z.ZodTypeAny, {
                 id?: string;
-                success?: boolean;
                 format?: string;
                 size?: number;
                 timestamp?: Date;
+                success?: boolean;
                 ipAddress?: string;
                 downloadedBy?: {
                     id?: string;
@@ -6043,10 +6043,10 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 errorReason?: string;
             }, {
                 id?: string;
-                success?: boolean;
                 format?: string;
                 size?: number;
                 timestamp?: Date;
+                success?: boolean;
                 ipAddress?: string;
                 downloadedBy?: {
                     id?: string;
@@ -6180,10 +6180,10 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             }[];
             downloads?: {
                 id?: string;
-                success?: boolean;
                 format?: string;
                 size?: number;
                 timestamp?: Date;
+                success?: boolean;
                 ipAddress?: string;
                 downloadedBy?: {
                     id?: string;
@@ -6255,10 +6255,10 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             }[];
             downloads?: {
                 id?: string;
-                success?: boolean;
                 format?: string;
                 size?: number;
                 timestamp?: Date;
+                success?: boolean;
                 ipAddress?: string;
                 downloadedBy?: {
                     id?: string;
@@ -6437,8 +6437,6 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 autoExpire?: boolean;
                 dataRetentionDays?: number;
             };
-            encryptionRequired?: boolean;
-            auditingEnabled?: boolean;
             accessControls?: {
                 requireAuthentication?: boolean;
                 sessionTimeout?: number;
@@ -6446,6 +6444,8 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 geoRestrictions?: string[];
                 maxConcurrentUsers?: number;
             };
+            encryptionRequired?: boolean;
+            auditingEnabled?: boolean;
         };
         analytics?: {
             views?: {
@@ -6474,10 +6474,10 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             }[];
             downloads?: {
                 id?: string;
-                success?: boolean;
                 format?: string;
                 size?: number;
                 timestamp?: Date;
+                success?: boolean;
                 ipAddress?: string;
                 downloadedBy?: {
                     id?: string;
@@ -6676,8 +6676,6 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 autoExpire?: boolean;
                 dataRetentionDays?: number;
             };
-            encryptionRequired?: boolean;
-            auditingEnabled?: boolean;
             accessControls?: {
                 requireAuthentication?: boolean;
                 sessionTimeout?: number;
@@ -6685,6 +6683,8 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 geoRestrictions?: string[];
                 maxConcurrentUsers?: number;
             };
+            encryptionRequired?: boolean;
+            auditingEnabled?: boolean;
         };
         analytics?: {
             views?: {
@@ -6713,10 +6713,10 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             }[];
             downloads?: {
                 id?: string;
-                success?: boolean;
                 format?: string;
                 size?: number;
                 timestamp?: Date;
+                success?: boolean;
                 ipAddress?: string;
                 downloadedBy?: {
                     id?: string;
@@ -6800,7 +6800,6 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
         lastAccessed?: Date;
     }>>;
 }, "strip", z.ZodTypeAny, {
-    success?: boolean;
     error?: string;
     content?: {
         id?: string;
@@ -6932,8 +6931,6 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 autoExpire?: boolean;
                 dataRetentionDays?: number;
             };
-            encryptionRequired?: boolean;
-            auditingEnabled?: boolean;
             accessControls?: {
                 requireAuthentication?: boolean;
                 sessionTimeout?: number;
@@ -6941,6 +6938,8 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 geoRestrictions?: string[];
                 maxConcurrentUsers?: number;
             };
+            encryptionRequired?: boolean;
+            auditingEnabled?: boolean;
         };
         analytics?: {
             views?: {
@@ -6969,10 +6968,10 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             }[];
             downloads?: {
                 id?: string;
-                success?: boolean;
                 format?: string;
                 size?: number;
                 timestamp?: Date;
+                success?: boolean;
                 ipAddress?: string;
                 downloadedBy?: {
                     id?: string;
@@ -7042,6 +7041,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             notifyOnAccess?: boolean;
         };
     };
+    success?: boolean;
     permissions?: ("view" | "edit" | "admin" | "comment")[];
     analytics?: {
         viewCount?: number;
@@ -7049,7 +7049,6 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
     };
     requiresPassword?: boolean;
 }, {
-    success?: boolean;
     error?: string;
     content?: {
         id?: string;
@@ -7181,8 +7180,6 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 autoExpire?: boolean;
                 dataRetentionDays?: number;
             };
-            encryptionRequired?: boolean;
-            auditingEnabled?: boolean;
             accessControls?: {
                 requireAuthentication?: boolean;
                 sessionTimeout?: number;
@@ -7190,6 +7187,8 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
                 geoRestrictions?: string[];
                 maxConcurrentUsers?: number;
             };
+            encryptionRequired?: boolean;
+            auditingEnabled?: boolean;
         };
         analytics?: {
             views?: {
@@ -7218,10 +7217,10 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             }[];
             downloads?: {
                 id?: string;
-                success?: boolean;
                 format?: string;
                 size?: number;
                 timestamp?: Date;
+                success?: boolean;
                 ipAddress?: string;
                 downloadedBy?: {
                     id?: string;
@@ -7291,6 +7290,7 @@ export declare const ShareAccessResponseSchema: z.ZodObject<{
             notifyOnAccess?: boolean;
         };
     };
+    success?: boolean;
     permissions?: ("view" | "edit" | "admin" | "comment")[];
     analytics?: {
         viewCount?: number;
@@ -7478,10 +7478,10 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
             errorReason: z.ZodOptional<z.ZodString>;
         }, "strip", z.ZodTypeAny, {
             id?: string;
-            success?: boolean;
             format?: string;
             size?: number;
             timestamp?: Date;
+            success?: boolean;
             ipAddress?: string;
             downloadedBy?: {
                 id?: string;
@@ -7493,10 +7493,10 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
             errorReason?: string;
         }, {
             id?: string;
-            success?: boolean;
             format?: string;
             size?: number;
             timestamp?: Date;
+            success?: boolean;
             ipAddress?: string;
             downloadedBy?: {
                 id?: string;
@@ -7630,10 +7630,10 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
         }[];
         downloads?: {
             id?: string;
-            success?: boolean;
             format?: string;
             size?: number;
             timestamp?: Date;
+            success?: boolean;
             ipAddress?: string;
             downloadedBy?: {
                 id?: string;
@@ -7705,10 +7705,10 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
         }[];
         downloads?: {
             id?: string;
-            success?: boolean;
             format?: string;
             size?: number;
             timestamp?: Date;
+            success?: boolean;
             ipAddress?: string;
             downloadedBy?: {
                 id?: string;
@@ -7756,8 +7756,8 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
     }>;
     error: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    success?: boolean;
     error?: string;
+    success?: boolean;
     analytics?: {
         views?: {
             id?: string;
@@ -7785,10 +7785,10 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
         }[];
         downloads?: {
             id?: string;
-            success?: boolean;
             format?: string;
             size?: number;
             timestamp?: Date;
+            success?: boolean;
             ipAddress?: string;
             downloadedBy?: {
                 id?: string;
@@ -7835,8 +7835,8 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
         }[];
     };
 }, {
-    success?: boolean;
     error?: string;
+    success?: boolean;
     analytics?: {
         views?: {
             id?: string;
@@ -7864,10 +7864,10 @@ export declare const ShareAnalyticsResponseSchema: z.ZodObject<{
         }[];
         downloads?: {
             id?: string;
-            success?: boolean;
             format?: string;
             size?: number;
             timestamp?: Date;
+            success?: boolean;
             ipAddress?: string;
             downloadedBy?: {
                 id?: string;
@@ -8185,8 +8185,6 @@ export declare const SharingSchemas: {
             autoExpire?: boolean;
             dataRetentionDays?: number;
         };
-        encryptionRequired?: boolean;
-        auditingEnabled?: boolean;
         accessControls?: {
             requireAuthentication?: boolean;
             sessionTimeout?: number;
@@ -8194,6 +8192,8 @@ export declare const SharingSchemas: {
             geoRestrictions?: string[];
             maxConcurrentUsers?: number;
         };
+        encryptionRequired?: boolean;
+        auditingEnabled?: boolean;
     }, {
         dataClassification?: "public" | "internal" | "restricted" | "confidential";
         retentionPolicy?: {
@@ -8201,8 +8201,6 @@ export declare const SharingSchemas: {
             autoExpire?: boolean;
             dataRetentionDays?: number;
         };
-        encryptionRequired?: boolean;
-        auditingEnabled?: boolean;
         accessControls?: {
             requireAuthentication?: boolean;
             sessionTimeout?: number;
@@ -8210,6 +8208,8 @@ export declare const SharingSchemas: {
             geoRestrictions?: string[];
             maxConcurrentUsers?: number;
         };
+        encryptionRequired?: boolean;
+        auditingEnabled?: boolean;
     }>;
     SharingSystemConfig: z.ZodObject<{
         maxShareDuration: z.ZodNumber;
@@ -9167,8 +9167,6 @@ export declare const SharingSchemas: {
                 autoExpire?: boolean;
                 dataRetentionDays?: number;
             };
-            encryptionRequired?: boolean;
-            auditingEnabled?: boolean;
             accessControls?: {
                 requireAuthentication?: boolean;
                 sessionTimeout?: number;
@@ -9176,6 +9174,8 @@ export declare const SharingSchemas: {
                 geoRestrictions?: string[];
                 maxConcurrentUsers?: number;
             };
+            encryptionRequired?: boolean;
+            auditingEnabled?: boolean;
         }, {
             dataClassification?: "public" | "internal" | "restricted" | "confidential";
             retentionPolicy?: {
@@ -9183,8 +9183,6 @@ export declare const SharingSchemas: {
                 autoExpire?: boolean;
                 dataRetentionDays?: number;
             };
-            encryptionRequired?: boolean;
-            auditingEnabled?: boolean;
             accessControls?: {
                 requireAuthentication?: boolean;
                 sessionTimeout?: number;
@@ -9192,6 +9190,8 @@ export declare const SharingSchemas: {
                 geoRestrictions?: string[];
                 maxConcurrentUsers?: number;
             };
+            encryptionRequired?: boolean;
+            auditingEnabled?: boolean;
         }>;
         analytics: z.ZodObject<{
             views: z.ZodDefault<z.ZodArray<z.ZodObject<{
@@ -9327,10 +9327,10 @@ export declare const SharingSchemas: {
                 errorReason: z.ZodOptional<z.ZodString>;
             }, "strip", z.ZodTypeAny, {
                 id?: string;
-                success?: boolean;
                 format?: string;
                 size?: number;
                 timestamp?: Date;
+                success?: boolean;
                 ipAddress?: string;
                 downloadedBy?: {
                     id?: string;
@@ -9342,10 +9342,10 @@ export declare const SharingSchemas: {
                 errorReason?: string;
             }, {
                 id?: string;
-                success?: boolean;
                 format?: string;
                 size?: number;
                 timestamp?: Date;
+                success?: boolean;
                 ipAddress?: string;
                 downloadedBy?: {
                     id?: string;
@@ -9479,10 +9479,10 @@ export declare const SharingSchemas: {
             }[];
             downloads?: {
                 id?: string;
-                success?: boolean;
                 format?: string;
                 size?: number;
                 timestamp?: Date;
+                success?: boolean;
                 ipAddress?: string;
                 downloadedBy?: {
                     id?: string;
@@ -9554,10 +9554,10 @@ export declare const SharingSchemas: {
             }[];
             downloads?: {
                 id?: string;
-                success?: boolean;
                 format?: string;
                 size?: number;
                 timestamp?: Date;
+                success?: boolean;
                 ipAddress?: string;
                 downloadedBy?: {
                     id?: string;
@@ -9736,8 +9736,6 @@ export declare const SharingSchemas: {
                 autoExpire?: boolean;
                 dataRetentionDays?: number;
             };
-            encryptionRequired?: boolean;
-            auditingEnabled?: boolean;
             accessControls?: {
                 requireAuthentication?: boolean;
                 sessionTimeout?: number;
@@ -9745,6 +9743,8 @@ export declare const SharingSchemas: {
                 geoRestrictions?: string[];
                 maxConcurrentUsers?: number;
             };
+            encryptionRequired?: boolean;
+            auditingEnabled?: boolean;
         };
         analytics?: {
             views?: {
@@ -9773,10 +9773,10 @@ export declare const SharingSchemas: {
             }[];
             downloads?: {
                 id?: string;
-                success?: boolean;
                 format?: string;
                 size?: number;
                 timestamp?: Date;
+                success?: boolean;
                 ipAddress?: string;
                 downloadedBy?: {
                     id?: string;
@@ -9975,8 +9975,6 @@ export declare const SharingSchemas: {
                 autoExpire?: boolean;
                 dataRetentionDays?: number;
             };
-            encryptionRequired?: boolean;
-            auditingEnabled?: boolean;
             accessControls?: {
                 requireAuthentication?: boolean;
                 sessionTimeout?: number;
@@ -9984,6 +9982,8 @@ export declare const SharingSchemas: {
                 geoRestrictions?: string[];
                 maxConcurrentUsers?: number;
             };
+            encryptionRequired?: boolean;
+            auditingEnabled?: boolean;
         };
         analytics?: {
             views?: {
@@ -10012,10 +10012,10 @@ export declare const SharingSchemas: {
             }[];
             downloads?: {
                 id?: string;
-                success?: boolean;
                 format?: string;
                 size?: number;
                 timestamp?: Date;
+                success?: boolean;
                 ipAddress?: string;
                 downloadedBy?: {
                     id?: string;
@@ -11532,10 +11532,10 @@ export declare const SharingSchemas: {
             errorReason: z.ZodOptional<z.ZodString>;
         }, "strip", z.ZodTypeAny, {
             id?: string;
-            success?: boolean;
             format?: string;
             size?: number;
             timestamp?: Date;
+            success?: boolean;
             ipAddress?: string;
             downloadedBy?: {
                 id?: string;
@@ -11547,10 +11547,10 @@ export declare const SharingSchemas: {
             errorReason?: string;
         }, {
             id?: string;
-            success?: boolean;
             format?: string;
             size?: number;
             timestamp?: Date;
+            success?: boolean;
             ipAddress?: string;
             downloadedBy?: {
                 id?: string;
@@ -11684,10 +11684,10 @@ export declare const SharingSchemas: {
         }[];
         downloads?: {
             id?: string;
-            success?: boolean;
             format?: string;
             size?: number;
             timestamp?: Date;
+            success?: boolean;
             ipAddress?: string;
             downloadedBy?: {
                 id?: string;
@@ -11759,10 +11759,10 @@ export declare const SharingSchemas: {
         }[];
         downloads?: {
             id?: string;
-            success?: boolean;
             format?: string;
             size?: number;
             timestamp?: Date;
+            success?: boolean;
             ipAddress?: string;
             downloadedBy?: {
                 id?: string;
@@ -11941,10 +11941,10 @@ export declare const SharingSchemas: {
         errorReason: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         id?: string;
-        success?: boolean;
         format?: string;
         size?: number;
         timestamp?: Date;
+        success?: boolean;
         ipAddress?: string;
         downloadedBy?: {
             id?: string;
@@ -11956,10 +11956,10 @@ export declare const SharingSchemas: {
         errorReason?: string;
     }, {
         id?: string;
-        success?: boolean;
         format?: string;
         size?: number;
         timestamp?: Date;
+        success?: boolean;
         ipAddress?: string;
         downloadedBy?: {
             id?: string;
@@ -12153,8 +12153,6 @@ export declare const SharingSchemas: {
                 autoExpire?: boolean;
                 dataRetentionDays?: number;
             };
-            encryptionRequired?: boolean;
-            auditingEnabled?: boolean;
             accessControls?: {
                 requireAuthentication?: boolean;
                 sessionTimeout?: number;
@@ -12162,6 +12160,8 @@ export declare const SharingSchemas: {
                 geoRestrictions?: string[];
                 maxConcurrentUsers?: number;
             };
+            encryptionRequired?: boolean;
+            auditingEnabled?: boolean;
         }, {
             dataClassification?: "public" | "internal" | "restricted" | "confidential";
             retentionPolicy?: {
@@ -12169,8 +12169,6 @@ export declare const SharingSchemas: {
                 autoExpire?: boolean;
                 dataRetentionDays?: number;
             };
-            encryptionRequired?: boolean;
-            auditingEnabled?: boolean;
             accessControls?: {
                 requireAuthentication?: boolean;
                 sessionTimeout?: number;
@@ -12178,6 +12176,8 @@ export declare const SharingSchemas: {
                 geoRestrictions?: string[];
                 maxConcurrentUsers?: number;
             };
+            encryptionRequired?: boolean;
+            auditingEnabled?: boolean;
         }>>;
         collaborators: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     }, "strip", z.ZodTypeAny, {
@@ -12190,8 +12190,6 @@ export declare const SharingSchemas: {
                 autoExpire?: boolean;
                 dataRetentionDays?: number;
             };
-            encryptionRequired?: boolean;
-            auditingEnabled?: boolean;
             accessControls?: {
                 requireAuthentication?: boolean;
                 sessionTimeout?: number;
@@ -12199,6 +12197,8 @@ export declare const SharingSchemas: {
                 geoRestrictions?: string[];
                 maxConcurrentUsers?: number;
             };
+            encryptionRequired?: boolean;
+            auditingEnabled?: boolean;
         };
         contentType?: "template" | "bundle" | "graph" | "dataset";
         collaborators?: string[];
@@ -12236,8 +12236,6 @@ export declare const SharingSchemas: {
                 autoExpire?: boolean;
                 dataRetentionDays?: number;
             };
-            encryptionRequired?: boolean;
-            auditingEnabled?: boolean;
             accessControls?: {
                 requireAuthentication?: boolean;
                 sessionTimeout?: number;
@@ -12245,6 +12243,8 @@ export declare const SharingSchemas: {
                 geoRestrictions?: string[];
                 maxConcurrentUsers?: number;
             };
+            encryptionRequired?: boolean;
+            auditingEnabled?: boolean;
         };
         contentType?: "template" | "bundle" | "graph" | "dataset";
         collaborators?: string[];
@@ -12281,15 +12281,15 @@ export declare const SharingSchemas: {
         expiresAt: z.ZodOptional<z.ZodDate>;
         error: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        success?: boolean;
         error?: string;
+        success?: boolean;
         expiresAt?: Date;
         shareUrl?: string;
         shareToken?: string;
         shareId?: string;
     }, {
-        success?: boolean;
         error?: string;
+        success?: boolean;
         expiresAt?: Date;
         shareUrl?: string;
         shareToken?: string;
@@ -12429,8 +12429,6 @@ export declare const SharingSchemas: {
                 autoExpire?: boolean;
                 dataRetentionDays?: number;
             };
-            encryptionRequired?: boolean;
-            auditingEnabled?: boolean;
             accessControls?: {
                 requireAuthentication?: boolean;
                 sessionTimeout?: number;
@@ -12438,6 +12436,8 @@ export declare const SharingSchemas: {
                 geoRestrictions?: string[];
                 maxConcurrentUsers?: number;
             };
+            encryptionRequired?: boolean;
+            auditingEnabled?: boolean;
         }, {
             dataClassification?: "public" | "internal" | "restricted" | "confidential";
             retentionPolicy?: {
@@ -12445,8 +12445,6 @@ export declare const SharingSchemas: {
                 autoExpire?: boolean;
                 dataRetentionDays?: number;
             };
-            encryptionRequired?: boolean;
-            auditingEnabled?: boolean;
             accessControls?: {
                 requireAuthentication?: boolean;
                 sessionTimeout?: number;
@@ -12454,6 +12452,8 @@ export declare const SharingSchemas: {
                 geoRestrictions?: string[];
                 maxConcurrentUsers?: number;
             };
+            encryptionRequired?: boolean;
+            auditingEnabled?: boolean;
         }>>;
     }, "strip", z.ZodTypeAny, {
         description?: string;
@@ -12465,8 +12465,6 @@ export declare const SharingSchemas: {
                 autoExpire?: boolean;
                 dataRetentionDays?: number;
             };
-            encryptionRequired?: boolean;
-            auditingEnabled?: boolean;
             accessControls?: {
                 requireAuthentication?: boolean;
                 sessionTimeout?: number;
@@ -12474,6 +12472,8 @@ export declare const SharingSchemas: {
                 geoRestrictions?: string[];
                 maxConcurrentUsers?: number;
             };
+            encryptionRequired?: boolean;
+            auditingEnabled?: boolean;
         };
         sharing?: {
             permissions?: "view" | "edit" | "admin" | "comment";
@@ -12508,8 +12508,6 @@ export declare const SharingSchemas: {
                 autoExpire?: boolean;
                 dataRetentionDays?: number;
             };
-            encryptionRequired?: boolean;
-            auditingEnabled?: boolean;
             accessControls?: {
                 requireAuthentication?: boolean;
                 sessionTimeout?: number;
@@ -12517,6 +12515,8 @@ export declare const SharingSchemas: {
                 geoRestrictions?: string[];
                 maxConcurrentUsers?: number;
             };
+            encryptionRequired?: boolean;
+            auditingEnabled?: boolean;
         };
         sharing?: {
             permissions?: "view" | "edit" | "admin" | "comment";
@@ -13479,8 +13479,6 @@ export declare const SharingSchemas: {
                     autoExpire?: boolean;
                     dataRetentionDays?: number;
                 };
-                encryptionRequired?: boolean;
-                auditingEnabled?: boolean;
                 accessControls?: {
                     requireAuthentication?: boolean;
                     sessionTimeout?: number;
@@ -13488,6 +13486,8 @@ export declare const SharingSchemas: {
                     geoRestrictions?: string[];
                     maxConcurrentUsers?: number;
                 };
+                encryptionRequired?: boolean;
+                auditingEnabled?: boolean;
             }, {
                 dataClassification?: "public" | "internal" | "restricted" | "confidential";
                 retentionPolicy?: {
@@ -13495,8 +13495,6 @@ export declare const SharingSchemas: {
                     autoExpire?: boolean;
                     dataRetentionDays?: number;
                 };
-                encryptionRequired?: boolean;
-                auditingEnabled?: boolean;
                 accessControls?: {
                     requireAuthentication?: boolean;
                     sessionTimeout?: number;
@@ -13504,6 +13502,8 @@ export declare const SharingSchemas: {
                     geoRestrictions?: string[];
                     maxConcurrentUsers?: number;
                 };
+                encryptionRequired?: boolean;
+                auditingEnabled?: boolean;
             }>;
             analytics: z.ZodObject<{
                 views: z.ZodDefault<z.ZodArray<z.ZodObject<{
@@ -13639,10 +13639,10 @@ export declare const SharingSchemas: {
                     errorReason: z.ZodOptional<z.ZodString>;
                 }, "strip", z.ZodTypeAny, {
                     id?: string;
-                    success?: boolean;
                     format?: string;
                     size?: number;
                     timestamp?: Date;
+                    success?: boolean;
                     ipAddress?: string;
                     downloadedBy?: {
                         id?: string;
@@ -13654,10 +13654,10 @@ export declare const SharingSchemas: {
                     errorReason?: string;
                 }, {
                     id?: string;
-                    success?: boolean;
                     format?: string;
                     size?: number;
                     timestamp?: Date;
+                    success?: boolean;
                     ipAddress?: string;
                     downloadedBy?: {
                         id?: string;
@@ -13791,10 +13791,10 @@ export declare const SharingSchemas: {
                 }[];
                 downloads?: {
                     id?: string;
-                    success?: boolean;
                     format?: string;
                     size?: number;
                     timestamp?: Date;
+                    success?: boolean;
                     ipAddress?: string;
                     downloadedBy?: {
                         id?: string;
@@ -13866,10 +13866,10 @@ export declare const SharingSchemas: {
                 }[];
                 downloads?: {
                     id?: string;
-                    success?: boolean;
                     format?: string;
                     size?: number;
                     timestamp?: Date;
+                    success?: boolean;
                     ipAddress?: string;
                     downloadedBy?: {
                         id?: string;
@@ -14048,8 +14048,6 @@ export declare const SharingSchemas: {
                     autoExpire?: boolean;
                     dataRetentionDays?: number;
                 };
-                encryptionRequired?: boolean;
-                auditingEnabled?: boolean;
                 accessControls?: {
                     requireAuthentication?: boolean;
                     sessionTimeout?: number;
@@ -14057,6 +14055,8 @@ export declare const SharingSchemas: {
                     geoRestrictions?: string[];
                     maxConcurrentUsers?: number;
                 };
+                encryptionRequired?: boolean;
+                auditingEnabled?: boolean;
             };
             analytics?: {
                 views?: {
@@ -14085,10 +14085,10 @@ export declare const SharingSchemas: {
                 }[];
                 downloads?: {
                     id?: string;
-                    success?: boolean;
                     format?: string;
                     size?: number;
                     timestamp?: Date;
+                    success?: boolean;
                     ipAddress?: string;
                     downloadedBy?: {
                         id?: string;
@@ -14287,8 +14287,6 @@ export declare const SharingSchemas: {
                     autoExpire?: boolean;
                     dataRetentionDays?: number;
                 };
-                encryptionRequired?: boolean;
-                auditingEnabled?: boolean;
                 accessControls?: {
                     requireAuthentication?: boolean;
                     sessionTimeout?: number;
@@ -14296,6 +14294,8 @@ export declare const SharingSchemas: {
                     geoRestrictions?: string[];
                     maxConcurrentUsers?: number;
                 };
+                encryptionRequired?: boolean;
+                auditingEnabled?: boolean;
             };
             analytics?: {
                 views?: {
@@ -14324,10 +14324,10 @@ export declare const SharingSchemas: {
                 }[];
                 downloads?: {
                     id?: string;
-                    success?: boolean;
                     format?: string;
                     size?: number;
                     timestamp?: Date;
+                    success?: boolean;
                     ipAddress?: string;
                     downloadedBy?: {
                         id?: string;
@@ -14411,7 +14411,6 @@ export declare const SharingSchemas: {
             lastAccessed?: Date;
         }>>;
     }, "strip", z.ZodTypeAny, {
-        success?: boolean;
         error?: string;
         content?: {
             id?: string;
@@ -14543,8 +14542,6 @@ export declare const SharingSchemas: {
                     autoExpire?: boolean;
                     dataRetentionDays?: number;
                 };
-                encryptionRequired?: boolean;
-                auditingEnabled?: boolean;
                 accessControls?: {
                     requireAuthentication?: boolean;
                     sessionTimeout?: number;
@@ -14552,6 +14549,8 @@ export declare const SharingSchemas: {
                     geoRestrictions?: string[];
                     maxConcurrentUsers?: number;
                 };
+                encryptionRequired?: boolean;
+                auditingEnabled?: boolean;
             };
             analytics?: {
                 views?: {
@@ -14580,10 +14579,10 @@ export declare const SharingSchemas: {
                 }[];
                 downloads?: {
                     id?: string;
-                    success?: boolean;
                     format?: string;
                     size?: number;
                     timestamp?: Date;
+                    success?: boolean;
                     ipAddress?: string;
                     downloadedBy?: {
                         id?: string;
@@ -14653,6 +14652,7 @@ export declare const SharingSchemas: {
                 notifyOnAccess?: boolean;
             };
         };
+        success?: boolean;
         permissions?: ("view" | "edit" | "admin" | "comment")[];
         analytics?: {
             viewCount?: number;
@@ -14660,7 +14660,6 @@ export declare const SharingSchemas: {
         };
         requiresPassword?: boolean;
     }, {
-        success?: boolean;
         error?: string;
         content?: {
             id?: string;
@@ -14792,8 +14791,6 @@ export declare const SharingSchemas: {
                     autoExpire?: boolean;
                     dataRetentionDays?: number;
                 };
-                encryptionRequired?: boolean;
-                auditingEnabled?: boolean;
                 accessControls?: {
                     requireAuthentication?: boolean;
                     sessionTimeout?: number;
@@ -14801,6 +14798,8 @@ export declare const SharingSchemas: {
                     geoRestrictions?: string[];
                     maxConcurrentUsers?: number;
                 };
+                encryptionRequired?: boolean;
+                auditingEnabled?: boolean;
             };
             analytics?: {
                 views?: {
@@ -14829,10 +14828,10 @@ export declare const SharingSchemas: {
                 }[];
                 downloads?: {
                     id?: string;
-                    success?: boolean;
                     format?: string;
                     size?: number;
                     timestamp?: Date;
+                    success?: boolean;
                     ipAddress?: string;
                     downloadedBy?: {
                         id?: string;
@@ -14902,6 +14901,7 @@ export declare const SharingSchemas: {
                 notifyOnAccess?: boolean;
             };
         };
+        success?: boolean;
         permissions?: ("view" | "edit" | "admin" | "comment")[];
         analytics?: {
             viewCount?: number;
@@ -15089,10 +15089,10 @@ export declare const SharingSchemas: {
                 errorReason: z.ZodOptional<z.ZodString>;
             }, "strip", z.ZodTypeAny, {
                 id?: string;
-                success?: boolean;
                 format?: string;
                 size?: number;
                 timestamp?: Date;
+                success?: boolean;
                 ipAddress?: string;
                 downloadedBy?: {
                     id?: string;
@@ -15104,10 +15104,10 @@ export declare const SharingSchemas: {
                 errorReason?: string;
             }, {
                 id?: string;
-                success?: boolean;
                 format?: string;
                 size?: number;
                 timestamp?: Date;
+                success?: boolean;
                 ipAddress?: string;
                 downloadedBy?: {
                     id?: string;
@@ -15241,10 +15241,10 @@ export declare const SharingSchemas: {
             }[];
             downloads?: {
                 id?: string;
-                success?: boolean;
                 format?: string;
                 size?: number;
                 timestamp?: Date;
+                success?: boolean;
                 ipAddress?: string;
                 downloadedBy?: {
                     id?: string;
@@ -15316,10 +15316,10 @@ export declare const SharingSchemas: {
             }[];
             downloads?: {
                 id?: string;
-                success?: boolean;
                 format?: string;
                 size?: number;
                 timestamp?: Date;
+                success?: boolean;
                 ipAddress?: string;
                 downloadedBy?: {
                     id?: string;
@@ -15367,8 +15367,8 @@ export declare const SharingSchemas: {
         }>;
         error: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        success?: boolean;
         error?: string;
+        success?: boolean;
         analytics?: {
             views?: {
                 id?: string;
@@ -15396,10 +15396,10 @@ export declare const SharingSchemas: {
             }[];
             downloads?: {
                 id?: string;
-                success?: boolean;
                 format?: string;
                 size?: number;
                 timestamp?: Date;
+                success?: boolean;
                 ipAddress?: string;
                 downloadedBy?: {
                     id?: string;
@@ -15446,8 +15446,8 @@ export declare const SharingSchemas: {
             }[];
         };
     }, {
-        success?: boolean;
         error?: string;
+        success?: boolean;
         analytics?: {
             views?: {
                 id?: string;
@@ -15475,10 +15475,10 @@ export declare const SharingSchemas: {
             }[];
             downloads?: {
                 id?: string;
-                success?: boolean;
                 format?: string;
                 size?: number;
                 timestamp?: Date;
+                success?: boolean;
                 ipAddress?: string;
                 downloadedBy?: {
                     id?: string;

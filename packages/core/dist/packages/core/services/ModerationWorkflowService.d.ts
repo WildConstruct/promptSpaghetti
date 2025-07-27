@@ -548,27 +548,13 @@ export declare class ModerationWorkflowService {
     /**
      * Workflow Management
      */
-    createWorkflow(
-      workflowData: Omit<ModerationWorkflow,
-      'id' | 'createdAt' | 'updatedAt'>,
-      createdBy: string
-    ): Promise<ModerationWorkflow>;
-    updateWorkflow(
-      workflowId: string,
-      updates: Partial<ModerationWorkflow>,
-      updatedBy: string
-    ): Promise<ModerationWorkflow | null>;
+    createWorkflow(workflowData: Omit<ModerationWorkflow, 'id' | 'createdAt' | 'updatedAt'>, createdBy: string): Promise<ModerationWorkflow>;
+    updateWorkflow(workflowId: string, updates: Partial<ModerationWorkflow>, updatedBy: string): Promise<ModerationWorkflow | null>;
     deleteWorkflow(workflowId: string, deletedBy: string): Promise<boolean>;
     /**
      * Workflow Execution
      */
-    executeWorkflow(
-      workflowId: string,
-      itemId: string,
-      triggeredBy: string,
-      context?: Record<string,
-      any>
-    ): Promise<WorkflowExecution>;
+    executeWorkflow(workflowId: string, itemId: string, triggeredBy: string, context?: Record<string, any>): Promise<WorkflowExecution>;
     pauseExecution(executionId: string, pausedBy: string): Promise<boolean>;
     resumeExecution(executionId: string, resumedBy: string): Promise<boolean>;
     cancelExecution(executionId: string, cancelledBy: string): Promise<boolean>;
@@ -614,11 +600,9 @@ export interface WorkflowEvent {
     data: any;
     timestamp: Date;
 }
-export declare export declare const executeWorkflow: (
-  workflowId: string,
-  itemId: string,
-  triggeredBy: string
-) => Promise<WorkflowExecution>;
+export declare const moderationWorkflowService: ModerationWorkflowService;
+export declare const createWorkflow: (workflowData: Omit<ModerationWorkflow, "id" | "createdAt" | "updatedAt">, createdBy: string) => Promise<ModerationWorkflow>;
+export declare const executeWorkflow: (workflowId: string, itemId: string, triggeredBy: string) => Promise<WorkflowExecution>;
 export declare const getWorkflows: (filter?: {
     category?: ModerationCategory;
     active?: boolean;

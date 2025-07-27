@@ -6,13 +6,7 @@
  * Extends the base DataClassifier with enterprise-grade features.
  */
 import { EventEmitter } from 'events';
-import { 
-  ClassificationLevel,
-  DataCategory,
-  ComplianceFramework,
-  ClassificationResult,
-  DataElement
-} from './DataClassifier';
+import { ClassificationLevel, DataCategory, ComplianceFramework, ClassificationResult, DataElement } from './DataClassifier';
 export interface MLClassificationModel {
     id: string;
     name: string;
@@ -140,10 +134,7 @@ export declare class AdvancedClassificationEngine extends EventEmitter {
     /**
      * Real-time stream classification
      */
-    classifyStream(
-      dataStream: AsyncIterable<DataElement>,
-      context: ClassificationContext
-    ): Promise<AsyncGenerator<EnhancedClassificationResult>>;
+    classifyStream(dataStream: AsyncIterable<DataElement>, context: ClassificationContext): Promise<AsyncGenerator<EnhancedClassificationResult>>;
     private classifyStreamInternal;
     /**
      * Add or update ML model
@@ -167,11 +158,7 @@ export declare class AdvancedClassificationEngine extends EventEmitter {
     /**
      * Execute workflow manually
      */
-    executeWorkflow(
-      workflowId: string,
-      result: EnhancedClassificationResult,
-      context: ClassificationContext
-    ): Promise<void>;
+    executeWorkflow(workflowId: string, result: EnhancedClassificationResult, context: ClassificationContext): Promise<void>;
     /**
      * Get classification analytics
      */

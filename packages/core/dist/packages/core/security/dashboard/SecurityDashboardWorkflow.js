@@ -496,69 +496,66 @@ export const SecurityDashboardWorkflow = ({ workspaceId, userId, userRole, dashb
         }
     };
     // Handle manual workflow transitions
-    const handleWorkflowTransition = async (eventId, toStateId, comment) => {
-        try {
-            // Acquire lock for the resource
-            await acquireLock(eventId, userId, 'state_change');
-            try {
-                const result = await transitionResourceState(eventId, toStateId, userId, { comment, metadata: { manualTransition: true } });
-                if (result.success) {
-                    // Update local state
-                    setSecurityEvents(prev => prev.map(event => event.id === eventId
-                        ? { ...event, workflowState: result.new_state_id }
-                        : event));
-                    // Notify parent component
-                    onWorkflowTransition?.(result);
-                }
-                return result;
-            }
-            finally {
-                // Always release the lock
-                const locks = await useWorkflowStore.getState().locks;
-                const eventLock = locks.find(lock => lock.resource_id === eventId && lock.locked_by === userId);
-                if (eventLock) {
-                    await releaseLock(eventLock.id, userId);
-                }
-            }
+    try {
+        const result = await transitionResourceState(eventId, toStateId, userId, { comment, metadata: { manualTransition: true } });
+        if (result.success) {
+            // Update local state
+            setSecurityEvents(prev => prev.map(event => event.id === eventId
+                ? { ...event, workflowState: result.new_state_id }
+                : event));
+            // Notify parent component
+            onWorkflowTransition?.(result);
         }
-        catch (error) {
-            console.error('Failed to transition workflow state:', error);
-            throw error;
-        }
-    };
-    // Handle approval actions
-    const handleApprovalAction = async (approvalId, action, comment) => {
-        try {
-            let result;
-            if (action === 'approve') {
-                result = await approveWorkflow(approvalId, userId, comment);
-            }
-            else {
-                result = await rejectWorkflow(approvalId, userId, comment || 'No reason provided');
-            }
-            // Handle the result
-            if (typeof result === 'object' && 'success' in result) {
-                onWorkflowTransition?.(result);
-            }
-            return result;
-        }
-        catch (error) {
-            console.error(`Failed to ${action} workflow:`, error);
-            throw error;
-        }
-    };
-    // Render loading state
-    if (loading) {
-        return (_jsxs("div", { className: "security-dashboard-loading", children: [_jsx("div", { className: "loading-spinner" }), _jsx("p", { children: "Initializing Security Dashboard Workflow..." })] }));
+        return result;
     }
-    // Render error state
-    if (error) {
-        return (_jsxs("div", { className: "security-dashboard-error", children: [_jsx("div", { className: "error-icon", children: "\u26A0\uFE0F" }), _jsx("h3", { children: "Dashboard Error" }), _jsx("p", { children: error }), _jsx("button", { onClick: safeReload, className: "retry-button", children: "Retry" })] }));
+    finally {
+        // Always release the lock
+        const locks = await useWorkflowStore.getState().locks;
+        const eventLock = locks.find(lock => lock.resource_id === eventId && lock.locked_by === userId);
+        if (eventLock) {
+            await releaseLock(eventLock.id, userId);
+        }
     }
-    // Main dashboard render
-    return (_jsxs("div", { className: "security-dashboard-workflow", children: [_jsxs("header", { className: "dashboard-header", children: [_jsxs("div", { className: "dashboard-title", children: [_jsx("h1", { children: dashboardConfig?.title }), _jsx("div", { className: "dashboard-status", children: _jsx("span", { className: `status-indicator ${activeAlerts.length > 0 ? 'alert' : 'normal'}`, children: activeAlerts.length > 0 ? `${activeAlerts.length} Active Alerts` : 'All Clear' }) })] }), _jsxs("div", { className: "dashboard-controls", children: [_jsx("button", { className: "refresh-button", onClick: safeReload, children: "\uD83D\uDD04 Refresh" }), _jsxs("div", { className: "user-info", children: [_jsx("span", { className: "user-role", children: userRole }), _jsx("span", { className: "user-id", children: userId })] })] })] }), activeAlerts.length > 0 && (_jsxs("div", { className: "active-alerts-banner", children: [_jsxs("div", { className: "alert-summary", children: [_jsx("span", { className: "alert-count", children: activeAlerts.length }), _jsx("span", { children: "Active Security Alerts Requiring Attention" })] }), _jsx("div", { className: "alert-actions", children: _jsx("button", { className: "view-all-alerts", children: "View All" }) })] })), _jsxs("main", { className: "dashboard-grid", children: [_jsxs("section", { className: "dashboard-widget security-events-widget", children: [_jsxs("div", { className: "widget-header", children: [_jsx("h2", { children: "Recent Security Events" }), _jsxs("div", { className: "widget-actions", children: [_jsx("button", { className: "filter-button", children: "\uD83D\uDD0D Filter" }), _jsx("button", { className: "export-button", children: "\uD83D\uDCC4 Export" })] })] }), _jsx("div", { className: "widget-content", children: _jsx("div", { className: "events-table", children: _jsxs("table", { children: [_jsx("thead", { children: _jsxs("tr", { children: [_jsx("th", { children: "Time" }), _jsx("th", { children: "Type" }), _jsx("th", { children: "Severity" }), _jsx("th", { children: "Source" }), _jsx("th", { children: "Status" }), _jsx("th", { children: "Actions" })] }) }), _jsx("tbody", { children: securityEvents.slice(0, 10).map(event => (_jsxs("tr", { className: `severity-${event.severity}`, children: [_jsx("td", { children: new Date(event.timestamp).toLocaleTimeString() }), _jsx("td", { children: event.type }), _jsx("td", { children: _jsx("span", { className: `severity-badge ${event.severity}`, children: event.severity.toUpperCase() }) }), _jsx("td", { children: event.source }), _jsx("td", { children: event.workflowState ? (_jsx("span", { className: "workflow-state", children: states.find(s => s.id === event.workflowState)?.name || 'Unknown' })) : (_jsx("span", { className: "no-workflow", children: "Not Assigned" })) }), _jsx("td", { children: _jsxs("div", { className: "event-actions", children: [_jsx("button", { className: "investigate-button", children: "\uD83D\uDD0D" }), _jsx("button", { className: "escalate-button", children: "\u2B06\uFE0F" })] }) })] }, event.id))) })] }) }) })] }), _jsxs("section", { className: "dashboard-widget workflow-status-widget", children: [_jsx("div", { className: "widget-header", children: _jsx("h2", { children: "Workflow Status" }) }), _jsx("div", { className: "widget-content", children: _jsx("div", { className: "status-overview", children: states.map(state => (_jsxs("div", { className: "status-item", children: [_jsx("div", { className: "status-color", style: { backgroundColor: state.color } }), _jsx("span", { className: "status-name", children: state.name }), _jsx("span", { className: "status-count", children: securityEvents.filter(e => e.workflowState === state.id).length })] }, state.id))) }) })] }), approvals.filter(a => a.status === 'pending').length > 0 && (_jsxs("section", { className: "dashboard-widget approvals-widget", children: [_jsx("div", { className: "widget-header", children: _jsx("h2", { children: "Pending Approvals" }) }), _jsx("div", { className: "widget-content", children: _jsx("div", { className: "approvals-list", children: approvals
-                                        .filter(a => a.status === 'pending')
-                                        .slice(0, 5)
-                                        .map(approval => (_jsxs("div", { className: "approval-item", children: [_jsxs("div", { className: "approval-info", children: [_jsx("span", { className: "approval-resource", children: approval.resource_id }), _jsx("span", { className: "approval-priority", children: approval.priority })] }), _jsxs("div", { className: "approval-actions", children: [_jsx("button", { onClick: () => handleApprovalAction(approval.id, 'approve'), className: "approve-button", children: "\u2713 Approve" }), _jsx("button", { onClick: () => handleApprovalAction(approval.id, 'reject'), className: "reject-button", children: "\u2717 Reject" })] })] }, approval.id))) }) })] }))] })] }));
 };
+try { }
+catch (error) {
+    console.error('Failed to transition workflow state:', error);
+    throw error;
+}
+;
+// Handle approval actions
+const handleApprovalAction = async (approvalId, action, comment) => {
+    try {
+        let result;
+        if (action === 'approve') {
+            result = await approveWorkflow(approvalId, userId, comment);
+        }
+        else {
+            result = await rejectWorkflow(approvalId, userId, comment || 'No reason provided');
+        }
+        // Handle the result
+        if (typeof result === 'object' && 'success' in result) {
+            onWorkflowTransition?.(result);
+        }
+        return result;
+    }
+    catch (error) {
+        console.error(`Failed to ${action} workflow:`, error);
+        throw error;
+    }
+};
+// Render loading state
+if (loading) {
+    return (_jsxs("div", { className: "security-dashboard-loading", children: [_jsx("div", { className: "loading-spinner" }), _jsx("p", { children: "Initializing Security Dashboard Workflow..." })] }));
+}
+// Render error state
+if (error) {
+    return (_jsxs("div", { className: "security-dashboard-error", children: [_jsx("div", { className: "error-icon", children: "\u26A0\uFE0F" }), _jsx("h3", { children: "Dashboard Error" }), _jsx("p", { children: error }), _jsx("button", { onClick: safeReload, className: "retry-button", children: "Retry" })] }));
+}
+// Main dashboard render
+return (_jsxs("div", { className: "security-dashboard-workflow", children: [_jsxs("header", { className: "dashboard-header", children: [_jsxs("div", { className: "dashboard-title", children: [_jsx("h1", { children: dashboardConfig?.title }), _jsx("div", { className: "dashboard-status", children: _jsx("span", { className: `status-indicator ${activeAlerts.length > 0 ? 'alert' : 'normal'}`, children: activeAlerts.length > 0 ? `${activeAlerts.length} Active Alerts` : 'All Clear' }) })] }), _jsxs("div", { className: "dashboard-controls", children: [_jsx("button", { className: "refresh-button", onClick: safeReload, children: "\uD83D\uDD04 Refresh" }), _jsxs("div", { className: "user-info", children: [_jsx("span", { className: "user-role", children: userRole }), _jsx("span", { className: "user-id", children: userId })] })] })] }), activeAlerts.length > 0 && (_jsxs("div", { className: "active-alerts-banner", children: [_jsxs("div", { className: "alert-summary", children: [_jsx("span", { className: "alert-count", children: activeAlerts.length }), _jsx("span", { children: "Active Security Alerts Requiring Attention" })] }), _jsx("div", { className: "alert-actions", children: _jsx("button", { className: "view-all-alerts", children: "View All" }) })] })), _jsxs("main", { className: "dashboard-grid", children: [_jsxs("section", { className: "dashboard-widget security-events-widget", children: [_jsxs("div", { className: "widget-header", children: [_jsx("h2", { children: "Recent Security Events" }), _jsxs("div", { className: "widget-actions", children: [_jsx("button", { className: "filter-button", children: "\uD83D\uDD0D Filter" }), _jsx("button", { className: "export-button", children: "\uD83D\uDCC4 Export" })] })] }), _jsx("div", { className: "widget-content", children: _jsx("div", { className: "events-table", children: _jsxs("table", { children: [_jsx("thead", { children: _jsxs("tr", { children: [_jsx("th", { children: "Time" }), _jsx("th", { children: "Type" }), _jsx("th", { children: "Severity" }), _jsx("th", { children: "Source" }), _jsx("th", { children: "Status" }), _jsx("th", { children: "Actions" })] }) }), _jsx("tbody", { children: securityEvents.slice(0, 10).map(event => (_jsxs("tr", { className: `severity-${event.severity}`, children: [_jsx("td", { children: new Date(event.timestamp).toLocaleTimeString() }), _jsx("td", { children: event.type }), _jsx("td", { children: _jsx("span", { className: `severity-badge ${event.severity}`, children: event.severity.toUpperCase() }) }), _jsx("td", { children: event.source }), _jsx("td", { children: event.workflowState ? (_jsx("span", { className: "workflow-state", children: states.find(s => s.id === event.workflowState)?.name || 'Unknown' })) : (_jsx("span", { className: "no-workflow", children: "Not Assigned" })) }), _jsx("td", { children: _jsxs("div", { className: "event-actions", children: [_jsx("button", { className: "investigate-button", children: "\uD83D\uDD0D" }), _jsx("button", { className: "escalate-button", children: "\u2B06\uFE0F" })] }) })] }, event.id))) })] }) }) })] }), _jsxs("section", { className: "dashboard-widget workflow-status-widget", children: [_jsx("div", { className: "widget-header", children: _jsx("h2", { children: "Workflow Status" }) }), _jsx("div", { className: "widget-content", children: _jsx("div", { className: "status-overview", children: states.map(state => (_jsxs("div", { className: "status-item", children: [_jsx("div", { className: "status-color", style: { backgroundColor: state.color } }), _jsx("span", { className: "status-name", children: state.name }), _jsx("span", { className: "status-count", children: securityEvents.filter(e => e.workflowState === state.id).length })] }, state.id))) }) })] }), approvals.filter(a => a.status === 'pending').length > 0 && (_jsxs("section", { className: "dashboard-widget approvals-widget", children: [_jsx("div", { className: "widget-header", children: _jsx("h2", { children: "Pending Approvals" }) }), _jsx("div", { className: "widget-content", children: _jsx("div", { className: "approvals-list", children: approvals
+                                    .filter(a => a.status === 'pending')
+                                    .slice(0, 5)
+                                    .map(approval => (_jsxs("div", { className: "approval-item", children: [_jsxs("div", { className: "approval-info", children: [_jsx("span", { className: "approval-resource", children: approval.resource_id }), _jsx("span", { className: "approval-priority", children: approval.priority })] }), _jsxs("div", { className: "approval-actions", children: [_jsx("button", { onClick: () => handleApprovalAction(approval.id, 'approve'), className: "approve-button", children: "\u2713 Approve" }), _jsx("button", { onClick: () => handleApprovalAction(approval.id, 'reject'), className: "reject-button", children: "\u2717 Reject" })] })] }, approval.id))) }) })] }))] })] }));
+;
 export default SecurityDashboardWorkflow;

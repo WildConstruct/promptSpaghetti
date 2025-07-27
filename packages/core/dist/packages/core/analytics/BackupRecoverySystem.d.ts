@@ -128,12 +128,7 @@ export declare class BackupRecoverySystem {
     /**
      * Create backup of analytics data
      */
-    createBackup(
-      backupName: string,
-      filter?: EventFilter,
-      config?: Partial<BackupConfig>,
-      description?: string
-    ): Promise<string>;
+    createBackup(backupName: string, filter?: EventFilter, config?: Partial<BackupConfig>, description?: string): Promise<string>;
     /**
      * Perform the actual backup operation
      */

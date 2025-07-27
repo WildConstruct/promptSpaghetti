@@ -36,24 +36,13 @@ export declare class ServerProjectManager {
     /**
      * Save project to server
      */
-    static saveProjectToServer(
-      graph: Graph,
-      options: SaveProjectOptions,
-      settings?: any,
-      userId?: number
-    ): Promise<SaveProjectResult & {
+    static saveProjectToServer(graph: Graph, options: SaveProjectOptions, settings?: any, userId?: number): Promise<SaveProjectResult & {
         projectId?: string;
     }>;
     /**
      * Update existing project on server
      */
-    static updateProjectOnServer(
-      projectId: string,
-      graph: Graph,
-      options: SaveProjectOptions,
-      settings?: any,
-      userId?: number
-    ): Promise<SaveProjectResult>;
+    static updateProjectOnServer(projectId: string, graph: Graph, options: SaveProjectOptions, settings?: any, userId?: number): Promise<SaveProjectResult>;
     /**
      * Load project from server by ID
      */
@@ -85,23 +74,13 @@ export declare class ServerProjectManager {
     /**
      * Search projects by name, description, author, or tags
      */
-    static searchProjects(
-      searchQuery: string,
-      userId?: number,
-      limit?: number,
-      offset?: number
-    ): Promise<ProjectListResponse | {
+    static searchProjects(searchQuery: string, userId?: number, limit?: number, offset?: number): Promise<ProjectListResponse | {
         error: string;
     }>;
     /**
      * Get projects by tags
      */
-    static getProjectsByTags(
-      tags: string[],
-      userId?: number,
-      limit?: number,
-      offset?: number
-    ): Promise<ProjectListResponse | {
+    static getProjectsByTags(tags: string[], userId?: number, limit?: number, offset?: number): Promise<ProjectListResponse | {
         error: string;
     }>;
 }

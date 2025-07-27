@@ -89,11 +89,7 @@ export declare class SynchronizationRecovery extends EventEmitter {
     /**
      * Start synchronization recovery for a document
      */
-    startRecovery(
-      documentId: string,
-      localState: DocumentState,
-      serverStateProvider: (
-    ) => Promise<DocumentState>): Promise<SyncDelta>;
+    startRecovery(documentId: string, localState: DocumentState, serverStateProvider: () => Promise<DocumentState>): Promise<SyncDelta>;
     /**
      * Calculate differential sync between local and server state
      */

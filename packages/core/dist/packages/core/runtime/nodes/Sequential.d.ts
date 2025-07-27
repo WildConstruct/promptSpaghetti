@@ -63,10 +63,7 @@ export declare class WeightedPattern implements SequencePattern {
 /**
  * Factory function to create sequence patterns
  */
-export declare function createSequencePattern(
-  type: SequencePattern['type'],
-  config?: SequencePatternConfig
-): SequencePattern;
+export declare function createSequencePattern(type: SequencePattern['type'], config?: SequencePatternConfig): SequencePattern;
 /**
  * Advanced sequential node with stateful sequence processing
  * Supports multiple traversal patterns: linear, cyclical, random, weighted
@@ -104,18 +101,5 @@ export declare class SequentialNode extends AdvancedRuntimeNode<string> {
 /**
  * Factory function for creating Sequential nodes
  */
-export declare function createSequentialNode(
-  id: string,
-  sequence: string[],
-  patternType?: SequencePattern['type'],
-  patternConfig?: SequencePatternConfig
-): SequentialNode;
-/**
- * Utility functions for common sequential patterns
- */
-export declare     readonly createCyclicalPattern: () => SequencePattern;
-    readonly createRandomPattern: () => SequencePattern;
-    readonly createWeightedPattern: (weights: number[]) => SequencePattern;
-    readonly resetSequenceState: (node: SequentialNode, ctx: AdvancedExecutionContext) => void;
-};
+export declare function createSequentialNode(id: string, sequence: string[], patternType?: SequencePattern['type'], patternConfig?: SequencePatternConfig): SequentialNode;
 //# sourceMappingURL=Sequential.d.ts.map

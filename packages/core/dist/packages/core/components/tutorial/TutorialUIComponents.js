@@ -22,7 +22,7 @@ import { Plus } from 'lucide-react';
  * - Analytics and engagement tracking
  */
 import { useState, useCallback, useMemo } from 'react';
-import { Play, Pause, Square, ChevronLeft, ChevronRight, Book, BookOpen, Target, CheckCircle, Circle, Clock, Users, Star, Zap, Lightbulb, Info, AlertCircle, Settings, Maximize2, Minimize2, Search } from 'lucide-react';
+import { Play, Pause, ChevronLeft, ChevronRight, Book, BookOpen, Target, CheckCircle, Circle, Clock, Users, Star, Zap, Lightbulb, Info, AlertCircle, Settings, Maximize2, Minimize2, Search } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Badge } from '../ui/Badge';
@@ -41,49 +41,47 @@ export const TutorialPlayer = ({ tutorial, progress, onStepComplete, onTutorialC
     const currentStep = tutorial.steps[currentStepIndex];
     const isFirstStep = currentStepIndex === 0;
     const isLastStep = currentStepIndex === tutorial.steps.length - 1;
-    const progressStats = useMemo(() => {
-        const completed = Object.values(progress).filter(Boolean).length;
-        const total = tutorial.steps.length;
-        return {
-            completed,
-            total,
-            percentage: (completed / total) * 100
-        };
-    }, [progress, tutorial.steps.length]);
-    const handleStepNavigation = useCallback((direction, stepIndex) => {
-        if (stepIndex !== undefined) {
-            setCurrentStepIndex(stepIndex);
+    const total = tutorial.steps.length;
+    return {
+        completed,
+        total,
+        percentage: (completed / total) * 100
+    };
+}, [progress, tutorial, steps, length];
+const handleStepNavigation = useCallback((direction, stepIndex) => {
+    if (stepIndex !== undefined) {
+        setCurrentStepIndex(stepIndex);
+    }
+    else if (direction === 'next' && !isLastStep) {
+        setCurrentStepIndex(prev => prev + 1);
+    }
+    else if (direction === 'previous' && !isFirstStep) {
+        setCurrentStepIndex(prev => prev - 1);
+    }
+}, [isFirstStep, isLastStep]);
+const handleStepComplete = useCallback((score) => {
+    onStepComplete(currentStep.id, score);
+    if (!isLastStep) {
+        if (tutorial.navigation.autoAdvance) {
+            setTimeout(() => {
+                handleStepNavigation('next');
+            }, tutorial.navigation.autoAdvanceDelay || 2000);
         }
-        else if (direction === 'next' && !isLastStep) {
-            setCurrentStepIndex(prev => prev + 1);
-        }
-        else if (direction === 'previous' && !isFirstStep) {
-            setCurrentStepIndex(prev => prev - 1);
-        }
-    }, [isFirstStep, isLastStep]);
-    const handleStepComplete = useCallback((score) => {
-        onStepComplete(currentStep.id, score);
-        if (!isLastStep) {
-            if (tutorial.navigation.autoAdvance) {
-                setTimeout(() => {
-                    handleStepNavigation('next');
-                }, tutorial.navigation.autoAdvanceDelay || 2000);
-            }
-        }
-        else {
-            // Tutorial completed
-            const finalScore = 85; // Calculate based on progress
-            const completionTime = Date.now() - (progress?.startTime.getTime() || Date.now());
-            onTutorialComplete(finalScore, completionTime);
-        }
-    }, [currentStep.id, isLastStep, onStepComplete, onTutorialComplete, tutorial.navigation, progress, handleStepNavigation]);
-    const handlePlayPause = useCallback(() => {
-        setIsPlaying(!isPlaying);
-    }, [isPlaying]);
-    return (_jsxs("div", { className: `tutorial-player ${className}`, children: [_jsxs("div", { className: "tutorial-header", children: [_jsxs("div", { className: "tutorial-info", children: [_jsx("h1", { className: "tutorial-title", children: tutorial.title }), _jsxs("div", { className: "tutorial-meta", children: [_jsx(Badge, { variant: "secondary", children: tutorial.difficulty }), _jsx(Badge, { variant: "outline", children: tutorial.category }), _jsxs("span", { className: "duration", children: [_jsx(Clock, { size: 14 }), tutorial.estimatedDuration, " min"] })] })] }), _jsxs("div", { className: "tutorial-controls", children: [_jsx(Button, { variant: "ghost", size: "icon", onClick: () => setShowStepList(!showStepList), title: "Show steps", children: _jsx(BookOpen, { size: 18 }) }), _jsx(Button, { variant: "ghost", size: "icon", onClick: () => setShowResources(!showResources), title: "Show resources", children: _jsx(Book, { size: 18 }) }), _jsx(Button, { variant: "ghost", size: "icon", onClick: () => setShowSettings(!showSettings), title: "Settings", children: _jsx(Settings, { size: 18 }) }), _jsx(Button, { variant: "ghost", size: "icon", onClick: onExit, title: "Exit tutorial", children: _jsx(Square, { size: 18 }) })] })] }), _jsx("div", { className: "tutorial-progress", children: _jsx(TutorialProgressBar, { current: currentStepIndex + 1, total: tutorial.steps.length, completedSteps: progress?.completedSteps || [], steps: tutorial.steps, onStepClick: (index) => handleStepNavigation('next', index) }) }), _jsxs("div", { className: "tutorial-content", children: [_jsx("div", { className: "main-content", children: _jsx(TutorialStepContent, { step: currentStep, isPlaying: isPlaying, settings: userSettings, onComplete: handleStepComplete, onPlayPause: handlePlayPause }) }), showStepList && (_jsx("div", { className: "step-list-sidebar", children: _jsx(TutorialStepList, { steps: tutorial.steps, currentStepIndex: currentStepIndex, completedSteps: progress?.completedSteps || [], onStepSelect: (index) => handleStepNavigation('next', index) }) })), showResources && (_jsx("div", { className: "resources-sidebar", children: _jsx(TutorialResources, { resources: currentStep.resources, onResourceClick: (resource) => {
-                                // Handle resource click
-                            } }) }))] }), _jsxs("div", { className: "tutorial-navigation", children: [_jsxs(Button, { variant: "outline", onClick: () => handleStepNavigation('previous'), disabled: isFirstStep || !tutorial.navigation.allowBackward, children: [_jsx(ChevronLeft, { size: 16 }), "Previous"] }), _jsxs("div", { className: "step-indicator", children: ["Step ", currentStepIndex + 1, " of ", tutorial.steps.length] }), _jsxs(Button, { variant: "primary", onClick: () => handleStepNavigation('next'), disabled: isLastStep || !tutorial.navigation.allowForward, children: [isLastStep ? 'Complete' : 'Next', _jsx(ChevronRight, { size: 16 })] })] }), showSettings && (_jsx(TutorialSettings, { settings: userSettings, onSettingsChange: setUserSettings, onClose: () => setShowSettings(false) }))] }));
-};
+    }
+    else {
+        // Tutorial completed
+        const finalScore = 85; // Calculate based on progress
+        const completionTime = Date.now() - (progress?.startTime.getTime() || Date.now());
+        onTutorialComplete(finalScore, completionTime);
+    }
+}, [currentStep.id, isLastStep, onStepComplete, onTutorialComplete, tutorial.navigation, progress, handleStepNavigation]);
+const handlePlayPause = useCallback(() => {
+    setIsPlaying(!isPlaying);
+}, [isPlaying]);
+return (_jsxs("div", { className: `tutorial-player ${className}`, children: [_jsxs("div", { className: "tutorial-header", children: [_jsxs("div", { className: "tutorial-info", children: [_jsx("h1", { className: "tutorial-title", children: tutorial.title }), _jsxs("div", { className: "tutorial-meta", children: [_jsx(Badge, { variant: "secondary", children: tutorial.difficulty }), _jsx(Badge, { variant: "outline", children: tutorial.category }), _jsxs("span", { className: "duration", children: [_jsx(Clock, { size: 14 }), tutorial.estimatedDuration, " min"] })] })] }), _jsxs("div", { className: "tutorial-controls", children: [_jsx(Button, { variant: "ghost", size: "icon", onClick: () => setShowStepList(!showStepList), title: "Show steps", children: _jsx(BookOpen, { size: 18 }) }), _jsx(Button, { variant: "ghost", size: "icon", onClick: () => setShowResources(!showResources), title: "Show resources", children: _jsx(Book, { size: 18 }) }), _jsx(Button, { variant: "ghost", size: "icon", onClick: () => setShowSettings(!showSettings), title: "Settings", children: _jsx(Settings, { size: 18 }) }), _jsx(Button, { variant: "ghost", size: "icon", onClick: onExit, title: "Exit tutorial", children: _jsx(Square, { size: 18 }) })] })] }), _jsx("div", { className: "tutorial-progress", children: _jsx(TutorialProgressBar, { current: currentStepIndex + 1, total: tutorial.steps.length, completedSteps: progress?.completedSteps || [], steps: tutorial.steps, onStepClick: (index) => handleStepNavigation('next', index) }) }), _jsxs("div", { className: "tutorial-content", children: [_jsx("div", { className: "main-content", children: _jsx(TutorialStepContent, { step: currentStep, isPlaying: isPlaying, settings: userSettings, onComplete: handleStepComplete, onPlayPause: handlePlayPause }) }), showStepList && (_jsx("div", { className: "step-list-sidebar", children: _jsx(TutorialStepList, { steps: tutorial.steps, currentStepIndex: currentStepIndex, completedSteps: progress?.completedSteps || [], onStepSelect: (index) => handleStepNavigation('next', index) }) })), showResources && (_jsx("div", { className: "resources-sidebar", children: _jsx(TutorialResources, { resources: currentStep.resources, onResourceClick: (resource) => {
+                            // Handle resource click
+                        } }) }))] }), _jsxs("div", { className: "tutorial-navigation", children: [_jsxs(Button, { variant: "outline", onClick: () => handleStepNavigation('previous'), disabled: isFirstStep || !tutorial.navigation.allowBackward, children: [_jsx(ChevronLeft, { size: 16 }), "Previous"] }), _jsxs("div", { className: "step-indicator", children: ["Step ", currentStepIndex + 1, " of ", tutorial.steps.length] }), _jsxs(Button, { variant: "primary", onClick: () => handleStepNavigation('next'), disabled: isLastStep || !tutorial.navigation.allowForward, children: [isLastStep ? 'Complete' : 'Next', _jsx(ChevronRight, { size: 16 })] })] }), showSettings && (_jsx(TutorialSettings, { settings: userSettings, onSettingsChange: setUserSettings, onClose: () => setShowSettings(false) }))] }));
+;
 const TutorialProgressBar = ({ current, total, completedSteps, steps, onStepClick }) => {
     const progressPercentage = (current / total) * 100;
     return (_jsxs("div", { className: "tutorial-progress-bar", children: [_jsx("div", { className: "progress-track", children: _jsx("div", { className: "progress-fill", style: { width: `${progressPercentage}%` } }) }), _jsx("div", { className: "progress-steps", children: steps.map((step, index) => {

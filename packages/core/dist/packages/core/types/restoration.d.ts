@@ -78,9 +78,9 @@ export declare const RestorationConflictSchema: z.ZodObject<{
     targetValue?: Record<string, unknown>;
     currentValue?: Record<string, unknown>;
     resolvedAt?: Date;
+    resolvedBy?: string;
     resolutionStrategy?: "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current";
     conflictType?: "node_modified" | "node_deleted" | "edge_deleted" | "edge_modified" | "position_conflict" | "property_conflict";
-    resolvedBy?: string;
     restorationAttemptId?: string;
     conflictDescription?: string;
     sourceValue?: Record<string, unknown>;
@@ -93,9 +93,9 @@ export declare const RestorationConflictSchema: z.ZodObject<{
     targetValue?: Record<string, unknown>;
     currentValue?: Record<string, unknown>;
     resolvedAt?: Date;
+    resolvedBy?: string;
     resolutionStrategy?: "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current";
     conflictType?: "node_modified" | "node_deleted" | "edge_deleted" | "edge_modified" | "position_conflict" | "property_conflict";
-    resolvedBy?: string;
     restorationAttemptId?: string;
     conflictDescription?: string;
     sourceValue?: Record<string, unknown>;
@@ -499,9 +499,9 @@ export declare const RestorationPreviewResponseSchema: z.ZodObject<{
         targetValue?: Record<string, unknown>;
         currentValue?: Record<string, unknown>;
         resolvedAt?: Date;
+        resolvedBy?: string;
         resolutionStrategy?: "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current";
         conflictType?: "node_modified" | "node_deleted" | "edge_deleted" | "edge_modified" | "position_conflict" | "property_conflict";
-        resolvedBy?: string;
         restorationAttemptId?: string;
         conflictDescription?: string;
         sourceValue?: Record<string, unknown>;
@@ -514,9 +514,9 @@ export declare const RestorationPreviewResponseSchema: z.ZodObject<{
         targetValue?: Record<string, unknown>;
         currentValue?: Record<string, unknown>;
         resolvedAt?: Date;
+        resolvedBy?: string;
         resolutionStrategy?: "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current";
         conflictType?: "node_modified" | "node_deleted" | "edge_deleted" | "edge_modified" | "position_conflict" | "property_conflict";
-        resolvedBy?: string;
         restorationAttemptId?: string;
         conflictDescription?: string;
         sourceValue?: Record<string, unknown>;
@@ -564,9 +564,9 @@ export declare const RestorationPreviewResponseSchema: z.ZodObject<{
         targetValue?: Record<string, unknown>;
         currentValue?: Record<string, unknown>;
         resolvedAt?: Date;
+        resolvedBy?: string;
         resolutionStrategy?: "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current";
         conflictType?: "node_modified" | "node_deleted" | "edge_deleted" | "edge_modified" | "position_conflict" | "property_conflict";
-        resolvedBy?: string;
         restorationAttemptId?: string;
         conflictDescription?: string;
         sourceValue?: Record<string, unknown>;
@@ -597,9 +597,9 @@ export declare const RestorationPreviewResponseSchema: z.ZodObject<{
         targetValue?: Record<string, unknown>;
         currentValue?: Record<string, unknown>;
         resolvedAt?: Date;
+        resolvedBy?: string;
         resolutionStrategy?: "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current";
         conflictType?: "node_modified" | "node_deleted" | "edge_deleted" | "edge_modified" | "position_conflict" | "property_conflict";
-        resolvedBy?: string;
         restorationAttemptId?: string;
         conflictDescription?: string;
         sourceValue?: Record<string, unknown>;
@@ -821,7 +821,10 @@ export declare const RestorationFilterSchema: z.ZodObject<{
     restorationType?: "full" | "partial" | "selective";
 }>;
 export type RestorationFilter = z.infer<typeof RestorationFilterSchema>;
-export declare export declare export declare export declare const RESTORATION_DEFAULTS: {
+export declare const validateRestorationConfig: (config: unknown) => RestorationConfig;
+export declare const validateRestorationAttempt: (attempt: unknown) => RestorationAttempt;
+export declare const validateConflictResolution: (resolution: unknown) => ConflictResolutionRequest;
+export declare const RESTORATION_DEFAULTS: {
     readonly PREVIEW_EXPIRY_MINUTES: 30;
     readonly MAX_OPERATIONS_PER_BATCH: 100;
     readonly MAX_CONFLICTS_PER_SESSION: 1000;

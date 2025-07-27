@@ -46,7 +46,10 @@ interface UISettingsState extends UISettings {
     applyDeveloperPreset: () => void;
     applyDemoPreset: () => void;
 }
-export declare         clearStorage: () => void;
+export declare const useUISettingsStore: import("zustand").UseBoundStore<Omit<import("zustand").StoreApi<UISettingsState>, "persist"> & {
+    persist: {
+        setOptions: (options: Partial<import("zustand/middleware").PersistOptions<UISettingsState, any>>) => void;
+        clearStorage: () => void;
         rehydrate: () => Promise<void> | void;
         hasHydrated: () => boolean;
         onHydrate: (fn: (state: UISettingsState) => void) => () => void;
@@ -54,5 +57,7 @@ export declare         clearStorage: () => void;
         getOptions: () => Partial<import("zustand/middleware").PersistOptions<UISettingsState, any>>;
     };
 }>;
-export declare export declare export {};
+export declare const shouldShowField: (fieldName: string, fieldType?: string, store?: ReturnType<typeof useUISettingsStore>) => boolean;
+export declare const classifyField: (fieldName: string, fieldType?: string) => "basic" | "advanced" | "technical";
+export {};
 //# sourceMappingURL=uiSettingsStore.d.ts.map

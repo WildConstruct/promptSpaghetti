@@ -397,46 +397,39 @@ export class SecurityEventMonitor extends EventEmitter {
 // Singleton instance for application use
 export const securityMonitor = new SecurityEventMonitor();
 // Integration helpers for Epic 18 security framework
-export const SecurityIntegrationHelpers = {
-    /**
-     * Create monitoring wrapper for validation functions
-     */
-    createValidationWrapper: (validationFn, source) => {
-        return ((...args) => {
-            const input = args[0];
-            const result = validationFn(...args);
-            if (!result && typeof input === 'string') {
-                // Record validation failure
-                const analyzer = new AdvancedSecurityAnalyzer();
-                const analysis = analyzer.analyzeInput(input);
-                securityMonitor.recordValidationFailure(input, 'string', source, analysis);
-            }
-            return result;
-        });
-    },
-    /**
-     * Create monitoring middleware for API endpoints
-     */
-    createApiMiddleware: (source) => {
-        return (req, res, next) => {
-            // Monitor request body for security issues
-            if (req.body) {
-                const bodyStr = JSON.stringify(req.body);
-                const analyzer = new AdvancedSecurityAnalyzer();
-                const analysis = analyzer.analyzeInput(bodyStr);
-                if (!analysis.isSecure) {
-                    securityMonitor.recordValidationFailure(bodyStr, 'api_request', source, analysis, {
-                        endpoint: req.path,
-                        userAgent: req.get('user-agent'),
-                        ipAddress: req.ip
-                    });
-                    if (analysis.riskScore > 0.8) {
-                        return res.status(400).json({ error: 'Request contains suspicious content' });
-                    }
+export const result = validationFn(...args);
+if (!result && typeof input === 'string') {
+    // Record validation failure
+    const analyzer = new AdvancedSecurityAnalyzer();
+    const analysis = analyzer.analyzeInput(input);
+    securityMonitor.recordValidationFailure(input, 'string', source, analysis);
+}
+return result;
+as;
+T;
+/**
+ * Create monitoring middleware for API endpoints
+ */
+createApiMiddleware: (source) => {
+    return (req, res, next) => {
+        // Monitor request body for security issues
+        if (req.body) {
+            const bodyStr = JSON.stringify(req.body);
+            const analyzer = new AdvancedSecurityAnalyzer();
+            const analysis = analyzer.analyzeInput(bodyStr);
+            if (!analysis.isSecure) {
+                securityMonitor.recordValidationFailure(bodyStr, 'api_request', source, analysis, {
+                    endpoint: req.path,
+                    userAgent: req.get('user-agent'),
+                    ipAddress: req.ip
+                });
+                if (analysis.riskScore > 0.8) {
+                    return res.status(400).json({ error: 'Request contains suspicious content' });
                 }
             }
-            next();
-        };
-    }
+        }
+        next();
+    };
 };
+;
 export default SecurityEventMonitor;

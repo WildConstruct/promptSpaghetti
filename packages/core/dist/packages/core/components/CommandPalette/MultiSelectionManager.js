@@ -126,109 +126,106 @@ export const MultiSelectionManager = ({ nodes, edges, selectedNodes, selectedEdg
         onSelectionChange({ nodes: unselectedNodes, edges: unselectedEdges });
     }, [nodes, edges, selectedNodes, selectedEdges, onNodesSelect, onEdgesSelect, onSelectionChange]);
     // Handle individual node selection with modifiers
-    const handleNodeClick = useCallback((node, event) => {
-        if (disabled)
-            return;
-        if (event.metaKey || event.ctrlKey) {
-            // Toggle selection
-            const isSelected = selectedNodes.some(n => n.id === node.id);
-            let newSelection;
-            if (isSelected) {
-                newSelection = selectedNodes.filter(n => n.id !== node.id);
-            }
-            else {
-                newSelection = [...selectedNodes, node];
-            }
-            onNodesSelect(newSelection);
-            onSelectionChange({ nodes: newSelection, edges: selectedEdges });
-            setLastSelectedNode(node);
-        }
-        else if (event.shiftKey && lastSelectedNode) {
-            // Range selection
-            const startIndex = nodes.findIndex(n => n.id === lastSelectedNode.id);
-            const endIndex = nodes.findIndex(n => n.id === node.id);
-            if (startIndex !== -1 && endIndex !== -1) {
-                const rangeStart = Math.min(startIndex, endIndex);
-                const rangeEnd = Math.max(startIndex, endIndex);
-                const rangeNodes = nodes.slice(rangeStart, rangeEnd + 1);
-                // Combine with existing selection
-                const newSelection = [...selectedNodes];
-                rangeNodes.forEach(rangeNode => {
-                    if (!newSelection.some(n => n.id === rangeNode.id)) {
-                        newSelection.push(rangeNode);
-                    }
-                });
-                onNodesSelect(newSelection);
-                onSelectionChange({ nodes: newSelection, edges: selectedEdges });
-            }
+    if (event.metaKey || event.ctrlKey) {
+        // Toggle selection
+        const isSelected = selectedNodes.some(n => n.id === node.id);
+        let newSelection;
+        if (isSelected) {
+            newSelection = selectedNodes.filter(n => n.id !== node.id);
         }
         else {
-            // Single selection
-            onNodesSelect([node]);
-            onSelectionChange({ nodes: [node], edges: [] });
-            setLastSelectedNode(node);
+            newSelection = [...selectedNodes, node];
         }
-    }, [disabled, selectedNodes, selectedEdges, lastSelectedNode, nodes, onNodesSelect, onSelectionChange]);
-    // Theme styles
-    const getThemeStyles = () => {
-        const themes = {
-            light: {
-                selection: 'rgba(59, 130, 246, 0.2)',
-                selectionBorder: '#3b82f6',
-                background: '#ffffff',
-                text: '#374151',
-                accent: '#3b82f6'
-            },
-            dark: {
-                selection: 'rgba(96, 165, 250, 0.2)',
-                selectionBorder: '#60a5fa',
-                background: '#1f2937',
-                text: '#f9fafb',
-                accent: '#60a5fa'
-            },
-            cinema: {
-                selection: 'rgba(255, 124, 0, 0.15)',
-                selectionBorder: 'var(--color-accent-orange)',
-                background: 'var(--color-bg-secondary)',
-                text: 'var(--color-text-primary)',
-                accent: 'var(--color-accent-orange)'
-            }
-        };
-        return themes[theme];
+        onNodesSelect(newSelection);
+        onSelectionChange({ nodes: newSelection, edges: selectedEdges });
+        setLastSelectedNode(node);
+    }
+    else if (event.shiftKey && lastSelectedNode) {
+        // Range selection
+        const startIndex = nodes.findIndex(n => n.id === lastSelectedNode.id);
+        const endIndex = nodes.findIndex(n => n.id === node.id);
+        if (startIndex !== -1 && endIndex !== -1) {
+            const rangeStart = Math.min(startIndex, endIndex);
+            const rangeEnd = Math.max(startIndex, endIndex);
+            const rangeNodes = nodes.slice(rangeStart, rangeEnd + 1);
+            // Combine with existing selection
+            const newSelection = [...selectedNodes];
+            rangeNodes.forEach(rangeNode => {
+                if (!newSelection.some(n => n.id === rangeNode.id)) {
+                    newSelection.push(rangeNode);
+                }
+            });
+            onNodesSelect(newSelection);
+            onSelectionChange({ nodes: newSelection, edges: selectedEdges });
+        }
+    }
+    else {
+        // Single selection
+        onNodesSelect([node]);
+        onSelectionChange({ nodes: [node], edges: [] });
+        setLastSelectedNode(node);
+    }
+}, [disabled, selectedNodes, selectedEdges, lastSelectedNode, nodes, onNodesSelect, onSelectionChange];
+// Theme styles
+const getThemeStyles = () => {
+    const themes = {
+        light: {
+            selection: 'rgba(59, 130, 246, 0.2)',
+            selectionBorder: '#3b82f6',
+            background: '#ffffff',
+            text: '#374151',
+            accent: '#3b82f6'
+        },
+        dark: {
+            selection: 'rgba(96, 165, 250, 0.2)',
+            selectionBorder: '#60a5fa',
+            background: '#1f2937',
+            text: '#f9fafb',
+            accent: '#60a5fa'
+        },
+        cinema: {
+            selection: 'rgba(255, 124, 0, 0.15)',
+            selectionBorder: 'var(--color-accent-orange)',
+            background: 'var(--color-bg-secondary)',
+            text: 'var(--color-text-primary)',
+            accent: 'var(--color-accent-orange)'
+        }
     };
-    const styles = getThemeStyles();
-    // Calculate selection rectangle for rendering
-    const getSelectionRectStyle = () => {
-        if (!selectionRect.active)
-            return { display: 'none' };
-        const left = Math.min(selectionRect.startX, selectionRect.currentX);
-        const top = Math.min(selectionRect.startY, selectionRect.currentY);
-        const width = Math.abs(selectionRect.currentX - selectionRect.startX);
-        const height = Math.abs(selectionRect.currentY - selectionRect.startY);
-        return {
-            position: 'absolute',
-            left: `${left}px`,
-            top: `${top}px`,
-            width: `${width}px`,
-            height: `${height}px`,
-            background: styles.selection,
-            border: `1px dashed ${styles.selectionBorder}`,
-            borderRadius: '2px',
-            pointerEvents: 'none',
-            zIndex: 1000,
-            transition: 'none'
-        };
-    };
-    return (_jsxs(_Fragment, { children: [_jsx("div", { ref: selectionRef, style: {
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    zIndex: 999,
-                    pointerEvents: disabled ? 'none' : 'auto'
-                }, onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp, children: _jsx("div", { style: getSelectionRectStyle() }) }), (selectedNodes.length > 0 || selectedEdges.length > 0) && (_jsx(SelectionInfoPanel, { selectedNodes: selectedNodes, selectedEdges: selectedEdges, onClearSelection: handleClearSelection, onSelectAll: handleSelectAll, onInvertSelection: handleInvertSelection, theme: theme }))] }));
+    return themes[theme];
 };
+const styles = getThemeStyles();
+// Calculate selection rectangle for rendering
+const getSelectionRectStyle = () => {
+    if (!selectionRect.active)
+        return { display: 'none' };
+    const left = Math.min(selectionRect.startX, selectionRect.currentX);
+    const top = Math.min(selectionRect.startY, selectionRect.currentY);
+    const width = Math.abs(selectionRect.currentX - selectionRect.startX);
+    const height = Math.abs(selectionRect.currentY - selectionRect.startY);
+    return {
+        position: 'absolute',
+        left: `${left}px`,
+        top: `${top}px`,
+        width: `${width}px`,
+        height: `${height}px`,
+        background: styles.selection,
+        border: `1px dashed ${styles.selectionBorder}`,
+        borderRadius: '2px',
+        pointerEvents: 'none',
+        zIndex: 1000,
+        transition: 'none'
+    };
+};
+return (_jsxs(_Fragment, { children: [_jsx("div", { ref: selectionRef, style: {
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: 999,
+                pointerEvents: disabled ? 'none' : 'auto'
+            }, onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp, children: _jsx("div", { style: getSelectionRectStyle() }) }), (selectedNodes.length > 0 || selectedEdges.length > 0) && (_jsx(SelectionInfoPanel, { selectedNodes: selectedNodes, selectedEdges: selectedEdges, onClearSelection: handleClearSelection, onSelectAll: handleSelectAll, onInvertSelection: handleInvertSelection, theme: theme }))] }));
+;
 const SelectionInfoPanel = ({ selectedNodes, selectedEdges, onClearSelection, onSelectAll, onInvertSelection, theme }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const getThemeStyles = () => {

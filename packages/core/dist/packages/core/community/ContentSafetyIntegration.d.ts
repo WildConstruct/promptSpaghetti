@@ -6,16 +6,8 @@
  * moderation with the Epic 16 marketplace, community, and learning ecosystems.
  * Provides comprehensive safety coverage from submission to publication.
  */
-import { 
-  MarketplaceContentFilteringService,
-  ContentFilteringResult,
-  MarketplaceContentType
-} from './MarketplaceContentFilteringSystem';
-import { 
-  EnhancedModerationService,
-  EnhancedModerationResult,
-  ModerationPriority
-} from './EnhancedAutomatedModerationSystem';
+import { MarketplaceContentFilteringService, ContentFilteringResult, MarketplaceContentType } from './MarketplaceContentFilteringSystem';
+import { EnhancedModerationService, EnhancedModerationResult, ModerationPriority } from './EnhancedAutomatedModerationSystem';
 import { ContributionManagementService, ContributionSubmission } from './ContributionManagementService';
 import { MarketplaceTutorialSystemService } from './MarketplaceTutorialSystem';
 import { LearningAnalyticsServiceImpl } from '../analytics/LearningAnalyticsService';
@@ -409,14 +401,7 @@ export declare class ContentSafetyServiceImpl implements ContentSafetyService {
     private tutorialService;
     private analyticsService;
     private apiClient;
-    constructor(
-      filteringService: MarketplaceContentFilteringService,
-      moderationService: EnhancedModerationService,
-      contributionService: ContributionManagementService,
-      tutorialService: MarketplaceTutorialSystemService,
-      analyticsService: LearningAnalyticsServiceImpl,
-      apiClient: any
-    );
+    constructor(filteringService: MarketplaceContentFilteringService, moderationService: EnhancedModerationService, contributionService: ContributionManagementService, tutorialService: MarketplaceTutorialSystemService, analyticsService: LearningAnalyticsServiceImpl, apiClient: any);
     processContentSafety(request: ContentSafetyRequest): Promise<ContentSafetyResult>;
     batchProcessSafety(requests: ContentSafetyRequest[]): Promise<ContentSafetyResult[]>;
     runIntakeStage(request: ContentSafetyRequest): Promise<SafetyStageResult>;

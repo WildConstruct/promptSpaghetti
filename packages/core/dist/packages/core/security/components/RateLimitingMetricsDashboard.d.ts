@@ -15,6 +15,6 @@ interface RateLimitingMetricsDashboardProps {
     autoRefresh?: boolean;
     refreshInterval?: number;
 }
-export declare const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboardProps>;
+export declare const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboardProps>, visualizationData: any;
 export default RateLimitingMetricsDashboard;
 //# sourceMappingURL=RateLimitingMetricsDashboard.d.ts.map

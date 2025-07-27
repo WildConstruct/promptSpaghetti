@@ -126,6 +126,7 @@ export interface SecurityDashboardWorkflowProps {
 /**
  * Main Security Dashboard Workflow Component
  */
-export declare export declare const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>;
+export declare const safeReload: () => void;
+export declare const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>;
 export default SecurityDashboardWorkflow;
 //# sourceMappingURL=SecurityDashboardWorkflow.d.ts.map

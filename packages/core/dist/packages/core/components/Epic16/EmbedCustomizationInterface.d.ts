@@ -90,8 +90,15 @@ export interface CustomTheme {
         large: string;
     };
 }
-export declare }>;
-export declare     previewSize: PreviewSize;
+export declare const PresetSelector: React.FC<{
+    presets: EmbedPreset[];
+    selectedPreset?: string;
+    onPresetSelect: (preset: EmbedPreset) => void;
+}>;
+export declare const VisualLayoutBuilder: React.FC<{
+    widgets: EmbedWidget[];
+    onWidgetsChange: (widgets: EmbedWidget[]) => void;
+    previewSize: PreviewSize;
 }>;
 export declare const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfaceProps>;
 export default EmbedCustomizationInterface;

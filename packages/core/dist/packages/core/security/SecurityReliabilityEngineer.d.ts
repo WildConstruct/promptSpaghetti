@@ -266,10 +266,7 @@ export declare class SecurityReliabilityEngineer extends EventEmitter {
     private reports;
     private events;
     constructor();
-    createSLO(
-      slo: Omit<ServiceLevelObjective,
-      'id' | 'created_at' | 'last_updated' | 'error_budget' | 'performance_history'>
-    ): Promise<string>;
+    createSLO(slo: Omit<ServiceLevelObjective, 'id' | 'created_at' | 'last_updated' | 'error_budget' | 'performance_history'>): Promise<string>;
     updateSLOPerformance(sloId: string, measurement: {
         actual_performance: number;
         measurement_window_start: number;
@@ -279,10 +276,7 @@ export declare class SecurityReliabilityEngineer extends EventEmitter {
     private calculateBurnRate;
     private handleSLOViolation;
     private checkErrorBudgetAlerts;
-    createIncident(
-      incident: Omit<ReliabilityIncident,
-      'id' | 'created_at' | 'last_updated' | 'timeline' | 'response'>
-    ): Promise<string>;
+    createIncident(incident: Omit<ReliabilityIncident, 'id' | 'created_at' | 'last_updated' | 'timeline' | 'response'>): Promise<string>;
     updateIncidentStatus(incidentId: string, status: ReliabilityIncident['status'], updates: {
         timeline_update?: Partial<ReliabilityIncident['timeline']>;
         actions?: IncidentAction[];

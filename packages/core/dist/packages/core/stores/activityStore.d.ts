@@ -78,7 +78,9 @@ export declare const useActivityStore: import("zustand").UseBoundStore<Omit<impo
         }): () => void;
     };
 }>;
-export declare     getGroupedActivities: (state: ActivityStore) => Record<string, Activity[]>;
+export declare const activitySelectors: {
+    getFilteredActivities: (state: ActivityStore) => Activity[];
+    getGroupedActivities: (state: ActivityStore) => Record<string, Activity[]>;
     getSelectedActivities: (state: ActivityStore) => Activity[];
     hasActiveFilters: (state: ActivityStore) => boolean;
     getSummaryStats: (state: ActivityStore) => {
@@ -89,7 +91,9 @@ export declare     getGroupedActivities: (state: ActivityStore) => Record<string
         recent: number;
     };
 };
-export declare     stopStream: () => void;
+export declare const useActivityStream: () => {
+    startStream: (filters: ActivityQuery) => Promise<void>;
+    stopStream: () => void;
     isConnected: boolean;
     subscriptionId: string;
 };

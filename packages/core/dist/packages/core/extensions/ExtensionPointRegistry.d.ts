@@ -173,11 +173,6 @@ export declare const ExtensionPointSchema: z.ZodObject<{
     name?: string;
     description?: string;
     priority?: ExtensionPointPriority;
-    location?: {
-        function?: string;
-        file?: string;
-        line?: number;
-    };
     category?: ExtensionPointCategory;
     version?: string;
     metadata?: {
@@ -185,6 +180,11 @@ export declare const ExtensionPointSchema: z.ZodObject<{
         deprecatedIn?: string;
         removedIn?: string;
         replacedBy?: string;
+    };
+    location?: {
+        function?: string;
+        file?: string;
+        line?: number;
     };
     examples?: {
         name?: string;
@@ -222,11 +222,6 @@ export declare const ExtensionPointSchema: z.ZodObject<{
     name?: string;
     description?: string;
     priority?: ExtensionPointPriority;
-    location?: {
-        function?: string;
-        file?: string;
-        line?: number;
-    };
     category?: ExtensionPointCategory;
     version?: string;
     metadata?: {
@@ -234,6 +229,11 @@ export declare const ExtensionPointSchema: z.ZodObject<{
         deprecatedIn?: string;
         removedIn?: string;
         replacedBy?: string;
+    };
+    location?: {
+        function?: string;
+        file?: string;
+        line?: number;
     };
     examples?: {
         name?: string;

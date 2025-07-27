@@ -352,27 +352,15 @@ export declare class Epic16TicketIntegrationService extends EventEmitter {
     /**
      * Create a new marketplace/community ticket
      */
-    createTicket(
-      ticketData: Omit<MarketplaceTicket,
-      'id' | 'createdAt' | 'updatedAt' | 'sla'>
-    ): Promise<MarketplaceTicket>;
+    createTicket(ticketData: Omit<MarketplaceTicket, 'id' | 'createdAt' | 'updatedAt' | 'sla'>): Promise<MarketplaceTicket>;
     /**
      * Update ticket status
      */
-    updateTicketStatus(
-      ticketId: string,
-      newStatus: TicketStatus,
-      userId: string,
-      comment?: string
-    ): Promise<MarketplaceTicket | null>;
+    updateTicketStatus(ticketId: string, newStatus: TicketStatus, userId: string, comment?: string): Promise<MarketplaceTicket | null>;
     /**
      * Add comment to ticket
      */
-    addComment(
-      ticketId: string,
-      commentData: Omit<TicketComment,
-      'id' | 'createdAt' | 'reactions'>
-    ): Promise<TicketComment | null>;
+    addComment(ticketId: string, commentData: Omit<TicketComment, 'id' | 'createdAt' | 'reactions'>): Promise<TicketComment | null>;
     /**
      * Assign ticket to user or team
      */

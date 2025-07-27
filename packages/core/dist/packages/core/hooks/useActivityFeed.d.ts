@@ -20,12 +20,7 @@ interface ActivityStatsData {
         count: number;
     }>;
 }
-export declare function useActivityFeed(
-  workspaceId: string,
-  userId: string,
-  filters?: ActivityEventFilter,
-  options?: UseActivityFeedOptions
-): {
+export declare function useActivityFeed(workspaceId: string, userId: string, filters?: ActivityEventFilter, options?: UseActivityFeedOptions): {
     activities: ActivityEventWithActorInfo[];
     loading: boolean;
     loadingMore: boolean;

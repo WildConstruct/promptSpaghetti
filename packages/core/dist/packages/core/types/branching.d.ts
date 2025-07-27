@@ -159,7 +159,7 @@ export declare const BranchMergeRequestSchema: z.ZodObject<{
     createdAt?: Date;
     updatedAt?: Date;
     description?: string;
-    status?: "closed" | "open" | "draft" | "merged";
+    status?: "open" | "closed" | "draft" | "merged";
     metadata?: Record<string, unknown>;
     title?: string;
     projectId?: string;
@@ -186,7 +186,7 @@ export declare const BranchMergeRequestSchema: z.ZodObject<{
     createdAt?: Date;
     updatedAt?: Date;
     description?: string;
-    status?: "closed" | "open" | "draft" | "merged";
+    status?: "open" | "closed" | "draft" | "merged";
     metadata?: Record<string, unknown>;
     title?: string;
     projectId?: string;
@@ -289,24 +289,24 @@ export declare const BranchConflictSchema: z.ZodObject<{
     id?: string;
     detectedAt?: Date;
     resolvedAt?: Date;
+    resolvedBy?: string;
+    conflictResolution?: Record<string, unknown>;
     sourceBranchId?: string;
     targetBranchId?: string;
     conflictType?: "merge" | "rebase" | "cherry_pick";
     conflictStatus?: "resolved" | "unresolved" | "ignored";
     conflictedResources?: Record<string, unknown>[];
-    conflictResolution?: Record<string, unknown>;
-    resolvedBy?: string;
 }, {
     id?: string;
     detectedAt?: Date;
     resolvedAt?: Date;
+    resolvedBy?: string;
+    conflictResolution?: Record<string, unknown>;
     sourceBranchId?: string;
     targetBranchId?: string;
     conflictType?: "merge" | "rebase" | "cherry_pick";
     conflictStatus?: "resolved" | "unresolved" | "ignored";
     conflictedResources?: Record<string, unknown>[];
-    conflictResolution?: Record<string, unknown>;
-    resolvedBy?: string;
 }>;
 export declare const BranchSyncOperationSchema: z.ZodObject<{
     id: z.ZodString;
@@ -554,12 +554,12 @@ export declare const MergeBranchRequestSchema: z.ZodObject<{
     commitMessage?: string;
     deleteSourceBranch?: boolean;
     mergeRequestId?: string;
-    mergeStrategy?: "merge" | "rebase" | "squash";
+    mergeStrategy?: "merge" | "squash" | "rebase";
 }, {
     commitMessage?: string;
     deleteSourceBranch?: boolean;
     mergeRequestId?: string;
-    mergeStrategy?: "merge" | "rebase" | "squash";
+    mergeStrategy?: "merge" | "squash" | "rebase";
 }>;
 export declare const SyncBranchRequestSchema: z.ZodObject<{
     branchId: z.ZodString;
@@ -567,14 +567,14 @@ export declare const SyncBranchRequestSchema: z.ZodObject<{
     operationType: z.ZodEnum<["pull", "push", "merge", "rebase", "sync"]>;
     conflictResolution: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
 }, "strip", z.ZodTypeAny, {
+    conflictResolution?: Record<string, unknown>;
     branchId?: string;
     sourceBranchId?: string;
-    conflictResolution?: Record<string, unknown>;
     operationType?: "push" | "sync" | "merge" | "rebase" | "pull";
 }, {
+    conflictResolution?: Record<string, unknown>;
     branchId?: string;
     sourceBranchId?: string;
-    conflictResolution?: Record<string, unknown>;
     operationType?: "push" | "sync" | "merge" | "rebase" | "pull";
 }>;
 export declare const BranchFilterSchema: z.ZodObject<{
@@ -635,7 +635,7 @@ export declare const MergeRequestFilterSchema: z.ZodObject<{
     sortBy: z.ZodDefault<z.ZodEnum<["created_at", "updated_at", "title"]>>;
     sortOrder: z.ZodDefault<z.ZodEnum<["asc", "desc"]>>;
 }, "strip", z.ZodTypeAny, {
-    status?: "closed" | "open" | "draft" | "merged";
+    status?: "open" | "closed" | "draft" | "merged";
     projectId?: string;
     limit?: number;
     offset?: number;
@@ -649,7 +649,7 @@ export declare const MergeRequestFilterSchema: z.ZodObject<{
     targetBranchId?: string;
     reviewerId?: string;
 }, {
-    status?: "closed" | "open" | "draft" | "merged";
+    status?: "open" | "closed" | "draft" | "merged";
     projectId?: string;
     limit?: number;
     offset?: number;
@@ -1140,24 +1140,24 @@ export declare const BranchComparisonResponseSchema: z.ZodObject<{
         id?: string;
         detectedAt?: Date;
         resolvedAt?: Date;
+        resolvedBy?: string;
+        conflictResolution?: Record<string, unknown>;
         sourceBranchId?: string;
         targetBranchId?: string;
         conflictType?: "merge" | "rebase" | "cherry_pick";
         conflictStatus?: "resolved" | "unresolved" | "ignored";
         conflictedResources?: Record<string, unknown>[];
-        conflictResolution?: Record<string, unknown>;
-        resolvedBy?: string;
     }, {
         id?: string;
         detectedAt?: Date;
         resolvedAt?: Date;
+        resolvedBy?: string;
+        conflictResolution?: Record<string, unknown>;
         sourceBranchId?: string;
         targetBranchId?: string;
         conflictType?: "merge" | "rebase" | "cherry_pick";
         conflictStatus?: "resolved" | "unresolved" | "ignored";
         conflictedResources?: Record<string, unknown>[];
-        conflictResolution?: Record<string, unknown>;
-        resolvedBy?: string;
     }>, "many">;
     canMerge: z.ZodBoolean;
     mergeStrategy: z.ZodOptional<z.ZodEnum<["merge", "squash", "rebase"]>>;
@@ -1168,16 +1168,16 @@ export declare const BranchComparisonResponseSchema: z.ZodObject<{
         id?: string;
         detectedAt?: Date;
         resolvedAt?: Date;
+        resolvedBy?: string;
+        conflictResolution?: Record<string, unknown>;
         sourceBranchId?: string;
         targetBranchId?: string;
         conflictType?: "merge" | "rebase" | "cherry_pick";
         conflictStatus?: "resolved" | "unresolved" | "ignored";
         conflictedResources?: Record<string, unknown>[];
-        conflictResolution?: Record<string, unknown>;
-        resolvedBy?: string;
     }[];
     canMerge?: boolean;
-    mergeStrategy?: "merge" | "rebase" | "squash";
+    mergeStrategy?: "merge" | "squash" | "rebase";
     sourceBranch?: {
         id?: string;
         createdAt?: Date;
@@ -1254,16 +1254,16 @@ export declare const BranchComparisonResponseSchema: z.ZodObject<{
         id?: string;
         detectedAt?: Date;
         resolvedAt?: Date;
+        resolvedBy?: string;
+        conflictResolution?: Record<string, unknown>;
         sourceBranchId?: string;
         targetBranchId?: string;
         conflictType?: "merge" | "rebase" | "cherry_pick";
         conflictStatus?: "resolved" | "unresolved" | "ignored";
         conflictedResources?: Record<string, unknown>[];
-        conflictResolution?: Record<string, unknown>;
-        resolvedBy?: string;
     }[];
     canMerge?: boolean;
-    mergeStrategy?: "merge" | "rebase" | "squash";
+    mergeStrategy?: "merge" | "squash" | "rebase";
     sourceBranch?: {
         id?: string;
         createdAt?: Date;
@@ -1377,7 +1377,13 @@ export interface BranchMetrics {
         commits: number;
     };
 }
-export declare export declare export declare export declare export declare export declare export declare const BRANCHING_DEFAULTS: {
+export declare const validateCreateBranchRequest: (request: unknown) => CreateBranchRequest;
+export declare const validateUpdateBranchRequest: (request: unknown) => UpdateBranchRequest;
+export declare const validateCreateMergeRequestRequest: (request: unknown) => CreateMergeRequestRequest;
+export declare const validateMergeBranchRequest: (request: unknown) => MergeBranchRequest;
+export declare const validateBranchFilter: (filter: unknown) => BranchFilter;
+export declare const validateMergeRequestFilter: (filter: unknown) => MergeRequestFilter;
+export declare const BRANCHING_DEFAULTS: {
     readonly DEFAULT_BRANCH_TYPE: BranchType;
     readonly DEFAULT_PROTECTION_LEVEL: ProtectionLevel;
     readonly DEFAULT_MERGE_STRATEGY: "merge";

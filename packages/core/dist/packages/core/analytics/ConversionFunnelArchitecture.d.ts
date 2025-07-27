@@ -204,11 +204,7 @@ export declare class ConversionArchitectureManager {
     /**
      * Create enhanced conversion event with attribution and privacy compliance
      */
-    createEnhancedEvent(
-      baseEvent: ConversionEvent,
-      touchpoints: TouchPoint[],
-      privacyConsent: EnhancedConversionEvent['privacyConsent']
-    ): EnhancedConversionEvent;
+    createEnhancedEvent(baseEvent: ConversionEvent, touchpoints: TouchPoint[], privacyConsent: EnhancedConversionEvent['privacyConsent']): EnhancedConversionEvent;
     /**
      * Calculate multi-touch attribution
      */

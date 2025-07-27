@@ -1,1 +1,1 @@
-{"version":3,"file":"useNotifications.d.ts","sourceRoot":"","sources":["../../../../hooks/useNotifications.ts"],"names":[],"mappings":"AACA,OAAO,EAIL,sBAAsB,EAGvB,MAAM,4BAA4B,CAAC;AAEpC,eAAO,MAAM,gBAAgB,GAAI,yBAG9B;IACD,MAAM,EAAE,MAAM,CAAC;IACf,WAAW,CAAC,EAAE,MAAM,CAAC;CACtB,KAAG,sBAuUH,CAAC"}
+{"version":3,"file":"useNotifications.d.ts","sourceRoot":"","sources":["../../../../hooks/useNotifications.ts"],"names":[],"mappings":""}

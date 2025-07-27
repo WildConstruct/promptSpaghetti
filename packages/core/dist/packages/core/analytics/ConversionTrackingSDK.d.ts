@@ -88,11 +88,7 @@ export declare class ConversionTrackingSDK extends AnalyticsClient {
     private isOnline;
     private recentEventHashes;
     private trackingMetrics;
-    constructor(
-      config: ConversionTrackingConfig,
-      conversionArchitecture: ConversionArchitectureManager,
-      sessionManager: SessionTrackingManager
-    );
+    constructor(config: ConversionTrackingConfig, conversionArchitecture: ConversionArchitectureManager, sessionManager: SessionTrackingManager);
     private initializeTracking;
     private setupEventListeners;
     private initializeStreamingConnection;
@@ -100,13 +96,7 @@ export declare class ConversionTrackingSDK extends AnalyticsClient {
     /**
      * Track conversion event with enhanced capabilities
      */
-    trackConversionEvent(
-      eventType: string,
-      properties?: Record<string,
-      any>,
-      value?: number,
-      touchpoints?: TouchPoint[]
-    ): Promise<boolean>;
+    trackConversionEvent(eventType: string, properties?: Record<string, any>, value?: number, touchpoints?: TouchPoint[]): Promise<boolean>;
     /**
      * Track funnel step progression
      */
@@ -114,13 +104,7 @@ export declare class ConversionTrackingSDK extends AnalyticsClient {
     /**
      * Track attribution touchpoint
      */
-    trackTouchpoint(
-      channel: string,
-      source: string,
-      medium: string,
-      properties?: Record<string,
-      any>
-    ): Promise<boolean>;
+    trackTouchpoint(channel: string, source: string, medium: string, properties?: Record<string, any>): Promise<boolean>;
     /**
      * Update user consent preferences
      */
@@ -175,8 +159,5 @@ export declare class ConversionTrackingSDK extends AnalyticsClient {
      */
     destroy(): void;
 }
-/**
- * Factory function to create ConversionTrackingSDK instance
- */
-export declare export default ConversionTrackingSDK;
+export default ConversionTrackingSDK;
 //# sourceMappingURL=ConversionTrackingSDK.d.ts.map

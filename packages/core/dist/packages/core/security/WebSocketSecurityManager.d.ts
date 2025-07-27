@@ -119,13 +119,7 @@ export declare class WebSocketSecurityManager extends EventEmitter {
     private rateLimiters;
     private suspiciousIPs;
     private blockedConnections;
-    constructor(
-      config: WebSocketSecurityConfig,
-      keyManagementService: KeyManagementService,
-      dataClassifier: DataClassifier,
-      fingerprintService: DeviceFingerprintingService,
-      trustedDeviceManager: TrustedDeviceManager
-    );
+    constructor(config: WebSocketSecurityConfig, keyManagementService: KeyManagementService, dataClassifier: DataClassifier, fingerprintService: DeviceFingerprintingService, trustedDeviceManager: TrustedDeviceManager);
     /**
      * Initialize connection security context
      */

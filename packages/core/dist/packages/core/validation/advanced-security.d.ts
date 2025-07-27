@@ -44,13 +44,5 @@ export interface SecurityMetrics {
     version: string;
     lastUpdated: Date;
 }
-export declare     /**
-     * Enhanced expression validation
-     */
-    enhancedSafeExpression: (maxLength?: number) => (expression: string) => boolean;
-    /**
-     * Get security analysis details
-     */
-    getAnalysis: (input: string) => SecurityAnalysisResult;
-};
+export declare const advancedSecurityAnalyzer: AdvancedSecurityAnalyzer;
 //# sourceMappingURL=advanced-security.d.ts.map

@@ -20,12 +20,6 @@ interface WeightControlSliderProps {
     className?: string;
 }
 export declare const WeightControlSlider: React.FC<WeightControlSliderProps>;
-export declare const useWeightControlIntegration: (
-  weightOptions: WeightControlOption[],
-  onPreviewRequest: (options: WeightControlOption[]
-) => void) => {
-    handleOptionsChange: (newOptions: WeightControlOption[]) => void;
-    lastUpdateTime: number;
-};
+export declare const updateTimeoutRef: React.MutableRefObject<NodeJS.Timeout>;
 export default WeightControlSlider;
 //# sourceMappingURL=WeightControlSlider.d.ts.map

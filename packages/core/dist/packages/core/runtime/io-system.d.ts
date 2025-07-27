@@ -153,24 +153,11 @@ export declare class IOSpecBuilder {
     /**
      * Add a standard number input
      */
-    addNumberInput(
-      id: string,
-      label: string,
-      required?: boolean,
-      min?: number,
-      max?: number,
-      defaultValue?: number
-    ): IOSpecBuilder;
+    addNumberInput(id: string, label: string, required?: boolean, min?: number, max?: number, defaultValue?: number): IOSpecBuilder;
     /**
      * Add a standard choice input
      */
-    addChoiceInput(
-      id: string,
-      label: string,
-      allowedValues: unknown[],
-      required?: boolean,
-      defaultValue?: unknown
-    ): IOSpecBuilder;
+    addChoiceInput(id: string, label: string, allowedValues: unknown[], required?: boolean, defaultValue?: unknown): IOSpecBuilder;
     /**
      * Add a standard text output
      */

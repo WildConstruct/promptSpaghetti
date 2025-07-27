@@ -326,9 +326,7 @@ function generateProjectIdFromMetadata(metadata) {
 /**
  * File extension and MIME type constants
  */
-export const PSG_FILE_EXTENSION = '.psg';
-export const PSG_MIME_TYPE = 'application/json';
-export const PSG_FILE_DESCRIPTION = 'PromptScape Graph Project';
+export export export 
 /**
  * Version compatibility checker
  */
@@ -514,7 +512,6 @@ export function serializePSGFile(psgFile, options = {}) {
     try {
         // Pre-serialization validation
         if (validate) {
-            const validationResult = validatePSGFile(psgFile);
             // If validation passes, continue
         }
         // Update timestamps

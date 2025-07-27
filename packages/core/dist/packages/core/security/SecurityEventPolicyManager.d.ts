@@ -199,5 +199,8 @@ export declare class SecurityEventPolicyManager {
     };
     private generatePolicyRecommendations;
 }
-export declare export default SecurityEventPolicyManager;
+export declare const defaultPolicyManagerConfig: PolicyManagerConfig;
+export declare const securityEventPolicyManager: SecurityEventPolicyManager;
+export declare const queueSecurityEvent: (event: SecurityEvent) => void;
+export default SecurityEventPolicyManager;
 //# sourceMappingURL=SecurityEventPolicyManager.d.ts.map

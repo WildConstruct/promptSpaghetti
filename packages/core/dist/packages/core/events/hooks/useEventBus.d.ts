@@ -79,12 +79,7 @@ export declare function useConditionalEventSubscription<T extends BaseEvent = Ba
 /**
  * Hook for event-driven state updates
  */
-export declare function useEventState<T>(
-  initialState: T,
-  filter: EventFilter,
-  updateFn: (currentState: T,
-  event: BaseEvent
-) => T): [T, React.Dispatch<React.SetStateAction<T>>];
+export declare function useEventState<T>(initialState: T, filter: EventFilter, updateFn: (currentState: T, event: BaseEvent) => T): [T, React.Dispatch<React.SetStateAction<T>>];
 /**
  * Performance monitoring hook for events
  */

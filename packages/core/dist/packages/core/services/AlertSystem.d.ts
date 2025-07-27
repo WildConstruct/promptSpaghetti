@@ -216,12 +216,11 @@ export declare class AlertSystem {
     private executeScript;
     private createTask;
 }
-export declare export declare const acknowledgeAlert: (
-  alertId: string,
-  acknowledgedBy: string,
-  note?: string
-) => boolean;
+export declare const alertSystem: AlertSystem;
+export declare const triggerAlert: (ruleId: string, context: Record<string, any>, overrides?: Partial<Alert>) => Promise<Alert>;
+export declare const acknowledgeAlert: (alertId: string, acknowledgedBy: string, note?: string) => boolean;
 export declare const resolveAlert: (alertId: string, resolvedBy: string, resolution?: string) => boolean;
 export declare const getAlerts: (filter?: AlertFilter) => Alert[];
 export declare const getAlertStats: () => AlertStats;
-export declare //# sourceMappingURL=AlertSystem.d.ts.map
+export declare const subscribeToAlerts: (listenerId: string, callback: (alert: Alert) => void) => void;
+//# sourceMappingURL=AlertSystem.d.ts.map

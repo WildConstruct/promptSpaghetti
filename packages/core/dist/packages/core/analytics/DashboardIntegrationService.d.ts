@@ -59,14 +59,7 @@ export declare class DashboardIntegrationService {
     private legacySystems;
     private performanceMetrics;
     private integrationCache;
-    constructor(
-      eventBus: UnifiedEventBus,
-      eventRepository: EventRepository,
-      authService: AnalyticsAuthorizationService,
-      wsServer: WebSocketStreamingServer,
-      adapters: AnalyticsAdapterManager,
-      config?: Partial<DashboardIntegrationConfig>
-    );
+    constructor(eventBus: UnifiedEventBus, eventRepository: EventRepository, authService: AnalyticsAuthorizationService, wsServer: WebSocketStreamingServer, adapters: AnalyticsAdapterManager, config?: Partial<DashboardIntegrationConfig>);
     /**
      * Initialize legacy analytics systems mapping
      */
@@ -99,12 +92,7 @@ export declare class DashboardIntegrationService {
     /**
      * Get widget-specific performance data
      */
-    getWidgetPerformanceData(
-      widgetId: string,
-      widgetType: string,
-      filter: EventFilter,
-      authContext: AuthContext
-    ): Promise<any>;
+    getWidgetPerformanceData(widgetId: string, widgetType: string, filter: EventFilter, authContext: AuthContext): Promise<any>;
     /**
      * Get performance widget data from performance monitoring system
      */

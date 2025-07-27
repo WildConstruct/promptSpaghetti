@@ -608,5 +608,5 @@ export interface ExportConfig {
     };
     metrics: string[];
 }
-export declare const TemplatePerformanceIndicators: React.FC<TemplatePerformanceIndicatorsProps>;
+export declare const error: string, setError: React.Dispatch<React.SetStateAction<string>>;
 //# sourceMappingURL=TemplatePerformanceIndicators.d.ts.map

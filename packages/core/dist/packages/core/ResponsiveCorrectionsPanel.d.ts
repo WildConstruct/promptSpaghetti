@@ -1,18 +1,4 @@
 import React from 'react';
-interface ResponsiveCorrectionsPanelProps {
-    isOpen: boolean;
-    onClose: () => void;
-}
-export declare const ResponsiveCorrectionsPanel: React.FC<ResponsiveCorrectionsPanelProps>;
-export declare const useCorrectionsPanel: () => {
-    isOpen: boolean;
-    showStats: boolean;
-    openPanel: () => void;
-    closePanel: () => void;
-    togglePanel: () => void;
-    openStats: () => void;
-    closeStats: () => void;
-    toggleStats: () => void;
-};
-export {};
+export declare const isMobile: boolean, setIsMobile: React.Dispatch<React.SetStateAction<boolean>>;
+export declare const showStats: boolean, setShowStats: React.Dispatch<React.SetStateAction<boolean>>;
 //# sourceMappingURL=ResponsiveCorrectionsPanel.d.ts.map

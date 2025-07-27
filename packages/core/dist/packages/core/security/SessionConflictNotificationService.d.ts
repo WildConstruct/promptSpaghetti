@@ -198,28 +198,15 @@ export declare class SessionConflictNotificationService extends EventEmitter {
     /**
      * Send session eviction notification
      */
-    sendEvictionNotification(
-      sessionId: string,
-      userId: string,
-      reason: string,
-      gracePeriodMinutes?: number
-    ): Promise<boolean>;
+    sendEvictionNotification(sessionId: string, userId: string, reason: string, gracePeriodMinutes?: number): Promise<boolean>;
     /**
      * Send emergency override notification
      */
-    sendEmergencyOverrideNotification(
-      adminUserId: string,
-      targetUserId: string,
-      evictedSessions: string[]
-    ): Promise<boolean>;
+    sendEmergencyOverrideNotification(adminUserId: string, targetUserId: string, evictedSessions: string[]): Promise<boolean>;
     /**
      * Prompt user for conflict resolution choice
      */
-    promptUserChoice(
-      conflict: SessionConflict,
-      userId: string,
-      timeoutMinutes?: number
-    ): Promise<ConflictResolutionResponse | null>;
+    promptUserChoice(conflict: SessionConflict, userId: string, timeoutMinutes?: number): Promise<ConflictResolutionResponse | null>;
     /**
      * Handle user response to conflict notification
      */
@@ -251,13 +238,7 @@ export declare class SessionConflictNotificationService extends EventEmitter {
     /**
      * Handle notification action click
      */
-    handleNotificationAction(
-      notificationId: string,
-      actionId: string,
-      userId: string,
-      data?: Record<string,
-      any>
-    ): void;
+    handleNotificationAction(notificationId: string, actionId: string, userId: string, data?: Record<string, any>): void;
     private mergeConfig;
     private initializeTemplates;
     private sendNotification;

@@ -9,11 +9,12 @@ export interface WeightVisualizationProps {
     showPercentages?: boolean;
     className?: string;
 }
-export declare export declare const WeightVisualization: React.FC<WeightVisualizationProps>;
+export declare const WEIGHT_OPTION_COLORS: string[];
+export declare const getOptionColor: (index: number) => string;
+export declare const WeightVisualization: React.FC<WeightVisualizationProps>;
 export interface WeightLegendProps {
     options: WeightControlOption[];
     className?: string;
 }
-export declare const WeightLegend: React.FC<WeightLegendProps>;
 export default WeightVisualization;
 //# sourceMappingURL=WeightVisualization.d.ts.map

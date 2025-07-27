@@ -325,13 +325,4 @@ export function createActivityTrackingService(config) {
     return new ActivityTrackingService(config);
 }
 // Default configuration
-export const DEFAULT_ACTIVITY_CONFIG = {
-    enableRealTime: true,
-    enableAnalytics: true,
-    enableRetention: true,
-    maxBatchSize: 100,
-    flushInterval: 5000,
-    enableCompression: false,
-    enableEncryption: false
-};
 export default ActivityTrackingService;

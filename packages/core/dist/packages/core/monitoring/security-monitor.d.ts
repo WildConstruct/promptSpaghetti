@@ -97,33 +97,15 @@ export declare class SecurityEventMonitor extends EventEmitter {
     /**
      * Record validation failure event
      */
-    recordValidationFailure(
-      input: string,
-      inputType: string,
-      source: string,
-      analysis: SecurityAnalysisResult,
-      context?: Partial<SecurityEvent['context']>
-    ): SecurityEvent;
+    recordValidationFailure(input: string, inputType: string, source: string, analysis: SecurityAnalysisResult, context?: Partial<SecurityEvent['context']>): SecurityEvent;
     /**
      * Record injection attempt
      */
-    recordInjectionAttempt(
-      input: string,
-      inputType: string,
-      source: string,
-      detectedPatterns: string[],
-      context?: Partial<SecurityEvent['context']>
-    ): SecurityEvent;
+    recordInjectionAttempt(input: string, inputType: string, source: string, detectedPatterns: string[], context?: Partial<SecurityEvent['context']>): SecurityEvent;
     /**
      * Record anomalous activity
      */
-    recordAnomaly(
-      description: string,
-      source: string,
-      riskScore: number,
-      metadata?: Record<string,
-      any>
-    ): SecurityEvent;
+    recordAnomaly(description: string, source: string, riskScore: number, metadata?: Record<string, any>): SecurityEvent;
     /**
      * Get recent security events
      */
@@ -159,10 +141,7 @@ export declare class SecurityEventMonitor extends EventEmitter {
     private getRiskScoreDistribution;
     private getTimelineData;
 }
-export declare     /**
-     * Create monitoring middleware for API endpoints
-     */
-    createApiMiddleware: (source: string) => (req: any, res: any, next: any) => any;
-};
+export declare const securityMonitor: SecurityEventMonitor;
+export declare const result: any;
 export default SecurityEventMonitor;
 //# sourceMappingURL=security-monitor.d.ts.map

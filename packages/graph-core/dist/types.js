@@ -19,12 +19,6 @@ export const NodeTypeEnum = z.enum([
     // Epic 8 Python Integration
     'PythonTransform'
 ]);
-// Base node schema for cross-platform compatibility
-export const BaseNodeSchema = z.object({
-    id: z.string(),
-    type: NodeTypeEnum,
-    inputs: z.array(z.string()).optional() // ids of upstream nodes (ordered)
-});
 // Abstract base for runtime nodes
 export class RuntimeNode {
     id;

@@ -15,13 +15,7 @@
  * - Verification analytics and reporting
  */
 import { EventEmitter } from 'events';
-import { 
-  DeviceFingerprintingService,
-  DeviceFingerprint,
-  LocationData,
-  RiskLevel,
-  FingerprintContext
-} from './DeviceFingerprintingService';
+import { DeviceFingerprintingService, DeviceFingerprint, LocationData, RiskLevel, FingerprintContext } from './DeviceFingerprintingService';
 import { TrustedDeviceManager, TrustLevel, VerificationMethod } from './TrustedDeviceManager';
 import { VerificationCodeManager } from './VerificationCodeManager';
 import { EmailDeliveryTracker } from './services/EmailDeliveryTracker';
@@ -160,13 +154,7 @@ export declare class DeviceVerificationService extends EventEmitter {
     private config;
     private sessions;
     private challenges;
-    constructor(
-      fingerprintService: DeviceFingerprintingService,
-      trustedDeviceManager: TrustedDeviceManager,
-      verificationCodeManager: VerificationCodeManager,
-      emailTracker: EmailDeliveryTracker,
-      config?: VerificationConfig
-    );
+    constructor(fingerprintService: DeviceFingerprintingService, trustedDeviceManager: TrustedDeviceManager, verificationCodeManager: VerificationCodeManager, emailTracker: EmailDeliveryTracker, config?: VerificationConfig);
     /**
      * Start device verification process
      */
@@ -174,13 +162,7 @@ export declare class DeviceVerificationService extends EventEmitter {
     /**
      * Submit challenge response
      */
-    submitChallengeResponse(
-      sessionId: string,
-      challengeId: string,
-      response: string,
-      metadata?: Record<string,
-      any>
-    ): Promise<{
+    submitChallengeResponse(sessionId: string, challengeId: string, response: string, metadata?: Record<string, any>): Promise<{
         success: boolean;
         session: VerificationSession;
         nextStep?: VerificationStep;

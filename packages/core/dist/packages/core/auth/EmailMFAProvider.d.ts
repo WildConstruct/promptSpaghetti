@@ -3,14 +3,7 @@
  * Task: T-1752989143997-938 - Implement email-based verification
  * Epic 19: Authentication Enhancement & Security Hardening
  */
-import { 
-  EmailConfiguration,
-  EmailVerification,
-  MFAVerificationRequest,
-  MFAVerificationResponse,
-  MFAEnrollmentRequest,
-  MFAEnrollmentResponse
-} from '../types/MFATypes';
+import { EmailConfiguration, EmailVerification, MFAVerificationRequest, MFAVerificationResponse, MFAEnrollmentRequest, MFAEnrollmentResponse } from '../types/MFATypes';
 interface EmailMFAConfig {
     encryption: {
         algorithm: 'aes-256-gcm';

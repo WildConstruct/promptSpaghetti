@@ -327,10 +327,7 @@ export declare class PolicyManagement extends EventEmitter {
     private performanceMetrics;
     private securityDashboardPolicies;
     private automatedEnforcementService;
-    constructor(
-      securityDashboardPolicies?: SecurityDashboardPolicies,
-      automatedEnforcementService?: AutomatedEnforcementService
-    );
+    constructor(securityDashboardPolicies?: SecurityDashboardPolicies, automatedEnforcementService?: AutomatedEnforcementService);
     /**
      * Create a new policy
      */

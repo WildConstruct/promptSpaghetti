@@ -100,12 +100,7 @@ export declare class ModelManager {
     private pools;
     private loadBalancingConfig;
     private warmupStrategy;
-    constructor(
-      factoryConfig?: FactoryConfig,
-      cacheConfig?: CacheConfig,
-      loadBalancingConfig?: LoadBalancingConfig,
-      warmupStrategy?: WarmupStrategy
-    );
+    constructor(factoryConfig?: FactoryConfig, cacheConfig?: CacheConfig, loadBalancingConfig?: LoadBalancingConfig, warmupStrategy?: WarmupStrategy);
     createModelPool(poolId: string, registrations: ModelRegistration[]): Promise<ModelPool>;
     processRequest(poolId: string, request: AIRequest): Promise<AIResponse>;
     estimateRequest(poolId: string, request: AIRequest): Promise<CostEstimate>;

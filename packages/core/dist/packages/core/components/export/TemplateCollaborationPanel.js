@@ -326,89 +326,97 @@ export const TemplateCollaborationPanel = ({ template, visible = true, onClose, 
                                     padding: '40px',
                                     textAlign: 'center',
                                     color: '#9ca3af'
-                                }, children: [_jsx("div", { style: { fontSize: '32px', marginBottom: '8px' }, children: "\uD83D\uDCCA" }), _jsx("div", { children: "Loading analytics..." })] })) : (_jsxs("div", { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }, children: [_jsxs("div", { style: {
-                                            padding: '16px',
-                                            background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-                                            color: 'white',
-                                            borderRadius: '8px'
-                                        }, children: [_jsx("div", { style: { fontSize: '24px', fontWeight: '600' }, children: formatUsageCount(analytics.totalUses) }), _jsx("div", { style: { fontSize: '12px', opacity: 0.9 }, children: "Total Uses" })] }), _jsxs("div", { style: {
-                                            padding: '16px',
-                                            background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                                            color: 'white',
-                                            borderRadius: '8px'
-                                        }, children: [_jsx("div", { style: { fontSize: '24px', fontWeight: '600' }, children: analytics.uniqueUsers }), _jsx("div", { style: { fontSize: '12px', opacity: 0.9 }, children: "Unique Users" })] }), _jsxs("div", { style: {
-                                            padding: '16px',
-                                            background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-                                            color: 'white',
-                                            borderRadius: '8px'
-                                        }, children: [_jsxs("div", { style: { fontSize: '24px', fontWeight: '600' }, children: [Math.round(analytics.successRate * 100), "%"] }), _jsx("div", { style: { fontSize: '12px', opacity: 0.9 }, children: "Success Rate" })] }), _jsxs("div", { style: {
-                                            padding: '16px',
-                                            background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
-                                            color: 'white',
-                                            borderRadius: '8px'
-                                        }, children: [_jsx("div", { style: { fontSize: '24px', fontWeight: '600' }, children: analytics.forkCount }), _jsx("div", { style: { fontSize: '12px', opacity: 0.9 }, children: "Forks" })] })] }))] })), activeTab === 'sharing' && (_jsxs("div", { children: [_jsx("h4", { style: { margin: '0 0 16px', fontSize: '16px', fontWeight: '600' }, children: "Public Sharing Settings" }), _jsxs("div", { style: { display: 'flex', flexDirection: 'column', gap: '20px' }, children: [_jsx("div", { style: {
+                                }, children: [_jsx("div", { style: { fontSize: '32px', marginBottom: '8px' }, children: "\uD83D\uDCCA" }), _jsx("div", { children: "Loading analytics..." })] })) : (_jsx("div", { style: ({ display: 'grid', gridTemplateColumns: 'repeat(,
+                                    auto } - fit,
+                                    minmax(200, px, 1, fr)) })), "', gap: '16px' }}>", _jsxs("div", { style: {
+                                    padding: '16px',
+                                    background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+                                    color: 'white',
+                                    borderRadius: '8px'
+                                }, children: [_jsx("div", { style: { fontSize: '24px', fontWeight: '600' }, children: formatUsageCount(analytics.totalUses) }), _jsx("div", { style: { fontSize: '12px', opacity: 0.9 }, children: "Total Uses" })] }), _jsxs("div", { style: {
+                                    padding: '16px',
+                                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                                    color: 'white',
+                                    borderRadius: '8px'
+                                }, children: [_jsx("div", { style: { fontSize: '24px', fontWeight: '600' }, children: analytics.uniqueUsers }), _jsx("div", { style: { fontSize: '12px', opacity: 0.9 }, children: "Unique Users" })] }), _jsxs("div", { style: {
+                                    padding: '16px',
+                                    background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                                    color: 'white',
+                                    borderRadius: '8px'
+                                }, children: [_jsxs("div", { style: { fontSize: '24px', fontWeight: '600' }, children: [Math.round(analytics.successRate * 100), "%"] }), _jsx("div", { style: { fontSize: '12px', opacity: 0.9 }, children: "Success Rate" })] }), _jsxs("div", { style: {
+                                    padding: '16px',
+                                    background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                                    color: 'white',
+                                    borderRadius: '8px'
+                                }, children: [_jsx("div", { style: { fontSize: '24px', fontWeight: '600' }, children: analytics.forkCount }), _jsx("div", { style: { fontSize: '12px', opacity: 0.9 }, children: "Forks" })] })] }))] }), ")}", activeTab === 'sharing' && (_jsxs("div", { children: [_jsx("h4", { style: { margin: '0 0 16px', fontSize: '16px', fontWeight: '600' }, children: "Public Sharing Settings" }), _jsxs("div", { style: { display: 'flex', flexDirection: 'column', gap: '20px' }, children: [_jsx("div", { style: {
+                                    padding: '16px',
+                                    background: '#f8fafc',
+                                    border: '1px solid #e2e8f0',
+                                    borderRadius: '8px'
+                                }, children: _jsxs("label", { style: { display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }, children: [_jsx("input", { type: "checkbox", checked: shareSettings.isPublic, onChange: (e) => handleShareSettingsUpdate({ isPublic: e.target.checked }) }), _jsxs("div", { children: [_jsx("div", { style: { fontSize: '14px', fontWeight: '500' }, children: "Make Template Public" }), _jsx("div", { style: { fontSize: '12px', color: '#6b7280' }, children: "Allow anyone to discover and use this template" })] })] }) }), shareSettings.isPublic && (_jsxs(_Fragment, { children: [_jsx("div", { style: {
                                             padding: '16px',
                                             background: '#f8fafc',
                                             border: '1px solid #e2e8f0',
                                             borderRadius: '8px'
-                                        }, children: _jsxs("label", { style: { display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }, children: [_jsx("input", { type: "checkbox", checked: shareSettings.isPublic, onChange: (e) => handleShareSettingsUpdate({ isPublic: e.target.checked }) }), _jsxs("div", { children: [_jsx("div", { style: { fontSize: '14px', fontWeight: '500' }, children: "Make Template Public" }), _jsx("div", { style: { fontSize: '12px', color: '#6b7280' }, children: "Allow anyone to discover and use this template" })] })] }) }), shareSettings.isPublic && (_jsxs(_Fragment, { children: [_jsx("div", { style: {
-                                                    padding: '16px',
-                                                    background: '#f8fafc',
-                                                    border: '1px solid #e2e8f0',
-                                                    borderRadius: '8px'
-                                                }, children: _jsxs("div", { style: { marginBottom: '12px' }, children: [_jsxs("label", { style: { display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', marginBottom: '8px' }, children: [_jsx("input", { type: "checkbox", checked: shareSettings.allowForks, onChange: (e) => handleShareSettingsUpdate({ allowForks: e.target.checked }) }), _jsxs("div", { children: [_jsx("div", { style: { fontSize: '14px', fontWeight: '500' }, children: "Allow Forks" }), _jsx("div", { style: { fontSize: '12px', color: '#6b7280' }, children: "Let others create their own copies of this template" })] })] }), _jsxs("label", { style: { display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }, children: [_jsx("input", { type: "checkbox", checked: shareSettings.allowComments, onChange: (e) => handleShareSettingsUpdate({ allowComments: e.target.checked }) }), _jsxs("div", { children: [_jsx("div", { style: { fontSize: '14px', fontWeight: '500' }, children: "Allow Comments" }), _jsx("div", { style: { fontSize: '12px', color: '#6b7280' }, children: "Enable community feedback and discussions" })] })] })] }) }), _jsx("div", { style: {
-                                                    padding: '16px',
-                                                    background: '#f8fafc',
-                                                    border: '1px solid #e2e8f0',
-                                                    borderRadius: '8px'
-                                                }, children: _jsxs("div", { style: { marginBottom: '12px' }, children: [_jsx("div", { style: { fontSize: '14px', fontWeight: '500', marginBottom: '8px' }, children: "Share Link" }), shareSettings.shareLink ? (_jsxs("div", { style: { display: 'flex', gap: '8px' }, children: [_jsx("input", { type: "text", value: shareSettings.shareLink, readOnly: true, style: {
-                                                                        flex: 1,
-                                                                        padding: '8px 12px',
-                                                                        border: '1px solid #e2e8f0',
-                                                                        borderRadius: '6px',
-                                                                        fontSize: '12px',
-                                                                        background: 'white'
-                                                                    } }), _jsx("button", { onClick: () => navigator.clipboard.writeText(shareSettings.shareLink), style: {
-                                                                        padding: '8px 12px',
-                                                                        background: '#10b981',
-                                                                        color: 'white',
-                                                                        border: 'none',
-                                                                        borderRadius: '6px',
-                                                                        cursor: 'pointer',
-                                                                        fontSize: '12px'
-                                                                    }, children: "\uD83D\uDCCB Copy" })] })) : (_jsx("button", { onClick: handleGenerateShareLink, style: {
-                                                                padding: '8px 16px',
-                                                                background: '#3b82f6',
+                                        }, children: _jsxs("div", { style: { marginBottom: '12px' }, children: [_jsxs("label", { style: { display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', marginBottom: '8px' }, children: [_jsx("input", { type: "checkbox", checked: shareSettings.allowForks, onChange: (e) => handleShareSettingsUpdate({ allowForks: e.target.checked }) }), _jsxs("div", { children: [_jsx("div", { style: { fontSize: '14px', fontWeight: '500' }, children: "Allow Forks" }), _jsx("div", { style: { fontSize: '12px', color: '#6b7280' }, children: "Let others create their own copies of this template" })] })] }), _jsxs("label", { style: { display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }, children: [_jsx("input", { type: "checkbox", checked: shareSettings.allowComments, onChange: (e) => handleShareSettingsUpdate({ allowComments: e.target.checked }) }), _jsxs("div", { children: [_jsx("div", { style: { fontSize: '14px', fontWeight: '500' }, children: "Allow Comments" }), _jsx("div", { style: { fontSize: '12px', color: '#6b7280' }, children: "Enable community feedback and discussions" })] })] })] }) }), _jsx("div", { style: {
+                                            padding: '16px',
+                                            background: '#f8fafc',
+                                            border: '1px solid #e2e8f0',
+                                            borderRadius: '8px'
+                                        }, children: _jsxs("div", { style: { marginBottom: '12px' }, children: [_jsx("div", { style: { fontSize: '14px', fontWeight: '500', marginBottom: '8px' }, children: "Share Link" }), shareSettings.shareLink ? (_jsxs("div", { style: { display: 'flex', gap: '8px' }, children: [_jsx("input", { type: "text", value: shareSettings.shareLink, readOnly: true, style: {
+                                                                flex: 1,
+                                                                padding: '8px 12px',
+                                                                border: '1px solid #e2e8f0',
+                                                                borderRadius: '6px',
+                                                                fontSize: '12px',
+                                                                background: 'white'
+                                                            } }), _jsx("button", { onClick: () => navigator.clipboard.writeText(shareSettings.shareLink), style: {
+                                                                padding: '8px 12px',
+                                                                background: '#10b981',
                                                                 color: 'white',
                                                                 border: 'none',
                                                                 borderRadius: '6px',
                                                                 cursor: 'pointer',
-                                                                fontSize: '14px'
-                                                            }, children: "\uD83D\uDD17 Generate Share Link" }))] }) })] }))] })] }))] }), _jsxs("div", { style: {
-                    padding: '16px 24px',
-                    borderTop: '1px solid #e2e8f0',
-                    background: '#f8fafc',
-                    display: 'flex',
-                    gap: '12px',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                }, children: [_jsx("div", { style: { display: 'flex', gap: '12px' }, children: _jsx("button", { onClick: handleForkTemplate, disabled: loading, style: {
-                                padding: '8px 16px',
-                                background: '#f3f4f6',
-                                border: '1px solid #e2e8f0',
-                                borderRadius: '6px',
-                                cursor: loading ? 'not-allowed' : 'pointer',
-                                fontSize: '14px',
-                                color: '#374151',
-                                opacity: loading ? 0.6 : 1
-                            }, children: "\uD83C\uDF74 Fork Template" }) }), _jsx("div", { style: { display: 'flex', gap: '12px' }, children: onClose && (_jsx("button", { onClick: onClose, style: {
-                                padding: '8px 16px',
-                                background: 'transparent',
-                                border: '1px solid #e2e8f0',
-                                borderRadius: '6px',
-                                cursor: 'pointer',
-                                fontSize: '14px',
-                                color: '#6b7280'
-                            }, children: "Close" })) })] })] }));
+                                                                fontSize: '12px'
+                                                            }, children: "\uD83D\uDCCB Copy" })] })) : (_jsx("button", { onClick: handleGenerateShareLink, style: {
+                                                        padding: '8px 16px',
+                                                        background: '#3b82f6',
+                                                        color: 'white',
+                                                        border: 'none',
+                                                        borderRadius: '6px',
+                                                        cursor: 'pointer',
+                                                        fontSize: '14px'
+                                                    }, children: "\uD83D\uDD17 Generate Share Link" }))] }) })] }))] })] }))] })) /* Footer */;
+    { /* Footer */ }
+    _jsxs("div", { style: {
+            padding: '16px 24px',
+            borderTop: '1px solid #e2e8f0',
+            background: '#f8fafc',
+            display: 'flex',
+            gap: '12px',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+        }, children: [_jsx("div", { style: { display: 'flex', gap: '12px' }, children: _jsx("button", { onClick: handleForkTemplate, disabled: loading, style: {
+                        padding: '8px 16px',
+                        background: '#f3f4f6',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '6px',
+                        cursor: loading ? 'not-allowed' : 'pointer',
+                        fontSize: '14px',
+                        color: '#374151',
+                        opacity: loading ? 0.6 : 1
+                    }, children: "\uD83C\uDF74 Fork Template" }) }), _jsx("div", { style: { display: 'flex', gap: '12px' }, children: onClose && (_jsx("button", { onClick: onClose, style: {
+                        padding: '8px 16px',
+                        background: 'transparent',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontSize: '14px',
+                        color: '#6b7280'
+                    }, children: "Close" })) })] });
 };
+div >
+;
+;
+;
 export default TemplateCollaborationPanel;

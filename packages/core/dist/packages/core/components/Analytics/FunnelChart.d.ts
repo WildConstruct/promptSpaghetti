@@ -15,12 +15,7 @@
  * - Accessibility compliance
  */
 import React from 'react';
-import { 
-  ConversionFunnelDefinition,
-  ConversionStep,
-  UserSegment,
-  ConversionCohort
-} from '../../analytics/ConversionDataModel';
+import { ConversionFunnelDefinition, ConversionStep, UserSegment, ConversionCohort } from '../../analytics/ConversionDataModel';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 export interface FunnelChartProps {
     funnelDefinition: ConversionFunnelDefinition;

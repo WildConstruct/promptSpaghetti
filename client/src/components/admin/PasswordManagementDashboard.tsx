@@ -264,11 +264,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
     return (
       <div>
         {/* Key Metrics */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(
-          auto-fit,
-          minmax(250px,
-          1fr
-        ))', gap: '20px', marginBottom: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginBottom: '24px' }}>
           <StatCard
             title="Password Compliance"
             value={`${stats.passwordPolicyCompliance.toFixed(1)}%`}
@@ -305,11 +301,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
         </div>
 
         {/* Additional Metrics */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(
-          auto-fit,
-          minmax(250px,
-          1fr
-        ))', gap: '20px', marginBottom: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginBottom: '24px' }}>
           <StatCard
             title="MFA Adoption"
             value={`${stats.mfaAdoptionRate.toFixed(1)}%`}

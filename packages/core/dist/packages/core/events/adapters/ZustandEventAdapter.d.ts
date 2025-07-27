@@ -48,12 +48,7 @@ export declare class ZustandEventAdapter {
     /**
      * Create Zustand middleware that publishes state changes as events
      */
-    middleware: <T extends object>(
-      stateCreator: StateCreator<T & EventableStore,
-      [],
-      [],
-      T & EventableStore>
-    ) => StateCreator<T & EventableStore, [], [], T & EventableStore>;
+    middleware: <T extends object>(stateCreator: StateCreator<T & EventableStore, [], [], T & EventableStore>) => StateCreator<T & EventableStore, [], [], T & EventableStore>;
     /**
      * Set up selective subscriptions using zustand's subscribeWithSelector
      */
@@ -89,12 +84,7 @@ export declare class ZustandEventAdapter {
     /**
      * Trigger state updates from events
      */
-    handleEventBasedStateUpdate(
-      store: any,
-      event: BaseEvent,
-      updateFn: (currentState: any,
-      event: BaseEvent
-    ) => any): void;
+    handleEventBasedStateUpdate(store: any, event: BaseEvent, updateFn: (currentState: any, event: BaseEvent) => any): void;
     /**
      * Clean up adapter resources
      */
@@ -112,13 +102,20 @@ export declare class ZustandEventAdapter {
 /**
  * Factory function to create Zustand event middleware
  */
-export declare /**
+export declare const createZustandEventMiddleware: () => <T extends object>(stateCreator: StateCreator<T & EventableStore, [], [], T & EventableStore>) => StateCreator<T & EventableStore, [], [], T & EventableStore>;
+/**
  * Enhanced Zustand store creator with event integration
  */
-export declare /**
+export declare const createEventEnabledStore: <T>(stateCreator: StateCreator<T>) => StateCreator<object & EventableStore, [], [], object & EventableStore>;
+/**
  * Utility functions for Zustand-Event integration
  */
-export declare     /**
+export declare const ZustandEventUtils: {
+    /**
+     * Extract event adapter from a Zustand store
+     */
+    getEventAdapter: (store: any) => ZustandEventAdapter | null;
+    /**
      * Check if a store has event integration
      */
     hasEventIntegration: (store: any) => boolean;

@@ -146,14 +146,7 @@ export declare class MarketplaceMetrics {
     /**
      * Track marketplace event
      */
-    trackEvent(
-      type: MarketplaceEventType,
-      properties?: Record<string,
-      any>,
-      entityId?: string,
-      entityType?: 'template' | 'creator' | 'category' | 'collection',
-      value?: number
-    ): void;
+    trackEvent(type: MarketplaceEventType, properties?: Record<string, any>, entityId?: string, entityType?: 'template' | 'creator' | 'category' | 'collection', value?: number): void;
     private updateMetricsFromEvent;
     private updateTemplateConversionRates;
     private integrateWithConversionTracking;

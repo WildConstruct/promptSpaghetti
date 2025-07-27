@@ -103,12 +103,21 @@ export interface ArticleManagementProps {
     onUpdateCategory: (id: string, category: Partial<ArticleCategory>) => Promise<ArticleCategory>;
     className?: string;
 }
-export declare     onDelete: (article: Article) => void;
+export declare const ArticleList: React.FC<{
+    articles: Article[];
+    filter: ArticleFilter;
+    sort: ArticleSort;
+    onEdit: (article: Article) => void;
+    onDelete: (article: Article) => void;
     onDuplicate: (article: Article) => void;
     onView: (article: Article) => void;
     currentUser: ArticleAuthor;
 }>;
-export declare     onCancel: () => void;
+export declare const ArticleEditor: React.FC<{
+    article?: Article;
+    categories: ArticleCategory[];
+    onSave: (article: Partial<Article>) => Promise<void>;
+    onCancel: () => void;
     onUploadAttachment: (file: File) => Promise<ArticleAttachment>;
 }>;
 export declare const ArticleManagement: React.FC<ArticleManagementProps>;

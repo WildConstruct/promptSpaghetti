@@ -376,70 +376,82 @@ export const IndividualResultManager = ({ visible = true, onClose, className = '
                                         borderRadius: '4px',
                                         fontSize: '12px',
                                         border: '1px solid #e2e8f0'
-                                    }, children: [_jsxs("div", { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))', gap: '8px' }, children: [_jsxs("div", { children: [_jsx("strong", { children: "Words:" }), " ", analytics.wordCount] }), _jsxs("div", { children: [_jsx("strong", { children: "Unique:" }), " ", analytics.uniqueWords] }), _jsxs("div", { children: [_jsx("strong", { children: "Readability:" }), " ", analytics.readabilityScore] }), _jsxs("div", { children: [_jsx("strong", { children: "Sentiment:" }), " ", analytics.sentiment] }), _jsxs("div", { children: [_jsx("strong", { children: "Similarity:" }), " ", Math.round(analytics.similarity * 100), "%"] })] }), analytics.topics.length > 0 && (_jsxs("div", { style: { marginTop: '4px' }, children: [_jsx("strong", { children: "Topics:" }), " ", analytics.topics.join(', ')] }))] })), actionMenuIndex === index && (_jsxs("div", { ref: menuRef, style: {
-                                        position: 'absolute',
-                                        top: '50px',
-                                        right: '10px',
-                                        background: 'white',
-                                        border: '1px solid #e2e8f0',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-                                        zIndex: 1001,
-                                        minWidth: '160px'
-                                    }, children: [!result.locked ? (_jsx("button", { onClick: () => handleResultAction({ type: 'lock', resultIndex: index }), style: menuButtonStyle, children: "\uD83D\uDD12 Lock Result" })) : (_jsx("button", { onClick: () => handleResultAction({ type: 'unlock', resultIndex: index }), style: menuButtonStyle, children: "\uD83D\uDD13 Unlock Result" })), _jsx("button", { onClick: () => handleResultAction({ type: 'regenerate', resultIndex: index }), disabled: result.locked || isRegenerating, style: {
-                                                ...menuButtonStyle,
-                                                color: result.locked || isRegenerating ? '#9ca3af' : '#374151',
-                                                cursor: result.locked || isRegenerating ? 'not-allowed' : 'pointer'
-                                            }, children: "\u27F3 Regenerate" }), _jsx("div", { style: { height: '1px', background: '#e2e8f0', margin: '4px 8px' } }), _jsx("button", { onClick: () => handleResultAction({ type: 'export', resultIndex: index, data: { format: 'text' } }), style: menuButtonStyle, children: "\uD83D\uDCC4 Export Text" }), _jsx("button", { onClick: () => handleResultAction({ type: 'export', resultIndex: index, data: { format: 'json' } }), style: menuButtonStyle, children: "\uD83D\uDCCB Export JSON" }), enableAnalytics && analytics && (_jsx("button", { onClick: () => handleResultAction({ type: 'export', resultIndex: index, data: { format: 'csv' } }), style: menuButtonStyle, children: "\uD83D\uDCCA Export CSV" }))] }))] }, `${result.seed}-${index}`));
-                    }), results.length > maxDisplayResults && (_jsxs("div", { style: {
-                            padding: '12px 20px',
-                            textAlign: 'center',
-                            color: '#6b7280',
-                            fontSize: '14px'
-                        }, children: ["... and ", results.length - maxDisplayResults, " more results"] }))] }), lockDialog.visible && (_jsx("div", { style: {
-                    position: 'absolute',
-                    inset: 0,
-                    background: 'rgba(0, 0, 0, 0.5)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    zIndex: 1002
-                }, children: _jsxs("div", { style: {
-                        background: 'white',
-                        padding: '20px',
-                        borderRadius: '12px',
-                        width: '300px',
-                        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.3)'
-                    }, children: [_jsx("h4", { style: { margin: '0 0 12px', fontSize: '16px' }, children: "Lock Result" }), _jsx("p", { style: { margin: '0 0 12px', fontSize: '14px', color: '#6b7280' }, children: "Add a note to explain why this result is locked:" }), _jsx("textarea", { value: lockDialog.note, onChange: (e) => setLockDialog(prev => ({ ...prev, note: e.target.value })), placeholder: "Important for X reason...", style: {
-                                width: '100%',
-                                height: '80px',
-                                padding: '8px',
-                                border: '1px solid #e2e8f0',
-                                borderRadius: '6px',
-                                fontSize: '14px',
-                                resize: 'none',
-                                marginBottom: '16px'
-                            } }), _jsxs("div", { style: { display: 'flex', gap: '8px', justifyContent: 'flex-end' }, children: [_jsx("button", { onClick: () => setLockDialog({ visible: false, resultIndex: -1, note: '' }), style: {
-                                        padding: '8px 16px',
-                                        background: '#e2e8f0',
-                                        color: '#374151',
-                                        border: 'none',
-                                        borderRadius: '6px',
-                                        cursor: 'pointer'
-                                    }, children: "Cancel" }), _jsx("button", { onClick: handleLockConfirmation, style: {
-                                        padding: '8px 16px',
-                                        background: '#f59e0b',
-                                        color: 'white',
-                                        border: 'none',
-                                        borderRadius: '6px',
-                                        cursor: 'pointer'
-                                    }, children: "\uD83D\uDD12 Lock Result" })] })] }) })), _jsx("style", { children: `
+                                    }, children: [_jsx("div", { style: ({ display: 'grid', gridTemplateColumns: 'repeat(,
+                                                auto } - fit,
+                                                minmax(80, px, 1, fr)) }), ")', gap: '8px' }}>", _jsxs("div", { children: [_jsx("strong", { children: "Words:" }), " ", analytics.wordCount] }), _jsxs("div", { children: [_jsx("strong", { children: "Unique:" }), " ", analytics.uniqueWords] }), _jsxs("div", { children: [_jsx("strong", { children: "Readability:" }), " ", analytics.readabilityScore] }), _jsxs("div", { children: [_jsx("strong", { children: "Sentiment:" }), " ", analytics.sentiment] }), _jsxs("div", { children: [_jsx("strong", { children: "Similarity:" }), " ", Math.round(analytics.similarity * 100), "%"] })] })), analytics.topics.length > 0 && (_jsxs("div", { style: { marginTop: '4px' }, children: [_jsx("strong", { children: "Topics:" }), " ", analytics.topics.join(', ')] }))] }, `${result.seed}-${index}`));
+                    }, { /* Action Menu */}, { actionMenuIndex } === index && (_jsxs("div", { ref: menuRef, style: {
+                            position: 'absolute',
+                            top: '50px',
+                            right: '10px',
+                            background: 'white',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '8px',
+                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                            zIndex: 1001,
+                            minWidth: '160px'
+                        }, children: [!result.locked ? (_jsx("button", { onClick: () => handleResultAction({ type: 'lock', resultIndex: index }), style: menuButtonStyle, children: "\uD83D\uDD12 Lock Result" })) : (_jsx("button", { onClick: () => handleResultAction({ type: 'unlock', resultIndex: index }), style: menuButtonStyle, children: "\uD83D\uDD13 Unlock Result" })), _jsx("button", { onClick: () => handleResultAction({ type: 'regenerate', resultIndex: index }), disabled: result.locked || isRegenerating, style: {
+                                    ...menuButtonStyle,
+                                    color: result.locked || isRegenerating ? '#9ca3af' : '#374151',
+                                    cursor: result.locked || isRegenerating ? 'not-allowed' : 'pointer'
+                                }, children: "\u27F3 Regenerate" }), _jsx("div", { style: { height: '1px', background: '#e2e8f0', margin: '4px 8px' } }), _jsx("button", { onClick: () => handleResultAction({ type: 'export', resultIndex: index, data: { format: 'text' } }), style: menuButtonStyle, children: "\uD83D\uDCC4 Export Text" }), _jsx("button", { onClick: () => handleResultAction({ type: 'export', resultIndex: index, data: { format: 'json' } }), style: menuButtonStyle, children: "\uD83D\uDCCB Export JSON" }), enableAnalytics && analytics && (_jsx("button", { onClick: () => handleResultAction({ type: 'export', resultIndex: index, data: { format: 'csv' } }), style: menuButtonStyle, children: "\uD83D\uDCCA Export CSV" }))] })))] }), "); })}", results.length > maxDisplayResults && (_jsxs("div", { style: {
+                    padding: '12px 20px',
+                    textAlign: 'center',
+                    color: '#6b7280',
+                    fontSize: '14px'
+                }, children: ["... and ", results.length - maxDisplayResults, " more results"] }))] })) /* Lock Dialog */;
+    { /* Lock Dialog */ }
+    {
+        lockDialog.visible && (_jsx("div", { style: {
+                position: 'absolute',
+                inset: 0,
+                background: 'rgba(0, 0, 0, 0.5)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 1002
+            }, children: _jsxs("div", { style: {
+                    background: 'white',
+                    padding: '20px',
+                    borderRadius: '12px',
+                    width: '300px',
+                    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.3)'
+                }, children: [_jsx("h4", { style: { margin: '0 0 12px', fontSize: '16px' }, children: "Lock Result" }), _jsx("p", { style: { margin: '0 0 12px', fontSize: '14px', color: '#6b7280' }, children: "Add a note to explain why this result is locked:" }), _jsx("textarea", { value: lockDialog.note, onChange: (e) => setLockDialog(prev => ({ ...prev, note: e.target.value })), placeholder: "Important for X reason...", style: {
+                            width: '100%',
+                            height: '80px',
+                            padding: '8px',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            fontSize: '14px',
+                            resize: 'none',
+                            marginBottom: '16px'
+                        } }), _jsxs("div", { style: { display: 'flex', gap: '8px', justifyContent: 'flex-end' }, children: [_jsx("button", { onClick: () => setLockDialog({ visible: false, resultIndex: -1, note: '' }), style: {
+                                    padding: '8px 16px',
+                                    background: '#e2e8f0',
+                                    color: '#374151',
+                                    border: 'none',
+                                    borderRadius: '6px',
+                                    cursor: 'pointer'
+                                }, children: "Cancel" }), _jsx("button", { onClick: handleLockConfirmation, style: {
+                                    padding: '8px 16px',
+                                    background: '#f59e0b',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '6px',
+                                    cursor: 'pointer'
+                                }, children: "\uD83D\uDD12 Lock Result" })] })] }) }));
+    }
+    { /* CSS Animations */ }
+    _jsx("style", { children: `
         @keyframes spin {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
-      ` })] }));
+      ` });
 };
+div >
+;
+;
+;
 // Shared menu button style
 const menuButtonStyle = {
     width: '100%',

@@ -440,12 +440,7 @@ export declare class EmbedAnalytics extends EventEmitter {
     endSession(): void;
     getExperimentVariant(experimentId: string): string | null;
     trackExperimentGoal(experimentId: string, goalId: string, value?: number): void;
-    generateReport(
-      type: ReportType,
-      timeRange: TimeRange,
-      filters?: ReportFilter[],
-      metrics?: ReportMetric[]
-    ): Promise<AnalyticsReport>;
+    generateReport(type: ReportType, timeRange: TimeRange, filters?: ReportFilter[], metrics?: ReportMetric[]): Promise<AnalyticsReport>;
     getPerformanceMetrics(timeRange: TimeRange): Promise<PerformanceMetrics[]>;
     getEngagementMetrics(timeRange: TimeRange): Promise<EngagementMetrics[]>;
     getConversionMetrics(timeRange: TimeRange): Promise<ConversionMetrics[]>;

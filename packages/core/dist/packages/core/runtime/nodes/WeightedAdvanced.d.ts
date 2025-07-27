@@ -79,11 +79,7 @@ export declare class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
 /**
  * Factory function for creating WeightedAdvanced nodes
  */
-export declare function createWeightedAdvancedNode(
-  id: string,
-  choices: WeightedChoice[],
-  distributionConfig?: WeightDistributionConfig
-): WeightedAdvancedNode;
+export declare function createWeightedAdvancedNode(id: string, choices: WeightedChoice[], distributionConfig?: WeightDistributionConfig): WeightedAdvancedNode;
 /**
  * Default distribution configurations for common use cases
  */

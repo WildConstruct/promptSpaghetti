@@ -5,39 +5,18 @@
  * Service implementation for managing community contributions through their lifecycle.
  * Integrates workflow management, quality assessment, and publication processes.
  */
-import { 
-  ContributionSubmission,
-  ContributionRepository,
-  ContributionWorkflow,
-  WorkflowStage,
-  ReviewerAssignment,
-  ReviewFeedbackEntry,
-  QualityGateResult,
-  ApprovalEntry,
-  PublicationSchedule,
-  ContributionEngagement,
-  ContributorStatistics,
-  ContributionSystemMetrics,
-  ContributionStatus
-} from './ContributionArchitecture';
+import { ContributionSubmission, ContributionRepository, ContributionWorkflow, WorkflowStage, ReviewerAssignment, ReviewFeedbackEntry, QualityGateResult, ApprovalEntry, PublicationSchedule, ContributionEngagement, ContributorStatistics, ContributionSystemMetrics, ContributionStatus } from './ContributionArchitecture';
 import { CommunityContentQualityMetrics } from './ContentQualityAssessment';
 export declare class ContributionManagementService implements ContributionRepository {
     private apiClient;
     private versionManager;
     private qualityService;
     constructor(apiClient: any);
-    submitContribution(
-      submissionData: Omit<ContributionSubmission,
-      'id' | 'created_at' | 'updated_at'>
-    ): Promise<ContributionSubmission>;
+    submitContribution(submissionData: Omit<ContributionSubmission, 'id' | 'created_at' | 'updated_at'>): Promise<ContributionSubmission>;
     updateContribution(id: string, updates: Partial<ContributionSubmission>): Promise<ContributionSubmission>;
     getContribution(id: string): Promise<ContributionSubmission>;
     getContributionsByUser(userId: string, status?: ContributionStatus): Promise<ContributionSubmission[]>;
-    advanceWorkflowStage(
-      contributionId: string,
-      newStage: WorkflowStage,
-      notes?: string
-    ): Promise<ContributionWorkflow>;
+    advanceWorkflowStage(contributionId: string, newStage: WorkflowStage, notes?: string): Promise<ContributionWorkflow>;
     assignReviewer(contributionId: string, assignment: ReviewerAssignment): Promise<void>;
     submitReviewFeedback(contributionId: string, feedback: ReviewFeedbackEntry): Promise<void>;
     approveContribution(contributionId: string, approval: ApprovalEntry): Promise<void>;

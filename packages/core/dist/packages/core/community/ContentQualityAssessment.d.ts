@@ -295,29 +295,15 @@ export declare class ContentQualityAssessmentService {
         target_completion?: string;
         special_instructions?: string;
     }): Promise<QualityAssessmentWorkflow>;
-    submitEditorialReview(
-      contentId: string,
-      versionId: string,
-      review: Omit<EditorialReview,
-      'reviewer_id' | 'reviewer_name' | 'review_date'>
-    ): Promise<EditorialReview>;
+    submitEditorialReview(contentId: string, versionId: string, review: Omit<EditorialReview, 'reviewer_id' | 'reviewer_name' | 'review_date'>): Promise<EditorialReview>;
     getReviewWorkflow(contentId: string, versionId: string): Promise<QualityAssessmentWorkflow>;
-    flagQualityIssue(
-      contentId: string,
-      versionId: string,
-      flag: Omit<QualityFlag,
-      'auto_detected'>
-    ): Promise<QualityFlag>;
+    flagQualityIssue(contentId: string, versionId: string, flag: Omit<QualityFlag, 'auto_detected'>): Promise<QualityFlag>;
     resolveQualityIssue(contentId: string, versionId: string, flagId: string, resolution: {
         resolution_type: 'fixed' | 'false_positive' | 'accepted_risk';
         resolution_notes: string;
         resolved_by: string;
     }): Promise<void>;
-    getQualityBenchmarks(
-      category?: string,
-      contentType?: string,
-      timeRange?: 'week' | 'month' | 'quarter' | 'year'
-    ): Promise<{
+    getQualityBenchmarks(category?: string, contentType?: string, timeRange?: 'week' | 'month' | 'quarter' | 'year'): Promise<{
         overall_average: number;
         grade_distribution: Record<string, number>;
         common_issues: Array<{
@@ -368,12 +354,7 @@ export declare class ContentQualityAssessmentService {
         prioritized_recommendations: QualityRecommendation[];
         success_probability: number;
     }>;
-    applyAutomatedFixes(
-      contentId: string,
-      versionId: string,
-      fixTypes: Array<'grammar' | 'formatting' | 'seo' | 'accessibility'>,
-      confidence_threshold?: number
-    ): Promise<{
+    applyAutomatedFixes(contentId: string, versionId: string, fixTypes: Array<'grammar' | 'formatting' | 'seo' | 'accessibility'>, confidence_threshold?: number): Promise<{
         fixes_applied: number;
         fixes_available: number;
         new_version_id?: string;

@@ -588,7 +588,10 @@ export function validateVFXCompatibility(graph) {
         features.push('Camera position and angle controls');
     const compatible = features.length >= 1; // Need at least one VFX feature
     if (!compatible) {
-        recommendations.push('Add VFX-related nodes (camera variables, sequential animations, or depth/edge hints) for better ControlNet compatibility');
+        recommendations.push('Add VFX-related nodes (, camera, variables, sequential, animations, or, depth / edge, hints);
+        for (better; ControlNet; compatibility)
+            ';
+        ;
     }
     return {
         compatible,

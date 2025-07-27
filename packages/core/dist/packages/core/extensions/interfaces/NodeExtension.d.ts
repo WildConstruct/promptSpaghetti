@@ -40,10 +40,7 @@ export declare enum NodeCategory {
     UTILITY = "utility",
     CUSTOM = "custom"
 }
-export type NodeClass = (
-  new (id: string,
-  config: any
-) => RuntimeNode<any>) | (new (id: string, config: any) => AdvancedRuntimeNode<any>);
+export type NodeClass = (new (id: string, config: any) => RuntimeNode<any>) | (new (id: string, config: any) => AdvancedRuntimeNode<any>);
 export interface NodeUIConfiguration {
     icon?: string;
     color?: string;

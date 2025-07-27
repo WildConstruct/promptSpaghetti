@@ -8,7 +8,32 @@ export * from './interfaces/NodeExtension';
 export * from './interfaces/UIExtension';
 export * from './interfaces/TransformExtension';
 export * from './interfaces/StorageExtension';
-export declare         deactivate?: (...args: unknown[]) => unknown;
+export declare const ExtensionTypeSchemas: {
+    BaseExtension: z.ZodObject<{
+        id: z.ZodString;
+        name: z.ZodString;
+        version: z.ZodString;
+        description: z.ZodString;
+        author: z.ZodString;
+        dependencies: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+        permissions: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
+        initialize: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
+        activate: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
+        deactivate: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
+        dispose: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
+        getConfiguration: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
+        setConfiguration: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
+        isHealthy: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
+        getHealthStatus: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
+    }, "strip", z.ZodTypeAny, {
+        id?: string;
+        name?: string;
+        description?: string;
+        version?: string;
+        author?: string;
+        permissions?: string[];
+        activate?: (...args: unknown[]) => unknown;
+        deactivate?: (...args: unknown[]) => unknown;
         dependencies?: string[];
         initialize?: (...args: unknown[]) => unknown;
         dispose?: (...args: unknown[]) => unknown;
@@ -45,6 +70,7 @@ export declare         deactivate?: (...args: unknown[]) => unknown;
         onNodeDestroyed: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
         createAdvancedNodeInstance: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
+        onNodeExecuted?: (...args: unknown[]) => unknown;
         extensionType?: "node";
         getNodeDefinitions?: (...args: unknown[]) => unknown;
         createNodeInstance?: (...args: unknown[]) => unknown;
@@ -52,10 +78,10 @@ export declare         deactivate?: (...args: unknown[]) => unknown;
         getNodeSchema?: (...args: unknown[]) => unknown;
         supportsAdvancedNodes?: (...args: unknown[]) => unknown;
         onNodeCreated?: (...args: unknown[]) => unknown;
-        onNodeExecuted?: (...args: unknown[]) => unknown;
         onNodeDestroyed?: (...args: unknown[]) => unknown;
         createAdvancedNodeInstance?: (...args: unknown[]) => unknown;
     }, {
+        onNodeExecuted?: (...args: unknown[]) => unknown;
         extensionType?: "node";
         getNodeDefinitions?: (...args: unknown[]) => unknown;
         createNodeInstance?: (...args: unknown[]) => unknown;
@@ -63,7 +89,6 @@ export declare         deactivate?: (...args: unknown[]) => unknown;
         getNodeSchema?: (...args: unknown[]) => unknown;
         supportsAdvancedNodes?: (...args: unknown[]) => unknown;
         onNodeCreated?: (...args: unknown[]) => unknown;
-        onNodeExecuted?: (...args: unknown[]) => unknown;
         onNodeDestroyed?: (...args: unknown[]) => unknown;
         createAdvancedNodeInstance?: (...args: unknown[]) => unknown;
     }>;
@@ -173,7 +198,66 @@ export declare         deactivate?: (...args: unknown[]) => unknown;
         createMigration?: (...args: unknown[]) => unknown;
     }>;
 };
-export declare export type AnyExtension = import('./interfaces/NodeExtension').NodeExtension | import('./interfaces/UIExtension').UIExtension | import('./interfaces/TransformExtension').TransformExtension | import('./interfaces/StorageExtension').StorageExtension;
+export declare const ExtensionTypeGuards: {
+    isBaseExtension(obj: any): obj is import("./interfaces/ExtensionInterfaces").BaseExtension;
+    isNodeExtension(obj: any): obj is import("./interfaces/NodeExtension").NodeExtension;
+    isUIExtension(obj: any): obj is import("./interfaces/UIExtension").UIExtension;
+    isTransformExtension(obj: any): obj is import("./interfaces/TransformExtension").TransformExtension;
+    isStorageExtension(obj: any): obj is import("./interfaces/StorageExtension").StorageExtension;
+};
+export declare class ExtensionTypeChecker {
+    private static instance;
+    private constructor();
+    static getInstance(): ExtensionTypeChecker;
+    /**
+     * Validate extension type at runtime
+     */
+    validateExtensionType(extension: any): {
+        valid: boolean;
+        type?: string;
+        errors: string[];
+    };
+    /**
+     * Validate method signature
+     */
+    validateMethodSignature(obj: any, methodName: string, expectedSignature: {
+        parameterCount?: number;
+        parameterTypes?: string[];
+        returnType?: string;
+    }): boolean;
+    /**
+     * Generate TypeScript declaration file
+     */
+    generateTypeDeclaration(extensionId: string): string;
+    /**
+     * Generate JSDoc documentation
+     */
+    generateJSDoc(extensionType: string): string;
+    private getTypeSpecificJSDoc;
+    private toPascalCase;
+}
+export declare class ExtensionInterfaceValidator {
+    private static instance;
+    private constructor();
+    static getInstance(): ExtensionInterfaceValidator;
+    /**
+     * Validate extension interface implementation
+     */
+    validateInterface(extension: any, expectedInterface: string): {
+        valid: boolean;
+        missingMethods: string[];
+        invalidMethods: string[];
+        extraMethods: string[];
+    };
+    private getRequiredMethods;
+    private getActualMethods;
+    private getMethodSignature;
+    private validateMethodSignature;
+}
+export declare const extensionTypeChecker: ExtensionTypeChecker;
+export declare const extensionInterfaceValidator: ExtensionInterfaceValidator;
+export type ExtensionType = 'node' | 'ui' | 'transform' | 'storage';
+export type AnyExtension = import('./interfaces/NodeExtension').NodeExtension | import('./interfaces/UIExtension').UIExtension | import('./interfaces/TransformExtension').TransformExtension | import('./interfaces/StorageExtension').StorageExtension;
 export declare function isNodeExtension(extension: any): extension is import('./interfaces/NodeExtension').NodeExtension;
 export declare function isUIExtension(extension: any): extension is import('./interfaces/UIExtension').UIExtension;
 export declare function isTransformExtension(extension: any): extension is import('./interfaces/TransformExtension').TransformExtension;

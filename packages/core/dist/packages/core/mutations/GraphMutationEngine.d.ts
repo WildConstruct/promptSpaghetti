@@ -5,18 +5,7 @@
  * conflict resolution, and history tracking capabilities.
  */
 import { EventEmitter } from 'events';
-import { 
-  GraphOperation,
-  OperationResult,
-  BatchOperationResult,
-  UndoResult,
-  RedoResult,
-  MutationEngineConfig,
-  GraphState,
-  GraphSnapshot,
-  HistoryEntry,
-  AnyGraphOperation
-} from './types';
+import { GraphOperation, OperationResult, BatchOperationResult, UndoResult, RedoResult, MutationEngineConfig, GraphState, GraphSnapshot, HistoryEntry, AnyGraphOperation } from './types';
 /**
  * Core engine for executing graph mutations with full validation,
  * conflict resolution, and history tracking

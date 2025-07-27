@@ -168,8 +168,5 @@ export declare class ConversionStreamProcessor extends EventEmitter {
      */
     reprocessDeadLetterEvent(eventId: string): Promise<boolean>;
 }
-/**
- * Factory function to create ConversionStreamProcessor
- */
-export declare export default ConversionStreamProcessor;
+export default ConversionStreamProcessor;
 //# sourceMappingURL=ConversionStreamProcessor.d.ts.map

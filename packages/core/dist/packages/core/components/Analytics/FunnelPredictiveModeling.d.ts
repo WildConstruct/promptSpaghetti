@@ -617,5 +617,5 @@ export interface PredictiveModelingExportData {
     exportTimestamp: number;
     configuration: PredictiveModelConfiguration;
 }
-export declare const FunnelPredictiveModeling: React.FC<FunnelPredictiveModelingProps>;
+export declare const error: string, setError: React.Dispatch<React.SetStateAction<string>>;
 //# sourceMappingURL=FunnelPredictiveModeling.d.ts.map

@@ -300,12 +300,7 @@ export declare class ContentQualityMetricsService {
     private analyticsService;
     private qualityService;
     private config;
-    constructor(
-      database: Database,
-      analyticsService: AnalyticsService,
-      qualityService: QualityMetricsService,
-      config?: ContentQualityConfig
-    );
+    constructor(database: Database, analyticsService: AnalyticsService, qualityService: QualityMetricsService, config?: ContentQualityConfig);
     /**
      * Assess comprehensive content quality for a template
      */

@@ -1,5 +1,4 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React from 'react';
 import { FileText, Eye, CheckCircle, Globe, Archive, XCircle, Clock, AlertCircle } from 'lucide-react';
 const DEFAULT_STATE_CONFIGS = {
     draft: {
@@ -166,16 +165,12 @@ export const WorkflowStateIndicator = ({ state, stateConfig, showLabel = true, s
     }
     return (_jsxs("div", { className: `inline-flex items-center rounded-full border font-medium ${colors.bg} ${colors.text} ${colors.border} ${sizes.container} ${sizes.gap} ${className}`, title: config.description, children: [_jsx(IconComponent, { className: `${sizes.icon} ${colors.icon}` }), _jsx("span", { children: config.name })] }));
 };
-export const WorkflowStateTimeline = ({ states, currentState, completedStates = [], className = '' }) => {
-    const isCompleted = (stateId) => completedStates.includes(stateId);
-    const isCurrent = (stateId) => stateId === currentState;
-    return (_jsx("div", { className: `flex items-center space-x-2 ${className}`, children: states.map((state, index) => {
-            const isLast = index === states.length - 1;
-            const completed = isCompleted(state.id);
-            const current = isCurrent(state.id);
-            return (_jsxs(React.Fragment, { children: [_jsxs("div", { className: "flex flex-col items-center", children: [_jsx(WorkflowStateIndicator, { state: state.id, stateConfig: state, showLabel: false, size: "sm", className: `${current ? 'ring-2 ring-blue-500 ring-offset-2' : ''}` }), _jsx("span", { className: `text-xs mt-1 ${current ? 'font-medium text-gray-900' : 'text-gray-500'}`, children: state.name })] }), !isLast && (_jsx("div", { className: "flex-1 mx-2", children: _jsx("div", { className: `h-0.5 ${completed ? 'bg-green-400' : 'bg-gray-200'}` }) }))] }, state.id));
-        }) }));
-};
-export const WorkflowStateHistory = ({ history, className }) => {
-    return (_jsx("div", { className: `workflow-state-history ${className || ''}`, children: history.map((entry, index) => (_jsxs("div", { className: "history-entry", children: [_jsx(WorkflowStateIndicator, { state: entry.state, stateConfig: entry.stateConfig, showLabel: true, size: "sm" }), _jsxs("div", { className: "entry-details", children: [_jsx("span", { className: "timestamp", children: entry.timestamp }), entry.actor && _jsxs("span", { className: "actor", children: ["by ", entry.actor] }), entry.comment && _jsx("span", { className: "comment", children: entry.comment })] })] }, index))) }));
-};
+export const isCurrent = (stateId) => stateId === currentState;
+return (_jsx("div", { className: `flex items-center space-x-2 ${className}`, children: states.map((state, index) => {
+        const isLast = index === states.length - 1;
+        const completed = isCompleted(state.id);
+        const current = isCurrent(state.id);
+        return (_jsxs(React.Fragment, { children: [_jsxs("div", { className: "flex flex-col items-center", children: [_jsx(WorkflowStateIndicator, { state: state.id, stateConfig: state, showLabel: false, size: "sm", className: `${current ? 'ring-2 ring-blue-500 ring-offset-2' : ''}` }), _jsx("span", { className: `text-xs mt-1 ${current ? 'font-medium text-gray-900' : 'text-gray-500'}`, children: state.name })] }), !isLast && (_jsx("div", { className: "flex-1 mx-2", children: _jsx("div", { className: `h-0.5 ${completed ? 'bg-green-400' : 'bg-gray-200'}` }) }))] }, state.id));
+    }) }));
+;
+;

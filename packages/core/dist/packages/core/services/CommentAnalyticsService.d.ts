@@ -66,14 +66,7 @@ export declare class CommentAnalyticsService {
     /**
      * Record a comment engagement event
      */
-    recordEngagementEvent(
-      commentId: string,
-      userId: string | null,
-      sessionId: string,
-      engagementType: CommentEngagementType,
-      metadata?: Record<string,
-      any>
-    ): Promise<void>;
+    recordEngagementEvent(commentId: string, userId: string | null, sessionId: string, engagementType: CommentEngagementType, metadata?: Record<string, any>): Promise<void>;
     /**
      * Update daily analytics for a resource
      */

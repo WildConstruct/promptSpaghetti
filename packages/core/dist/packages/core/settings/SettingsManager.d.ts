@@ -28,18 +28,11 @@ export declare class SettingsManager {
     /**
      * Update settings with validation
      */
-    updateSettings(
-      newSettings: Partial<AdvancedSettings>,
-      source?: 'user' | 'system' | 'import'
-    ): SettingsValidationResult;
+    updateSettings(newSettings: Partial<AdvancedSettings>, source?: 'user' | 'system' | 'import'): SettingsValidationResult;
     /**
      * Update specific setting
      */
-    updateSetting<K extends keyof AdvancedSettings>(
-      key: K,
-      value: AdvancedSettings[K],
-      source?: 'user' | 'system' | 'import'
-    ): SettingsValidationResult;
+    updateSetting<K extends keyof AdvancedSettings>(key: K, value: AdvancedSettings[K], source?: 'user' | 'system' | 'import'): SettingsValidationResult;
     /**
      * Reset settings to defaults
      */
@@ -138,4 +131,5 @@ export declare class SettingsManager {
      */
     setAutoSave(enabled: boolean): void;
 }
-export declare //# sourceMappingURL=SettingsManager.d.ts.map
+export declare const getSettingsManager: () => SettingsManager;
+//# sourceMappingURL=SettingsManager.d.ts.map

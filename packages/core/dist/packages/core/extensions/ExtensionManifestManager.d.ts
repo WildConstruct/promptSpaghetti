@@ -23,12 +23,7 @@ export declare class ExtensionManifestManager {
     /**
      * Validate manifest with context
      */
-    validateManifest(
-      manifest: ExtensionManifest,
-      systemVersion?: string,
-      platform?: string,
-      grantedPermissions?: string[]
-    ): ExtensionValidationResult;
+    validateManifest(manifest: ExtensionManifest, systemVersion?: string, platform?: string, grantedPermissions?: string[]): ExtensionValidationResult;
     /**
      * Get manifest by ID
      */

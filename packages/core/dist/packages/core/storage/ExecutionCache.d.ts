@@ -40,14 +40,7 @@ export declare class ExecutionCache {
     /**
      * Cache execution result with dependency tracking
      */
-    cacheExecutionResult(
-      key: string,
-      result: any,
-      dependencies: string[],
-      executionTime: number,
-      inputs?: any,
-      seed?: string | number
-    ): Promise<void>;
+    cacheExecutionResult(key: string, result: any, dependencies: string[], executionTime: number, inputs?: any, seed?: string | number): Promise<void>;
     /**
      * Get cached execution result if valid
      */

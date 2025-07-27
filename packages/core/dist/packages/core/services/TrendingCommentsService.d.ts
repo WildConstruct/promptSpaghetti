@@ -6,16 +6,7 @@
  *
  * Task: E16-1753114247017-86B04D - Implement trending comments
  */
-import { 
-  TrendingComment,
-  CommentScore,
-  CommentEngagement,
-  CommentAnalytics,
-  TrendingAlgorithmConfig,
-  GetTrendingCommentsRequest,
-  TrendingCommentsResponse,
-  CommentEngagementType
-} from '../types/TrendingCommentsTypes';
+import { TrendingComment, CommentScore, CommentEngagement, CommentAnalytics, TrendingAlgorithmConfig, GetTrendingCommentsRequest, TrendingCommentsResponse, CommentEngagementType } from '../types/TrendingCommentsTypes';
 export declare class TrendingCommentsService {
     private baseUrl;
     private algorithms;
@@ -37,21 +28,11 @@ export declare class TrendingCommentsService {
     /**
      * Calculate trending score for a single comment
      */
-    calculateCommentScore(
-      comment: TrendingComment,
-      engagements: CommentEngagement[],
-      algorithmId?: string
-    ): Promise<CommentScore>;
+    calculateCommentScore(comment: TrendingComment, engagements: CommentEngagement[], algorithmId?: string): Promise<CommentScore>;
     /**
      * Track comment engagement event
      */
-    trackEngagement(
-      commentId: string,
-      userId: string,
-      engagementType: CommentEngagementType,
-      contextData?: Record<string,
-      unknown>
-    ): Promise<CommentEngagement>;
+    trackEngagement(commentId: string, userId: string, engagementType: CommentEngagementType, contextData?: Record<string, unknown>): Promise<CommentEngagement>;
     /**
      * Get comment analytics for a resource
      */

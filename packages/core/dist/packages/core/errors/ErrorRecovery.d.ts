@@ -87,9 +87,6 @@ interface CircuitBreakerState extends CircuitBreakerOptions {
 /**
  * Decorator for automatic error recovery
  */
-export declare function withErrorRecovery<T extends any[], R>(
-  retryOptions?: Partial<RetryOptions>,
-  fallbackOptions?: FallbackOptions<R>
-): (target: any, propertyKey: string, descriptor: PropertyDescriptor) => PropertyDescriptor;
+export declare function withErrorRecovery<T extends any[], R>(retryOptions?: Partial<RetryOptions>, fallbackOptions?: FallbackOptions<R>): (target: any, propertyKey: string, descriptor: PropertyDescriptor) => PropertyDescriptor;
 export {};
 //# sourceMappingURL=ErrorRecovery.d.ts.map

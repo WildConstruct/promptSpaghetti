@@ -18,32 +18,15 @@ export interface HelpContextState {
     toggleHelpHints: () => void;
     resetHelpSystem: () => void;
 }
-export declare export interface HelpProviderProps {
+export declare const useHelpSystem: () => HelpContextState;
+export interface HelpProviderProps {
     children: React.ReactNode;
     customHelpContent?: HelpContent[];
     enableOnboarding?: boolean;
     enableHelpHints?: boolean;
 }
 export declare const HelpProvider: React.FC<HelpProviderProps>;
-export declare const useHelpManager: () => {
-    registerHelpContent: (content: HelpContent | HelpContent[]) => void;
-    useHelpContent: (content: HelpContent | HelpContent[]) => void;
-    updateHelpContent: (id: string, updates: Partial<HelpContent>) => void;
-    removeHelpContent: (id: string) => void;
-};
-export declare export declare     currentStep: HelpContent;
-    currentStepIndex: number;
-    totalSteps: number;
-    allSteps: HelpContent[];
-    nextStep: () => void;
-    previousStep: () => void;
-    skipOnboarding: () => void;
-    completeOnboarding: () => void;
-    startOnboarding: () => void;
-    isComplete: boolean;
-};
-export declare const HelpSystemSettings: React.FC<{
-    className?: string;
-}>;
+export declare const registerHelpContent: (content: HelpContent | HelpContent[]) => void;
+export declare const onboardingSteps: any;
 export default HelpProvider;
 //# sourceMappingURL=HelpContentManager.d.ts.map

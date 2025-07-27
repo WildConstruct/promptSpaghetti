@@ -1,9 +1,6 @@
 import React from 'react';
 import { HelpContent } from './ContextualHelpSystem';
-export declare function withHelp<P extends object>(
-  WrappedComponent: React.ComponentType<P>,
-  helpContent: HelpContent
-): {
+export declare function withHelp<P extends object>(WrappedComponent: React.ComponentType<P>, helpContent: HelpContent): {
     (props: P): import("react/jsx-runtime").JSX.Element;
     displayName: string;
 };

@@ -6,12 +6,7 @@
  * with batch operations, templates, and automated classification
  */
 import React from 'react';
-import { 
-  DataClassification,
-  ClassificationContext,
-  ClassificationRule,
-  ValidationResult
-} from '../../types/DataClassification';
+import { DataClassification, ClassificationContext, ClassificationRule, ValidationResult } from '../../types/DataClassification';
 interface DataElement {
     id: string;
     name: string;

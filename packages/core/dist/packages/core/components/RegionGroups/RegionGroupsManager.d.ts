@@ -18,6 +18,6 @@ interface RegionGroupsManagerProps {
     onGroupHover?: (groupId: string | null) => void;
     onGroupSelect?: (groupId: string | null) => void;
 }
-export declare const RegionGroupsManager: React.FC<RegionGroupsManagerProps>;
+export declare const RegionGroupsManager: React.FC<RegionGroupsManagerProps>, onGroupHover: any;
 export default RegionGroupsManager;
 //# sourceMappingURL=RegionGroupsManager.d.ts.map

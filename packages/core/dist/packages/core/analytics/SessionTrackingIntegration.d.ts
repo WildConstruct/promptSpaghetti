@@ -155,5 +155,6 @@ export declare class SessionTrackingManager {
     private getHashedIP;
     private generateDeviceFingerprint;
 }
-export declare export default SessionTrackingManager;
+export declare const createSessionTrackingManager: (analyticsClient: AnalyticsClient, conversionArchitecture: ConversionArchitectureManager) => SessionTrackingManager;
+export default SessionTrackingManager;
 //# sourceMappingURL=SessionTrackingIntegration.d.ts.map

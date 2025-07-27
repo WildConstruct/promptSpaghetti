@@ -12,12 +12,6 @@ export type { PerformanceReport, PerformanceBenchmark, PerformanceInsight } from
 export { default as SecurityAnalyticsMonitor } from './SecurityAnalyticsMonitor';
 export type { SecurityAnalyticsMetrics, SecuritySystemHealth, SecurityAnalyticsAlert, SecurityAnalyticsConfig } from './SecurityAnalyticsMonitor';
 export { default as Epic1Epic17SecurityIntegration } from './Epic1Epic17SecurityIntegration';
-import { Epic1Epic17SecurityIntegration } from './Epic1Epic17SecurityIntegration';
-import { SecurityAnalyticsMonitor } from './SecurityAnalyticsMonitor';
 export type { IntegratedSecurityMetrics, IntegratedAlertRule, IntegratedDashboardData, IntegrationConfig } from './Epic1Epic17SecurityIntegration';
-export declare export declare export declare export declare export declare export declare     epic17Health: "healthy" | "degraded" | "unhealthy";
-    securityHealth: "healthy" | "degraded" | "unhealthy";
-    overallHealth: "healthy" | "degraded" | "unhealthy";
-    recommendations: string[];
-};
+export declare const createDefaultSecuritySystemHealth: (systemId: string, systemType: SecuritySystemHealth["systemType"]) => SecuritySystemHealth;
 //# sourceMappingURL=index.d.ts.map

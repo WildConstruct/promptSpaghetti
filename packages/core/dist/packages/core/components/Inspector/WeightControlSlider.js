@@ -98,39 +98,35 @@ export const WeightControlSlider = ({ options, onOptionsChange, onPreviewRequest
                 }, children: "Preview" }))] }));
 };
 // Helper function to get consistent colors for options
-const getWeightColor = (index) => {
-    const colors = ['#4d7cff', '#22c55e', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
-    return colors[index % colors.length];
-};
+return colors[index % colors.length];
+;
 // Hook for integrating weight controls with preview system
 // Epic 8.5 Task 6: Real-Time Weight Integration with debouncing
-export const useWeightControlIntegration = (weightOptions, onPreviewRequest) => {
-    const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
-    const updateTimeoutRef = useRef(null);
-    const handleOptionsChange = useCallback((newOptions) => {
-        // Update immediately for UI responsiveness
-        setLastUpdateTime(Date.now());
-        // Clear existing timeout
+export const updateTimeoutRef = useRef(null);
+const handleOptionsChange = useCallback((newOptions) => {
+    // Update immediately for UI responsiveness
+    setLastUpdateTime(Date.now());
+    // Clear existing timeout
+    if (updateTimeoutRef.current) {
+        clearTimeout(updateTimeoutRef.current);
+    }
+    // Debounce the preview request for performance (Epic 8.5 Task 6)
+    updateTimeoutRef.current = setTimeout(() => {
+        console.log('[Epic 8.5 Task 6] Triggering debounced preview update with', newOptions.length, 'weight options');
+        onPreviewRequest(newOptions);
+    }, 300); // 300ms debounce for optimal UX
+}, [onPreviewRequest]);
+// Cleanup timeout on unmount
+useEffect(() => {
+    return () => {
         if (updateTimeoutRef.current) {
             clearTimeout(updateTimeoutRef.current);
         }
-        // Debounce the preview request for performance (Epic 8.5 Task 6)
-        updateTimeoutRef.current = setTimeout(() => {
-            console.log('[Epic 8.5 Task 6] Triggering debounced preview update with', newOptions.length, 'weight options');
-            onPreviewRequest(newOptions);
-        }, 300); // 300ms debounce for optimal UX
-    }, [onPreviewRequest]);
-    // Cleanup timeout on unmount
-    useEffect(() => {
-        return () => {
-            if (updateTimeoutRef.current) {
-                clearTimeout(updateTimeoutRef.current);
-            }
-        };
-    }, []);
-    return {
-        handleOptionsChange,
-        lastUpdateTime // For debugging/monitoring
     };
+}, []);
+return {
+    handleOptionsChange,
+    lastUpdateTime // For debugging/monitoring
 };
+;
 export default WeightControlSlider;

@@ -13,7 +13,34 @@ export type { EventableStore, StateChangeEvent, ZustandEventConfig } from './ada
 /**
  * Event System Configuration and Setup Utilities
  */
-export declare /**
+export declare const EventSystemConfigs: {
+    production: {
+        middleware: any[];
+        eventBusOptions: {
+            maxHistorySize: number;
+            enableHistory: boolean;
+        };
+    };
+    development: {
+        middleware: any[];
+        eventBusOptions: {
+            maxHistorySize: number;
+            enableHistory: boolean;
+        };
+    };
+    testing: {
+        middleware: any[];
+        eventBusOptions: {
+            maxHistorySize: number;
+            enableHistory: boolean;
+        };
+    };
+};
+/**
+ * Initialize event system with environment-specific configuration
+ */
+export declare const initializeEventSystem: (environment?: "production" | "development" | "testing") => import("./EventSystem").EventBus;
+/**
  * Event system health check utility
  */
 export declare const performEventSystemHealthCheck: () => {

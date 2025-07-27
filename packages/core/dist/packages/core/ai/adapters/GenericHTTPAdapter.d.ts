@@ -44,14 +44,7 @@ export declare class GenericHTTPAdapter extends BaseAIModel {
     private config;
     private requestMapping;
     private defaultEndpoint;
-    constructor(
-      id: string,
-      config: HTTPConfig,
-      metadata: Partial<ModelMetadata>,
-      capabilities: Partial<ModelCapabilities>,
-      requestMapping: HTTPRequestMapping,
-      defaultEndpoint?: string
-    );
+    constructor(id: string, config: HTTPConfig, metadata: Partial<ModelMetadata>, capabilities: Partial<ModelCapabilities>, requestMapping: HTTPRequestMapping, defaultEndpoint?: string);
     initialize(): Promise<void>;
     process(input: unknown, options?: HTTPRequestOptions): Promise<unknown>;
     cleanup(): Promise<void>;

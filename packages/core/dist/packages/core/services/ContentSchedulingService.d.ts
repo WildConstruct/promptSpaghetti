@@ -240,11 +240,7 @@ export declare class ContentSchedulingService {
     /**
      * Content Management
      */
-    createContent(
-      contentData: Omit<ContentItem,
-      'id' | 'createdAt' | 'updatedAt' | 'performance'>,
-      createdBy: string
-    ): Promise<ContentItem>;
+    createContent(contentData: Omit<ContentItem, 'id' | 'createdAt' | 'updatedAt' | 'performance'>, createdBy: string): Promise<ContentItem>;
     updateContent(contentId: string, updates: Partial<ContentItem>, updatedBy: string): Promise<ContentItem | null>;
     deleteContent(contentId: string, deletedBy: string): Promise<boolean>;
     /**
@@ -256,13 +252,7 @@ export declare class ContentSchedulingService {
     /**
      * Batch Operations
      */
-    createBatch(
-      name: string,
-      contentIds: string[],
-      operation: BatchOperation,
-      schedule: BatchSchedule,
-      createdBy: string
-    ): Promise<ScheduleBatch>;
+    createBatch(name: string, contentIds: string[], operation: BatchOperation, schedule: BatchSchedule, createdBy: string): Promise<ScheduleBatch>;
     executeBatch(batchId: string): Promise<boolean>;
     /**
      * Data Retrieval
@@ -290,11 +280,9 @@ export interface SchedulingEvent {
     data: any;
     timestamp: Date;
 }
-export declare export declare const scheduleContent: (
-  contentId: string,
-  scheduling: ContentScheduling,
-  scheduledBy: string
-) => Promise<boolean>;
+export declare const contentSchedulingService: ContentSchedulingService;
+export declare const createContent: (contentData: Omit<ContentItem, "id" | "createdAt" | "updatedAt" | "performance">, createdBy: string) => Promise<ContentItem>;
+export declare const scheduleContent: (contentId: string, scheduling: ContentScheduling, scheduledBy: string) => Promise<boolean>;
 export declare const publishContent: (contentId: string, publishedBy: string) => Promise<boolean>;
 export declare const getContent: (filter?: ContentFilter) => ContentItem[];
 export declare const getSchedulingStats: () => SchedulingStats;

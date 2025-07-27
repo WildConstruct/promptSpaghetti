@@ -274,11 +274,7 @@ export declare class ContentVersionManager {
         publish_date?: string;
         notify_subscribers?: boolean;
     }): Promise<ContentVersion>;
-    addReviewFeedback(
-      versionId: string,
-      feedback: Omit<ReviewFeedback,
-      'id' | 'reviewer_id' | 'reviewer_name' | 'review_date'>
-    ): Promise<ReviewFeedback>;
+    addReviewFeedback(versionId: string, feedback: Omit<ReviewFeedback, 'id' | 'reviewer_id' | 'reviewer_name' | 'review_date'>): Promise<ReviewFeedback>;
     resolveFeedback(versionId: string, feedbackId: string, resolution: string): Promise<void>;
     getReviewHistory(versionId: string): Promise<ReviewFeedback[]>;
     addContributor(versionId: string, contributor: Omit<ContentContributor, 'contribution_date'>): Promise<void>;

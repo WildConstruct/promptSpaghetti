@@ -4,14 +4,7 @@
  * Integration hook for connecting advanced prompting collaboration features
  * with the existing graph editor, export system, and VFX pipeline.
  */
-import { 
-  AdvancedPromptingCollaborationService,
-  PromptingMethodologySession,
-  FilmIndustryUser,
-  MARSRegionTemplate,
-  ZadaPromptPattern,
-  FilmIndustryRole
-} from '../services/AdvancedPromptingCollaborationService';
+import { AdvancedPromptingCollaborationService, PromptingMethodologySession, FilmIndustryUser, MARSRegionTemplate, ZadaPromptPattern, FilmIndustryRole } from '../services/AdvancedPromptingCollaborationService';
 export interface AdvancedCollaborationConfig {
     enableRealTimeSync: boolean;
     enableMARSRegions: boolean;
@@ -31,10 +24,7 @@ export interface AdvancedCollaborationState {
 }
 export interface AdvancedCollaborationActions {
     initializeCollaboration: (user: FilmIndustryUser, config?: Partial<AdvancedCollaborationConfig>) => Promise<void>;
-    createSession: (
-      title: string,
-      methodology: 'zada' | 'mars' | 'hybrid' | 'custom'
-    ) => Promise<PromptingMethodologySession>;
+    createSession: (title: string, methodology: 'zada' | 'mars' | 'hybrid' | 'custom') => Promise<PromptingMethodologySession>;
     joinSession: (sessionId: string) => Promise<boolean>;
     leaveSession: () => Promise<void>;
     createMARSRegion: (regionData: Partial<MARSRegionTemplate>) => Promise<MARSRegionTemplate>;

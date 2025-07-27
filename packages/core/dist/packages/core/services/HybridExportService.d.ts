@@ -175,17 +175,8 @@ declare class MARSFrameworkExtractor {
     private mapToControlNetComposition;
 }
 declare class ZadaNaturalLanguageGenerator {
-    generateNaturalLanguageVariants(
-      prompt: string,
-      variables: Record<string,
-      string>,
-      targetAudience: 'director' | 'vfx_professional' | 'mixed_crew'
-    ): Promise<ZadaNaturalLanguageVariant[]>;
-    createDirectorAccessiblePrompt(
-      prompt: string,
-      variables: Record<string,
-      string>
-    ): Promise<DirectorAccessiblePrompt>;
+    generateNaturalLanguageVariants(prompt: string, variables: Record<string, string>, targetAudience: 'director' | 'vfx_professional' | 'mixed_crew'): Promise<ZadaNaturalLanguageVariant[]>;
+    createDirectorAccessiblePrompt(prompt: string, variables: Record<string, string>): Promise<DirectorAccessiblePrompt>;
     private convertToScreenplayStyle;
     private convertToStoryboardStyle;
     private convertToShotListStyle;

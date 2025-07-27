@@ -92,4 +92,5 @@ export declare class FavoritesManager {
      */
     private setupBeforeUnloadHandler;
 }
-export declare //# sourceMappingURL=FavoritesManager.d.ts.map
+export declare const getFavoritesManager: () => FavoritesManager;
+//# sourceMappingURL=FavoritesManager.d.ts.map

@@ -15,44 +15,7 @@ export { OperationHistory } from './OperationHistory';
 import { GraphMutationEngine } from './GraphMutationEngine';
 export { CollaborativeSync, SimpleWebSocketService } from './CollaborativeSync';
 // Default Configuration
-export const defaultMutationEngineConfig = {
-    // History management
-    historyLimit: 100,
-    enableUndo: true,
-    enableRedo: true,
-    // Validation settings
-    validation: {
-        strictMode: true,
-        allowDangerousOperations: false,
-        customValidators: [],
-        enableSchemaValidation: true,
-        enableStructuralValidation: true,
-        enableSemanticValidation: false
-    },
-    // Conflict resolution
-    conflictResolution: {
-        strategy: 'OPERATIONAL_TRANSFORM',
-        autoResolve: true,
-        maxConflictAge: 5000,
-        enableOperationalTransform: true,
-        conflictDetectionSensitivity: 'medium'
-    },
-    // Batch operations
-    batchAtomicity: 'all_or_nothing',
-    maxBatchSize: 50,
-    // Performance settings
-    enableSnapshots: true,
-    snapshotInterval: 10,
-    enableCompression: false,
-    // Collaborative features
-    enableCollaboration: false,
-    syncDelay: 100,
-    maxCollaborators: 10,
-    // Debug and monitoring
-    enableLogging: false,
-    enableMetrics: false,
-    logLevel: 'info'
-};
+export 
 // Utility Functions
 export const createOperationId = () => {
     return `op-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -67,8 +30,12 @@ export const calculateChecksum = (state) => {
     }
     return hash.toString(16);
 };
-// Factory Functions for Common Operations
-export const createNodeAddOperation = (node, position, userId) => {
+position: {
+    x: number;
+    y: number;
+}
+userId ?  : string;
+any => {
     return {
         id: createOperationId(),
         type: 'NODE_ADD',
@@ -116,18 +83,16 @@ export class ConflictError extends Error {
     }
 }
 // Integration Helpers for Existing Codebase
-export const createMutationEngineForStore = (store, config) => {
-    const finalConfig = { ...defaultMutationEngineConfig, ...config };
-    const engine = new GraphMutationEngine(finalConfig);
-    // Setup state synchronization
-    engine.on('state_changed', (data) => {
-        // Update the store with the new state
-        if (store.setState) {
-            store.setState({
-                nodes: data.newState.nodes,
-                edges: data.newState.edges
-            });
-        }
-    });
-    return engine;
-};
+export const engine = new GraphMutationEngine(finalConfig);
+// Setup state synchronization
+engine.on('state_changed', (data) => {
+    // Update the store with the new state
+    if (store.setState) {
+        store.setState({
+            nodes: data.newState.nodes,
+            edges: data.newState.edges
+        });
+    }
+});
+return engine;
+;

@@ -165,15 +165,7 @@ export declare class ClassificationAuditLoggingService {
     /**
      * Log an audit entry
      */
-    logAuditEvent(
-      action: AuditAction,
-      classification: DataClassificationLevel,
-      dataId: string,
-      details: Partial<AuditDetails>,
-      context: OperationContext,
-      outcome: Partial<AuditOutcome>,
-      metadata?: Partial<AuditMetadata>
-    ): Promise<string>;
+    logAuditEvent(action: AuditAction, classification: DataClassificationLevel, dataId: string, details: Partial<AuditDetails>, context: OperationContext, outcome: Partial<AuditOutcome>, metadata?: Partial<AuditMetadata>): Promise<string>;
     /**
      * Determine resource type from data ID
      */
@@ -205,13 +197,7 @@ export declare class ClassificationAuditLoggingService {
     /**
      * Generate audit report
      */
-    generateAuditReport(
-      name: string,
-      description: string,
-      query: AuditQuery,
-      format: AuditReport['format'],
-      requestedBy: string
-    ): Promise<string>;
+    generateAuditReport(name: string, description: string, query: AuditQuery, format: AuditReport['format'], requestedBy: string): Promise<string>;
     /**
      * Generate audit summary
      */

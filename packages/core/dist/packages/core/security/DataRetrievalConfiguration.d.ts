@@ -7,13 +7,7 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  * Task: T-1752989143998-95 - Add rate limiting for data retrieval
  */
-import { 
-  DataRetrievalConfig,
-  DataRetrievalLimits,
-  GlobalDataLimits,
-  AlertThresholds,
-  DataAccessExemption
-} from './DataRetrievalRateLimit';
+import { DataRetrievalConfig, DataRetrievalLimits, GlobalDataLimits, AlertThresholds, DataAccessExemption } from './DataRetrievalRateLimit';
 import { DataClassificationLevel } from '../types/DataClassification';
 import { DataOperation } from './DataClassificationAccessControl';
 /**
@@ -116,10 +110,7 @@ export declare class DataRetrievalConfigurationFactory {
     /**
      * Create configuration for specific environment
      */
-    static createConfiguration(
-      environment: 'DEVELOPMENT' | 'STAGING' | 'PRODUCTION',
-      customizations?: Partial<DataRetrievalConfig>
-    ): DataRetrievalConfig;
+    static createConfiguration(environment: 'DEVELOPMENT' | 'STAGING' | 'PRODUCTION', customizations?: Partial<DataRetrievalConfig>): DataRetrievalConfig;
     /**
      * Create operation-specific limits based on base limits and operation
      */
@@ -127,13 +118,7 @@ export declare class DataRetrievalConfigurationFactory {
     /**
      * Create role-based exemption
      */
-    static createRoleExemption(
-      exemptionId: string,
-      role: keyof typeof ROLE_EXEMPTION_TEMPLATES,
-      userId?: string,
-      approvedBy?: string,
-      expiresAt?: Date
-    ): DataAccessExemption;
+    static createRoleExemption(exemptionId: string, role: keyof typeof ROLE_EXEMPTION_TEMPLATES, userId?: string, approvedBy?: string, expiresAt?: Date): DataAccessExemption;
     /**
      * Validate configuration
      */

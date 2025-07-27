@@ -1,14 +1,3 @@
 import React from 'react';
-interface ActivityFeedProps {
-    workspaceId?: string;
-    projectId?: string;
-    userId?: string;
-    className?: string;
-    maxHeight?: string;
-    showFilters?: boolean;
-    showSearch?: boolean;
-    realTime?: boolean;
-}
-export declare const ActivityFeed: React.FC<ActivityFeedProps>;
-export {};
+export declare const dateFilter: "all" | "month" | "week" | "today", setDateFilter: React.Dispatch<React.SetStateAction<"all" | "month" | "week" | "today">>;
 //# sourceMappingURL=ActivityFeed.d.ts.map

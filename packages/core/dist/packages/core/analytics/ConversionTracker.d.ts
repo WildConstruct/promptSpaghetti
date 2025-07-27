@@ -92,20 +92,11 @@ export declare class ConversionTracker {
     /**
      * Track user engagement events
      */
-    trackEngagement(
-      engagementType: 'feature_usage' | 'help_interaction' | 'collaboration' | 'content_creation',
-      details?: Record<string,
-      any>
-    ): void;
+    trackEngagement(engagementType: 'feature_usage' | 'help_interaction' | 'collaboration' | 'content_creation', details?: Record<string, any>): void;
     /**
      * Track business conversion events
      */
-    trackBusinessEvent(
-      eventType: 'trial_started' | 'subscription_upgraded' | 'payment_completed' | 'subscription_cancelled',
-      value: number,
-      metadata?: Record<string,
-      any>
-    ): void;
+    trackBusinessEvent(eventType: 'trial_started' | 'subscription_upgraded' | 'payment_completed' | 'subscription_cancelled', value: number, metadata?: Record<string, any>): void;
     /**
      * Get conversion metrics for a specific funnel
      */
@@ -132,13 +123,7 @@ export declare class ConversionTracker {
     /**
      * A/B testing integration
      */
-    trackExperimentConversion(
-      experimentId: string,
-      variantId: string,
-      eventType: ConversionEventType,
-      properties?: Record<string,
-      any>
-    ): void;
+    trackExperimentConversion(experimentId: string, variantId: string, eventType: ConversionEventType, properties?: Record<string, any>): void;
     /**
      * Add event listener for real-time tracking
      */

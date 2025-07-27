@@ -1763,7 +1763,9 @@ export declare function validateExportOptions(format: ExportFormat, options: any
     encrypt_output?: boolean;
     encryption_key?: string;
 }>;
-export declare export type ExportFormat = z.infer<typeof ExportFormatSchema>;
+export declare const MAX_EXPORT_FILE_SIZE: number;
+export type ShareAccessLevel = z.infer<typeof ShareAccessLevelSchema>;
+export type ExportFormat = z.infer<typeof ExportFormatSchema>;
 export type TemplateType = z.infer<typeof TemplateTypeSchema>;
 export type ExportType = z.infer<typeof ExportTypeSchema>;
 export type ExportJobStatus = z.infer<typeof ExportJobStatusSchema>;

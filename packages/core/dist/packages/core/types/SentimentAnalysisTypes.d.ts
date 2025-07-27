@@ -1782,7 +1782,10 @@ export declare const SentimentAnalysisResponseSchema: z.ZodObject<{
 }>;
 export type AnalyzeSentimentRequest = z.infer<typeof AnalyzeSentimentRequestSchema>;
 export type SentimentAnalysisResponse = z.infer<typeof SentimentAnalysisResponseSchema>;
-export declare export declare export declare export interface SentimentSystemConfig {
+export declare const validateAnalyzeSentimentRequest: (data: unknown) => AnalyzeSentimentRequest;
+export declare const validateSentimentAnalysis: (data: unknown) => SentimentAnalysis;
+export declare const validateSentimentAnalytics: (data: unknown) => SentimentAnalytics;
+export interface SentimentSystemConfig {
     enabledModels: AnalysisModelType[];
     defaultModel: AnalysisModelType;
     cachingEnabled: boolean;

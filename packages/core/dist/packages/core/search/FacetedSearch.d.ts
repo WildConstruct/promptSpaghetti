@@ -317,18 +317,10 @@ export declare class FacetedSearchSystem<T = any> extends EventEmitter {
     addDocuments(indexName: string, documents: T[], idField?: string): Promise<void>;
     addFacet(indexName: string, facet: SearchFacet): Promise<void>;
     search(indexName: string, query: Partial<SearchQuery>): Promise<SearchResult<T>>;
-    searchRealTime(
-      indexName: string,
-      query: Partial<SearchQuery>,
-      callback: (result: SearchResult<T>
-    ) => void, debounceMs?: number): Promise<() => void>;
+    searchRealTime(indexName: string, query: Partial<SearchQuery>, callback: (result: SearchResult<T>) => void, debounceMs?: number): Promise<() => void>;
     updateFacetSelection(indexName: string, facetId: string, value: unknown, selected: boolean): Promise<void>;
     clearFacetSelections(indexName: string, facetId?: string): Promise<void>;
-    getSuggestions(
-      indexName: string,
-      query: string,
-      type?: 'all' | 'completion' | 'correction'
-    ): Promise<SearchSuggestion[]>;
+    getSuggestions(indexName: string, query: string, type?: 'all' | 'completion' | 'correction'): Promise<SearchSuggestion[]>;
     getSearchAnalytics(indexName?: string): {
         totalSearches: number;
         averageResponseTime: number;

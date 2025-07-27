@@ -234,7 +234,7 @@ export interface TutorialPlayerProps {
     onExit: () => void;
     className?: string;
 }
-export declare const TutorialPlayer: React.FC<TutorialPlayerProps>;
+export declare const TutorialPlayer: React.FC<TutorialPlayerProps>, progress: any, tutorial: any, steps: any, length: any;
 interface TutorialStepContentProps {
     step: TutorialStep;
     isPlaying: boolean;

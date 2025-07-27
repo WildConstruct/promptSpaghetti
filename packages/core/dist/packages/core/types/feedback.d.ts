@@ -31,17 +31,17 @@ export declare const BaseFeedbackSchema: z.ZodObject<{
         mimeType: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "video" | "image" | "screenshot";
+        type?: "video" | "image" | "document" | "screenshot";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "video" | "image" | "screenshot";
+        type?: "video" | "image" | "document" | "screenshot";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }>, "many">>;
     rating: z.ZodOptional<z.ZodNumber>;
@@ -64,7 +64,7 @@ export declare const BaseFeedbackSchema: z.ZodObject<{
     updatedAt?: Date;
     status?: "pending" | "approved" | "rejected" | "archived" | "resolved" | "flagged";
     type?: "rating" | "comment" | "suggestion" | "review" | "report" | "feature_request" | "bug_report";
-    category?: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
+    category?: "general" | "technical" | "performance" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
     content?: string;
     metadata?: Record<string, unknown>;
     title?: string;
@@ -79,10 +79,10 @@ export declare const BaseFeedbackSchema: z.ZodObject<{
     replies?: number;
     attachments?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "video" | "image" | "screenshot";
+        type?: "video" | "image" | "document" | "screenshot";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     targetId?: string;
@@ -98,7 +98,7 @@ export declare const BaseFeedbackSchema: z.ZodObject<{
     updatedAt?: Date;
     status?: "pending" | "approved" | "rejected" | "archived" | "resolved" | "flagged";
     type?: "rating" | "comment" | "suggestion" | "review" | "report" | "feature_request" | "bug_report";
-    category?: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
+    category?: "general" | "technical" | "performance" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
     content?: string;
     metadata?: Record<string, unknown>;
     title?: string;
@@ -113,10 +113,10 @@ export declare const BaseFeedbackSchema: z.ZodObject<{
     replies?: number;
     attachments?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "video" | "image" | "screenshot";
+        type?: "video" | "image" | "document" | "screenshot";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     targetId?: string;
@@ -147,17 +147,17 @@ export declare const ReviewFeedbackSchema: z.ZodObject<{
         mimeType: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "video" | "image" | "screenshot";
+        type?: "video" | "image" | "document" | "screenshot";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "video" | "image" | "screenshot";
+        type?: "video" | "image" | "document" | "screenshot";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }>, "many">>;
     status: z.ZodDefault<z.ZodEnum<["pending", "approved", "rejected", "flagged", "archived", "resolved"]>>;
@@ -205,7 +205,7 @@ export declare const ReviewFeedbackSchema: z.ZodObject<{
     updatedAt?: Date;
     status?: "pending" | "approved" | "rejected" | "archived" | "resolved" | "flagged";
     type?: "review";
-    category?: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
+    category?: "general" | "technical" | "performance" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
     content?: string;
     metadata?: Record<string, unknown>;
     title?: string;
@@ -222,10 +222,10 @@ export declare const ReviewFeedbackSchema: z.ZodObject<{
     replies?: number;
     attachments?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "video" | "image" | "screenshot";
+        type?: "video" | "image" | "document" | "screenshot";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     targetId?: string;
@@ -252,7 +252,7 @@ export declare const ReviewFeedbackSchema: z.ZodObject<{
     updatedAt?: Date;
     status?: "pending" | "approved" | "rejected" | "archived" | "resolved" | "flagged";
     type?: "review";
-    category?: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
+    category?: "general" | "technical" | "performance" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
     content?: string;
     metadata?: Record<string, unknown>;
     title?: string;
@@ -269,10 +269,10 @@ export declare const ReviewFeedbackSchema: z.ZodObject<{
     replies?: number;
     attachments?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "video" | "image" | "screenshot";
+        type?: "video" | "image" | "document" | "screenshot";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     targetId?: string;
@@ -314,17 +314,17 @@ export declare const ReportFeedbackSchema: z.ZodObject<{
         mimeType: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "video" | "image" | "screenshot";
+        type?: "video" | "image" | "document" | "screenshot";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "video" | "image" | "screenshot";
+        type?: "video" | "image" | "document" | "screenshot";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }>, "many">>;
     rating: z.ZodOptional<z.ZodNumber>;
@@ -368,7 +368,7 @@ export declare const ReportFeedbackSchema: z.ZodObject<{
     updatedAt?: Date;
     status?: "pending" | "approved" | "rejected" | "archived" | "resolved" | "flagged";
     type?: "report";
-    category?: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
+    category?: "general" | "technical" | "performance" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
     content?: string;
     metadata?: Record<string, unknown>;
     title?: string;
@@ -390,10 +390,10 @@ export declare const ReportFeedbackSchema: z.ZodObject<{
     replies?: number;
     attachments?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "video" | "image" | "screenshot";
+        type?: "video" | "image" | "document" | "screenshot";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     targetId?: string;
@@ -413,7 +413,7 @@ export declare const ReportFeedbackSchema: z.ZodObject<{
     updatedAt?: Date;
     status?: "pending" | "approved" | "rejected" | "archived" | "resolved" | "flagged";
     type?: "report";
-    category?: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
+    category?: "general" | "technical" | "performance" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
     content?: string;
     metadata?: Record<string, unknown>;
     title?: string;
@@ -435,10 +435,10 @@ export declare const ReportFeedbackSchema: z.ZodObject<{
     replies?: number;
     attachments?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "video" | "image" | "screenshot";
+        type?: "video" | "image" | "document" | "screenshot";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     targetId?: string;
@@ -473,17 +473,17 @@ export declare const BugReportFeedbackSchema: z.ZodObject<{
         mimeType: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "video" | "image" | "screenshot";
+        type?: "video" | "image" | "document" | "screenshot";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "video" | "image" | "screenshot";
+        type?: "video" | "image" | "document" | "screenshot";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }>, "many">>;
     rating: z.ZodOptional<z.ZodNumber>;
@@ -535,7 +535,7 @@ export declare const BugReportFeedbackSchema: z.ZodObject<{
     priority?: "low" | "medium" | "high" | "urgent";
     status?: "pending" | "approved" | "rejected" | "archived" | "resolved" | "flagged";
     type?: "bug_report";
-    category?: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
+    category?: "general" | "technical" | "performance" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
     content?: string;
     metadata?: Record<string, unknown>;
     title?: string;
@@ -558,10 +558,10 @@ export declare const BugReportFeedbackSchema: z.ZodObject<{
     assignedTo?: string;
     attachments?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "video" | "image" | "screenshot";
+        type?: "video" | "image" | "document" | "screenshot";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     targetId?: string;
@@ -585,7 +585,7 @@ export declare const BugReportFeedbackSchema: z.ZodObject<{
     priority?: "low" | "medium" | "high" | "urgent";
     status?: "pending" | "approved" | "rejected" | "archived" | "resolved" | "flagged";
     type?: "bug_report";
-    category?: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
+    category?: "general" | "technical" | "performance" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
     content?: string;
     metadata?: Record<string, unknown>;
     title?: string;
@@ -608,10 +608,10 @@ export declare const BugReportFeedbackSchema: z.ZodObject<{
     assignedTo?: string;
     attachments?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "video" | "image" | "screenshot";
+        type?: "video" | "image" | "document" | "screenshot";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     targetId?: string;
@@ -649,17 +649,17 @@ export declare const SuggestionFeedbackSchema: z.ZodObject<{
         mimeType: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "video" | "image" | "screenshot";
+        type?: "video" | "image" | "document" | "screenshot";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "video" | "image" | "screenshot";
+        type?: "video" | "image" | "document" | "screenshot";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }>, "many">>;
     rating: z.ZodOptional<z.ZodNumber>;
@@ -693,7 +693,7 @@ export declare const SuggestionFeedbackSchema: z.ZodObject<{
     updatedAt?: Date;
     status?: "pending" | "approved" | "rejected" | "archived" | "resolved" | "flagged";
     type?: "suggestion";
-    category?: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
+    category?: "general" | "technical" | "performance" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
     content?: string;
     metadata?: Record<string, unknown>;
     title?: string;
@@ -710,10 +710,10 @@ export declare const SuggestionFeedbackSchema: z.ZodObject<{
     replies?: number;
     attachments?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "video" | "image" | "screenshot";
+        type?: "video" | "image" | "document" | "screenshot";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     targetId?: string;
@@ -736,7 +736,7 @@ export declare const SuggestionFeedbackSchema: z.ZodObject<{
     updatedAt?: Date;
     status?: "pending" | "approved" | "rejected" | "archived" | "resolved" | "flagged";
     type?: "suggestion";
-    category?: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
+    category?: "general" | "technical" | "performance" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
     content?: string;
     metadata?: Record<string, unknown>;
     title?: string;
@@ -753,10 +753,10 @@ export declare const SuggestionFeedbackSchema: z.ZodObject<{
     replies?: number;
     attachments?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "video" | "image" | "screenshot";
+        type?: "video" | "image" | "document" | "screenshot";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     targetId?: string;
@@ -786,16 +786,16 @@ export declare const FeedbackSummarySchema: z.ZodObject<{
         4: z.ZodDefault<z.ZodNumber>;
         5: z.ZodDefault<z.ZodNumber>;
     }, "strip", z.ZodTypeAny, {
-        2?: number;
         1?: number;
-        3?: number;
+        2?: number;
         4?: number;
+        3?: number;
         5?: number;
     }, {
-        2?: number;
         1?: number;
-        3?: number;
+        2?: number;
         4?: number;
+        3?: number;
         5?: number;
     }>;
     totalReviews: z.ZodDefault<z.ZodNumber>;
@@ -823,10 +823,10 @@ export declare const FeedbackSummarySchema: z.ZodObject<{
     totalHelpfulVotes?: number;
     moderationRate?: number;
     ratingDistribution?: {
-        2?: number;
         1?: number;
-        3?: number;
+        2?: number;
         4?: number;
+        3?: number;
         5?: number;
     };
     totalReviews?: number;
@@ -848,10 +848,10 @@ export declare const FeedbackSummarySchema: z.ZodObject<{
     totalHelpfulVotes?: number;
     moderationRate?: number;
     ratingDistribution?: {
-        2?: number;
         1?: number;
-        3?: number;
+        2?: number;
         4?: number;
+        3?: number;
         5?: number;
     };
     totalReviews?: number;
@@ -896,14 +896,14 @@ export declare const FeedbackReplySchema: z.ZodObject<{
         filename: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         id?: string;
-        filename?: string;
-        type?: "document" | "image";
+        type?: "image" | "document";
         url?: string;
+        filename?: string;
     }, {
         id?: string;
-        filename?: string;
-        type?: "document" | "image";
+        type?: "image" | "document";
         url?: string;
+        filename?: string;
     }>, "many">>;
     status: z.ZodDefault<z.ZodEnum<["visible", "hidden", "deleted"]>>;
     likes: z.ZodDefault<z.ZodNumber>;
@@ -921,9 +921,9 @@ export declare const FeedbackReplySchema: z.ZodObject<{
     likes?: number;
     attachments?: {
         id?: string;
-        filename?: string;
-        type?: "document" | "image";
+        type?: "image" | "document";
         url?: string;
+        filename?: string;
     }[];
     authorType?: "admin" | "user" | "creator" | "moderator";
     editedAt?: Date;
@@ -940,9 +940,9 @@ export declare const FeedbackReplySchema: z.ZodObject<{
     likes?: number;
     attachments?: {
         id?: string;
-        filename?: string;
-        type?: "document" | "image";
+        type?: "image" | "document";
         url?: string;
+        filename?: string;
     }[];
     authorType?: "admin" | "user" | "creator" | "moderator";
     editedAt?: Date;
@@ -971,7 +971,7 @@ export declare const CreateFeedbackRequestSchema: z.ZodObject<{
     attachments: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
 }, "strip", z.ZodTypeAny, {
     type?: "rating" | "comment" | "suggestion" | "review" | "report" | "feature_request" | "bug_report";
-    category?: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
+    category?: "general" | "technical" | "performance" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
     content?: string;
     title?: string;
     rating?: number;
@@ -991,7 +991,7 @@ export declare const CreateFeedbackRequestSchema: z.ZodObject<{
     actualBehavior?: string;
 }, {
     type?: "rating" | "comment" | "suggestion" | "review" | "report" | "feature_request" | "bug_report";
-    category?: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
+    category?: "general" | "technical" | "performance" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
     content?: string;
     title?: string;
     rating?: number;
@@ -1057,7 +1057,7 @@ export declare const FeedbackFilterSchema: z.ZodObject<{
     search?: string;
     status?: "pending" | "approved" | "rejected" | "archived" | "resolved" | "flagged";
     type?: "rating" | "comment" | "suggestion" | "review" | "report" | "feature_request" | "bug_report";
-    category?: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
+    category?: "general" | "technical" | "performance" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
     limit?: number;
     offset?: number;
     sortBy?: "rating" | "created_at" | "updated_at" | "helpful_votes";
@@ -1075,7 +1075,7 @@ export declare const FeedbackFilterSchema: z.ZodObject<{
     search?: string;
     status?: "pending" | "approved" | "rejected" | "archived" | "resolved" | "flagged";
     type?: "rating" | "comment" | "suggestion" | "review" | "report" | "feature_request" | "bug_report";
-    category?: "performance" | "general" | "technical" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
+    category?: "general" | "technical" | "performance" | "documentation" | "usability" | "support" | "pricing" | "content_quality";
     limit?: number;
     offset?: number;
     sortBy?: "rating" | "created_at" | "updated_at" | "helpful_votes";
@@ -1120,7 +1120,12 @@ export type CreateFeedbackRequest = z.infer<typeof CreateFeedbackRequestSchema>;
 export type UpdateFeedbackRequest = z.infer<typeof UpdateFeedbackRequestSchema>;
 export type FeedbackFilter = z.infer<typeof FeedbackFilterSchema>;
 export type ModerateFeedbackRequest = z.infer<typeof ModerateFeedbackRequestSchema>;
-export declare export declare export declare export declare export declare export declare const FEEDBACK_TYPE_DESCRIPTIONS: {
+export declare const validateFeedback: (feedback: unknown) => Feedback;
+export declare const validateCreateFeedbackRequest: (request: unknown) => CreateFeedbackRequest;
+export declare const validateUpdateFeedbackRequest: (request: unknown) => UpdateFeedbackRequest;
+export declare const validateFeedbackFilter: (filter: unknown) => FeedbackFilter;
+export declare const validateModerateFeedbackRequest: (request: unknown) => ModerateFeedbackRequest;
+export declare const FEEDBACK_TYPE_DESCRIPTIONS: {
     readonly rating: "Simple star rating";
     readonly review: "Detailed review with rating";
     readonly comment: "General comment or discussion";

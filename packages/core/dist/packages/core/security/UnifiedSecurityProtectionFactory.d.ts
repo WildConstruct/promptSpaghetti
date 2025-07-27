@@ -11,12 +11,7 @@ import { RateLimitingService } from './RateLimitingService';
 import { AdaptiveThrottlingRulesEngine } from './AdaptiveThrottlingRules';
 import { ApiUsagePatternQuotaRecommendations } from './ApiUsagePatternQuotaRecommendations';
 import { ApiScalingAnalyticsIntegration } from './ApiScalingAnalyticsIntegration';
-import { 
-  AdaptiveRateLimitingIntegration,
-  IntegrationMode,
-  CoordinationStrategy,
-  FallbackBehavior
-} from './AdaptiveRateLimitingIntegration';
+import { AdaptiveRateLimitingIntegration, IntegrationMode, CoordinationStrategy, FallbackBehavior } from './AdaptiveRateLimitingIntegration';
 export interface UnifiedSecurityConfig {
     rateLimiting: {
         enabled: boolean;

@@ -25,5 +25,7 @@ interface InspectorProviderProps {
     initialCollapsed?: boolean;
     initialVisible?: boolean;
 }
-export declare export {};
+export declare const InspectorProvider: React.FC<InspectorProviderProps>;
+export declare const useInspectorContext: () => InspectorContextValue;
+export {};
 //# sourceMappingURL=InspectorContext.d.ts.map

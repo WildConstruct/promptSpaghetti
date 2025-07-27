@@ -15,12 +15,7 @@
  * - Cross-device attribution tracking
  */
 import React from 'react';
-import { 
-  ConversionFunnelDefinition,
-  ConversionStep,
-  UserSegment,
-  ConversionCohort
-} from '../../analytics/ConversionDataModel';
+import { ConversionFunnelDefinition, ConversionStep, UserSegment, ConversionCohort } from '../../analytics/ConversionDataModel';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 export interface FunnelAttributionAnalysisProps {
     funnelDefinition: ConversionFunnelDefinition;
@@ -393,5 +388,5 @@ export interface AttributionAnalysisExportData {
     configuration: AttributionConfiguration;
     insights: AttributionInsight[];
 }
-export declare const FunnelAttributionAnalysis: React.FC<FunnelAttributionAnalysisProps>;
+export declare const error: string, setError: React.Dispatch<React.SetStateAction<string>>;
 //# sourceMappingURL=FunnelAttributionAnalysis.d.ts.map

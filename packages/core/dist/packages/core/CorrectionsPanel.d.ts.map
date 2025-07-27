@@ -1,1 +1,1 @@
-{"version":3,"file":"CorrectionsPanel.d.ts","sourceRoot":"","sources":["../../../CorrectionsPanel.tsx"],"names":[],"mappings":"AAAA,OAAO,KAAgC,MAAM,OAAO,CAAC;AAQrD,UAAU,qBAAqB;IAC7B,MAAM,EAAE,OAAO,CAAC;IAChB,OAAO,EAAE,MAAM,IAAI,CAAC;CACrB;AAED,eAAO,MAAM,gBAAgB,EAAE,KAAK,CAAC,EAAE,CAAC,qBAAqB,CA8e5D,CAAC"}
+{"version":3,"file":"CorrectionsPanel.d.ts","sourceRoot":"","sources":["../../../CorrectionsPanel.tsx"],"names":[],"mappings":"AAaA,eAAS,MACL,KAAK,OACL,OAAO,OACP,UAAU,OACV,UAAU,OACV,UAAU,OACV,aAAa,OACb,gBAAgB,KACO,CAAC"}

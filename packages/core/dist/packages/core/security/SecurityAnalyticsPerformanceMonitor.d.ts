@@ -574,10 +574,7 @@ export declare class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
     private baselines;
     constructor();
     private initializeGlobalMonitoring;
-    createPerformanceProfile(
-      profile: Omit<AnalyticsPerformanceProfile,
-      'id' | 'created_at' | 'current_state'>
-    ): Promise<string>;
+    createPerformanceProfile(profile: Omit<AnalyticsPerformanceProfile, 'id' | 'created_at' | 'current_state'>): Promise<string>;
     updatePerformanceProfile(profileId: string, updates: Partial<AnalyticsPerformanceProfile>): Promise<void>;
     deletePerformanceProfile(profileId: string): Promise<void>;
     private startProfileMonitoring;
@@ -631,10 +628,7 @@ export declare class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
     getPerformanceMetrics(profileId: string, hours?: number): PerformanceMetrics[];
     getCurrentPerformanceState(profileId: string): AnalyticsPerformanceProfile['current_state'] | undefined;
     getActiveAnomalies(profileId?: string, severity?: PerformanceAnomaly['severity']): PerformanceAnomaly[];
-    getOptimizationRecommendations(
-      profileId: string,
-      status?: PerformanceOptimizationRecommendation['status']
-    ): PerformanceOptimizationRecommendation[];
+    getOptimizationRecommendations(profileId: string, status?: PerformanceOptimizationRecommendation['status']): PerformanceOptimizationRecommendation[];
     acknowledgeAnomaly(anomalyId: string, acknowledgedBy: string): Promise<void>;
     resolveAnomaly(anomalyId: string, resolvedBy: string, resolutionMethod: string, notes?: string): Promise<void>;
     generatePerformanceReport(profileId: string, hours?: number): Promise<PerformanceReport>;

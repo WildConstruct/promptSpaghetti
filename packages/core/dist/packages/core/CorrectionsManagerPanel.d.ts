@@ -1,8 +1,4 @@
 import React from 'react';
-interface CorrectionsPanelProps {
-    isOpen: boolean;
-    onClose: () => void;
-}
-export declare const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps>;
-export {};
+import { CorrectionRule } from './correctionsStore';
+export declare const editingRule: CorrectionRule, setEditingRule: React.Dispatch<React.SetStateAction<CorrectionRule>>;
 //# sourceMappingURL=CorrectionsManagerPanel.d.ts.map

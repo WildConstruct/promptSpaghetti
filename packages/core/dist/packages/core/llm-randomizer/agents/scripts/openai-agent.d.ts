@@ -67,8 +67,5 @@ export declare const defaultOpenAIConfig: OpenAIAgentConfig;
 /**
  * Utility function to create and use OpenAI agent
  */
-export declare function generateGraphWithOpenAI(
-  request: GraphGenerationRequest,
-  config?: Partial<OpenAIAgentConfig>
-): Promise<GenerationResult>;
+export declare function generateGraphWithOpenAI(request: GraphGenerationRequest, config?: Partial<OpenAIAgentConfig>): Promise<GenerationResult>;
 //# sourceMappingURL=openai-agent.d.ts.map

@@ -11,7 +11,12 @@ export { ConflictResolver } from './ConflictResolver';
 export { OperationHistory } from './OperationHistory';
 import { GraphMutationEngine } from './GraphMutationEngine';
 export { CollaborativeSync, SimpleWebSocketService, type WebSocketService } from './CollaborativeSync';
-export declare export declare export declare export declare class MutationEngineError extends Error {
+export declare const createOperationId: () => string;
+export declare const calculateChecksum: (state: {
+    nodes: any[];
+    edges: any[];
+}) => string;
+export declare class MutationEngineError extends Error {
     operation?: any;
     validationErrors?: any[];
     constructor(message: string, operation?: any, validationErrors?: any[]);
@@ -27,4 +32,5 @@ export declare class ConflictError extends Error {
     operation?: any;
     constructor(message: string, conflicts: any[], operation?: any);
 }
-export declare //# sourceMappingURL=index.d.ts.map
+export declare const engine: GraphMutationEngine;
+//# sourceMappingURL=index.d.ts.map

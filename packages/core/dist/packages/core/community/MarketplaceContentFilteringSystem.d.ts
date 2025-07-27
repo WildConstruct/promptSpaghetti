@@ -476,11 +476,7 @@ export declare class MarketplaceContentFilteringServiceImpl implements Marketpla
     private apiClient;
     private configuration;
     private filteringRules;
-    constructor(
-      moderationService: AutomatedModerationService,
-      apiClient: any,
-      configuration?: Partial<FilteringConfiguration>
-    );
+    constructor(moderationService: AutomatedModerationService, apiClient: any, configuration?: Partial<FilteringConfiguration>);
     filterContent(request: ContentFilteringRequest): Promise<ContentFilteringResult>;
     batchFilterContent(requests: ContentFilteringRequest[]): Promise<ContentFilteringResult[]>;
     revalidateContent(contentId: string, reason: string): Promise<ContentFilteringResult>;

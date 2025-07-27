@@ -376,5 +376,5 @@ export interface AnomalyDetectionExportData {
     exportTimestamp: number;
     configuration: AnomalyDetectionConfig;
 }
-export declare const FunnelAnomalyDetection: React.FC<FunnelAnomalyDetectionProps>;
+export declare const error: string, setError: React.Dispatch<React.SetStateAction<string>>;
 //# sourceMappingURL=FunnelAnomalyDetection.d.ts.map

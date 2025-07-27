@@ -174,12 +174,7 @@ declare class DataSensitivityUtils {
     /**
      * Validate if a sensitivity level assignment is appropriate for the data type
      */
-    static validateSensitivityAssignment(
-      dataType: string,
-      proposedLevel: DataSensitivityLevel,
-      context?: Record<string,
-      any>
-    ): {
+    static validateSensitivityAssignment(dataType: string, proposedLevel: DataSensitivityLevel, context?: Record<string, any>): {
         valid: boolean;
         recommendedLevel?: DataSensitivityLevel;
         reasons: string[];

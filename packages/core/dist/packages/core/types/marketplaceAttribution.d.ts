@@ -1685,13 +1685,13 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
             derivatives?: number;
         }>;
     }, "strip", z.ZodTypeAny, {
+        title?: string;
         performance?: {
             rating?: number;
             views?: number;
             purchases?: number;
             derivatives?: number;
         };
-        title?: string;
         revenue?: {
             total?: number;
             pending?: number;
@@ -1751,13 +1751,13 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
         };
         templateId?: string;
     }, {
+        title?: string;
         performance?: {
             rating?: number;
             views?: number;
             purchases?: number;
             derivatives?: number;
         };
-        title?: string;
         revenue?: {
             total?: number;
             pending?: number;
@@ -1978,13 +1978,13 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
     }>>;
 }, "strip", z.ZodTypeAny, {
     templates?: {
+        title?: string;
         performance?: {
             rating?: number;
             views?: number;
             purchases?: number;
             derivatives?: number;
         };
-        title?: string;
         revenue?: {
             total?: number;
             pending?: number;
@@ -2120,13 +2120,13 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
     }[];
 }, {
     templates?: {
+        title?: string;
         performance?: {
             rating?: number;
             views?: number;
             purchases?: number;
             derivatives?: number;
         };
-        title?: string;
         revenue?: {
             total?: number;
             pending?: number;
@@ -2263,4 +2263,39 @@ export declare const CreatorDashboardResponseSchema: z.ZodObject<{
 }>;
 export type TemplateAttributionResponse = z.infer<typeof TemplateAttributionResponseSchema>;
 export type CreatorDashboardResponse = z.infer<typeof CreatorDashboardResponseSchema>;
-export declare export declare export declare export declare //# sourceMappingURL=marketplaceAttribution.d.ts.map
+export declare const MARKETPLACE_RESOURCE_TYPE_DESCRIPTIONS: {
+    readonly template: "Marketplace template";
+    readonly template_version: "Template version";
+    readonly template_purchase: "Template purchase";
+    readonly template_review: "Template review";
+    readonly template_collection: "Template collection";
+    readonly creator_profile: "Creator profile";
+    readonly revenue_record: "Revenue record";
+    readonly attribution_claim: "Attribution claim";
+};
+export declare const MARKETPLACE_CHANGE_TYPE_DESCRIPTIONS: {
+    readonly template_create: "Template created";
+    readonly template_publish: "Template published";
+    readonly template_purchase: "Template purchased";
+    readonly template_review: "Template reviewed";
+    readonly revenue_earned: "Revenue earned";
+    readonly attribution_assigned: "Attribution assigned";
+    readonly collaboration_joined: "Collaboration joined";
+    readonly template_derived: "Template derived";
+    readonly collection_add: "Added to collection";
+    readonly creator_verified: "Creator verified";
+};
+export declare const MARKETPLACE_ATTRIBUTION_DEFAULTS: {
+    readonly DEFAULT_CREATOR_SHARE: 85;
+    readonly DEFAULT_PLATFORM_FEE: 15;
+    readonly DEFAULT_COLLABORATION_THRESHOLD: 10;
+    readonly VERIFICATION_REQUIRED_THRESHOLD: 1000;
+    readonly CLAIM_RESOLUTION_DAYS: 14;
+    readonly REVENUE_HOLD_DAYS: 7;
+    readonly MIN_CONFIDENCE_SCORE: 0.8;
+};
+export declare const validateCreateTemplateAttributionRequest: (request: unknown) => CreateTemplateAttributionRequest;
+export declare const validateCreateAttributionClaimRequest: (request: unknown) => CreateAttributionClaimRequest;
+export declare const validateUpdateRevenueAttributionRequest: (request: unknown) => UpdateRevenueAttributionRequest;
+export declare const validateMarketplaceAttributionFilter: (filter: unknown) => MarketplaceAttributionFilter;
+//# sourceMappingURL=marketplaceAttribution.d.ts.map

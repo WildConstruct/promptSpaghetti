@@ -20,12 +20,7 @@ interface ApprovalReviewInterfaceProps {
     request: ApprovalRequest;
     workspaceId: string;
     currentUserId: string;
-    onReviewSubmit: (
-      decision: 'approve' | 'reject' | 'abstain',
-      comment?: string,
-      criteriaEvaluations?: Record<string,
-      any>
-    ) => void;
+    onReviewSubmit: (decision: 'approve' | 'reject' | 'abstain', comment?: string, criteriaEvaluations?: Record<string, any>) => void;
     onClose: () => void;
     readOnly?: boolean;
 }

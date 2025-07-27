@@ -11,7 +11,6 @@
  * - Export integration
  */
 import React from 'react';
-import { VarianceAnalysis } from '../../hooks/useEnhancedPreview';
 export interface EnhancedPreviewResult {
     seed: number;
     output?: string;
@@ -34,27 +33,5 @@ export interface EnhancedPreviewResult {
     saved?: boolean;
     exported?: boolean;
 }
-interface EnhancedPreviewModalProps {
-    open: boolean;
-    loading: boolean;
-    error: string | null;
-    results: EnhancedPreviewResult[];
-    varianceAnalysis?: VarianceAnalysis | null;
-    onClose: () => void;
-    onCancel?: () => void;
-    onResultHover?: (index: number) => void;
-    onResultSelect?: (resultId: string, selected: boolean) => void;
-    onResultSave?: (resultId: string, metadata?: Record<string, unknown>) => Promise<void>;
-    onResultExport?: (resultIds: string[]) => Promise<void>;
-    onResultRate?: (resultId: string, rating: number) => void;
-    onResultTag?: (resultId: string, tags: string[]) => void;
-    onResultNote?: (resultId: string, note: string) => void;
-    enableSelection?: boolean;
-    enableRating?: boolean;
-    enableNotes?: boolean;
-    enableExport?: boolean;
-    maxResults?: number;
-}
-export declare const EnhancedPreviewModal: React.FC<EnhancedPreviewModalProps>;
-export {};
+export declare const expandedResult: string, setExpandedResult: React.Dispatch<React.SetStateAction<string>>;
 //# sourceMappingURL=EnhancedPreviewModal.d.ts.map

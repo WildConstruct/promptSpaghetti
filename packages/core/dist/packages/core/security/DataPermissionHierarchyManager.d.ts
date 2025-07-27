@@ -7,12 +7,7 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
 import { EventEmitter } from 'events';
-import { 
-  PermissionHierarchy,
-  OperationPermission,
-  PermissionCondition,
-  DelegationCondition
-} from './DataPermissionHierarchy';
+import { PermissionHierarchy, OperationPermission, PermissionCondition, DelegationCondition } from './DataPermissionHierarchy';
 import { DataClassificationLevel, OperationContext, DataOperation } from '../types/DataClassification';
 export interface PermissionRequest {
     id: string;
@@ -150,13 +145,7 @@ export declare class DataPermissionHierarchyManager extends EventEmitter {
     /**
      * Grant permission based on evaluation
      */
-    grantPermission(
-      request: PermissionRequest,
-      grantedBy: string,
-      conditions?: PermissionCondition[],
-      timeLimit?: Date,
-      usageLimit?: number
-    ): Promise<PermissionGrant>;
+    grantPermission(request: PermissionRequest, grantedBy: string, conditions?: PermissionCondition[], timeLimit?: Date, usageLimit?: number): Promise<PermissionGrant>;
     /**
      * Initiate escalation process
      */
@@ -164,14 +153,7 @@ export declare class DataPermissionHierarchyManager extends EventEmitter {
     /**
      * Delegate permissions to another user
      */
-    delegatePermissions(
-      delegatorId: string,
-      delegateeId: string,
-      permissions: string[],
-      timeLimit: Date,
-      conditions: DelegationCondition[],
-      justification: string
-    ): Promise<DelegationRequest>;
+    delegatePermissions(delegatorId: string, delegateeId: string, permissions: string[], timeLimit: Date, conditions: DelegationCondition[], justification: string): Promise<DelegationRequest>;
     /**
      * Analyze user's effective permissions
      */

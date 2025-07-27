@@ -13,7 +13,6 @@ import { jsx as _jsx } from "react/jsx-runtime";
 import { useCallback, useState } from 'react';
 import { useViewport } from 'reactflow';
 import { useGraphStore } from '../../graphStore';
-import { RegionGroupsLayer } from '../Annotations/RegionGroupsLayer';
 export const RegionGroupsManager = ({ disabled = false, readonly = false, author = 'Anonymous', selectedGroupId = null, onGroupHover, onGroupSelect }) => {
     const { nodes, annotations, setRegionGroups } = useGraphStore();
     const viewport = useViewport();
@@ -23,22 +22,18 @@ export const RegionGroupsManager = ({ disabled = false, readonly = false, author
         setRegionGroups(groups);
     }, [setRegionGroups]);
     // Handle group hover state
-    const handleGroupHover = useCallback((groupId) => {
-        onGroupHover?.(groupId);
-    }, [onGroupHover]);
-    // Handle group selection
-    const handleGroupSelect = useCallback((groupId) => {
-        onGroupSelect?.(groupId);
-    }, [onGroupSelect]);
-    // Get canvas size and offset from ReactFlow
-    const canvasOffset = {
-        x: viewport.x,
-        y: viewport.y
-    };
-    // Don't render if disabled
-    if (disabled) {
-        return null;
-    }
-    return (_jsx(RegionGroupsLayer, { nodes: nodes, regionGroups: annotations.regionGroups, onRegionGroupsChange: handleRegionGroupsChange, groupPreferences: annotations.regionGroupPreferences, selectedGroupId: selectedGroupId, hoveredGroupId: hoveredGroupId, author: author, readOnly: readonly, canvasOffset: canvasOffset, zoom: viewport.zoom }));
+}, [onGroupHover];
+[onGroupSelect];
+;
+// Get canvas size and offset from ReactFlow
+const canvasOffset = {
+    x: viewport.x,
+    y: viewport.y
 };
+// Don't render if disabled
+if (disabled) {
+    return null;
+}
+return (_jsx(RegionGroupsLayer, { nodes: nodes, regionGroups: annotations.regionGroups, onRegionGroupsChange: handleRegionGroupsChange, groupPreferences: annotations.regionGroupPreferences, selectedGroupId: selectedGroupId, hoveredGroupId: hoveredGroupId, author: author, readOnly: readonly, canvasOffset: canvasOffset, zoom: viewport.zoom }));
+;
 export default RegionGroupsManager;

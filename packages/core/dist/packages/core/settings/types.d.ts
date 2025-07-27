@@ -8,14 +8,14 @@ export declare const SeedSettingsSchema: z.ZodObject<{
     history: z.ZodDefault<z.ZodArray<z.ZodNumber, "many">>;
     autoGenerate: z.ZodDefault<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    history?: number[];
     value?: number;
     enabled?: boolean;
+    history?: number[];
     autoGenerate?: boolean;
 }, {
-    history?: number[];
     value?: number;
     enabled?: boolean;
+    history?: number[];
     autoGenerate?: boolean;
 }>;
 /**
@@ -146,14 +146,14 @@ export declare const AdvancedSettingsSchema: z.ZodObject<{
         history: z.ZodDefault<z.ZodArray<z.ZodNumber, "many">>;
         autoGenerate: z.ZodDefault<z.ZodBoolean>;
     }, "strip", z.ZodTypeAny, {
-        history?: number[];
         value?: number;
         enabled?: boolean;
+        history?: number[];
         autoGenerate?: boolean;
     }, {
-        history?: number[];
         value?: number;
         enabled?: boolean;
+        history?: number[];
         autoGenerate?: boolean;
     }>;
     temperature: z.ZodObject<{
@@ -263,21 +263,21 @@ export declare const AdvancedSettingsSchema: z.ZodObject<{
     lastModified: z.ZodOptional<z.ZodString>;
     userId: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
+    seed?: {
+        value?: number;
+        enabled?: boolean;
+        history?: number[];
+        autoGenerate?: boolean;
+    };
+    version?: string;
+    lastModified?: string;
+    userId?: string;
     performance?: {
         enableCaching?: boolean;
         showExecutionTimes?: boolean;
         showMemoryUsage?: boolean;
         logExecutionSteps?: boolean;
     };
-    seed?: {
-        history?: number[];
-        value?: number;
-        enabled?: boolean;
-        autoGenerate?: boolean;
-    };
-    version?: string;
-    lastModified?: string;
-    userId?: string;
     temperature?: {
         value?: number;
         enabled?: boolean;
@@ -308,21 +308,21 @@ export declare const AdvancedSettingsSchema: z.ZodObject<{
         showPerformanceWarning?: boolean;
     };
 }, {
+    seed?: {
+        value?: number;
+        enabled?: boolean;
+        history?: number[];
+        autoGenerate?: boolean;
+    };
+    version?: string;
+    lastModified?: string;
+    userId?: string;
     performance?: {
         enableCaching?: boolean;
         showExecutionTimes?: boolean;
         showMemoryUsage?: boolean;
         logExecutionSteps?: boolean;
     };
-    seed?: {
-        history?: number[];
-        value?: number;
-        enabled?: boolean;
-        autoGenerate?: boolean;
-    };
-    version?: string;
-    lastModified?: string;
-    userId?: string;
     temperature?: {
         value?: number;
         enabled?: boolean;

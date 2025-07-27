@@ -369,7 +369,33 @@ export interface RevisionRequestConfig {
     enablePredictiveAnalytics: boolean;
     retentionDays: number;
 }
-export declare     description: string;
+export declare const DEFAULT_REVISION_REQUEST_CONFIG: RevisionRequestConfig;
+export interface RevisionRequestFormData {
+    title: string;
+    description: string;
+    requestedChanges: string;
+    businessJustification: string;
+    contentType: RevisionContentType;
+    contentId: string;
+    type: RevisionRequestType;
+    priority: RevisionRequestPriority;
+    dueDate?: Date;
+    estimatedHours?: number;
+    tags: string[];
+    evidence: File[];
+}
+export interface RevisionRequestReviewFormData {
+    decision: 'approve' | 'reject' | 'request_info';
+    reviewNotes: string;
+    rejectionReason?: string;
+    approvalNotes?: string;
+    estimatedImplementationHours?: number;
+    implementationPlan?: string;
+    additionalRequirements?: string;
+}
+export type RevisionRequestCreateSchema = {
+    title: string;
+    description: string;
     requestedChanges: string;
     businessJustification: string;
     contentType: RevisionContentType;

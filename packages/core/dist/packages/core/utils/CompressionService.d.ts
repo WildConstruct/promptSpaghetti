@@ -156,10 +156,7 @@ export declare class CompressionService {
     /**
      * Benchmark different algorithms on sample data
      */
-    benchmarkAlgorithms(
-      data: string | Buffer | object,
-      dataType: DataType
-    ): Promise<Map<CompressionAlgorithm, CompressionResult>>;
+    benchmarkAlgorithms(data: string | Buffer | object, dataType: DataType): Promise<Map<CompressionAlgorithm, CompressionResult>>;
     /**
      * Get current compression statistics
      */

@@ -369,16 +369,10 @@ export interface LearningAnalyticsService {
     trackTutorialEvent(event: TutorialAnalyticsEvent): Promise<void>;
     trackKnowledgeBaseEvent(event: KnowledgeBaseAnalyticsEvent): Promise<void>;
     trackCommunityEvent(event: CommunityAnalyticsEvent): Promise<void>;
-    generateLearningEffectivenessMetrics(
-      contentId: string,
-      timeRange: TimeRange
-    ): Promise<LearningEffectivenessMetrics>;
+    generateLearningEffectivenessMetrics(contentId: string, timeRange: TimeRange): Promise<LearningEffectivenessMetrics>;
     generateUserLearningAnalytics(userId: string, timeRange: TimeRange): Promise<UserLearningAnalytics>;
     generateCommunityKnowledgeMetrics(communityId: string, timeRange: TimeRange): Promise<CommunityKnowledgeMetrics>;
-    generateKnowledgeBaseUsageMetrics(
-      knowledgeBaseId: string,
-      timeRange: TimeRange
-    ): Promise<KnowledgeBaseUsageMetrics>;
+    generateKnowledgeBaseUsageMetrics(knowledgeBaseId: string, timeRange: TimeRange): Promise<KnowledgeBaseUsageMetrics>;
     identifyLearningTrends(timeRange: TimeRange): Promise<LearningTrend[]>;
     detectContentPerformanceAnomalies(contentType: ContentType, threshold: number): Promise<PerformanceAnomaly[]>;
     generatePersonalizedLearningInsights(userId: string): Promise<PersonalizedInsight[]>;
@@ -671,14 +665,14 @@ export declare const LearningAnalyticsEventSchema: z.ZodObject<{
         session_id?: string;
         content_id?: string;
         content_type?: ContentType;
-        skill_domain?: "security" | "writing" | "database" | "business" | "marketing" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "tools" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development";
+        skill_domain?: "security" | "database" | "writing" | "business" | "marketing" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "tools" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development";
         skill_level?: "advanced" | "expert" | "intermediate" | "beginner";
         learning_objective?: string;
     }, {
         session_id?: string;
         content_id?: string;
         content_type?: ContentType;
-        skill_domain?: "security" | "writing" | "database" | "business" | "marketing" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "tools" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development";
+        skill_domain?: "security" | "database" | "writing" | "business" | "marketing" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "tools" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development";
         skill_level?: "advanced" | "expert" | "intermediate" | "beginner";
         learning_objective?: string;
     }>;
@@ -725,7 +719,7 @@ export declare const LearningAnalyticsEventSchema: z.ZodObject<{
         session_id?: string;
         content_id?: string;
         content_type?: ContentType;
-        skill_domain?: "security" | "writing" | "database" | "business" | "marketing" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "tools" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development";
+        skill_domain?: "security" | "database" | "writing" | "business" | "marketing" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "tools" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development";
         skill_level?: "advanced" | "expert" | "intermediate" | "beginner";
         learning_objective?: string;
     };
@@ -748,7 +742,7 @@ export declare const LearningAnalyticsEventSchema: z.ZodObject<{
         session_id?: string;
         content_id?: string;
         content_type?: ContentType;
-        skill_domain?: "security" | "writing" | "database" | "business" | "marketing" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "tools" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development";
+        skill_domain?: "security" | "database" | "writing" | "business" | "marketing" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "tools" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development";
         skill_level?: "advanced" | "expert" | "intermediate" | "beginner";
         learning_objective?: string;
     };
@@ -776,13 +770,13 @@ export declare const LearningAnalyticsQuerySchema: z.ZodObject<{
         user_segments: z.ZodOptional<z.ZodArray<z.ZodNativeEnum<typeof LearningAnalyticsSegment>, "many">>;
     }, "strip", z.ZodTypeAny, {
         user_segments?: LearningAnalyticsSegment[];
-        skill_domains?: ("security" | "writing" | "database" | "business" | "marketing" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "tools" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development")[];
+        skill_domains?: ("security" | "database" | "writing" | "business" | "marketing" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "tools" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development")[];
         skill_levels?: ("advanced" | "expert" | "intermediate" | "beginner")[];
         content_types?: ContentType[];
         learning_objectives?: string[];
     }, {
         user_segments?: LearningAnalyticsSegment[];
-        skill_domains?: ("security" | "writing" | "database" | "business" | "marketing" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "tools" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development")[];
+        skill_domains?: ("security" | "database" | "writing" | "business" | "marketing" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "tools" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development")[];
         skill_levels?: ("advanced" | "expert" | "intermediate" | "beginner")[];
         content_types?: ContentType[];
         learning_objectives?: string[];
@@ -821,7 +815,7 @@ export declare const LearningAnalyticsQuerySchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     learning_filters?: {
         user_segments?: LearningAnalyticsSegment[];
-        skill_domains?: ("security" | "writing" | "database" | "business" | "marketing" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "tools" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development")[];
+        skill_domains?: ("security" | "database" | "writing" | "business" | "marketing" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "tools" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development")[];
         skill_levels?: ("advanced" | "expert" | "intermediate" | "beginner")[];
         content_types?: ContentType[];
         learning_objectives?: string[];
@@ -838,7 +832,7 @@ export declare const LearningAnalyticsQuerySchema: z.ZodObject<{
 }, {
     learning_filters?: {
         user_segments?: LearningAnalyticsSegment[];
-        skill_domains?: ("security" | "writing" | "database" | "business" | "marketing" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "tools" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development")[];
+        skill_domains?: ("security" | "database" | "writing" | "business" | "marketing" | "design" | "programming" | "web-development" | "mobile-development" | "data-science" | "devops" | "tools" | "soft-skills" | "project-management" | "ai-ml" | "quality-assurance" | "blockchain" | "game-development")[];
         skill_levels?: ("advanced" | "expert" | "intermediate" | "beginner")[];
         content_types?: ContentType[];
         learning_objectives?: string[];

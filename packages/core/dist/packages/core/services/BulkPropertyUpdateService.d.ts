@@ -195,20 +195,8 @@ export declare class BulkPropertyUpdateService {
     /**
      * Template Management
      */
-    createTemplate(
-      name: string,
-      targetType: TargetType,
-      updates: PropertyUpdate[],
-      validation: ValidationRules,
-      execution: ExecutionSettings,
-      createdBy: string
-    ): Promise<BulkUpdateTemplate>;
-    applyTemplate(
-      templateId: string,
-      targets: BulkUpdateTarget[],
-      operationName: string,
-      createdBy: string
-    ): Promise<BulkUpdateOperation>;
+    createTemplate(name: string, targetType: TargetType, updates: PropertyUpdate[], validation: ValidationRules, execution: ExecutionSettings, createdBy: string): Promise<BulkUpdateTemplate>;
+    applyTemplate(templateId: string, targets: BulkUpdateTarget[], operationName: string, createdBy: string): Promise<BulkUpdateOperation>;
     /**
      * Data Retrieval
      */
@@ -257,6 +245,10 @@ export interface BulkUpdateEvent {
     data: any;
     timestamp: Date;
 }
-export declare export declare export declare export declare const getBulkUpdateStats: () => BulkUpdateStats;
+export declare const bulkPropertyUpdateService: BulkPropertyUpdateService;
+export declare const createBulkOperation: (name: string, targets: BulkUpdateTarget[], updates: PropertyUpdate[], options: any, createdBy: string) => Promise<BulkUpdateOperation>;
+export declare const executeBulkOperation: (operationId: string) => Promise<boolean>;
+export declare const getBulkOperations: (filter?: BulkUpdateFilter) => BulkUpdateOperation[];
+export declare const getBulkUpdateStats: () => BulkUpdateStats;
 export {};
 //# sourceMappingURL=BulkPropertyUpdateService.d.ts.map

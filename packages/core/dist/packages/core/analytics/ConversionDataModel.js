@@ -363,10 +363,5 @@ export class ConversionDataRelationshipManager {
         return 'referral';
     }
 }
-/**
- * Factory function to create ConversionDataRelationshipManager
- */
-export const createConversionDataRelationshipManager = () => {
-    return new ConversionDataRelationshipManager();
-};
+;
 export default ConversionDataRelationshipManager;

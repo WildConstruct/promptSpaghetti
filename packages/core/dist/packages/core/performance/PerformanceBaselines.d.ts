@@ -447,11 +447,7 @@ export declare class PerformanceBaselineManager {
     /**
      * Add a measurement to a baseline
      */
-    addMeasurement(
-      baselineId: string,
-      measurement: Omit<PerformanceMeasurement,
-      'id' | 'timestamp' | 'environment'>
-    ): void;
+    addMeasurement(baselineId: string, measurement: Omit<PerformanceMeasurement, 'id' | 'timestamp' | 'environment'>): void;
     /**
      * Update baseline statistics based on recent measurements
      */
@@ -514,6 +510,7 @@ export declare class PerformanceBaselineManager {
      */
     clear(): void;
 }
-export declare export declare const globalBaselineManager: PerformanceBaselineManager;
+export declare const createDefaultBaselines: (manager: PerformanceBaselineManager) => void;
+export declare const globalBaselineManager: PerformanceBaselineManager;
 export default PerformanceBaselineManager;
 //# sourceMappingURL=PerformanceBaselines.d.ts.map

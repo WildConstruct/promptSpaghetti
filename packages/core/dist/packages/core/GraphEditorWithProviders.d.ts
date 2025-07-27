@@ -23,6 +23,5 @@ export interface GraphEditorWithProvidersProps {
     onProviderError?: (error: Error, hookId: string) => void;
 }
 export declare const GraphEditorWithProviders: React.FC<GraphEditorWithProvidersProps>;
-export declare const createAnalyticsProviderHook: () => ProviderHook;
 export default GraphEditorWithProviders;
 //# sourceMappingURL=GraphEditorWithProviders.d.ts.map

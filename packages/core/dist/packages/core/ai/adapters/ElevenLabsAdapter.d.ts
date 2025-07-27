@@ -159,22 +159,12 @@ export declare class ElevenLabsAdapter extends BaseAIModel {
     getAvailableVoices(): Promise<ElevenLabsVoice[]>;
     getAvailableModels(): Promise<ElevenLabsModel[]>;
     getQuotaInfo(): Promise<any>;
-    createCustomVoice(
-      name: string,
-      audioFiles: File[],
-      description?: string,
-      labels?: Record<string,
-      string>
-    ): Promise<ElevenLabsVoice>;
+    createCustomVoice(name: string, audioFiles: File[], description?: string, labels?: Record<string, string>): Promise<ElevenLabsVoice>;
     cloneVoice(name: string, audioSample: File, description?: string): Promise<ElevenLabsVoice>;
     deleteVoice(voiceId: string): Promise<void>;
     getVoiceSettings(voiceId: string): Promise<any>;
     updateVoiceSettings(voiceId: string, settings: any): Promise<void>;
-    generateWithStream(
-      text: string,
-      voiceId: string,
-      options?: Partial<ElevenLabsRequestOptions>
-    ): Promise<ReadableStream>;
+    generateWithStream(text: string, voiceId: string, options?: Partial<ElevenLabsRequestOptions>): Promise<ReadableStream>;
     static getDefaultVoiceSettings(): {
         stability: number;
         similarity_boost: number;

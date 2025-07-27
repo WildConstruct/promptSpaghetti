@@ -37,21 +37,19 @@ interface UseExternalDataImportReturn {
     getQuerySuggestions: (partial: Partial<HistoricalQuery>) => string[];
     exportResults: (format: 'json' | 'csv') => string;
 }
-export declare const useExternalDataImport: (
-  { autoRefresh,
-  refreshInterval,
-  enableRealTimeUpdates,
-  cacheStrategy,
-  onError,
-  onSuccess }?: UseExternalDataImportProps
-) => UseExternalDataImportReturn;
-export declare     isValid: boolean;
+export declare const useExternalDataImport: ({ autoRefresh, refreshInterval, enableRealTimeUpdates, cacheStrategy, onError, onSuccess }?: UseExternalDataImportProps) => UseExternalDataImportReturn;
+export declare const useQueryBuilder: () => {
+    query: Partial<HistoricalQuery>;
+    isValid: boolean;
     validationErrors: string[];
     updateQuery: (updates: Partial<HistoricalQuery>) => void;
     resetQuery: () => void;
     buildQuery: () => HistoricalQuery | null;
 };
-export declare         hitRate: number;
+export declare const useCacheManagement: () => {
+    cacheStats: {
+        size: number;
+        hitRate: number;
         lastCleanup: string;
         entries: number;
     };

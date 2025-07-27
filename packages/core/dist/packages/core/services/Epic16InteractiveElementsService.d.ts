@@ -482,10 +482,7 @@ export declare class Epic16InteractiveElementsService extends EventEmitter {
     private userSessions;
     private analyticsData;
     constructor();
-    createElement(
-      elementData: Omit<InteractiveElement,
-      'id' | 'created' | 'lastUpdated' | 'version'>
-    ): Promise<InteractiveElement>;
+    createElement(elementData: Omit<InteractiveElement, 'id' | 'created' | 'lastUpdated' | 'version'>): Promise<InteractiveElement>;
     updateElement(elementId: string, updates: Partial<InteractiveElement>): Promise<InteractiveElement | null>;
     deleteElement(elementId: string): Promise<boolean>;
     activateElement(elementId: string, context: ActivationContext): Promise<boolean>;

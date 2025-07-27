@@ -30,17 +30,17 @@ export declare const BaseContributionSchema: z.ZodObject<{
         mimeType: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }>, "many">>;
     status: z.ZodEnum<["draft", "submitted", "under_review", "revision_requested", "approved", "published", "rejected", "archived"]>;
@@ -114,10 +114,10 @@ export declare const BaseContributionSchema: z.ZodObject<{
     comments?: number;
     assets?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     views?: number;
@@ -163,10 +163,10 @@ export declare const BaseContributionSchema: z.ZodObject<{
     comments?: number;
     assets?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     views?: number;
@@ -216,17 +216,17 @@ export declare const TemplateContributionSchema: z.ZodObject<{
         mimeType: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }>, "many">>;
     status: z.ZodEnum<["draft", "submitted", "under_review", "revision_requested", "approved", "published", "rejected", "archived"]>;
@@ -411,10 +411,10 @@ export declare const TemplateContributionSchema: z.ZodObject<{
     comments?: number;
     assets?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     marketplace?: {
@@ -485,10 +485,10 @@ export declare const TemplateContributionSchema: z.ZodObject<{
     comments?: number;
     assets?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     marketplace?: {
@@ -546,17 +546,17 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
         mimeType: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }>, "many">>;
     status: z.ZodEnum<["draft", "submitted", "under_review", "revision_requested", "approved", "published", "rejected", "archived"]>;
@@ -773,10 +773,10 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
     comments?: number;
     assets?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     views?: number;
@@ -849,10 +849,10 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
     comments?: number;
     assets?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     views?: number;
@@ -902,17 +902,17 @@ export declare const TutorialContributionSchema: z.ZodObject<{
         mimeType: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }>, "many">>;
     status: z.ZodEnum<["draft", "submitted", "under_review", "revision_requested", "approved", "published", "rejected", "archived"]>;
@@ -1137,10 +1137,10 @@ export declare const TutorialContributionSchema: z.ZodObject<{
     comments?: number;
     assets?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     views?: number;
@@ -1213,10 +1213,10 @@ export declare const TutorialContributionSchema: z.ZodObject<{
     comments?: number;
     assets?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     views?: number;
@@ -1266,17 +1266,17 @@ export declare const CaseStudyContributionSchema: z.ZodObject<{
         mimeType: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }>, "many">>;
     status: z.ZodEnum<["draft", "submitted", "under_review", "revision_requested", "approved", "published", "rejected", "archived"]>;
@@ -1623,10 +1623,10 @@ export declare const CaseStudyContributionSchema: z.ZodObject<{
     comments?: number;
     assets?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     views?: number;
@@ -1717,10 +1717,10 @@ export declare const CaseStudyContributionSchema: z.ZodObject<{
     comments?: number;
     assets?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     views?: number;
@@ -1770,17 +1770,17 @@ export declare const PatternLibraryContributionSchema: z.ZodObject<{
         mimeType: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }>, "many">>;
     status: z.ZodEnum<["draft", "submitted", "under_review", "revision_requested", "approved", "published", "rejected", "archived"]>;
@@ -2045,10 +2045,10 @@ export declare const PatternLibraryContributionSchema: z.ZodObject<{
     comments?: number;
     assets?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     views?: number;
@@ -2128,10 +2128,10 @@ export declare const PatternLibraryContributionSchema: z.ZodObject<{
     comments?: number;
     assets?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     views?: number;
@@ -2181,17 +2181,17 @@ export declare const CommunityPostContributionSchema: z.ZodObject<{
         mimeType: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }, {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }>, "many">>;
     status: z.ZodEnum<["draft", "submitted", "under_review", "revision_requested", "approved", "published", "rejected", "archived"]>;
@@ -2366,10 +2366,10 @@ export declare const CommunityPostContributionSchema: z.ZodObject<{
     comments?: number;
     assets?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     views?: number;
@@ -2435,10 +2435,10 @@ export declare const CommunityPostContributionSchema: z.ZodObject<{
     comments?: number;
     assets?: {
         id?: string;
-        filename?: string;
         size?: number;
-        type?: "document" | "code" | "graph" | "video" | "image";
+        type?: "code" | "graph" | "video" | "image" | "document";
         url?: string;
+        filename?: string;
         mimeType?: string;
     }[];
     views?: number;
@@ -2682,10 +2682,10 @@ export declare const ContributorProfileSchema: z.ZodObject<{
     id?: string;
     createdAt?: Date;
     updatedAt?: Date;
-    location?: string;
     userId?: string;
     level?: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
     displayName?: string;
+    location?: string;
     social?: {
         twitter?: string;
         linkedin?: string;
@@ -2724,10 +2724,10 @@ export declare const ContributorProfileSchema: z.ZodObject<{
     id?: string;
     createdAt?: Date;
     updatedAt?: Date;
-    location?: string;
     userId?: string;
     level?: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
     displayName?: string;
+    location?: string;
     social?: {
         twitter?: string;
         linkedin?: string;
@@ -2780,7 +2780,13 @@ export type UpdateContributionRequest = z.infer<typeof UpdateContributionRequest
 export type ContributionReviewRequest = z.infer<typeof ContributionReviewRequestSchema>;
 export type ContributionFilter = z.infer<typeof ContributionFilterSchema>;
 export type ContributorProfile = z.infer<typeof ContributorProfileSchema>;
-export declare export declare export declare export declare export declare export declare export declare const CONTRIBUTION_TYPE_DESCRIPTIONS: {
+export declare const validateContribution: (contribution: unknown) => Contribution;
+export declare const validateCreateContributionRequest: (request: unknown) => CreateContributionRequest;
+export declare const validateUpdateContributionRequest: (request: unknown) => UpdateContributionRequest;
+export declare const validateContributionReviewRequest: (request: unknown) => ContributionReviewRequest;
+export declare const validateContributionFilter: (filter: unknown) => ContributionFilter;
+export declare const validateContributorProfile: (profile: unknown) => ContributorProfile;
+export declare const CONTRIBUTION_TYPE_DESCRIPTIONS: {
     readonly template: "Reusable prompt templates for the marketplace";
     readonly knowledge_article: "Educational articles and guides";
     readonly tutorial: "Step-by-step learning content";

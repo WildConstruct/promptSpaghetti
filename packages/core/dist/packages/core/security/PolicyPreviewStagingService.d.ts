@@ -9,19 +9,7 @@
  * Task: T-1752989143998-98 - Implement policy preview and staging
  */
 import { EventEmitter } from 'events';
-import { 
-  PolicyType,
-  PolicyUpdateRequest,
-  PolicyVersion,
-  PolicyDeployment,
-  DeploymentType,
-  DeploymentStatus,
-  ValidationType,
-  ValidationStatus,
-  RiskLevel,
-  UpdatePriority,
-  VersionStatus
-} from '../../../server/src/services/PolicyUpdateWorkflowService';
+import { PolicyType, PolicyUpdateRequest, PolicyVersion, PolicyDeployment, DeploymentType, DeploymentStatus, ValidationType, ValidationStatus, RiskLevel, UpdatePriority, VersionStatus } from '../../../server/src/services/PolicyUpdateWorkflowService';
 export { PolicyType, PolicyUpdateRequest, PolicyVersion, PolicyDeployment, DeploymentType, DeploymentStatus, ValidationType, ValidationStatus, RiskLevel, UpdatePriority, VersionStatus };
 export interface PolicyPreviewConfig {
     enableStagingEnvironments: boolean;
@@ -443,11 +431,7 @@ export declare class PolicyPreviewStagingService extends EventEmitter {
     /**
      * Generate policy comparison report
      */
-    generateComparisonReport(
-      baseVersion: string,
-      compareVersion: string,
-      policyId: string
-    ): Promise<PolicyComparisonReport>;
+    generateComparisonReport(baseVersion: string, compareVersion: string, policyId: string): Promise<PolicyComparisonReport>;
     /**
      * Collect user feedback for preview
      */

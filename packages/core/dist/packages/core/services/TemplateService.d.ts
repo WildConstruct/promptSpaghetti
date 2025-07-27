@@ -1,14 +1,5 @@
 import { Node, Edge } from 'reactflow';
-import { 
-  Template,
-  TemplateFilter,
-  TemplateCategory,
-  TemplateInstantiationOptions,
-  Review,
-  GraphData,
-  TemplateValidation,
-  TemplateSaveData
-} from '../types/TemplateTypes';
+import { Template, TemplateFilter, TemplateCategory, TemplateInstantiationOptions, Review, GraphData, TemplateValidation, TemplateSaveData } from '../types/TemplateTypes';
 /**
  * Template storage interface - can be implemented for local/server storage
  */

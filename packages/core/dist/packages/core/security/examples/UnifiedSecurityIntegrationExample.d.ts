@@ -5,13 +5,7 @@
  * This example demonstrates how to use the unified security protection system
  * that combines rate limiting, adaptive throttling, and security analytics.
  */
-import { 
-  UnifiedSecurityProtectionFactory,
-  SecurityProfile,
-  IntegrationMode,
-  CoordinationStrategy,
-  FallbackBehavior
-} from '../UnifiedSecurityProtectionFactory';
+import { UnifiedSecurityProtectionFactory, SecurityProfile, IntegrationMode, CoordinationStrategy, FallbackBehavior } from '../UnifiedSecurityProtectionFactory';
 import { AdaptiveRateLimitingIntegration } from '../AdaptiveRateLimitingIntegration';
 export declare function createQuickSecuritySetup(): {
     rateLimitingService: import("../RateLimitingService").RateLimitingService;

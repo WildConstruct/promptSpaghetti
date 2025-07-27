@@ -447,14 +447,7 @@ export declare class QualityMetricsService extends EventEmitter {
     private metricsCollector;
     private collectionTimer?;
     private aggregationTimer?;
-    constructor(
-      config: QualityMetricsConfig,
-      databaseService: DatabaseService,
-      redisService: RedisService,
-      auditService: AuditService,
-      analyticsCollector: AnalyticsCollector,
-      metricsCollector: MetricsCollector
-    );
+    constructor(config: QualityMetricsConfig, databaseService: DatabaseService, redisService: RedisService, auditService: AuditService, analyticsCollector: AnalyticsCollector, metricsCollector: MetricsCollector);
     /**
      * Start the quality metrics collection service
      */
@@ -474,11 +467,7 @@ export declare class QualityMetricsService extends EventEmitter {
     /**
      * Get historical quality metrics
      */
-    getHistoricalMetrics(
-      startDate: Date,
-      endDate: Date,
-      granularity?: 'hour' | 'day' | 'week'
-    ): Promise<QualityMetrics[]>;
+    getHistoricalMetrics(startDate: Date, endDate: Date, granularity?: 'hour' | 'day' | 'week'): Promise<QualityMetrics[]>;
     /**
      * Get quality trends for dashboard
      */
@@ -486,10 +475,7 @@ export declare class QualityMetricsService extends EventEmitter {
     /**
      * Get quality recommendations
      */
-    getRecommendations(
-      category?: string,
-      priority?: 'low' | 'medium' | 'high' | 'critical'
-    ): Promise<QualityRecommendation[]>;
+    getRecommendations(category?: string, priority?: 'low' | 'medium' | 'high' | 'critical'): Promise<QualityRecommendation[]>;
     /**
      * Get active quality alerts
      */
@@ -501,11 +487,7 @@ export declare class QualityMetricsService extends EventEmitter {
     /**
      * Update recommendation status
      */
-    updateRecommendationStatus(
-      recommendationId: string,
-      status: 'acknowledged' | 'in_progress' | 'completed' | 'dismissed',
-      updatedBy: string
-    ): Promise<void>;
+    updateRecommendationStatus(recommendationId: string, status: 'acknowledged' | 'in_progress' | 'completed' | 'dismissed', updatedBy: string): Promise<void>;
     private collectTestCoverageMetrics;
     private collectCodeQualityMetrics;
     private collectPerformanceMetrics;

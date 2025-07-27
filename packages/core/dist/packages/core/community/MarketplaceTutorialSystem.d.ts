@@ -465,11 +465,7 @@ export declare class MarketplaceTutorialSystemService implements MarketplaceTuto
     private apiClient;
     private skillAssessmentEngine;
     private contributionRepository;
-    constructor(
-      apiClient: any,
-      skillAssessmentEngine: SkillAssessmentEngine,
-      contributionRepository: ContributionRepository
-    );
+    constructor(apiClient: any, skillAssessmentEngine: SkillAssessmentEngine, contributionRepository: ContributionRepository);
     discoverTutorials(userProfile: UserSkillProfile, context: TutorialDiscoveryContext): Promise<MarketplaceTutorial[]>;
     recommendNextTutorials(userId: string, completedTutorialId: string): Promise<MarketplaceTutorial[]>;
     getPersonalizedLearningPath(userId: string, goals: LearningGoal[]): Promise<LearningPath>;

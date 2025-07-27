@@ -470,10 +470,5 @@ export class ConversionStreamProcessor extends EventEmitter {
         return false;
     }
 }
-/**
- * Factory function to create ConversionStreamProcessor
- */
-export const createConversionStreamProcessor = (config) => {
-    return new ConversionStreamProcessor(config);
-};
+;
 export default ConversionStreamProcessor;

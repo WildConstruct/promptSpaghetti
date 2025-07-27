@@ -282,36 +282,51 @@ export const RegionGroupsLayer = ({ nodes, regionGroups, onRegionGroupsChange, g
                             e.currentTarget.style.opacity = '1';
                         }, onMouseLeave: (e) => {
                             e.currentTarget.style.opacity = '0.7';
-                        }, children: [_jsx("div", { style: { fontWeight: 'bold', marginBottom: '4px' }, children: "\uD83C\uDFAF Region Groups" }), _jsxs("div", { style: { lineHeight: 1.4 }, children: ["\u2022 Press ", _jsx("kbd", { style: { background: 'rgba(255, 255, 255, 0.2)', padding: '2px 4px', borderRadius: '3px' }, children: "G" }), " to start group selection", _jsx("br", {}), "\u2022 Drag to select multiple nodes", _jsx("br", {}), "\u2022 Right-click for group options"] })] }))] }), contextMenu && !readOnly && (_jsx("div", { style: {
-                    position: 'fixed',
-                    left: contextMenu.x,
-                    top: contextMenu.y,
-                    background: 'white',
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '8px',
-                    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
-                    padding: '4px 0',
-                    zIndex: 10000,
-                    minWidth: '160px',
-                    fontFamily: 'system-ui, -apple-system, sans-serif'
-                }, children: _jsx("button", { onClick: () => {
-                        setIsDragSelecting(true);
-                        setContextMenu(null);
-                    }, style: {
-                        width: '100%',
-                        padding: '8px 12px',
-                        border: 'none',
-                        background: 'transparent',
-                        textAlign: 'left',
-                        cursor: 'pointer',
-                        fontSize: '13px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px'
-                    }, onMouseEnter: (e) => {
-                        e.currentTarget.style.backgroundColor = '#f3f4f6';
-                    }, onMouseLeave: (e) => {
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                    }, children: "\uD83C\uDFAF Create Region Group" }) })), _jsx(DragSelectBox, { isActive: isDragSelecting, onSelectionComplete: handleSelectionComplete, onSelectionCancel: handleSelectionCancel, canvasOffset: canvasOffset, zoom: zoom })] }));
+                        }, children: [_jsx("div", { style: { fontWeight: 'bold', marginBottom: '4px' }, children: "\uD83C\uDFAF Region Groups" }), _jsxs("div", { style: { lineHeight: 1.4 }, children: ["\u2022 Press ", _jsx("kbd", { style: { background: 'rgba(,
+                                            255: ,
+                                            255: ,
+                                            255: ,
+                                            0.2:  } }), ")', padding: '2px 4px', borderRadius: '3px' }}>G"] }), " to start group selection", _jsx("br", {}), "\u2022 Drag to select multiple nodes", _jsx("br", {}), "\u2022 Right-click for group options"] }))] }), ")}"] }));
+    div >
+        { /* Context menu */};
+    {
+        contextMenu && !readOnly && (_jsx("div", { style: {
+                position: 'fixed',
+                left: contextMenu.x,
+                top: contextMenu.y,
+                background: 'white',
+                border: '1px solid #e5e7eb',
+                borderRadius: '8px',
+                boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
+                padding: '4px 0',
+                zIndex: 10000,
+                minWidth: '160px',
+                fontFamily: 'system-ui, -apple-system, sans-serif'
+            }, children: _jsx("button", { onClick: () => {
+                    setIsDragSelecting(true);
+                    setContextMenu(null);
+                }, style: {
+                    width: '100%',
+                    padding: '8px 12px',
+                    border: 'none',
+                    background: 'transparent',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                }, onMouseEnter: (e) => {
+                    e.currentTarget.style.backgroundColor = '#f3f4f6';
+                }, onMouseLeave: (e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                }, children: "\uD83C\uDFAF Create Region Group" }) }));
+    }
+    { /* Drag selection overlay */ }
+    _jsx(DragSelectBox, { isActive: isDragSelecting, onSelectionComplete: handleSelectionComplete, onSelectionCancel: handleSelectionCancel, canvasOffset: canvasOffset, zoom: zoom });
 };
+ >
+;
+;
+;
 export default RegionGroupsLayer;

@@ -1,15 +1,4 @@
-import { 
-  CreateAttributionRequest,
-  AttributionFilter,
-  AttributionStatsRequest,
-  UpdatePrivacySettingsRequest,
-  ChangeAttribution,
-  AttributionStatsResponse,
-  AttributionTimelineResponse,
-  ContributorStatsResponse,
-  AttributionPrivacySettings,
-  AttributionSession
-} from '../types/attribution';
+import { CreateAttributionRequest, AttributionFilter, AttributionStatsRequest, UpdatePrivacySettingsRequest, ChangeAttribution, AttributionStatsResponse, AttributionTimelineResponse, ContributorStatsResponse, AttributionPrivacySettings, AttributionSession } from '../types/attribution';
 interface UseAttributionReturn {
     loading: boolean;
     error: string | null;
@@ -26,11 +15,7 @@ interface UseAttributionReturn {
     updatePrivacySettings: (request: UpdatePrivacySettingsRequest) => Promise<AttributionPrivacySettings>;
     getPrivacySettings: (projectId: string) => Promise<AttributionPrivacySettings | null>;
     cleanupOldData: (projectId: string) => Promise<void>;
-    getResourceAttribution: (
-      projectId: string,
-      resourceType: string,
-      resourceId: string
-    ) => Promise<ChangeAttribution[]>;
+    getResourceAttribution: (projectId: string, resourceType: string, resourceId: string) => Promise<ChangeAttribution[]>;
     getAuthorAttribution: (projectId: string, authorId: string, dateRange?: {
         start: Date;
         end: Date;

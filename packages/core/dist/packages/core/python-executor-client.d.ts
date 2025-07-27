@@ -131,16 +131,9 @@ export declare function isPythonExecutorAvailable(baseUrl?: string): Promise<boo
 /**
  * Utility function to execute Python code with default settings
  */
-export declare function executePythonCode(
-  code: string,
-  inputData: any,
-  options?: Partial<PythonExecutionRequest>
-): Promise<PythonExecutionResult>;
+export declare function executePythonCode(code: string, inputData: any, options?: Partial<PythonExecutionRequest>): Promise<PythonExecutionResult>;
 /**
  * Utility function to validate Python code
  */
-export declare function validatePythonCode(
-  code: string,
-  options?: Partial<PythonValidationRequest>
-): Promise<PythonValidationResult>;
+export declare function validatePythonCode(code: string, options?: Partial<PythonValidationRequest>): Promise<PythonValidationResult>;
 //# sourceMappingURL=python-executor-client.d.ts.map

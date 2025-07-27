@@ -17,19 +17,11 @@ export declare class ExtensionInterfaceValidator {
     /**
      * Validate extension interface compatibility
      */
-    validateInterfaceCompatibility(
-      extension: any,
-      requiredInterface: string,
-      version?: string
-    ): ExtensionValidationResult;
+    validateInterfaceCompatibility(extension: any, requiredInterface: string, version?: string): ExtensionValidationResult;
     /**
      * Validate method signatures
      */
-    validateMethodSignatures(
-      extension: any,
-      expectedSignatures: Record<string,
-      MethodSignature>
-    ): ExtensionValidationResult;
+    validateMethodSignatures(extension: any, expectedSignatures: Record<string, MethodSignature>): ExtensionValidationResult;
     /**
      * Validate extension configuration
      */
@@ -37,11 +29,7 @@ export declare class ExtensionInterfaceValidator {
     /**
      * Validate extension dependencies
      */
-    validateExtensionDependencies(
-      extension: any,
-      availableExtensions: Map<string,
-      BaseExtension>
-    ): ExtensionValidationResult;
+    validateExtensionDependencies(extension: any, availableExtensions: Map<string, BaseExtension>): ExtensionValidationResult;
     /**
      * Validate extension permissions
      */
@@ -120,7 +108,6 @@ interface RuntimeTypeInfo {
     properties: string[];
     isExtension: boolean;
 }
-export declare const extensionValidator: ExtensionInterfaceValidator;
 export declare const runtimeTypeChecker: ExtensionRuntimeTypeChecker;
 export {};
 //# sourceMappingURL=ExtensionInterfaceValidator.d.ts.map

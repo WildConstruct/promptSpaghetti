@@ -1,27 +1,4 @@
-import { 
-  ExportTemplate,
-  CreateExportTemplate,
-  UpdateExportTemplate,
-  ExportJob,
-  CreateExportJob,
-  UpdateExportJob,
-  ExportSchedule,
-  CreateExportSchedule,
-  UpdateExportSchedule,
-  ExportShare,
-  CreateExportShare,
-  UpdateExportShare,
-  ExportAnalytics,
-  CreateExportAnalytics,
-  ExportFormatDefinition,
-  ExportFormat,
-  ExportJobStatus,
-  ExportProgress,
-  ExportStatistics,
-  ExportTemplateWithStats,
-  ExportJobWithTemplate,
-  ExportScheduleWithStats
-} from '../types/export';
+import { ExportTemplate, CreateExportTemplate, UpdateExportTemplate, ExportJob, CreateExportJob, UpdateExportJob, ExportSchedule, CreateExportSchedule, UpdateExportSchedule, ExportShare, CreateExportShare, UpdateExportShare, ExportAnalytics, CreateExportAnalytics, ExportFormatDefinition, ExportFormat, ExportJobStatus, ExportProgress, ExportStatistics, ExportTemplateWithStats, ExportJobWithTemplate, ExportScheduleWithStats } from '../types/export';
 interface UseExportState {
     templates: ExportTemplate[];
     jobs: ExportJob[];
@@ -98,8 +75,6 @@ interface UseExportActions {
     setLoading: (loading: boolean) => void;
 }
 export type UseExportReturn = UseExportState & UseExportActions;
-export declare const useExport: ({ projectId }: {
-    projectId: string;
-}) => UseExportReturn;
+export declare const setLoading: (loading: boolean) => void;
 export {};
 //# sourceMappingURL=useExport.d.ts.map

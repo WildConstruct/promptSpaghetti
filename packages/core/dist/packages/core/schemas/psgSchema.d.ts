@@ -5,7 +5,8 @@
  * Provides versioning support and comprehensive metadata structure.
  */
 import { z } from 'zod';
-export declare export declare const ProjectMetadataSchema: z.ZodObject<{
+export declare const PSG_FORMAT_VERSION = "1.0.0";
+export declare const ProjectMetadataSchema: z.ZodObject<{
     name: z.ZodString;
     description: z.ZodOptional<z.ZodString>;
     version: z.ZodDefault<z.ZodString>;

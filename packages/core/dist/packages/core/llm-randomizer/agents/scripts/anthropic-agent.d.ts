@@ -69,8 +69,5 @@ export declare const defaultAnthropicConfig: AnthropicAgentConfig;
 /**
  * Utility function to create and use Anthropic agent
  */
-export declare function generateGraphWithClaude(
-  request: ClaudeGenerationRequest,
-  config?: Partial<AnthropicAgentConfig>
-): Promise<ClaudeGenerationResult>;
+export declare function generateGraphWithClaude(request: ClaudeGenerationRequest, config?: Partial<AnthropicAgentConfig>): Promise<ClaudeGenerationResult>;
 //# sourceMappingURL=anthropic-agent.d.ts.map

@@ -27,11 +27,14 @@ interface ResourceUsage {
     disk: number;
     network: number;
 }
-export declare     successRateAverage: number;
+export declare const analyzePerformanceMetrics: (metrics: PerformanceMetrics[]) => {
+    averageResponseTime: number;
+    successRateAverage: number;
     costTrend: "increasing" | "decreasing" | "stable";
     recommendations: string[];
 };
-export declare export interface OptimizationCategories {
+export declare const calculateResourceEfficiency: (usage: ResourceUsage, performance: PerformanceMetrics) => number;
+export interface OptimizationCategories {
     categories: {
         caching: {
             score: number;
@@ -48,4 +51,4 @@ export declare export interface OptimizationCategories {
     };
     priorityActions: string[];
 }
-export declare //# sourceMappingURL=index.d.ts.map
+//# sourceMappingURL=index.d.ts.map

@@ -72,7 +72,20 @@ export interface CollaborativeGraphState {
   getSyncState: () => any;
 }
 
-export       
+export const useCollaborativeGraphStore = create<CollaborativeGraphState>()(
+  subscribeWithSelector((set, get) => ({
+    // Initial state
+    graph: { nodes: [], edges: [], metadata: { created: Date.now(), lastModified: Date.now() } },
+    isCollaborative: false,
+    collaborationEnabled: false,
+    connectedUsers: new Map(),
+    isConnected: false,
+    connectionStatus: 'disconnected',
+    
+    // Enable collaborative editing
+    enableCollaboration: async (options: CollaborativeGraphOptions) => {
+      const currentGraph = get().graph;
+      
       // Create CRDT adapter
       const crdtAdapter = new GraphCRDTAdapter(
         {
@@ -322,6 +335,5 @@ export
 export 
 export 
 export 
-export 
-// Action hooks
-export   }));
+// Action hooks  
+export }));

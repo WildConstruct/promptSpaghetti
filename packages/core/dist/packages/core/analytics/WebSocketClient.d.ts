@@ -165,4 +165,5 @@ export declare class AnalyticsWebSocketClient extends WebSocketClient {
 /**
  * Create analytics WebSocket client instance
  */
-export declare //# sourceMappingURL=WebSocketClient.d.ts.map
+export declare const createAnalyticsWebSocketClient: (config?: Partial<WebSocketClientConfig>) => AnalyticsWebSocketClient;
+//# sourceMappingURL=WebSocketClient.d.ts.map

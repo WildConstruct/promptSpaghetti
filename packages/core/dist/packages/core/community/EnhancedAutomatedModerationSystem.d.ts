@@ -6,17 +6,8 @@
  * with Epic 16-specific features: marketplace context, community workflows,
  * learning content moderation, and intelligent escalation.
  */
-import { 
-  AutomatedModerationService,
-  ModerationRequest,
-  ModerationResult,
-  ModerationAction
-} from '../services/AutomatedModerationService';
-import { 
-  MarketplaceContentFilteringServiceImpl,
-  ContentFilteringResult,
-  MarketplaceContentType
-} from './MarketplaceContentFilteringSystem';
+import { AutomatedModerationService, ModerationRequest, ModerationResult, ModerationAction } from '../services/AutomatedModerationService';
+import { MarketplaceContentFilteringServiceImpl, ContentFilteringResult, MarketplaceContentType } from './MarketplaceContentFilteringSystem';
 import { ContributionManagementService, ContributionSubmission, WorkflowStage } from './ContributionManagementService';
 import { SkillLevel, SkillDomain } from './SkillLevelTagging';
 import { LearningAnalyticsServiceImpl } from '../analytics/LearningAnalyticsService';
@@ -481,13 +472,7 @@ export declare class EnhancedModerationServiceImpl implements EnhancedModeration
     private contributionService;
     private analyticsService;
     private apiClient;
-    constructor(
-      baseModerationService: AutomatedModerationService,
-      contentFilteringService: MarketplaceContentFilteringServiceImpl,
-      contributionService: ContributionManagementService,
-      analyticsService: LearningAnalyticsServiceImpl,
-      apiClient: any
-    );
+    constructor(baseModerationService: AutomatedModerationService, contentFilteringService: MarketplaceContentFilteringServiceImpl, contributionService: ContributionManagementService, analyticsService: LearningAnalyticsServiceImpl, apiClient: any);
     moderateContentEnhanced(request: EnhancedModerationRequest): Promise<EnhancedModerationResult>;
     moderateBatchEnhanced(requests: EnhancedModerationRequest[]): Promise<EnhancedModerationResult[]>;
     moderateContribution(contribution: ContributionSubmission): Promise<EnhancedModerationResult>;

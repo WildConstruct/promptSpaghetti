@@ -660,10 +660,5 @@ export class ConversionEventValidator {
         this.deduplicationConfig = { ...this.deduplicationConfig, ...config };
     }
 }
-/**
- * Factory function to create ConversionEventValidator
- */
-export const createConversionEventValidator = (config) => {
-    return new ConversionEventValidator(config);
-};
+;
 export default ConversionEventValidator;

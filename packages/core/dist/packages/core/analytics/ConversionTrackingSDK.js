@@ -652,10 +652,5 @@ export class ConversionTrackingSDK extends AnalyticsClient {
         this.debugLog('ConversionTrackingSDK destroyed');
     }
 }
-/**
- * Factory function to create ConversionTrackingSDK instance
- */
-export const createConversionTrackingSDK = (config, conversionArchitecture, sessionManager) => {
-    return new ConversionTrackingSDK(config, conversionArchitecture, sessionManager);
-};
+;
 export default ConversionTrackingSDK;

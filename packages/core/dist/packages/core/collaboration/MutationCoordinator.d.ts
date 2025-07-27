@@ -4,14 +4,7 @@
  * Coordinates graph mutations with operational transform and conflict resolution
  * Handles concurrent operations and maintains data consistency
  */
-import { 
-  MutationOperation,
-  BatchMutationOperation,
-  ResolutionStrategy,
-  ConflictOperation,
-  ConflictResolution,
-  OperationPriority
-} from './GraphMutations';
+import { MutationOperation, BatchMutationOperation, ResolutionStrategy, ConflictOperation, ConflictResolution, OperationPriority } from './GraphMutations';
 import { GraphCRDT } from './GraphCRDT';
 /**
  * Result of operational transformation

@@ -29,11 +29,7 @@ export interface EditorProviderWrapperProps {
     onProviderError?: (error: Error, hookId: string) => void;
 }
 export declare const EditorProviderWrapper: React.FC<EditorProviderWrapperProps>;
-export declare const withEditorProviders: <T extends {}>(
-  Component: React.ComponentType<T>,
-  providerConfig?: Omit<EditorProviderWrapperProps,
-  "children" | "initialNodes" | "initialEdges" | "selectedNodeId">
-) => React.ForwardRefExoticComponent<React.PropsWithoutRef<T & {
+export declare const withEditorProviders: <T extends {}>(Component: React.ComponentType<T>, providerConfig?: Omit<EditorProviderWrapperProps, "children" | "initialNodes" | "initialEdges" | "selectedNodeId">) => React.ForwardRefExoticComponent<React.PropsWithoutRef<T & {
     initialNodes: Node[];
     initialEdges: Edge[];
     selectedNodeId: string | null;

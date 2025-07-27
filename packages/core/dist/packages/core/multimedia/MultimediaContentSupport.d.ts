@@ -214,11 +214,7 @@ export declare class MultimediaContentSupport extends EventEmitter {
     private processingWorkers;
     private isProcessing;
     constructor(config?: Partial<MultimediaConfig>);
-    uploadAsset(
-      file: File | Buffer,
-      metadata?: Partial<MediaMetadata>,
-      options?: MediaProcessingOptions
-    ): Promise<string>;
+    uploadAsset(file: File | Buffer, metadata?: Partial<MediaMetadata>, options?: MediaProcessingOptions): Promise<string>;
     processAsset(assetId: string, options?: MediaProcessingOptions): Promise<void>;
     getAsset(assetId: string): MediaAsset | null;
     listAssets(filters?: {
