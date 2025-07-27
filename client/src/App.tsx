@@ -5,6 +5,7 @@ import './randomizer.css';
 import './professional-theme.css';
 
 import EnhancedGraphEditor from './components/EnhancedGraphEditor';
+import { NodePrototypePage } from './components/NodePrototype';
 
 interface GraphEditorProps {
   initialNodes?: unknown[];
@@ -96,15 +97,17 @@ function MainApp(): React.ReactElement {
   const getActiveTab = (): string => {
     if (location.pathname === '/randomizer') return 'randomizer';
     if (location.pathname === '/files') return 'files';
+    if (location.pathname === '/prototype') return 'prototype';
     return 'editor';
   };
   const activeTab = getActiveTab();
 
-  const handleTabChange = useCallback((tab: 'editor' | 'randomizer' | 'files') => {
+  const handleTabChange = useCallback((tab: 'editor' | 'randomizer' | 'files' | 'prototype') => {
     const paths = {
       editor: '/',
       randomizer: '/randomizer',
-      files: '/files'
+      files: '/files',
+      prototype: '/prototype'
     };
     navigate(paths[tab] || '/');
   }, [navigate]);
@@ -176,6 +179,21 @@ function MainApp(): React.ReactElement {
           >
             Files
           </button>
+          <button
+            onClick={() => handleTabChange('prototype')}
+            style={{
+              padding: '10px 20px',
+              border: 'none',
+              backgroundColor: activeTab === 'prototype' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
+              borderBottom: activeTab === 'prototype' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: activeTab === 'prototype' ? 'bold' : 'normal',
+              color: 'var(--color-text-primary, #e8e8e8)'
+            }}
+          >
+            Prototype
+          </button>
         </div>
           
           {/* Status indicator */}
@@ -204,6 +222,8 @@ function MainApp(): React.ReactElement {
               className="randomizer-main"
             />
           </div>
+        ) : activeTab === 'prototype' ? (
+          <NodePrototypePage />
         ) : (
           <div style={{ 
             padding: '20px', 
@@ -304,6 +324,8 @@ export default function App(): React.ReactElement {
         {/* Main routes (no authentication) */}
         <Route path="/" element={<MainApp />} />
         <Route path="/randomizer" element={<MainApp />} />
+        <Route path="/files" element={<MainApp />} />
+        <Route path="/prototype" element={<MainApp />} />
         
         {/* Catch-all redirect to main app */}
         <Route path="*" element={<MainApp />} />
