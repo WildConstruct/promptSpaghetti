@@ -418,6 +418,7 @@ const NODE_TYPES: NodeMeta[] = [
       previewTimeoutRef.current = setTimeout(run, 500 - sinceChange);
     } else {
       run();
+    }
   }, [nodes, edges, runPreview]);
   const handleInspectorChange = (partial: Record<string, unknown>) => {
     if (!selectedNode) return;

@@ -39,6 +39,8 @@ export class AutosaveSystem {
     this.sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     this.storageKey = `autosave_${projectId}`;
     this.maxVersions = maxVersions;
+  }
+
   // Generate checksum for data integrity
   private generateChecksum(nodes: Node[], edges: Edge[]): string {
     const data = JSON.stringify({ nodes, edges });
