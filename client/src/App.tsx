@@ -134,67 +134,68 @@ function MainApp(): React.ReactElement {
   // Menu bar handlers
   const menuBarHandlers = {
   // File operations
-  onNew: useCallback(() => {,
+  onNew: useCallback(() => {
   if (confirm('Create a new graph? Unsaved changes will be lost.')) {
   setGeneratedGraph(null);
   navigate('/');
+}
 }, [navigate]),
-    onOpen: useCallback(() => {,
+    onOpen: useCallback(() => {
       // Switch to Files tab to enable file selection
       handleTabChange('files');
     }, [handleTabChange]),
-    onSave: useCallback(() => {,
-  // TODO: Integrate with save system,
+    onSave: useCallback(() => {
+  // TODO: Integrate with save system
   console.log('Save graph');
 }, []),
-    onSaveAs: useCallback(() => {,
-  // TODO: Integrate with save system,
+    onSaveAs: useCallback(() => {
+  // TODO: Integrate with save system
   console.log('Save as...');
 }, []),
-    onImport: useCallback(() => {,
-  // TODO: Integrate with import system,
+    onImport: useCallback(() => {
+  // TODO: Integrate with import system
   console.log('Import');
 }, []),
-    onExport: useCallback((format: 'json' | 'png' | 'svg' | 'pdf') => {,
-  // TODO: Integrate with export system,
+    onExport: useCallback((format: 'json' | 'png' | 'svg' | 'pdf') => {
+  // TODO: Integrate with export system
   console.log('Export as', format);
 }, []),
     // Edit operations
-    onUndo: useCallback(() => {,
-  // TODO: Integrate with undo system,
+    onUndo: useCallback(() => {
+  // TODO: Integrate with undo system
   console.log('Undo');
 }, []),
-    onRedo: useCallback(() => {,
-  // TODO: Integrate with redo system,
+    onRedo: useCallback(() => {
+  // TODO: Integrate with redo system
   console.log('Redo');
 }, []),
-    onSelectAll: useCallback(() => {,
-  // TODO: Integrate with selection system,
+    onSelectAll: useCallback(() => {
+  // TODO: Integrate with selection system
   console.log('Select all');
 }, []),
     // View operations
-    onZoomIn: useCallback(() => {,
-  // TODO: Integrate with React Flow zoom,
+    onZoomIn: useCallback(() => {
+  // TODO: Integrate with React Flow zoom
   console.log('Zoom in');
 }, []),
-    onZoomOut: useCallback(() => {,
-  // TODO: Integrate with React Flow zoom,
+    onZoomOut: useCallback(() => {
+  // TODO: Integrate with React Flow zoom
   console.log('Zoom out');
 }, []),
-    onFitView: useCallback(() => {,
-  // TODO: Integrate with React Flow fit view,
+    onFitView: useCallback(() => {
+  // TODO: Integrate with React Flow fit view
   console.log('Fit view');
 }, []),
-    onToggleGrid: useCallback(() => {,
+    onToggleGrid: useCallback(() => {
       setGridVisible(prev => !prev);
     }, []),
-    onToggleMinimap: useCallback(() => {,
+    onToggleMinimap: useCallback(() => {
       setMinimapVisible(prev => !prev);
     }, []),
-    onToggleInspector: useCallback(() => {,
+    onToggleInspector: useCallback(() => {
       setInspectorVisible(prev => !prev);
     }, []),
-    onToggleFullscreen: useCallback(() => {,
+    onToggleFullscreen: useCallback(() => {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen();
         setIsFullscreen(true);
@@ -202,7 +203,7 @@ function MainApp(): React.ReactElement {
         document.exitFullscreen();
         setIsFullscreen(false);
     }, []),
-    onToggleTheme: useCallback((newTheme: 'light' | 'dark' | 'cinema') => {,
+    onToggleTheme: useCallback((newTheme: 'light' | 'dark' | 'cinema') => {
       setTheme(newTheme);
     }, []),
     // Navigation handlers
@@ -211,7 +212,7 @@ function MainApp(): React.ReactElement {
     onViewFiles: useCallback(() => handleTabChange('files'), [handleTabChange]),
     onViewPrototype: useCallback(() => handleTabChange('prototype'), [handleTabChange]),
     // Help operations
-    onKeyboardShortcuts: useCallback(() => {,
+    onKeyboardShortcuts: useCallback(() => {
   // Trigger the help by simulating ? key press
   const event = new KeyboardEvent('keydown', {)
   key: '?',
@@ -220,32 +221,32 @@ function MainApp(): React.ReactElement {
 });
       document.dispatchEvent(event);
     }, []),
-    onAbout: useCallback(() => {,
+    onAbout: useCallback(() => {
       alert('Prompt Spaghetti - Professional Graph Editor\nVersion 1.0.0\nCinema 4D-inspired interface');
     }, []),
     // Additional handlers for KeyboardShortcutsManager
-    onDelete: useCallback(() => {,
-  // TODO: Integrate with selection deletion,
+    onDelete: useCallback(() => {
+  // TODO: Integrate with selection deletion
   console.log('Delete selected items');
 }, []),
-    onDuplicate: useCallback(() => {,
-  // TODO: Integrate with node duplication,
+    onDuplicate: useCallback(() => {
+  // TODO: Integrate with node duplication
   console.log('Duplicate selected items');
 }, []),
-    onGenerateCharacter: useCallback(() => {,
-  // TODO: Integrate with character generation,
+    onGenerateCharacter: useCallback(() => {
+  // TODO: Integrate with character generation
   console.log('Generate character');
 }, []),
-    onCommandPalette: useCallback(() => {,
+    onCommandPalette: useCallback(() => {
       setShowCommandPalette(true);
     }, [])
 };
   // File browser handlers
   const fileBrowserHandlers = {
-  onFileSelected: useCallback((file: PSGFile) => {,
+  onFileSelected: useCallback((file: PSGFile) => {
   setSelectedProjectFile(file);
 }, []),
-    onProjectLoad: useCallback((file: PSGFile) => {,
+    onProjectLoad: useCallback((file: PSGFile) => {
       // TODO: Integrate with ProjectManager to load .psg file
       console.log('Loading project:', file.name);
       // Add to recent files
@@ -256,7 +257,7 @@ function MainApp(): React.ReactElement {
       alert(`Loading project: ${file.name}\n\nProject loading integration coming soon!`);}
       navigate('/'); // Switch to editor tab
     }, [navigate, projectManager]),
-    onNewProject: useCallback(() => {,
+    onNewProject: useCallback(() => {
       if (confirm('Create a new project? Any unsaved changes will be lost.')) {
         setGeneratedGraph(null);
         setSelectedProjectFile(null);
@@ -266,7 +267,7 @@ function MainApp(): React.ReactElement {
       console.log(`File action: ${action}`, file);}
       // Handle file actions like delete, rename, duplicate
     }, []),
-    onRecentFileLoad: useCallback((file: PSGFile) => {,
+    onRecentFileLoad: useCallback((file: PSGFile) => {
       // Load recent file directly
       projectManager.addToRecentFiles(file);
       setRecentFiles(projectManager.getRecentFiles(10));
@@ -276,26 +277,26 @@ function MainApp(): React.ReactElement {
   };
   // Command palette specific handlers
   const commandPaletteHandlers = {
-  onClose: useCallback(() => {,
+  onClose: useCallback(() => {
   setShowCommandPalette(false);
 }, []),
     onGenerationStart: useCallback(async (flow: any, params: Record<string, any>) => {
-  // TODO: Integrate with generation flows,
+  // TODO: Integrate with generation flows
   console.log('Starting generation flow:', flow.name, params);
   setShowCommandPalette(false);
 }, []),
     onNodeCreate: useCallback((nodeType: string, position: { x: number; y: number }, data?: any) => {
-  // TODO: Integrate with node creation,
+  // TODO: Integrate with node creation
   console.log('Creating node:', nodeType, position, data);
   setShowCommandPalette(false);
 }, []),
-    onNodeDelete: useCallback((nodeIds: string) => {,
-  // TODO: Integrate with node deletion,
+    onNodeDelete: useCallback((nodeIds: string) => {
+  // TODO: Integrate with node deletion
   console.log('Deleting nodes:', nodeIds);
   setShowCommandPalette(false);
 }, []),
-    onTemplateApply: useCallback((templateId: string) => {,
-  // TODO: Integrate with template system,
+    onTemplateApply: useCallback((templateId: string) => {
+  // TODO: Integrate with template system
   console.log('Applying template:', templateId);
   setShowCommandPalette(false);
 }, [])
@@ -311,7 +312,7 @@ function MainApp(): React.ReactElement {
   icon: '📄',
   shortcut: '⌘N',
   keywords: ['new', 'create', 'file'],
-  action: () => {,
+  action: () => {
   setShowCommandPalette(false);
   menuBarHandlers.onNew();
 }
@@ -323,7 +324,7 @@ function MainApp(): React.ReactElement {
   icon: '📂',
   shortcut: '⌘O',
   keywords: ['open', 'load', 'file'],
-  action: () => {,
+  action: () => {
   setShowCommandPalette(false);
   menuBarHandlers.onOpen();
 }
@@ -335,7 +336,7 @@ function MainApp(): React.ReactElement {
   icon: '💾',
   shortcut: '⌘S',
   keywords: ['save', 'file'],
-  action: () => {,
+  action: () => {
   setShowCommandPalette(false);
   menuBarHandlers.onSave();
 }
@@ -346,7 +347,7 @@ function MainApp(): React.ReactElement {
   category: 'export' as const,
   icon: '📦',
   keywords: ['export', 'json', 'download'],
-  action: () => {,
+  action: () => {
   setShowCommandPalette(false);
   menuBarHandlers.onExport('json');
 }
@@ -359,7 +360,7 @@ function MainApp(): React.ReactElement {
   icon: '🔍',
   shortcut: '⌘0',
   keywords: ['fit', 'view', 'zoom', 'center'],
-  action: () => {,
+  action: () => {
   setShowCommandPalette(false);
   menuBarHandlers.onFitView();
 }
@@ -371,7 +372,7 @@ function MainApp(): React.ReactElement {
   icon: '⛶',
   shortcut: 'Alt+F',
   keywords: ['fullscreen', 'full', 'screen', 'maximize'],
-  action: () => {,
+  action: () => {
   setShowCommandPalette(false);
   menuBarHandlers.onToggleFullscreen();
 }
@@ -382,7 +383,7 @@ function MainApp(): React.ReactElement {
   category: 'editing' as const,
   icon: '🎨',
   keywords: ['theme', 'appearance', 'dark', 'light', 'cinema'],
-  action: () => {,
+  action: () => {
   setShowCommandPalette(false);
   const nextTheme = theme === 'cinema' ? 'dark' : theme === 'dark' ? 'light' : 'cinema';
   menuBarHandlers.onToggleTheme(nextTheme);
@@ -395,7 +396,7 @@ function MainApp(): React.ReactElement {
   category: 'navigation' as const,
   icon: '🎲',
   keywords: ['randomizer', 'llm', 'navigate', 'tab'],
-  action: () => {,
+  action: () => {
   setShowCommandPalette(false);
   menuBarHandlers.onViewRandomizer();
 }
@@ -406,7 +407,7 @@ function MainApp(): React.ReactElement {
   category: 'navigation' as const,
   icon: '📁',
   keywords: ['files', 'browser', 'navigate', 'tab'],
-  action: () => {,
+  action: () => {
   setShowCommandPalette(false);
   menuBarHandlers.onViewFiles();
 }
@@ -419,7 +420,7 @@ function MainApp(): React.ReactElement {
   icon: '⌨️',
   shortcut: '?',
   keywords: ['help', 'shortcuts', 'keyboard', 'keys'],
-  action: () => {,
+  action: () => {
   setShowCommandPalette(false);
   menuBarHandlers.onKeyboardShortcuts();
 }
@@ -430,7 +431,7 @@ function MainApp(): React.ReactElement {
       category: 'navigation' as const,
       icon: 'ℹ️',
       keywords: ['about', 'info', 'version'],
-      action: () => {,
+      action: () => {
         setShowCommandPalette(false);
         menuBarHandlers.onAbout();
   ];
