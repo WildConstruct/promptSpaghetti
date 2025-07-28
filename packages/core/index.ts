@@ -53,6 +53,34 @@ export type { RecentFilesPanelProps } from './components/FileManagement/RecentFi
 export { WorkspaceManager } from './components/FileManagement/WorkspaceManager';
 export type { WorkspaceManagerProps, WorkspaceSession } from './components/FileManagement/WorkspaceManager';
 
+// Epic 4: Inline Node Editing System - Complete Implementation ✅
+export {
+  InlineNodeEditor,
+  InlineEditorManager,
+  InlineEditorProvider,
+  InlineEditableNode,
+  GraphEditorWithInlineEditing,
+  useInlineEditor,
+  useInlineEditorContext,
+  useGraphWithInlineEditing,
+  createInlineEditingGraph,
+  withInlineEditing,
+  RichTextEditor,
+  NodeSpecificRichEditor,
+  WeightedChoiceEditor,
+  ConcatEditor,
+  VariableEditor,
+  ConditionalEditor,
+  OutputEditor,
+  BatchNodeEditor
+} from './components/InlineEditor';
+export type {
+  InlineNodeEditorProps,
+  InlineEditorManagerProps,
+  InlineEditableNodeProps,
+  GraphEditorWithInlineEditingProps
+} from './components/InlineEditor';
+
 // Project Management System exports
 export { ProjectManager } from './projectManager';
 export { ServerProjectManager } from './serverProjectManager';
