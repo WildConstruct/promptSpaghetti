@@ -92,8 +92,8 @@ export const MultiSelectionManager: React.FC<MultiSelectionManagerProps> = ({
     const rect = e.currentTarget.getBoundingClientRect();
     const currentX = e.clientX - rect.left;
     const currentY = e.clientY - rect.top;
-    setSelectionRect(prev => ({)
-  ...prev,
+    setSelectionRect(prev => ({
+      ...prev,
       currentX,
       currentY
     }));
@@ -115,12 +115,12 @@ export const MultiSelectionManager: React.FC<MultiSelectionManagerProps> = ({
     const flowEndX = (Math.max(startX, endX) - viewport.x) / viewport.zoom;
     const flowEndY = (Math.max(startY, endY) - viewport.y) / viewport.zoom;
     // Find nodes within selection rectangle
-    const nodesInSelection = nodes.filter(node => {)
-  const nodeX = node.position.x;
+    const nodesInSelection = nodes.filter(node => {
+      const nodeX = node.position.x;
       const nodeY = node.position.y;
-      const nodeWidth = node.width || 200; // Default width;
-      const nodeHeight = node.height || 100; // Default height;
-      return;
+      const nodeWidth = node.width || 200; // Default width
+      const nodeHeight = node.height || 100; // Default height
+      return (
         nodeX >= flowStartX &&
         nodeY >= flowStartY &&
         nodeX + nodeWidth <= flowEndX &&
@@ -144,24 +144,26 @@ export const MultiSelectionManager: React.FC<MultiSelectionManagerProps> = ({
     setLastSelectedNode(null);
   }, [onNodesSelect, onEdgesSelect, onSelectionChange]);
   const handleInvertSelection = useCallback(() => {
-    const unselectedNodes = nodes.filter(node => ;);
+    const unselectedNodes = nodes.filter(node => 
       !selectedNodes.some(selected => selected.id === node.id)
     );
-    const unselectedEdges = edges.filter(edge => ;);
+    const unselectedEdges = edges.filter(edge => 
       !selectedEdges.some(selected => selected.id === edge.id)
     );
     onNodesSelect(unselectedNodes);
     onEdgesSelect(unselectedEdges);
     onSelectionChange({ nodes: unselectedNodes, edges: unselectedEdges });
   }, [nodes, edges, selectedNodes, selectedEdges, onNodesSelect, onEdgesSelect, onSelectionChange]);
+
   // Handle individual node selection with modifiers
+  const handleNodeSelection = useCallback((node: Node, event: MouseEvent) => {
     if (event.metaKey || event.ctrlKey) {
-  // Toggle selection
-  const isSelected = selectedNodes.some(n => n.id === node.id);
-  let newSelection: Node;
-  if (isSelected) {
-  newSelection = selectedNodes.filter(n => n.id !== node.id);
-} else {
+      // Toggle selection
+      const isSelected = selectedNodes.some(n => n.id === node.id);
+      let newSelection: Node[];
+      if (isSelected) {
+        newSelection = selectedNodes.filter(n => n.id !== node.id);
+      } else {
         newSelection = [...selectedNodes, node];
       onNodesSelect(newSelection);
       onSelectionChange({ nodes: newSelection, edges: selectedEdges });
@@ -176,42 +178,46 @@ export const MultiSelectionManager: React.FC<MultiSelectionManagerProps> = ({
         const rangeNodes = nodes.slice(rangeStart, rangeEnd + 1);
         // Combine with existing selection
         const newSelection = [...selectedNodes];
-        rangeNodes.forEach(rangeNode => {)
-  if (!newSelection.some(n => n.id === rangeNode.id)) {
+        rangeNodes.forEach(rangeNode => {
+          if (!newSelection.some(n => n.id === rangeNode.id)) {
             newSelection.push(rangeNode);
+          }
         });
         onNodesSelect(newSelection);
         onSelectionChange({ nodes: newSelection, edges: selectedEdges });
+      }
     } else {
       // Single selection
       onNodesSelect([node]);
       onSelectionChange({ nodes: [node], edges: [] });
       setLastSelectedNode(node);
+    }
   }, [disabled, selectedNodes, selectedEdges, lastSelectedNode, nodes, onNodesSelect, onSelectionChange]);
   // Theme styles
   const getThemeStyles = () => {
-  const themes = {
-  light: {,
-  selection: 'rgba(59, 130, 246, 0.2)',
-  selectionBorder: '#3b82f6',
-  background: '#ffffff',
-  text: '#374151',
-  accent: '#3b82f6',
-},
-  dark: {,
-  selection: 'rgba(96, 165, 250, 0.2)',
-  selectionBorder: '#60a5fa',
-  background: '#1f2937',
-  text: '#f9fafb',
-  accent: '#60a5fa',
-},
-  cinema: {,
-  selection: 'rgba(255, 124, 0, 0.15)',
-  selectionBorder: 'var(--color-accent-orange)',
-  background: 'var(--color-bg-secondary)',
-  text: 'var(--color-text-primary)',
-  accent: 'var(--color-accent-orange)',
-};
+    const themes = {
+      light: {
+        selection: 'rgba(59, 130, 246, 0.2)',
+        selectionBorder: '#3b82f6',
+        background: '#ffffff',
+        text: '#374151',
+        accent: '#3b82f6',
+      },
+      dark: {
+        selection: 'rgba(96, 165, 250, 0.2)',
+        selectionBorder: '#60a5fa',
+        background: '#1f2937',
+        text: '#f9fafb',
+        accent: '#60a5fa',
+      },
+      cinema: {
+        selection: 'rgba(255, 124, 0, 0.15)',
+        selectionBorder: 'var(--color-accent-orange)',
+        background: 'var(--color-bg-secondary)',
+        text: 'var(--color-text-primary)',
+        accent: 'var(--color-accent-orange)',
+      }
+    };
     return themes[theme];
   };
   const styles = getThemeStyles();
@@ -224,24 +230,19 @@ export const MultiSelectionManager: React.FC<MultiSelectionManagerProps> = ({
     const height = Math.abs(selectionRect.currentY - selectionRect.startY);
     return {
       position: 'absolute' as const,
-      left: `${left}px`}
-},
-  top: `${top}px`}
-},
-  width: `${width}px`}
-},
-  height: `${height}px`}
-},
-  background: styles.selection,
-      border: `1px dashed ${styles.selectionBorder}`}
-},
-  borderRadius: '2px',
+      left: `${left}px`,
+      top: `${top}px`,
+      width: `${width}px`,
+      height: `${height}px`,
+      background: styles.selection,
+      border: `1px dashed ${styles.selectionBorder}`,
+      borderRadius: '2px',
       pointerEvents: 'none' as const,
       zIndex: 1000,
-      transition: 'none';
+      transition: 'none'
+    };
   };
-  };
-  return;
+  return (
     <>
       {/* Selection Overlay */}
       <div
@@ -263,7 +264,7 @@ export const MultiSelectionManager: React.FC<MultiSelectionManagerProps> = ({
         <div style={getSelectionRectStyle()} />
       </div>
       {/* Selection Info Panel */}
-      {(selectedNodes.length > 0 || selectedEdges.length > 0) && ()
+      {(selectedNodes.length > 0 || selectedEdges.length > 0) && (
         <SelectionInfoPanel
           selectedNodes={selectedNodes}
           selectedEdges={selectedEdges}
@@ -280,12 +281,14 @@ export const MultiSelectionManager: React.FC<MultiSelectionManagerProps> = ({
 // Selection Info Panel Component
 interface SelectionInfoPanelProps {
   selectedNodes: Node[];
-  selectedEdges: Edge;
-  onClearSelection: () => void;,
+  selectedEdges: Edge[];
+  onClearSelection: () => void;
   onSelectAll: () => void;
-  onInvertSelection: () => void;,
+  onInvertSelection: () => void;
   theme: 'light' | 'dark' | 'cinema';
-  const SelectionInfoPanel: React.FC<SelectionInfoPanelProps> = ({,)
+}
+
+const SelectionInfoPanel: React.FC<SelectionInfoPanelProps> = ({
   selectedNodes,
   selectedEdges,
   onClearSelection,
@@ -295,38 +298,39 @@ interface SelectionInfoPanelProps {
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const getThemeStyles = () => {
-  const themes = {
-  light: {,
-  background: '#ffffff',
-  secondary: '#f8fafc',
-  border: '#e5e7eb',
-  text: '#374151',
-  textSecondary: '#6b7280',
-  accent: '#3b82f6',
-  hover: '#f3f4f6',
-},
-  dark: {,
-  background: '#1f2937',
-  secondary: '#111827',
-  border: '#4b5563',
-  text: '#f9fafb',
-  textSecondary: '#9ca3af',
-  accent: '#60a5fa',
-  hover: '#374151',
-},
-  cinema: {,
-  background: 'var(--color-bg-secondary)',
-  secondary: 'var(--color-bg-tertiary)',
-  border: 'var(--color-ui-border)',
-  text: 'var(--color-text-primary)',
-  textSecondary: 'var(--color-text-secondary)',
-  accent: 'var(--color-accent-orange)',
-  hover: 'var(--color-ui-hover)',
-};
+    const themes = {
+      light: {
+        background: '#ffffff',
+        secondary: '#f8fafc',
+        border: '#e5e7eb',
+        text: '#374151',
+        textSecondary: '#6b7280',
+        accent: '#3b82f6',
+        hover: '#f3f4f6',
+      },
+      dark: {
+        background: '#1f2937',
+        secondary: '#111827',
+        border: '#4b5563',
+        text: '#f9fafb',
+        textSecondary: '#9ca3af',
+        accent: '#60a5fa',
+        hover: '#374151',
+      },
+      cinema: {
+        background: 'var(--color-bg-secondary)',
+        secondary: 'var(--color-bg-tertiary)',
+        border: 'var(--color-ui-border)',
+        text: 'var(--color-text-primary)',
+        textSecondary: 'var(--color-text-secondary)',
+        accent: 'var(--color-accent-orange)',
+        hover: 'var(--color-ui-hover)',
+      }
+    };
     return themes[theme];
   };
   const styles = getThemeStyles();
-  return;
+  return (
     <div
       style={{
         position: 'fixed',

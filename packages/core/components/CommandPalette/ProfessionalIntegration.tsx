@@ -13,16 +13,16 @@ import { AutosaveManager } from './AutosaveManager';
 import { KeyboardShortcutsManager } from './KeyboardShortcutsManager';
 
 export interface ProfessionalIntegrationProps {
-  nodes: Node;
-  edges: Edge;
-  selectedNodes: Node;
-  selectedEdges: Edge;
-  onNodesChange: (nodes: Node) => void;
-  onEdgesChange: (edges: Edge) => void;
-  onNodesSelect: (nodes: Node) => void;
-  onEdgesSelect: (edges: Edge) => void;
+  nodes: Node[];
+  edges: Edge[];
+  selectedNodes: Node[];
+  selectedEdges: Edge[];
+  onNodesChange: (nodes: Node[]) => void;
+  onEdgesChange: (edges: Edge[]) => void;
+  onNodesSelect: (nodes: Node[]) => void;
+  onEdgesSelect: (edges: Edge[]) => void;
   onNodeCreate: (nodeType: string, position: { x: number; y: number }, data?: Record<string, unknown>) => void;
-  onNodeDelete: (nodeIds: string) => void;
+  onNodeDelete: (nodeIds: string[]) => void;
   onExport: (format: 'json' | 'png' | 'svg' | 'pdf') => void;
   onSave: () => void;
   onLoad: () => void;
@@ -65,7 +65,7 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
     setShowCommandPalette(true);
   }, []);
   const handleGenerationStart = useCallback(
-    async (flow: { nodes: Node; edges: Edge }, params: Record<string, unknown>) => {
+    async (flow: { nodes: Node[]; edges: Edge[] }, params: Record<string, unknown>) => {
     console.log('Starting generation flow:', flow.name, params);
     // Implementation would go here - this is a demo
     // Simulate graph generation
@@ -133,10 +133,10 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
   }, [selectedNodes, onNodeDelete]);
   const handleDuplicate = useCallback(() => {
     selectedNodes.forEach(node => {
-  const position = { x: node.position.x + 50, y: node.position.y + 50 };
-      onNodeCreate(node.type || 'text', position, {)
-  ...node.data,
-        label: `${node.data?.label || 'Node'} (Copy)`}
+      const position = { x: node.position.x + 50, y: node.position.y + 50 };
+      onNodeCreate(node.type || 'text', position, {
+        ...node.data,
+        label: `${node.data?.label || 'Node'} (Copy)`
       });
     });
   }, [selectedNodes, onNodeCreate]);
@@ -155,6 +155,7 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
       document.documentElement.requestFullscreen();
     } else {
       document.exitFullscreen();
+    }
   }, []);
   // Generation Actions
   const handleGenerateCharacter = useCallback(() => {
@@ -167,16 +168,16 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
   // Template application logic would go here
 }, []);
   // Autosave Restore
-  const handleAutosaveRestore = useCallback((autosaveState: { nodes: Node; edges: Edge }) => {
+  const handleAutosaveRestore = useCallback((autosaveState: { nodes: Node[]; edges: Edge[] }) => {
     onNodesChange(autosaveState.nodes);
     onEdgesChange(autosaveState.edges);
   }, [onNodesChange, onEdgesChange]);
   // Selection Change Handler
-  const handleSelectionChange = useCallback((selection: { nodes: Node; edges: Edge }) => {
+  const handleSelectionChange = useCallback((selection: { nodes: Node[]; edges: Edge[] }) => {
     onNodesSelect(selection.nodes);
     onEdgesSelect(selection.edges);
   }, [onNodesSelect, onEdgesSelect]);
-  return;
+  return (
     <>
       {/* Command Palette */}
       <CommandPalette
@@ -288,7 +289,7 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
         <span>Press ⌘K for commands</span>
       </div>
       {/* Professional Welcome Hint */}
-      {nodes.length === 0 && ()
+      {nodes.length === 0 && (
         <div
           style={{
   position: 'absolute',
@@ -351,16 +352,21 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
         @keyframes pulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.5; }
+        }
         /* Smooth node animations */
         .react-flow__node {
           transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
         .react-flow__node.selected {
           transform: scale(1.02);
+        }
         /* Professional edge animations */
         .react-flow__edge {
           transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
         .react-flow__edge:hover {
           stroke-width: 3px !important;
+        }
       `}</style>
     </>
   );

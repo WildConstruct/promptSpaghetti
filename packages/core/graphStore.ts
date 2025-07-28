@@ -324,15 +324,16 @@ export const useGraphStore = create<GraphState>((set, get) => ({
     set((state) => {
       const { [labelId]: deleted, ...remainingConfigs } = state.annotations.nodeLabelConfigs;
       return {
-  annotations: {
-  ...state.annotations,
-  nodeLabelConfigs: remainingConfigs,
-  metadata: {
-  ...state.annotations.metadata,
-  modified: new Date().toISOString(),
-},
-  hasUnsavedChanges: true
-  };
+        annotations: {
+          ...state.annotations,
+          nodeLabelConfigs: remainingConfigs,
+          metadata: {
+            ...state.annotations.metadata,
+            modified: new Date().toISOString(),
+          },
+        },
+        hasUnsavedChanges: true
+      };
     }),
   setLabelPreferences: (preferences: NodeLabelPreferences) =>
     set((state) => ({

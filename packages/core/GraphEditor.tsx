@@ -527,9 +527,7 @@ const NODE_TYPES: NodeMeta[] = [
         }, 600);
       });
     }
-  },
-    [reactFlowInstance, addNode, hasUnsavedChanges, setNodes, setEdges, setStatusMessage]
-  );
+  }, [reactFlowInstance, addNode, hasUnsavedChanges, setNodes, setEdges, setStatusMessage]);
   // Allow drop on canvas
   const handleDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();

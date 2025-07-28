@@ -46,12 +46,15 @@ export class AutosaveSystem {
     const data = JSON.stringify({ nodes, edges });
     let hash = 0;
     for (let i = 0; i < data.length; i++) {
-  const char = data.charCodeAt(i);
-  hash = ((hash << 5) - hash) + char;
-  hash = hash & hash; // Convert to 32bit integer
-  return hash.toString(36);
+      const char = data.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash.toString(36);
+  }
+
   // Save current state
-  save(nodes: Node, edges: Edge): AutosaveState {
+  save(nodes: Node[], edges: Edge[]): AutosaveState {
   const timestamp = Date.now();
   const checksum = this.generateChecksum(nodes, edges);
   const state: AutosaveState = {
